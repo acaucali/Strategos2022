@@ -1,0 +1,1 @@
+ALTER TABLE clase ALTER nombre TYPE character varying(310);

@@ -1,0 +1,118 @@
+<div class="container">
+  <form class="form-row my-1" #procesoForm="ngForm">
+    <div class="form-group col-md-6">
+      <label for="factor" style="font-size: medium">Factor</label>
+      <input type="text" class="form-control" placeholder="Factor" [(ngModel)]="factor.factorRiesgo"
+        name="factorRiesgo" required maxlength="100" #nombre="ngModel">
+      <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+        <div *ngIf="nombre.errors.required">
+          Factor es requerido
+        </div>
+      </div>
+
+    </div>
+    <div class="form-group col-md-3">
+      <label for="tipo" style="font-size: medium">Respuesta</label>
+      <select class="form-control" [(ngModel)]="factor.respuestaId" name="respuestaId" required #res="ngModel" >
+        <option [ngValue]="undefined" selected>Seleccionar</option>
+        <option *ngFor="let respuesta of respuestas" [value]="respuesta.respuestaId">{{respuesta.respuesta}}</option>
+      </select>
+      <div class="alert alert-danger" *ngIf="res.invalid && (res.dirty || res.touched)">
+        <div *ngIf="res.errors.required">
+         Respuesta es requerido
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-3">
+      <label for="tipo" style="font-size: medium">Estatus</label>
+      <select class="form-control selectpicker" data-live-search="true" [(ngModel)]="factor.estatus"  name="estatus" required #est="ngModel">
+        <option [value]="undefined" selected >Seleccionar</option>
+        <option [value]="0">Pendiente</option>
+        <option [value]="1">Mitigado</option>
+      </select>
+      <div class="alert alert-danger" *ngIf="est.invalid && (est.dirty || est.touched)">
+        <div *ngIf="est.errors.required">
+          Estatus es requerido
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputAddress2" style="font-size: medium">Descripción</label>
+      <textarea class="form-control" rows="5" placeholder="Descripción" [(ngModel)]="factor.descripcionFactor"
+        name="descripcionFactor" required maxlength="150" #des="ngModel"></textarea>
+        <div class="alert alert-danger" *ngIf="des.invalid && (des.dirty || des.touched)">
+          <div *ngIf="des.errors.required">
+            Descripción es requerido
+          </div>
+        </div>  
+    </div>
+    <div class="form-group col-md-6">
+      <label for="tipo" style="font-size: medium">Tipo de Riesgo</label>
+      <select class="form-control" [(ngModel)]="factor.tipoRiesgoId" name="tipoRiesgoId" required #tipo="ngModel" >
+        <option [ngValue]="undefined" selected>Seleccionar</option>
+        <option *ngFor="let tipo of tipos" [value]="tipo.tipoRiesgoId">{{tipo.tipoRiesgo}}</option>
+      </select>
+      <div class="alert alert-danger" *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)">
+        <div *ngIf="tipo.errors.required">
+          Tipo de riesgo es requerido
+        </div>
+      </div>
+
+
+      <br>
+      <label for="responsable" style="font-size: medium">Responsable</label>
+      <input type="text" class="form-control" placeholder="Responsable" [(ngModel)]="factor.responsable"
+        name="responsable" maxlength="150">
+    </div>
+
+    
+    <div class="form-group col-md-6" *ngIf="factor.factorRiesgoId">
+      <label for="tipo" style="font-size: medium; font-weight: bolder;">Efectividad controles</label>
+      <br>
+      <span class="label label-default">{{factor.controlId}}</span>
+    </div>
+    <div class="form-group col-md-6" *ngIf="factor.factorRiesgoId">
+      <label for="tipo" style="font-size: medium; font-weight: bolder;">Historico</label>
+      <br>
+      <span class="label label-default" *ngIf="factor.historico == 1">S</span>
+      <span class="label label-default" *ngIf="factor.historico == 0">N</span>
+    </div>
+    <div class="form-group col-md-3" *ngIf="factor.factorRiesgoId">
+      <label for="tipo" style="font-size: medium; font-weight: bolder;">Probabilidad</label>
+      <br>
+      <span class="label label-default">{{factor.probabilidad}}</span>
+
+    </div>
+    <div class="form-group col-md-3" *ngIf="factor.factorRiesgoId">
+      <label for="tipo" style="font-size: medium; font-weight: bolder;">Impacto</label>
+      <br>
+      <span class="label label-default">{{factor.impacto}}</span>
+    </div>
+    <div class="form-group col-md-3" *ngIf="factor.factorRiesgoId">
+      <label for="tipo" style="font-size: medium; font-weight: bolder;">Riesgo Inherente</label>
+      <br>
+      <span class="label label-default">{{factor.severidad}}</span>
+      <div id="red" *ngIf="factor.alerta == 'rojo'"></div>
+      <div id="orange" *ngIf="factor.alerta == 'naranja'"></div>
+      <div id="yellow" *ngIf="factor.alerta == 'amarillo'"></div>
+      <div id="green" *ngIf="factor.alerta == 'verde'"></div>
+
+    </div>
+    <div class="form-group col-md-3" *ngIf="factor.factorRiesgoId">
+      <label for="tipo" style="font-size: medium; font-weight: bolder;">Riesgo Residual</label>
+      <br>
+      <span class="label label-default">{{factor.riesgoResidual}}</span>
+
+    </div>
+    <br>
+    <br>
+  
+    <button *ngIf="!factor.factorRiesgoId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+      [disabled]="!procesoForm.form.valid">Crear</button>&nbsp;&nbsp;
+    <ng-template #elseBlock>
+      <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal"
+        [disabled]="!procesoForm.form.valid">Actualizar</button>&nbsp;&nbsp;
+    </ng-template>
+    <button (click)="cerrarVentana()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+  </form>
+</div>

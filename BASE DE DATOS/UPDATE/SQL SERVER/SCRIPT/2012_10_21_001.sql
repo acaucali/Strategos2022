@@ -1,0 +1,1 @@
+ALTER TABLE indicador ADD COLUMN tipo_suma numeric(1,0);

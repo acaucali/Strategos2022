@@ -1,0 +1,1 @@
+ALTER TABLE celda ADD COLUMN configuracion text NULL;

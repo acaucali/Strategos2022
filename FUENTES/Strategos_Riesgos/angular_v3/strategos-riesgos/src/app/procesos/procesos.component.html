@@ -1,0 +1,56 @@
+<div class="container mb-5 my-5">
+  <h5>Procesos / Subprocesos</h5>
+  <br>
+  <div class="row">
+    <div class="col-lg-5">
+      <!--
+      <div class="example-config">
+        Selected keys: {{selectedKeys.join(",")}}
+      </div>
+      -->
+      <button class="btn btn-rounded btn-primary" (click)="crearProceso(selectedKeys.join())" type="button" placement="bottom"
+        ngbTooltip="Crear proceso" style="font-size: 8px"><i class="far fa-plus-square fa-2x"></i></button>&nbsp;
+      &nbsp;
+      <button class="btn btn-rounded btn-primary" (click)="editarProceso(selectedKeys.join())" type="button" placement="bottom"
+        ngbTooltip="Editar proceso" style="font-size: 8px" *ngIf="selectedKeys.join() !='0'"><i class="far fa-edit fa-2x"></i></button>&nbsp; &nbsp;
+      <button class="btn btn-rounded btn-danger" (click)="eliminarProceso(selectedKeys.join())" type="button" placement="bottom"
+        ngbTooltip="Eliminar proceso" style="font-size: 8px" *ngIf="selectedKeys.join() !='0'"><i class="far fa-trash-alt fa-2x"></i></button>
+
+      <br>
+      <br>
+      <div class="container-fluid">
+        <kendo-treeview [nodes]="arbol" textField="text" [hasChildren]="hasChildren" [children]="fetchChildren" style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 400;"
+          kendoTreeViewExpandable [expandedKeys]="expandedKeys" kendoTreeViewSelectable [selectBy]="'id'"
+          [(selectedKeys)]="selectedKeys">
+        </kendo-treeview>
+      </div>
+    </div>
+    <div class="card col-lg-7" *ngIf="ver">
+      <div>
+          <ul class="nav nav-tabs my-3" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><span style="font-size: medium; color: black;">Proceso</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" *ngIf="habilitar"><span style="font-size: medium; color: black;">Productos</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" *ngIf="habilitar"><span style="font-size: medium; color: black;">Caracterizacion</span></a>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <form-proceso [proceso]="procesoSeleccionado"></form-proceso>
+              </div>
+              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <app-producto [proceso]="procesoSeleccionado"></app-producto>
+              </div>
+              <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <app-caracterizacion [proceso]="procesoSeleccionado"></app-caracterizacion>
+              </div>
+            </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

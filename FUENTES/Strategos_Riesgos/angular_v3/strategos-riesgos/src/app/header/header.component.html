@@ -1,0 +1,44 @@
+<nav class="navbar header-top fixed-top navbar-expand-lg  navbar-dark bg-dark">
+  <span class="navbar-toggler-icon leftmenutrigger"></span>
+  <span class="navbar-brand">Strategos Riesgos</span>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse navbar-dark bg-dark my-0 " id="navbarText">
+    <ul class="navbar-nav animate side-nav bg-dark p-3 ">
+      <h6 class="text-white">Opciones</h6>
+      <li class="dropdown nav-item">
+        <a class="dropdown-toggle nav-link" data-toggle="dropdown" style="cursor: pointer;"><i class="fa fa-cog fa-lg p-2 text-white"></i>Configuración</a>
+        <ul class="dropdown-menu nav-item bg-dark animate side-nav">
+          <li><a class="nav-link" routerLink="/calificaciones">Calificaciones Riesgo</a></li>
+          <li><a class="nav-link" routerLink="/causas">Causas Riesgo</a></li>
+          <li><a class="nav-link" routerLink="/controles">Controles Riesgo</a></li>
+          <li><a class="nav-link" routerLink="/efectividad">Efectividad de Controles</a></li>
+          <li><a class="nav-link" routerLink="/efectos">Efectos</a></li>
+          <li><a class="nav-link" routerLink="/tiposimpacto">Impactos</a></li>
+          <li><a class="nav-link" routerLink="/macros">Macroprocesos</a></li>
+          <li><a class="nav-link" routerLink="/probabilidad">Probabilidades Riesgo</a></li>
+          <li><a class="nav-link" routerLink="/respuesta">Respuestas Riesgo</a></li>
+          <li><a class="nav-link" routerLink="/tiporiesgo">Tipos de Riesgo</a></li>
+          
+        </ul>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" routerLink="/procesos"><i class="fas fa-sitemap nav-item p-2 text-white" style="cursor: pointer;"></i>Procesos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/riesgos"><i class="fas fa-exclamation-triangle p-2 text-white" style="cursor: pointer;"></i>Riesgos</a>
+      </li>
+
+    </ul>
+
+    <ul class="navbar-nav ml-md-auto d-md-flex">
+      <li class="nav-item">
+        <a class="nav-link" (click)="regresar()">Regresar
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

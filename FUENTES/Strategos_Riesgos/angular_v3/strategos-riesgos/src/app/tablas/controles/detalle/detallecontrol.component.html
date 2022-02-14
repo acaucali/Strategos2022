@@ -1,0 +1,63 @@
+
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn"> 
+
+<div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: #007BFF;">
+          <h5 class="modal-title">{{titulo}}</h5>
+          <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+                <form #controlForm="ngForm">
+                    <div class="form-row">
+                      <div class="form-group col-md-12">
+                        <label for="control" style="font-size: medium">Control de riesgo</label>
+                        <input type="text" class="form-control" placeholder="Control" [(ngModel)]="control.control" name="control"
+                        required maxlength="50" #nombre="ngModel">
+
+                        <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                          <div *ngIf="nombre.errors.required">
+                            Control es requerido
+                          </div>
+                        </div>
+                    </div>
+                   
+                    <div class="form-group col-md-12">
+                      <label for="inputAddress2" style="font-size: medium">Descripción</label>
+                      <textarea class="form-control" rows="5" placeholder="Descripción" [(ngModel)]="control.controlDescripcion" name="controlDescripcion"
+                      maxlength="500"></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <select  class="form-control " [(ngModel)]="control.procesoId" name="procesoId" required #proceso="ngModel">
+                        <option [value]="undefined" selected>Procesos/Subprocesos</option>
+                        <option *ngFor="let proceso of procesos" [value]="proceso.procesosId">{{proceso.procesoNombre}}</option>
+                      </select>
+                      <div class="alert alert-danger" *ngIf="proceso.invalid && (proceso.dirty || proceso.touched)">
+                        <div *ngIf="proceso.errors.required">
+                          Proceso es requerido
+                        </div>
+                      </div>
+
+                      
+                    </div>
+ 
+                  </div>                 
+                  
+                  </form>    
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="!control.controlId else elseBlock" (click)="create()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!controlForm.form.valid">Crear</button>
+            <ng-template #elseBlock>
+                <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!controlForm.form.valid">Actualizar</button>
+            </ng-template>
+          <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

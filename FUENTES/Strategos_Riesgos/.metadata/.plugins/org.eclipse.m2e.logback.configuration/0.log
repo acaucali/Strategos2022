@@ -1,0 +1,28 @@
+2019-09-17 13:38:03,309 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2019-09-17 13:38:29,759 [Worker-13: Updating Maven Dependencies] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.maven.ide.eclipse.wtp.WarLifecycleMapping lifecycle mapping for MavenProject: com.strategos:Riesgos:0.0.1-SNAPSHOT @ C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\pom.xml.
+2019-09-17 13:38:30,062 [Worker-12: Building workspace] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.maven.ide.eclipse.wtp.WarLifecycleMapping lifecycle mapping for MavenProject: com.strategos:Riesgos:0.0.1-SNAPSHOT @ C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\pom.xml.
+2019-09-17 13:38:32,762 [Worker-12: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 13:38:32,766 [Worker-12: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2019-09-17 13:38:32,780 [Worker-12: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2019-09-17 13:38:32,792 [Worker-12: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 13:38:32,792 [Worker-12: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\src\test\resources
+2019-09-17 13:38:35,533 [Worker-14: Updating Maven Dependencies] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.maven.ide.eclipse.wtp.WarLifecycleMapping lifecycle mapping for MavenProject: com.strategos:Riesgos:0.0.1-SNAPSHOT @ C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\pom.xml.
+2019-09-17 13:38:36,942 [Worker-10: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 13:38:36,947 [Worker-10: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2019-09-17 13:38:36,958 [Worker-10: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2019-09-17 13:38:36,965 [Worker-10: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 13:38:36,965 [Worker-10: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\src\test\resources
+2019-09-17 13:38:38,809 [Worker-3: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 13:38:38,809 [Worker-3: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2019-09-17 13:38:38,810 [Worker-3: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2019-09-17 13:38:38,812 [Worker-3: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 13:38:38,812 [Worker-3: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\src\test\resources
+2019-09-17 14:30:44,057 [Worker-30: Launching Riesgos - RiesgosApplication] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2019-09-17 14:30:44,059 [Worker-30: Launching Riesgos - RiesgosApplication] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2019-09-17 14:30:44,061 [Worker-30: Launching Riesgos - RiesgosApplication] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 14:30:44,062 [Worker-30: Launching Riesgos - RiesgosApplication] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\src\test\resources
+2019-09-17 14:40:20,664 [Worker-40: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 14:40:20,666 [Worker-40: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2019-09-17 14:40:20,668 [Worker-40: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2019-09-17 14:40:20,671 [Worker-40: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2019-09-17 14:40:20,671 [Worker-40: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos\src\test\resources

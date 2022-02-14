@@ -1,0 +1,49 @@
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn">
+
+  <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: #007BFF;">
+          <h5 class="modal-title">Detalle Riesgo</h5>
+          <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+              <ul class="nav nav-tabs my-3" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><span style="font-size: medium; color: black;">Declaración</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" *ngIf="factor.factorRiesgoId"><span style="font-size: medium; color: black;">Causas</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link " id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" *ngIf="factor.factorRiesgoId"><span style="font-size: medium; color: black;">Efectos</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link " id="control-tab" data-toggle="tab" href="#control" role="tab" aria-controls="control" aria-selected="false" *ngIf="factor.factorRiesgoId"><span style="font-size: medium; color: black;">Controles</span></a>
+                  </li>
+              </ul>
+              
+              <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <app-form-factor></app-form-factor>
+                  </div>
+                  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                      <app-causas-factores [factor]="factorSeleccionado"></app-causas-factores>
+                  </div>
+                  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                      <app-efectos-factor [factor]="factorSeleccionado"></app-efectos-factor>
+                  </div>
+                  <div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="control-tab">
+                      <app-controles-factor [factor]="factorSeleccionado"></app-controles-factor>
+                  </div>
+                </div>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

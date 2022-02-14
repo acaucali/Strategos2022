@@ -1,0 +1,71 @@
+<div class="container">
+
+  <form class="form-row my-1" #procesoForm="ngForm">
+    <div class="form-group col-md-9">
+      <label for="proceso" style="font-size: medium">Proceso</label>
+      <input type="text" class="form-control" placeholder="Proceso" [(ngModel)]="proceso.procesoNombre"
+        name="procesoNombre" required maxlength="100" #nombre="ngModel">
+      <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+        <div *ngIf="nombre.errors.required">
+          Proceso es requerido
+        </div>
+      </div>
+
+    </div>
+    <div class="form-group col-md-3">
+      <label for="codigo" style="font-size: medium">Código proceso</label>
+      <input type="text" class="form-control" placeholder="Código" [(ngModel)]="proceso.procesoCodigo"
+        name="procesoCodigo" maxlength="20">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputAddress2" style="font-size: medium">Descripción</label>
+      <textarea class="form-control" rows="5" placeholder="Descripción" [(ngModel)]="proceso.descripcion"
+        name="descripcion" maxlength="150"></textarea>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="tipo" style="font-size: medium">Tipo de proceso</label>
+      <select class="form-control" [(ngModel)]="proceso.procesoTipo" name="procesoTipo" required #tipo="ngModel">
+        <option [value]="undefined" selected>Seleccionar</option>
+        <option [value]="0">Misional</option>
+        <option [value]="1">Apoyo</option>
+      </select>
+      <div class="alert alert-danger" *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)">
+        <div *ngIf="tipo.errors.required">
+          Tipo de proceso es requerido
+        </div>
+      </div>
+
+      <br>
+      <label for="responsable" style="font-size: medium">Responsable</label>
+      <input type="text" class="form-control" placeholder="Responsable" [(ngModel)]="proceso.responsable"
+        name="responsable" maxlength="50">
+    </div>
+
+    <div class="form-group col-md-12" *ngIf="proceso.procesosId">
+      <label for="documento" style="font-size: medium">Documento</label> <br>
+      <input (change)="seleccionarFoto($event)" type="file" name="documento" class="form"
+        accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.pdf" *ngIf="proceso.procesoDocumento == 0">
+      &nbsp; &nbsp;<button class="btn btn-rounded btn-primary" (click)="subirDocumento()" type="button" placement="bottom"
+        ngbTooltip="Subir documento" style="font-size: 8px" *ngIf="proceso.procesoDocumento == 0"><i class="fas fa-file-upload fa-2x"></i></button>
+      &nbsp;
+    <div class="form-group" *ngIf="proceso.procesosId && proceso.procesoDocumento >0">
+      <label style="font-size: medium" *ngIf="documento">{{documento.documentoNombre}}</label> &nbsp; &nbsp;
+      <button class="btn btn-rounded btn-primary" (click)="descargarDocumento()" type="button" placement="bottom"
+        ngbTooltip="Descargar documento" style="font-size: 8px"><i class="fas fa-download fa-2x"></i></button>
+      &nbsp;
+      <button class="btn btn-rounded btn-danger" (click)="eliminarDocumento()" type="button" placement="bottom"
+        ngbTooltip="Eliminar documento" style="font-size: 8px"><i class="far fa-trash-alt fa-2x"></i></button>
+
+    </div>
+    
+    </div>
+
+    <button *ngIf="!proceso.procesosId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+      [disabled]="!procesoForm.form.valid">Crear</button>&nbsp;&nbsp;
+    <ng-template #elseBlock>
+      <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal"
+        [disabled]="!procesoForm.form.valid">Actualizar</button>&nbsp;&nbsp;
+    </ng-template>
+    <button (click)="cerrarVentana()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+  </form>
+</div>

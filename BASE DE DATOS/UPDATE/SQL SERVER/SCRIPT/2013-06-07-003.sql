@@ -1,0 +1,1 @@
+ALTER TABLE afw_objeto_auditable_atributo ADD COLUMN configuracion character varying(2000);

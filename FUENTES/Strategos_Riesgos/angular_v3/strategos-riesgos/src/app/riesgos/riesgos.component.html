@@ -1,0 +1,34 @@
+<div class="mb-5 my-5">
+  <div class="row" style="margin: 10px 0 0 10px;">
+    <div class="col-sm-3">
+      <h5>
+        Procesos/Subprocesos
+      </h5>
+    </div>
+    <div class="col-sm-9">
+      <select class="form-control selcls" [(ngModel)]="id" (change)="seleccionarProceso()" style="display:inline">
+        <option [ngValue]="undefined" selected>Procesos/Subprocesos</option>
+        <option *ngFor="let proceso of procesos" [value]="proceso.procesosId">{{proceso.procesoNombre}}</option>
+      </select>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <div class="card border-primary ">
+    <div class="row" style="margin: 10px 0 0 10px;">
+      <div class="col-sm-12">
+        <app-riesgo [id]="procesoId"></app-riesgo>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="card border-primary ">
+    <div class="row" style="margin: 10px 0 0 10px;">
+      <div class="col-sm-12">
+        <app-ejercicios [id]="procesoId"></app-ejercicios>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+ALTER TABLE INDICADOR ALTER COLUMN alerta_min_max TYPE numeric(2,0);
+ALTER TABLE INDICADOR ALTER COLUMN mascara_decimales TYPE numeric(2,0);
+

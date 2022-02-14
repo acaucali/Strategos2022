@@ -1,0 +1,38 @@
+<detalle-control-factor [control]= "controlSeleccionado"  [factor]="factor"></detalle-control-factor>
+<div class="container">
+        <span style="font-size: large">Controles</span>
+   
+  <div class="text-left">
+    <button class="btn btn-rounded bg-white" (click)="crearControl()" type="button" placement="bottom" ngbTooltip="Crear Control">
+      <i class="far fa-plus-square fa-lg"></i></button>
+  </div>
+  
+  <div>
+    <table  class="table" id="tablac" width="100%">
+      <thead>
+        <tr class="text-white bg-primary">
+          <td width="20%">Acciones</td>
+          <td witdh="60%">Control</td>
+          <td width="20%">Efectividad</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let control of controles | paginate: {itemsPerPage: 5, currentPage: pageControl, id: 'pageCon'}">
+          <td width="20%">
+            <i class="fas fa-edit" (click)="abrirModal(control)" style="cursor: pointer;"></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="fas fa-trash-alt" (click)='delete(control)' style="cursor: pointer;"></i>
+          </td>
+          <td witdh="60%">{{control.control}}</td>
+          <td width="20%">{{control.efectividadId}} </td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls id="pageCon" previousLabel="Anterior"
+    nextLabel="Siguiente" (pageChange)="pageControl = $event"></pagination-controls>
+    <h5 ALIGN=RIGHT>Promedio: {{promedio}}</h5>
+  </div>
+  
+
+</div>

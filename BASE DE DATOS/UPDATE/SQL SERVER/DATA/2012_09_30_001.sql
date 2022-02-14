@@ -1,0 +1,1 @@
+UPDATE afw_plantilla SET xml = NULL;

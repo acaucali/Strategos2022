@@ -1,0 +1,10 @@
+package com.strategos.riesgos.models.procesos.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.strategos.riesgos.models.procesos.entity.Documento;
+
+
+public interface IDocumentoDao2 extends JpaRepository<Documento, Long>{
+
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/Referenced  Libraries"/>
+	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/vgcBll.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/vgcCalcular.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/vgcCalculo.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/vgcFramework.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/vgcFrwkWeb.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Documentos/quartz-2.3.0-SNAPSHOT/lib/c3p0-0.9.5.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Documentos/quartz-2.3.0-SNAPSHOT/lib/log4j-1.2.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Documentos/quartz-2.3.0-SNAPSHOT/lib/quartz-2.3.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Documentos/quartz-2.3.0-SNAPSHOT/lib/quartz-jobs-2.3.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Documentos/quartz-2.3.0-SNAPSHOT/lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Documentos/quartz-2.3.0-SNAPSHOT/lib/slf4j-log4j12-1.7.7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

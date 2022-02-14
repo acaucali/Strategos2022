@@ -1,0 +1,43 @@
+#red {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: red;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#orange {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: orange;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#yellow {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: yellow;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#green {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: green;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
