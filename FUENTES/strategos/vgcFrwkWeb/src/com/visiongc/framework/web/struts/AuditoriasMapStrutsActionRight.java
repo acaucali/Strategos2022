@@ -35,21 +35,26 @@ public class AuditoriasMapStrutsActionRight
     actionRight = new StrutsActionRight("framework.auditorias.gestionarauditoriasmedicion", true, false, null);
     mapa.put("framework.auditorias.gestionarauditoriasmedicion", actionRight);
     
-    actionRight = new StrutsActionRight("framework.auditorias.gestionarauditoriasmediciondetalle", true, false, null);
-    mapa.put("framework.auditorias.gestionarauditoriasmediciondetalle", actionRight);
-    
-    actionRight = new StrutsActionRight("framework.auditorias.reporteauditoriamedicionpdf", true, false, null);
-    mapa.put("framework.auditorias.reporteauditoriamedicionpdf", actionRight);
-    
-    actionRight = new StrutsActionRight("framework.auditorias.reporteauditoriamedicionexcel", true, false, null);
-    mapa.put("framework.auditorias.reporteauditoriamedicionexcel", actionRight);
-    
     actionRight = new StrutsActionRight("framework.auditorias.reporteauditoriapdf", true, false, null);
     mapa.put("framework.auditorias.reporteauditoriapdf", actionRight);
     
     actionRight = new StrutsActionRight("framework.auditorias.reporteauditoriaexcel", true, false, null);
     mapa.put("framework.auditorias.reporteauditoriaexcel", actionRight);
     
+    actionRight = new StrutsActionRight("framework.auditorias.gestionarauditoriasmediciondetalle", true, false, null);
+    mapa.put("framework.auditorias.gestionarauditoriasmediciondetalle", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.auditorias.reportemedicionproyecto", true, false, null);
+    mapa.put("framework.auditorias.reportemedicionproyecto", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.auditorias.reportemedicionproyectopdf", true, false, null);
+    mapa.put("framework.auditorias.reportemedicionproyectopdf", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.auditorias.reportemedicionproyectoxls", true, false, null);
+    mapa.put("framework.auditorias.reportemedicionproyectoxls", actionRight);
+    
+   
+            
     
   }
   

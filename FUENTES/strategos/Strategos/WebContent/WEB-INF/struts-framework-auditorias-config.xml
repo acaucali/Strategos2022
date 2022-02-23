@@ -11,6 +11,7 @@
 		<form-bean name="gestionarAuditoriasForm" type="com.visiongc.framework.web.struts.auditorias.forms.GestionarAuditoriasForm" />
 		<form-bean name="gestionarAuditoriasMedicionForm" type="com.visiongc.framework.web.struts.auditorias.forms.GestionarAuditoriasMedicionForm" />
 		<form-bean name="gestionarAuditoriasPorAtributoForm" type="com.visiongc.framework.web.struts.auditorias.forms.GestionarAuditoriasPorAtributoForm" />
+		<form-bean name="reporteAuditoriaForm" type="com.visiongc.framework.web.struts.auditorias.forms.ReporteAuditoriaForm" />
 	</form-beans>
 
 	<!-- Definiciones: Global Forward -->
@@ -19,6 +20,8 @@
 		<forward name="gestionarAuditoriasPorAtributoAction" path="/framework/auditorias/gestionarAuditoriasPorAtributo.action" />
 		<forward name="gestionarAuditoriasMedicionAction" path="/framework/auditorias/gestionarAuditoriasMedicion.action" />
 		<forward name="gestionarAuditoriasMedicionDetalleAction" path="/framework/auditorias/gestionarAuditoriasMedicionDetalle.action" />
+		<forward name="reporteAuditoriaMedicionProyecto" path="/paginas/framework/auditorias/reporteMedicionProyecto.jsp" />
+	
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -71,6 +74,18 @@
 			<set-property property="secure" value="false" />
 			<forward name="exito" path="/framework/auditorias/gestionarAuditoriasMedicion.action" />
 		</action>
+		
+			<!-- Mapeo del Action: Reporte auditoria mediciones por proyecto -->
+		<action path="/framework/auditorias/reporteMedicionProyecto" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyecto" scope="request" name="reporteAuditoriaForm" parameter="reporteAuditoriaMedicionProyecto"></action>
+		
+		<!-- Mapeo del Action: Reporte auditoria mediciones por proyecto pdf-->
+		<action path="/framework/auditorias/reporteMedicionProyectoPdf" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyectoPdf"></action>
+		
+		<!-- Mapeo del Action: Reporte auditoria mediciones por proyecto xls-->
+		<action path="/framework/auditorias/reporteMedicionProyectoXls" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyectoExcel"></action>
+
+
+		
 
 	</action-mappings>
 

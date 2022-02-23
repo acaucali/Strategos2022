@@ -179,6 +179,10 @@
 				abrirSelectorOrganizaciones('gestionarAuditoriasMedicionForm', 'organizacion', 'organizacionId', null, null, null);
 			}
 			
+			function reporteAuditoriaProyecto(){
+				abrirVentanaModal('<html:rewrite action="/framework/auditorias/reporteMedicionProyecto" />?' , "reporteAuditoriaMedicionProyecto", 500, 490);
+			}
+			
 			function limpiarOrganizacion() 
 			{
 				document.gestionarAuditoriasForm.organizacionId.value = '';
@@ -229,6 +233,14 @@
 								<vgcinterfaz:botonMenu key="menu.ayuda.manual" onclick="abrirManual();" agregarSeparador="true" />
 								<vgcinterfaz:botonMenu key="menu.ayuda.acerca" onclick="acerca();" agregarSeparador="true" />
 								<vgcinterfaz:botonMenu key="menu.ayuda.licencia" onclick="licencia();" />
+							</vgcinterfaz:menuBotones>
+						</vgcinterfaz:contenedorMenuHorizontalItem>
+						
+						<%-- Menú: Evaluacion --%>
+						<vgcinterfaz:contenedorMenuHorizontalItem>
+							<vgcinterfaz:menuBotones id="menuEvaluacionAuditorias" key="menu.evaluacion">
+								<vgcinterfaz:botonMenu key="reporte.framework.auditorias.detallado.titulo" onclick=";" />
+								<vgcinterfaz:botonMenu key="reporte.framework.auditorias.proyecto.detallado.titulo" onclick="reporteAuditoriaProyecto();" />
 							</vgcinterfaz:menuBotones>
 						</vgcinterfaz:contenedorMenuHorizontalItem>
 						
