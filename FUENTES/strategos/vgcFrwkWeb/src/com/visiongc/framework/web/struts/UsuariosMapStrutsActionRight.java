@@ -119,6 +119,15 @@ public class UsuariosMapStrutsActionRight
     
     actionRight = new StrutsActionRight("framework.iniciosesion.configurariniciosesion", false, false, "CONFIGURACION_SET");
     mapa.put("framework.iniciosesion.configurariniciosesion", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.usuarios.reportegrupo", true, false, null);
+    mapa.put("framework.usuarios.reportegrupo", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.usuarios.reportegrupopdf", true, false, null);
+    mapa.put("framework.usuarios.reportegrupopdf", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.usuarios.reportegrupoxls", true, false, null);
+    mapa.put("framework.usuarios.reportegrupoxls", actionRight);
   }
   
   public static MapStrutsActionRight getInstance()

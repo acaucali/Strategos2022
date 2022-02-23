@@ -205,6 +205,17 @@
 		<action path="/framework/bloqueos/eliminarBloqueo" type="com.visiongc.framework.web.struts.bloqueos.actions.EliminarBloqueoAction">
 			<set-property property="secure" value="false" />
 		</action>
+		
+		
+		<!-- Mapeo del Action: Reporte usuario por grupo -->
+		<action path="/framework/usuarios/reporteGrupo" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupo" scope="request" name="reporteUsuarioForm" parameter="reporteUsuarioGrupo"></action>
+		
+		<!-- Mapeo del Action: Reporte usuario por grupo pdf-->
+		<action path="/framework/usuarios/reporteGrupoPdf" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoPdf"></action>
+		
+		<!-- Mapeo del Action: Reporte usuario por grupo xls-->
+		<action path="/framework/usuarios/reporteGrupoXls" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoExcel"></action>
+
 
 	</action-mappings>
 
