@@ -4,8 +4,12 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
+import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.app.strategos.portafolios.model.Portafolio;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.report.TablaDetallesObjeto;
@@ -41,7 +45,7 @@ public class ReporteAuditoriaMedicionProyectoPdfAction extends VgcReporteBasicoA
   
   protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
   {
-    return VgcResourceManager.getResourceApp("reporte.framework.auditorias.detallado.titulo");
+    return VgcResourceManager.getResourceApp("reporte.framework.auditorias.proyecto.detallado.titulo");
   }
   
   protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
@@ -57,22 +61,21 @@ public class ReporteAuditoriaMedicionProyectoPdfAction extends VgcReporteBasicoA
 	 MessageResources messageResources = getResources(request); 
 	  
 	 AuditoriaMedicionService auditoriaMedicionService = FrameworkServiceFactory.getInstance().openAuditoriaMedicionService();
+	 StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
 	  
 	 List<AuditoriaMedicion> auditorias = new ArrayList();
 	 
 	 Map<String, Object> filtros = new HashMap();
 	    
-		
-		String usuario = request.getParameter("usuario");
+			
 		String fechaDesde = request.getParameter("fechaDesde");
 		String fechaHasta = request.getParameter("fechaHasta");
-		String accion = request.getParameter("accion");
-		String organizacion = request.getParameter("organizacion");
+		String organizacionId = request.getParameter("organizacion");
+				
+		String atributoOrden = "";	    
+	    String tipoOrden = "ASC";
 		
-		String atributoOrden = request.getParameter("atributoOrden");
 	    
-	    String tipoOrden = request.getParameter("tipoOrden");
-		
 	    String[] ordenArray = new String[1];
 	    String[] tipoOrdenArray = new String[1];
 	    ordenArray[0] = atributoOrden;
@@ -82,127 +85,131 @@ public class ReporteAuditoriaMedicionProyectoPdfAction extends VgcReporteBasicoA
 	        filtros.put("fechaDesde", FechaUtil.convertirStringToDate(fechaDesde, VgcResourceManager.getResourceApp("formato.fecha.corta")));
 	    if ((fechaHasta != null) && (!fechaHasta.equals("")))
 	        filtros.put("fechaHasta", FechaUtil.convertirStringToDate(fechaHasta, VgcResourceManager.getResourceApp("formato.fecha.corta")));
-	    if ((usuario != null) && (!usuario.equals("")))
-	    	filtros.put("usuario", usuario);
-	    if ((accion != null) && (!accion.equals("")))
-	    	filtros.put("accion", accion);
-	    if ((organizacion != null) && (!organizacion.equals("")))
-	    	filtros.put("organizacion", organizacion);
+
+	    if(organizacionId != "") {
+	    	
+	    	OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, new Long(organizacionId));
+	    		    	
+	    	if ((organizacion != null) && (!organizacion.getNombre().equals("")))
+		    	filtros.put("organizacion", organizacion.getNombre());
+	    }
+	    
 		
 		 
 		auditorias= auditoriaMedicionService.getAuditoriasMedicion(ordenArray, tipoOrdenArray, true, filtros);
 	 
-	 documento.add(lineaEnBlanco(fuente));
+		documento.add(lineaEnBlanco(fuente));
+		
 	 
-	 for(Iterator<AuditoriaMedicion> iter = auditorias.iterator(); iter.hasNext(); ){
+		for(Iterator<AuditoriaMedicion> iter = auditorias.iterator(); iter.hasNext(); ){
 		
-		AuditoriaMedicion auditoria = iter.next();
-		
-		TablaPDF tabla = null;
-	    tabla = new TablaPDF(getConfiguracionPagina(request), request);
-	    int[] columnas = new int[9];
-	    columnas[0] = 21;
-	    columnas[1] = 17;
-	    columnas[2] = 14;
-	    columnas[3] = 25;
-	    columnas[4] = 21;
-	    columnas[5] = 21;
-	    columnas[6] = 21;
-	    columnas[7] = 10;
-	    columnas[8] = 10;
-	    tabla.setAmplitudTabla(100);
-	    tabla.crearTabla(columnas);
-	    
-	    tabla.setAlineacionHorizontal(1);
-	    
-
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.fecha"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.usuario"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.organizacion"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.indicador"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.clase"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.iniciativa"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.inicial"));
-	    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.final"));
-	    
-	    tabla.setDefaultAlineacionHorizontal();
-	    
-	    tabla.setAlineacionHorizontal(0);
-	    
-	    tabla.agregarCelda(VgcFormatter.formatearFecha(auditoria.getFechaEjecucion(), "dd-MM-yyyy hh:mm:ss aa"));
-	    tabla.agregarCelda(auditoria.getUsuario());
-	    tabla.agregarCelda(auditoria.getAccion());
-	    tabla.agregarCelda(auditoria.getOrganizacion());
-	    tabla.agregarCelda(auditoria.getIndicador());
-	    tabla.agregarCelda(auditoria.getClase());
-	    tabla.agregarCelda(auditoria.getIniciativa());
-	    tabla.agregarCelda(auditoria.getPeriodo());
-	    tabla.agregarCelda(auditoria.getPeriodoFinal());
-       
-      
-
-        documento.add(tabla.getTabla());
-	    
-        documento.add(lineaEnBlanco(fuente));
-       
-       
-        // detalle auditoria
-        
-        TablaPDF tablaDetalle = null;
-	    tablaDetalle = new TablaPDF(getConfiguracionPagina(request), request);
-	    int[] columnasDetalle = new int[6];
-	    
-	    columnasDetalle[0] = 15;
-	    columnasDetalle[1] = 10;
-	    columnasDetalle[2] = 10;
-	    columnasDetalle[3] = 21;
-	    columnasDetalle[4] = 19;
-	    columnasDetalle[5] = 21;
-	    
-	    tablaDetalle.setAmplitudTabla(100);
-	    tablaDetalle.crearTabla(columnasDetalle);
-	    
-	    tablaDetalle.setAlineacionHorizontal(1);
-	    
-	    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
-	    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.ano"));
-	    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo"));
-	    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.actual"));
-	    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.serie"));
-	    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.anterior"));
-	  
-	    tablaDetalle.setDefaultAlineacionHorizontal();
-	    
-	    tablaDetalle.setAlineacionHorizontal(0);
-		
-	    List<AuditoriaDetalleMedicion> auditoriasDetalle = new ArrayList(); 
-	    
-	    auditoriasDetalle=obtenerDetalles(auditoria);
+			AuditoriaMedicion auditoria = iter.next();
+			
+			TablaPDF tabla = null;
+		    tabla = new TablaPDF(getConfiguracionPagina(request), request);
+		    int[] columnas = new int[9];
+		    columnas[0] = 21;
+		    columnas[1] = 17;
+		    columnas[2] = 14;
+		    columnas[3] = 25;
+		    columnas[4] = 21;
+		    columnas[5] = 21;
+		    columnas[6] = 21;
+		    columnas[7] = 10;
+		    columnas[8] = 10;
+		    tabla.setAmplitudTabla(100);
+		    tabla.crearTabla(columnas);
+		    
+		    tabla.setAlineacionHorizontal(1);
+		    
+	
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.fecha"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.usuario"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.organizacion"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.indicador"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.clase"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.iniciativa"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.inicial"));
+		    tabla.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.final"));
+		    
+		    tabla.setDefaultAlineacionHorizontal();
+		    
+		    tabla.setAlineacionHorizontal(0);
+		    
+		    tabla.agregarCelda(VgcFormatter.formatearFecha(auditoria.getFechaEjecucion(), "dd-MM-yyyy hh:mm:ss aa"));
+		    tabla.agregarCelda(auditoria.getUsuario());
+		    tabla.agregarCelda(auditoria.getAccion());
+		    tabla.agregarCelda(auditoria.getOrganizacion());
+		    tabla.agregarCelda(auditoria.getIndicador());
+		    tabla.agregarCelda(auditoria.getClase());
+		    tabla.agregarCelda(auditoria.getIniciativa());
+		    tabla.agregarCelda(auditoria.getPeriodo());
+		    tabla.agregarCelda(auditoria.getPeriodoFinal());
+	       
 	      
-	    for(AuditoriaDetalleMedicion aud: auditoriasDetalle){
-	    	tablaDetalle.agregarCelda(aud.getAccion());
-	    	tablaDetalle.agregarCelda(aud.getAno().toString());
-	    	tablaDetalle.agregarCelda(aud.getPeriodo().toString());
-	    	Double valor= aud.getValor();
-	    	tablaDetalle.agregarCelda(Long.toString(valor.longValue()));
-	    	tablaDetalle.agregarCelda(aud.getSerieNombre());
-	    	
-	    	Double valorAnt= aud.getValorAnterior();
-	    	
-	    	if(aud.getAccion().equals("Inserción")){
-	    		tablaDetalle.agregarCelda("");
-			}else{
-				tablaDetalle.agregarCelda(Long.toString(valorAnt.longValue()));
-			}
-	    	
-	    	
-	    	    	
-	    }
-	    
-	    documento.add(tablaDetalle.getTabla());
-	    	    
-        documento.add(lineaEnBlanco(fuente));
+	
+	        documento.add(tabla.getTabla());
+		    
+	        documento.add(lineaEnBlanco(fuente));
+	       
+	       
+	        // detalle auditoria
+	        
+	        TablaPDF tablaDetalle = null;
+		    tablaDetalle = new TablaPDF(getConfiguracionPagina(request), request);
+		    int[] columnasDetalle = new int[6];
+		    
+		    columnasDetalle[0] = 15;
+		    columnasDetalle[1] = 10;
+		    columnasDetalle[2] = 10;
+		    columnasDetalle[3] = 21;
+		    columnasDetalle[4] = 19;
+		    columnasDetalle[5] = 21;
+		    
+		    tablaDetalle.setAmplitudTabla(100);
+		    tablaDetalle.crearTabla(columnasDetalle);
+		    
+		    tablaDetalle.setAlineacionHorizontal(1);
+		    
+		    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
+		    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.ano"));
+		    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo"));
+		    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.actual"));
+		    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.serie"));
+		    tablaDetalle.agregarCelda(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.anterior"));
+		  
+		    tablaDetalle.setDefaultAlineacionHorizontal();
+		    
+		    tablaDetalle.setAlineacionHorizontal(0);
+			
+		    List<AuditoriaDetalleMedicion> auditoriasDetalle = new ArrayList(); 
+		    
+		    auditoriasDetalle=obtenerDetalles(auditoria);
+		      
+		    for(AuditoriaDetalleMedicion aud: auditoriasDetalle){
+		    	tablaDetalle.agregarCelda(aud.getAccion());
+		    	tablaDetalle.agregarCelda(aud.getAno().toString());
+		    	tablaDetalle.agregarCelda(aud.getPeriodo().toString());
+		    	Double valor= aud.getValor();
+		    	tablaDetalle.agregarCelda(Long.toString(valor.longValue()));
+		    	tablaDetalle.agregarCelda(aud.getSerieNombre());
+		    	
+		    	Double valorAnt= aud.getValorAnterior();
+		    	
+		    	if(aud.getAccion().equals("Inserción")){
+		    		tablaDetalle.agregarCelda("");
+				}else{
+					tablaDetalle.agregarCelda(Long.toString(valorAnt.longValue()));
+				}
+		    	
+		    	
+		    	    	
+		    }
+		    
+		    documento.add(tablaDetalle.getTabla());
+		    	    
+	        documento.add(lineaEnBlanco(fuente));
 	 }
 	 
 	 documento.newPage();

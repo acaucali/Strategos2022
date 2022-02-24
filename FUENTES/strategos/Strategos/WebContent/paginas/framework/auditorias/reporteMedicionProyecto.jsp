@@ -23,27 +23,112 @@
 		<%-- Funciones JavaScript locales de la página Jsp --%>
 		<script type="text/javascript">
 			
-			
-	
+			var _fechaDesde;
+			var _fechaHasta;	
+		
 			function cancelar() 
 			{
 				window.close();						
 			}
 			
+			function validar() 
+			{
+				if (document.reporteAuditoriaForm.fechaDesde.value == "")
+				{
+					alert('<vgcutil:message key="jsp.framework.gestionarauditorias.alerta.fechadesde.vacio" /> ');
+					return false;
+				}
+
+				if (document.reporteAuditoriaForm.fechaHasta.value == "")
+				{
+					alert('<vgcutil:message key="jsp.framework.gestionarauditorias.alerta.fechahasta.vacio" /> ');
+					return false;
+				}
+				
+		 		if (!fechaValida(document.reporteAuditoriaForm.fechaDesde))
+	 			{
+		 			alert('<vgcutil:message key="jsp.framework.gestionarauditorias.alerta.fechadesde.invalido" /> ');
+		 			return;
+	 			}
+
+		 		if (!fechaValida(document.reporteAuditoriaForm.fechaHasta))
+	 			{
+		 			alert('<vgcutil:message key="jsp.framework.gestionarauditorias.alerta.fechahasta.invalido" /> ');
+		 			return;
+	 			}
+				
+				var fecha1 = document.reporteAuditoriaForm.fechaDesde.value.split("/");
+				var fecha2 = document.reporteAuditoriaForm.fechaHasta.value.split("/");
+
+				var diaDesde = fecha1[0];
+				var diaHasta = fecha2[0];
+				
+				var mesDesde = fecha1[1];
+				var mesHasta = fecha2[1];
+				
+				var anoDesde = fecha1[2];
+				var anoHasta = fecha2[2];
+
+		 		var desde = parseInt(anoDesde + "" + (mesDesde.length == 1 ? ("0" + mesDesde) : mesDesde) + "" + (diaDesde.length == 1 ? ("0" + diaDesde) : diaDesde));
+				var hasta = parseInt(anoHasta + "" + (mesHasta.length == 1 ? ("0" + mesHasta) : mesHasta) + "" + (diaHasta.length == 1 ? ("0" + diaHasta) : diaHasta));
+
+				if (hasta<desde) 
+				{
+					alert('<vgcutil:message key="jsp.framework.gestionarauditorias.alerta.rango.fechas.invalido" /> ');
+					return false;
+				} 
+		 		
+				return true;
+			}
+			
 			function generarReporte() 
 			{
-			 				
-	    	 	
+				if (validar()){
+					var url = '?fechaDesde=' + document.reporteAuditoriaForm.fechaDesde.value; 
+					url = url + '&fechaHasta=' + document.reporteAuditoriaForm.fechaHasta.value; 
+
+					url = url + '&organizacionId=' + document.reporteAuditoriaForm.organizacionId.value;
+					
+					if (document.reporteAuditoriaForm.tipoReporte[0].checked)
+						abrirReporte('<html:rewrite action="/framework/auditorias/reporteMedicionProyectoPdf"/>'+url);
+			    	 	
+					else if (document.reporteAuditoriaForm.tipoReporte[1].checked)
+						abrirReporte('<html:rewrite action="/framework/auditorias/reporteMedicionProyectoXls"/>'+url);
+						
+					window.close();
+				}				
+				
+					    	 	
 			}
 			
 			function seleccionarOrganizaciones() 
 		    {
 				abrirSelectorOrganizaciones('reporteAuditoriaForm', 'nombreOrganizacion', 'organizacionId', null);
 			}
-	
+			
+			function seleccionarFechaDesde() 
+			{
+				mostrarCalendario('document.reporteAuditoriaForm.fechaDesde' , document.reporteAuditoriaForm.fechaDesde.value, '<vgcutil:message key="formato.fecha.corta" />');
+			}
+			
+			function limpiarFechaDesde() 
+			{
+				document.reporteAuditoriaForm.fechaDesde.value = '';
+			}
+			
+			function seleccionarFechaHasta() 
+			{
+				mostrarCalendario('document.reporteAuditoriaForm.fechaHasta' , document.reporteAuditoriaForm.fechaHasta.value, '<vgcutil:message key="formato.fecha.corta" />');
+			}
+			
+			function limpiarFechaHasta() 
+			{
+				document.reporteAuditoriaForm.fechaHasta.value = '';
+			}
 
 		</script>
 		<jsp:include flush="true" page="/paginas/strategos/organizaciones/organizacionesJs.jsp"></jsp:include>
+		<jsp:include page="/componentes/calendario/calendario.jsp"></jsp:include>
 
 		<%-- Forma asociada al Action - Jsp --%>
 		<html:form action="/framework/auditorias/reporteMedicionProyecto">
@@ -79,50 +164,26 @@
 							<!-- Organizacion Seleccionada-->
 							<tr>
 								<td align="right"><b><vgcutil:message key="jsp.editariniciativa.ficha.organizacion" /></b></td>
-								<td align="right"><input type="button" style="width:40%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();"></td>
+								<td align="right"><input type="button" style="width:80%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();"></td>
+								
 							</tr>
 							
 							<tr>
 								<td colspan="3"><hr width="100%"></td>
 							</tr>
 							
-							<tr>
-								<!-- Encabezado selector de fechas -->
-							
-								<td align="center" colspan="1"></td>
-								<td align="left" colspan="1"><b><vgcutil:message key="jsp.reportes.iniciativa.ejecucion.plantilla.mes" /> </b> </td>
-								<td align="left" colspan="1"><b><vgcutil:message key="jsp.reportes.iniciativa.ejecucion.plantilla.ano" /> </b> </td>
-							
+							<tr>	
+								<tr class="barraFiltrosForma">
+								<td align="right"><vgcutil:message key="jsp.framework.gestionarauditorias.filtro.fechadesde" /></td>
+								<td align="right"><html:text property="fechaDesde" size="10" onfocus="this.blur();" maxlength="10" styleClass="cuadroTexto" />&nbsp;<img style="cursor: pointer" onclick="seleccionarFechaDesde();" src="<html:rewrite page='/componentes/calendario/calendario.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.calendario.alt" />">&nbsp;<img style="cursor:pointer" onclick="limpiarFechaDesde()" src="<html:rewrite page='/componentes/formulario/salir.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key='boton.limpiar.alt' />"></td>
+								<td width="30px">&nbsp;</td>
+								<td>&nbsp;</td>
 							</tr>
-							
-							<!-- Fecha Inicio -->
-							<tr>
-								<td align="left"><vgcutil:message key="jsp.reportes.iniciativa.ejecucion.plantilla.desde" /> : </td>
-								<td>
-									<html:select property="mesInicial" styleClass="cuadroTexto">
-										<html:optionsCollection property="grupoMeses" value="clave" label="valor" />
-									</html:select>
-								</td>
-								<td>
-									<html:select property="anoInicial" styleClass="cuadroTexto">
-										<html:optionsCollection property="grupoAnos" value="clave" label="valor" />
-									</html:select>
-								
-								</td>
-							</tr>
-							<!-- Fecha Final -->
-							<tr>
-								<td align="left"><vgcutil:message key="jsp.reportes.iniciativa.ejecucion.plantilla.hasta" /> : </td>
-								<td >
-									<html:select property="mesFinal" styleClass="cuadroTexto">
-										<html:optionsCollection property="grupoMeses" value="clave" label="valor" />
-									</html:select>
-								</td>
-								<td>
-									<html:select property="anoFinal" styleClass="cuadroTexto">
-										<html:optionsCollection property="grupoAnos" value="clave" label="valor" />
-									</html:select>
-								</td>
+							<tr class="barraFiltrosForma">
+								<td align="right"><vgcutil:message key="jsp.framework.gestionarauditorias.filtro.fechahasta" /></td>
+								<td align="right"><html:text property="fechaHasta" size="10" onfocus="this.blur();" maxlength="10" styleClass="cuadroTexto" />&nbsp;<img style="cursor: pointer" onclick="seleccionarFechaHasta();" src="<html:rewrite page='/componentes/calendario/calendario.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.calendario.alt" />">&nbsp;<img style="cursor:pointer" onclick="limpiarFechaHasta()" src="<html:rewrite page='/componentes/formulario/salir.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key='boton.limpiar.alt' />"></td>
+								<td width="30px">&nbsp;</td>
+								<td>&nbsp;</td>
 							</tr>
 						
 							<tr>
@@ -165,7 +226,7 @@
 						<table class="panelContenedor panelContenedorTabla">
 														
 							<tr>
-								<td colspan="3">
+								<td colspan="3" >
 									<html:radio property="tipoReporte" value="1" /><vgcutil:message key="jsp.reportes.plan.meta.reporte.tipo.pdf" />&nbsp;&nbsp;&nbsp;
 									<html:radio property="tipoReporte" value="2" /><vgcutil:message key="jsp.reportes.plan.meta.reporte.tipo.excel" />
 								</td>

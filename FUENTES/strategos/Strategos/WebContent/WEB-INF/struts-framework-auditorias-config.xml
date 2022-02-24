@@ -79,10 +79,10 @@
 		<action path="/framework/auditorias/reporteMedicionProyecto" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyecto" scope="request" name="reporteAuditoriaForm" parameter="reporteAuditoriaMedicionProyecto"></action>
 		
 		<!-- Mapeo del Action: Reporte auditoria mediciones por proyecto pdf-->
-		<action path="/framework/auditorias/reporteMedicionProyectoPdf" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyectoPdf"></action>
+		<action path="/framework/auditorias/reporteMedicionProyectoPdf" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyectoPdfAction"></action>
 		
 		<!-- Mapeo del Action: Reporte auditoria mediciones por proyecto xls-->
-		<action path="/framework/auditorias/reporteMedicionProyectoXls" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyectoExcel"></action>
+		<action path="/framework/auditorias/reporteMedicionProyectoXls" type="com.visiongc.framework.web.struts.auditorias.actions.ReporteAuditoriaMedicionProyectoExcelAction"></action>
 
 
 		

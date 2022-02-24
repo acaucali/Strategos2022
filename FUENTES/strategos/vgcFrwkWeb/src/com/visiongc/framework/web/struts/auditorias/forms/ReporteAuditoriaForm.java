@@ -20,6 +20,8 @@ public class ReporteAuditoriaForm extends EditarObjetoForm{
 	private String anoFinal;
 	private String mesInicial;
 	private String mesFinal;
+	private String fechaDesde;
+	private String fechaHasta;
 	private Byte alcance;
 	private String nombreOrganizacion;
 	private List<ObjetoClaveValor> grupoAnos;
@@ -49,6 +51,23 @@ public class ReporteAuditoriaForm extends EditarObjetoForm{
 	private String titulo;
 	
 		
+	
+	public String getFechaDesde() {
+		return fechaDesde;
+	}
+
+	public void setFechaDesde(String fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+
+	public String getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(String fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+
 	public List<ObjetoClaveValor> getGrupoAnos() {
 		return grupoAnos;
 	}

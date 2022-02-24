@@ -2,6 +2,7 @@ package com.visiongc.framework.web.struts.auditorias.actions;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,23 +57,22 @@ public class ReporteAuditoriaMedicionProyecto extends VgcAction{
 		
 		/* Parametros para el reporte */
 		
-		Calendar fecha = Calendar.getInstance();
-        int ano = fecha.get(Calendar.YEAR);
-        int mes = fecha.get(Calendar.MONTH) + 1;
-        int anoIn = ano -20;
-        int anoFin = ano +20;
+		Date dateActual = new Date();
+	    Calendar c = Calendar.getInstance();
+	    c.setTime(dateActual);
+	    String dia = (new StringBuilder()).append(c.get(5)).toString();
+	    String mes = (new StringBuilder()).append(c.get(2) + 1).toString();
+	    String ano = (new StringBuilder()).append(c.get(1)).toString();
+	    String fechaActual = (dia.length() < 2 ? "0" + dia : dia) + "/" + (mes.length() < 2 ? "0" + mes : mes) + "/" + ano;
         
-        
-	    /*Asigna a la Forma que genera reportes, el nombre de la organizacion y plan seleccionados*/
-	    reporteForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
-		
+    
 	
-		reporteForm.setAnoFinal(""+ano);
-		reporteForm.setAnoInicial(""+anoIn);
-		reporteForm.setGrupoAnos(PeriodoUtil.getListaNumeros(anoIn, anoFin));
-		reporteForm.setGrupoMeses(PeriodoUtil.getListaMeses());
-    	reporteForm.setMesInicial("1");
-    	reporteForm.setMesFinal("12");
+	    if ((reporteForm.getFechaDesde() == null) || ((reporteForm.getFechaDesde() != null) && (reporteForm.getFechaDesde().equals(""))))
+	    	reporteForm.setFechaDesde(fechaActual);
+	    if ((reporteForm.getFechaHasta() == null) || ((reporteForm.getFechaHasta() != null) && (reporteForm.getFechaHasta().equals("")))) {
+	    	reporteForm.setFechaHasta(fechaActual);
+	    }
+    	reporteForm.setTipoReporte((byte) 1);
 
 
 		return mapping.findForward(forward);
