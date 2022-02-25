@@ -19,8 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
+
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.commons.struts.action.VgcAction;
