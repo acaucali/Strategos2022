@@ -69,6 +69,15 @@ public class UsuariosMapStrutsActionRight
     actionRight = new StrutsActionRight("framework.usuarios.reporteusuariosresumidoexcel", true, false, "USUARIO_PRINT");
     mapa.put("framework.usuarios.reporteusuariosresumidoexcel", actionRight);
     
+    actionRight = new StrutsActionRight("framework.usuarios.reporteusuariosorganizacion", true, false, "USUARIO_PRINT");
+    mapa.put("framework.usuarios.reporteusuariosorganizacion", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.usuarios.reporteusuariosorganizacionpdf", true, false, "USUARIO_PRINT");
+    mapa.put("framework.usuarios.reporteusuariosorganizacionpdf", actionRight);
+    
+    actionRight = new StrutsActionRight("framework.usuarios.reporteusuariosorganizacionexcel", true, false, "USUARIO_PRINT");
+    mapa.put("framework.usuarios.reporteusuariosorganizacionexcel", actionRight);
+    
     actionRight = new StrutsActionRight("framework.usuarios.activarusuarios", true, false, "USUARIO_ACTIVAR");
     mapa.put("framework.usuarios.activarusuarios", actionRight);
 
@@ -139,7 +148,7 @@ public class UsuariosMapStrutsActionRight
         new UsuariosMapStrutsActionRight();
       }
       catch (Exception e) {
-        throw new ChainedRuntimeException("El mapeo de acciones a permisos no está configurado correctamente.", e);
+        throw new ChainedRuntimeException("El mapeo de acciones a permisos no estï¿½ configurado correctamente.", e);
       }
     }
     

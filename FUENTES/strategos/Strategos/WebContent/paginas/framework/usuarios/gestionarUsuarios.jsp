@@ -142,6 +142,11 @@
 					window.location.href='<sslext:rewrite action="/framework/usuarios/activarUsuarios"/>?usuarios='+ arrObjetosId;
 				}
 			}
+			
+			function reporteOrganizacion() 
+			{
+				abrirVentanaModal('<html:rewrite action="/framework/usuarios/reporteUsuariosOrganizacion"/>', 'reporteUsuariosOrganizacion', 400, 390);
+			}
 
 		</script>
 
@@ -201,6 +206,16 @@
 								<%-- 
 								<vgcinterfaz:botonMenu key="menu.herramientas.configurar.sistema" onclick="configurarSistema();" permisoId="CONFIGURACION_SISTEMA" />
 								 --%>
+							</vgcinterfaz:menuBotones>
+						</vgcinterfaz:contenedorMenuHorizontalItem>
+						
+						<%-- Menú: Evaluacion --%>
+						<vgcinterfaz:contenedorMenuHorizontalItem>
+							<vgcinterfaz:menuBotones id="menuEvaluacion" key="menu.evaluacion">
+								<vgcinterfaz:botonMenu key="menu.evaluacion.organizacion" onclick="reporteOrganizacion();" permisoId="USUARIO_PRINT" />
+								<vgcinterfaz:botonMenu key="menu.evaluacion.grupo" onclick=""  />
+								<vgcinterfaz:botonMenu key="menu.evaluacion.resumido" onclick=""  />
+								<vgcinterfaz:botonMenu key="menu.evaluacion.detallado" onclick=""  />							
 							</vgcinterfaz:menuBotones>
 						</vgcinterfaz:contenedorMenuHorizontalItem>
 						

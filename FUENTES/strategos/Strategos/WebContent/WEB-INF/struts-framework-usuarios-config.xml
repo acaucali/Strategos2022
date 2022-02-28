@@ -18,6 +18,7 @@
 		<form-bean name="cambiarClaveUsuarioForm" type="com.visiongc.framework.web.struts.forms.usuarios.CambiarClaveUsuarioForm" />
 		<form-bean name="editarGrupoForm" type="com.visiongc.framework.web.struts.forms.grupos.EditarGrupoForm" />
 		<form-bean name="configurarInicioSesionForm" type="com.visiongc.framework.web.struts.iniciosesion.forms.ConfigurarInicioSesionForm" />
+		<form-bean name="reporteUsuariosForm" type="com.visiongc.framework.web.struts.forms.usuarios.ReporteUsuariosForm"/>
 	</form-beans>
 
 	<!-- Definiciones: Global Forward -->
@@ -31,6 +32,7 @@
 		<forward name="propiedadesGrupo" path="/paginas/framework/grupos/propiedadesGrupo.jsp" />
 		<forward name="gestionarBloqueosLecturaAction" path="/framework/bloqueos/gestionarBloqueosLectura.action" />
 		<forward name="configurarInicioSesionAction" path="/framework/iniciosesion/configurarInicioSesion.action" />
+		<forward name="reporteUsuariosOrganizacion" path="/paginas/framework/usuarios/reporteOrganizacion.jsp" />
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -100,6 +102,15 @@
 			<set-property property="secure" value="false" />
 			<forward name="exito" path="/framework/usuarios/gestionarUsuarios.action" />
 		</action>
+		
+		<!-- Mapeo del Action: Reporte de Usuarios Organizacion -->
+		<action path="/framework/usuarios/reporteUsuariosOrganizacion" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuariosOrganizacionAction" scope="request" name="reporteUsuariosForm"  parameter="reporteUsuariosOrganizacion"></action>
+		
+		<!-- Mapeo del Action: Reporte de Usuarios Organizacion Pdf-->
+		<action path="/framework/usuarios/reporteUsuariosOrganizacionPdf" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuariosOrganizacionPdfAction" ></action>
+		
+		<!-- Mapeo del Action: Reporte de Usuarios Organizacion Excel-->
+		<action path="/framework/usuarios/reporteUsuariosOrganizacionExcel" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuariosOrganizacionExcelAction" ></action>
 
 		<!-- Mapeo del Action: Reporte de Usuario Detallado -->
 		<action path="/framework/usuarios/reporteUsuarioDetallado" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioDetalladoAction"></action>
