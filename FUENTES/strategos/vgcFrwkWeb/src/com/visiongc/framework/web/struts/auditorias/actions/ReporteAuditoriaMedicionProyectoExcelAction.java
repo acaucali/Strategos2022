@@ -44,6 +44,9 @@ import java.math.BigDecimal;
 import com.lowagie.text.Document;
 
 import com.lowagie.text.Paragraph;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
+import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
@@ -69,7 +72,7 @@ public class ReporteAuditoriaMedicionProyectoExcelAction extends VgcAction {
 			String nombre) {
 		navBar.agregarUrl(url, nombre);
 	}
-	 
+	  
 	
 	  public ActionForward execute(ActionMapping mapping, ActionForm form,
 				HttpServletRequest request, HttpServletResponse response)
@@ -83,22 +86,21 @@ public class ReporteAuditoriaMedicionProyectoExcelAction extends VgcAction {
 	    MessageResources messageResources = getResources(request);
 	    
 	    AuditoriaMedicionService auditoriaMedicionService = FrameworkServiceFactory.getInstance().openAuditoriaMedicionService();
+	    StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
 		  
 		List<AuditoriaMedicion> auditorias = new ArrayList();
 		
 		Map<String, Object> filtros = new HashMap();
 	    
 		
-		String usuario = request.getParameter("usuario");
 		String fechaDesde = request.getParameter("fechaDesde");
 		String fechaHasta = request.getParameter("fechaHasta");
-		String accion = request.getParameter("accion");
-		String organizacion = request.getParameter("organizacion");
+		String organizacionId = request.getParameter("organizacionId");
+				
+		String atributoOrden = "";	    
+	    String tipoOrden = "ASC";
 		
-		String atributoOrden = request.getParameter("atributoOrden");
-	    
-	    String tipoOrden = request.getParameter("tipoOrden");
-		
+			    	      
 	    String[] ordenArray = new String[1];
 	    String[] tipoOrdenArray = new String[1];
 	    ordenArray[0] = atributoOrden;
@@ -108,14 +110,18 @@ public class ReporteAuditoriaMedicionProyectoExcelAction extends VgcAction {
 	        filtros.put("fechaDesde", FechaUtil.convertirStringToDate(fechaDesde, VgcResourceManager.getResourceApp("formato.fecha.corta")));
 	    if ((fechaHasta != null) && (!fechaHasta.equals("")))
 	        filtros.put("fechaHasta", FechaUtil.convertirStringToDate(fechaHasta, VgcResourceManager.getResourceApp("formato.fecha.corta")));
-	    if ((usuario != null) && (!usuario.equals("")))
-	    	filtros.put("usuario", usuario);
-	    if ((accion != null) && (!accion.equals("")))
-	    	filtros.put("accion", accion);
-	    if ((organizacion != null) && (!organizacion.equals("")))
-	    	filtros.put("organizacion", organizacion);
+
+
+	    if(organizacionId != null && organizacionId != "") {
+	    	
+	    	OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, new Long(organizacionId));
+	    		    	
+	    	if ((organizacion != null) && (!organizacion.getNombre().equals("")))
+		    	filtros.put("organizacion", organizacion.getNombre());
+	    }
 		 
 		auditorias= auditoriaMedicionService.getAuditoriasMedicion(ordenArray, tipoOrdenArray, true, filtros);
+		
 		 
 		HSSFWorkbook objWB = new HSSFWorkbook();
 
@@ -124,7 +130,7 @@ public class ReporteAuditoriaMedicionProyectoExcelAction extends VgcAction {
 		HSSFCell celda = null;
 
 		// Creo la hoja
-		HSSFSheet hoja1 = objWB.createSheet("Auditoria Medición");
+		HSSFSheet hoja1 = objWB.createSheet("Auditoria Medición por Proyecto");
 
 		// Proceso la información y genero el xls.
 		int numeroFila = 1;
@@ -144,143 +150,113 @@ public class ReporteAuditoriaMedicionProyectoExcelAction extends VgcAction {
 			
 			AuditoriaMedicion auditoria = iter.next();
 			
-			
-
-			// Creamos la celda, aplicamos el estilo y definimos
-			// el tipo de dato que contendrá la celda
-			
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.fecha"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.usuario"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.organizacion"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.indicador"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.clase"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.iniciativa"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.inicial"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.final"));
-	
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue(VgcFormatter.formatearFecha(auditoria.getFechaEjecucion(), "dd-MM-yyyy hh:mm:ss aa"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getUsuario());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getAccion());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getOrganizacion());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getIndicador());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getClase());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getIniciativa());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getPeriodo());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getPeriodoFinal());
-			
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue("");
-			
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.ano"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.actual"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.serie"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.anterior"));
-			
-			List<AuditoriaDetalleMedicion> auditoriasDetalle = new ArrayList(); 
-			    
-			auditoriasDetalle=obtenerDetalles(auditoria);
-			
-						
-			for(AuditoriaDetalleMedicion aud: auditoriasDetalle){
-			
+			if(!auditoria.getIniciativa().equals("")) {
+				
+				// Creamos la celda, aplicamos el estilo y definimos
+				// el tipo de dato que contendrá la celda
+				
 				numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				
 				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getAccion());
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.organizacion"));
 				
 				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getAno().toString());
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.proyecto.titulo.usuario"));
 				
 				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getPeriodo().toString());
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.iniciativa"));
 				
-				Double valor= aud.getValor();
+					
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
 				
 				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(Long.toString(valor.longValue()));
+				celda.setCellValue(auditoria.getOrganizacion());
 				
 				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getSerieNombre());
+				celda.setCellValue(auditoria.getUsuario());
 				
-				Double valorAnt= aud.getValorAnterior();
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(auditoria.getIniciativa());
 				
-				if(aud.getAccion().equals("Inserción")){
+				//detalle
+				
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
+				
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
+				
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.ano"));
+				
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo"));
+				
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.actual"));
+				
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.serie"));
+				
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.anterior"));
+				
+				List<AuditoriaDetalleMedicion> auditoriasDetalle = new ArrayList(); 
+				    
+				auditoriasDetalle=obtenerDetalles(auditoria);
+				
+							
+				for(AuditoriaDetalleMedicion aud: auditoriasDetalle){
+				
+					numeroCelda = 1;
+					fila = hoja1.createRow(numeroFila++);
+					
 					celda = fila.createCell(numeroCelda++);
-					celda.setCellValue("");
-				}else{
+					celda.setCellValue(aud.getAccion());
+					
 					celda = fila.createCell(numeroCelda++);
-					celda.setCellValue(Long.toString(valorAnt.longValue()));
-				}
+					celda.setCellValue(aud.getAno().toString());
+					
+					celda = fila.createCell(numeroCelda++);
+					celda.setCellValue(aud.getPeriodo().toString());
+					
+					Double valor= aud.getValor();
+					
+					celda = fila.createCell(numeroCelda++);
+					celda.setCellValue(Long.toString(valor.longValue()));
+					
+					celda = fila.createCell(numeroCelda++);
+					celda.setCellValue(aud.getSerieNombre());
+					
+					Double valorAnt= aud.getValorAnterior();
+					
+					if(aud.getAccion().equals("Inserción")){
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue("");
+					}else{
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(Long.toString(valorAnt.longValue()));
+					}
+					
+					
+					
+						    	    	
+			    }
 				
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
 				
-				
-					    	    	
-		    }
+			}
 			
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue("");
 		}
 	
 		      
