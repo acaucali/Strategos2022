@@ -147,6 +147,11 @@
 			{
 				abrirVentanaModal('<html:rewrite action="/framework/usuarios/reporteUsuariosOrganizacion"/>', 'reporteUsuariosOrganizacion', 400, 390);
 			}
+			
+			function reporteGrupo() 
+			{
+				abrirVentanaModal('<html:rewrite action="/framework/usuarios/reporteGrupo"/>', 'reporteUsuariosGrupo', 600, 380);
+			}
 
 		</script>
 
@@ -213,9 +218,8 @@
 						<vgcinterfaz:contenedorMenuHorizontalItem>
 							<vgcinterfaz:menuBotones id="menuEvaluacion" key="menu.evaluacion">
 								<vgcinterfaz:botonMenu key="menu.evaluacion.organizacion" onclick="reporteOrganizacion();" permisoId="USUARIO_PRINT" />
-								<vgcinterfaz:botonMenu key="menu.evaluacion.grupo" onclick=""  />
-								<vgcinterfaz:botonMenu key="menu.evaluacion.resumido" onclick=""  />
-								<vgcinterfaz:botonMenu key="menu.evaluacion.detallado" onclick=""  />							
+								<vgcinterfaz:botonMenu key="menu.evaluacion.grupo" onclick="reporteGrupo();"  permisoId="USUARIO_PRINT"/>
+														
 							</vgcinterfaz:menuBotones>
 						</vgcinterfaz:contenedorMenuHorizontalItem>
 						
@@ -487,7 +491,7 @@
 			</vgcinterfaz:contenedorForma>
 		</html:form>
 		<script type="text/javascript">
-			resizeAlto(document.getElementById('body-usuarios'), 310);
+			resizeAlto(document.getElementById('body-usuarios'), 280);
 			var visor = document.getElementById('visorUsuarios');
 			if (visor != null)
 				visor.style.width = (parseInt(_myWidth) - 140) + "px";

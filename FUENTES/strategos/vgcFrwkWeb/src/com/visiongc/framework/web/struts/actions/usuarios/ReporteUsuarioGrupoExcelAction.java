@@ -42,7 +42,7 @@ import java.math.BigDecimal;
 
 
 import com.lowagie.text.Document;
-
+import com.lowagie.text.Element;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.commons.report.Tabla;
@@ -51,6 +51,7 @@ import com.visiongc.commons.report.TablaDetallesObjeto;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.FechaUtil;
+import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
@@ -58,6 +59,7 @@ import com.visiongc.framework.auditoria.AuditoriaMedicionService;
 import com.visiongc.framework.auditoria.model.AuditoriaDetalleMedicion;
 import com.visiongc.framework.auditoria.model.AuditoriaMedicion;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.Grupo;
 import com.visiongc.framework.model.Organizacion;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.model.UsuarioGrupo;
@@ -82,305 +84,404 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 		
 	    MessageResources messageResources = getResources(request);
 	    
-	    AuditoriaMedicionService auditoriaMedicionService = FrameworkServiceFactory.getInstance().openAuditoriaMedicionService();
-		  
-		List<AuditoriaMedicion> auditorias = new ArrayList();
+	    String estatus = request.getParameter("estatus");
+		String grupo = request.getParameter("selectGrupos");
+		 
+		UsuariosService usuariosService = FrameworkServiceFactory.getInstance().openUsuariosService();
+		 
+		String atributoOrden = "";
+		    
+		String tipoOrden = "ASC";
+			
+		String[] ordenArray = new String[1];
+		String[] tipoOrdenArray = new String[1];
+		ordenArray[0] = atributoOrden;
+		tipoOrdenArray[0] = tipoOrden;
 		
+		
+		   
+		List<Usuario> usuarios = new ArrayList();
+		List<Grupo> grupos = new ArrayList();	 
+		 
 		Map<String, Object> filtros = new HashMap();
-	    
 		
-		String usuario = request.getParameter("usuario");
-		String fechaDesde = request.getParameter("fechaDesde");
-		String fechaHasta = request.getParameter("fechaHasta");
-		String accion = request.getParameter("accion");
-		String organizacion = request.getParameter("organizacion");
-		
-		String atributoOrden = request.getParameter("atributoOrden");
-	    
-	    String tipoOrden = request.getParameter("tipoOrden");
-		
-	    String[] ordenArray = new String[1];
-	    String[] tipoOrdenArray = new String[1];
-	    ordenArray[0] = atributoOrden;
-	    tipoOrdenArray[0] = tipoOrden;
-	      
-	    if ((fechaDesde != null) && (!fechaDesde.equals("")))
-	        filtros.put("fechaDesde", FechaUtil.convertirStringToDate(fechaDesde, VgcResourceManager.getResourceApp("formato.fecha.corta")));
-	    if ((fechaHasta != null) && (!fechaHasta.equals("")))
-	        filtros.put("fechaHasta", FechaUtil.convertirStringToDate(fechaHasta, VgcResourceManager.getResourceApp("formato.fecha.corta")));
-	    if ((usuario != null) && (!usuario.equals("")))
-	    	filtros.put("usuario", usuario);
-	    if ((accion != null) && (!accion.equals("")))
-	    	filtros.put("accion", accion);
-	    if ((organizacion != null) && (!organizacion.equals("")))
-	    	filtros.put("organizacion", organizacion);
+		//grupo seleccionado
+		if((grupo != null) && (!grupo.equals("") && !grupo.equals("0"))) {
+			
+			if ((estatus != null) && (!estatus.equals("") && !estatus.equals("2")))
+		    	filtros.put("estatus", estatus);
 		 
-		auditorias= auditoriaMedicionService.getAuditoriasMedicion(ordenArray, tipoOrdenArray, true, filtros);
+			filtros.put("grupoId", grupo);
 		 
-		HSSFWorkbook objWB = new HSSFWorkbook();
-
-		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
-		HSSFCell celda = null;
-
-		// Creo la hoja
-		HSSFSheet hoja1 = objWB.createSheet("Auditoria Medición");
-
-		// Proceso la información y genero el xls.
-		int numeroFila = 1;
-		int numeroCelda = 1;
-		HSSFRow fila = hoja1.createRow(numeroFila++); 
-		
-		celda = fila.createCell(numeroCelda);
-		celda.setCellType(HSSFCell.CELL_TYPE_STRING);
-		celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detallado.titulo"));
-
-		numeroCelda = 1;
-		fila = hoja1.createRow(numeroFila++);
-		celda = fila.createCell(numeroCelda);
-		celda.setCellValue("");
-		
-		for(Iterator<AuditoriaMedicion> iter = auditorias.iterator(); iter.hasNext(); ){
-			
-			AuditoriaMedicion auditoria = iter.next();
 			
 			
+			HSSFWorkbook objWB = new HSSFWorkbook();
 
 			// Creamos la celda, aplicamos el estilo y definimos
 			// el tipo de dato que contendrá la celda
+			HSSFCell celda = null;
+
+			// Creo la hoja
+			HSSFSheet hoja1 = objWB.createSheet("Usuario Grupo");
+
+			// Proceso la información y genero el xls.
+			int numeroFila = 1;
+			int numeroCelda = 1;
+			HSSFRow fila = hoja1.createRow(numeroFila++); 
 			
+			CellStyle headerStyle = objWB.createCellStyle();
+	        Font font = objWB.createFont();
+	        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	        headerStyle.setFont(font);
+
+	        CellStyle style = objWB.createCellStyle();
+	        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+	        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	        
+	        
+			
+			celda = fila.createCell(numeroCelda);
+			celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+			celda.setCellStyle(headerStyle);
+			celda.setCellValue(messageResources.getMessage("reporte.framework.usuarios.grupo.titulo"));
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.fecha"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.usuario"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.organizacion"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.indicador"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.clase"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.iniciativa"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.inicial"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo.final"));
-	
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue(VgcFormatter.formatearFecha(auditoria.getFechaEjecucion(), "dd-MM-yyyy hh:mm:ss aa"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getUsuario());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getAccion());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getOrganizacion());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getIndicador());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getClase());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getIniciativa());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getPeriodo());
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(auditoria.getPeriodoFinal());
+			Grupo grupoNombre = (Grupo)usuariosService.load(Grupo.class,  new Long(grupo));
 			
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue("");
 			
-			numeroCelda = 1;
+			String header = "Grupo: "+ grupoNombre.getGrupo();
+	        HSSFCell cell = fila.createCell(1);
+	        cell.setCellStyle(headerStyle);
+	        cell.setCellValue(header);
+			
+	        numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
+			celda = fila.createCell(numeroCelda);
+			celda.setCellValue("");
 			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.accion"));
 			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.ano"));
+			usuarios= usuariosService.getUsuarios(1, atributoOrden, tipoOrden, true, filtros).getLista();
+					
+			if(usuarios == null || usuarios.size() == 0) {
+				
+				String texto = "No existen usuarios asociados al Grupo";
+		        HSSFCell celdatex = fila.createCell(1);
+		        celdatex.setCellStyle(headerStyle);
+		        celdatex.setCellValue(texto);
+				
+		        numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");	
+				 
+										 
+			 }else {
+				// Creamos la celda, aplicamos el estilo y definimos
+					// el tipo de dato que contendrá la celda
+					
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.uid"));
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.fullname"));
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.isadmin"));
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus"));
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus.bloqueado"));
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.propiedadesusuario.pestana.general.creado"));
+							
+				celda = fila.createCell(numeroCelda++);
+				celda.setCellValue(messageResources.getMessage("jsp.framework.propiedadesusuario.pestana.general.modificado"));
 			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.periodo"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.actual"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.serie"));
-			
-			celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(messageResources.getMessage("reporte.framework.auditorias.detalle.valor.anterior"));
-			
-			List<AuditoriaDetalleMedicion> auditoriasDetalle = new ArrayList(); 
-			    
-			auditoriasDetalle=obtenerDetalles(auditoria);
-			
-						
-			for(AuditoriaDetalleMedicion aud: auditoriasDetalle){
-			
+				
 				numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				
-				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getAccion());
-				
-				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getAno().toString());
-				
-				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getPeriodo().toString());
-				
-				Double valor= aud.getValor();
-				
-				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(Long.toString(valor.longValue()));
-				
-				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue(aud.getSerieNombre());
-				
-				Double valorAnt= aud.getValorAnterior();
-				
-				if(aud.getAccion().equals("Inserción")){
+				for(Iterator<Usuario> iter = usuarios.iterator(); iter.hasNext(); ){
+					
+					Usuario usuario = iter.next();
+					
 					celda = fila.createCell(numeroCelda++);
-					celda.setCellValue("");
-				}else{
+					celda.setCellValue(usuario.getUId());
+					
 					celda = fila.createCell(numeroCelda++);
-					celda.setCellValue(Long.toString(valorAnt.longValue()));
-				}
+					celda.setCellValue(usuario.getFullName());
+					
+					celda = fila.createCell(numeroCelda++);
 				
-				
-				
-					    	    	
-		    }
-			
-			numeroCelda = 1;
-			fila = hoja1.createRow(numeroFila++);
-			celda = fila.createCell(numeroCelda);
-			celda.setCellValue("");
-		}
-	
-		      
-        Date date = new Date();
-        SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
-        
-        String ruta="AuditoriaDetallado_"+hourdateFormat.format(date)+".xls"; 
-        
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition","attachment;filename="+ruta);    
-       
-        ServletOutputStream file  = response.getOutputStream();
-      
-        objWB.write(file);
-        file.close();
+					if(usuario.getIsAdmin() != null && usuario.getIsAdmin() == true) {
+						celda.setCellValue("Si");
+				    }else {
+				    	celda.setCellValue("No");
+				    }
+				    
+					celda = fila.createCell(numeroCelda++);
+				    if(usuario.getEstatus() != null) {
+				    	switch(usuario.getEstatus()) {
+					    	case 0:
+					    		celda.setCellValue("Activo");
+					    		break;
+					    	case 1:
+					    		celda.setCellValue("Inactivo");
+					    		break;
+				    	}
+				    }
+				    
+				    celda = fila.createCell(numeroCelda++);
+				    if(usuario.getBloqueado() != null && usuario.getBloqueado() == true) {
+				    	celda.setCellValue("Si");
+				    }else {
+				    	celda.setCellValue("No");
+				    }
+					
 		
-	   
-	   
-	    forward="exito";
-		 
+					celda = fila.createCell(numeroCelda++);
+					celda.setCellValue(VgcFormatter.formatearFecha(usuario.getCreado(), "dd-MM-yyyy hh:mm:ss aa"));
+					
+					celda = fila.createCell(numeroCelda++);
+					celda.setCellValue(VgcFormatter.formatearFecha(usuario.getModificado(), "dd-MM-yyyy hh:mm:ss aa"));
+					
+					numeroCelda = 1;
+					fila = hoja1.createRow(numeroFila++);
+					celda = fila.createCell(numeroCelda);
+					celda.setCellValue(""); 
+				}
 			
+			
+				
+			}
+			
+			Date date = new Date();
+	        SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
+	        
+	        String ruta="UsuarioGrupo_"+hourdateFormat.format(date)+".xls"; 
+	        
+	        response.setContentType("application/octet-stream");
+	        response.setHeader("Content-Disposition","attachment;filename="+ruta);    
+	       
+	        ServletOutputStream file  = response.getOutputStream();
+	      
+	        objWB.write(file);
+	        file.close();
+			
+			
+		}else {
+			PaginaLista paginaGrupos = usuariosService.getGrupos(1, "grupo", "ASC");
+		    
+			 if(paginaGrupos != null && paginaGrupos.getLista().size() > 0) {   	
+			   	grupos = paginaGrupos.getLista();	
+			 }
+			 
+			 HSSFWorkbook objWB = new HSSFWorkbook();
+
+				// Creamos la celda, aplicamos el estilo y definimos
+				// el tipo de dato que contendrá la celda
+				HSSFCell celda = null;
+
+				// Creo la hoja
+				HSSFSheet hoja1 = objWB.createSheet("Usuario Grupo");
+
+				// Proceso la información y genero el xls.
+				int numeroFila = 1;
+				int numeroCelda = 1;
+				HSSFRow fila = hoja1.createRow(numeroFila++); 
+				
+				CellStyle headerStyle = objWB.createCellStyle();
+		        Font font = objWB.createFont();
+		        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		        headerStyle.setFont(font);
+
+		        CellStyle style = objWB.createCellStyle();
+		        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+		        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		        
+		        HSSFRow headerRow = hoja1.createRow(numeroFila++);
+				
+		        celda = fila.createCell(numeroCelda);
+				celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+				celda.setCellStyle(headerStyle);
+				celda.setCellValue(messageResources.getMessage("reporte.framework.usuarios.grupo.titulo"));
+
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				
+											 
+			 //se recorren los grupos
+			 for(Grupo gru: grupos) {
+				 
+				 
+				 
+				 	if ((estatus != null) && (!estatus.equals("") && !estatus.equals("2")))
+				    	filtros.put("estatus", estatus);
+				 
+					filtros.put("grupoId", gru.getGrupoId());
+					
+					Grupo grupoNombre = (Grupo)usuariosService.load(Grupo.class,  gru.getGrupoId());
+
+					numeroCelda = 1;
+					fila = hoja1.createRow(numeroFila++);
+					celda = fila.createCell(numeroCelda);
+					celda.setCellValue("");
+					
+					String header = "Grupo: "+ grupoNombre.getGrupo();
+			        HSSFCell cell = fila.createCell(1);
+			        cell.setCellStyle(headerStyle);
+			        cell.setCellValue(header);
+					
+			        numeroCelda = 1;
+					fila = hoja1.createRow(numeroFila++);
+					celda = fila.createCell(numeroCelda);
+					celda.setCellValue("");					
+					
+				 
+					usuarios= usuariosService.getUsuarios(1, atributoOrden, tipoOrden, true, filtros).getLista();
+					
+					if(usuarios == null || usuarios.size() == 0) {
+						
+						String texto = "No existen usuarios asociados al Grupo";
+				        HSSFCell celdatex = fila.createCell(1);
+				        celdatex.setCellStyle(headerStyle);
+				        celdatex.setCellValue(texto);
+						
+				        numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+						celda = fila.createCell(numeroCelda);
+						celda.setCellValue("");	
+						 
+												 
+					 }else {
+						 
+						// Creamos la celda, aplicamos el estilo y definimos
+							// el tipo de dato que contendrá la celda
+							
+						numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.uid"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.fullname"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.isadmin"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus.bloqueado"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.propiedadesusuario.pestana.general.creado"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.propiedadesusuario.pestana.general.modificado"));
+					
+						
+						numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+						
+						for(Iterator<Usuario> iter = usuarios.iterator(); iter.hasNext(); ){
+							
+							Usuario usuario = iter.next();
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(usuario.getUId());
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(usuario.getFullName());
+							
+							celda = fila.createCell(numeroCelda++);
+						
+							if(usuario.getIsAdmin() != null && usuario.getIsAdmin() == true) {
+								celda.setCellValue("Si");
+						    }else {
+						    	celda.setCellValue("No");
+						    }
+						    
+							celda = fila.createCell(numeroCelda++);
+						    if(usuario.getEstatus() != null) {
+						    	switch(usuario.getEstatus()) {
+							    	case 0:
+							    		celda.setCellValue("Activo");
+							    		break;
+							    	case 1:
+							    		celda.setCellValue("Inactivo");
+							    		break;
+						    	}
+						    }
+						    
+						    celda = fila.createCell(numeroCelda++);
+						    if(usuario.getBloqueado() != null && usuario.getBloqueado() == true) {
+						    	celda.setCellValue("Si");
+						    }else {
+						    	celda.setCellValue("No");
+						    }
+							
+		
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(VgcFormatter.formatearFecha(usuario.getCreado(), "dd-MM-yyyy hh:mm:ss aa"));
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(VgcFormatter.formatearFecha(usuario.getModificado(), "dd-MM-yyyy hh:mm:ss aa"));
+							
+							numeroCelda = 1;
+							fila = hoja1.createRow(numeroFila++);
+							celda = fila.createCell(numeroCelda);
+							celda.setCellValue("");
+							
+						 
+					 }
+																	
+					
+				}
+					
+					
+				 
+			 }
+			 
+			 	Date date = new Date();
+		        SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
+		        
+		        String ruta="UsuarioGrupo_"+hourdateFormat.format(date)+".xls"; 
+		        
+		        response.setContentType("application/octet-stream");
+		        response.setHeader("Content-Disposition","attachment;filename="+ruta);    
+		       
+		        ServletOutputStream file  = response.getOutputStream();
+		      
+		        objWB.write(file);
+		        file.close();
+
+			 	
+		}
+		
+		forward="exito";
+		 
+		
 		/** Código de lógica de Negocio del action	*/
 
 		/** Otherwise, return "success" */
-		return mapping.findForward(forward);     	  	
+		return mapping.findForward(forward);  
+	          	  	
 	    
    }
-	
-	  private List<AuditoriaDetalleMedicion> obtenerDetalles(AuditoriaMedicion auditoria){
-		  
-		  List<AuditoriaDetalleMedicion> auditorias = new ArrayList();
-		  
-		  String detalle = auditoria.getDetalle();
-		    
-		  String[] cadena= detalle.split("]");
-		    
-		    	for(int x=0; x<cadena.length; x++){
-		    		String[] cad = cadena[x].split(":");
-		    		AuditoriaDetalleMedicion auditoriaDetalle = new AuditoriaDetalleMedicion();
-		    		auditoriaDetalle.setAuditoriaMedicionId(new Long(auditoria.getAuditoriaMedicionId()));
-		    		List<String> detalles = obtenerDetalle(auditoriaDetalle, cad);
-		    		
-		    		if(detalles.size() >0){
-		    			auditoriaDetalle.setAno(new Integer(detalles.get(0)));
-		    			auditoriaDetalle.setPeriodo(new Integer(detalles.get(1)));
-		    			auditoriaDetalle.setValor(new Double(detalles.get(2)).longValue());
-		    			auditoriaDetalle.setSerie(detalles.get(3));
-		    			auditoriaDetalle.setSerieNombre(obtenerNombreSerie(auditoriaDetalle.getSerie()));
-		    			auditoriaDetalle.setAccion(detalles.get(4));
-		    			if(detalles.size() == 6){
-		    				auditoriaDetalle.setValorAnterior(new Double(detalles.get(5)).longValue());
-		    			}
-		    			auditorias.add(auditoriaDetalle);
-		    		}
-		    		    		
-		    	}
-		  
-		  return auditorias;
-	  }
-	  
-	  private List<String> obtenerDetalle(AuditoriaDetalleMedicion auditoriaDetalle, String[] cad){
-			 
-			 int index=0; 
-			 int cont=1;
-			 String signo =",";
-			 List<String> detalles = new ArrayList();		
-			 
-			 for(int x=0; x<cad.length; x++) {
-				String cadena= cad[x];
-				String valor= "";
-				index=cadena.indexOf(signo);
-				
-				if(index >0){
-					valor = cadena.substring(0, index);
-					detalles.add(valor);
-				}else if(cont == cad.length){
-					valor = cadena;
-					detalles.add(valor);
-				}
-				cont++;
-			 }
-			  
-			 return detalles; 
-	  }
-		  
-	  private String obtenerNombreSerie(String serie){
-			  Long serieId = new Long(serie);
-			  
-			  String serieNombre = "";
-			  
-			  if(serieId == SerieTiempo.getSerieRealId().longValue()){
-				serieNombre = "Real";  
-			  }else if(serieId == SerieTiempo.getSerieProgramadoId().longValue()){
-				serieNombre = "Programado";  
-			  }else if(serieId == SerieTiempo.getSerieMetaId().longValue()){
-				serieNombre = "Meta";  
-			  }
-			  	  
-			  return serieNombre;
-			  
-	  }
 	
 }

@@ -3,6 +3,10 @@ package com.visiongc.framework.web.struts.forms.usuarios;
 
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
+import java.util.List;
+
+import com.visiongc.framework.model.Grupo;
+
 public class ReporteUsuariosForm extends EditarObjetoForm {
 	
 	
@@ -13,8 +17,36 @@ public class ReporteUsuariosForm extends EditarObjetoForm {
 	private Integer estatus;
 	private Byte tipoReporte;
 	
+	private Long grupoId;
+	private List<Grupo> grupos;
+	private Grupo grupo;
 	
 	
+	
+	public Long getGrupoId() {
+		return grupoId;
+	}
+
+	public void setGrupoId(Long grupoId) {
+		this.grupoId = grupoId;
+	}
+
+	public List<Grupo> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<Grupo> grupos) {
+		this.grupos = grupos;
+	}
+
+	public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
+	}
+
 	public void setOrganizacionId(Long organizacionId) {
 		this.organizacionId = organizacionId;
 	}

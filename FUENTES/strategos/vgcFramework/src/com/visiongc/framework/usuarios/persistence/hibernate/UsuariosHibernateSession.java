@@ -83,6 +83,12 @@ public class UsuariosHibernateSession
           condicionesConsulta = condicionesConsulta + "usuario.usuarioId = ug.pk.usuarioId and ug.pk." + fieldName + " = " + fieldValue + " and ";
           hayCondicionesConsulta = true;
         }
+        else if (fieldName.equals("grupoId"))
+        {
+          tablasConsulta = tablasConsulta + ", UsuarioGrupo ug";
+          condicionesConsulta = condicionesConsulta + "usuario.usuarioId = ug.pk.usuarioId and ug.pk." + fieldName + " = " + fieldValue + " and ";
+          hayCondicionesConsulta = true;
+        }
         else if (fieldName.equals("isConnected"))
         {
           condicionesConsulta = condicionesConsulta + "usuario." + fieldName + " = " + fieldValue + " and ";

@@ -33,6 +33,7 @@
 		<forward name="gestionarBloqueosLecturaAction" path="/framework/bloqueos/gestionarBloqueosLectura.action" />
 		<forward name="configurarInicioSesionAction" path="/framework/iniciosesion/configurarInicioSesion.action" />
 		<forward name="reporteUsuariosOrganizacion" path="/paginas/framework/usuarios/reporteOrganizacion.jsp" />
+		<forward name="reporteUsuariosGrupo" path="/paginas/framework/usuarios/reporteUsuariosGrupo.jsp" />
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -219,13 +220,13 @@
 		
 		
 		<!-- Mapeo del Action: Reporte usuario por grupo -->
-		<action path="/framework/usuarios/reporteGrupo" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupo" scope="request" name="reporteUsuarioForm" parameter="reporteUsuarioGrupo"></action>
+		<action path="/framework/usuarios/reporteGrupo" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoAction" scope="request" name="reporteUsuariosForm" parameter="reporteUsuariosGrupo"></action>
 		
 		<!-- Mapeo del Action: Reporte usuario por grupo pdf-->
-		<action path="/framework/usuarios/reporteGrupoPdf" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoPdf"></action>
+		<action path="/framework/usuarios/reporteGrupoPdf" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoPdfAction"></action>
 		
 		<!-- Mapeo del Action: Reporte usuario por grupo xls-->
-		<action path="/framework/usuarios/reporteGrupoXls" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoExcel"></action>
+		<action path="/framework/usuarios/reporteGrupoXls" type="com.visiongc.framework.web.struts.actions.usuarios.ReporteUsuarioGrupoExcelAction"></action>
 
 
 	</action-mappings>

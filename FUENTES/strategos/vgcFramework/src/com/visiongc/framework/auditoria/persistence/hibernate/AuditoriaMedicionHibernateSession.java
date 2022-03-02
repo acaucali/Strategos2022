@@ -119,7 +119,7 @@ public class AuditoriaMedicionHibernateSession extends VgcHibernateSession
                 }else
                 if(fieldName.equals("organizacion"))
                 {
-                	condicionesConsulta = condicionesConsulta + "lower(auditoriaMedicion.organizacion)" + " like '%" + (String)filtros.get(fieldName) + "%' and ";
+                	condicionesConsulta = condicionesConsulta + "auditoriaMedicion.organizacion" + " like '%" + (String)filtros.get(fieldName) + "%' and ";
                     hayCondicionesConsulta = true;
                 }
             }
