@@ -34,13 +34,13 @@
 			
 			function nuevo() 
 			{
-				window.location.href="<sslext:rewrite action='/framework/usuarios/crearUsuario' />";
+				abrirVentanaModal('<sslext:rewrite action="/framework/usuarios/crearUsuario"/>', "UsuarioAdd", 450, 470);
 			}
 			
 			function modificar() 
 			{
 				if (verificarElementoUnicoSeleccionMultiple(document.gestionarUsuariosForm.seleccionados)) 
-					window.location.href = '<sslext:rewrite action="/framework/usuarios/modificarUsuario"/>?usuarioId=' + document.gestionarUsuariosForm.seleccionados.value;
+					abrirVentanaModal('<sslext:rewrite action="/framework/usuarios/modificarUsuario"/>?usuarioId='+ document.gestionarUsuariosForm.seleccionados.value, "UsuarioEdit", 450, 470);
 			}
 			
 			function copiar() 
