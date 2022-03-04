@@ -49,6 +49,9 @@ public class ReporteUsuariosOrganizacionAction extends VgcAction{
 		
 		request.getSession().setAttribute("isAdmin", isAdmin); 
 		
+		reporteUsuariosForm.setEstatus(2);
+		reporteUsuariosForm.setTipoReporte((byte) 1);
+	   
 	   
 	   
 	   return mapping.findForward(forward);

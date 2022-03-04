@@ -1,9 +1,12 @@
 package com.visiongc.framework.web.struts.actions.usuarios;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +24,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import com.lowagie.text.Element;
+import com.lowagie.text.Paragraph;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
+import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
+import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.Grupo;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.usuarios.UsuariosService;
 
@@ -44,114 +55,390 @@ public class ReporteUsuariosOrganizacionExcelAction extends VgcAction{
 		super.execute(mapping, form, request, response);
 		
 		int x=1;
+		
+		
 		String forward = mapping.getParameter();
-		String estatus = (request.getParameter("estatus"));	
 		
-	    MessageResources messageResources = getResources(request);
-	    	    
-	    UsuariosService usuariosService = FrameworkServiceFactory.getInstance().openUsuariosService(getLocale(request));
-	    
-	    List usuarios = usuariosService.getUsuarios(0, estatus, estatus).getLista();
-	    
-	    Object[][] data = new Object[usuarios.size()+1][7];
+		String estatus = request.getParameter("estatus");
+		String organizacionId = request.getParameter("organizacionId");
+		MessageResources messageResources = getResources(request);
 		 
-	    data[0][0]=messageResources.getMessage("reporte.framework.usuarios.resumido.uid");
-    	data[0][1]=messageResources.getMessage("reporte.framework.usuarios.resumido.fullname");
-    	data[0][2]=messageResources.getMessage("reporte.framework.usuarios.resumido.administrador");
-    	data[0][3]=messageResources.getMessage("reporte.framework.usuarios.resumido.estatus");
-    	data[0][4]=messageResources.getMessage("reporte.framework.usuarios.detallado.bloqueado");
-    	data[0][5]=messageResources.getMessage("reporte.framework.grupos.listagrupos.grupo");
-    	data[0][6]=messageResources.getMessage("reporte.framework.usuarios.organizacion.asociada");
-    	
-    	if (usuarios.size() > 0)
-		{
-			for (Iterator<Usuario> iter = usuarios.iterator(); iter.hasNext();)
-			{
-				Usuario usuario = (Usuario)iter.next();
-				
-				data[x][0]=usuario.getUId();
-				data[x][1]=usuario.getFullName();
-				
-				if (usuario.getIsAdmin().booleanValue()) {
-					data[x][2]=VgcResourceManager.getResourceApp("comunes.si");
-		        } else {
-		        	data[x][2]=VgcResourceManager.getResourceApp("comunes.no");
-		        }
-				 
-				data[x][3]="4";
-		        
-				if(usuario.getBloqueado().booleanValue()){
-					data[x][4]=VgcResourceManager.getResourceApp("comunes.no");
-		        }else {
-		        	data[x][4]=VgcResourceManager.getResourceApp("comunes.si");
-		        }
-								
-				data[x][5]="6";
-				data[x][6]="7";
-				x=x+1;
-			}
-		}
-    	
-    	HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet();
-        workbook.setSheetName(0, "Hoja excel");
-        
-        CellStyle headerStyle = workbook.createCellStyle();
-        Font font = workbook.createFont();
-        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        headerStyle.setFont(font);
-
-        CellStyle style = workbook.createCellStyle();
-        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
-        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-        
-        HSSFRow headerRow = sheet.createRow(0);
-        
-        String header = "Reporte Usuarios por Organizacion";
-        HSSFCell cell = headerRow.createCell(1);
-        cell.setCellStyle(headerStyle);
-        cell.setCellValue(header);
-        
-        for (int i = 0; i < data.length; ++i) {
-            HSSFRow dataRow = sheet.createRow(i + 1);
-
-            Object[] d = data[i];
-            String login = (String) d[0];
-            String nombreUs = (String) d[1];
-            String admin = (String) d[2];
-            String estado=(String)d[3];
-            String bloqueado = (String) d[4];
-            String grupo = (String) d[5];
-            String organizacion =(String) d[6];
-            
-
-           
-            dataRow.createCell(0).setCellValue(login);
-            dataRow.createCell(1).setCellValue(nombreUs);
-            dataRow.createCell(2).setCellValue(admin);
-            dataRow.createCell(3).setCellValue(estado);
-            dataRow.createCell(4).setCellValue(bloqueado);
-            dataRow.createCell(5).setCellValue(grupo);
-            dataRow.createCell(6).setCellValue(organizacion);            
-        }
-        
-        HSSFRow dataRow = sheet.createRow(1 + data.length);   
-        
-        Date date = new Date();
-        SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
-       
-        
-        String archivo="UsuariosOrganizacion_"+hourdateFormat.format(date)+".xls"; 
-        
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition","attachment;filename="+archivo);    
-       
-        ServletOutputStream file  = response.getOutputStream();
-        
-        workbook.write(file);
-        file.close();
+		UsuariosService usuariosService = FrameworkServiceFactory.getInstance().openUsuariosService();
+		 
+		String atributoOrden = "";
+		    
+		String tipoOrden = "ASC";
+			
+		String[] ordenArray = new String[1];
+		String[] tipoOrdenArray = new String[1];
+		ordenArray[0] = atributoOrden;
+		tipoOrdenArray[0] = tipoOrden;
+		   
+		List<Usuario> usuarios = new ArrayList();
+		List<Grupo> grupos = new ArrayList();	 
+		 
+		StrategosOrganizacionesService organizacionservice = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
+			  
+		Map<String, Object> filtros = new HashMap();
 		
-        return mapping.findForward(forward);  
+		
+		List<OrganizacionStrategos> organizaciones = organizacionservice.getOrganizaciones(0, 0, "organizacionId", "ASC", true, filtros).getLista();
+		 
+	 	// Organizacion seleccionada
+	    if(organizacionId != null && organizacionId != "") {
+	    	
+	    	OrganizacionStrategos org = (OrganizacionStrategos)organizacionservice.load(OrganizacionStrategos.class,  new Long(organizacionId));
+			if(org != null) {
+				
+				if ((estatus != null) && (!estatus.equals("") && !estatus.equals("2")))
+			    	filtros.put("estatus", estatus);
+			 
+				filtros.put("organizacionId", org.getOrganizacionId());
+				
+				HSSFWorkbook objWB = new HSSFWorkbook();
+
+				// Creamos la celda, aplicamos el estilo y definimos
+				// el tipo de dato que contendrá la celda
+				HSSFCell celda = null;
+
+				// Creo la hoja
+				HSSFSheet hoja1 = objWB.createSheet("Usuario Organizacion");
+
+				// Proceso la información y genero el xls.
+				int numeroFila = 1;
+				int numeroCelda = 1;
+				HSSFRow fila = hoja1.createRow(numeroFila++); 
+				
+				CellStyle headerStyle = objWB.createCellStyle();
+		        Font font = objWB.createFont();
+		        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		        headerStyle.setFont(font);
+
+		        CellStyle style = objWB.createCellStyle();
+		        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+		        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		        
+		        
+				
+				celda = fila.createCell(numeroCelda);
+				celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+				celda.setCellStyle(headerStyle);
+				celda.setCellValue("Reporte de Usuarios Organización");
+
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+			
+				
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
+				
+				String header = "Organización: "+ org.getNombre();
+		        HSSFCell cell = fila.createCell(1);
+		        cell.setCellStyle(headerStyle);
+		        cell.setCellValue(header);
+				
+		        numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
+				
+				usuarios= usuariosService.getUsuarios(1, atributoOrden, tipoOrden, true, filtros).getLista();
+				 
+				 if(usuarios == null || usuarios.size() == 0) {
+					 
+					 String texto = "No existen usuarios asociados a la Organización";
+				     HSSFCell celdatex = fila.createCell(1);
+				     celdatex.setCellStyle(headerStyle);
+				     celdatex.setCellValue(texto);
+						
+				     numeroCelda = 1;
+					 fila = hoja1.createRow(numeroFila++);
+					 celda = fila.createCell(numeroCelda);
+					 celda.setCellValue("");	
+					 
+				 }else {
+					 
+						
+						numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.uid"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.fullname"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.isadmin"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus.bloqueado"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("reporte.framework.grupos.listagrupos.grupo"));
+									
+					
+					
+						
+						numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+						
+						for(Iterator<Usuario> iter = usuarios.iterator(); iter.hasNext(); ){
+							
+							Usuario usuario = iter.next();
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(usuario.getUId());
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(usuario.getFullName());
+							
+							celda = fila.createCell(numeroCelda++);
+						
+							if(usuario.getIsAdmin() != null && usuario.getIsAdmin() == true) {
+								celda.setCellValue("Si");
+						    }else {
+						    	celda.setCellValue("No");
+						    }
+						    
+							celda = fila.createCell(numeroCelda++);
+						    if(usuario.getEstatus() != null) {
+						    	switch(usuario.getEstatus()) {
+							    	case 0:
+							    		celda.setCellValue("Activo");
+							    		break;
+							    	case 1:
+							    		celda.setCellValue("Inactivo");
+							    		break;
+						    	}
+						    }
+						    
+						    celda = fila.createCell(numeroCelda++);
+						    if(usuario.getBloqueado() != null && usuario.getBloqueado() == true) {
+						    	celda.setCellValue("Si");
+						    }else {
+						    	celda.setCellValue("No");
+						    }
+							
+				
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue("");
+							
+							
+							
+							numeroCelda = 1;
+							fila = hoja1.createRow(numeroFila++);
+							celda = fila.createCell(numeroCelda);
+							celda.setCellValue(""); 
+						}
+					
+					 
+				 }
+				 
+				 Date date = new Date();
+			        SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
+			        
+			        String ruta="UsuarioOrganizacion_"+hourdateFormat.format(date)+".xls"; 
+			        
+			        response.setContentType("application/octet-stream");
+			        response.setHeader("Content-Disposition","attachment;filename="+ruta);    
+			       
+			        ServletOutputStream file  = response.getOutputStream();
+			      
+			        objWB.write(file);
+			        file.close();
+				
+			}
+			
+	    	
+	    }else {
+	    	
+	    	HSSFWorkbook objWB = new HSSFWorkbook();
+
+			// Creamos la celda, aplicamos el estilo y definimos
+			// el tipo de dato que contendrá la celda
+			HSSFCell celda = null;
+
+			// Creo la hoja
+			HSSFSheet hoja1 = objWB.createSheet("Usuario Organizacion");
+
+			// Proceso la información y genero el xls.
+			int numeroFila = 1;
+			int numeroCelda = 1;
+			HSSFRow fila = hoja1.createRow(numeroFila++); 
+			
+			CellStyle headerStyle = objWB.createCellStyle();
+	        Font font = objWB.createFont();
+	        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+	        headerStyle.setFont(font);
+
+	        CellStyle style = objWB.createCellStyle();
+	        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+	        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	        
+	        
+			
+			celda = fila.createCell(numeroCelda);
+			celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+			celda.setCellStyle(headerStyle);
+			celda.setCellValue("Reporte de Usuarios Organización");
+
+			numeroCelda = 1;
+			fila = hoja1.createRow(numeroFila++);
+		
+			
+			
+	    
+	    	for (Iterator<OrganizacionStrategos> iter = organizaciones.iterator(); iter.hasNext();)
+			{
+	    		OrganizacionStrategos organizacion = (OrganizacionStrategos)iter.next();
+	    		
+	    		if ((estatus != null) && (!estatus.equals("") && !estatus.equals("2")))
+			    	filtros.put("estatus", estatus);
+			 
+				filtros.put("organizacionId", organizacion.getOrganizacionId());
+				
+				numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
+				
+				String header = "Organización: "+ organizacion.getNombre();
+		        HSSFCell cell = fila.createCell(1);
+		        cell.setCellStyle(headerStyle);
+		        cell.setCellValue(header);
+				
+		        numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
+							
+				usuarios= usuariosService.getUsuarios(1, atributoOrden, tipoOrden, true, filtros).getLista();
+				 
+				 if(usuarios == null || usuarios.size() == 0) {
+					 
+					 String texto = "No existen usuarios asociados a la Organización";
+				     HSSFCell celdatex = fila.createCell(1);
+				     celdatex.setCellStyle(headerStyle);
+				     celdatex.setCellValue(texto);
+						
+				     numeroCelda = 1;
+					 fila = hoja1.createRow(numeroFila++);
+					 celda = fila.createCell(numeroCelda);
+					 celda.setCellValue("");	
+					 
+				 }else {
+					 
+					 numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.uid"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.fullname"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.isadmin"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("jsp.framework.editarusuario.label.estatus.bloqueado"));
+									
+						celda = fila.createCell(numeroCelda++);
+						celda.setCellValue(messageResources.getMessage("reporte.framework.grupos.listagrupos.grupo"));
+									
+					
+					
+						
+						numeroCelda = 1;
+						fila = hoja1.createRow(numeroFila++);
+						
+						for(Iterator<Usuario> iterUser = usuarios.iterator(); iterUser.hasNext(); ){
+							
+							Usuario usuario = iterUser.next();
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(usuario.getUId());
+							
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue(usuario.getFullName());
+							
+							celda = fila.createCell(numeroCelda++);
+						
+							if(usuario.getIsAdmin() != null && usuario.getIsAdmin() == true) {
+								celda.setCellValue("Si");
+						    }else {
+						    	celda.setCellValue("No");
+						    }
+						    
+							celda = fila.createCell(numeroCelda++);
+						    if(usuario.getEstatus() != null) {
+						    	switch(usuario.getEstatus()) {
+							    	case 0:
+							    		celda.setCellValue("Activo");
+							    		break;
+							    	case 1:
+							    		celda.setCellValue("Inactivo");
+							    		break;
+						    	}
+						    }
+						    
+						    celda = fila.createCell(numeroCelda++);
+						    if(usuario.getBloqueado() != null && usuario.getBloqueado() == true) {
+						    	celda.setCellValue("Si");
+						    }else {
+						    	celda.setCellValue("No");
+						    }
+							
+				
+							celda = fila.createCell(numeroCelda++);
+							celda.setCellValue("");
+							
+							
+							
+							numeroCelda = 1;
+							fila = hoja1.createRow(numeroFila++);
+							celda = fila.createCell(numeroCelda);
+							celda.setCellValue(""); 
+						}
+					
+					 
+				 }
+				 
+				 
+				
+			}
+	    	
+	    	Date date = new Date();
+	        SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
+	        
+	        String ruta="UsuarioOrganizacion_"+hourdateFormat.format(date)+".xls"; 
+	        
+	        response.setContentType("application/octet-stream");
+	        response.setHeader("Content-Disposition","attachment;filename="+ruta);    
+	       
+	        ServletOutputStream file  = response.getOutputStream();
+	      
+	        objWB.write(file);
+	        file.close();
+	    	
+	    }
+		
+	    forward="exito";
+		 
+		
+		/** Código de lógica de Negocio del action	*/
+
+		/** Otherwise, return "success" */
+		return mapping.findForward(forward);  
 		
 	}
 		

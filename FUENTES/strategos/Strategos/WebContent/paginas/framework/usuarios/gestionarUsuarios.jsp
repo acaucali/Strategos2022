@@ -145,7 +145,7 @@
 			
 			function reporteOrganizacion() 
 			{
-				abrirVentanaModal('<html:rewrite action="/framework/usuarios/reporteUsuariosOrganizacion"/>', 'reporteUsuariosOrganizacion', 400, 390);
+				abrirVentanaModal('<html:rewrite action="/framework/usuarios/reporteUsuariosOrganizacion"/>', 'reporteUsuariosOrganizacion', 600, 370);
 			}
 			
 			function reporteGrupo() 
