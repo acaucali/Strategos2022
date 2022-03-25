@@ -12,8 +12,6 @@
 		maxWait="10000" validationQuery="SELECT 1 FROM afw_sistema"
 		driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
 		url="jdbc:sqlserver://localhost:1433;databaseName=Strategos2018;user=sa;password=12345;"/>
-
-
 		
 	
 	-->

@@ -184,7 +184,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 							    	tabla.agregarCelda("No");
 							    }
 							    	
-							    tabla.agregarCelda(obtenerGruposUsuario(org.getOrganizacionId(), usuario.getUsuarioId(), usuario));
+							    tabla.agregarCelda("");
 							 				
 								
 						 }
@@ -297,7 +297,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 							    	tabla.agregarCelda("No");
 							    }
 							    	
-							    tabla.agregarCelda(obtenerGruposUsuario(organizacion.getOrganizacionId(), usuario.getUsuarioId(), usuario));
+							    tabla.agregarCelda("");
 							 				
 								
 						 }
