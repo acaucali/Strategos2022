@@ -30,30 +30,30 @@ import com.strategos.nueva.bancoproyecto.ideas.service.CriteriosEvaluacionServic
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
 @RequestMapping("/api/tinguiclick")
-public class CriteriosEvaluacionRestController {
+public class IdeasDocumentosAnexosRestController {
 	
 	@Autowired
 	private CriteriosEvaluacionService criteriosEvaluacionService;
 	
 	//Servicios Rest tabla - Tipo Identificacion 
 	
-		private final Logger log = LoggerFactory.getLogger(CriteriosEvaluacionRestController.class);
+		private final Logger log = LoggerFactory.getLogger(IdeasDocumentosAnexosRestController.class);
 		
 		//servicio que trae la lista de tipos de identificacion
-		@GetMapping("/criterios")
+		@GetMapping("/tarifa")
 		public List<CriteriosEvaluacion> index (){
 			return criteriosEvaluacionService.findAll();
 		}
 			
 		//servicio que muestra un tipo de identificacion
-		@GetMapping("/criterios/{id}")
+		@GetMapping("/tarifa/{id}")
 		public ResponseEntity<?> show(@PathVariable Long id) {
 			
-			CriteriosEvaluacion criterioId=null;
+			Tarifa tarifaId=null;
 			Map<String, Object> response = new HashMap<>();
 			
 			try { 
-				criterioId= criteriosEvaluacionService.findById(id);
+				tarifaId= tarifaService.findById(id);
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar la consulta en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -61,18 +61,18 @@ public class CriteriosEvaluacionRestController {
 			}
 			
 			
-			if(criterioId == null) {
-			  response.put("mensaje", "El criterio Id: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
+			if(tarifaId == null) {
+			  response.put("mensaje", "La tarifa Id: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
 			  return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<CriteriosEvaluacion>(criterioId, HttpStatus.OK); 		
+			return new ResponseEntity<Tarifa>(tarifaId, HttpStatus.OK); 		
 		}
 		
 		//servicio que crea un tipo de identificacion
-		@PostMapping("/criterios")
-		public ResponseEntity<?> create(@Valid @RequestBody CriteriosEvaluacion criterioaN, BindingResult result) {
+		@PostMapping("/tarifa")
+		public ResponseEntity<?> create(@Valid @RequestBody Tarifa tarifaN, BindingResult result) {
 			
-			CriteriosEvaluacion criterioNew= null;
+			Tarifa tarifaNew= null;
 			
 			Map<String, Object> response = new HashMap<>();
 			
@@ -88,23 +88,23 @@ public class CriteriosEvaluacionRestController {
 			
 			try { 
 				
-				criterioNew= criteriosEvaluacionService.save(criterioaN);
+				tarifaNew= tarifaService.save(tarifaN);
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "El criterio ha sido creado con Exito!");
-			response.put("criterio", criterioNew);
+			response.put("mensaje", "La tarifa ha sido creado con Exito!");
+			response.put("tarifa", tarifaNew);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
 		//servicio que actualiza un tipo de identificacion
-		@PutMapping("/criterios/{id}")
-		public ResponseEntity<?>  update(@Valid @RequestBody CriteriosEvaluacion criterio, BindingResult result, @PathVariable Long id) {
-			CriteriosEvaluacion criterioActual= criteriosEvaluacionService.findById(id);
-			CriteriosEvaluacion criterioUpdated = null;
+		@PutMapping("/tarifa/{id}")
+		public ResponseEntity<?>  update(@Valid @RequestBody Tarifa tarifa, BindingResult result, @PathVariable Long id) {
+			Tarifa tarifaActual= tarifaService.findById(id);
+			Tarifa tarifaUpdated = null;
 			Map<String, Object> response = new HashMap<>();
 			
 			if(result.hasErrors()) {
@@ -117,43 +117,43 @@ public class CriteriosEvaluacionRestController {
 			    return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 			}
 			
-			if(criterioActual == null) {
-				  response.put("mensaje", "Error, no se pudo editar, el criterio ID: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
+			if(tarifaActual == null) {
+				  response.put("mensaje", "Error, no se pudo editar, la tarifa ID: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
 				  return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
 			try{
 							
-				criterioActual.setControl(criterio.getControl());
-				criterioActual.setPeso(criterio.getPeso());
-																			
-				criterioUpdated=criteriosEvaluacionService.save(criterioActual);
+				tarifaActual.setUbicacion(tarifa.getUbicacion());
+				tarifaActual.setValor(tarifa.getValor());
+																	
+				tarifaUpdated=tarifaService.save(tarifaActual);
 			
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al actualizar la tarifa en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "El criterio ha sido actualizado con Exito!");
-			response.put("criterio", criterioUpdated);
+			response.put("mensaje", "El tarifa ha sido actualizado con Exito!");
+			response.put("tarifa", tarifaUpdated);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
 		//servicio que elimina el tipo de identificacion
-		@DeleteMapping("/criterios/{id}")
+		@DeleteMapping("/tarifa/{id}")
 		public ResponseEntity<?> delete(@PathVariable Long id) {
 			
 			Map<String, Object> response = new HashMap<>();
 			
 			try{
 				
-				criteriosEvaluacionService.delete(id);
+				tarifaService.delete(id);
 			}catch(DataAccessException e) {
-				response.put("mensaje", "Error al eliminar el criterio en la base de datos!");
+				response.put("mensaje", "Error al eliminar la tarifa en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "El criterio ha sido eliminado con Exito!");
+			response.put("mensaje", "La tarifa ha sido eliminado con Exito!");
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
 

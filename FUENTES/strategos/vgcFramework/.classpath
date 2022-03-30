@@ -22,7 +22,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/java-json.jar"/>
 	<classpathentry exported="true" kind="lib" path="D:/StrategosDesarrollo/Strategos2/Strategos/WebContent/WEB-INF/lib/jackson-mapper-lgpl-0.9.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="/vgcCalcular2/lib/vgcBll.jar"/>
+	<classpathentry kind="lib" path="D:/StrategosDesarrollo/Strategos/FUENTES/strategos/vgcCalcular/lib/vgcBll.jar"/>
 	<classpathentry exported="true" kind="lib" path="/vgcBll/lib/vgcCalcular.jar" sourcepath="/vgcCalcular"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
