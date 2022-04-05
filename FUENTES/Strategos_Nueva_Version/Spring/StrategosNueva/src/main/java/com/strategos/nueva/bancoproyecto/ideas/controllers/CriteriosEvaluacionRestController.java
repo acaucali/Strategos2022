@@ -29,23 +29,23 @@ import com.strategos.nueva.bancoproyecto.ideas.service.CriteriosEvaluacionServic
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
-@RequestMapping("/api/tinguiclick")
+@RequestMapping("/api/strategos/bancoproyectos")
 public class CriteriosEvaluacionRestController {
 	
 	@Autowired
 	private CriteriosEvaluacionService criteriosEvaluacionService;
 	
-	//Servicios Rest tabla - Tipo Identificacion 
+	//Servicios Rest tabla - criterio 
 	
 		private final Logger log = LoggerFactory.getLogger(CriteriosEvaluacionRestController.class);
 		
-		//servicio que trae la lista de tipos de identificacion
+		//servicio que trae la lista de criterio 
 		@GetMapping("/criterios")
 		public List<CriteriosEvaluacion> index (){
 			return criteriosEvaluacionService.findAll();
 		}
 			
-		//servicio que muestra un tipo de identificacion
+		//servicio que muestra un criterio 
 		@GetMapping("/criterios/{id}")
 		public ResponseEntity<?> show(@PathVariable Long id) {
 			
@@ -68,7 +68,7 @@ public class CriteriosEvaluacionRestController {
 			return new ResponseEntity<CriteriosEvaluacion>(criterioId, HttpStatus.OK); 		
 		}
 		
-		//servicio que crea un tipo de identificacion
+		//servicio que crea un criterio 
 		@PostMapping("/criterios")
 		public ResponseEntity<?> create(@Valid @RequestBody CriteriosEvaluacion criterioaN, BindingResult result) {
 			
@@ -100,7 +100,7 @@ public class CriteriosEvaluacionRestController {
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
-		//servicio que actualiza un tipo de identificacion
+		//servicio que actualiza un criterio 
 		@PutMapping("/criterios/{id}")
 		public ResponseEntity<?>  update(@Valid @RequestBody CriteriosEvaluacion criterio, BindingResult result, @PathVariable Long id) {
 			CriteriosEvaluacion criterioActual= criteriosEvaluacionService.findById(id);
@@ -139,7 +139,7 @@ public class CriteriosEvaluacionRestController {
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
-		//servicio que elimina el tipo de identificacion
+		//servicio que elimina el criterio 
 		@DeleteMapping("/criterios/{id}")
 		public ResponseEntity<?> delete(@PathVariable Long id) {
 			

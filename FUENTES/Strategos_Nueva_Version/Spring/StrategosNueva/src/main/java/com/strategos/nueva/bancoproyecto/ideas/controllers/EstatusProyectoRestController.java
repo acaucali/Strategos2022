@@ -24,36 +24,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.strategos.nueva.bancoproyecto.ideas.model.CriteriosEvaluacion;
-import com.strategos.nueva.bancoproyecto.ideas.service.CriteriosEvaluacionService;
+import com.strategos.nueva.bancoproyecto.ideas.model.EstatusProyecto;
+import com.strategos.nueva.bancoproyecto.ideas.service.EstatusProyectoService;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
-@RequestMapping("/api/tinguiclick")
+@RequestMapping("/api/strategos/bancoproyectos")
 public class EstatusProyectoRestController {
 	
 	@Autowired
-	private CriteriosEvaluacionService criteriosEvaluacionService;
+	private EstatusProyectoService estatusProyectoService;
 	
-	//Servicios Rest tabla - Tipo Identificacion 
+	//Servicios Rest tabla - estatus 
 	
 		private final Logger log = LoggerFactory.getLogger(EstatusProyectoRestController.class);
 		
-		//servicio que trae la lista de tipos de identificacion
-		@GetMapping("/tarifa")
-		public List<CriteriosEvaluacion> index (){
-			return criteriosEvaluacionService.findAll();
+		//servicio que trae la lista de estatus
+		@GetMapping("/estatusproyecto")
+		public List<EstatusProyecto> index (){
+			return estatusProyectoService.findAll();
 		}
 			
-		//servicio que muestra un tipo de identificacion
-		@GetMapping("/tarifa/{id}")
+		//servicio que muestra un estatus
+		@GetMapping("/estatusproyecto/{id}")
 		public ResponseEntity<?> show(@PathVariable Long id) {
 			
-			Tarifa tarifaId=null;
+			EstatusProyecto estatusId=null;
 			Map<String, Object> response = new HashMap<>();
 			
 			try { 
-				tarifaId= tarifaService.findById(id);
+				estatusId= estatusProyectoService.findById(id);
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar la consulta en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -61,18 +61,18 @@ public class EstatusProyectoRestController {
 			}
 			
 			
-			if(tarifaId == null) {
-			  response.put("mensaje", "La tarifa Id: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
+			if(estatusId == null) {
+			  response.put("mensaje", "El estatus proyecto Id: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
 			  return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<Tarifa>(tarifaId, HttpStatus.OK); 		
+			return new ResponseEntity<EstatusProyecto>(estatusId, HttpStatus.OK); 		
 		}
 		
-		//servicio que crea un tipo de identificacion
-		@PostMapping("/tarifa")
-		public ResponseEntity<?> create(@Valid @RequestBody Tarifa tarifaN, BindingResult result) {
+		//servicio que crea un estatus
+		@PostMapping("/estatusproyecto")
+		public ResponseEntity<?> create(@Valid @RequestBody EstatusProyecto estatusProN, BindingResult result) {
 			
-			Tarifa tarifaNew= null;
+			EstatusProyecto estatusProNew= null;
 			
 			Map<String, Object> response = new HashMap<>();
 			
@@ -88,23 +88,23 @@ public class EstatusProyectoRestController {
 			
 			try { 
 				
-				tarifaNew= tarifaService.save(tarifaN);
+				estatusProNew= estatusProyectoService.save(estatusProN);
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "La tarifa ha sido creado con Exito!");
-			response.put("tarifa", tarifaNew);
+			response.put("mensaje", "El estatus proyecto ha sido creado con Exito!");
+			response.put("estatuspro", estatusProNew);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
-		//servicio que actualiza un tipo de identificacion
-		@PutMapping("/tarifa/{id}")
-		public ResponseEntity<?>  update(@Valid @RequestBody Tarifa tarifa, BindingResult result, @PathVariable Long id) {
-			Tarifa tarifaActual= tarifaService.findById(id);
-			Tarifa tarifaUpdated = null;
+		//servicio que actualiza un estatus
+		@PutMapping("/estatusproyecto/{id}")
+		public ResponseEntity<?>  update(@Valid @RequestBody EstatusProyecto estatusPro, BindingResult result, @PathVariable Long id) {
+			EstatusProyecto estatusProActual= estatusProyectoService.findById(id);
+			EstatusProyecto estatusProUpdated = null;
 			Map<String, Object> response = new HashMap<>();
 			
 			if(result.hasErrors()) {
@@ -117,43 +117,43 @@ public class EstatusProyectoRestController {
 			    return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 			}
 			
-			if(tarifaActual == null) {
-				  response.put("mensaje", "Error, no se pudo editar, la tarifa ID: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
+			if(estatusProActual == null) {
+				  response.put("mensaje", "Error, no se pudo editar, el estatus proyecto ID: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
 				  return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
 			try{
-							
-				tarifaActual.setUbicacion(tarifa.getUbicacion());
-				tarifaActual.setValor(tarifa.getValor());
-																	
-				tarifaUpdated=tarifaService.save(tarifaActual);
+											
+				estatusProActual.setEstatus(estatusPro.getEstatus());
+				
+																			
+				estatusProUpdated=estatusProyectoService.save(estatusProActual);
 			
 			}catch(DataAccessException e) {
-				response.put("mensaje", "Error al actualizar la tarifa en la base de datos!");
+				response.put("mensaje", "Error al actualizar el estatus proyecto en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "El tarifa ha sido actualizado con Exito!");
-			response.put("tarifa", tarifaUpdated);
+			response.put("mensaje", "El estatus proyecto ha sido actualizado con Exito!");
+			response.put("estatuspro", estatusProUpdated);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
-		//servicio que elimina el tipo de identificacion
-		@DeleteMapping("/tarifa/{id}")
+		//servicio que elimina el estatus
+		@DeleteMapping("/estatusproyecto/{id}")
 		public ResponseEntity<?> delete(@PathVariable Long id) {
 			
 			Map<String, Object> response = new HashMap<>();
 			
 			try{
 				
-				tarifaService.delete(id);
+				estatusProyectoService.delete(id);
 			}catch(DataAccessException e) {
-				response.put("mensaje", "Error al eliminar la tarifa en la base de datos!");
+				response.put("mensaje", "Error al eliminar el estatus proyecto en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "La tarifa ha sido eliminado con Exito!");
+			response.put("mensaje", "El estatus proyecto ha sido eliminado con Exito!");
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
 

@@ -126,6 +126,215 @@ public class IdeasProyectos implements Serializable{
 	@OneToMany(cascade= CascadeType.ALL, mappedBy="idea", fetch=FetchType.LAZY)
 	private List<IdeasDocumentosAnexos> documentos;
 	
+		
+	public Long getIdeaId() {
+		return ideaId;
+	}
+
+	public void setIdeaId(Long ideaId) {
+		this.ideaId = ideaId;
+	}
+
+	public String getNombreIdea() {
+		return nombreIdea;
+	}
+
+	public void setNombreIdea(String nombreIdea) {
+		this.nombreIdea = nombreIdea;
+	}
+
+	public String getDescripcionIdea() {
+		return descripcionIdea;
+	}
+
+	public void setDescripcionIdea(String descripcionIdea) {
+		this.descripcionIdea = descripcionIdea;
+	}
+
+	public TiposPropuestas getTipoPropuesta() {
+		return tipoPropuesta;
+	}
+
+	public void setTipoPropuesta(TiposPropuestas tipoPropuesta) {
+		this.tipoPropuesta = tipoPropuesta;
+	}
+
+	public String getImpacto() {
+		return impacto;
+	}
+
+	public void setImpacto(String impacto) {
+		this.impacto = impacto;
+	}
+
+	public String getProblematica() {
+		return problematica;
+	}
+
+	public void setProblematica(String problematica) {
+		this.problematica = problematica;
+	}
+
+	public String getPoblacion() {
+		return poblacion;
+	}
+
+	public void setPoblacion(String poblacion) {
+		this.poblacion = poblacion;
+	}
+
+	public String getFocalizacion() {
+		return focalizacion;
+	}
+
+	public void setFocalizacion(String focalizacion) {
+		this.focalizacion = focalizacion;
+	}
+
+	public TiposObjetivos getTipoObjetivo() {
+		return tipoObjetivo;
+	}
+
+	public void setTipoObjetivo(TiposObjetivos tipoObjetivo) {
+		this.tipoObjetivo = tipoObjetivo;
+	}
+
+	public Integer getAlineacionPlan() {
+		return alineacionPlan;
+	}
+
+	public void setAlineacionPlan(Integer alineacionPlan) {
+		this.alineacionPlan = alineacionPlan;
+	}
+
+	public String getFinanciacion() {
+		return financiacion;
+	}
+
+	public void setFinanciacion(String financiacion) {
+		this.financiacion = financiacion;
+	}
+
+	public String getPersonaEncargada() {
+		return personaEncargada;
+	}
+
+	public void setPersonaEncargada(String personaEncargada) {
+		this.personaEncargada = personaEncargada;
+	}
+
+	public String getPersonaContactoDatos() {
+		return personaContactoDatos;
+	}
+
+	public void setPersonaContactoDatos(String personaContactoDatos) {
+		this.personaContactoDatos = personaContactoDatos;
+	}
+
+	public Long getDependenciaId() {
+		return dependenciaId;
+	}
+
+	public void setDependenciaId(Long dependenciaId) {
+		this.dependenciaId = dependenciaId;
+	}
+
+	public String getProyectosEjecutados() {
+		return proyectosEjecutados;
+	}
+
+	public void setProyectosEjecutados(String proyectosEjecutados) {
+		this.proyectosEjecutados = proyectosEjecutados;
+	}
+
+	public String getCapacidadTecnica() {
+		return capacidadTecnica;
+	}
+
+	public void setCapacidadTecnica(String capacidadTecnica) {
+		this.capacidadTecnica = capacidadTecnica;
+	}
+
+	public Date getFechaIdea() {
+		return fechaIdea;
+	}
+
+	public void setFechaIdea(Date fechaIdea) {
+		this.fechaIdea = fechaIdea;
+	}
+
+	public String getAnioFormulacion() {
+		return anioFormulacion;
+	}
+
+	public void setAnioFormulacion(String anioFormulacion) {
+		this.anioFormulacion = anioFormulacion;
+	}
+
+	public EstatusIdeas getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(EstatusIdeas estatus) {
+		this.estatus = estatus;
+	}
+
+	public Integer getEstatusIdea() {
+		return estatusIdea;
+	}
+
+	public void setEstatusIdea(Integer estatusIdea) {
+		this.estatusIdea = estatusIdea;
+	}
+
+	public Date getFechaEstatus() {
+		return fechaEstatus;
+	}
+
+	public void setFechaEstatus(Date fechaEstatus) {
+		this.fechaEstatus = fechaEstatus;
+	}
+
+	public Byte getHistorico() {
+		return historico;
+	}
+
+	public void setHistorico(Byte historico) {
+		this.historico = historico;
+	}
+
+	public Double getValorUltimaEvaluacion() {
+		return valorUltimaEvaluacion;
+	}
+
+	public void setValorUltimaEvaluacion(Double valorUltimaEvaluacion) {
+		this.valorUltimaEvaluacion = valorUltimaEvaluacion;
+	}
+
+	public Date getFechaUltimaEvaluacion() {
+		return fechaUltimaEvaluacion;
+	}
+
+	public void setFechaUltimaEvaluacion(Date fechaUltimaEvaluacion) {
+		this.fechaUltimaEvaluacion = fechaUltimaEvaluacion;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public List<IdeasDocumentosAnexos> getDocumentos() {
+		return documentos;
+	}
+
+	public void setDocumentos(List<IdeasDocumentosAnexos> documentos) {
+		this.documentos = documentos;
+	}
+
 	private static final long serialVersionUID = 1L;
 	
 }
