@@ -24,36 +24,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.strategos.nueva.bancoproyecto.ideas.model.CriteriosEvaluacion;
-import com.strategos.nueva.bancoproyecto.ideas.service.CriteriosEvaluacionService;
+import com.strategos.nueva.bancoproyecto.ideas.model.TiposPropuestas;
+import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
-@RequestMapping("/api/tinguiclick")
+@RequestMapping("/api/strategos/bancoproyectos")
 public class TiposPropuestasRestController {
 	
 	@Autowired
-	private CriteriosEvaluacionService criteriosEvaluacionService;
+	private TiposPropuestasService tiposPropuestasService;
 	
-	//Servicios Rest tabla - Tipo Identificacion 
+	//Servicios Rest tabla - tipos propuestas 
 	
 		private final Logger log = LoggerFactory.getLogger(TiposPropuestasRestController.class);
 		
-		//servicio que trae la lista de tipos de identificacion
-		@GetMapping("/tarifa")
-		public List<CriteriosEvaluacion> index (){
-			return criteriosEvaluacionService.findAll();
+		//servicio que trae la lista de tipos propuestas
+		@GetMapping("/tipopropuesta")
+		public List<TiposPropuestas> index (){
+			return tiposPropuestasService.findAll();
 		}
 			
-		//servicio que muestra un tipo de identificacion
-		@GetMapping("/tarifa/{id}")
+		//servicio que muestra un tipos propuestas
+		@GetMapping("/tipopropuesta/{id}")
 		public ResponseEntity<?> show(@PathVariable Long id) {
 			
-			Tarifa tarifaId=null;
+			TiposPropuestas tiposPropuestasId=null;
 			Map<String, Object> response = new HashMap<>();
 			
 			try { 
-				tarifaId= tarifaService.findById(id);
+				tiposPropuestasId= tiposPropuestasService.findById(id);
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar la consulta en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -61,18 +61,18 @@ public class TiposPropuestasRestController {
 			}
 			
 			
-			if(tarifaId == null) {
-			  response.put("mensaje", "La tarifa Id: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
+			if(tiposPropuestasId == null) {
+			  response.put("mensaje", "El tipo propuesta Id: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
 			  return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
-			return new ResponseEntity<Tarifa>(tarifaId, HttpStatus.OK); 		
+			return new ResponseEntity<TiposPropuestas>(tiposPropuestasId, HttpStatus.OK); 		
 		}
 		
-		//servicio que crea un tipo de identificacion
-		@PostMapping("/tarifa")
-		public ResponseEntity<?> create(@Valid @RequestBody Tarifa tarifaN, BindingResult result) {
+		//servicio que crea un tipos propuestas
+		@PostMapping("/tipopropuesta")
+		public ResponseEntity<?> create(@Valid @RequestBody TiposPropuestas tiposPropuestasN, BindingResult result) {
 			
-			Tarifa tarifaNew= null;
+			TiposPropuestas tipoPropuestasNew= null;
 			
 			Map<String, Object> response = new HashMap<>();
 			
@@ -88,23 +88,23 @@ public class TiposPropuestasRestController {
 			
 			try { 
 				
-				tarifaNew= tarifaService.save(tarifaN);
+				tipoPropuestasNew= tiposPropuestasService.save(tiposPropuestasN);
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "La tarifa ha sido creado con Exito!");
-			response.put("tarifa", tarifaNew);
+			response.put("mensaje", "El tipo propuestas ha sido creado con Exito!");
+			response.put("tipopropuesta", tipoPropuestasNew);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
-		//servicio que actualiza un tipo de identificacion
-		@PutMapping("/tarifa/{id}")
-		public ResponseEntity<?>  update(@Valid @RequestBody Tarifa tarifa, BindingResult result, @PathVariable Long id) {
-			Tarifa tarifaActual= tarifaService.findById(id);
-			Tarifa tarifaUpdated = null;
+		//servicio que actualiza un tipos propuestas
+		@PutMapping("/tipopropuesta/{id}")
+		public ResponseEntity<?>  update(@Valid @RequestBody TiposPropuestas tiposPropuestas, BindingResult result, @PathVariable Long id) {
+			TiposPropuestas tiposPropuestasActual= tiposPropuestasService.findById(id);
+			TiposPropuestas tiposPropuestasUpdated = null;
 			Map<String, Object> response = new HashMap<>();
 			
 			if(result.hasErrors()) {
@@ -117,43 +117,44 @@ public class TiposPropuestasRestController {
 			    return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 			}
 			
-			if(tarifaActual == null) {
-				  response.put("mensaje", "Error, no se pudo editar, la tarifa ID: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
+			if(tiposPropuestasActual == null) {
+				  response.put("mensaje", "Error, no se pudo editar, el tipo propuesta ID: ".concat(id.toString().concat(" no existe en la base de datos!"))); 	
 				  return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
 			try{
-							
-				tarifaActual.setUbicacion(tarifa.getUbicacion());
-				tarifaActual.setValor(tarifa.getValor());
-																	
-				tarifaUpdated=tarifaService.save(tarifaActual);
+						
+				tiposPropuestasActual.setTipoPropuesta(tiposPropuestas.getTipoPropuesta());
+				tiposPropuestasActual.setIdea(tiposPropuestas.getIdea());
+				
+																			
+				tiposPropuestasUpdated=tiposPropuestasService.save(tiposPropuestasActual);
 			
 			}catch(DataAccessException e) {
-				response.put("mensaje", "Error al actualizar la tarifa en la base de datos!");
+				response.put("mensaje", "Error al actualizar el tipo propuesta en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "El tarifa ha sido actualizado con Exito!");
-			response.put("tarifa", tarifaUpdated);
+			response.put("mensaje", "El tipo propuesta ha sido actualizado con Exito!");
+			response.put("tipopropuesta", tiposPropuestasUpdated);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
 		
-		//servicio que elimina el tipo de identificacion
-		@DeleteMapping("/tarifa/{id}")
+		//servicio que elimina el tipos propuestas
+		@DeleteMapping("/tipopropuesta/{id}")
 		public ResponseEntity<?> delete(@PathVariable Long id) {
 			
 			Map<String, Object> response = new HashMap<>();
 			
 			try{
 				
-				tarifaService.delete(id);
+				tiposPropuestasService.delete(id);
 			}catch(DataAccessException e) {
-				response.put("mensaje", "Error al eliminar la tarifa en la base de datos!");
+				response.put("mensaje", "Error al eliminar el tipo propuesta en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "La tarifa ha sido eliminado con Exito!");
+			response.put("mensaje", "El tipo propuesta ha sido eliminado con Exito!");
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
 
