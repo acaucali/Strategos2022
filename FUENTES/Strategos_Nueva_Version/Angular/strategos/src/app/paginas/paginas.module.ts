@@ -12,8 +12,6 @@ import { AppRoutingModule } from '../app-routing.module';
 @NgModule({
   declarations: [
     ManinpageComponent,
-    InicioComponent,
-    GestionideasComponent,
     Pagina404Component
   ],
   imports: [
