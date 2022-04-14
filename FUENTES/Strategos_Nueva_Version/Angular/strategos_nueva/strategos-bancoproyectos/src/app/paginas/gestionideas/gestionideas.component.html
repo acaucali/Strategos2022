@@ -1,0 +1,163 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Gestión Ideas</h1>
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+                <i class="fa-md fas fa-plus"></i>
+            </button>
+            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+                <i class="fa-md far fa-file-pdf"></i>
+            </button>
+            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+                <i class="fa-md far fa-file-excel"></i>
+            </button>
+            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+                <i class="fa-md fas fa-sync"></i>
+            </button>
+            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+                <i class="fa-md fas fa-filter"></i>
+            </button>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-footer">
+            <div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Año Formulación</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Tipo Propuesta</label>
+                        <select class="custom-select form-control-border" id="exampleSelectBorder">
+                            <option>Value 1</option>
+                            <option>Value 2</option>
+                            <option>Value 3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Estatus</label>
+                        <select class="custom-select form-control-border" id="exampleSelectBorder">
+                            <option>Value 1</option>
+                            <option>Value 2</option>
+                            <option>Value 3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Historico</label>
+                        <input type="checkbox">
+                    </div>
+
+                    <div class="col-md-9">
+                        <label for="exampleInputEmail1">Dependencia</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                    </div>
+
+                    <div class="col-md-8">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Filtrar</button>&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary">Limpiar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /.card-footer-->
+        <div class="card-body">
+            
+            <!--
+            <div *ngIf="ideas?.length==0" class="alert alert-info">
+                No hay registros en la base de datos!
+            </div>
+            -->
+            <div class="table-responsive">
+                <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+                  <thead>
+                    <tr class="text-white bg-primary">
+                      <td width="50">Acciones</td>
+                      <td>Año</td>
+                      <td>Ideas Proyecto</td>
+                      <td>Dependencia</td>
+                      <td>Tipo Propuesta</td>
+                      <td>Estatus</td>
+                    </tr>
+                  </thead>
+
+                  <tr> 
+                    <td width="50" >
+                        &nbsp;
+                      <i class="fas fa-edit" style="cursor: pointer;"></i>
+                      &nbsp;&nbsp;
+                      <i class="fas fa-trash-alt" style="cursor: pointer;"></i>
+                    </td> 
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>  
+
+                  <!--
+
+                  
+                  <tbody>
+                    <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageCali, id: 'pageCal'}">
+                      <td width="50" >
+                          &nbsp;
+                        <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
+                        &nbsp;&nbsp;
+                        <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                      </td>
+                      <td >{{el.numeroReferencia}} </td>
+                      <td >{{el.direccionCompra}} </td>
+                      <td >{{el.dependencia}} </td>
+                      <td >{{el.tipo}} </td>
+                      <td >{{el.estatus}} </td>
+                    </tr>
+                  </tbody>
+                  -->
+                </table>
+                <!--
+                <pagination-controls id="pageCal" previousLabel="Anterior"
+                  nextLabel="Siguiente" (pageChange)="pageCali = $event"></pagination-controls>
+                -->
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+
