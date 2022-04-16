@@ -1,3 +1,4 @@
+<detallegestion [idea]="ideaSeleccionada"></detallegestion>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -20,19 +21,17 @@
         
 
         <div class="card-header">
-            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+            <button type="button" class="btn" (click)="crearIdea()">
                 <i class="fa-md fas fa-plus"></i>
             </button>
-            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+            <button type="button" class="btn" >
                 <i class="fa-md far fa-file-pdf"></i>
             </button>
-            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+            <button type="button" class="btn" >
                 <i class="fa-md far fa-file-excel"></i>
             </button>
-            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
-                <i class="fa-md fas fa-sync"></i>
-            </button>
-            <button type="button" class="btn" data-card-widget="collapse" title="Collapse">
+         
+            <button type="button" class="btn" >
                 <i class="fa-md fas fa-filter"></i>
             </button>
 
@@ -92,11 +91,10 @@
         <!-- /.card-footer-->
         <div class="card-body">
             
-            <!--
             <div *ngIf="ideas?.length==0" class="alert alert-info">
                 No hay registros en la base de datos!
             </div>
-            -->
+        
             <div class="table-responsive">
                 <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
                   <thead>
@@ -109,45 +107,28 @@
                       <td>Estatus</td>
                     </tr>
                   </thead>
-
-                  <tr> 
-                    <td width="50" >
-                        &nbsp;
-                      <i class="fas fa-edit" style="cursor: pointer;"></i>
-                      &nbsp;&nbsp;
-                      <i class="fas fa-trash-alt" style="cursor: pointer;"></i>
-                    </td> 
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>  
-
-                  <!--
-
                   
                   <tbody>
-                    <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageCali, id: 'pageCal'}">
+                    <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageIdea, id: 'pageIde'}">
                       <td width="50" >
                           &nbsp;
                         <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
                         &nbsp;&nbsp;
                         <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
                       </td>
-                      <td >{{el.numeroReferencia}} </td>
-                      <td >{{el.direccionCompra}} </td>
-                      <td >{{el.dependencia}} </td>
-                      <td >{{el.tipo}} </td>
-                      <td >{{el.estatus}} </td>
+                      <td >{{el.anioFormulacion}} </td>
+                      <td >{{el.nombreIdea}} </td>
+                      <td >{{el.dependenciaId}} </td>
+                      <td >{{el.tiposPropuestas}} </td>
+                      <td >{{el.estatusIdea}} </td>
                     </tr>
                   </tbody>
-                  -->
+             
                 </table>
-                <!--
-                <pagination-controls id="pageCal" previousLabel="Anterior"
-                  nextLabel="Siguiente" (pageChange)="pageCali = $event"></pagination-controls>
-                -->
+            
+                <pagination-controls id="pageIde" previousLabel="Anterior"
+                  nextLabel="Siguiente" (pageChange)="pageIdea = $event"></pagination-controls>
+            
             </div>
 
         </div>

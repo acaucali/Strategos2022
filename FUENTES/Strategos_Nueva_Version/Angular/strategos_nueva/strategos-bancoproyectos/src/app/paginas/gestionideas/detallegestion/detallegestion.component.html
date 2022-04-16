@@ -1,0 +1,183 @@
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn"> 
+
+    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #007BFF;">
+              <h5 class="modal-title">{{titulo}}</h5>
+              <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form  #ideaForm="ngForm">
+                      <div class="form-row">
+                        
+                              
+                                
+                                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                      <li class="nav-item">
+                                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Datos</a>
+                                      </li>
+                                      <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Datos II</a>
+                                      </li>
+                                      <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Datos III</a>
+                                      </li>
+                                      <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Anexos</a>
+                                      </li>
+                                    </ul>
+                                
+                                  <div class="card-body">
+                                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                                      <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="exampleInputEmail1">Nombre de la idea</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label>Descripción</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label for="exampleInputEmail1">Tipo Actividad</label>
+                                                <select class="custom-select form-control-border" id="exampleSelectBorder">
+                                                    <option>Value 1</option>
+                                                    <option>Value 2</option>
+                                                    <option>Value 3</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label for="exampleInputEmail1">Alineación plan</label>
+                                                <select class="custom-select form-control-border" id="exampleSelectBorder">
+                                                    <option>Value 1</option>
+                                                    <option>Value 2</option>
+                                                    <option>Value 3</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Impacto</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+                                            
+                                            <div class="col-md-5">
+                                                <label for="exampleInputEmail1">Estatus Idea</label>
+                                                <select class="custom-select form-control-border" id="exampleSelectBorder">
+                                                    <option>Value 1</option>
+                                                    <option>Value 2</option>
+                                                    <option>Value 3</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label>Date:</label>
+                                                  <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                                      <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate"/>
+                                                      <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+
+                                            <div class="col-md-3">
+                                                <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
+                                                <label for="customCheckbox1" class="custom-control-label">Historico</label>
+                                            </div>
+                        
+                                                                  
+                                        </div>  
+                                      </div>
+                                      <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                        <div class="row">
+                                            
+                                            <div class="col-md-12">
+                                                <label>Población</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                                <label>Focalización de la Población</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Problemática</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Financiación</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Capacidad Técnica</label>
+                                                <textarea class="form-control" rows="2" placeholder="Enter ..."></textarea>
+                                            </div>
+                                                                  
+                                        </div>  
+                                      </div>
+                                      <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                        <div class="row">   
+                                            <div class="col-md-12">
+                                                <label>Dependencias Participantes</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label for="exampleInputEmail1">Persona Encargada</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="exampleInputEmail1">Dependencia Persona Encargada</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Datos Contacto</label>
+                                                <textarea class="form-control" rows="2" placeholder="Enter ..."></textarea>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Proyectos Ejecutados</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+
+                                            
+                                            <div class="col-md-12">
+                                                <label>Observaciones</label>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            </div>
+                                        </div> 
+                                      </div>
+                                      <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                         Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                                      </div>
+                                    </div>
+                                  </div>
+
+                           
+                      </div>   
+                    </form>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="!idea.ideaId else elseBlock" (click)="create()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!ideaForm.form.valid">Crear</button>
+                <ng-template #elseBlock>
+                    <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!ideaForm.form.valid">Actualizar</button>
+                </ng-template>
+              <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+</div>
