@@ -26,11 +26,6 @@ public class EstatusIdeas implements Serializable{
 	@Column(nullable=true)
 	private String estatus;
 	
-	@OneToOne(mappedBy = "estatus", fetch=FetchType.LAZY)
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "estatus" }, allowSetters = true)
-    private IdeasProyectos idea;
-	
-		
 	public Long getEstatusIdeaId() {
 		return estatusIdeaId;
 	}
@@ -45,14 +40,6 @@ public class EstatusIdeas implements Serializable{
 
 	public void setEstatus(String estatus) {
 		this.estatus = estatus;
-	}
-		
-	public IdeasProyectos getIdea() {
-		return idea;
-	}
-
-	public void setIdea(IdeasProyectos idea) {
-		this.idea = idea;
 	}
 
 

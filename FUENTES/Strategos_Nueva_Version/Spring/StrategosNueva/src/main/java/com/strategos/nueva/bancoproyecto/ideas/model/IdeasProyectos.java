@@ -35,12 +35,9 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=false)
 	private String descripcionIdea;
 	
-	//tabla interna propuesta
-	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinColumn(name = "tipoPropuestaId")
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "idea" }, allowSetters = true)
-    private TiposPropuestas tipoPropuesta;
-		
+	@Column(nullable=false)
+	private Long tipoPropuestaId;
+	
 	@Size(max=2000)
 	@Column(nullable=false)
 	private String impacto;
@@ -56,19 +53,21 @@ public class IdeasProyectos implements Serializable{
 	@Size(max=2000)
 	@Column(nullable=true)
 	private String focalizacion;
-	
-	//tabla interna tipo objetivos
-	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinColumn(name = "tipoObjetivoId")
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "idea" }, allowSetters = true)
-    private TiposObjetivos tipoObjetivo;
-	
+
 	@Column(nullable=false)
-	private Integer alineacionPlan;
-	
+	private Long tipoObjetivoId;	
+		
 	@Size(max=500)
 	@Column(nullable=false)
 	private String financiacion;
+	
+	@Size(max=500)
+	@Column(nullable=false)
+	private String dependenciasParticipantes;
+	
+	@Size(max=500)
+	@Column(nullable=false)
+	private String dependenciaPersona;
 	
 	@Size(max=50)
 	@Column(nullable=false)
@@ -92,25 +91,19 @@ public class IdeasProyectos implements Serializable{
 	
 	@Column(nullable=false)
 	private Date fechaIdea;
-	
+
 	@Size(max=4)
 	@Column(nullable=true)
 	private String anioFormulacion;
+	
+	@Column(nullable=true)
+	private Long estatusIdeaId;
 		
-	//estatus idea
-	@OneToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinColumn(name = "estatusIdeaId")
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "idea" }, allowSetters = true)
-    private EstatusIdeas estatus;
-	
-	@Column(nullable=false)
-	private Integer estatusIdea;
+	@Column(nullable=true)
+	private Date fechaEstatus; 
 	
 	@Column(nullable=true)
-	private Date fechaEstatus;
-	
-	@Column(nullable=true)
-	private Byte historico;
+	private Boolean historico;
 	
 	@Column(nullable=true)
 	private Double valorUltimaEvaluacion;
@@ -122,9 +115,8 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=true)
 	private String observaciones;
 	
-	@JsonIgnoreProperties(value ={ "hibernateLazyInitializer", "handler", "idea" }, allowSetters = true)
-	@OneToMany(cascade= CascadeType.ALL, mappedBy="idea", fetch=FetchType.LAZY)
-	private List<IdeasDocumentosAnexos> documentos;
+	@Column(nullable=true)
+	private Long documentoId;
 	
 		
 	public Long getIdeaId() {
@@ -151,13 +143,6 @@ public class IdeasProyectos implements Serializable{
 		this.descripcionIdea = descripcionIdea;
 	}
 
-	public TiposPropuestas getTipoPropuesta() {
-		return tipoPropuesta;
-	}
-
-	public void setTipoPropuesta(TiposPropuestas tipoPropuesta) {
-		this.tipoPropuesta = tipoPropuesta;
-	}
 
 	public String getImpacto() {
 		return impacto;
@@ -189,22 +174,6 @@ public class IdeasProyectos implements Serializable{
 
 	public void setFocalizacion(String focalizacion) {
 		this.focalizacion = focalizacion;
-	}
-
-	public TiposObjetivos getTipoObjetivo() {
-		return tipoObjetivo;
-	}
-
-	public void setTipoObjetivo(TiposObjetivos tipoObjetivo) {
-		this.tipoObjetivo = tipoObjetivo;
-	}
-
-	public Integer getAlineacionPlan() {
-		return alineacionPlan;
-	}
-
-	public void setAlineacionPlan(Integer alineacionPlan) {
-		this.alineacionPlan = alineacionPlan;
 	}
 
 	public String getFinanciacion() {
@@ -270,23 +239,7 @@ public class IdeasProyectos implements Serializable{
 	public void setAnioFormulacion(String anioFormulacion) {
 		this.anioFormulacion = anioFormulacion;
 	}
-
-	public EstatusIdeas getEstatus() {
-		return estatus;
-	}
-
-	public void setEstatus(EstatusIdeas estatus) {
-		this.estatus = estatus;
-	}
-
-	public Integer getEstatusIdea() {
-		return estatusIdea;
-	}
-
-	public void setEstatusIdea(Integer estatusIdea) {
-		this.estatusIdea = estatusIdea;
-	}
-
+	
 	public Date getFechaEstatus() {
 		return fechaEstatus;
 	}
@@ -295,11 +248,11 @@ public class IdeasProyectos implements Serializable{
 		this.fechaEstatus = fechaEstatus;
 	}
 
-	public Byte getHistorico() {
+	public Boolean getHistorico() {
 		return historico;
 	}
 
-	public void setHistorico(Byte historico) {
+	public void setHistorico(Boolean historico) {
 		this.historico = historico;
 	}
 
@@ -326,14 +279,55 @@ public class IdeasProyectos implements Serializable{
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
-
-	public List<IdeasDocumentosAnexos> getDocumentos() {
-		return documentos;
+	
+	public String getDependenciasParticipantes() {
+		return dependenciasParticipantes;
 	}
 
-	public void setDocumentos(List<IdeasDocumentosAnexos> documentos) {
-		this.documentos = documentos;
+	public void setDependenciasParticipantes(String dependenciasParticipantes) {
+		this.dependenciasParticipantes = dependenciasParticipantes;
 	}
+
+	public String getDependenciaPersona() {
+		return dependenciaPersona;
+	}
+
+	public void setDependenciaPersona(String dependenciaPersona) {
+		this.dependenciaPersona = dependenciaPersona;
+	}
+	
+	public Long getTipoPropuestaId() {
+		return tipoPropuestaId;
+	}
+
+	public void setTipoPropuestaId(Long tipoPropuestaId) {
+		this.tipoPropuestaId = tipoPropuestaId;
+	}
+
+	public Long getTipoObjetivoId() {
+		return tipoObjetivoId;
+	}
+
+	public void setTipoObjetivoId(Long tipoObjetivoId) {
+		this.tipoObjetivoId = tipoObjetivoId;
+	}
+
+	public Long getEstatusIdeaId() {
+		return estatusIdeaId;
+	}
+
+	public void setEstatusIdeaId(Long estatusIdeaId) {
+		this.estatusIdeaId = estatusIdeaId;
+	}
+
+	public Long getDocumentoId() {
+		return documentoId;
+	}
+
+	public void setDocumentoId(Long documentoId) {
+		this.documentoId = documentoId;
+	}
+
 
 	private static final long serialVersionUID = 1L;
 	

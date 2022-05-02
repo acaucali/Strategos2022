@@ -4,6 +4,7 @@ export class IdeasDocumentosAnexos {
 
     documentoId: number;
     tituloDocumento: String;
-    documento: any[];
-    idea: IdeasProyectos;
+    descripcion: String;
+    documentoRuta: String;
+    ideaId: number;
 }

@@ -4,4 +4,15 @@
 		<item value="C:\Users\amc01\OneDrive\Escritorio\Strategos_Riesgos\spring\Riesgos"/>
 		<item value="D:\Strategos_Riesgos\spring"/>
 	</list>
+	<section name="ExternalProjectImportWizard">
+	</section>
+	<section name="SmartImportWizard">
+		<item key="SmartImportRootWizardPage.STORE_HIDE_ALREADY_OPEN" value="false"/>
+		<item key="SmartImportRootWizardPage.STORE_CLOSE_IMPORTED" value="false"/>
+		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
+		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
+		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="D:\StrategosDesarrollo\Strategos\FUENTES\Strategos_Riesgos\spring\strategos_riesgos"/>
+		</list>
+	</section>
 </section>

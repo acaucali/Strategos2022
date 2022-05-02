@@ -24,33 +24,18 @@ export class IdeasDocumentosService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  getDocumentosList(){
-    return this.http.get(this.urlEndPoint).pipe(map(res =>{
-      this.documentos = res as IdeasDocumentosAnexos[];
-      return this.documentos;
-    }));
-  }
+  subirDocumento(origenId, documento, archivo: File) : Observable<any>{
 
-  getDocumentos(page: number): Observable<any> {
-    //return of(tarjetas);
-    return this.http.get(this.urlEndPoint+ '/page/'+page).pipe(
-      map((response: any) => {
-        (response.content as IdeasDocumentosAnexos[]).map(documento=>{
-          return documento;
-        });
-        return response;
-      })
-    );
-  }
+    let formData = new FormData();
+    formData.append("archivo", archivo);
+    formData.append("id", origenId);
+    formData.append("titulo", documento.tituloDocumento);
+    formData.append("descripcion", documento.descripcion);
 
-  create(documento: IdeasDocumentosAnexos) : Observable<any>{
-    return this.http.post<any>(this.urlEndPoint, documento, {headers: this.httpHeaders}).pipe(
-      catchError(e =>{
-        if(e.status==400){
-          return throwError(e);
-        }
+    return this.http.post<any>(`${this.urlEndPoint}/upload`, formData).pipe(
+      catchError(e=>{
         console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje,e.error.error, 'error');
+        swal.fire('Error al editar', e.error.mensaje, 'error');
         return throwError(e);
       })
     );
@@ -67,20 +52,9 @@ export class IdeasDocumentosService {
     );
   }
 
-  update(documento: IdeasDocumentosAnexos): Observable<any>{
-    return this.http.put<any>(`${this.urlEndPoint}/${documento.documentoId}`, documento, {headers: this.httpHeaders }).pipe(
-      catchError(e =>{
-        if(e.status==400){
-          return throwError(e);
-        }
-        console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje, e.error.error, 'error');
-        return throwError(e);
-      })
-    );
-  }
-
-  delete(id: number): Observable<IdeasDocumentosAnexos>{
+  
+  
+  deleteDocumento(id: number): Observable<IdeasDocumentosAnexos>{
     return this.http.delete<IdeasDocumentosAnexos>(`${this.urlEndPoint}/${id}`,{headers: this.httpHeaders }).pipe(
       catchError(e =>{
         console.error(e.error.mensaje);

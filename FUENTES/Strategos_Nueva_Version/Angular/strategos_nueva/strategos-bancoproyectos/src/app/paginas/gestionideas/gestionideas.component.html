@@ -6,6 +6,7 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Gestión Ideas</h1>
+            Organización: {{organizacion.nombre}} 
           </div>
           
         </div>
@@ -25,20 +26,14 @@
                 <i class="fa-md fas fa-plus"></i>
             </button>
             <button type="button" class="btn" >
-                <i class="fa-md far fa-file-pdf"></i>
+                <i class="fa-md far fa-file-pdf" (click)="descargarPDFResumido()"></i>
             </button>
-            <button type="button" class="btn" >
-                <i class="fa-md far fa-file-excel"></i>
-            </button>
-         
-            <button type="button" class="btn" >
+                     
+            <button type="button" class="btn" class="btn" data-card-widget="collapse" title="Collapse">
                 <i class="fa-md fas fa-filter"></i>
             </button>
 
           <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
-            </button>
             <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
               <i class="fas fa-times"></i>
             </button>
@@ -49,34 +44,40 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="exampleInputEmail1">Año Formulación</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
+                        [(ngModel)]="anio" maxlength="4" >
                     </div>
                     <div class="col-md-3">
                         <label for="exampleInputEmail1">Tipo Propuesta</label>
-                        <select class="custom-select form-control-border" id="exampleSelectBorder">
-                            <option>Value 1</option>
-                            <option>Value 2</option>
-                            <option>Value 3</option>
+                        <select class="form-control" [(ngModel)]="propuestaId" >
+                          <option [value]="undefined" selected>Seleccionar</option>
+                          <option *ngFor="let pro of propuestas" [value]="pro.tipoPropuestaId">{{pro.tipoPropuesta}}</option>
                         </select>
                     </div>
                     
                     <div class="col-md-3">
                         <label for="exampleInputEmail1">Estatus</label>
-                        <select class="custom-select form-control-border" id="exampleSelectBorder">
-                            <option>Value 1</option>
-                            <option>Value 2</option>
-                            <option>Value 3</option>
+                        <select class="form-control"[(ngModel)]="estatusId">
+                          <option [value]="undefined" selected>Seleccionar</option>
+                          <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
                         </select>
                     </div>
                     
                     <div class="col-md-3">
-                        <label for="exampleInputEmail1">Historico</label>
-                        <input type="checkbox">
+                      <br>
+                      <label>Historico</label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <input type="checkbox" id="customCheckbox1"
+                      [(ngModel)]="historico">
+                       
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-9" *ngIf="isAdmin == true">
                         <label for="exampleInputEmail1">Dependencia</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                        <select class="form-control" required [(ngModel)]="organizacionFiltroId" >
+                          <option [value]="undefined" selected>Seleccionar</option>
+                          <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
+                        </select>
                     </div>
 
                     <div class="col-md-8">
@@ -88,56 +89,64 @@
                 </div>
             </div>
         </div>
-        <!-- /.card-footer-->
-        <div class="card-body">
-            
-            <div *ngIf="ideas?.length==0" class="alert alert-info">
-                No hay registros en la base de datos!
-            </div>
         
-            <div class="table-responsive">
-                <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
-                  <thead>
-                    <tr class="text-white bg-primary">
-                      <td width="50">Acciones</td>
-                      <td>Año</td>
-                      <td>Ideas Proyecto</td>
-                      <td>Dependencia</td>
-                      <td>Tipo Propuesta</td>
-                      <td>Estatus</td>
-                    </tr>
-                  </thead>
-                  
-                  <tbody>
-                    <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageIdea, id: 'pageIde'}">
-                      <td width="50" >
-                          &nbsp;
-                        <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
-                        &nbsp;&nbsp;
-                        <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
-                      </td>
-                      <td >{{el.anioFormulacion}} </td>
-                      <td >{{el.nombreIdea}} </td>
-                      <td >{{el.dependenciaId}} </td>
-                      <td >{{el.tiposPropuestas}} </td>
-                      <td >{{el.estatusIdea}} </td>
-                    </tr>
-                  </tbody>
-             
-                </table>
-            
-                <pagination-controls id="pageIde" previousLabel="Anterior"
-                  nextLabel="Siguiente" (pageChange)="pageIdea = $event"></pagination-controls>
-            
-            </div>
-
-        </div>
         <!-- /.card-body -->
         
       </div>
       <!-- /.card -->
 
     </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="ideas?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="100">Acciones</td>
+                  <td width="80">Año</td>
+                  <td>Ideas Proyecto</td>
+                  <td>Dependencia</td>
+                  <td>Tipo Propuesta</td>
+                  <td>Estatus</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageIdea, id: 'pageIde'}">
+                  <td width="100" >
+                    
+                    <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="far fa-file-pdf" (click)="descargarPDF(el)"></i>
+                  </td>
+                  <td width="80">{{el.anioFormulacion}} </td>
+                  <td >{{el.nombreIdea}} </td>
+                  <td >{{el.orgStr}} </td>
+                  <td >{{el.proStr}} </td>
+                  <td >{{el.estStr}} </td>
+                </tr>
+              </tbody>
+         
+            </table>
+        
+            <pagination-controls id="pageIde" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageIdea = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
     <!-- /.content -->
 </div>
   <!-- /.content-wrapper -->

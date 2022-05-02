@@ -13,6 +13,8 @@ const routes: Routes = [
   children: [
     { path: '', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
     { path: 'gestionideas', loadChildren: () => import('./gestionideas/gestionideas.module').then(m =>m.GestionIdeasModule)},
+    { path: 'criterios', loadChildren: () => import('./configuracion/tablas/criterios/criterios.module').then(m =>m.CriteriosModule)},
+    { path: 'inicio', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
     { path: '**', component: Pagina404Component},
   ]}
 ];

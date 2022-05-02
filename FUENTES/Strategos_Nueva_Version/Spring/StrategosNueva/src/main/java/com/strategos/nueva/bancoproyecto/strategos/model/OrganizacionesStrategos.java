@@ -60,10 +60,10 @@ public class OrganizacionesStrategos implements Serializable{
 	@Column(nullable=true)
 	private Integer alertaMinMax;
 	
-	@Column(nullable=true)
+	@Column(nullable=true, name="alerta_meta_n1")
 	private Integer alertaMetaN1;
 	
-	@Column(nullable=true)
+	@Column(nullable=true, name="alerta_meta_n2")
 	private Integer alertaMetaN2;
 	
 	@Column(nullable=true)

@@ -8,14 +8,15 @@ export class IdeasProyectos {
     ideaId: number;
     nombreIdea: String;
     descripcionIdea: String;
-    tiposPropuestas: TiposPropuestas;
+    tipoPropuestaId: number;
     impacto: String;
     problematica: String;
     poblacion: String;
     focalizacion: String;
-    tipoObjetivo: TiposObjetivos;
-    alineacionPlan: number;
+    tipoObjetivoId: number;
     financiacion: String;
+    dependenciasParticipantes: String;
+    dependenciaPersona: String;
     personaEncargada: String;
     personaContactoDatos: String;
     dependenciaId: number;
@@ -23,13 +24,12 @@ export class IdeasProyectos {
     capacidadTecnica: String;
     fechaIdea: Date;
     anioFormulacion: String;
-    estatus: EstatusIdeas;
-    estatusIdea: number;
+    estatusIdeaId: EstatusIdeas;
     fechaEstatus: Date;
     historico: number;
     valorUltimaEvaluacion: number;
     fechaUltimaEvaluacion: Date;
     observaciones: String;
-    documentos: IdeasDocumentosAnexos[];
+    documentoId: number;
 
 }

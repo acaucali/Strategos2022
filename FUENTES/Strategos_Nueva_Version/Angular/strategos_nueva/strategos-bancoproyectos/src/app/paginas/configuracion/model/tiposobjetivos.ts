@@ -4,6 +4,5 @@ export class TiposObjetivos {
 
     tipoObjetivoId: number;
     descripcionObjetivo: String;
-    idea: IdeasProyectos;
-
+   
 }

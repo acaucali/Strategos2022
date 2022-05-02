@@ -28,16 +28,16 @@ public class IdeasDocumentosAnexos implements Serializable{
 	@Column(nullable=false)
 	private String tituloDocumento;
 	
-	//campo blob donde se guardara el documento
-	@Lob
+	@Size(max = 500)
+	@Column(nullable = false)
+	private String descripcion;
+	
+	@Size(max = 1000)
+	@Column(nullable = false)
+	private String documentoRuta;
+	
 	@Column(nullable=false)
-	private byte[] documento;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ideaId", nullable = false)
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "documentos" }, allowSetters = true)
-	private IdeasProyectos idea;
-	
+	private Long ideaId;
 			
 	public Long getDocumentoId() {
 		return documentoId;
@@ -55,21 +55,31 @@ public class IdeasDocumentosAnexos implements Serializable{
 		this.tituloDocumento = tituloDocumento;
 	}
 
-	public byte[] getDocumento() {
-		return documento;
+	public Long getIdeaId() {
+		return ideaId;
 	}
 
-	public void setDocumento(byte[] documento) {
-		this.documento = documento;
+	public void setIdeaId(Long ideaId) {
+		this.ideaId = ideaId;
 	}
 
-	public IdeasProyectos getIdea() {
-		return idea;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setIdea(IdeasProyectos idea) {
-		this.idea = idea;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
+
+	public String getDocumentoRuta() {
+		return documentoRuta;
+	}
+
+	public void setDocumentoRuta(String documentoRuta) {
+		this.documentoRuta = documentoRuta;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 	

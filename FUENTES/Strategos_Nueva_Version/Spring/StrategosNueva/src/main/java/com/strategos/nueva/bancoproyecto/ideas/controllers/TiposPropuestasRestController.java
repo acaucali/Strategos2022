@@ -125,7 +125,6 @@ public class TiposPropuestasRestController {
 			try{
 						
 				tiposPropuestasActual.setTipoPropuesta(tiposPropuestas.getTipoPropuesta());
-				tiposPropuestasActual.setIdea(tiposPropuestas.getIdea());
 				
 																			
 				tiposPropuestasUpdated=tiposPropuestasService.save(tiposPropuestasActual);

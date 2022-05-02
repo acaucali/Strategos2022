@@ -26,9 +26,6 @@ public class TiposPropuestas implements Serializable{
 	@Column(nullable=true)
 	private String tipoPropuesta;
 	
-	@OneToOne(mappedBy = "tipoPropuesta", fetch=FetchType.LAZY)
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "tipoPropuesta" }, allowSetters = true)
-    private IdeasProyectos idea;
 	
 	
 	public Long getTipoPropuestaId() {
@@ -47,15 +44,7 @@ public class TiposPropuestas implements Serializable{
 		this.tipoPropuesta = tipoPropuesta;
 	}
 
-	public IdeasProyectos getIdea() {
-		return idea;
-	}
-
-	public void setIdea(IdeasProyectos idea) {
-		this.idea = idea;
-	}
-
-
+	
 
 	private static final long serialVersionUID = 1L;
 	

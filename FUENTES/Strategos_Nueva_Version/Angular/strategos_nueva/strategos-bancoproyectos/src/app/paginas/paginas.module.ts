@@ -6,18 +6,22 @@ import { ModulosModule } from '../modulos/modulos.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 
+import { CriteriosComponent } from './configuracion/tablas/criterios/criterios.component';
+import { DetalleCriterioComponent } from './configuracion/tablas/criterios/detalle-criterio/detalle-criterio.component';
+
 
 
 @NgModule({
   declarations: [
     ManinpageComponent,
     Pagina404Component,
-    ConfiguracionComponent,
+    ConfiguracionComponent
   ],
   imports: [
     CommonModule,
     ModulosModule,
     AppRoutingModule,
+    
 
   ]
 })

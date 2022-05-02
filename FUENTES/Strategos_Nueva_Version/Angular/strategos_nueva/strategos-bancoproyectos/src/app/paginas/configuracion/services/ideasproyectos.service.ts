@@ -32,6 +32,13 @@ export class IdeasProyectosService {
     }));
   }
 
+  getIdeasListId(id: number){
+    return this.http.get(`${this.urlEndPoint}/org/${id}`).pipe(map(res =>{
+      this.ideas = res as IdeasProyectos[];
+      return this.ideas;
+    }));
+  }
+
   getIdeas(page: number): Observable<any> {
     //return of(tarjetas);
     return this.http.get(this.urlEndPoint+ '/page/'+page).pipe(

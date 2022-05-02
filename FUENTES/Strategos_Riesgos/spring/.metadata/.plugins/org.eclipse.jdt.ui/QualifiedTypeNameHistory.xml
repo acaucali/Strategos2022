@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.services.ITipoImpactoService"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.entity.TipoImpacto"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.entity.Probabilidad"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.services.IProbabilidadService"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.model.ejercicios.entity.RiCausaRiesgo"/>
-<fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.models.procesos.utilidades.MapaCalor"/>
-<fullyQualifiedTypeName name="com.strategos.riesgos.model.ejercicios.entity.FactoresRiesgo"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.services.ITipoImpactoService"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.entity.TipoImpacto"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.entity.Probabilidad"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.models.tablas.services.IProbabilidadService"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.model.ejercicios.entity.RiCausaRiesgo"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.models.procesos.utilidades.MapaCalor"/>
+    <fullyQualifiedTypeName name="com.strategos.riesgos.model.ejercicios.entity.FactoresRiesgo"/>
 </qualifiedTypeNameHistroy>

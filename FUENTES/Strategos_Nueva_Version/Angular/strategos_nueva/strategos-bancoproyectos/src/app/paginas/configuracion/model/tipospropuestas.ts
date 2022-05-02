@@ -4,6 +4,6 @@ export class TiposPropuestas {
 
     tipoPropuestaId: number;
     tipoPropuesta: String;
-    idea: IdeasProyectos;
+
 
 }

@@ -59,7 +59,7 @@ export class CriteriosEvaluacionService {
   getCriterio(id): Observable<CriteriosEvaluacion>{
     return this.http.get<CriteriosEvaluacion>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e=>{
-        this.router.navigate(['/gestionideas']);
+        this.router.navigate(['/criterios']);
         console.error(e.error.mensaje);
         swal.fire('Error al editar', e.error.mensaje, 'error');
         return throwError(e);

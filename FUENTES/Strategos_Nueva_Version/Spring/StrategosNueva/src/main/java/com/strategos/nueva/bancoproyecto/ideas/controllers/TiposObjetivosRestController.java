@@ -125,7 +125,7 @@ public class TiposObjetivosRestController {
 			try{
 						
 				tipoObjetivoActual.setDescripcionObjetivo(tipoObjetivo.getDescripcionObjetivo());
-				tipoObjetivoActual.setIdea(tipoObjetivo.getIdea());
+
 				
 																			
 				tipoObjetivoUpdated=tiposObjetivosService.save(tipoObjetivoActual);

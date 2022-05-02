@@ -125,8 +125,7 @@ public class EstatusIdeaRestController {
 			try{
 							
 				estatusActual.setEstatus(estatus.getEstatus());
-				estatusActual.setIdea(estatus.getIdea());
-
+				
 																			
 				estatusUpdated=estatusIdeaService.save(estatusActual);
 			

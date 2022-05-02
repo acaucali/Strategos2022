@@ -1,7 +1,6 @@
-INDEX VERSION 1.4+D:\datos\build_riesgos\Strategos_Riesgos\spring\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-3315569021.index
-3784611028.index
-4176718893.index
-2920404889.index
-2143847929.index
+INDEX VERSION 1.4+D:\StrategosDesarrollo\Strategos\FUENTES\Strategos_Riesgos\spring\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+901366509.index
 2693781654.index
+759386132.index
+465046556.index
+3845739494.index

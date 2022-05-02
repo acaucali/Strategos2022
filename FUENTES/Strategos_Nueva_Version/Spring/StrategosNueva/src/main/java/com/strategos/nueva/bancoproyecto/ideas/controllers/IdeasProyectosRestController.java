@@ -1,17 +1,25 @@
 package com.strategos.nueva.bancoproyecto.ideas.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,8 +30,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
 
@@ -43,6 +65,22 @@ public class IdeasProyectosRestController {
 		@GetMapping("/idea")
 		public List<IdeasProyectos> index (){
 			return ideasProyectosService.findAll();
+		}
+		
+		//servicio que trae la lista de idea
+		@GetMapping("/idea/org/{id}")
+		public List<IdeasProyectos> index(@PathVariable Long id){
+			
+			List<IdeasProyectos> ideasOrg = ideasProyectosService.findAll(); 
+			List<IdeasProyectos> ideasFin = new ArrayList();
+			
+			for(IdeasProyectos ide: ideasOrg) {
+				if(ide.getDependenciaId() == id) {
+					ideasFin.add(ide);
+				}				
+			}
+			
+			return ideasFin;
 		}
 			
 		//servicio que muestra un idea
@@ -124,14 +162,13 @@ public class IdeasProyectosRestController {
 			
 			try{
 				
-				ideasProyectosActual.setAlineacionPlan(ideasProyectos.getAlineacionPlan());
+				ideasProyectosActual.setDependenciasParticipantes(ideasProyectos.getDependenciasParticipantes());
 				ideasProyectosActual.setAnioFormulacion(ideasProyectos.getAnioFormulacion());
 				ideasProyectosActual.setCapacidadTecnica(ideasProyectos.getCapacidadTecnica());
 				ideasProyectosActual.setDependenciaId(ideasProyectos.getDependenciaId());
 				ideasProyectosActual.setDescripcionIdea(ideasProyectos.getDescripcionIdea());
-				ideasProyectosActual.setDocumentos(ideasProyectos.getDocumentos());
-				ideasProyectosActual.setEstatus(ideasProyectos.getEstatus());
-				ideasProyectosActual.setEstatusIdea(ideasProyectos.getEstatusIdea());
+				
+				ideasProyectosActual.setDependenciaPersona(ideasProyectos.getDependenciaPersona());
 				ideasProyectosActual.setFechaEstatus(ideasProyectos.getFechaEstatus());
 				ideasProyectosActual.setFechaIdea(ideasProyectos.getFechaIdea());
 				ideasProyectosActual.setFechaUltimaEvaluacion(ideasProyectos.getFechaUltimaEvaluacion());
@@ -145,10 +182,13 @@ public class IdeasProyectosRestController {
 				ideasProyectosActual.setPoblacion(ideasProyectos.getPoblacion());
 				ideasProyectosActual.setProblematica(ideasProyectos.getProblematica());
 				ideasProyectosActual.setProyectosEjecutados(ideasProyectos.getProyectosEjecutados());
-				ideasProyectosActual.setTipoObjetivo(ideasProyectos.getTipoObjetivo());
-				ideasProyectosActual.setTipoPropuesta(ideasProyectos.getTipoPropuesta());
-				ideasProyectosActual.setValorUltimaEvaluacion(ideasProyectos.getValorUltimaEvaluacion());				
 				
+				ideasProyectosActual.setValorUltimaEvaluacion(ideasProyectos.getValorUltimaEvaluacion());				
+				ideasProyectosActual.setAnioFormulacion(ideasProyectos.getAnioFormulacion());
+				ideasProyectosActual.setEstatusIdeaId(ideasProyectos.getEstatusIdeaId());
+				ideasProyectosActual.setDocumentoId(ideasProyectos.getDocumentoId());
+				ideasProyectosActual.setTipoObjetivoId(ideasProyectos.getTipoObjetivoId());
+				ideasProyectosActual.setTipoPropuestaId(ideasProyectos.getTipoPropuestaId());
 				
 																			
 				ideasProyectosUpdated=ideasProyectosService.save(ideasProyectosActual);
@@ -181,4 +221,5 @@ public class IdeasProyectosRestController {
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
 
+		
 }
