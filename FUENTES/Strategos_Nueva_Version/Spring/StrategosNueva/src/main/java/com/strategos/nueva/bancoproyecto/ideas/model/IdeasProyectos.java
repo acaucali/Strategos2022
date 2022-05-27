@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,6 +39,10 @@ public class IdeasProyectos implements Serializable{
 	
 	@Column(nullable=false)
 	private Long tipoPropuestaId;
+	
+	@Size(max=2000)
+	@Column(nullable=true)
+	private String propuesta;
 	
 	@Size(max=2000)
 	@Column(nullable=false)
@@ -65,9 +71,8 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=false)
 	private String dependenciasParticipantes;
 	
-	@Size(max=500)
-	@Column(nullable=false)
-	private String dependenciaPersona;
+	@Column(nullable=true)
+	private Long dependenciaPersona;
 	
 	@Size(max=50)
 	@Column(nullable=false)
@@ -82,6 +87,10 @@ public class IdeasProyectos implements Serializable{
 	private Long dependenciaId;
 	
 	@Size(max=2000)
+	@Column(nullable=true)
+	private String organizacion;
+	
+	@Size(max=2000)
 	@Column(nullable=false)
 	private String proyectosEjecutados;
 	
@@ -89,6 +98,7 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=false)
 	private String capacidadTecnica;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(nullable=false)
 	private Date fechaIdea;
 
@@ -98,7 +108,12 @@ public class IdeasProyectos implements Serializable{
 	
 	@Column(nullable=true)
 	private Long estatusIdeaId;
-		
+	
+	@Size(max=2000)
+	@Column(nullable=true)
+	private String estatus;
+	
+	@Temporal(TemporalType.DATE)
 	@Column(nullable=true)
 	private Date fechaEstatus; 
 	
@@ -108,6 +123,7 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=true)
 	private Double valorUltimaEvaluacion;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(nullable=true)
 	private Date fechaUltimaEvaluacion;
 	
@@ -288,11 +304,11 @@ public class IdeasProyectos implements Serializable{
 		this.dependenciasParticipantes = dependenciasParticipantes;
 	}
 
-	public String getDependenciaPersona() {
+	public Long getDependenciaPersona() {
 		return dependenciaPersona;
 	}
 
-	public void setDependenciaPersona(String dependenciaPersona) {
+	public void setDependenciaPersona(Long dependenciaPersona) {
 		this.dependenciaPersona = dependenciaPersona;
 	}
 	
@@ -327,6 +343,31 @@ public class IdeasProyectos implements Serializable{
 	public void setDocumentoId(Long documentoId) {
 		this.documentoId = documentoId;
 	}
+		
+	public String getPropuesta() {
+		return propuesta;
+	}
+
+	public void setPropuesta(String propuesta) {
+		this.propuesta = propuesta;
+	}
+
+	public String getOrganizacion() {
+		return organizacion;
+	}
+
+	public void setOrganizacion(String organizacion) {
+		this.organizacion = organizacion;
+	}
+
+	public String getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(String estatus) {
+		this.estatus = estatus;
+	}
+
 
 
 	private static final long serialVersionUID = 1L;

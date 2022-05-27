@@ -23,7 +23,7 @@
                                       <li class="nav-item">
                                         <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Parte III</a>
                                       </li>
-                                      <li class="nav-item">
+                                      <li class="nav-item" *ngIf="idea.ideaId">
                                         <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Anexos</a>
                                       </li>
                                     </ul>
@@ -33,25 +33,25 @@
                                       <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                         <div class="row">
                                             <div class="col-md-12" *ngIf="isAdmin == true">
-                                              <label for="exampleInputEmail1">Organización</label>
+                                              <label for="exampleInputEmail1">Organización (*)</label>
                                               <select class="form-control" required [(ngModel)]="idea.dependenciaId" name="dependenciaId" required #dependenciaId="ngModel">
                                                 <option [value]="undefined" selected>Seleccionar</option>
                                                 <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
                                               </select>
                                             </div>
                                             <div class="col-md-12">
-                                                <label for="exampleInputEmail1">Nombre de la idea</label>
+                                                <label for="exampleInputEmail1">Nombre de la idea (*)</label>
                                                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nombre Idea"
-                                                [(ngModel)]="idea.nombreIdea" name="nombreIdea" required maxlength="14" #nombreIdea="ngModel">
+                                                [(ngModel)]="idea.nombreIdea" name="nombreIdea" required maxlength="250" #nombreIdea="ngModel">
                                             </div>
                                             <div class="col-md-12">
-                                                <label>Descripción</label>
+                                                <label>Descripción (*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Descripción"
-                                                [(ngModel)]="idea.descripcionIdea" name="descripcionIdea" required maxlength="14" #descripcionIdea="ngModel"></textarea>
+                                                [(ngModel)]="idea.descripcionIdea" name="descripcionIdea" required maxlength="2000" #descripcionIdea="ngModel"></textarea>
                                             </div>
                                             
                                             <div class="col-md-6">
-                                                <label for="exampleInputEmail1">Tipo Propuesta</label>
+                                                <label for="exampleInputEmail1">Tipo Propuesta (*)</label>
                                                 <select class="form-control" required [(ngModel)]="idea.tipoPropuestaId" name="tipoPropuestaId" required #tipoPropuestaId="ngModel">
                                                   <option [value]="undefined" selected>Seleccionar</option>
                                                   <option *ngFor="let pro of propuestas" [value]="pro.tipoPropuestaId">{{pro.tipoPropuesta}}</option>
@@ -59,7 +59,7 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                              <label for="exampleInputEmail1">Alineación plan</label>
+                                              <label for="exampleInputEmail1">Alineación plan (*)</label>
                                               <select class="form-control" required [(ngModel)]="idea.tipoObjetivoId" name="tipoObjetivoId" #tipoObjetivoId="ngModel">
                                                 <option [value]="undefined" selected>Seleccionar</option>
                                                 <option *ngFor="let obj of objetivos" [value]="obj.tipoObjetivoId">{{obj.descripcionObjetivo}}</option>
@@ -68,21 +68,25 @@
                                             
                                             
                                             <div class="col-md-12">
-                                                <label>Impacto</label>
+                                                <label>Impacto (*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Impacto"
-                                                [(ngModel)]="idea.impacto" name="impacto" maxlength="14" #impacto="ngModel"></textarea>
+                                                [(ngModel)]="idea.impacto" name="impacto" required maxlength="2000" #impacto="ngModel"></textarea>
                                             </div>
                                             
                                             <div class="col-md-5">
                                                 <label for="exampleInputEmail1">Estatus Idea</label>
-                                                <select class="form-control" [(ngModel)]="idea.estatusIdeaId" name="estatusIdeaId" #estatusIdeaId="ngModel">
+                                                <select *ngIf="idea.ideaId" class="form-control" [(ngModel)]="idea.estatusIdeaId" name="estatusIdeaId" #estatusIdeaId="ngModel">
+                                                  <option [value]="undefined" selected>Seleccionar</option>
+                                                  <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
+                                                </select>
+                                                <select *ngIf="!idea.ideaId" class="form-control" [(ngModel)]="idea.estatusIdeaId" name="estatusIdeaId" #estatusIdeaId="ngModel" disabled>
                                                   <option [value]="undefined" selected>Seleccionar</option>
                                                   <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
                                                 </select>
                                             </div>
 
                                             <div class="col-md-5">
-                                                <label>Fecha Idea</label>
+                                                <label>Fecha Idea (*)</label>
                                                 <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="idea.fechaIdea" name="fechaIdea" required #fechaIdea="ngModel" 
                                                 style="display:inline; width:250px;" placeholder="dd/mm/yyyy">
                                                 <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
@@ -90,17 +94,17 @@
 
                                               </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" *ngIf="idea.ideaId">
                                               <br>
                                               <label>Historico</label>
                                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <input type="checkbox" id="customCheckbox1"
-                                                [(ngModel)]="idea.historico" name="historico" maxlength="14" #historico="ngModel">
+                                                [(ngModel)]="idea.historico" name="historico" #historico="ngModel">
                                                 
                                             </div>
 
                                             <div class="col-md-3">
-                                              <label for="exampleInputEmail1">Año Formulación</label>
+                                              <label for="exampleInputEmail1">Año Formulación (*)</label>
                                               <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
                                               [(ngModel)]="idea.anioFormulacion" name="anioFormulacion" required maxlength="4" #anioFormulacion="ngModel">
                                             </div>
@@ -112,33 +116,33 @@
                                         <div class="row">
                                             
                                             <div class="col-md-12">
-                                                <label>Población</label>
+                                                <label>Población (*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Población"
-                                                [(ngModel)]="idea.poblacion" name="poblacion"  maxlength="14" #poblacion="ngModel"></textarea>
+                                                [(ngModel)]="idea.poblacion" name="poblacion" required maxlength="2000" #poblacion="ngModel"></textarea>
                                             </div>
                                             
                                             <div class="col-md-12">
                                                 <label>Focalización de la Población</label>
                                                 <textarea class="form-control" rows="3" placeholder="Focalización de la Población"
-                                                [(ngModel)]="idea.focalizacion" name="focalizacion"  maxlength="14" #focalizacion="ngModel"></textarea>
+                                                [(ngModel)]="idea.focalizacion" name="focalizacion"  maxlength="2000" #focalizacion="ngModel"></textarea>
                                             </div>
 
                                             <div class="col-md-12">
-                                                <label>Problemática</label>
+                                                <label>Problemática (*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Problemática"
-                                                [(ngModel)]="idea.problematica" name="problematica"  maxlength="14" #problematica="ngModel"></textarea>
+                                                [(ngModel)]="idea.problematica" name="problematica" required maxlength="2000" #problematica="ngModel"></textarea>
                                             </div>
 
                                             <div class="col-md-12">
-                                                <label>Financiación</label>
+                                                <label>Financiación (*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Financiación"
-                                                [(ngModel)]="idea.financiacion" name="financiacion"  maxlength="14" #financiacion="ngModel"></textarea>
+                                                [(ngModel)]="idea.financiacion" name="financiacion" required maxlength="2000" #financiacion="ngModel"></textarea>
                                             </div>
 
                                             <div class="col-md-12">
-                                                <label>Capacidad Técnica</label>
+                                                <label>Capacidad Técnica (*)</label>
                                                 <textarea class="form-control" rows="2" placeholder="Capacidad Técnica"
-                                                [(ngModel)]="idea.capacidadTecnica" name="capacidadTecnica"  maxlength="14" #capacidadTecnica="ngModel"></textarea>
+                                                [(ngModel)]="idea.capacidadTecnica" name="capacidadTecnica" required maxlength="2000" #capacidadTecnica="ngModel"></textarea>
                                             </div>
                                                                   
                                         </div>  
@@ -146,44 +150,46 @@
                                       <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
                                         <div class="row">   
                                             <div class="col-md-12">
-                                                <label>Dependencias Participantes</label>
+                                                <label>Dependencias Participantes (*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Dependencias Participantes"
-                                                [(ngModel)]="idea.dependenciasParticipantes" name="dependenciasParticipantes"  maxlength="14" #dependenciasParticipantes="ngModel"></textarea>
+                                                [(ngModel)]="idea.dependenciasParticipantes" name="dependenciasParticipantes" required maxlength="2000" #dependenciasParticipantes="ngModel"></textarea>
                                             </div>
                                             
                                             <div class="col-md-6">
-                                                <label for="exampleInputEmail1">Persona Encargada</label>
+                                                <label for="exampleInputEmail1">Persona Encargada (*)</label>
                                                 <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Persona Encargada"
-                                                [(ngModel)]="idea.personaEncargada" name="personaEncargada"  maxlength="14" #personaEncargada="ngModel">
+                                                [(ngModel)]="idea.personaEncargada" name="personaEncargada" required maxlength="50" #personaEncargada="ngModel">
                                             </div>
 
                                             <div class="col-md-6">
-                                                <label for="exampleInputEmail1">Dependencia Persona Encargada</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Dependencia Persona Encargada"
-                                                [(ngModel)]="idea.dependenciaPersona" name="dependenciaPersona"  maxlength="14" #dependenciaPersona="ngModel">
+                                                <label for="exampleInputEmail1">Dependencia Persona Encargada (*)</label>
+                                                <select class="form-control" required [(ngModel)]="idea.dependenciaPersona" name="dependenciaPersona" required #dependenciaPersona="ngModel">
+                                                  <option [value]="undefined" selected>Seleccionar</option>
+                                                  <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
+                                                </select>
                                             </div>
 
                                             <div class="col-md-12">
-                                                <label>Datos Contacto</label>
+                                                <label>Datos Contacto (*)</label>
                                                 <textarea class="form-control" rows="2" placeholder="Datos Contacto"
-                                                [(ngModel)]="idea.personaContactoDatos" name="personaContactoDatos"  maxlength="14" #personaContactoDatos="ngModel"></textarea>
+                                                [(ngModel)]="idea.personaContactoDatos" name="personaContactoDatos" required  maxlength="250" #personaContactoDatos="ngModel"></textarea>
                                             </div>
 
                                             <div class="col-md-12">
-                                                <label>Proyectos Ejecutados</label>
+                                                <label>Proyectos Ejecutados(*)</label>
                                                 <textarea class="form-control" rows="3" placeholder="Proyectos Ejecutados"
-                                                [(ngModel)]="idea.proyectosEjecutados" name="proyectosEjecutados"  maxlength="14" #proyectosEjecutados="ngModel"></textarea>
+                                                [(ngModel)]="idea.proyectosEjecutados" name="proyectosEjecutados" required maxlength="500" #proyectosEjecutados="ngModel"></textarea>
                                             </div>
 
                                             
                                             <div class="col-md-12">
                                                 <label>Observaciones</label>
                                                 <textarea class="form-control" rows="3" placeholder="Observaciones"
-                                                [(ngModel)]="idea.observaciones" name="observaciones" maxlength="14" #observaciones="ngModel"></textarea>
+                                                [(ngModel)]="idea.observaciones" name="observaciones" maxlength="2000" #observaciones="ngModel"></textarea>
                                             </div>
                                         </div> 
                                       </div>
-                                      <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                      <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab" *ngIf="idea.ideaId">
                                           <div class="row">   
                                             <div class="col-md-12">
                                               <label>Nombre del Documento</label>

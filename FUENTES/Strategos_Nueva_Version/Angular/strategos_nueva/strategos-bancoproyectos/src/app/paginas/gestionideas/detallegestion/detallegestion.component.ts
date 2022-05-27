@@ -63,6 +63,7 @@ export class DetallegestionComponent implements OnInit {
     if(this.isAdmin == true){
       this.idea.dependenciaId = this.ideaComponent.organizacionId;
     }
+    console.log(this.idea);
     this.ideaService.create(this.idea).subscribe(
       json => {
       swal.fire('Nueva Idea', `${json.mensaje}`, 'success');

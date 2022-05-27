@@ -12,6 +12,15 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +58,7 @@ import com.strategos.nueva.bancoproyecto.ideas.service.TiposObjetivosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
 import com.strategos.nueva.bancoproyecto.strategos.model.OrganizacionesStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.service.OrganizacionService;
-import com.strategos.nueva.bancoproyectos.model.util.ExportExcelResumido;
+
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -70,59 +79,34 @@ public class ReportesRestController {
 	//Servicios Rest tabla - idea
 	private final Logger log = LoggerFactory.getLogger(IdeasProyectosRestController.class);
 	
-	
-	 @GetMapping("/idea/excel/{ideaId}")
-	    public void exportToExcel(HttpServletResponse response, @PathVariable Long ideaId) throws IOException {
-		 
-		 IdeasProyectos idea = ideasProyectosService.findById(ideaId);
-		 
-	        response.setContentType("application/octet-stream");
-	        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-	        String currentDateTime = dateFormatter.format(new Date());
-	         
-	        String headerKey = "Content-Disposition";
-	        String headerValue = "attachment; filename=idea_" + currentDateTime + ".xlsx";
-	        response.setHeader(headerKey, headerValue);
-	         
-	        ExportExcelResumido excelExporter = new ExportExcelResumido(idea);	
-	        excelExporter.exportDetalle(response);    
-	 } 
-	
-	 
-	 @GetMapping("/idea/excel/resumido/{orgId}")
-	    public void exportToExcelResumido(HttpServletResponse response, @PathVariable Long orgId) throws IOException {
-		 
-		 	
-		 
-	        response.setContentType("application/octet-stream");
-	        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-	        String currentDateTime = dateFormatter.format(new Date());
-	         
-	        String headerKey = "Content-Disposition";
-	        String headerValue = "attachment; filename=idea_" + currentDateTime + ".xlsx";
-	        response.setHeader(headerKey, headerValue);
-	        
-	        List<IdeasProyectos> ideasOrg = ideasProyectosService.findAll(); 
+		
+	 @GetMapping("/idea/excel/{orgId}") //ideas detalle
+		public @ResponseBody ResponseEntity<InputStreamResource> exportToXls(@PathVariable Long orgId) throws IOException {
+			
+		 	List<IdeasProyectos> ideasOrg = ideasProyectosService.findAll(); 
 			List<IdeasProyectos> ideasFin = new ArrayList();
 			ByteArrayInputStream bis;
 			
-			if(orgId == 0) { // todas las organizaciones
-				ExportExcelResumido excelExporter = new ExportExcelResumido(ideasOrg);	         
-		        excelExporter.export(response); 
-			}else {
-				for(IdeasProyectos ide: ideasOrg) {
+			 if(orgId == 0) {
+				 bis = createReportXls(ideasOrg);
+			 }else {
+				 for(IdeasProyectos ide: ideasOrg) {
 					if(ide.getDependenciaId() == orgId) {
 						ideasFin.add(ide);
 					}				
-				}
-				ExportExcelResumido excelExporter = new ExportExcelResumido(ideasFin);	         
-		        excelExporter.export(response); 
-			}
+				 }
+				 bis = createReportXls(ideasFin);
+			 }
 			  
-	 } 
-	
-	
-	
+
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Disposition", "attachment; filename=ideasDetalle.xls");
+
+		    return ResponseEntity
+		            .ok()
+		            .headers(headers)
+		            .body(new InputStreamResource(bis));
+	}
 
 	@GetMapping("/idea/pdf/{ideaId}") //ideas detalle
 	public @ResponseBody ResponseEntity<InputStreamResource> exportToPDF(@PathVariable Long ideaId) throws IOException {
@@ -174,7 +158,6 @@ public class ReportesRestController {
 	            .body(new InputStreamResource(bis));
 	  }
 	
-	
 	public  ByteArrayInputStream createReport(List<IdeasProyectos> ideas) {
 
 		
@@ -214,6 +197,285 @@ public class ReportesRestController {
 	    }
 
 	    return new ByteArrayInputStream(out.toByteArray());
+	}
+	
+	public  ByteArrayInputStream createReportXls(List<IdeasProyectos> ideas) throws IOException{
+
+		int columns = 0;
+		
+		try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+			
+			Sheet sheet = workbook.createSheet("Ideas");
+			
+			org.apache.poi.ss.usermodel.Font headerFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
+            ((org.apache.poi.ss.usermodel.Font) headerFont).setBold(true);
+            headerFont.setColor(IndexedColors.BLUE.getIndex());
+
+            CellStyle headerCellStyle = workbook.createCellStyle();
+            headerCellStyle.setFont(headerFont);
+            headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            // Header Row
+            org.apache.poi.ss.usermodel.Font titleFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
+            ((org.apache.poi.ss.usermodel.Font) titleFont).setBold(true);
+            
+            CellStyle titleCellStyle = workbook.createCellStyle();
+            titleCellStyle.setFont(titleFont);
+            
+            Row titleRow = sheet.createRow(0);
+            Cell celdaTitle = titleRow.createCell(0);
+            celdaTitle.setCellValue("Listado de Ideas");
+            celdaTitle.setCellStyle(titleCellStyle);
+            
+            Row headerRow = sheet.createRow(2);
+            
+            int col = 0;
+            Cell cell;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Nombre Idea");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Descripcion Idea");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Tipo Propuesta");
+            cell.setCellStyle(headerCellStyle);
+            col++; 
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Impacto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Problematica");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Poblacion");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Focalizacion");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Alineacion Plan");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Financiacion");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Dependencia Participantes");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Dependencia Persona");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Persona Encargada");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Datos Contacto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Dependencia");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Proyectos Ejecutados");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+                        
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Capacidad Tecnica");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Fecha Idea");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Año Formulacion");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Estatus");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Historico");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Observaciones");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+        
+            int row=3;
+            int colu = 0;
+            
+            
+            
+            for(IdeasProyectos ide: ideas) {
+            	
+            	Row headerRow2 = sheet.createRow(row);
+            	
+            	Cell celda = headerRow2.createCell(0);
+            	celda.setCellValue(ide.getNombreIdea());
+            	
+            	celda = headerRow2.createCell(1);
+            	celda.setCellValue(ide.getDescripcionIdea());
+            	
+            	if(ide.getTipoPropuestaId() != null) {
+            		TiposPropuestas tipo = propuestasService.findById(ide.getTipoPropuestaId());
+            		celda = headerRow2.createCell(2);
+                	celda.setCellValue(tipo.getTipoPropuesta());
+            	}else {
+            		celda = headerRow2.createCell(2);
+                	celda.setCellValue("");
+            	}            	
+            	
+            	celda = headerRow2.createCell(3);
+            	celda.setCellValue(ide.getImpacto());
+            	
+            	celda = headerRow2.createCell(4);
+            	celda.setCellValue(ide.getProblematica());
+            	
+            	celda = headerRow2.createCell(5);
+            	celda.setCellValue(ide.getPoblacion());
+            	
+            	celda = headerRow2.createCell(6);
+            	celda.setCellValue(ide.getFocalizacion());
+            	
+            	if(ide.getTipoObjetivoId() != null) {
+            		TiposObjetivos tip = objetivosService.findById(ide.getTipoObjetivoId());
+            		celda = headerRow2.createCell(7);
+                	celda.setCellValue(tip.getDescripcionObjetivo());
+            	}else {
+            		celda = headerRow2.createCell(7);
+                	celda.setCellValue("");
+            	}
+            	
+            	
+            	celda = headerRow2.createCell(8);
+            	celda.setCellValue(ide.getFinanciacion());
+            	
+            	celda = headerRow2.createCell(9);
+            	celda.setCellValue(ide.getDependenciasParticipantes());
+            	
+            	if(ide.getDependenciaPersona() != null) {
+            		OrganizacionesStrategos org = organizacionService.findById(ide.getDependenciaPersona());
+            		celda = headerRow2.createCell(10);
+                	celda.setCellValue(org.getNombre());
+        
+            	}else {
+            		celda = headerRow2.createCell(10);
+                	celda.setCellValue("");
+            	}
+            	
+            	celda = headerRow2.createCell(11);
+            	celda.setCellValue(ide.getPersonaEncargada());
+            	
+            	celda = headerRow2.createCell(12);
+            	celda.setCellValue(ide.getPersonaContactoDatos());
+            	
+            	if(ide.getDependenciaId() != null) {
+            		OrganizacionesStrategos org = organizacionService.findById(ide.getDependenciaId());
+            		celda = headerRow2.createCell(13);
+                	celda.setCellValue(org.getNombre());
+            	}else {
+            		celda = headerRow2.createCell(13);
+                	celda.setCellValue("");
+            	}
+            	
+            	
+            	celda = headerRow2.createCell(14);
+            	celda.setCellValue(ide.getProyectosEjecutados());
+            	
+            	if(ide.getCapacidadTecnica() != null) {
+            		celda = headerRow2.createCell(15);
+                	celda.setCellValue(ide.getCapacidadTecnica());
+            	}else {
+            		celda = headerRow2.createCell(15);
+                	celda.setCellValue("");
+            	}
+            	
+            	
+            	if(ide.getFechaIdea() != null) {
+            		celda = headerRow2.createCell(16);
+                	celda.setCellValue(ide.getFechaIdea().toString());
+            	}else {
+            		celda = headerRow2.createCell(16);
+                	celda.setCellValue("");
+            	}
+            	
+            	
+            	celda = headerRow2.createCell(17);
+            	celda.setCellValue(ide.getAnioFormulacion());
+            	
+            	if(ide.getEstatusIdeaId() != null) {
+            		celda = headerRow2.createCell(18);
+            		EstatusIdeas est = estatusService.findById(ide.getEstatusIdeaId());
+                	celda.setCellValue(est.getEstatus());
+            	}else {
+            		celda = headerRow2.createCell(18);
+                	celda.setCellValue("");           		
+            	}
+            	
+            	
+            	if(ide.getHistorico() != null) {
+            		celda = headerRow2.createCell(19);
+            		if(ide.getHistorico()) {
+            			celda.setCellValue("Si");
+            		}else {
+            			celda.setCellValue("No");
+            		}
+            	}else {
+            		celda = headerRow2.createCell(19);
+                	celda.setCellValue("");
+            	}
+            	
+            	if(ide.getObservaciones() != null) {
+            		celda = headerRow2.createCell(20);
+                	celda.setCellValue(ide.getObservaciones());
+            	}else {
+            		celda = headerRow2.createCell(20);
+                	celda.setCellValue("");
+            	}
+            	
+            	
+            	row++;
+			}
+            
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+		}
 	}
 	
 	
@@ -368,7 +630,7 @@ public class ReportesRestController {
 		OrganizacionesStrategos org = organizacionService.findById(idea.getDependenciaId());
 	
 		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, BaseColor.BLACK);
-	    Stream.of(tip.getDescripcionObjetivo() ,idea.getFinanciacion(), idea.getDependenciasParticipantes(), idea.getDependenciaPersona(), idea.getPersonaEncargada() ,idea.getPersonaContactoDatos()
+	    Stream.of(tip.getDescripcionObjetivo() ,idea.getFinanciacion(), idea.getDependenciasParticipantes(), "", idea.getPersonaEncargada() ,idea.getPersonaContactoDatos()
 	    		,org.getNombre())
 	      .forEach(columnas -> {
 	        PdfPCell header = new PdfPCell();
@@ -385,7 +647,7 @@ public class ReportesRestController {
 		SimpleDateFormat formateadorFecha = new SimpleDateFormat("dd/MM/yyyy");
 		String fecha = formateadorFecha.format(idea.getFechaIdea());
 		String historico ="";
-		if(idea.getHistorico()) {
+		if(idea.getHistorico() != null && idea.getHistorico()) {
 			historico="Si";
 		}else {
 			historico="No";

@@ -46,8 +46,16 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.strategos.nueva.bancoproyecto.ideas.model.EstatusIdeas;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
+import com.strategos.nueva.bancoproyecto.ideas.model.TiposPropuestas;
+import com.strategos.nueva.bancoproyecto.ideas.service.EstatusIdeaService;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.TiposObjetivosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
+import com.strategos.nueva.bancoproyecto.strategos.model.OrganizacionesStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.service.OrganizacionService;
+import com.strategos.nueva.bancoproyectos.model.util.FIltroIdea;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -56,6 +64,14 @@ public class IdeasProyectosRestController {
 	
 	@Autowired
 	private IdeasProyectosService ideasProyectosService;
+	@Autowired
+	private EstatusIdeaService estatusService;
+	@Autowired
+	private TiposObjetivosService objetivosService;
+	@Autowired
+	private TiposPropuestasService propuestasService;
+	@Autowired
+	private OrganizacionService organizacionService;
 	
 	//Servicios Rest tabla - idea
 	
@@ -65,6 +81,60 @@ public class IdeasProyectosRestController {
 		@GetMapping("/idea")
 		public List<IdeasProyectos> index (){
 			return ideasProyectosService.findAll();
+		}
+		
+		//servicio que trae la lista de idea
+		@GetMapping("/idea/filtro/{orgId}/{propuestaId}/{estatusId}/{anio}/{historico}")
+		public List<IdeasProyectos> indexFiltro(@PathVariable String orgId, @PathVariable String propuestaId, @PathVariable String estatusId, @PathVariable String anio, @PathVariable String historico){
+			
+			FIltroIdea filtro = new FIltroIdea();
+			
+			Long org;
+			Long propId;
+			Long estId;
+			String ani;
+			Boolean histor;
+			
+			List<IdeasProyectos> ideasFin = new ArrayList();
+			
+			if(!orgId.equals("undefined")) {
+				if(!orgId.equals("0")) {
+					org = Long.parseLong(orgId);
+					filtro.setOrganizacionId(org);
+				}
+				
+			}
+			if(!propuestaId.equals("undefined")) {
+				if(!propuestaId.equals("0")) {
+					propId = Long.parseLong(propuestaId);
+					filtro.setPropuestaId(propId);;
+				}
+				
+			}
+			if(!estatusId.equals("undefined")) {
+				if(!estatusId.equals("0")) {
+					estId = Long.parseLong(estatusId);
+					filtro.setEstatusId(estId);
+				}
+				
+			}
+			if(!anio.equals("undefined")) {
+				if(!anio.equals("0")) {
+					ani = anio;
+					filtro.setAnio(ani);
+				}		
+				
+			}
+			if(!historico.equals("undefined") ) {
+				histor = Boolean.getBoolean(historico);
+				filtro.setHistorico(histor);
+			}
+			
+			ideasFin = ideasProyectosService.queryFiltros(filtro);
+			
+			System.out.println(" "+orgId + propuestaId+ estatusId+ anio+ historico);
+					
+			return ideasFin;
 		}
 		
 		//servicio que trae la lista de idea
@@ -82,7 +152,7 @@ public class IdeasProyectosRestController {
 			
 			return ideasFin;
 		}
-			
+				
 		//servicio que muestra un idea
 		@GetMapping("/idea/{id}")
 		public ResponseEntity<?> show(@PathVariable Long id) {
@@ -125,7 +195,19 @@ public class IdeasProyectosRestController {
 			}
 			
 			try { 
-				
+				if(ideasProyectoN.getDependenciaId() != null) {
+					OrganizacionesStrategos org = organizacionService.findById(ideasProyectoN.getDependenciaId());
+					ideasProyectoN.setOrganizacion(org.getNombre());
+				}
+				if(ideasProyectoN.getTipoPropuestaId() != null) {
+					TiposPropuestas tipo = propuestasService.findById(ideasProyectoN.getTipoPropuestaId());
+					ideasProyectoN.setPropuesta(tipo.getTipoPropuesta());
+				}
+				if(ideasProyectoN.getEstatusIdeaId() != null) {
+					EstatusIdeas est = estatusService.findById(ideasProyectoN.getEstatusIdeaId());
+					ideasProyectoN.setEstatus(est.getEstatus());
+				}
+				ideasProyectoN.setHistorico(false);
 				ideasProyectosNew= ideasProyectosService.save(ideasProyectoN);
 
 			}catch(DataAccessException e) {
@@ -190,6 +272,18 @@ public class IdeasProyectosRestController {
 				ideasProyectosActual.setTipoObjetivoId(ideasProyectos.getTipoObjetivoId());
 				ideasProyectosActual.setTipoPropuestaId(ideasProyectos.getTipoPropuestaId());
 				
+				if(ideasProyectos.getDependenciaId() != null) {
+					OrganizacionesStrategos org = organizacionService.findById(ideasProyectos.getDependenciaId());
+					ideasProyectosActual.setOrganizacion(org.getNombre());
+				}
+				if(ideasProyectos.getTipoPropuestaId() != null) {
+					TiposPropuestas tipo = propuestasService.findById(ideasProyectos.getTipoPropuestaId());
+					ideasProyectosActual.setPropuesta(tipo.getTipoPropuesta());
+				}
+				if(ideasProyectos.getEstatusIdeaId() != null) {
+					EstatusIdeas est = estatusService.findById(ideasProyectos.getEstatusIdeaId());
+					ideasProyectosActual.setEstatus(est.getEstatus());
+				}
 																			
 				ideasProyectosUpdated=ideasProyectosService.save(ideasProyectosActual);
 			
@@ -220,6 +314,9 @@ public class IdeasProyectosRestController {
 			response.put("mensaje", "La idea proyecto ha sido eliminado con Exito!");
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
+		
+		
+	
 
 		
 }

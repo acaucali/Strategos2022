@@ -19,7 +19,7 @@ public class CriteriosEvaluacion implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long criterioId;
 	
-	@Size(max=50)
+	@Size(max=100)
 	@Column(nullable=true)
 	private String control;
 	

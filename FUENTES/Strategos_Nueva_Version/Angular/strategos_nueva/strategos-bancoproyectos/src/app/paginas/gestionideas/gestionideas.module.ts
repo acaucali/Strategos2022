@@ -13,6 +13,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 
 
+
+
 @NgModule({
   declarations: [GestionideasComponent, DetallegestionComponent, DocumentosComponent],
   imports: [

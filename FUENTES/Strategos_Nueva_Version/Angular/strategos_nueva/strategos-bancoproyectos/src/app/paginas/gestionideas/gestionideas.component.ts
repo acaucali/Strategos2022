@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { IdeasProyectos } from '../configuracion/model/ideasproyectos';
 import { IdeasProyectosService } from '../configuracion/services/ideasproyectos.service';
 import { ModalService } from './detallegestion/modal.service';
@@ -114,12 +114,14 @@ export class GestionideasComponent implements OnInit {
 
   abrirModal(idea: IdeasProyectos){
     this.ideaSeleccionada= idea;
+    console.log(this.ideaSeleccionada);
     this.modalservice.abrirModal();
   }
 
   crearIdea(){
     this.ideaSeleccionada = new IdeasProyectos();
     this.ideaSeleccionada.dependenciaId = this.organizacionId;
+    this.ideaSeleccionada.estatusIdeaId = 1;
     console.log(this.ideaSeleccionada);
     this.modalservice.abrirModal();
   }
@@ -136,28 +138,12 @@ export class GestionideasComponent implements OnInit {
         this.ideas = response;
         if(this.ideas.length >0){
           this.ideas.forEach(idea =>{
-
-            this.organizacionesService.getOrganizacion(idea.dependenciaId).subscribe((org) =>{ 
-              this.orgStr = org.nombre;
-            });
-        
-            this.estatusService.getCriterio(idea.estatusIdeaId).subscribe((est) =>{ 
-              this.estStr = est.estatus;
-            });
-        
-            this.propuestasService.getTipoPropuesta(idea.tipoPropuestaId).subscribe((pro) =>{ 
-              this.proStr= pro.tipoPropuesta;
-            });
-
-            this.elements.push({
-                                                        
-              ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, impacto: idea.impacto,
+            this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
               problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
               financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
-              proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea , anioFormulacion: idea.anioFormulacion,
-              estatusIdeaId: idea.estatusIdeaId, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
-              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId, orgStr: this.orgStr, estStr: this.estStr,
-              proStr: this.proStr
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
             });
           });
         }
@@ -168,29 +154,12 @@ export class GestionideasComponent implements OnInit {
         this.ideas = response;
         if(this.ideas.length >0){
           this.ideas.forEach(idea =>{
-            this.organizacionesService.getOrganizacion(idea.dependenciaId).subscribe((org) =>{ 
-              this.orgStr = org.nombre;
-              
-            });
-        
-            this.estatusService.getCriterio(idea.estatusIdeaId).subscribe((est) =>{ 
-              this.estStr = est.estatus;
-             
-            });
-        
-            this.propuestasService.getTipoPropuesta(idea.tipoPropuestaId).subscribe((pro) =>{ 
-              this.proStr= pro.tipoPropuesta;
-            
-            });
-
-
-            this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, impacto: idea.impacto,
+            this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
               problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
               financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
-              proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
-              estatusIdeaId: idea.estatusIdeaId, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
-              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId, orgStr: this.orgStr, estStr: this.estStr,
-              proStr: this.proStr
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
             });
           });
         }
@@ -217,10 +186,59 @@ export class GestionideasComponent implements OnInit {
 
   descargarXlsResumido(){
     if(this.isAdmin == true){
-      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/resumido/"+ 0);
+      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/"+ 0);
     }else{
-      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/resumido/"+this.organizacionId);
+      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/"+this.organizacionId);
     }
+  }
+
+  buscar(){
+    this.ideas = null;
+    this.elements = [];
+    this.previous = [];
+   
+    if(this.isAdmin == true){
+      this.ideasService.getIdeasFiltro(this.organizacionFiltroId, this.propuestaId, this.estatusId, this.anio, this.historico).subscribe(response => {
+        this.ideas = response;
+        if(this.ideas.length >0){
+          this.ideas.forEach(idea =>{  
+                    
+            this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
+              problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
+              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
+            });
+          });
+        }
+      });
+    }else{
+      this.ideasService.getIdeasFiltro(this.organizacionId, this.propuestaId, this.estatusId, this.anio, this.historico).subscribe(response => {
+        this.ideas = response;
+        if(this.ideas.length >0){
+          this.ideas.forEach(idea =>{      
+               
+            this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
+              problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
+              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
+            });
+          });
+        }
+      });
+    }
+    
+  }
+
+  limpiar(){
+    this.propuestaId = 0;
+    this.estatusId = 0;
+    this.anio = "0";
+    this.historico = 0;
+    this.organizacionFiltroId = 0;
   }
 
 

@@ -38,6 +38,8 @@ public class IdeasDocumentosAnexos implements Serializable{
 	
 	@Column(nullable=false)
 	private Long ideaId;
+	
+	private Byte tipo;
 			
 	public Long getDocumentoId() {
 		return documentoId;

@@ -22,15 +22,23 @@
         
 
         <div class="card-header">
-            <button type="button" class="btn" (click)="crearIdea()">
+            <button type="button" class="btn" (click)="crearIdea()" title="Crear Idea">
                 <i class="fa-md fas fa-plus"></i>
             </button>
-            <button type="button" class="btn" >
+            <button type="button" class="btn" title="Descargar Resumido">
                 <i class="fa-md far fa-file-pdf" (click)="descargarPDFResumido()"></i>
             </button>
-                     
-            <button type="button" class="btn" class="btn" data-card-widget="collapse" title="Collapse">
+            
+            <button type="button" class="btn" title="Descargar Resumido">
+              <i class="fa-md far fa-file-excel" (click)="descargarXlsResumido()"></i>
+            </button>
+
+            <button type="button" class="btn" class="btn" data-card-widget="collapse" title="Buscar">
                 <i class="fa-md fas fa-filter"></i>
+            </button>
+
+            <button type="button" class="btn" class="btn" title="Ponderación Idea">
+              <i class="fas fa-arrow-alt-circle-right" [routerLink]="['/ponderacion', organizacionId]"></i>
             </button>
 
           <div class="card-tools">
@@ -82,8 +90,8 @@
 
                     <div class="col-md-8">
                         <br>
-                        <button type="submit" class="btn btn-primary">Filtrar</button>&nbsp;&nbsp;
-                        <button type="submit" class="btn btn-primary">Limpiar</button>
+                        <button type="submit" class="btn btn-primary" (click)="buscar()">Filtrar</button>&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" (click)="limpiar()">Limpiar</button>
                     </div>
 
                 </div>
@@ -131,9 +139,9 @@
                   </td>
                   <td width="80">{{el.anioFormulacion}} </td>
                   <td >{{el.nombreIdea}} </td>
-                  <td >{{el.orgStr}} </td>
-                  <td >{{el.proStr}} </td>
-                  <td >{{el.estStr}} </td>
+                  <td >{{el.organizacion}} </td>
+                  <td >{{el.propuesta}} </td>
+                  <td >{{el.estatus}} </td>
                 </tr>
               </tbody>
          

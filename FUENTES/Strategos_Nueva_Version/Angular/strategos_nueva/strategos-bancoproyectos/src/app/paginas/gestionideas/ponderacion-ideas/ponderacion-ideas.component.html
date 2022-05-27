@@ -1,0 +1,102 @@
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Ponderación Ideas</h1>
+           
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <button type="button" class="btn" title="Crear Evaluacion">
+                <i class="fa-md fas fa-plus" [routerLink]="['/evaluacion', organizacionId, 0]"></i>
+            </button>
+            <button type="button" class="btn" title="Descargar Resumido">
+                <i class="fa-md far fa-file-pdf" ></i>
+            </button>
+            <button type="button" class="btn" title="Descargar Resumido">
+              <i class="fa-md far fa-file-pdf" ></i>
+            </button>
+                     
+            <button type="button" class="btn" class="btn" title="Ponderación Idea">
+              <i class="fas fa-arrow-alt-circle-right"></i>
+            </button>
+            <button type="button" class="btn" class="btn" title="Regresar">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          <div class="card-tools">
+           
+          </div>
+        </div>
+                
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="ponderaciones?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="100">Acciones</td>
+                  <td width="150">Fecha Evaluación</td>
+                  <td>Descripción</td>
+                  <td width="200">Documentos</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageEva, id: 'pageEv'}">
+                  <td width="100" >
+                    
+                    <i class="fas fa-edit" style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="fas fa-trash-alt" style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="far fa-file-pdf" ></i>
+                  </td>
+                  <td width="150">{{el.fechaEvaluacion}} </td>
+                  <td >{{el.observacion}} </td>
+                  <td width="200"></td>
+                </tr>
+              </tbody>
+         
+            </table>
+        
+            <pagination-controls id="pageEv" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageEva = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+

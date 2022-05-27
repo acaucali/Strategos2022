@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.ideas.model;
+	package com.strategos.nueva.bancoproyecto.ideas.model;
 
 import java.io.Serializable;
 

@@ -25,6 +25,12 @@ export class IdeasProyectosService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  getIdeasFiltro(orgId: any, propuestaId: any, estatusId: any, anio: string, historico: number){
+    return this.http.get(`${this.urlEndPoint}/filtro/${orgId}/${propuestaId}/${estatusId}/${anio}/${historico}`).pipe(map(res =>{
+      this.ideas = res as IdeasProyectos[];
+      return this.ideas;
+    }));
+  }
   getIdeasList(){
     return this.http.get(this.urlEndPoint).pipe(map(res =>{
       this.ideas = res as IdeasProyectos[];
