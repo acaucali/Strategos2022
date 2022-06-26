@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.ideas.service;
+package com.strategos.nueva.bancoproyecto.ideas.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.strategos.nueva.bancoproyecto.ideas.dao.EvaluacionIdeasDetalleDao;
 import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeasDetalle;
+import com.strategos.nueva.bancoproyecto.ideas.model.IdeasEvaluadas;
+import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasDetalleService;
 
 @Service
 public class EvaluacionIdeasDetalleServiceImpl implements EvaluacionIdeasDetalleService{
@@ -40,6 +42,16 @@ public class EvaluacionIdeasDetalleServiceImpl implements EvaluacionIdeasDetalle
 	public void delete(Long id) {
 		
 		evaluacionIdeasDetalleDao.deleteById(id);
+	}
+
+	@Override
+	public List<EvaluacionIdeasDetalle> findAllByEvaluacionId(Long evaluacionId) {
+		return (List<EvaluacionIdeasDetalle>)evaluacionIdeasDetalleDao.findAllByEvaluacionId(evaluacionId);
+	}
+
+	@Override
+	public List<EvaluacionIdeasDetalle> findAllByEvaluacionIdAndIdeaId(Long evaluacionId, Long ideaId) {
+		return (List<EvaluacionIdeasDetalle>)evaluacionIdeasDetalleDao.findAllByEvaluacionIdAndIdeaId(evaluacionId, ideaId);
 	}
 			
 }

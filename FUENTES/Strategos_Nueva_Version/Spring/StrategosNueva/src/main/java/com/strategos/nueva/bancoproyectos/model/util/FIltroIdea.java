@@ -4,6 +4,7 @@ public class FIltroIdea {
 	
 	private Long organizacionId;
 	private Long propuestaId;
+	private Long tipoId;
 	private Long estatusId;
 	private String anio;
 	private Boolean historico;
@@ -37,6 +38,12 @@ public class FIltroIdea {
 	}
 	public void setHistorico(Boolean historico) {
 		this.historico = historico;
+	}
+	public Long getTipoId() {
+		return tipoId;
+	}
+	public void setTipoId(Long tipoId) {
+		this.tipoId = tipoId;
 	}	
 	
 }

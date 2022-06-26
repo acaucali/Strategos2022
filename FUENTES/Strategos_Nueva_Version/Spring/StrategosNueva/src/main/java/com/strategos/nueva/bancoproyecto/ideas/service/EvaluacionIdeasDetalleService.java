@@ -7,6 +7,10 @@ import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeasDetalle;
 public interface EvaluacionIdeasDetalleService {
 
 	public List<EvaluacionIdeasDetalle> findAll();	
+	
+	List<EvaluacionIdeasDetalle> findAllByEvaluacionId(Long evaluacionId);
+	
+	List<EvaluacionIdeasDetalle> findAllByEvaluacionIdAndIdeaId(Long evaluacionId, Long ideaId);
 
 	
 	public EvaluacionIdeasDetalle findById(Long id);

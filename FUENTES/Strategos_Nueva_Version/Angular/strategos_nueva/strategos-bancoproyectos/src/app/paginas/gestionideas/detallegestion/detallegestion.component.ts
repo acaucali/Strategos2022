@@ -38,7 +38,7 @@ export class DetallegestionComponent implements OnInit {
   private urlEndPoint:string =URL_BACKEND+'/api/strategos/bancoproyectos/documento/';
   private archivoSeleccionado: File;
   
-  titulo: string = "Datos de la idea";
+  titulo: string = "Datos de la Idea - Iniciativas de Proyectos";
   constructor(public modalservice: ModalService, private router: Router, private estatusService: EstatusIdeaService, private propuestasService: TiposPropuestaService,
     private objetivosService: TiposObejtivosService, private activatedRoute: ActivatedRoute, private ideaService: IdeasProyectosService, private ideaComponent: GestionideasComponent,
     private organizacionService: OrganizacionStrategosService, public documentoService: IdeasDocumentosService) { }
@@ -60,9 +60,7 @@ export class DetallegestionComponent implements OnInit {
   }
 
   create(): void{
-    if(this.isAdmin == true){
-      this.idea.dependenciaId = this.ideaComponent.organizacionId;
-    }
+    
     console.log(this.idea);
     this.ideaService.create(this.idea).subscribe(
       json => {

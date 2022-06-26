@@ -1,5 +1,8 @@
 package com.strategos.nueva.bancoproyecto.ideas.controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeasDetalle;
+import com.strategos.nueva.bancoproyecto.ideas.model.IdeasEvaluadas;
+import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
 import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasDetalleService;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasEvaluadasService;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
+import com.strategos.nueva.bancoproyectos.model.util.DatoIdea;
+import com.strategos.nueva.bancoproyectos.model.util.DatoMedicion;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -34,6 +43,12 @@ public class EvaluacionIdeasDetalleRestController {
 	
 	@Autowired
 	private EvaluacionIdeasDetalleService evaluacionDetalleService;
+	
+	@Autowired
+	private IdeasEvaluadasService ideasEvaluadasService;
+	
+	@Autowired
+	private IdeasProyectosService ideasProyectosService;
 	
 	//Servicios Rest tabla - evaluacion detalle
 	
@@ -44,6 +59,171 @@ public class EvaluacionIdeasDetalleRestController {
 		public List<EvaluacionIdeasDetalle> index (){
 			return evaluacionDetalleService.findAll();
 		}
+		
+		//servicio que trae la lista de evaluacion 
+		@GetMapping("/evaluaciondetalle/ideasevaluadas/{evaId}")
+		public List<Long> getIdeasEvaluadas(@PathVariable Long evaId){
+			
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();
+			ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(evaId);
+			List<Long> ids = new ArrayList<Long>();
+			
+			List <String> ideas =ordenarIdeas(ideasEvaluadas);
+									
+			for(String idea: ideas) {
+				String carId = idea.substring(idea.indexOf("-") + 1, idea.length());				
+				ids.add(new Long(carId));								
+			}
+			
+			return ids;
+		}
+				//servicio que trae la lista de evaluacion 
+		@GetMapping("/evaluaciondetalle/encabezados/{evaId}")
+		public List<DatoIdea> getEncabezados(@PathVariable Long evaId){
+			
+			List<DatoIdea> datos = new ArrayList<DatoIdea>();
+			List<EvaluacionIdeasDetalle> evaluacionesDetalle = evaluacionDetalleService.findAllByEvaluacionId(evaId);
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();			
+			ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(evaId);
+			
+			String cadenaTitulo ="";
+			
+			for(IdeasEvaluadas ide: ideasEvaluadas) {
+				
+				IdeasProyectos idea = ideasProyectosService.findById(ide.getIdeaId());
+				
+				DatoIdea dato = new DatoIdea();
+				dato.setCampo("idea");
+				dato.setValor("Nombre Idea");
+				dato.setTamanio("300");
+				
+				datos.add(dato);
+								
+				for(EvaluacionIdeasDetalle eva: evaluacionesDetalle) {
+					if(eva.getIdeaId().equals(ide.getIdeaId())) {
+						
+						dato = new DatoIdea();
+						dato.setCampo("criterio");
+						dato.setValor(eva.getCriterio()+" ("+eva.getPeso()+" %)");
+						dato.setTamanio("150");
+						
+						datos.add(dato);
+					}
+				}
+				
+				dato = new DatoIdea();
+				dato.setCampo("total");
+				dato.setValor("Puntaje Total");
+				dato.setTamanio("80");
+				
+				datos.add(dato);
+				
+				return datos;
+				
+			}	
+			
+			return datos;
+		}
+		
+		@GetMapping("/evaluaciondetalle/datosmediciones/{evaId}")
+		public List<DatoMedicion> getDatosMediciones(@PathVariable Long evaId){
+			
+			List<DatoMedicion> datos = new ArrayList<DatoMedicion>();
+			List<EvaluacionIdeasDetalle> evaluacionesDetalle = evaluacionDetalleService.findAllByEvaluacionId(evaId);
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();		
+			List<Long> ids = new ArrayList<Long>();
+			ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(evaId);
+			
+			List <String> ideas =ordenarIdeas(ideasEvaluadas);
+									
+			for(String idea: ideas) {
+				String carId = idea.substring(idea.indexOf("-") + 1, idea.length());				
+				ids.add(new Long(carId));								
+			}
+			
+			for(Long id: ids) {
+				IdeasProyectos idea = ideasProyectosService.findById(id);
+				
+				DatoMedicion dato = new DatoMedicion();
+				dato.setCampo("idea");
+				dato.setValor(idea.getNombreIdea());
+				dato.setTamanio("300");
+				dato.setPeso("0");
+				dato.setId(idea.getIdeaId());
+				dato.setIdeaId(idea.getIdeaId());
+				
+				datos.add(dato);
+								
+				for(EvaluacionIdeasDetalle eva: evaluacionesDetalle) {
+					if(eva.getIdeaId().equals(id)) {
+						
+						dato = new DatoMedicion();
+						dato.setCampo("criterio");
+						if(eva.getValorEvaluado() != null) {
+							dato.setValor(""+eva.getValorEvaluado());
+						}else {
+							dato.setValor("");
+						}
+						
+						dato.setTamanio("150");
+						Double peso = (eva.getPeso()/100);
+						dato.setPeso(""+peso);
+						dato.setId(eva.getEvaluacionDetalleId());
+						dato.setIdeaId(idea.getIdeaId());
+						
+						datos.add(dato);
+					}
+				}
+				
+				dato = new DatoMedicion();
+				dato.setCampo("total");
+				if(idea.getValorUltimaEvaluacion() != null) {
+					dato.setValor(""+idea.getValorUltimaEvaluacion());
+				}else {
+					dato.setValor("");
+				}
+				
+				dato.setTamanio("80");
+				dato.setPeso("0");
+				dato.setId(evaId);
+				dato.setIdeaId(idea.getIdeaId());
+				
+				datos.add(dato);
+			}
+			
+			return datos;
+		}
+		
+		//servicio que trae la lista de evaluacion 
+		@GetMapping("/evaluaciondetalle/datos/{evaId}")
+		public List<DatoIdea> getDatos(@PathVariable Long evaId){
+			
+			List<DatoIdea> datos = new ArrayList<DatoIdea>();
+			List<EvaluacionIdeasDetalle> evaluacionesDetalle = evaluacionDetalleService.findAllByEvaluacionId(evaId);
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();			
+			ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(evaId);
+			
+			String cadenaTitulo ="";
+			
+			for(IdeasEvaluadas ide: ideasEvaluadas) {
+				
+				IdeasProyectos idea = ideasProyectosService.findById(ide.getIdeaId());
+				
+				String cadena =""+idea.getNombreIdea()+",";
+				for(EvaluacionIdeasDetalle eva: evaluacionesDetalle) {
+					if(eva.getIdeaId().equals(ide.getIdeaId())) {
+						
+						cadena += eva.getCriterio()+" " + eva.getPeso()+","; 
+					}
+				}
+				
+				
+			}			
+			
+			return datos;
+		}
+		
+		
 			
 		//servicio que muestra un evaluacion
 		@GetMapping("/evaluaciondetalle/{id}")
@@ -157,5 +337,80 @@ public class EvaluacionIdeasDetalleRestController {
 			response.put("mensaje", "El detalle evaluacion ha sido eliminado con Exito!");
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
+		
+		//servicio que crea un evaluacion
+		@PutMapping("/evaluaciondetalle/mediciones/{id}")
+		public ResponseEntity<?> registrarMedicion(@Valid @RequestBody List<DatoMedicion> mediciones, BindingResult result, @PathVariable Long id) {
+					
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();	
+			Map<String, Object> response = new HashMap<>();
+			
+			ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(id);
+			
+			if(result.hasErrors()) {
+						
+				List<String> errors= result.getFieldErrors().stream().map(err ->
+				"Campo: "+err.getField()+" "+err.getDefaultMessage()
+				).collect(Collectors.toList());
+						
+				response.put("errors", errors);
+			    return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+			}
+					
+			try {
+				
+				for(IdeasEvaluadas ide: ideasEvaluadas) {
+					
+					for(DatoMedicion dato: mediciones) {
+						
+						if(dato.getIdeaId().equals(ide.getIdeaId())) {
+							if(dato.getCampo().equals("criterio")) {
+								EvaluacionIdeasDetalle detalle = evaluacionDetalleService.findById(dato.getId());
+								detalle.setValorEvaluado(Double.parseDouble(dato.getValor()));
+								evaluacionDetalleService.save(detalle);
+							}else if(dato.getCampo().equals("total")) {
+								IdeasProyectos idea = ideasProyectosService.findById(dato.getIdeaId());
+								idea.setFechaUltimaEvaluacion(new Date());
+								idea.setValorUltimaEvaluacion(Double.parseDouble(dato.getValor()));
+								ideasProyectosService.save(idea);
+							}
+						}
+					}	
+				}
+								
+							
+						
+			}catch(DataAccessException e) {
+				response.put("mensaje", "Error al realizar el insert en la base de datos!");
+				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			response.put("mensaje", "Los datos de evaluación se han registrado con Exito!");
+			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
+		}
+		
+
+	public List<String> ordenarIdeas(List<IdeasEvaluadas> ideasEvaluadas){
+		List<String> puntajes = new ArrayList<>();
+		
+		for(IdeasEvaluadas ide: ideasEvaluadas) {
+			IdeasProyectos idea = ideasProyectosService.findById(ide.getIdeaId());
+			if(idea.getValorUltimaEvaluacion() != null) {
+				puntajes.add(idea.getValorUltimaEvaluacion().toString()+"-"+idea.getIdeaId());
+			}else {
+				puntajes.add("0"+"-"+idea.getIdeaId());
+			}
+			
+		}		
+		
+		System.out.println("Before Sorting: "+ puntajes);   
+		
+		Collections.sort(puntajes, Collections.reverseOrder()); 
+				
+		System.out.println("After Sorting: "+ puntajes);   
+		
+		return puntajes;
+	}
+		
 
 }

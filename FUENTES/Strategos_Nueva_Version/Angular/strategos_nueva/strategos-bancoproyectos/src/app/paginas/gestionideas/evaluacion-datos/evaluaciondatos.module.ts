@@ -9,10 +9,12 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { EvaluacionDatosComponent } from './evaluacion-datos.component';
 import { EvaluacionDatosRoutingModule } from './evaluaciondatosrouting.module';
+import { ConsultaideaComponent } from '../consultaidea/consultaidea.component';
+import { GestionideasComponent } from '../gestionideas.component';
 
 
 @NgModule({
-  declarations: [EvaluacionDatosComponent],
+  declarations: [EvaluacionDatosComponent, ConsultaideaComponent],
   imports: [
     CommonModule, EvaluacionDatosRoutingModule, NgxPaginationModule,  FormsModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule
   ],

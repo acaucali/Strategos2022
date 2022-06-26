@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,16 +142,9 @@ public class IdeasProyectosRestController {
 		@GetMapping("/idea/org/{id}")
 		public List<IdeasProyectos> index(@PathVariable Long id){
 			
-			List<IdeasProyectos> ideasOrg = ideasProyectosService.findAll(); 
-			List<IdeasProyectos> ideasFin = new ArrayList();
-			
-			for(IdeasProyectos ide: ideasOrg) {
-				if(ide.getDependenciaId() == id) {
-					ideasFin.add(ide);
-				}				
-			}
-			
-			return ideasFin;
+			List<IdeasProyectos> ideasOrg = ideasProyectosService.findAllByDependenciaId(id); 
+						
+			return ideasOrg;
 		}
 				
 		//servicio que muestra un idea
@@ -206,6 +200,7 @@ public class IdeasProyectosRestController {
 				if(ideasProyectoN.getEstatusIdeaId() != null) {
 					EstatusIdeas est = estatusService.findById(ideasProyectoN.getEstatusIdeaId());
 					ideasProyectoN.setEstatus(est.getEstatus());
+					ideasProyectoN.setFechaEstatus(new Date());
 				}
 				ideasProyectoN.setHistorico(false);
 				ideasProyectosNew= ideasProyectosService.save(ideasProyectoN);
@@ -249,10 +244,13 @@ public class IdeasProyectosRestController {
 				ideasProyectosActual.setCapacidadTecnica(ideasProyectos.getCapacidadTecnica());
 				ideasProyectosActual.setDependenciaId(ideasProyectos.getDependenciaId());
 				ideasProyectosActual.setDescripcionIdea(ideasProyectos.getDescripcionIdea());
-				
-				ideasProyectosActual.setDependenciaPersona(ideasProyectos.getDependenciaPersona());
-				ideasProyectosActual.setFechaEstatus(ideasProyectos.getFechaEstatus());
-				ideasProyectosActual.setFechaIdea(ideasProyectos.getFechaIdea());
+				ideasProyectosActual.setContactoEmail(ideasProyectos.getContactoEmail());
+				ideasProyectosActual.setContactoTelefono(ideasProyectos.getContactoTelefono());
+				ideasProyectosActual.setFechaRadicacion(ideasProyectos.getFechaRadicacion());
+				ideasProyectosActual.setObjetivoGeneral(ideasProyectos.getObjetivoGeneral());
+				ideasProyectosActual.setDuracionTotal(ideasProyectos.getDuracionTotal());	
+			
+				 
 				ideasProyectosActual.setFechaUltimaEvaluacion(ideasProyectos.getFechaUltimaEvaluacion());
 				ideasProyectosActual.setFinanciacion(ideasProyectos.getFinanciacion());
 				ideasProyectosActual.setFocalizacion(ideasProyectos.getFocalizacion());
@@ -260,7 +258,7 @@ public class IdeasProyectosRestController {
 				ideasProyectosActual.setImpacto(ideasProyectos.getImpacto());
 				ideasProyectosActual.setNombreIdea(ideasProyectos.getNombreIdea());
 				ideasProyectosActual.setObservaciones(ideasProyectos.getObservaciones());
-				ideasProyectosActual.setPersonaContactoDatos(ideasProyectos.getPersonaContactoDatos());
+
 				ideasProyectosActual.setPoblacion(ideasProyectos.getPoblacion());
 				ideasProyectosActual.setProblematica(ideasProyectos.getProblematica());
 				ideasProyectosActual.setProyectosEjecutados(ideasProyectos.getProyectosEjecutados());
@@ -283,6 +281,7 @@ public class IdeasProyectosRestController {
 				if(ideasProyectos.getEstatusIdeaId() != null) {
 					EstatusIdeas est = estatusService.findById(ideasProyectos.getEstatusIdeaId());
 					ideasProyectosActual.setEstatus(est.getEstatus());
+					ideasProyectosActual.setFechaEstatus(new Date());
 				}
 																			
 				ideasProyectosUpdated=ideasProyectosService.save(ideasProyectosActual);

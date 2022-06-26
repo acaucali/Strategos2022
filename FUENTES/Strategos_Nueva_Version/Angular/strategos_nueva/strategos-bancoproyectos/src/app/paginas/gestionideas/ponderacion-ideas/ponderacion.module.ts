@@ -6,7 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { PonderacionRoutingModule } from './ponderacion-routing.module';
 import { PonderacionIdeasComponent } from './ponderacion-ideas.component';
 
@@ -20,6 +20,8 @@ import { PonderacionIdeasComponent } from './ponderacion-ideas.component';
   imports: [
     CommonModule, PonderacionRoutingModule, NgxPaginationModule,  FormsModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule
   ],
-  providers: []
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+  ]
 })
 export class PonderacionModule { }

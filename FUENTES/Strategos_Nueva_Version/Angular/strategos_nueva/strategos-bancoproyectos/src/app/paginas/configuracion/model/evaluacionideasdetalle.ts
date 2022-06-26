@@ -1,5 +1,6 @@
 export class EvaluacionIdeasDetalle {
 
+    evaluacionDetalleId: number;
     evaluacionId: number;
     ideaId: number;
     criterio: string;

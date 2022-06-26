@@ -6,7 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { EvaluacionRoutingModule } from './evaluacion-routing.module';
 import { EvaluacionComponent } from './evaluacion.component';
 import { SelectorIdeasComponent } from './selector-ideas/selector-ideas.component';
@@ -22,6 +22,8 @@ import { SelectorIdeasComponent } from './selector-ideas/selector-ideas.componen
   imports: [
     CommonModule, EvaluacionRoutingModule, NgxPaginationModule,  FormsModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule
   ],
-  providers: []
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+  ]
 })
 export class EvaluacionModule { }

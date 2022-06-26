@@ -1,0 +1,138 @@
+<detalle-preproyecto [preproyecto]="preproyectoSeleccionado"></detalle-preproyecto>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Pre Proyectos</h1>
+            Organización: {{organizacion.nombre}} 
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <button type="button" class="btn" (click)="crearPreProyecto()" title="Crear Idea">
+                <i class="fa-md fas fa-plus"></i>
+            </button>
+            <button type="button" class="btn" title="Descargar Resumido">
+                <i class="fa-md far fa-file-pdf" (click)="descargarPDFResumido()"></i>
+            </button>
+            
+            <button type="button" class="btn" title="Descargar Resumido">
+              <i class="fa-md far fa-file-excel" (click)="descargarXlsResumido()"></i>
+            </button>
+
+            <button type="button" class="btn" class="btn" data-card-widget="collapse" title="Buscar">
+                <i class="fa-md fas fa-filter"></i>
+            </button>
+          
+
+          <div class="card-tools">
+            
+          </div>
+        </div>
+        <div class="card-footer">
+            <div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="exampleInputEmail1">Año Formulación</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
+                    [(ngModel)]="anio" maxlength="4" >
+                </div>
+                <div class="col-md-3">
+                    <label for="exampleInputEmail1">Tipologia</label>
+                    <select class="form-control" [(ngModel)]="tipoId" >
+                      <option [value]="undefined" selected>Seleccionar</option>
+                      <option *ngFor="let tipo of tipos" [value]="tipo.tipoId">{{tipo.nombre}}</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="exampleInputEmail1">Estatus</label>
+                    <select class="form-control"[(ngModel)]="estatusId">
+                      <option [value]="undefined" selected>Seleccionar</option>
+                      <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.nombre}}</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <br>
+                  <label>Historico</label>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="checkbox" id="customCheckbox1"
+                  [(ngModel)]="historico">
+                   
+                </div>
+
+                <div class="col-md-9" *ngIf="isAdmin == true">
+                    <label for="exampleInputEmail1">Dependencia</label>
+                    <select class="form-control" required [(ngModel)]="organizacionFiltroId" >
+                      <option [value]="undefined" selected>Seleccionar</option>
+                      <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-8">
+                    <br>
+                    <button type="submit" class="btn btn-primary" (click)="buscar()">Filtrar</button>&nbsp;&nbsp;
+                    <button type="submit" class="btn btn-primary" (click)="limpiar()">Limpiar</button>
+                </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="preproyectos?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+                <thead>
+                  <tr class="text-white bg-primary">
+                    <td width="100">Acciones</td>
+                    <td width="80">Año</td>
+                    <td>Preproyecto</td>
+                    <td>Dependencia</td>
+                    <td>Tipologia</td>
+                    <td>Estatus</td>
+                  </tr>
+                </thead>
+                
+                          
+            </table>  
+            
+            <pagination-controls id="pagePre" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pagePrepro = $event"></pagination-controls>
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+

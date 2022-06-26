@@ -29,7 +29,7 @@ export class GestionideasComponent implements OnInit {
   pageIdea: number =1;
  
 
-  ideas: IdeasProyectos[];
+  public ideas: IdeasProyectos[];
   paginador: any;
   ideaSeleccionada: IdeasProyectos;
   public organizacionFiltroId: any;
@@ -64,6 +64,10 @@ export class GestionideasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    if(this.organizacionId == undefined){
+      this.organizacionId = localStorage.getItem('organizacion');
+    }
 
     this.estatusService.getEstatusList().subscribe(response =>{this.estatus = response}); // obtiene los estatus
     this.propuestasService.getTiposPropuestaList().subscribe(response =>{this.propuestas = response}); // obtiene las propuestas
@@ -77,6 +81,8 @@ export class GestionideasComponent implements OnInit {
     if(this.organizacionId == ORGANIZACION_ID){
       this.isAdmin = true;      
     }
+
+    localStorage.setItem('organizacion', this.organizacionId);
     
     this.getIdeas();
 
@@ -114,7 +120,6 @@ export class GestionideasComponent implements OnInit {
 
   abrirModal(idea: IdeasProyectos){
     this.ideaSeleccionada= idea;
-    console.log(this.ideaSeleccionada);
     this.modalservice.abrirModal();
   }
 
@@ -122,7 +127,7 @@ export class GestionideasComponent implements OnInit {
     this.ideaSeleccionada = new IdeasProyectos();
     this.ideaSeleccionada.dependenciaId = this.organizacionId;
     this.ideaSeleccionada.estatusIdeaId = 1;
-    console.log(this.ideaSeleccionada);
+    this.ideaSeleccionada.fechaEstatus = new Date();
     this.modalservice.abrirModal();
   }
   
@@ -140,10 +145,12 @@ export class GestionideasComponent implements OnInit {
           this.ideas.forEach(idea =>{
             this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
               problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
-              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
-              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
-              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
-              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
+              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, personaEncargada: idea.personaEncargada, 
+              contactoEmail: idea.contactoEmail, contactoTelefono: idea.contactoTelefono, dependenciaId: idea.dependenciaId,
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus,
+              fechaRadicacion: idea.fechaRadicacion,  historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, objetivoGeneral: idea.objetivoGeneral, duracionTotal: idea.duracionTotal, documentoId: idea.documentoId
             });
           });
         }
@@ -156,10 +163,12 @@ export class GestionideasComponent implements OnInit {
           this.ideas.forEach(idea =>{
             this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
               problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
-              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
-              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
-              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
-              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
+              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, personaEncargada: idea.personaEncargada, 
+              contactoEmail: idea.contactoEmail, contactoTelefono: idea.contactoTelefono, dependenciaId: idea.dependenciaId,
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus,
+              fechaRadicacion: idea.fechaRadicacion,  historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, objetivoGeneral: idea.objetivoGeneral, duracionTotal: idea.duracionTotal, documentoId: idea.documentoId
             });
           });
         }
@@ -205,10 +214,12 @@ export class GestionideasComponent implements OnInit {
                     
             this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
               problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
-              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
-              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
-              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
-              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
+              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, personaEncargada: idea.personaEncargada, 
+              contactoEmail: idea.contactoEmail, contactoTelefono: idea.contactoTelefono, dependenciaId: idea.dependenciaId,
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus,
+              fechaRadicacion: idea.fechaRadicacion,  historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, objetivoGeneral: idea.objetivoGeneral, duracionTotal: idea.duracionTotal, documentoId: idea.documentoId
             });
           });
         }
@@ -221,10 +232,12 @@ export class GestionideasComponent implements OnInit {
                
             this.elements.push({ideaId: idea.ideaId, nombreIdea: idea.nombreIdea, descripcionIdea: idea.descripcionIdea, tipoPropuestaId: idea.tipoPropuestaId, propuesta: idea.propuesta, impacto: idea.impacto,
               problematica: idea.problematica, poblacion: idea.poblacion, focalizacion: idea.focalizacion, tipoObjetivoId: idea.tipoObjetivoId, 
-              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, dependenciaPersona: idea.dependenciaPersona, personaEncargada: idea.personaEncargada, personaContactoDatos: idea.personaContactoDatos, dependenciaId: idea.dependenciaId,
-              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, fechaIdea: idea.fechaIdea, anioFormulacion: idea.anioFormulacion,
-              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus, historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
-              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, documentoId: idea.documentoId
+              financiacion: idea.financiacion, dependenciasParticipantes: idea.dependenciasParticipantes, personaEncargada: idea.personaEncargada, 
+              contactoEmail: idea.contactoEmail, contactoTelefono: idea.contactoTelefono, dependenciaId: idea.dependenciaId,
+              organizacion: idea.organizacion, proyectosEjecutados: idea.proyectosEjecutados, capacidadTecnica: idea.capacidadTecnica, anioFormulacion: idea.anioFormulacion,
+              estatusIdeaId: idea.estatusIdeaId, estatus: idea.estatus, fechaEstatus: idea.fechaEstatus,
+              fechaRadicacion: idea.fechaRadicacion,  historico: idea.historico, valorUltimaEvaluacion: idea.valorUltimaEvaluacion,
+              fechaUltimaEvaluacion: idea.fechaUltimaEvaluacion, observaciones: idea.observaciones, objetivoGeneral: idea.objetivoGeneral, duracionTotal: idea.duracionTotal, documentoId: idea.documentoId
             });
           });
         }

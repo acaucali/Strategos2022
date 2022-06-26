@@ -7,6 +7,7 @@ import { URL_BACKEND } from 'src/app/config/config';
 import { EstatusIdeas } from '../model/estatusideas';
 import swal from 'sweetalert2';
 import { EvaluacionIdeas } from '../model/evaluacionideas';
+import { IdeasProyectos } from '../model/ideasproyectos';
 
 
 @Injectable({
@@ -18,6 +19,7 @@ export class EvaluacionIdeasService {
   private urlEndPoint:string =URL_BACKEND+'/api/strategos/bancoproyectos/evaluacion';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
   public evaluaciones: EvaluacionIdeas[];
+  public ideas: IdeasProyectos[];
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -25,6 +27,13 @@ export class EvaluacionIdeasService {
     return this.http.get(this.urlEndPoint).pipe(map(res =>{
       this.evaluaciones = res as EvaluacionIdeas[];
       return this.evaluaciones;
+    }));
+  }
+
+  getIdeasList(id){
+    return this.http.get(`${this.urlEndPoint}/ideas/${id}`).pipe(map(res =>{
+      this.ideas = res as IdeasProyectos[];
+      return this.ideas;
     }));
   }
 

@@ -1,5 +1,7 @@
 package com.strategos.nueva.bancoproyecto.ideas.controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +26,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.strategos.nueva.bancoproyecto.ideas.model.CriteriosEvaluacion;
+import com.strategos.nueva.bancoproyecto.ideas.model.EstatusIdeas;
 import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeas;
+import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeasDetalle;
+import com.strategos.nueva.bancoproyecto.ideas.model.IdeasEvaluadas;
+import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
+import com.strategos.nueva.bancoproyecto.ideas.service.CriteriosEvaluacionService;
+import com.strategos.nueva.bancoproyecto.ideas.service.EstatusIdeaService;
+import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasDetalleService;
 import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasService;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasEvaluadasService;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
+import com.strategos.nueva.bancoproyectos.model.util.DatoMedicion;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -35,6 +48,22 @@ public class EvaluacionIdeasRestController {
 	@Autowired
 	private EvaluacionIdeasService evaluacionService;
 	
+	@Autowired
+	private IdeasEvaluadasService ideasEvaluadasService;
+	
+	@Autowired
+	private IdeasProyectosService ideasProyectosService;
+	
+	@Autowired
+	private EvaluacionIdeasDetalleService evaluacionDetalleService;
+	
+	@Autowired
+	private CriteriosEvaluacionService criteriosService;
+	
+	@Autowired
+	private EstatusIdeaService estatusService;
+	
+	
 	//Servicios Rest tabla - evaluacion 
 	
 		private final Logger log = LoggerFactory.getLogger(EvaluacionIdeasRestController.class);
@@ -43,6 +72,24 @@ public class EvaluacionIdeasRestController {
 		@GetMapping("/evaluacion")
 		public List<EvaluacionIdeas> index (){
 			return evaluacionService.findAll();
+		}
+		
+		
+		
+		//servicio que trae la lista de evaluacion 
+		@GetMapping("/evaluacion/ideas/{id}")
+		public List<IdeasProyectos> getIdeas(@PathVariable Long id){
+			
+			List<IdeasProyectos> ideasProyectos = new ArrayList<IdeasProyectos>();
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();			
+			ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(id);
+			
+			for(IdeasEvaluadas ide: ideasEvaluadas) {
+				IdeasProyectos idea = ideasProyectosService.findById(ide.getIdeaId());
+				ideasProyectos.add(idea);
+			}
+												
+			return ideasProyectos;
 		}
 			
 		//servicio que muestra un evaluacion
@@ -73,6 +120,8 @@ public class EvaluacionIdeasRestController {
 		public ResponseEntity<?> create(@Valid @RequestBody EvaluacionIdeas evaluacionN, BindingResult result) {
 			
 			EvaluacionIdeas evaluacionNew= null;
+			List<IdeasProyectos> ideas = new ArrayList<IdeasProyectos>();
+			List<CriteriosEvaluacion> criterios = new ArrayList<CriteriosEvaluacion>();
 			
 			Map<String, Object> response = new HashMap<>();
 			
@@ -88,7 +137,46 @@ public class EvaluacionIdeasRestController {
 			
 			try { 
 				
+				criterios = criteriosService.findAll();		
+				
 				evaluacionNew= evaluacionService.save(evaluacionN);
+				
+				ideas = evaluacionN.getIdeas();
+				
+				for(IdeasProyectos ide: ideas) {
+													
+					
+					IdeasEvaluadas ideaEva = new IdeasEvaluadas();
+					
+					ideaEva.setEvaluacionId(evaluacionNew.getEvaluacionId());
+					ideaEva.setIdeaId(ide.getIdeaId()); 
+					
+					ideasEvaluadasService.save(ideaEva);
+					
+					for(CriteriosEvaluacion cri: criterios) {
+						
+						EvaluacionIdeasDetalle evaluacionDetalle = new EvaluacionIdeasDetalle();	
+						
+						evaluacionDetalle.setEvaluacionId(evaluacionNew.getEvaluacionId());
+						evaluacionDetalle.setCriterio(cri.getControl());
+						evaluacionDetalle.setIdeaId(ide.getIdeaId());
+						evaluacionDetalle.setPeso(cri.getPeso());
+						
+						evaluacionDetalleService.save(evaluacionDetalle);
+						
+					}
+					
+					ide.setEstatusIdeaId((long) 2);
+					
+					if(ide.getEstatusIdeaId() != null) {
+						EstatusIdeas est = estatusService.findById(ide.getEstatusIdeaId());
+						ide.setEstatus(est.getEstatus());
+						ide.setFechaEstatus(new Date());
+					}
+					
+					ideasProyectosService.save(ide);
+					
+				}
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
@@ -103,6 +191,11 @@ public class EvaluacionIdeasRestController {
 		//servicio que actualiza un evaluacion
 		@PutMapping("/evaluacion/{id}")
 		public ResponseEntity<?>  update(@Valid @RequestBody EvaluacionIdeas evaluacion, BindingResult result, @PathVariable Long id) {
+			
+			List<IdeasProyectos> ideasEvaluacionAntes = new ArrayList<IdeasProyectos>();	
+			List<IdeasProyectos> ideasEvaluacion = new ArrayList<IdeasProyectos>();
+			List<CriteriosEvaluacion> criterios = new ArrayList<CriteriosEvaluacion>();
+			
 			EvaluacionIdeas evaluacionActual= evaluacionService.findById(id);
 			EvaluacionIdeas evaluacionUpdated = null;
 			Map<String, Object> response = new HashMap<>();
@@ -123,6 +216,57 @@ public class EvaluacionIdeasRestController {
 			}
 			
 			try{
+				
+				List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();			
+				ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(id);
+				
+				for(IdeasEvaluadas ide: ideasEvaluadas) {
+					IdeasProyectos idea = ideasProyectosService.findById(ide.getIdeaId());
+					ideasEvaluacionAntes.add(idea);
+				}
+				
+				ideasEvaluacion = evaluacion.getIdeas();
+				
+				for(IdeasProyectos ideaActual: ideasEvaluacion) {
+					
+					Boolean existe = existeIdeas(ideasEvaluacionAntes, ideaActual);
+					
+					if(!existe) {
+						criterios = criteriosService.findAll();
+						
+						IdeasEvaluadas ideaEva = new IdeasEvaluadas();
+						
+						ideaEva.setEvaluacionId(id);
+						ideaEva.setIdeaId(ideaActual.getIdeaId()); 
+						
+						ideasEvaluadasService.save(ideaEva);
+						
+						for(CriteriosEvaluacion cri: criterios) {
+							
+							EvaluacionIdeasDetalle evaluacionDetalle = new EvaluacionIdeasDetalle();	
+							
+							evaluacionDetalle.setEvaluacionId(id);
+							evaluacionDetalle.setCriterio(cri.getControl());
+							evaluacionDetalle.setIdeaId(ideaActual.getIdeaId());
+							evaluacionDetalle.setPeso(cri.getPeso());
+							
+							evaluacionDetalleService.save(evaluacionDetalle);
+							
+						}
+						
+						ideaActual.setEstatusIdeaId((long) 2);
+						
+						if(ideaActual.getEstatusIdeaId() != null) {
+							EstatusIdeas est = estatusService.findById(ideaActual.getEstatusIdeaId());
+							ideaActual.setEstatus(est.getEstatus());
+							ideaActual.setFechaEstatus(new Date());
+						}
+						
+						ideasProyectosService.save(ideaActual);
+					}
+					
+				}
+				
 							
 				evaluacionActual.setFechaEvaluacion(evaluacion.getFechaEvaluacion());
 				evaluacionActual.setObservacion(evaluacion.getObservacion());
@@ -142,10 +286,25 @@ public class EvaluacionIdeasRestController {
 		//servicio que elimina el evaluacion
 		@DeleteMapping("/evaluacion/{id}")
 		public ResponseEntity<?> delete(@PathVariable Long id) {
+			List<EvaluacionIdeasDetalle> detallesEvaluacion = new ArrayList<EvaluacionIdeasDetalle>();
+			List<IdeasEvaluadas> ideasEvaluadas = new ArrayList<IdeasEvaluadas>();
 			
 			Map<String, Object> response = new HashMap<>();
 			
 			try{
+				
+				ideasEvaluadas = ideasEvaluadasService.findAllByEvaluacionId(id);
+				
+				for(IdeasEvaluadas ide: ideasEvaluadas) {
+					detallesEvaluacion = evaluacionDetalleService.findAllByEvaluacionId(ide.getEvaluacionId());
+					
+					for(EvaluacionIdeasDetalle eva: detallesEvaluacion) {
+						evaluacionDetalleService.delete(eva.getEvaluacionDetalleId());
+					}
+					
+					ideasEvaluadasService.delete(ide.getIdeaEvaluadaId());
+				}
+				
 				
 				evaluacionService.delete(id);
 			}catch(DataAccessException e) {
@@ -157,4 +316,19 @@ public class EvaluacionIdeasRestController {
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.OK);
 		}
 
+		
+		
+		
+		public Boolean existeIdeas(List<IdeasProyectos> ideas, IdeasProyectos ideaActual) {
+			
+			Boolean existe = false;
+			
+			for(IdeasProyectos idea: ideas) {
+				if(idea.getIdeaId().equals(ideaActual.getIdeaId())){
+					existe = true;
+				}
+			}
+			
+			return existe;
+		}
 }

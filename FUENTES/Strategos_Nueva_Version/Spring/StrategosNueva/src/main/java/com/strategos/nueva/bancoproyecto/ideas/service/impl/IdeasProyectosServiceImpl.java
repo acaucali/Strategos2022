@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.ideas.service;
+package com.strategos.nueva.bancoproyecto.ideas.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.strategos.nueva.bancoproyecto.ideas.dao.IdeasProyectosDao;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
 import com.strategos.nueva.bancoproyectos.model.util.FIltroIdea;
 
 @Service
@@ -82,6 +83,13 @@ public class IdeasProyectosServiceImpl implements IdeasProyectosService{
             ideas.add(idea);
         }
         return ideas;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<IdeasProyectos> findAllByDependenciaId(Long dependenciaId) {
+		
+		return (List<IdeasProyectos>)ideasProyectosDao.findAllByDependenciaId(dependenciaId);
 	}
 		
 

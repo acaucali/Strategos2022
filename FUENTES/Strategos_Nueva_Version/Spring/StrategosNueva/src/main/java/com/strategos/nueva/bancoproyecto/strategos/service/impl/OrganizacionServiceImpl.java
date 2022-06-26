@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.strategos.service;
+package com.strategos.nueva.bancoproyecto.strategos.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.strategos.nueva.bancoproyecto.strategos.dao.OrganizacionesStrategosDao;
 import com.strategos.nueva.bancoproyecto.strategos.model.OrganizacionesStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.service.OrganizacionService;
 
 @Service
 public class OrganizacionServiceImpl implements OrganizacionService{

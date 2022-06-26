@@ -16,6 +16,8 @@ public class EvaluacionIdeasDetalle implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long evaluacionDetalleId;
+	
 	private Long evaluacionId;
 	
 	private Long ideaId;
@@ -30,7 +32,15 @@ public class EvaluacionIdeasDetalle implements Serializable{
 	@Column(nullable=true)
 	private Double valorEvaluado;
 	
-		
+			
+	public Long getEvaluacionDetalleId() {
+		return evaluacionDetalleId;
+	}
+
+	public void setEvaluacionDetalleId(Long evaluacionDetalleId) {
+		this.evaluacionDetalleId = evaluacionDetalleId;
+	}
+
 	public Long getEvaluacionId() {
 		return evaluacionId;
 	}
@@ -64,7 +74,7 @@ public class EvaluacionIdeasDetalle implements Serializable{
 	}
 
 	public Double getValorEvaluado() {
-		return valorEvaluado;
+		return valorEvaluado; 
 	}
 
 	public void setValorEvaluado(Double valorEvaluado) {

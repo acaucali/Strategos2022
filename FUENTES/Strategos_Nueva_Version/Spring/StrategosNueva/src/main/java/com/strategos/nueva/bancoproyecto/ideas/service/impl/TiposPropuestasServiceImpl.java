@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.ideas.service;
+package com.strategos.nueva.bancoproyecto.ideas.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.strategos.nueva.bancoproyecto.ideas.dao.TiposPropuestasDao;
 import com.strategos.nueva.bancoproyecto.ideas.model.TiposPropuestas;
+import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
 
 @Service
 public class TiposPropuestasServiceImpl implements TiposPropuestasService{

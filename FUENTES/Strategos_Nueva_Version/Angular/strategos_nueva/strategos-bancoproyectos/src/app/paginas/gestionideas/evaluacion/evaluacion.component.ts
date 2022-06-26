@@ -6,6 +6,7 @@ import { IdeasProyectos } from '../../configuracion/model/ideasproyectos';
 import { EvaluacionIdeasService } from '../../configuracion/services/evaluacionidea.service';
 import { IdeasProyectosService } from '../../configuracion/services/ideasproyectos.service';
 import { ModalService } from './selector-ideas/modal.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-evaluacion',
@@ -13,9 +14,11 @@ import { ModalService } from './selector-ideas/modal.service';
   styleUrls: ['./evaluacion.component.css']
 })
 export class EvaluacionComponent implements OnInit {
+  [x: string]: any;
 
+  private errores: string[];
   public ideas: IdeasProyectos[];
-  evaluacion: EvaluacionIdeas;
+  evaluacion: EvaluacionIdeas =new EvaluacionIdeas();
   
   public organizacionId: any;
   public isAdmin: boolean = false;
@@ -31,30 +34,20 @@ export class EvaluacionComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if(this.organizacionId == undefined){
+      this.organizacionId = localStorage.getItem('organizacion');
+    }
+
     this.activatedRoute.params.subscribe(params =>{
-      let id = params['id'];
       let evaId = params['evaId'];
       this.ideas= null;
 
       if(evaId && evaId != 0){
-        console.log("existe idea")
         this.evaluacionService.getEvaluacion(evaId).subscribe(response =>{this.evaluacion = response}); //traer evaluacion
+        this.evaluacionService.getIdeasList(evaId).subscribe(response =>{this.ideas = response});
         //traer ideas x evaluacion
       }else{
         this.evaluacion = new EvaluacionIdeas();
-      }
-
-      
-      if(id){
-
-        if(id == ORGANIZACION_ID){
-          this.isAdmin = true;   
-          this.ideasService.getIdeasList().subscribe(response => {this.ideas = response});   
-        }else{
-          this.ideasService.getIdeasListId(id).subscribe(response =>{this.ideas = response})
-        }
-
-        this.organizacionId = id;
       }
 
       
@@ -66,20 +59,42 @@ export class EvaluacionComponent implements OnInit {
     this.modalService.abrirModal();
   }
 
-  eliminarIdea(){
+
+  create(){
+    this.evaluacion.ideas = this.ideas;
+    this.evaluacionService.create(this.evaluacion).subscribe(
+      json => {
+      swal.fire('Nueva Evaluación', `${json.mensaje}`, 'success');
+      this.cerrarModal();
+    },
+    err =>{
+      this.errores = err.error.errors as string[];
+      console.error('Código error: '+err.status);
+      console.error(err.error.errors);
+    }
+    );
+    this.router.navigateByUrl('/ponderacion');
+    this.ponderacionComponent.ngOnInit();
+    
     
   }
 
-  create(){
-
-  }
-
   update(){
+    this.evaluacion.ideas = this.ideas;
+    this.evaluacionService.update(this.evaluacion).subscribe(json =>{
+      swal.fire('Evaluación Actualizado',  `${json.mensaje}`, 'success')
+      this.cerrarModal();
+    },
+    err =>{
+      this.errores = err.error.errors as string[];
+      console.error('Código error: '+err.status);
+      console.error(err.error.errors);
+    }
+    );
+    this.router.navigateByUrl('/ponderacion');
+    this.ponderacionComponent.ngOnInit();
 
   }
 
-  cerrarModal(){
-
-  }
 
 }

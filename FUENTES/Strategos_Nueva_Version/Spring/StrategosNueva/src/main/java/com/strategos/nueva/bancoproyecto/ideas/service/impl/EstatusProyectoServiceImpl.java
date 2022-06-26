@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.ideas.service;
+package com.strategos.nueva.bancoproyecto.ideas.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.strategos.nueva.bancoproyecto.ideas.dao.EstatusProyectoDao;
 import com.strategos.nueva.bancoproyecto.ideas.model.EstatusProyecto;
+import com.strategos.nueva.bancoproyecto.ideas.service.EstatusProyectoService;
 
 @Service
 public class EstatusProyectoServiceImpl implements EstatusProyectoService{

@@ -8,7 +8,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DocumentosComponent } from './documentos/documentos.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { ConsultaideaComponent } from './consultaidea/consultaidea.component';
 
 
 
@@ -20,6 +21,8 @@ import { MatNativeDateModule } from '@angular/material/core';
   imports: [
     CommonModule, GestionIdeasRoutingModule, NgxPaginationModule,  FormsModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule
   ],
-  providers: []
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+  ]
 })
 export class GestionIdeasModule { }

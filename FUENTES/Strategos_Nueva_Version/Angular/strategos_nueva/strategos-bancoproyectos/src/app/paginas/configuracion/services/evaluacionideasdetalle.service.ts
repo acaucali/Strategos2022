@@ -7,6 +7,9 @@ import { URL_BACKEND } from 'src/app/config/config';
 import { EstatusIdeas } from '../model/estatusideas';
 import swal from 'sweetalert2';
 import { EvaluacionIdeasDetalle } from '../model/evaluacionideasdetalle';
+import { DatoIdea } from '../model-util/DatoIdea';
+import { IdeasEvaluadas } from '../model/ideasevaluadas';
+import { DatoMedicion } from '../model-util/DatoMedicion';
 
 
 @Injectable({
@@ -18,8 +21,32 @@ export class EvaluacionIdeasDetalleService {
   private urlEndPoint:string =URL_BACKEND+'/api/strategos/bancoproyectos/evaluaciondetalle';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
   public evaluacionDetalle: EvaluacionIdeasDetalle[];
+  public encabezados: DatoIdea[];
+  public datos: DatoMedicion[];
+  public ideas: number[];
 
   constructor(private http: HttpClient, private router: Router) { }
+
+  getEncabezadosList(id){
+    return this.http.get(`${this.urlEndPoint}/encabezados/${id}`).pipe(map(res =>{
+      this.encabezados = res as DatoIdea[];
+      return this.encabezados;
+    }));
+  }
+  
+  getMedicionesList(id){
+    return this.http.get(`${this.urlEndPoint}/datosmediciones/${id}`).pipe(map(res =>{
+      this.datos = res as DatoMedicion[];
+      return this.datos;
+    }));
+  }
+
+  getEvaluacionesList(id){
+    return this.http.get(`${this.urlEndPoint}/ideasevaluadas/${id}`).pipe(map(res =>{
+      this.ideas = res as number[];
+      return this.ideas;
+    }));
+  }
 
   getEvaluacionDetalleList(){
     return this.http.get(this.urlEndPoint).pipe(map(res =>{
@@ -87,6 +114,18 @@ export class EvaluacionIdeasDetalleService {
     );
   }
 
+  registrarMediciones(mediciones: Array<DatoMedicion>, evaId: any): Observable<any>{
+    return this.http.put<any>(`${this.urlEndPoint}/mediciones/${evaId}`, mediciones, {headers: this.httpHeaders }).pipe(
+      catchError(e =>{
+        if(e.status==400){
+          return throwError(e);
+        }
+        console.error(e.error.mensaje);
+        swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
 
 }
 

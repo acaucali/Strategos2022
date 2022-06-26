@@ -12,6 +12,6 @@ import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
 
 public interface IdeasProyectosDao extends JpaRepository<IdeasProyectos, Long>, JpaSpecificationExecutor<IdeasProyectos>{
 	
-	
+	List<IdeasProyectos> findAllByDependenciaId(Long dependenciaId);
 	
 }

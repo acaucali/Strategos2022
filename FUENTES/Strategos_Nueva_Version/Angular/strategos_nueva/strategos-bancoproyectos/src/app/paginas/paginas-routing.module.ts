@@ -14,10 +14,11 @@ const routes: Routes = [
     { path: '', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
     { path: 'gestionideas', loadChildren: () => import('./gestionideas/gestionideas.module').then(m =>m.GestionIdeasModule)},
     { path: 'criterios', loadChildren: () => import('./configuracion/tablas/criterios/criterios.module').then(m =>m.CriteriosModule)},
-    { path: 'ponderacion/:id', loadChildren: () => import('./gestionideas/ponderacion-ideas/ponderacion.module').then(m =>m.PonderacionModule)},
-    { path: 'evaluacion/:id/:evaId', loadChildren: () => import('./gestionideas/evaluacion/evaluacion.module').then(m =>m.EvaluacionModule)},
+    { path: 'ponderacion', loadChildren: () => import('./gestionideas/ponderacion-ideas/ponderacion.module').then(m =>m.PonderacionModule)},
+    { path: 'evaluacion/:evaId', loadChildren: () => import('./gestionideas/evaluacion/evaluacion.module').then(m =>m.EvaluacionModule)},
     { path: 'evaluaciondatos/:id', loadChildren: () => import('./gestionideas/evaluacion-datos/evaluaciondatos.module').then(m =>m.EvaluacionDatosModule)},
     { path: 'inicio', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
+    { path: 'preproyecto', loadChildren: () => import('./preproyecto/preproyectos.module').then(m =>m.PreProyectoModule)},
     { path: '**', component: Pagina404Component},
   ]}
 ];

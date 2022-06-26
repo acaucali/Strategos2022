@@ -21,4 +21,6 @@ public interface IdeasProyectosService {
 	
 	public void delete(Long id);
 	
+	List<IdeasProyectos> findAllByDependenciaId(Long dependenciaId);
+	
 }

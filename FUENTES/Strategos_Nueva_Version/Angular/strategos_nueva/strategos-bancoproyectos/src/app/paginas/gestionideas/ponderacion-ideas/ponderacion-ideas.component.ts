@@ -30,16 +30,9 @@ export class PonderacionIdeasComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.activatedRoute.params.subscribe(params =>{
-
-      let id = params['id'];
-      this.organizacionId= null;
-      
-      if(id){ 
-        this.organizacionId = id;
+      if(this.organizacionId == undefined){
+        this.organizacionId = localStorage.getItem('organizacion');
       }
-      
-    });
 
     this.getEvaluaciones();
   }

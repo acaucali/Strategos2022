@@ -1,246 +1,339 @@
-<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn"> 
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn">
 
-    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: #007BFF;">
-              <h5 class="modal-title">{{titulo}}</h5>
-              <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form  #ideaForm="ngForm">
-                      <div class="form-row">       
-                                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                                      <li class="nav-item">
-                                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Parte I</a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Parte II</a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Parte III</a>
-                                      </li>
-                                      <li class="nav-item" *ngIf="idea.ideaId">
-                                        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Anexos</a>
-                                      </li>
-                                    </ul>
-                                
-                                  <div class="card-body">
-                                    <div class="tab-content" id="custom-tabs-one-tabContent">
-                                      <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                        <div class="row">
-                                            <div class="col-md-12" *ngIf="isAdmin == true">
-                                              <label for="exampleInputEmail1">Organización (*)</label>
-                                              <select class="form-control" required [(ngModel)]="idea.dependenciaId" name="dependenciaId" required #dependenciaId="ngModel">
-                                                <option [value]="undefined" selected>Seleccionar</option>
-                                                <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
-                                              </select>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label for="exampleInputEmail1">Nombre de la idea (*)</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nombre Idea"
-                                                [(ngModel)]="idea.nombreIdea" name="nombreIdea" required maxlength="250" #nombreIdea="ngModel">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label>Descripción (*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Descripción"
-                                                [(ngModel)]="idea.descripcionIdea" name="descripcionIdea" required maxlength="2000" #descripcionIdea="ngModel"></textarea>
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label for="exampleInputEmail1">Tipo Propuesta (*)</label>
-                                                <select class="form-control" required [(ngModel)]="idea.tipoPropuestaId" name="tipoPropuestaId" required #tipoPropuestaId="ngModel">
-                                                  <option [value]="undefined" selected>Seleccionar</option>
-                                                  <option *ngFor="let pro of propuestas" [value]="pro.tipoPropuestaId">{{pro.tipoPropuesta}}</option>
-                                                </select>
-                                            </div>
+  <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" style="width: 1200px;">
+        <div class="modal-header text-white" style="background-color: #007BFF; height: 50px;">
+          <h4 class="modal-title">{{titulo}}</h4>
 
-                                            <div class="col-md-6">
-                                              <label for="exampleInputEmail1">Alineación plan (*)</label>
-                                              <select class="form-control" required [(ngModel)]="idea.tipoObjetivoId" name="tipoObjetivoId" #tipoObjetivoId="ngModel">
-                                                <option [value]="undefined" selected>Seleccionar</option>
-                                                <option *ngFor="let obj of objetivos" [value]="obj.tipoObjetivoId">{{obj.descripcionObjetivo}}</option>
-                                              </select>
-                                            </div>
-                                            
-                                            
-                                            <div class="col-md-12">
-                                                <label>Impacto (*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Impacto"
-                                                [(ngModel)]="idea.impacto" name="impacto" required maxlength="2000" #impacto="ngModel"></textarea>
-                                            </div>
-                                            
-                                            <div class="col-md-5">
-                                                <label for="exampleInputEmail1">Estatus Idea</label>
-                                                <select *ngIf="idea.ideaId" class="form-control" [(ngModel)]="idea.estatusIdeaId" name="estatusIdeaId" #estatusIdeaId="ngModel">
-                                                  <option [value]="undefined" selected>Seleccionar</option>
-                                                  <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
-                                                </select>
-                                                <select *ngIf="!idea.ideaId" class="form-control" [(ngModel)]="idea.estatusIdeaId" name="estatusIdeaId" #estatusIdeaId="ngModel" disabled>
-                                                  <option [value]="undefined" selected>Seleccionar</option>
-                                                  <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
-                                                </select>
-                                            </div>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <form #ideaForm="ngForm">
+              <div class="form-row">
+                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill"
+                      href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
+                      aria-selected="true">Parte I</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill"
+                      href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile"
+                      aria-selected="false">Parte II</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
+                      href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages"
+                      aria-selected="false">Parte III</a>
+                  </li>
+                  <li class="nav-item" *ngIf="idea.ideaId">
+                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill"
+                      href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings"
+                      aria-selected="false">Anexos</a>
+                  </li>
+                </ul>
 
-                                            <div class="col-md-5">
-                                                <label>Fecha Idea (*)</label>
-                                                <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="idea.fechaIdea" name="fechaIdea" required #fechaIdea="ngModel" 
-                                                style="display:inline; width:250px;" placeholder="dd/mm/yyyy">
-                                                <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
-                                                <mat-datepicker #myDatepicker></mat-datepicker>
+                <div class="card-body">
+                  <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-home-tab">
+                      <div class="row">
+                        <div class="col-md-12" *ngIf="isAdmin == true">
+                          <label for="exampleInputEmail1">Dependencia Responsable (*)</label>
+                          <select class="form-control" required [(ngModel)]="idea.dependenciaId" name="dependenciaId"
+                            required #dependenciaId="ngModel">
+                            <option [value]="undefined" selected>Seleccionar</option>
+                            <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}
+                            </option>
+                          </select>
+                        </div>
 
-                                              </div>
+                        <div class="col-md-5">
+                          <br>
+                          <label for="exampleInputEmail1">Profesional Responsable (*)</label>
 
-                                            <div class="col-md-2" *ngIf="idea.ideaId">
-                                              <br>
-                                              <label>Historico</label>
-                                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="checkbox" id="customCheckbox1"
-                                                [(ngModel)]="idea.historico" name="historico" #historico="ngModel">
-                                                
-                                            </div>
+                          <input type="text" class="form-control" id="exampleInputEmail1"
+                            placeholder="Profesional Responsable" [(ngModel)]="idea.personaEncargada"
+                            name="personaEncargada" required maxlength="50" #personaEncargada="ngModel">
+                        </div>
 
-                                            <div class="col-md-3">
-                                              <label for="exampleInputEmail1">Año Formulación (*)</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
-                                              [(ngModel)]="idea.anioFormulacion" name="anioFormulacion" required maxlength="4" #anioFormulacion="ngModel">
-                                            </div>
+                        <div class="col-md-3">
+                          <br>
+                          <label for="exampleInputEmail1">Teléfono Contacto (*)</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1"
+                            placeholder="Teléfono Contacto" [(ngModel)]="idea.contactoTelefono" name="contactoTelefono"
+                            required maxlength="50" #contactoTelefono="ngModel">
+                        </div>
+
+                        <div class="col-md-4">
+                          <br>
+                          <label for="exampleInputEmail1">Correo electronico (*)</label>
+                          <input type="email" class="form-control" id="exampleInputEmail1"
+                            placeholder="Correo electronico" [(ngModel)]="idea.contactoEmail" name="contactoEmail"
+                            required maxlength="50" #contactoEmail="ngModel">
+                        </div>
+
+
+
+                        <div class="col-md-2">
+                          <br>
+                          <label for="exampleInputEmail1">Fecha Radicación (*)</label><br>
+                          <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="idea.fechaRadicacion"
+                            name="fechaRadicacion" #fechaRadicacion="ngModel"
+                            style="display:inline; width:120px;" placeholder="dd/mm/yyyy">
+                          <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
+                          <mat-datepicker #myDatepicker></mat-datepicker>
+                        </div>
+
+                        <div class="col-md-2">
+                          <br>
+                          <label for="exampleInputEmail1">Año Formulación (*)</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
+                            [(ngModel)]="idea.anioFormulacion" name="anioFormulacion" required maxlength="4"
+                            #anioFormulacion="ngModel">
+                        </div>
+
+                        <div class="col-md-3">
+                          <br>
+                          <label for="exampleInputEmail1">Tipo Propuesta (*)</label>
+                          <select class="form-control" required [(ngModel)]="idea.tipoPropuestaId"
+                            name="tipoPropuestaId" required #tipoPropuestaId="ngModel">
+                            <option [value]="undefined" selected>Seleccionar</option>
+                            <option *ngFor="let pro of propuestas" [value]="pro.tipoPropuestaId">{{pro.tipoPropuesta}}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
+                          <br>
+                          <label for="exampleInputEmail1">Estatus Idea</label>
+                          <select *ngIf="idea.ideaId" class="form-control" [(ngModel)]="idea.estatusIdeaId"
+                            name="estatusIdeaId" #estatusIdeaId="ngModel">
+                            <option [value]="undefined" selected>Seleccionar</option>
+                            <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
+                          </select>
+                          <select *ngIf="!idea.ideaId" class="form-control" [(ngModel)]="idea.estatusIdeaId"
+                            name="estatusIdeaId" #estatusIdeaId="ngModel" disabled>
+                            <option [value]="undefined" selected>Seleccionar</option>
+                            <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-2">
+                          <br>
+                          <label for="exampleInputEmail1">Fecha Estatus</label><br>
+                          <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="idea.fechaEstatus"
+                            name="fechaEstatus" #fechaEstatus="ngModel" style="display:inline; width:150px;"
+                            placeholder="dd/mm/yyyy" disabled>
+
+                          <mat-datepicker #myDatepicker></mat-datepicker>
+                        </div>
+
                         
-                                                                  
-                                        </div>  
-                                      </div>
-                                      <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                        <div class="row">
-                                            
-                                            <div class="col-md-12">
-                                                <label>Población (*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Población"
-                                                [(ngModel)]="idea.poblacion" name="poblacion" required maxlength="2000" #poblacion="ngModel"></textarea>
-                                            </div>
-                                            
-                                            <div class="col-md-12">
-                                                <label>Focalización de la Población</label>
-                                                <textarea class="form-control" rows="3" placeholder="Focalización de la Población"
-                                                [(ngModel)]="idea.focalizacion" name="focalizacion"  maxlength="2000" #focalizacion="ngModel"></textarea>
-                                            </div>
+                        <div class="col-md-12">
+                          <br>
+                          <label for="exampleInputEmail1">Nombre Iniciativa / Propuesta(*)</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nombre Idea"
+                            [(ngModel)]="idea.nombreIdea" name="nombreIdea" required maxlength="250"
+                            #nombreIdea="ngModel">
+                        </div>
 
-                                            <div class="col-md-12">
-                                                <label>Problemática (*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Problemática"
-                                                [(ngModel)]="idea.problematica" name="problematica" required maxlength="2000" #problematica="ngModel"></textarea>
-                                            </div>
+                        <div class="col-md-12">
+                          <br>
+                          <label>Objetivo General </label>
+                          <textarea class="form-control" rows="2" placeholder="Objetivo General"
+                            [(ngModel)]="idea.objetivoGeneral" name="objetivoGeneral" maxlength="2000"
+                            #objetivoGeneral="ngModel"></textarea>
+                        </div>
 
-                                            <div class="col-md-12">
-                                                <label>Financiación (*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Financiación"
-                                                [(ngModel)]="idea.financiacion" name="financiacion" required maxlength="2000" #financiacion="ngModel"></textarea>
-                                            </div>
+                        <div class="col-md-12">
+                          <br>
+                          <label>Descripción Propuesta(*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Descripción Propuesta"
+                            [(ngModel)]="idea.descripcionIdea" name="descripcionIdea" required maxlength="2000"
+                            #descripcionIdea="ngModel"></textarea>
+                        </div>
 
-                                            <div class="col-md-12">
-                                                <label>Capacidad Técnica (*)</label>
-                                                <textarea class="form-control" rows="2" placeholder="Capacidad Técnica"
-                                                [(ngModel)]="idea.capacidadTecnica" name="capacidadTecnica" required maxlength="2000" #capacidadTecnica="ngModel"></textarea>
-                                            </div>
-                                                                  
-                                        </div>  
-                                      </div>
-                                      <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                        <div class="row">   
-                                            <div class="col-md-12">
-                                                <label>Dependencias Participantes (*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Dependencias Participantes"
-                                                [(ngModel)]="idea.dependenciasParticipantes" name="dependenciasParticipantes" required maxlength="2000" #dependenciasParticipantes="ngModel"></textarea>
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label for="exampleInputEmail1">Persona Encargada (*)</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Persona Encargada"
-                                                [(ngModel)]="idea.personaEncargada" name="personaEncargada" required maxlength="50" #personaEncargada="ngModel">
-                                            </div>
+                                               
 
-                                            <div class="col-md-6">
-                                                <label for="exampleInputEmail1">Dependencia Persona Encargada (*)</label>
-                                                <select class="form-control" required [(ngModel)]="idea.dependenciaPersona" name="dependenciaPersona" required #dependenciaPersona="ngModel">
-                                                  <option [value]="undefined" selected>Seleccionar</option>
-                                                  <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
-                                                </select>
-                                            </div>
+                        <div class="col-md-2" *ngIf="idea.ideaId">
+                          <br>
+                          <label>Historico</label>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <input type="checkbox" id="customCheckbox1" [(ngModel)]="idea.historico" name="historico"
+                            #historico="ngModel">
 
-                                            <div class="col-md-12">
-                                                <label>Datos Contacto (*)</label>
-                                                <textarea class="form-control" rows="2" placeholder="Datos Contacto"
-                                                [(ngModel)]="idea.personaContactoDatos" name="personaContactoDatos" required  maxlength="250" #personaContactoDatos="ngModel"></textarea>
-                                            </div>
+                        </div>
 
-                                            <div class="col-md-12">
-                                                <label>Proyectos Ejecutados(*)</label>
-                                                <textarea class="form-control" rows="3" placeholder="Proyectos Ejecutados"
-                                                [(ngModel)]="idea.proyectosEjecutados" name="proyectosEjecutados" required maxlength="500" #proyectosEjecutados="ngModel"></textarea>
-                                            </div>
 
-                                            
-                                            <div class="col-md-12">
-                                                <label>Observaciones</label>
-                                                <textarea class="form-control" rows="3" placeholder="Observaciones"
-                                                [(ngModel)]="idea.observaciones" name="observaciones" maxlength="2000" #observaciones="ngModel"></textarea>
-                                            </div>
-                                        </div> 
-                                      </div>
-                                      <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab" *ngIf="idea.ideaId">
-                                          <div class="row">   
-                                            <div class="col-md-12">
-                                              <label>Nombre del Documento</label>
-                                              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nombre del Documento"
-                                              [(ngModel)]="documento.tituloDocumento" name="tituloDocumento"  maxlength="30" #tituloDocumento="ngModel">
-                                            </div>
-                                            <div class="col-md-12">
-                                                  <label>Descripción</label>
-                                                  <textarea class="form-control" rows="3" placeholder="Descripción"
-                                                  [(ngModel)]="documento.descripcion" name="descripcion" maxlength="30" #descripcion="ngModel"></textarea>
-                                            </div>
-                                            
-                                              <div class="form-group col-md-12" >
-                                                <label for="documento" style="font-size: medium">Documento</label> <br>
-                                                <input (change)="seleccionarFoto($event)" type="file" name="documento" class="form"
-                                                  accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.pdf" *ngIf="idea.ideaId">
-                                                &nbsp; &nbsp;<button class="btn btn-rounded btn-primary" (click)="subirDocumento()" type="button" placement="bottom"
-                                                  ngbTooltip="Subir documento" style="font-size: 8px" *ngIf="idea.ideaId"><i class="fas fa-file-upload fa-2x"></i></button>
-                                                &nbsp;
-                                                    
-                                                    <div class="form-group" *ngIf="idea.ideaId">
-                                                      <label style="font-size: medium" *ngIf="documento">{{documento.tituloDocumento}}</label> &nbsp; &nbsp;
-                                                      <button class="btn btn-rounded btn-primary" (click)="descargarDocumento()" type="button" placement="bottom"
-                                                        ngbTooltip="Descargar documento" style="font-size: 8px"><i class="fas fa-download fa-2x"></i></button>
-                                                      &nbsp;
-                                                      <button class="btn btn-rounded btn-danger" (click)="eliminarDocumento()" type="button" placement="bottom"
-                                                        ngbTooltip="Eliminar documento" style="font-size: 8px"><i class="far fa-trash-alt fa-2x"></i></button>
-                                              
-                                                    </div>
-                                                    
-                                              </div>  
-                                              
-                                            </div>  
-                                      </div>
-                                    </div>
-                                  </div>
 
-                           
-                      </div>   
-                    </form>    
+
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-profile-tab">
+                      <div class="row">
+
+                        <div class="col-md-12">
+                          <label>Problemática / Necesidad (*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Problemática"
+                            [(ngModel)]="idea.problematica" name="problematica" required maxlength="2000"
+                            #problematica="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label>Población (*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Población" [(ngModel)]="idea.poblacion"
+                            name="poblacion" required maxlength="2000" #poblacion="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label>Focalización de la Población</label>
+                          <textarea class="form-control" rows="2" placeholder="Focalización de la Población"
+                            [(ngModel)]="idea.focalizacion" name="focalizacion" maxlength="2000"
+                            #focalizacion="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label for="exampleInputEmail1">Alineación plan (*)</label>
+                          <select class="form-control" required [(ngModel)]="idea.tipoObjetivoId" name="tipoObjetivoId"
+                            #tipoObjetivoId="ngModel">
+                            <option [value]="undefined" selected>Seleccionar</option>
+                            <option *ngFor="let obj of objetivos" [value]="obj.tipoObjetivoId">
+                              {{obj.descripcionObjetivo}}</option>
+                          </select>
+                        </div>
+
+
+                        <div class="col-md-12">
+                          <br>
+                          <label>Impacto Estimado(*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Impacto" [(ngModel)]="idea.impacto"
+                            name="impacto" required maxlength="2000" #impacto="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label for="exampleInputEmail1">Duración Total</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Duración Total"
+                            [(ngModel)]="idea.duracionTotal" name="duracionTotal" maxlength="250"
+                            #duracionTotal="ngModel">
+                        </div>
+
+
+
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-messages-tab">
+                      <div class="row">
+
+                        <div class="col-md-12">
+                          <label>Posibles Fuentes Financiación (*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Financiación"
+                            [(ngModel)]="idea.financiacion" name="financiacion" required maxlength="2000"
+                            #financiacion="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label>Dependencias Participantes (*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Dependencias Participantes"
+                            [(ngModel)]="idea.dependenciasParticipantes" name="dependenciasParticipantes" required
+                            maxlength="2000" #dependenciasParticipantes="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label>Proyectos Ejecutados(*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Proyectos Ejecutados"
+                            [(ngModel)]="idea.proyectosEjecutados" name="proyectosEjecutados" required maxlength="500"
+                            #proyectosEjecutados="ngModel"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br>
+                          <label>Capacidad Técnica (*)</label>
+                          <textarea class="form-control" rows="2" placeholder="Capacidad Técnica"
+                            [(ngModel)]="idea.capacidadTecnica" name="capacidadTecnica" required maxlength="2000"
+                            #capacidadTecnica="ngModel"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br>
+                          <label>Observaciones</label>
+                          <textarea class="form-control" rows="2" placeholder="Observaciones"
+                            [(ngModel)]="idea.observaciones" name="observaciones" maxlength="2000"
+                            #observaciones="ngModel"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel"
+                      aria-labelledby="custom-tabs-one-settings-tab" *ngIf="idea.ideaId">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Nombre del Documento</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1"
+                            placeholder="Nombre del Documento" [(ngModel)]="documento.tituloDocumento"
+                            name="tituloDocumento" maxlength="30" #tituloDocumento="ngModel">
+                        </div>
+                        <div class="col-md-12">
+                          <br>
+                          <label>Descripción</label>
+                          <textarea class="form-control" rows="3" placeholder="Descripción"
+                            [(ngModel)]="documento.descripcion" name="descripcion" maxlength="30"
+                            #descripcion="ngModel"></textarea>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <br>
+                          <label for="documento" style="font-size: medium">Documento</label> <br>
+                          <input (change)="seleccionarFoto($event)" type="file" name="documento" class="form"
+                            accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.pdf" *ngIf="idea.ideaId">
+                          &nbsp; &nbsp;<button class="btn btn-rounded btn-primary" (click)="subirDocumento()"
+                            type="button" placement="bottom" ngbTooltip="Subir documento" style="font-size: 8px"
+                            *ngIf="idea.ideaId"><i class="fas fa-file-upload fa-2x"></i></button>
+                          &nbsp;
+
+                          <div class="form-group" *ngIf="idea.ideaId">
+                            <label style="font-size: medium" *ngIf="documento">{{documento.tituloDocumento}}</label>
+                            &nbsp; &nbsp;
+                            <button class="btn btn-rounded btn-primary" (click)="descargarDocumento()" type="button"
+                              placement="bottom" ngbTooltip="Descargar documento" style="font-size: 8px"><i
+                                class="fas fa-download fa-2x"></i></button>
+                            &nbsp;
+                            <button class="btn btn-rounded btn-danger" (click)="eliminarDocumento()" type="button"
+                              placement="bottom" ngbTooltip="Eliminar documento" style="font-size: 8px"><i
+                                class="far fa-trash-alt fa-2x"></i></button>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button *ngIf="!idea.ideaId else elseBlock" (click)="create()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!ideaForm.form.valid">Crear</button>
-                <ng-template #elseBlock>
-                    <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!ideaForm.form.valid">Actualizar</button>
-                </ng-template>
-              <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
+
+
+              </div>
+            </form>
           </div>
         </div>
+        <div class="modal-footer">
+          <button *ngIf="!idea.ideaId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+            data-dismiss="modal" [disabled]="!ideaForm.form.valid">Crear</button>
+          <ng-template #elseBlock>
+            <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal"
+              [disabled]="!ideaForm.form.valid">Actualizar</button>
+          </ng-template>
+          <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        </div>
       </div>
-    
+    </div>
+  </div>
+
 </div>

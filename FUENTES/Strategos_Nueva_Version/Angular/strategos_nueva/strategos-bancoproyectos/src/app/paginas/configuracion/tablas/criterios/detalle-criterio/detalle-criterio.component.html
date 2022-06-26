@@ -4,7 +4,7 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header text-white" style="background-color: #007BFF;">
-              <h5 class="modal-title">{{titulo}}</h5>
+              <h4 class="modal-title">{{titulo}}</h4>
               <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -15,11 +15,13 @@
                       <div class="form-row">       
                                                                
                         <div class="col-md-12">
-                            <label for="exampleInputEmail1">Control</label>
+                            <label for="exampleInputEmail1">Criterio de Ponderación</label>
                             <textarea class="form-control" rows="3" placeholder="Control"
                             [(ngModel)]="criterio.control" name="control" #control="ngModel"></textarea>
                         </div>
+                     
                         <div class="col-md-12">
+                          <br>
                             <label>Peso</label>
 
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Peso"

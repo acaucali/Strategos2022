@@ -1,4 +1,4 @@
-package com.strategos.nueva.bancoproyecto.ideas.service;
+package com.strategos.nueva.bancoproyecto.ideas.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.strategos.nueva.bancoproyecto.ideas.dao.IdeasDocumentosAnexosDao;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasDocumentosAnexos;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasDocumentosAnexosService;
 
 @Service
 public class IdeasDocumentosAnexosServiceImpl implements IdeasDocumentosAnexosService{

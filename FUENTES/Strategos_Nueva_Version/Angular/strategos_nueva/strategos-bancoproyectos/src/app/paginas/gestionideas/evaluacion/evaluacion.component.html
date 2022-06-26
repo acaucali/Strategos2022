@@ -23,12 +23,13 @@
             <div class="col-md-12">
                 <label for="exampleInputEmail1">Fecha Evaluación</label>   
                 <br>           
-                  <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="evaluacion.fechaEvaluacion" name="fechaEvaluacion" #fechaEvaluacion="ngModel" 
-                  style="display:inline; width:250px;" placeholder="dd/mm/yyyy">
+                  <input matInput [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="evaluacion.fechaEvaluacion" name="fechaEvaluacion" #fechaEvaluacion="ngModel" 
+                  style="display:inline; width:250px;" placeholder="dd/mm/yyyy" >
                   <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
                   <mat-datepicker #myDatepicker></mat-datepicker>
             </div>
             <div class="col-md-12">
+                <br>
                 <label>Descripción</label>
                 <textarea class="form-control" rows="3" placeholder="Descripción"
                 [(ngModel)]="evaluacion.observacion" name="observacion" #observacion="ngModel"></textarea>                           
@@ -53,9 +54,9 @@
               </thead>
               
               <tbody>
-                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageEva, id: 'pageEv'}">                  
-                  <td >{{el.nombreIdea}} </td>
-                  <td >{{el.orgStr}} </td>                  
+                <tr *ngFor="let ide of ideas | paginate: {itemsPerPage: 10, currentPage: pageEva, id: 'pageEv'}">                  
+                  <td >{{ide.nombreIdea}} </td>
+                  <td >{{ide.organizacion}} </td>                  
                 </tr>
               </tbody>
          
@@ -71,7 +72,7 @@
           <ng-template #elseBlock>
               <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!evaluacionForm.form.valid">Actualizar</button>
           </ng-template>
-          <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          <button [routerLink]="['/ponderacion']" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
         </div>
 
       </div>

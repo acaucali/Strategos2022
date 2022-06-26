@@ -5,6 +5,7 @@ import { Pagina404Component } from './pagina404/pagina404.component';
 import { ModulosModule } from '../modulos/modulos.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
+import { PreproyectoComponent } from './preproyecto/preproyecto.component';
 
 
 @NgModule({

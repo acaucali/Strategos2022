@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -70,18 +71,20 @@ public class IdeasProyectos implements Serializable{
 	@Size(max=500)
 	@Column(nullable=false)
 	private String dependenciasParticipantes;
-	
-	@Column(nullable=true)
-	private Long dependenciaPersona;
+
 	
 	@Size(max=50)
 	@Column(nullable=false)
 	private String personaEncargada;
 	
-	@Size(max=250)
+	@Size(max=50)
 	@Column(nullable=false)
-	private String personaContactoDatos;
+	private String contactoEmail;
 	
+	@Size(max=50)
+	@Column(nullable=false)
+	private String contactoTelefono;
+		
 	//organizacion Id
 	@Column(nullable=true)
 	private Long dependenciaId;
@@ -97,10 +100,7 @@ public class IdeasProyectos implements Serializable{
 	@Size(max=2000)
 	@Column(nullable=false)
 	private String capacidadTecnica;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
-	private Date fechaIdea;
+		
 
 	@Size(max=4)
 	@Column(nullable=true)
@@ -117,6 +117,10 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=true)
 	private Date fechaEstatus; 
 	
+	@Temporal(TemporalType.DATE)
+	@Column(nullable=true)
+	private Date fechaRadicacion; 
+	
 	@Column(nullable=true)
 	private Boolean historico;
 	
@@ -131,9 +135,21 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=true)
 	private String observaciones;
 	
+	@Size(max=2000)
+	@Column(nullable=true)
+	private String objetivoGeneral;
+	
+	@Size(max=500)
+	@Column(nullable=true)
+	private String duracionTotal;
+	
 	@Column(nullable=true)
 	private Long documentoId;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "evaluacionId", nullable = true)
+	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "ideas" }, allowSetters = true)
+	private EvaluacionIdeas evaluacion;
 		
 	public Long getIdeaId() {
 		return ideaId;
@@ -208,14 +224,6 @@ public class IdeasProyectos implements Serializable{
 		this.personaEncargada = personaEncargada;
 	}
 
-	public String getPersonaContactoDatos() {
-		return personaContactoDatos;
-	}
-
-	public void setPersonaContactoDatos(String personaContactoDatos) {
-		this.personaContactoDatos = personaContactoDatos;
-	}
-
 	public Long getDependenciaId() {
 		return dependenciaId;
 	}
@@ -238,14 +246,6 @@ public class IdeasProyectos implements Serializable{
 
 	public void setCapacidadTecnica(String capacidadTecnica) {
 		this.capacidadTecnica = capacidadTecnica;
-	}
-
-	public Date getFechaIdea() {
-		return fechaIdea;
-	}
-
-	public void setFechaIdea(Date fechaIdea) {
-		this.fechaIdea = fechaIdea;
 	}
 
 	public String getAnioFormulacion() {
@@ -304,14 +304,6 @@ public class IdeasProyectos implements Serializable{
 		this.dependenciasParticipantes = dependenciasParticipantes;
 	}
 
-	public Long getDependenciaPersona() {
-		return dependenciaPersona;
-	}
-
-	public void setDependenciaPersona(Long dependenciaPersona) {
-		this.dependenciaPersona = dependenciaPersona;
-	}
-	
 	public Long getTipoPropuestaId() {
 		return tipoPropuestaId;
 	}
@@ -368,7 +360,53 @@ public class IdeasProyectos implements Serializable{
 		this.estatus = estatus;
 	}
 
+	public String getContactoEmail() {
+		return contactoEmail;
+	}
 
+	public void setContactoEmail(String contactoEmail) {
+		this.contactoEmail = contactoEmail;
+	}
+
+	public String getContactoTelefono() {
+		return contactoTelefono;
+	}
+
+	public void setContactoTelefono(String contactoTelefono) {
+		this.contactoTelefono = contactoTelefono;
+	}
+
+	public Date getFechaRadicacion() {
+		return fechaRadicacion;
+	}
+
+	public void setFechaRadicacion(Date fechaRadicacion) {
+		this.fechaRadicacion = fechaRadicacion;
+	}
+
+	public String getObjetivoGeneral() {
+		return objetivoGeneral;
+	}
+
+	public void setObjetivoGeneral(String objetivoGeneral) {
+		this.objetivoGeneral = objetivoGeneral;
+	}
+
+	public String getDuracionTotal() {
+		return duracionTotal;
+	}
+
+	public void setDuracionTotal(String duracionTotal) {
+		this.duracionTotal = duracionTotal;
+	}
+
+	public EvaluacionIdeas getEvaluacion() {
+		return evaluacion;
+	}
+
+	public void setEvaluacion(EvaluacionIdeas evaluacion) {
+		this.evaluacion = evaluacion;
+	}
 
 	private static final long serialVersionUID = 1L;
 	
