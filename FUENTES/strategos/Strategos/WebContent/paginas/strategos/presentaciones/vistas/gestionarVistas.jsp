@@ -26,8 +26,9 @@
 	}
 
 	function nuevaVista() 
-	{
-		window.location.href='<html:rewrite action="/presentaciones/vistas/crearVista" />';
+	{		
+		//abrirVentanaModal('<html:rewrite action="/presentaciones/vistas/crearVista" />', "VistaAdd", 580, 330);
+		window.location.href = '<html:rewrite action="/presentaciones/vistas/crearVista" />';
 	}
 
 	function modificarVista() 
@@ -37,10 +38,12 @@
 		{
 			<logic:equal name="gestionarVistasForm" property="editarForma" value="true">
 				window.location.href='<html:rewrite action="/presentaciones/vistas/modificarVista" />?vistaId=' + vistaId;
+				//abrirVentanaModal('<html:rewrite action="/presentaciones/vistas/modificarVista" />?vistaId=' + vistaId, "VistaEdit", 580, 330);
 			</logic:equal>
 			<logic:notEqual name="gestionarVistasForm" property="editarForma" value="true">
 				<logic:equal name="gestionarVistasForm" property="verForma" value="true">
-					window.location.href='<html:rewrite action="/presentaciones/vistas/verVista" />?vistaId=' + vistaId;
+					//abrirVentanaModal('<html:rewrite action="/presentaciones/vistas/verVista" />?vistaId=' + vistaId, "VistaEdit", 580, 330);
+					window.location.href ='<html:rewrite action="/presentaciones/vistas/verVista" />?vistaId=' + vistaId;
 				</logic:equal>
 			</logic:notEqual>
 		}

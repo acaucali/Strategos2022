@@ -661,13 +661,7 @@ public class EditarActividadForm extends EditarObjetoForm
     	this.unidadMedida = null;
     	this.unidadesMedida = new ArrayList<UnidadMedida>();
     	this.tipoMedicion = TipoMedicion.getTipoMedicionEnPeriodo();
-    	this.responsableCargarMetaId = null;
-    	this.responsableCargarMeta = null;
-    	this.responsableCargarEjecutadoId = null;
-    	this.responsableCargarEjecutado = null;
-    	this.responsableFijarMetaId = null;
-    	this.responsableLograrMetaId = null;
-    	this.responsableSeguimientoId = null;
+    	
     	Date ahora = new Date();
     	this.comienzoPlan = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");
     	this.finPlan = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");

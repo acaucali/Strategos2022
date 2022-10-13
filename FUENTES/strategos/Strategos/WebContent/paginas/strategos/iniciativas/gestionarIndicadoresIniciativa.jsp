@@ -17,13 +17,15 @@
 <script type="text/javascript">
 
 	function nuevoIndicadorIniciativa() 
-	{
+	{		
+		//abrirVentanaModal('<html:rewrite action="/indicadores/crearIndicador"/>?inicializar=true&claseId=<bean:write name="gestionarIndicadoresIniciativaForm" property="claseId"/>&iniciativaId=<bean:write name="gestionarIndicadoresIniciativaForm" property="iniciativaId"/>' , "IndicadoresAdd", 880, 670);
 		window.location.href = '<html:rewrite action="/indicadores/crearIndicador" />?inicializar=true&claseId=<bean:write name="gestionarIndicadoresIniciativaForm" property="claseId"/>&iniciativaId=<bean:write name="gestionarIndicadoresIniciativaForm" property="iniciativaId"/>';
 	}
 
 	function modificarIndicadorIniciativa() 
 	{
-		if (verificarElementoUnicoSeleccionMultiple(document.gestionarIndicadoresIniciativaForm.seleccionados)) 
+		if ( verificarElementoUnicoSeleccionMultiple(document.gestionarIndicadoresIniciativaForm.seleccionados)) 			
+			//abrirVentanaModal('<html:rewrite action="/indicadores/modificarIndicador"/>?claseId=<bean:write name="gestionarIndicadoresIniciativaForm" property="claseId"/>&iniciativaId=<bean:write name="gestionarIndicadoresIniciativaForm" property="iniciativaId"/>&indicadorId=' + document.gestionarIndicadoresIniciativaForm.seleccionados.value , "IndicadoresEdit", 880, 670);
 			window.location.href = '<html:rewrite action="/indicadores/modificarIndicador" />?claseId=<bean:write name="gestionarIndicadoresIniciativaForm" property="claseId"/>&iniciativaId=<bean:write name="gestionarIndicadoresIniciativaForm" property="iniciativaId"/>&indicadorId=' + document.gestionarIndicadoresIniciativaForm.seleccionados.value;
 	}
 

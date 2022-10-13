@@ -167,9 +167,6 @@ INSERT INTO afw_configuracion (PARAMETRO, VALOR) VALUES ('visorLista.visorIndica
 INSERT INTO AFW_SISTEMA (id, version, RDBMS_ID, PRODUCTO, CONEXION) VALUES (1, NULL, 'POSTGRESQL', 'PROTOTIPO', '2063<46,2451?589><=-(''#');
 UPDATE AFW_SISTEMA SET VERSION='1.0.0.2';
 
-
-UPDATE afw_sistema set actual = '8.01-210505';  
-UPDATE afw_sistema set build = 210505;
 /************************************************/
 /************************************************/
 /************************************************/
@@ -1250,5 +1247,8 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INSTRUMENTOS_ASOCIAR', 'Asociar', 'INSTRUMENTOS', 1, 8, 1, 'Asociar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INSTRUMENTOS_DESASOCIAR', 'Desasociar', 'INSTRUMENTOS', 1, 9, 1, 'Desasociar');
 
+UPDATE afw_sistema set actual = '8.01-220307';  
+UPDATE afw_sistema set build = 220307;
 
-
+UPDATE afw_permiso set permiso = 'Desasociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_DELETE';
+UPDATE afw_permiso set permiso = 'Asociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_ADD';

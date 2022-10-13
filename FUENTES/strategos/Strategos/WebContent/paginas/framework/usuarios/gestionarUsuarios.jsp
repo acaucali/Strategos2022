@@ -34,13 +34,15 @@
 			
 			function nuevo() 
 			{
-				abrirVentanaModal('<sslext:rewrite action="/framework/usuarios/crearUsuario"/>', "UsuarioAdd", 450, 470);
+				//abrirVentanaModal('<sslext:rewrite action="/framework/usuarios/crearUsuario"/>', "UsuarioAdd", 780, 580);
+				window.location.href="<sslext:rewrite action='/framework/usuarios/crearUsuario' />";
 			}
 			
 			function modificar() 
 			{
 				if (verificarElementoUnicoSeleccionMultiple(document.gestionarUsuariosForm.seleccionados)) 
-					abrirVentanaModal('<sslext:rewrite action="/framework/usuarios/modificarUsuario"/>?usuarioId='+ document.gestionarUsuariosForm.seleccionados.value, "UsuarioEdit", 450, 470);
+					//abrirVentanaModal('<sslext:rewrite action="/framework/usuarios/modificarUsuario"/>?usuarioId='+ document.gestionarUsuariosForm.seleccionados.value, "UsuarioEdit", 780, 580);
+					window.location.href = '<sslext:rewrite action="/framework/usuarios/modificarUsuario"/>?usuarioId=' + document.gestionarUsuariosForm.seleccionados.value;
 			}
 			
 			function copiar() 
@@ -93,7 +95,12 @@
 			
 			function reporteUsuariosResumido() 
 			{
-				abrirReporte('<html:rewrite action="/framework/usuarios/reporteUsuariosResumido"/>', 'usuariosResumido', '750', '550');
+				var selectCondicionType = document.getElementById('selectCondicionType');
+				if (selectCondicionType != null && url != null)
+					url = '&selectCondicionType=' + selectCondicionType.value;
+				else
+					url = '?selectCondicionType=' + selectCondicionType.value;
+				abrirReporte('<html:rewrite action="/framework/usuarios/reporteUsuariosResumido"/>?selectType='+ selectCondicionType.value, 'usuariosResumido', '750', '550');
 			}
 			
 			function configurarVisorUsuarios() 
@@ -162,7 +169,7 @@
 			<html:hidden property="pagina" />
 			<html:hidden property="atributoOrden" />
 			<html:hidden property="tipoOrden" />
-			<html:hidden property="seleccionados" />
+			<html:hidden property="seleccionados" />			
 
 			<vgcinterfaz:contenedorForma idContenedor="body-usuarios">
 

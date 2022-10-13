@@ -34,6 +34,7 @@
 			function cancelar() {
 				window.document.editarEstadoAccionesForm.action = '<html:rewrite action="/estadosacciones/cancelarGuardarEstadoAcciones"/>';
 				window.document.editarEstadoAccionesForm.submit();
+				this.close();
 			}
 
 			function guardar() {

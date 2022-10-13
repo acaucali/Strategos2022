@@ -48,6 +48,7 @@
 			function cancelar() {			
 				window.document.editarUnidadMedidaForm.action = '<html:rewrite action="/unidadesmedida/cancelarGuardarUnidadMedida"/>';
 				window.document.editarUnidadMedidaForm.submit();
+				this.close();
 			}
 
 			function ejecutarPorDefecto(e) {			
@@ -66,7 +67,7 @@
 
 			<html:hidden property="unidadId" />
 
-			<vgcinterfaz:contenedorForma width="490px" height="135px">
+			<vgcinterfaz:contenedorForma width="580px" height="165px">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
@@ -81,7 +82,7 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Ficha de datos --%>
-				<table class="bordeFichaDatos" cellpadding="3" cellspacing="0" align="center" height="100%">
+				<table class="bordeFichaDatos" cellpadding="3" cellspacing="6" align="center" height="100%">
 					<%-- Campos de la Ficha de Datos --%>
 					<tr>
 						<td align="right"><vgcutil:message key="jsp.editarunidadmedida.ficha.nombre" /></td>

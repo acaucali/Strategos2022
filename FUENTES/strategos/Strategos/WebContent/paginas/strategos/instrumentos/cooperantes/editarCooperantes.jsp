@@ -31,7 +31,8 @@
 		
 			function cancelar() {				
 				window.document.editarCooperantesForm.action = '<html:rewrite action="/instrumentos/cancelarGuardarCooperante"/>';
-				window.document.editarCooperantesForm.submit();			
+				window.document.editarCooperantesForm.submit();		
+				this.close();
 			}
 		
 			function guardar() {				

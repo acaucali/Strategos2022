@@ -17,7 +17,8 @@
 <script type="text/javascript">
 
 	function nuevoIndicador() 
-	{
+	{		
+		//abrirVentanaModal('<html:rewrite action="/indicadores/crearIndicador"/>?inicializar=true', 'IndicadoresAdd', 900, 680);
 		window.location.href='<html:rewrite action="/indicadores/crearIndicador" />?inicializar=true';
 	}
 
@@ -26,8 +27,11 @@
 		if (verificarElementoUnicoSeleccionMultiple(document.gestionarIndicadoresForm.seleccionados))
 		{
 			if (modificar)
+				
+				//abrirVentanaModal('<html:rewrite action="/indicadores/modificarIndicador"/>?indicadorId=' + document.gestionarIndicadoresForm.seleccionados.value, 'IndicadoresAdd', 900, 680);
 				window.location.href='<html:rewrite action="/indicadores/modificarIndicador" />?indicadorId=' + document.gestionarIndicadoresForm.seleccionados.value;
-			else
+			else				
+				//abrirVentanaModal('<html:rewrite action="/indicadores/verIndicador"/>?indicadorId=' + document.gestionarIndicadoresForm.seleccionados.value, 'IndicadoresAdd', 900, 680);
 				window.location.href='<html:rewrite action="/indicadores/verIndicador" />?indicadorId=' + document.gestionarIndicadoresForm.seleccionados.value;
 		}
 	}

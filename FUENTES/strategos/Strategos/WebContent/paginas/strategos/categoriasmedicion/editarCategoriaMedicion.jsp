@@ -32,7 +32,8 @@
 		
 			function cancelar() {				
 				window.document.editarCategoriaMedicionForm.action = '<html:rewrite action="/categoriasmedicion/cancelarGuardarCategoriaMedicion"/>';
-				window.document.editarCategoriaMedicionForm.submit();			
+				window.document.editarCategoriaMedicionForm.submit();	
+				this.close();
 			}
 		
 			function guardar() {				
@@ -66,7 +67,7 @@
 
 			<html:hidden property="categoriaId" />
 
-			<vgcinterfaz:contenedorForma width="460px" height="110px">
+			<vgcinterfaz:contenedorForma width="560px" height="150px">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
@@ -81,12 +82,12 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Ficha de datos --%>
-				<table class="bordeFichaDatos" cellpadding="3" cellspacing="0" align="center" height="100%">
+				<table class="bordeFichaDatos" cellpadding="3" cellspacing="20" align="center" height="100%">
 
 					<%-- Campos de la Ficha de Datos --%>
 					<tr>
 						<td align="right"><vgcutil:message key="jsp.editarcategoriamedicion.ficha.nombre" /></td>
-						<td><html:text property="nombre" size="45" maxlength="50" styleClass="cuadroTexto" /></td>
+						<td><html:text property="nombre" size="60" maxlength="50" styleClass="cuadroTexto" /></td>
 					</tr>
 
 				</table>

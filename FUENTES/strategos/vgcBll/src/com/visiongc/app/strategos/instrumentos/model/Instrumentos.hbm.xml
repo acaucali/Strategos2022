@@ -31,13 +31,25 @@
 		<property name="areasCargo" type="java.lang.String" column="areas_cargo" length="500"/>
 		<property name="nombreReposnsableAreas" type="java.lang.String" column="nombre_responsable_areas" length="250"/>
 		<property name="responsableCgi" type="java.lang.String" column="responsable_cgi" length="250"/>
-		<property name="observaciones" type="java.lang.String" column="observaciones" length="2500"/>	
+		<property name="observaciones" type="java.lang.String" column="observaciones" length="2500"/>
+		<property name="claseId" type="java.lang.Long" column="clase_id" />	
+		
+		<!-- Asociación uno a uno para InstrumentoPeso -->
+		<one-to-one name="instrumentoPeso" class="com.visiongc.app.strategos.instrumentos.model.InstrumentoPeso" cascade="persist, merge, save-update, delete"></one-to-one>		
 		
 		<!-- Asociación uno a uno para Estatus -->
 		<many-to-one name="cooperante" class="com.visiongc.app.strategos.instrumentos.model.Cooperante" lazy="false" fetch="join" column="cooperante_id" unique="true" insert="false" update="false"></many-to-one>
 		
 		<!-- Asociación uno a uno para Estatus -->
 		<many-to-one name="tipoConvenio" class="com.visiongc.app.strategos.instrumentos.model.TipoConvenio" lazy="false" fetch="join" column="tipos_convenio_id" unique="true" insert="false" update="false"></many-to-one>
+		
+		<!-- Asociación uno a muchos para IniciativaIndicadores -->
+		<set name="instrumentoIndicadores" fetch="select" lazy="true" inverse="true" cascade="none">
+			<key>
+				<column name="instrumento_id" />
+			</key>
+			<one-to-many class="com.visiongc.app.strategos.instrumentos.model.IndicadorInstrumento" />
+		</set>
 		
 		
 		

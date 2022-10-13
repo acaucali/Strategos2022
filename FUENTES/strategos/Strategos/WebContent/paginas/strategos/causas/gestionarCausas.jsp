@@ -36,12 +36,12 @@
 				window.location.href='<html:rewrite action="/causas/gestionarCausas"/>?closeCausaId=' + nodoId + marcadorAncla;
 			}		
 			
-			function nuevo() {
-				window.location.href='<html:rewrite action="/causas/crearCausa" />';							
+			function nuevo() {				
+				abrirVentanaModal('<html:rewrite action="/causas/crearCausa"/>', "CausaAdd", 680, 370);
 			}
 	
-			function modificar() {
-				window.location.href='<html:rewrite action="/causas/modificarCausa" />?causaId=<bean:write name="causa" property="causaId" scope="session" />';
+			function modificar() {				
+				abrirVentanaModal('<html:rewrite action="/causas/modificarCausa"/>?causaId=<bean:write name="causa" property="causaId" scope="session" />', "CausaEdit", 680, 370);
 			}
 	
 			function eliminar() {

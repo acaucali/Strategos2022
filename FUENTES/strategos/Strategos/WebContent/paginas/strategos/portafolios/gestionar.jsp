@@ -17,7 +17,7 @@
 
 	function nuevo() 
 	{
-		abrirVentanaModal('<html:rewrite action="/portafolios/crearPortafolio" />', "Portafolio", 460, 240);
+		abrirVentanaModal('<html:rewrite action="/portafolios/crearPortafolio" />', "Portafolio", 660, 440);
 	}
 
 	function modificar() 
@@ -28,7 +28,7 @@
 			return;
 		}
 		var id = document.gestionarPortafoliosForm.seleccionadoId.value;
-		abrirVentanaModal('<html:rewrite action="/portafolios/modificarPortafolio" />?id=' + id, "Portafolio", 460, 240);
+		abrirVentanaModal('<html:rewrite action="/portafolios/modificarPortafolio" />?id=' + id, "Portafolio", 660, 440);
 	}
 
 	function eliminar(categoriaId) 

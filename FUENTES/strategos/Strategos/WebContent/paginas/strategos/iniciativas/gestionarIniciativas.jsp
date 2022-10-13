@@ -30,7 +30,8 @@
 			<logic:notEmpty name="gestionarIniciativasForm" property="instrumentoId">
 				url = url + "&instrumentoId=" + document.gestionarIniciativasForm.instrumentoId.value;
 			</logic:notEmpty>
-		</logic:equal>	
+		</logic:equal>					
+		//abrirVentanaModal('<html:rewrite action="/iniciativas/crearIniciativa"/>' + url , "IniciativaAdd", 1080, 800);
 		window.location.href = '<html:rewrite action="/iniciativas/crearIniciativa" />' + url;
 	}
 
@@ -49,11 +50,13 @@
 			</logic:notEmpty>
 		</logic:equal>
 		
-		<logic:equal name="gestionarIniciativasForm" property="editarForma" value="true">
+		<logic:equal name="gestionarIniciativasForm" property="editarForma" value="true">					
+			//abrirVentanaModal('<html:rewrite action="/iniciativas/modificarIniciativa"/>?iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value + url, "IniciativaEdit", 1080, 800);
 			window.location.href='<html:rewrite action="/iniciativas/modificarIniciativa" />?iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value + url;
 		</logic:equal>
 		<logic:notEqual name="gestionarIniciativasForm" property="editarForma" value="true">
-			<logic:equal name="gestionarIniciativasForm" property="verForma" value="true">
+			<logic:equal name="gestionarIniciativasForm" property="verForma" value="true">				
+				//abrirVentanaModal('<html:rewrite action="/iniciativas/verIniciativa"/>?iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value + url, "IniciativaEdit", 1080, 800);
 				window.location.href='<html:rewrite action="/iniciativas/verIniciativa" />?iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value + url;
 			</logic:equal>
 		</logic:notEqual>
@@ -451,8 +454,9 @@
 		abrirVentanaModal('<html:rewrite action="/iniciativas/protegerLiberar"/>' + nombreForma + nombreCampoOculto + funcionCierre + parametros, 'protegerLiberarIniciativa', '750', '560');
 	}
 	
-	 function onProtegerLiberarIniciativas()
+	 function generarReporteDatosBasicos()
 	 {
+		 abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/datosBasicos" />', "Iniciativa", 520, 460);
 	 }
 	
 	
@@ -576,6 +580,7 @@
 							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
 							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
 							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
 							<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 								
@@ -648,12 +653,13 @@
 					</vgcinterfaz:barraHerramientasBoton>
 				</logic:equal>
 				<logic:equal name="gestionarIniciativasForm" property="source" value="instrumentos">
-					<vgcinterfaz:barraHerramientasBoton permisoId="PORTAFOLIO_INICIATIVA_ADD" nombreImagen="asociar" pathImagenes="/componentes/barraHerramientas/" nombre="vincularIniciativa" onclick="javascript:asociarInstrumento();">
+							
+					<vgcinterfaz:barraHerramientasBoton permisoId="INSTRUMENTOS_INICIATIVA_ADD" nombreImagen="asociar" pathImagenes="/componentes/barraHerramientas/" nombre="vincularIniciativa" onclick="javascript:asociarInstrumento();">							
 						<vgcinterfaz:barraHerramientasBotonTitulo>
 							<vgcutil:message key="menu.edicion.asociar" />
 						</vgcinterfaz:barraHerramientasBotonTitulo>
-					</vgcinterfaz:barraHerramientasBoton>
-					<vgcinterfaz:barraHerramientasBoton permisoId="PORTAFOLIO_INICIATIVA_DELETE" nombreImagen="desasociar" pathImagenes="/componentes/barraHerramientas/" nombre="desvincularIniciativa" onclick="javascript:desasociarInstrumento();">
+					</vgcinterfaz:barraHerramientasBoton>					
+					<vgcinterfaz:barraHerramientasBoton permisoId="INSTRUMENTOS_INICIATIVA_DELETE" nombreImagen="desasociar" pathImagenes="/componentes/barraHerramientas/" nombre="desvincularIniciativa" onclick="javascript:desasociarInstrumento();">
 						<vgcinterfaz:barraHerramientasBotonTitulo>
 							<vgcutil:message key="menu.edicion.desasociar" />
 						</vgcinterfaz:barraHerramientasBotonTitulo>

@@ -24,8 +24,8 @@
 		<script type="text/javascript">
 
 			function nuevo() 
-			{
-				window.location.href='<html:rewrite action="/categoriasmedicion/crearCategoriaMedicion" />';
+			{				
+				abrirVentanaModal('<html:rewrite action="/categoriasmedicion/crearCategoriaMedicion"/>', "CategoriaMedicionAdd", 600, 370);
 			}
 	
 			function modificar(categoriaId) 
@@ -35,8 +35,8 @@
 					alert('<vgcutil:message key="jsp.seleccionar.noseleccion" />');
 					return;
 				}
-				var categoriaId = document.gestionarCategoriasMedicionForm.seleccionados.value;
-				window.location.href='<html:rewrite action="/categoriasmedicion/modificarCategoriaMedicion" />?categoriaId=' + categoriaId;
+				var categoriaId = document.gestionarCategoriasMedicionForm.seleccionados.value;				
+				abrirVentanaModal('<html:rewrite action="/categoriasmedicion/modificarCategoriaMedicion"/>?categoriaId=' + categoriaId, "CategoriaMedicionEdit", 600, 370);
 			}
 	
 			function eliminar(categoriaId) 

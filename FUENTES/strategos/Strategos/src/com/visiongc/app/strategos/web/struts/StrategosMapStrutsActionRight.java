@@ -325,15 +325,19 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    
 	    //instrumentos
 	        
-	       
+	    actionRight = new StrutsActionRight("instrumentos.calcularindicadores", false, false, "INSTRUMENTOS_CALCULAR");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.calcularindicadoresejecucion", false, false, "INSTRUMENTOS_CALCULAR");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+		
 	    actionRight = new StrutsActionRight("instrumentos.gestionarinstrumentosiniciativas", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarinstrumentosiniciativas", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.gestionarinstrumentosindicadoresiniciativas", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarinstrumentosindicadoresiniciativas", actionRight);
 	    
-	    actionRight = new StrutsActionRight("instrumentos.asociariniciativa", false, false, "INSTRUMENTOS");
+	    actionRight = new StrutsActionRight("instrumentos.asociariniciativa", false, false, "INSTRUMENTOS_INICIATIVA_ADD");
 	    this.mapa.put("instrumentos.asociariniciativa", actionRight);
-	    actionRight = new StrutsActionRight("instrumentos.desasociariniciativa", false, false, "INSTRUMENTOS");
+	    actionRight = new StrutsActionRight("instrumentos.desasociariniciativa", false, false, "INSTRUMENTOS_INICIATIVA_DELETE");
 	    this.mapa.put("instrumentos.desasociariniciativa", actionRight);
 	    
 	    actionRight = new StrutsActionRight("instrumentos.gestionarinstrumentos", false, false, "INSTRUMENTOS");
@@ -357,6 +361,12 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("instrumentos.reporteinstrumentodetallexls", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteinstrumentodetallexls", actionRight);
 	    
+	    actionRight = new StrutsActionRight("instrumentos.reporteproyectosasociados", false, false, "INSTRUMENTOS");
+	    this.mapa.put("instrumentos.reporteproyectosasociados", actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.reporteproyectosasociadospdf", false, false, "INSTRUMENTOS");
+	    this.mapa.put("instrumentos.reporteproyectosasociadospdf", actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.reporteproyectosasociadosxls", false, false, "INSTRUMENTOS");
+	    this.mapa.put("instrumentos.reporteproyectosasociadosxls", actionRight);
 	
 	    
 	    actionRight = new StrutsActionRight("instrumentos.crearconvenio", false, false, "INSTRUMENTOS");
@@ -402,6 +412,13 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("instrumentos.reportebasicopdf", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.seleccionarorganizacion", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.seleccionarorganizacion", actionRight);
+	    
+	    actionRight = new StrutsActionRight("instrumentos.asignarpesos", false, false, "INSTRUMENTOS_ASIGNARPESOS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.asignarpesosinstrumentos", false, false, "INSTRUMENTOS_ASIGNARPESOS");
+	    this.mapa.put("instrumentos.asignarpesosinstrumentos", actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.asignarpesosinstrumentosparametros", false, false, "INSTRUMENTOS_ASIGNARPESOS");
+	    this.mapa.put("instrumentos.asignarpesosinstrumentosparametros", actionRight);
 	   	    
 	    // mediciones
 	    actionRight = new StrutsActionRight("mediciones.configuraredicionmediciones", false, true, "INDICADOR_MEDICION");
@@ -1230,6 +1247,14 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportes.iniciativas.reporteiniciativaxls", actionRight);	    
 	    
 	    
+	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicos", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicospdf", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicosxls", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    	  
+	    
 	    actionRight = new StrutsActionRight("reportes.portafolios.detalle", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.portafolios.detalleejecucionpdf", false, false, "PORTAFOLIO_VISTA");
@@ -1243,7 +1268,10 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("reportes.portafolios.resumidaejecucionxls", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put("reportes.portafolios.resumidaejecucionxls", actionRight);	
 	    
-	    
+	    actionRight = new StrutsActionRight("reportes.explicaciones.instrumentos.ejecucionpdf", false, false, "EXPLICACIONES_VISTA");
+	    this.mapa.put("reportes.explicaciones.instrumentos.ejecucionpdf", actionRight);
+	    actionRight = new StrutsActionRight("reportes.explicaciones.instrumentos.ejecucionxls", false, false, "EXPLICACIONES_VISTA");
+	    this.mapa.put("reportes.explicaciones.instrumentos.ejecucionxls", actionRight);	
 	    
 	    // Grafico
 	    actionRight = new StrutsActionRight("graficos.cancelarasistentegrafico", false, true, "INDICADOR_EVALUAR_GRAFICO");
@@ -1353,7 +1381,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
   			} 
   			catch (Exception e) 
   			{
-  				throw new ChainedRuntimeException("El mapeo de acciones a permisos no está configurado correctamente.", e);
+  				throw new ChainedRuntimeException("El mapeo de acciones a permisos no estï¿½ configurado correctamente.", e);
   			}
   		}
 

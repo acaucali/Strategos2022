@@ -70,6 +70,23 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private Boolean desdeInstrumento;
 	private Long instrumentoId;
 	
+	//Campos nuevos
+	private String responsableProyecto;	
+	private String cargoResponsable;
+	private String organizacionesInvolucradas;
+	private String objetivoEstrategico;
+	private String fuenteFinanciacion;
+	private String montoFinanciamiento;
+	private String iniciativaEstrategica;
+	private String liderIniciativa;
+	private String tipoIniciativa;
+	private String poblacionBeneficiada;
+	private String contexto;
+	private String definicionProblema;
+	private String alcance;
+	private String objetivoGeneral;
+	private String objetivoEspecificos;
+	
 		
     public Long getInstrumentoId() {
 		return instrumentoId;
@@ -516,6 +533,127 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	public void setDesdeInstrumento(Boolean desdeInstrumento) {
 		this.desdeInstrumento = desdeInstrumento;
 	}
+	
+	public String getResponsableProyecto() {
+		return responsableProyecto;
+	}
+
+	public void setResponsableProyecto(String responsableProyecto) {
+		this.responsableProyecto = responsableProyecto;
+	}
+
+	public String getCargoResponsable() {
+		return cargoResponsable;
+	}
+
+	public void setCargoResponsable(String cargoResponsable) {
+		this.cargoResponsable = cargoResponsable;
+	}
+
+	public String getOrganizacionesInvolucradas() {
+		return organizacionesInvolucradas;
+	}
+
+	public void setOrganizacionesInvolucradas(String organizacionesInvolucradas) {
+		this.organizacionesInvolucradas = organizacionesInvolucradas;
+	}
+
+	public String getObjetivoEstrategico() {
+		return objetivoEstrategico;
+	}
+
+	public void setObjetivoEstrategico(String objetivoEstrategico) {
+		this.objetivoEstrategico = objetivoEstrategico;
+	}
+
+	public String getFuenteFinanciacion() {
+		return fuenteFinanciacion;
+	}
+
+	public void setFuenteFinanciacion(String fuenteFinanciacion) {
+		this.fuenteFinanciacion = fuenteFinanciacion;
+	}
+
+	public String getMontoFinanciamiento() {
+		return montoFinanciamiento;
+	}
+
+	public void setMontoFinanciamiento(String montoFinanciamiento) {
+		this.montoFinanciamiento = montoFinanciamiento;
+	}
+
+	public String getIniciativaEstrategica() {
+		return iniciativaEstrategica;
+	}
+
+	public void setIniciativaEstrategica(String iniciativaEstrategica) {
+		this.iniciativaEstrategica = iniciativaEstrategica;
+	}
+
+	public String getLiderIniciativa() {
+		return liderIniciativa;
+	}
+
+	public void setLiderIniciativa(String liderIniciativa) {
+		this.liderIniciativa = liderIniciativa;
+	}
+
+	public String getTipoIniciativa() {
+		return tipoIniciativa;
+	}
+
+	public void setTipoIniciativa(String tipoIniciativa) {
+		this.tipoIniciativa = tipoIniciativa;
+	}
+
+	public String getPoblacionBeneficiada() {
+		return poblacionBeneficiada;
+	}
+
+	public void setPoblacionBeneficiada(String poblacionBeneficiada) {
+		this.poblacionBeneficiada = poblacionBeneficiada;
+	}
+
+	public String getContexto() {
+		return contexto;
+	}
+
+	public void setContexto(String contexto) {
+		this.contexto = contexto;
+	}
+
+	public String getDefinicionProblema() {
+		return definicionProblema;
+	}
+
+	public void setDefinicionProblema(String definicionProblema) {
+		this.definicionProblema = definicionProblema;
+	}
+
+	public String getAlcance() {
+		return alcance;
+	}
+
+	public void setAlcance(String alcance) {
+		this.alcance = alcance;
+	}
+
+	public String getObjetivoGeneral() {
+		return objetivoGeneral;
+	}
+
+	public void setObjetivoGeneral(String objetivoGeneral) {
+		this.objetivoGeneral = objetivoGeneral;
+	}
+
+	public String getObjetivoEspecificos() {
+		return objetivoEspecificos;
+	}
+
+	public void setObjetivoEspecificos(String objetivoEspecificos) {
+		this.objetivoEspecificos = objetivoEspecificos;
+	}
+
 
 	public void clear()
 	{
@@ -564,6 +702,22 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.porcentajeCompletado = null;
 		this.desdeInstrumento = false;
 		
+		this.responsableProyecto = null;
+		this.cargoResponsable = null;
+		this.organizacionesInvolucradas = null;
+		this.objetivoEstrategico = null;
+		this.fuenteFinanciacion = null;
+		this.montoFinanciamiento = null;
+		this.iniciativaEstrategica = null;
+		this.liderIniciativa = null;
+		this.tipoIniciativa = null;
+		this.poblacionBeneficiada = null;
+		this.contexto = null;
+		this.definicionProblema = null;
+		this.alcance = null;
+		this.objetivoGeneral = null;
+		this.objetivoEspecificos = null;
+				
 		this.seriesIndicador = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries() + SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();    
 	}
 }

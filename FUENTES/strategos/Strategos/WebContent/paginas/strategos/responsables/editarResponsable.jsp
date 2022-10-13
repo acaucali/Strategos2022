@@ -49,6 +49,7 @@
 			function cancelar() {
 				window.document.editarResponsableForm.action = '<html:rewrite action="/responsables/cancelarGuardarResponsable"/>';
 				window.document.editarResponsableForm.submit();
+				this.close();
 			}
 
 			function ejecutarPorDefecto(e) {
@@ -90,7 +91,7 @@
 			<html:hidden property="responsableId" />
 			<html:hidden property="usuarioId" />
 
-			<vgcinterfaz:contenedorForma width="510px" height="350px">
+			<vgcinterfaz:contenedorForma width="650px" height="420px">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
@@ -105,7 +106,7 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Ficha de datos --%>
-				<table class="bordeFichaDatos" cellpadding="3" cellspacing="0" align="center" height="100%" border="0">
+				<table class="bordeFichaDatos" cellpadding="3" cellspacing="8" align="center" height="100%" border="0">
 
 					<%-- Campos de la Ficha de Datos --%>
 					<tr>

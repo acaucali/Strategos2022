@@ -102,6 +102,8 @@ public class EditarPerspectivaAction extends VgcAction
 				editarPerspectivaForm.setNombre(perspectiva.getNombre());
 				editarPerspectivaForm.setDescripcion(perspectiva.getDescripcion());
 				editarPerspectivaForm.setFrecuencia(perspectiva.getFrecuencia());
+				
+				System.out.print("\n\nFrecuencia : " + perspectiva.getFrecuencia());
 				editarPerspectivaForm.setTipo(perspectiva.getTipo());
 				editarPerspectivaForm.setTipoCalculo(perspectiva.getTipoCalculo());
 				editarPerspectivaForm.setPadreId(perspectiva.getPadreId());
@@ -139,6 +141,7 @@ public class EditarPerspectivaAction extends VgcAction
 			strategosIndicadoresService.close();
 
 			editarPerspectivaForm.clear();
+			editarPerspectivaForm.setFrecuencia((byte) 3);
 			Perspectiva padre = (Perspectiva)request.getSession().getAttribute("perspectiva");
 			editarPerspectivaForm.setPadreId(padre.getPerspectivaId());
 

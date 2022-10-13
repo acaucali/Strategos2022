@@ -228,13 +228,20 @@
 			else 
 				return false;
 		}
-
+		
+		let identificadorTiempoDeEspera;
+		
+		function cerrarModal(){				
+			this.close();
+			window.location.reload();
+		}
+		
 		function guardar() 
 		{
 			if (validar(document.editarUsuarioForm))
 			{
 				activarBloqueoEspera();
-				document.editarUsuarioForm.submit();
+				document.editarUsuarioForm.submit();				
 			}
 		}
 		
@@ -913,7 +920,7 @@
 			<html:hidden property="reutilizacionContrasena" />
 			<input type="hidden" name="tipoContraIngresada" value="" >
 
-			<vgcinterfaz:contenedorForma width="670px" height="460px">
+			<vgcinterfaz:contenedorForma width="750px" height="480px">
 
 				<vgcinterfaz:contenedorFormaTitulo>
 					<logic:equal name="editarUsuarioForm" property="usuarioId" value="0">
@@ -929,13 +936,13 @@
 					</logic:notEqual>
 				</vgcinterfaz:contenedorFormaTitulo>
 
-				<vgcinterfaz:contenedorPaneles height="350px" width="625px" nombre="panelesEditarUsuario">
+				<vgcinterfaz:contenedorPaneles height="320px" width="735px" nombre="panelesEditarUsuario">
 
 					<vgcinterfaz:panelContenedor anchoPestana="100px" nombre="panelDatosBasicos">
 						<vgcinterfaz:panelContenedorTitulo>Datos Básicos</vgcinterfaz:panelContenedorTitulo>
 
 						<%-- Ficha de datos --%>
-						<table class="bordeFichaDatos" cellpadding="3" cellspacing="0" align="center" height="100%" border="0">
+						<table class="bordeFichaDatos" cellpadding="3" cellspacing="8" align="center" height="100%" border="0">
 
 							<tr>
 								<td align="right"><vgcutil:message key="jsp.framework.editarusuario.label.uid" /></td>

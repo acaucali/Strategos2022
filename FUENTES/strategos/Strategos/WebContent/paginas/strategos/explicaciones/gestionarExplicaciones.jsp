@@ -136,6 +136,16 @@
 				else
 					abrirReporte('<html:rewrite action="/explicaciones/generarReporteExplicacionesXls"/>' + url);
 			}
+			
+			function reporteExplicacionesInstrumentoPdf() 
+			{
+				abrirReporte('<html:rewrite action="/reportes/explicaciones/instrumentos/ejecucionPdf"/>?instrumentoId=' + document.gestionarExplicacionesForm.objetoId.value, 'explicacionesInstrumento', '1050', '850');
+			}
+			
+			function reporteExplicacionesInstrumentoExcel() 
+			{
+				window.location.href='<html:rewrite action="/reportes/explicaciones/instrumentos/ejecucionXls"/>?instrumentoId=' + document.gestionarExplicacionesForm.objetoId.value;	
+			}
 
 		</script>
 
@@ -343,6 +353,23 @@
 								<vgcutil:message key="menu.edicion.propiedades" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
+						
+						<logic:equal name="gestionarExplicacionesForm" property="desdeInstrumento" value="true">
+							<vgcinterfaz:barraHerramientasBoton nombreImagen="pdf" pathImagenes="/componentes/barraHerramientas/" nombre="pdfResumido" onclick="javascript:reporteExplicacionesInstrumentoPdf();">
+								<vgcinterfaz:barraHerramientasBotonTitulo>
+									<vgcutil:message key="menu.archivo.presentacionpreliminar.resumida" />
+								</vgcinterfaz:barraHerramientasBotonTitulo>
+							</vgcinterfaz:barraHerramientasBoton>
+							
+							<vgcinterfaz:barraHerramientasBoton nombreImagen="exportar"
+								pathImagenes="/componentes/barraHerramientas/" nombre="exportar"
+								onclick="javascript:reporteExplicacionesInstrumentoExcel();">
+								<vgcinterfaz:barraHerramientasBotonTitulo>
+									<vgcutil:message key="boton.exportar.usuarios.reportes.excel" />
+								</vgcinterfaz:barraHerramientasBotonTitulo>
+							</vgcinterfaz:barraHerramientasBoton>
+						</logic:equal>
+											
 					</vgcinterfaz:barraHerramientas>
 
 				</vgcinterfaz:contenedorFormaBarraGenerica>

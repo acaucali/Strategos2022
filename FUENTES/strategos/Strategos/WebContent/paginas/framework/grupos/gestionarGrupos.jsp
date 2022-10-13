@@ -23,13 +23,15 @@
 		<script type="text/javascript">
 
 			function nuevo() 
-			{
+			{				
+				//abrirVentanaModal('<sslext:rewrite action="/framework/grupos/crearGrupo"/>', "GrupoAdd", 750, 570);
 				window.location.href="<sslext:rewrite action='/framework/grupos/crearGrupo'/>";
 			}
 			
 			function modificar() 
 			{
-				if (verificarElementoUnicoSeleccionMultiple(document.gestionarGruposForm.seleccionados)) 
+				if (verificarElementoUnicoSeleccionMultiple(document.gestionarGruposForm.seleccionados)) 					
+					//abrirVentanaModal('<sslext:rewrite action="/framework/grupos/modificarGrupo"/>?grupoId=' + document.gestionarGruposForm.seleccionados.value, "GrupoEdit", 750, 570);
 					window.location.href="<sslext:rewrite action='/framework/grupos/modificarGrupo'/>?grupoId=" + document.gestionarGruposForm.seleccionados.value;
 			}
 			

@@ -23,20 +23,23 @@
 	var _selectHitoricoTypeIndex = 1;
 
 	function nuevaIniciativa() 
-	{
-		window.location.href='<html:rewrite action="/iniciativas/crearIniciativa" />?planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
+	{		
+		abrirVentanaModal('<html:rewrite action="/iniciativas/crearIniciativa"/>?planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />', "IniciativaAdd", 1080, 800);
+		window.location.href = '<html:rewrite action="/iniciativas/crearIniciativa"/>?planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
 	}
 
 	function modificarIniciativa() 
 	{
 		if (verificarElementoUnicoSeleccionMultiple(document.gestionarIniciativasPlanForm.seleccionados))
 		{
-			<logic:equal name="gestionarIniciativasPlanForm" property="editarForma" value="true">
-				window.location.href='<html:rewrite action="/iniciativas/modificarIniciativa" />?iniciativaId=' + document.gestionarIniciativasPlanForm.seleccionados.value + '&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
+			<logic:equal name="gestionarIniciativasPlanForm" property="editarForma" value="true">				
+				//abrirVentanaModal('<html:rewrite action="/iniciativas/modificarIniciativa"/>?iniciativaId=' + document.gestionarIniciativasPlanForm.seleccionados.value + '&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />', "IniciativaEdit", 1080, 800);
+				window.location.href = '<html:rewrite action="/iniciativas/modificarIniciativa"/>?iniciativaId=' + document.gestionarIniciativasPlanForm.seleccionados.value + '&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
 			</logic:equal>
 			<logic:notEqual name="gestionarIniciativasPlanForm" property="editarForma" value="true">
-				<logic:equal name="gestionarIniciativasPlanForm" property="verForma" value="true">
-					window.location.href='<html:rewrite action="/iniciativas/verIniciativa" />?iniciativaId=' + document.gestionarIniciativasPlanForm.seleccionados.value + '&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
+				<logic:equal name="gestionarIniciativasPlanForm" property="verForma" value="true">					
+					//abrirVentanaModal('<html:rewrite action="/iniciativas/verIniciativa"/>?iniciativaId=' + document.gestionarIniciativasPlanForm.seleccionados.value + '&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />', "IniciativaEdit", 1080, 800);
+					window.location.href = '<html:rewrite action="/iniciativas/verIniciativa"/>?iniciativaId=' + document.gestionarIniciativasPlanForm.seleccionados.value + '&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
 				</logic:equal>
 			</logic:notEqual>
 		}

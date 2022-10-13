@@ -92,7 +92,7 @@
 
 			<html:hidden property="id" />
 			
-			<vgcinterfaz:contenedorForma width="420px" height="230px" bodyAlign="center" bodyValign="middle" scrolling="none">
+			<vgcinterfaz:contenedorForma width="500px" height="330px" bodyAlign="center" bodyValign="middle" scrolling="none">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::
@@ -107,18 +107,18 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Ficha de datos --%>
-				<table class="bordeFichaDatos fichaDatostablaGeneral">
+				<table class="bordeFichaDatos fichaDatostablaGeneral" cellpadding="4" cellspacing="10" border="0" >
 					<%-- Campos de la Ficha de Datos --%>
 					<tr>
-						<td align="left" width="180px">
+						<td align="left" width="120px">
 							<vgcutil:message key="jsp.editarportafolio.ficha.nombre" />
 						</td>
-						<td colspan="3">
+						<td align="left" colspan="3">
 							<html:text property="nombre" size="44" maxlength="50" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" styleClass="cuadroTexto" />
 						</td>
 					</tr>
 					<tr>
-						<td align="left" width="180px">&nbsp;</td>
+						<td align="left" width="80px">&nbsp;</td>
 						<td colspan="3">
 							<div>
 								<table style="border-spacing: 0px; padding: 0px; width: 324px; border-style:solid; border-width:1px; border-color:#666666; font-family:Verdana; font-size:11; color:#666666; text-decoration:none;">
@@ -138,10 +138,10 @@
 					
 					<!-- Ancho y Alto -->
 					<tr>
-						<td align="left" width="180px">&nbsp;</td>
+						<td align="left" width="80px">&nbsp;</td>
 						<td colspan="3">
 							<div>
-								<table style="border-spacing: 0px; padding: 0px; width: 324px; border-style:solid; border-width:1px; border-color:#666666; font-family:Verdana; font-size:11; color:#666666; text-decoration:none;">
+								<table style="border-spacing: 3px; padding: 6px; width: 324px; border-style:solid; border-width:1px; border-color:#666666; font-family:Verdana; font-size:11; color:#666666; text-decoration:none;">
 									<tr>
 										<td colspan="2">
 											<b><vgcutil:message key="jsp.editarportafolio.ficha.celdas.tamano" /></b>
@@ -209,7 +209,7 @@
 
 					<!-- Campo frecuencia -->
 					<tr>
-						<td align="right" width="180px"><vgcutil:message key="jsp.editarportafolio.ficha.frecuencia" /></td>
+						<td align="left" width="80px"><vgcutil:message key="jsp.editarportafolio.ficha.frecuencia" /></td>
 						<td colspan="3" align="left">
 							<html:select property="frecuencia" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" styleClass="cuadroTexto" size="1">
 								<html:option value=""></html:option>

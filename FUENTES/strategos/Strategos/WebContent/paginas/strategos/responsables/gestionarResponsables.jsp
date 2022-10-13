@@ -23,8 +23,8 @@
 		<%-- Funciones JavaScript locales de la página Jsp --%>
 		<script type="text/javascript">	
 		
-			function nuevo() {
-				window.location.href='<html:rewrite action="/responsables/crearResponsable" />';
+			function nuevo() {				
+				abrirVentanaModal('<html:rewrite action="/responsables/crearResponsable"/>', "ResponsableAdd", 750, 530);
 			}
 	
 			function modificar() {
@@ -32,8 +32,8 @@
 					alert('<vgcutil:message key="jsp.seleccionar.noseleccion" />');
 					return;
 				}			
-				var responsableId = document.gestionarResponsablesForm.seleccionados.value;
-				window.location.href='<html:rewrite action="/responsables/modificarResponsable" />?responsableId=' + responsableId;
+				var responsableId = document.gestionarResponsablesForm.seleccionados.value;			
+				abrirVentanaModal('<html:rewrite action="/responsables/modificarResponsable"/>?responsableId=' + responsableId, "ResponsableEdit", 750, 530);
 			}
 	        
 	        function asociar() {

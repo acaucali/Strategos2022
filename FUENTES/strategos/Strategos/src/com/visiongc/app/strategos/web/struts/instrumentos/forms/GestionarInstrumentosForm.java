@@ -35,6 +35,11 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 	private List<TipoConvenio> convenios;
 	private List<Cooperante> cooperantes;
 	
+	private String claseId;
+	private String indicadorId;		
+	private String source;
+	private Double peso;
+	private String indicadorAnioId;
 	
 	
 	
@@ -174,6 +179,37 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 		this.cooperantes = cooperantes;
 	}
 
+	public String getClaseId() 
+	{
+		return this.claseId;
+	}
+
+	public void setClaseId(String claseId) 
+	{
+		this.claseId = claseId;
+	}
+
+	public String getIndicadorId() 
+	{
+		return this.indicadorId;
+	}
+
+	public void setIndicadorId(String indicadorId) 
+	{
+		this.indicadorId = indicadorId;
+	}
+  			
+
+	
+	public String getSource() 
+	{
+		return this.source;
+	}
+
+	public void setSource(String source) 
+	{
+		this.source = source;
+	}
 	public void clear() 
 	{
 		this.respuesta = "";
@@ -190,9 +226,30 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 		this.estatus = null;
 		this.nombreCorto = null;
 		
+		this.claseId = null;
+		this.indicadorId =  null;		
+		this.source = null;
+		
+		
 		FiltroForm filtro = new FiltroForm();
 		filtro.setCondicion(CondicionType.getFiltroCondicionActivo());
 		filtro.setNombre(null);
 		this.setFiltro(filtro);
+	}
+
+	public Double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Double peso) {
+		this.peso = peso;
+	}
+
+	public String getIndicadorAnioId() {
+		return this.indicadorAnioId;
+	}
+
+	public void setIndicadorAnioId(String indicadorAnioId) {
+		this.indicadorAnioId = indicadorAnioId;
 	}
 }

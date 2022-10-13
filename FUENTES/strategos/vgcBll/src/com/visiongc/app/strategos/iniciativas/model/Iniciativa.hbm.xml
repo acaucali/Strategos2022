@@ -37,7 +37,24 @@
 		<property name="tipoMedicion" type="java.lang.Byte" column="tipo_medicion" />
 		<property name="historicoDate" type="java.util.Date" column="historico_date" />
 		<property name="estatusId" type="java.lang.Long" column="estatusId" />
-		<property name="tipoId" type="java.lang.Long" column="tipoId" />
+		<property name="tipoId" type="java.lang.Long" column="tipoId" />		
+		
+		<!-- Campos nuevos -->
+		<property name="responsableProyecto" type="java.lang.String" column="responsable_proyecto" length="150" />
+		<property name="cargoResponsable" type="java.lang.String" column="cargo_responsable" length="50" />
+		<property name="organizacionesInvolucradas" type="java.lang.String" column="organizaciones_involucradas" length="250" />
+		<property name="objetivoEstrategico" type="java.lang.String" column="objetivo_estrategico" length="250" />
+		<property name="fuenteFinanciacion" type="java.lang.String" column="fuente_financiacion" length="50" />
+		<property name="montoFinanciamiento" type="java.lang.String" column="monto_financiamiento" length="50" />
+		<property name="iniciativaEstrategica" type="java.lang.String" column="iniciativa_estrategica" length="150" />
+		<property name="liderIniciativa" type="java.lang.String" column="lider_iniciativa" length="150" />
+		<property name="tipoIniciativa" type="java.lang.String" column="tipo_iniciativa" length="150" />
+		<property name="poblacionBeneficiada" type="java.lang.String" column="poblacion_beneficiada" length="450" />
+		<property name="contexto" type="java.lang.String" column="contexto" length="450" />
+		<property name="definicionProblema" type="java.lang.String" column="definicion_problema" length="450" />
+		<property name="alcance" type="java.lang.String" column="alcance" length="450" />
+		<property name="objetivoGeneral" type="java.lang.String" column="objetivo_general" length="450" />
+		<property name="objetivoEspecificos" type="java.lang.String" column="objetivos_especificos" length="450" />
 
 		<!-- Asociación uno a uno para organizacion -->
 		<many-to-one name="organizacion" class="com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos" column="organizacion_id" unique="true" insert="false" update="false"></many-to-one>

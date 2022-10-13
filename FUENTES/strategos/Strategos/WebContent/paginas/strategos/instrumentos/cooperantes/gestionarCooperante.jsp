@@ -24,8 +24,8 @@
 			var _selectCondicionTypeIndex = 1;
 			var _altoPrefijoListo = false;
 		
-			function nuevoCooperante(){
-				window.location.href='<html:rewrite action="/instrumentos/crearCooperante" />';
+			function nuevoCooperante(){				
+				abrirVentanaModal('<html:rewrite action="/instrumentos/crearCooperante" />',"CooperanteAdd", 530, 380);				
 			}
 			
 			function modificarCooperante(cooperanteId) 
@@ -36,7 +36,8 @@
 					return;
 				}
 				var cooperanteId = document.gestionarCooperantesForm.seleccionados.value;
-				window.location.href='<html:rewrite action="/instrumentos/modificarCooperante" />?cooperanteId=' + cooperanteId;
+				abrirVentanaModal('<html:rewrite action="/instrumentos/modificarCooperante" />?cooperanteId=' + cooperanteId , "CooperanteEdit", 530, 380);
+				
 			}
 	
 			function eliminarCooperante(cooperanteId) 

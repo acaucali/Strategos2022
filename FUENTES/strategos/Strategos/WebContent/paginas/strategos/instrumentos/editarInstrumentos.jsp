@@ -38,11 +38,12 @@
 		
 			function cancelar() {				
 				window.document.editarInstrumentosForm.action = '<html:rewrite action="/instrumentos/cancelarGuardarInstrumento"/>';
-				window.document.editarInstrumentosForm.submit();			
+				window.document.editarInstrumentosForm.submit();					
 			}
 		
 			function guardar() {				
 				if (validar(document.editarInstrumentosForm)) {
+					console.log(document.editarInstrumentosForm.anio.value);
 					window.document.editarInstrumentosForm.submit();					
 				}	
 			}

@@ -303,7 +303,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 		try
 		{
 			o = session.get(clazz, id);
-		} 
+		}
 		catch (HibernateException e) 
 		{
 			o = null;
@@ -325,7 +325,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 	}
 
 	public int insert(Object objeto, Usuario usuario) 
-	{
+	{			
 		try 
 		{
 			if (objeto instanceof Collection) 
@@ -1169,9 +1169,8 @@ public class VgcHibernateSession implements VgcPersistenceSession
 	 * 
 	 *  (10/04/2012)
 	 */
-	public boolean existsObject(Object objeto, String fieldNames[], Object fieldValues[]) {
+	public boolean existsObject(Object objeto, String fieldNames[], Object fieldValues[]) {			
 		return existsObject(objeto, fieldNames, fieldValues, null, null);
-
 	}
 
 	/**
@@ -1179,25 +1178,24 @@ public class VgcHibernateSession implements VgcPersistenceSession
 	 * 
 	 *  (10/04/2012)
 	 */
-	public boolean existsObject(Object objeto, String fieldNames[], Object fieldValues[], String idFieldNames[], Object idFieldValues[]) {
-
+	public boolean existsObject(Object objeto, String fieldNames[], Object fieldValues[], String idFieldNames[], Object idFieldValues[]) {		
 		String sql = "select count(*) from " + objeto.getClass().getName();
 		boolean caseSensitive = FrameworkConfiguration.getInstance().getBoolean("com.visiongc.framework.persistence.save.casesensitive");
 
 		sql = sql + " where ";
-		for (int i = 0; i < fieldNames.length; i++) {
-			if (fieldValues[i] == null) {
+		for (int i = 0; i < fieldNames.length; i++) {			
+			if (fieldValues[i] == null) {				
 				sql = sql + fieldNames[i] + " is null and ";
-			} else if (fieldValues[i].getClass().getName().equals("java.lang.String")) {
+			} else if (fieldValues[i].getClass().getName().equals("java.lang.String")) {				
 				if (caseSensitive) {
 					sql = sql + fieldNames[i] + "=? and ";
 				} else {
 					sql = sql + "lower(" + fieldNames[i] + ")=? and ";
-				}
-			} else {
+				}				
+			} else {				
 				sql = sql + fieldNames[i] + "=? and ";
-			}
-		}
+			}			
+		}		
 		if (idFieldNames == null) {
 			sql = sql.substring(0, sql.length() - 5);
 		} else {
@@ -1216,20 +1214,20 @@ public class VgcHibernateSession implements VgcPersistenceSession
 				}
 			}
 			sql = sql.substring(0, sql.length() - 5) + ")";
-		}
+		}		
 
-		Query consulta = session.createQuery(sql);
-		int ajuste = 0;
+		Query consulta = session.createQuery(sql);		
+		int ajuste = 0;		
 		for (int i = 0; i < fieldValues.length; i++) {
-			if (fieldValues[i] != null) {
+			if (fieldValues[i] != null) {				
 				if (fieldValues[i].getClass().getName().equals("java.lang.String")) {
 					if (caseSensitive) {
 						consulta.setString(i + ajuste, ((String) fieldValues[i]));
 					} else {
 						consulta.setString(i + ajuste, ((String) fieldValues[i]).toLowerCase());
 					}
-				} else if (fieldValues[i].getClass().getName().equals("java.lang.Long")) {
-					consulta.setLong(i + ajuste, ((Long) fieldValues[i]).longValue());
+				} else if (fieldValues[i].getClass().getName().equals("java.lang.Long")) {					
+					consulta.setLong(i + ajuste, ((Long) fieldValues[i]).longValue());					
 				} else if (fieldValues[i].getClass().getName().equals("java.lang.Byte")) {
 					consulta.setByte(i + ajuste, ((Byte) fieldValues[i]).byteValue());
 				} else if (fieldValues[i].getClass().getName().equals("java.util.Date")) {
@@ -1242,7 +1240,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			} else {
 				ajuste--;
 			}
-		}
+		}		
 		if (idFieldNames != null) {
 			ajuste = ajuste + fieldValues.length;
 			for (int i = 0; i < idFieldValues.length; i++) {
@@ -1269,7 +1267,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 				}
 			}
 
-		}
+		}		
 
 		Object total = consulta.list().get(0);
 
@@ -1549,13 +1547,13 @@ public class VgcHibernateSession implements VgcPersistenceSession
 		switch(tipoEvento) {
 		
 		case 1:
-			evento = "inserción";
+			evento = "inserciï¿½n";
 			break;
 		case 2:
-			evento = "actualización";
+			evento = "actualizaciï¿½n";
 			break;
 		case 3:
-			evento = "eliminación";
+			evento = "eliminaciï¿½n";
 			break;
 		case 4:
 			evento = "login";
@@ -1802,7 +1800,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Iniciativa Id"+ ":"+ iniciativa.getIniciativaId()+",";
 			cadena+="Nombre"+ ":"+ iniciativa.getNombre()+",";
 			cadena+="Descripcion"+ ":"+ iniciativa.getDescripcion()+",";
-			cadena+="Año Formulacion"+ ":"+ iniciativa.getAnioFormulacion()+",";
+			cadena+="Aï¿½o Formulacion"+ ":"+ iniciativa.getAnioFormulacion()+",";
 			cadena+="Alerta"+ ":"+ iniciativa.getAlerta()+",";
 			cadena+="Alerta Zona Amarilla"+ ":"+ iniciativa.getAlertaZonaAmarilla()+",";
 			cadena+="Alerta Zona Verde"+ ":"+ iniciativa.getAlertaZonaVerde()+",";
@@ -1838,7 +1836,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="{";
 			cadena+="Clase Id"+ ":"+ claseInd.getClaseId()+",";
 			cadena+="Nombre"+ ":"+ claseInd.getNombre()+",";
-			cadena+="Descripción"+ ":"+ claseInd.getDescripcion()+",";
+			cadena+="Descripciï¿½n"+ ":"+ claseInd.getDescripcion()+",";
 			cadena+="Enlace Parcial"+ ":"+ claseInd.getEnlaceParcial()+",";
 			cadena+="Nivel"+ ":"+ claseInd.getNivel()+",";
 			cadena+="Tipo"+ ":"+ claseInd.getTipo()+",";
@@ -1870,7 +1868,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			Meta meta = (Meta) objeto; 
 			
 			cadena+="{";
-			cadena+="Año"+ ":"+ meta.getMetaId().getAno()+",";
+			cadena+="Aï¿½o"+ ":"+ meta.getMetaId().getAno()+",";
 			cadena+="Periodo"+ ":"+ meta.getMetaId().getPeriodo()+",";
 			cadena+="Indicador Id"+ ":"+ meta.getMetaId().getIndicadorId()+",";
 			cadena+="Plan Id"+ ":"+ meta.getMetaId().getPlanId()+",";
@@ -1892,7 +1890,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Nombre"+ ":"+ perspectiva.getNombre()+",";
 			cadena+="Titulo"+ ":"+ perspectiva.getTitulo()+",";
 			cadena+="Descripcion"+ ":"+ perspectiva.getDescripcion()+",";
-			cadena+="Año"+ ":"+ perspectiva.getAno()+",";
+			cadena+="Aï¿½o"+ ":"+ perspectiva.getAno()+",";
 			cadena+="Alerta Anual"+ ":"+ perspectiva.getAlertaAnual()+",";
 			cadena+="Alerta Parcial"+ ":"+ perspectiva.getAlertaParcial()+",";
 			cadena+="Clase Id"+ ":"+ perspectiva.getClaseId()+",";
@@ -1924,8 +1922,8 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Nombre"+ ":"+ plan.getNombre()+",";
 			cadena+="Activo"+ ":"+ plan.getActivo()+",";
 			cadena+="Alerta"+ ":"+ plan.getAlerta()+",";
-			cadena+="Año Inicial"+ ":"+ plan.getAnoInicial()+",";
-			cadena+="Año Final"+ ":"+ plan.getAnoFinal()+",";
+			cadena+="Aï¿½o Inicial"+ ":"+ plan.getAnoInicial()+",";
+			cadena+="Aï¿½o Final"+ ":"+ plan.getAnoFinal()+",";
 			if(plan.getClase() != null) {
 				cadena+="Clase Nombre"+ ":"+ plan.getClase().getNombre()+",";
 			}
@@ -1934,10 +1932,10 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Metodologia Id"+ ":"+ plan.getMetodologiaId()+",";
 			cadena+="Fecha Ultima Medicion"+ ":"+ plan.getFechaUltimaMedicion()+",";
 			
-			cadena+="Organización Id"+ ":"+ plan.getOrganizacionId()+",";
+			cadena+="Organizaciï¿½n Id"+ ":"+ plan.getOrganizacionId()+",";
 			
 			if(plan.getOrganizacion() != null) {
-				cadena+="Nombre Organización"+ ":"+ plan.getOrganizacion().getNombre()+",";
+				cadena+="Nombre Organizaciï¿½n"+ ":"+ plan.getOrganizacion().getNombre()+",";
 			}
 			
 			cadena+="Padre Id"+ ":"+ plan.getPadreId()+",";
@@ -1978,7 +1976,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			Explicacion explicacion = (Explicacion) objeto; 
 			
 			cadena+="{";
-			cadena+="Explicación Id"+ ":"+ explicacion.getExplicacionId()+",";
+			cadena+="Explicaciï¿½n Id"+ ":"+ explicacion.getExplicacionId()+",";
 			cadena+="Titulo"+ ":"+ explicacion.getTitulo()+",";
 			cadena+="Tipo"+ ":"+ explicacion.getTipo()+",";
 			cadena+="Numero Adjuntos"+ ":"+ explicacion.getNumeroAdjuntos()+",";
@@ -1990,7 +1988,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			
 			if(explicacion.getUsuarioCreado() != null) {
 				cadena+=","; 
-				cadena+="Usuario Creación"+ ":"+ explicacion.getUsuarioCreado();
+				cadena+="Usuario Creaciï¿½n"+ ":"+ explicacion.getUsuarioCreado();
 			}
 			
 			cadena+="}";
@@ -2002,9 +2000,9 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			
 			cadena+="{";
 			cadena+="Adjunto Id"+ ":"+ adjunto.getPk().getAdjuntoId()+",";
-			cadena+="Explicación Id"+ ":"+ adjunto.getPk().getExplicacionId()+","; 
+			cadena+="Explicaciï¿½n Id"+ ":"+ adjunto.getPk().getExplicacionId()+","; 
 			if(adjunto.getExplicacion() != null) {
-				cadena+="Titulo Explicación"+ ":"+ adjunto.getExplicacion().getTitulo()+","; 
+				cadena+="Titulo Explicaciï¿½n"+ ":"+ adjunto.getExplicacion().getTitulo()+","; 
 			}
 			
 			cadena+="Titulo Archivo"+ ":"+ adjunto.getRuta()+","; 
@@ -2017,7 +2015,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			MemoExplicacion memo = (MemoExplicacion) objeto; 
 			
 			cadena+="{";
-			cadena+="Explicación Id"+ ":"+ memo.getPk().getExplicacionId()+",";
+			cadena+="Explicaciï¿½n Id"+ ":"+ memo.getPk().getExplicacionId()+",";
 			
 			if(memo.getExplicacion() != null) {
 				cadena+="Titulo"+ ":"+ memo.getExplicacion().getTitulo()+",";
@@ -2079,7 +2077,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Bloqueado"+ ":"+ usuario.getBloqueado()+",";
 			cadena+="Deshabilitado"+ ":"+ usuario.getDeshabilitado()+",";
 			cadena+="Estatus"+ ":"+ usuario.getEstatus()+",";
-			cadena+="Forzar Cambiar Contraseña"+ ":"+ usuario.getForzarCambiarpwd()+",";
+			cadena+="Forzar Cambiar Contraseï¿½a"+ ":"+ usuario.getForzarCambiarpwd()+",";
 			cadena+="Administrador"+ ":"+ usuario.getIsAdmin()+",";
 			cadena+="Instancia"+ ":"+ usuario.getInstancia()+",";
 			cadena+="Password"+ ":"+ usuario.getPwd()+",";
@@ -2087,7 +2085,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Sistema"+ ":"+ usuario.getIsSystem()+",";
 			cadena+="Fecha Creado"+ ":"+ usuario.getCreado()+",";
 			cadena+="Fecha Modificado"+ ":"+ usuario.getModificado()+",";
-			cadena+="Fecha Modificación Password"+ ":"+ usuario.getUltimaModifPwd();
+			cadena+="Fecha Modificaciï¿½n Password"+ ":"+ usuario.getUltimaModifPwd();
 			
 			cadena+="}";
 			
@@ -2134,7 +2132,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="{";
 			cadena+="Indicador Id"+ ":"+ indicadorEst.getPk().getIndicadorId()+",";
 			cadena+="Plan Id"+ ":"+ indicadorEst.getPk().getPlanId()+",";
-			cadena+="Año"+ ":"+ indicadorEst.getPk().getAno()+",";
+			cadena+="Aï¿½o"+ ":"+ indicadorEst.getPk().getAno()+",";
 			cadena+="Periodo"+ ":"+ indicadorEst.getPk().getPeriodo()+",";
 			cadena+="Tipo"+ ":"+ indicadorEst.getPk().getTipo()+",";
 			cadena+="Estado"+ ":"+ indicadorEst.getEstado();
@@ -2152,7 +2150,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Plan Id"+ ":"+ indicadorPlan.getPk().getPlanId()+",";
 			cadena+="Crecimiento"+ ":"+ indicadorPlan.getCrecimiento()+",";
 			cadena+="Peso"+ ":"+ indicadorPlan.getPeso()+",";
-			cadena+="Tipo Medición"+ ":"+ indicadorPlan.getTipoMedicion();
+			cadena+="Tipo Mediciï¿½n"+ ":"+ indicadorPlan.getTipoMedicion();
 			if(indicadorPlan.getIndicador() != null) {
 				cadena+=",";
 				cadena+="Nombre Indicador"+ ":"+ indicadorPlan.getIndicador().getNombre();
@@ -2176,7 +2174,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			
 			if(grafico.getOrganizacion() != null) {
 				cadena+=",";
-				cadena+="Nombre Organización"+ ":"+ grafico.getOrganizacion().getNombre();
+				cadena+="Nombre Organizaciï¿½n"+ ":"+ grafico.getOrganizacion().getNombre();
 			}
 			if(grafico.getUsuario() != null) {
 				cadena+=",";
@@ -2194,14 +2192,14 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="{";
 			cadena+="Reporte Id"+ ":"+ reporte.getReporteId()+","; 
 			cadena+="Nombre"+ ":"+ reporte.getNombre()+",";
-			cadena+="Descripción"+ ":"+ reporte.getDescripcion()+",";
+			cadena+="Descripciï¿½n"+ ":"+ reporte.getDescripcion()+",";
 			cadena+="Corte"+ ":"+ reporte.getCorte()+",";
 			cadena+="Publico"+ ":"+ reporte.getPublico()+",";
 			cadena+="Tipo"+ ":"+ reporte.getTipo();
 			
 			if(reporte.getOrganizacion() != null) {
 				cadena+=",";
-				cadena+="Nombre Organización"+ ":"+ reporte.getOrganizacion().getNombre();
+				cadena+="Nombre Organizaciï¿½n"+ ":"+ reporte.getOrganizacion().getNombre();
 			}
 			if(reporte.getUsuario() != null) {
 				cadena+=",";
@@ -2219,7 +2217,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="{";
 			cadena+="Plantilla Planes Id"+ ":"+ plantillaPlanes.getPlantillaPlanesId()+","; 
 			cadena+="Nombre"+ ":"+ plantillaPlanes.getNombre()+","; 
-			cadena+="Descripción"+ ":"+ plantillaPlanes.getDescripcion()+","; 
+			cadena+="Descripciï¿½n"+ ":"+ plantillaPlanes.getDescripcion()+","; 
 			cadena+="Tipo"+ ":"+ plantillaPlanes.getTipo()+","; 
 			cadena+="Nombre Iniciativas Singular"+ ":"+ plantillaPlanes.getNombreIniciativaSingular()+","; 
 			cadena+="Nombre Actividad Singular"+ ":"+ plantillaPlanes.getNombreActividadSingular()+","; 
@@ -2240,13 +2238,13 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			cadena+="Comienzo"+ ":"+ proyecto.getComienzo() +",";
 			cadena+="Comienzo Plan"+ ":"+ proyecto.getComienzoPlan() +",";
 			cadena+="Comienzo Real"+ ":"+ proyecto.getComienzoReal() +",";
-			cadena+="Duración Plan"+ ":"+ proyecto.getDuracionPlan() +",";
-			cadena+="Duración Real"+ ":"+ proyecto.getDuracionReal() +",";
+			cadena+="Duraciï¿½n Plan"+ ":"+ proyecto.getDuracionPlan() +",";
+			cadena+="Duraciï¿½n Real"+ ":"+ proyecto.getDuracionReal() +",";
 			cadena+="Fin Plan"+ ":"+ proyecto.getFinPlan() +",";
 			cadena+="Fin Real"+ ":"+ proyecto.getFinReal() +",";
-			cadena+="Variación Comienzo"+ ":"+ proyecto.getVariacionComienzo() +",";
-			cadena+="Variación Duración"+ ":"+ proyecto.getVariacionDuracion() +",";
-			cadena+="Variación Fin"+ ":"+ proyecto.getVariacionFin() +",";
+			cadena+="Variaciï¿½n Comienzo"+ ":"+ proyecto.getVariacionComienzo() +",";
+			cadena+="Variaciï¿½n Duraciï¿½n"+ ":"+ proyecto.getVariacionDuracion() +",";
+			cadena+="Variaciï¿½n Fin"+ ":"+ proyecto.getVariacionFin() +",";
 			cadena+="Fecha Creado"+ ":"+ proyecto.getCreado() +",";
 			cadena+="Fecha Modificado"+ ":"+ proyecto.getModificado();
 			cadena+="}";

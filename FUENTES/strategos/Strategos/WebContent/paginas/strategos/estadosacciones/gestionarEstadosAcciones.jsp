@@ -23,8 +23,8 @@
 		<%-- Funciones JavaScript locales de la página Jsp --%>
 		<script type="text/javascript">
 
-		function nuevo() {
-			window.location.href='<html:rewrite action="/estadosacciones/crearEstadoAcciones" />';
+		function nuevo() {			
+			abrirVentanaModal('<html:rewrite action="/estadosacciones/crearEstadoAcciones"/>', "EstadosAccionesAdd", 450, 470);
 		}
 
 		function modificar() {
@@ -32,8 +32,8 @@
 					alert('<vgcutil:message key="jsp.seleccionar.noseleccion" />');
 					return;
 				}			
-			var estadoId = document.gestionarEstadosAccionesForm.seleccionados.value;
-			window.location.href='<html:rewrite action="/estadosacciones/modificarEstadoAcciones" />?estadoId=' + estadoId;
+			var estadoId = document.gestionarEstadosAccionesForm.seleccionados.value;			
+			abrirVentanaModal('<html:rewrite action="/estadosacciones/modificarEstadoAcciones"/>?estadoId=' + estadoId, "EstadosAccionesAdd", 450, 470);
 		}
 
 		function eliminar() {

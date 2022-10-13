@@ -106,6 +106,7 @@
 			{
 				window.document.editarPlanForm.action = '<html:rewrite action="/planes/cancelarGuardarPlan"/>';
 				window.document.editarPlanForm.submit();
+				this.close();
 			}
 			
 			function ejecutarPorDefecto(e) 

@@ -10,13 +10,20 @@ import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
-
+import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
+import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.instrumentos.model.Cooperante;
+import com.visiongc.app.strategos.instrumentos.model.InstrumentoIniciativa;
+import com.visiongc.app.strategos.instrumentos.model.InstrumentoPeso;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
 import com.visiongc.app.strategos.instrumentos.persistence.StrategosCooperantesPersistenceSession;
 import com.visiongc.app.strategos.instrumentos.persistence.StrategosInstrumentosPersistenceSession;
+import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.persistence.hibernate.StrategosHibernateSession;
+import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
+import com.visiongc.commons.util.ListaMap;
 import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.framework.model.Usuario;
 
 
 public class StrategosInstrumentosHibernateSession extends StrategosHibernateSession implements StrategosInstrumentosPersistenceSession{
@@ -137,4 +144,140 @@ public class StrategosInstrumentosHibernateSession extends StrategosHibernateSes
 	    
 	    return paginaLista;
 	  }
+	
+	public List<InstrumentoIniciativa> getIniciativasInstrumento(Long instrumentoId) {
+		Query consulta = session.createQuery("select instrumentoIniciativa from InstrumentoIniciativa instrumentoIniciativa where instrumentoIniciativa.pk.instrumentoId = :instrumentoId");
+		consulta.setLong("instrumentoId", instrumentoId.longValue());
+		
+		return consulta.list();
+	}
+	
+	public List<InstrumentoPeso> getInstrumentoPeso(String anio){
+		Query consulta = session.createQuery("select instrumentoPeso from InstrumentoPeso instrumentoPeso where instrumentoPeso.anio = :anio");
+		consulta.setString("anio", anio);
+		
+		return consulta.list();
+	}
+
+	public int updatePesos(InstrumentoIniciativa instrumentoIniciativa, Usuario Usuario) {
+		
+		String sql = "update InstrumentoIniciativa instrumentoIniciativa set instrumentoIniciativa.peso = :peso ";
+		String sqlNulo = "update InstrumentoIniciativa instrumentoIniciativa set instrumentoIniciativa.peso = null ";
+		
+		String sqlWhere = "where instrumentoIniciativa.pk.instrumentoId = :instrumentoId";
+		sqlWhere = sqlWhere + " and instrumentoIniciativa.pk.iniciativaId = :iniciativaId";
+		
+		Query update = null;
+		if(instrumentoIniciativa.getPeso() != null) {
+			update = session.createQuery(sql + sqlWhere);
+		}else {
+			update = session.createQuery(sqlNulo + sqlWhere);
+		}
+		update.setLong("instrumentoId", instrumentoIniciativa.getPk().getInstrumentoId().longValue());
+		update.setLong("iniciativaId", instrumentoIniciativa.getPk().getIniciativaId().longValue());
+		
+		if(instrumentoIniciativa.getPeso() != null) {
+			update.setDouble("peso", instrumentoIniciativa.getPeso().doubleValue());
+		}
+		
+		int actualizados = update.executeUpdate();
+				
+		
+		return actualizados != 0 ? 10000 : 10001;
+	}
+	
+	public int updatePesosInstrumentos(InstrumentoPeso instrumentoPeso, Usuario ususario) {
+		String sql = "update InstrumentoPeso instrumentoPeso set instrumentoPeso.peso = :peso ";
+		String sqlNulo = "update InstrumentoPeso instrumentoPeso set instrumentoPeso.peso = null ";
+		
+		String sqlWhere = "where instrumentoPeso.instrumentoId = :instrumentoId";
+		
+		Query update = null;
+		if(instrumentoPeso.getPeso() != null) {			
+			update = session.createQuery(sql +sqlWhere);			
+		}else {
+			update = session.createQuery(sqlNulo + sqlWhere);
+		}
+		update.setLong("instrumentoId", instrumentoPeso.getInstrumentoId().longValue());
+		
+		if(instrumentoPeso.getPeso() != null) { 			
+			update.setDouble("peso", instrumentoPeso.getPeso().doubleValue());
+		}
+		
+		int actualizados = update.executeUpdate();
+		
+		return actualizados != 0 ? 10000 : 10001;
+	}
+
+	
+	public Instrumentos getValoresOriginales(Long instrumentoId) {
+		
+		Instrumentos instrumento = null;
+		
+		String hqlQuery = "select instrumentoId from Instrumentos instrumento where instrumento.instrumentoId = :instrumentoId";
+		
+		List<Long> resultado = session.createQuery(hqlQuery).setLong("instrumentoId", instrumentoId.longValue()).list();
+		if(resultado.size() > 0) {
+			instrumento = new Instrumentos();
+			
+			Long valores = (Long)resultado.get(0);
+			
+			instrumento.setFrecuencia(Frecuencia.getFrecuenciaTrimestral());
+		}
+		
+		return instrumento;
+	}
+	
+	public Instrumentos getInstrumentoByIndicador(long indicadorId) {
+		
+		String sql = "select nre Instrumentos(instrumento.instrumentoId) from Instrumentos instrumento, IndicadorInstrumento indicadorInstrumento where instrumento.instrumentoId = indicadorInstrumento.pk.instrumentoId and indicadorInstrumento.pk.indicadorId=:indicadorId";
+		
+		Query consulta = session.createQuery(sql);
+		consulta.setLong("indicadorId", indicadorId);
+		
+		Instrumentos instrumento = (Instrumentos)consulta.uniqueResult();
+		
+		if(instrumento != null) {
+			return (Instrumentos)load(Instrumentos.class, new Long(instrumento.getInstrumentoId().longValue()));
+		}
+		
+		return null;
+	}		
+	
+	public ListaMap getDependenciasCiclicasInstrumento(Instrumentos instrumento)
+	  {
+	    ListaMap dependenciasCiclicas = new ListaMap();
+	    
+	    Criteria consulta = null;	    
+	    if (instrumento.getClaseId() != null)
+	    {
+	      consulta = session.createCriteria(ClaseIndicadores.class);
+	      consulta.add(Restrictions.eq("claseId", instrumento.getClaseId()));
+	      List clases = consulta.list();
+	      dependenciasCiclicas.add(clases, "clases");
+	    }
+	    
+	    return dependenciasCiclicas;
+	  }
+	
+	public ListaMap getDependenciasInstrumento(Instrumentos instrumento)
+	  {
+	    ListaMap dependencias = new ListaMap();	    
+	    
+	    Criteria consulta = null;
+	    	    	    
+	    
+	    consulta = session.createCriteria(PryActividad.class);
+	    consulta.add(Restrictions.eq("objetoAsociadoId", instrumento.getInstrumentoId()));
+	    List objetosAsociados = consulta.list();
+	    dependencias.add(objetosAsociados, "objetosAsociados");
+	    
+	    consulta = session.createCriteria(PryActividad.class);
+	    consulta.add(Restrictions.eq("proyectoId", instrumento.getInstrumentoId()));
+	    List actividades = consulta.list();
+	    dependencias.add(actividades, "actividades");
+	    
+	    return dependencias;
+	  }
+	
 }

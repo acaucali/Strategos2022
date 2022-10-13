@@ -58,7 +58,7 @@
 			function cancelar() 
 			{
 				window.document.editarPerspectivaForm.action = '<html:rewrite action="/planes/perspectivas/cancelarGuardarPerspectiva"/>';
-				window.document.editarPerspectivaForm.submit();			
+				window.document.editarPerspectivaForm.submit();					
 			}
 
 			function validar(forma) 
@@ -514,13 +514,29 @@
 								<td><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" rows="15" cols="55" property="descripcion" styleClass="cuadroTexto"/></td>
 							</tr>
 
-							<tr>
-								<%-- Fecuencia de Evaluacion --%>
-								<td align="right"><vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.frecuenciadeevaluacion" /></td>
-								<td><html:select disabled="<%= Boolean.parseBoolean(bloquearForma) %>" name="editarPerspectivaForm" property="frecuencia" styleClass="cuadroTexto">
-									<html:options collection="frecuencias" property="frecuenciaId" labelProperty="nombre"></html:options>
-								</html:select></td>
-							</tr>
+
+							<%-- Para el caso de Nuevo --%>
+							<logic:equal name="editarPerspectivaForm" property="perspectivaId" value="0">
+								<tr>
+									<%-- Fecuencia de Evaluacion --%>
+									<td align="right"><vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.frecuenciadeevaluacion" /></td>
+									<td><html:select disabled="<%= Boolean.parseBoolean(bloquearForma) %>" name="editarPerspectivaForm" property="frecuencia" styleClass="cuadroTexto">
+										<html:options collection="frecuencias" property="frecuenciaId" labelProperty="nombre"></html:options>
+									</html:select></td>
+								</tr>
+							</logic:equal>
+							<%-- Para el caso de Modificar --%>
+							<logic:notEqual name="editarPerspectivaForm" property="perspectivaId" value="0">
+								<tr>
+									<%-- Fecuencia de Evaluacion --%>
+									<td align="right"><vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.frecuenciadeevaluacion" /></td>
+									<td><html:select disabled="<%= Boolean.parseBoolean(bloquearForma) %>" name="editarPerspectivaForm" property="frecuencia" styleClass="cuadroTexto">
+										<html:options collection="frecuencias" property="frecuenciaId" labelProperty="nombre"></html:options>
+										
+									</html:select></td>
+								</tr>
+							</logic:notEqual>
+							
 
 							<bean:define id="tipoCalculoPerspectivaAutomatico">
 								<bean:write name="editarPerspectivaForm" property="tipoCalculoPerspectivaAutomatico" />

@@ -76,6 +76,23 @@ public class Iniciativa
   private String anioFormulacion;
   private TipoProyecto tipoProyecto;
   
+//Campos nuevos
+  private String responsableProyecto;
+  private String cargoResponsable;
+  private String organizacionesInvolucradas;
+  private String objetivoEstrategico;
+  private String fuenteFinanciacion;
+  private String montoFinanciamiento;
+  private String iniciativaEstrategica;
+  private String liderIniciativa;
+  private String tipoIniciativa;
+  private String poblacionBeneficiada;
+  private String contexto;
+  private String definicionProblema;
+  private String alcance;
+  private String objetivoGeneral;
+  private String objetivoEspecificos;
+  
   //estos son campos temporales, no tienen mapeo de base de datos
   private String fechaesperado;
   private int dias;
@@ -747,6 +764,126 @@ public Long getIndicadorId(Byte tipo)
     this.anioFormulacion = anio;
   }
   
+  public String getResponsableProyecto() {
+	  return responsableProyecto;
+  }
+
+  public void setResponsableProyecto(String responsableProyecto) {
+	  this.responsableProyecto = responsableProyecto;
+  }
+
+  public String getCargoResponsable() {
+	  return cargoResponsable;
+  }
+
+  public void setCargoResponsable(String cargoResponsable) {
+	  this.cargoResponsable = cargoResponsable;
+  }
+
+  public String getOrganizacionesInvolucradas() {
+	  return organizacionesInvolucradas;
+  }
+
+  public void setOrganizacionesInvolucradas(String organizacionesInvolucradas) {
+	  this.organizacionesInvolucradas = organizacionesInvolucradas;
+  }
+
+  public String getObjetivoEstrategico() {
+	  return objetivoEstrategico;
+  }
+
+  public void setObjetivoEstrategico(String objetivoEstrategico) {
+	  this.objetivoEstrategico = objetivoEstrategico;
+  }
+
+  public String getFuenteFinanciacion() {
+	  return fuenteFinanciacion;
+  }
+
+  public void setFuenteFinanciacion(String fuenteFinanciacion) {
+	  this.fuenteFinanciacion = fuenteFinanciacion;
+  }
+
+  public String getMontoFinanciamiento() {
+	  return montoFinanciamiento;
+  }
+
+  public void setMontoFinanciamiento(String montoFinanciamiento) {
+	  this.montoFinanciamiento = montoFinanciamiento;
+  }
+
+  public String getIniciativaEstrategica() {
+	  return iniciativaEstrategica;
+  }
+
+  public void setIniciativaEstrategica(String iniciativaEstrategica) {
+	  this.iniciativaEstrategica = iniciativaEstrategica;
+  }
+
+  public String getLiderIniciativa() {
+	  return liderIniciativa;
+  }
+
+  public void setLiderIniciativa(String liderIniciativa) {
+	  this.liderIniciativa = liderIniciativa;
+  }
+
+  public String getTipoIniciativa() {
+	  return tipoIniciativa;
+  }
+
+  public void setTipoIniciativa(String tipoIniciativa) {
+	  this.tipoIniciativa = tipoIniciativa;
+  }
+
+  public String getPoblacionBeneficiada() {
+	  return poblacionBeneficiada;
+  }
+
+  public void setPoblacionBeneficiada(String poblacionBeneficiada) {
+	  this.poblacionBeneficiada = poblacionBeneficiada;
+  }
+
+  public String getContexto() {
+	  return contexto;
+  }
+
+  public void setContexto(String contexto) {
+	  this.contexto = contexto;
+  }
+
+  public String getDefinicionProblema() {
+	  return definicionProblema;
+  }
+
+  public void setDefinicionProblema(String definicionProblema) {
+	  this.definicionProblema = definicionProblema;
+  }
+
+  public String getAlcance() {
+	  return alcance;
+  }
+
+  public void setAlcance(String alcance) {
+	  this.alcance = alcance;
+  }
+
+  public String getObjetivoGeneral() {
+	  return objetivoGeneral;
+  }
+
+  public void setObjetivoGeneral(String objetivoGeneral) {
+	  this.objetivoGeneral = objetivoGeneral;
+  }
+
+  public String getObjetivoEspecificos() {
+	  return objetivoEspecificos;
+  }
+  
+  public void setObjetivoEspecificos(String objetivoEspecificos) {
+	  this.objetivoEspecificos = objetivoEspecificos;
+  }
+  
   public int compareTo(Object o)
   {
     Iniciativa or = (Iniciativa)o;
@@ -792,6 +929,22 @@ public Long getIndicadorId(Byte tipo)
     iniciativaCopia.setTipoId(iniciativa.getTipoId());
     iniciativaCopia.setAnioFormulacion(iniciativa.getAnioFormulacion());
     
+    iniciativaCopia.setResponsableProyecto(iniciativa.getResponsableProyecto());
+    iniciativaCopia.setCargoResponsable(iniciativa.getCargoResponsable());
+    iniciativaCopia.setOrganizacionesInvolucradas(iniciativa.getOrganizacionesInvolucradas());
+    iniciativaCopia.setObjetivoEstrategico(iniciativa.getObjetivoEstrategico());
+    iniciativaCopia.setFuenteFinanciacion(iniciativa.getFuenteFinanciacion());
+    iniciativaCopia.setMontoFinanciamiento(iniciativa.getMontoFinanciamiento());
+    iniciativaCopia.setIniciativaEstrategica(iniciativa.getIniciativaEstrategica());
+    iniciativaCopia.setLiderIniciativa(iniciativa.getLiderIniciativa());
+    iniciativaCopia.setTipoIniciativa(iniciativa.getTipoIniciativa());
+    iniciativaCopia.setPoblacionBeneficiada(iniciativa.getPoblacionBeneficiada());
+    iniciativaCopia.setContexto(iniciativa.getContexto());
+    iniciativaCopia.setDefinicionProblema(iniciativa.getDefinicionProblema());
+    iniciativaCopia.setAlcance(iniciativa.getAlcance());
+    iniciativaCopia.setObjetivoGeneral(iniciativa.getObjetivoGeneral());
+    iniciativaCopia.setObjetivoEspecificos(iniciativa.getObjetivoEspecificos());
+    
     if (iniciativa.getMemoIniciativa() != null)
     {
       if (iniciativa.getMemoIniciativa().getDescripcion() != null) {
@@ -802,7 +955,7 @@ public Long getIndicadorId(Byte tipo)
         iniciativaCopia.getMemoIniciativa().setResultado(iniciativa.getMemoIniciativa().getResultado());
       } else {
         iniciativaCopia.getMemoIniciativa().setResultado(null);
-      }
+      }                       
     }
     iniciativaCopia.getResultadosEspecificosIniciativa().clear();
     for (Iterator<ResultadoEspecificoIniciativa> iter = iniciativa.getResultadosEspecificosIniciativa().iterator(); iter.hasNext();)
@@ -848,5 +1001,5 @@ public Long getIndicadorId(Byte tipo)
   public String toString()
   {
     return new ToStringBuilder(this).append("iniciativaId", getIniciativaId()).toString();
-  }
+  }  
 }

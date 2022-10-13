@@ -95,7 +95,7 @@ public class AsignarPesosIndicadoresPlanAction extends VgcAction
 			filtros.put("excluirTipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());
 		*/
 		
-		filtros.put("tipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());		
+		//filtros.put("tipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());		
 
 
 		List<String> orderBy = new ArrayList<String>();

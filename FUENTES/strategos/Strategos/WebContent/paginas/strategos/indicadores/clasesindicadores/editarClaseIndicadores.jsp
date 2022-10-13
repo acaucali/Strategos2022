@@ -64,6 +64,7 @@
 			{
 				window.document.editarClaseIndicadoresForm.action = '<html:rewrite action="/indicadores/clasesindicadores/cancelarClaseIndicadores"/>';
 				window.document.editarClaseIndicadoresForm.submit();
+				
 			}
 
 			<%-- Esta funcion Guarda la Clase Indicador que se esta creando si Pulso Enter --%>			
@@ -83,7 +84,7 @@
 			<html:hidden property="claseId" />
 			<html:hidden property="padreId" />
 
-			<vgcinterfaz:contenedorForma width="550px" height="230px">
+			<vgcinterfaz:contenedorForma width="600px" height="320px">
 
 				<%-- Barra Superior del "Contenedor Secundario o Forma" --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::	
@@ -100,7 +101,7 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Ficha de datos --%>
-				<table class="bordeFichaDatos" style="height: 140px; text-align:center; border-spacing:0px; border-collapse: collapse; padding: 0px;">
+				<table class="bordeFichaDatos" style="height: 240px; text-align:center; border-spacing:0px; border-collapse: collapse; padding: 0px;">
 					<%-- Este es el cuerpo de la "Ficha de Datos" --%>
 					<tr>
 						<%-- Nombre --%>
@@ -110,7 +111,7 @@
 					<tr>
 						<%-- Descripcion --%>
 						<td align="right"><vgcutil:message key="jsp.editarclaseindicadores.ficha.descripcion" /></td>
-						<td><html:textarea rows="5" cols="50" property="descripcion" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+						<td><html:textarea rows="7" cols="50" property="descripcion" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 					</tr>
 					<tr>
 						<%-- Codigo Parcial de Enlace --%>

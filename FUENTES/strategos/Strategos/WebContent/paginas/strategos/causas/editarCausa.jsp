@@ -52,6 +52,7 @@
 			{
 				window.document.editarCausaForm.action = '<html:rewrite action="/causas/cancelarGuardarCausa"/>';
 				window.document.editarCausaForm.submit();
+				this.close();
 			}
 
 			function ejecutarPorDefecto(e) 
@@ -71,7 +72,7 @@
 			<html:hidden property="causaId" />
 			<html:hidden property="padreId" />
 
-			<vgcinterfaz:contenedorForma width="540px" height="200px">
+			<vgcinterfaz:contenedorForma width="620px" height="250px">
 
 				<%-- Barra Superior del "Contenedor Secundario o Forma" --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::	
@@ -88,19 +89,19 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Ficha de datos --%>
-				<table class="bordeFichaDatos" cellpadding="3" cellspacing="0" align="center" height="100%">
+				<table class="bordeFichaDatos" cellpadding="3" cellspacing="10" align="center" height="100%">
 
 					<%-- Este es el cuerpo de la "Ficha de Datos" --%>
 					<tr>
 						<%-- Nombre --%>
 						<td align="right"><vgcutil:message key="jsp.editarcausa.ficha.nombre" /></td>
-						<td><html:text property="nombre" size="60" disabled="false" maxlength="50" styleClass="cuadroTexto" /></td>
+						<td><html:text property="nombre" size="61" disabled="false" maxlength="50" styleClass="cuadroTexto" /></td>
 					</tr>
 
 					<tr>
 						<%-- Descripcion --%>
 						<td align="right"><vgcutil:message key="jsp.editarcausa.ficha.descripcion" /></td>
-						<td><html:textarea rows="5" cols="60" property="descripcion" styleClass="cuadroTexto" /></td>
+						<td><html:textarea rows="7" cols="60" property="descripcion" styleClass="cuadroTexto" /></td>
 					</tr>
 				</table>
 

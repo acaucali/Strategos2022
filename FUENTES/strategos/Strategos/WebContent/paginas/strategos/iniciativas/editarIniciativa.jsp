@@ -36,7 +36,6 @@
 				<vgcutil:message key="menu.edicion.modificar" />&nbsp;<bean:write name="editarIniciativaForm" property="nombreIniciativaSingular" />
 			</logic:notEmpty>
 		</logic:notEqual>
-
 	</tiles:put>
 
 	<%-- Cuerpo --%>
@@ -128,6 +127,13 @@
 					return false;
 			}
 			
+			let identificadorTiempoDeEspera;
+			
+			function cerrarModal(){				
+				this.close();
+				window.location.reload();
+			}
+										
 			function guardar() 
 			{
 				<vgcinterfaz:mostrarPanelContenedorJs nombrePanel="datosBasicos" nombreContenedor="editarIniciativa"></vgcinterfaz:mostrarPanelContenedorJs>
@@ -141,7 +147,9 @@
 					armarResultadosEspecificos();
 					activarBloqueoEspera();
 					window.document.editarIniciativaForm.submit();
-				}
+								
+																				
+				}				
 			}
 			
 			function cancelar() 
@@ -287,8 +295,10 @@
 			<html:hidden property="desdeInstrumento" />
 			<html:hidden property="instrumentoId" />
 			
+			
+			
 
-			<vgcinterfaz:contenedorForma width="750px" height="510px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
+			<vgcinterfaz:contenedorForma width="1040px" height="780px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::
@@ -315,16 +325,16 @@
 
 				</vgcinterfaz:contenedorFormaTitulo>
 
-				<vgcinterfaz:contenedorPaneles height="375px" width="520px" nombre="editarIniciativa">
+				<vgcinterfaz:contenedorPaneles height="650px" width="950px" nombre="editarIniciativa">
 
 					<!-- Panel: Datos Básicos -->
 					<vgcinterfaz:panelContenedor anchoPestana="105" nombre="datosBasicos">
 						<vgcinterfaz:panelContenedorTitulo>
 							<vgcutil:message key="jsp.editariniciativa.pestana.datos.basicos" />
-						</vgcinterfaz:panelContenedorTitulo>
-						<table class="panelContenedor" cellpadding="3" cellspacing="0" border="0">
-
+						</vgcinterfaz:panelContenedorTitulo>						
+						<table class="bordeFichaDatos" cellpadding="4" cellspacing="10" border="0" >
 							<%-- Organizacion --%>
+							
 							<logic:notEqual name="editarIniciativaForm" property="desdeInstrumento" value="true">
 								<tr>
 									<td align="right"><b><vgcutil:message key="jsp.editariniciativa.ficha.organizacion" /></b></td>
@@ -338,43 +348,35 @@
 									<logic:equal name="editarIniciativaForm" property="iniciativaId" value="0">
 										<td align="right"><input type="button" style="width:40%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();"></td>
 									</logic:equal>
-									<logic:notEqual name="editarIniciativaForm" property="iniciativaId" value="0">
+									<logic:notEqual name="editarIniciativaForm" property="iniciativaId" value="0">										
 										<td colspan="3"><bean:write name="editarIniciativaForm" property="organizacionNombre" /></td>
-									</logic:notEqual>
-								</tr>
-							</logic:equal>							
+									</logic:notEqual>									
+								</tr>								
+							</logic:equal>						
 							
 							<!-- Campo Nombre -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.nombre" /></td>
-								<td colspan="3"><html:text property="nombre" onkeypress="ejecutarPorDefecto(event)" size="60" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="250" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombre, document.editarIniciativaForm.nombreLargo, 250, document.editarIniciativaForm.sincronizarNombres.checked)" /><input type="checkbox" name="sincronizarNombres" title="SincronizarNombres"></td>
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.nombre" /></td>
+								<td colspan="3"><html:text property="nombre" onkeypress="ejecutarPorDefecto(event)" size="89" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="250" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombre, document.editarIniciativaForm.nombreLargo, 250, document.editarIniciativaForm.sincronizarNombres.checked)" /><input type="checkbox" name="sincronizarNombres" title="SincronizarNombres"></td>
 							</tr>
 
 							<!-- Campo Nombre Largo -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.nombrelargo" /></td>
-								<td colspan="3"><html:text property="nombreLargo" size="60" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="300" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombreLargo, document.editarIniciativaForm.nombre, 300, document.editarIniciativaForm.sincronizarNombres.checked)" /></td>
+								<td align=""left""><vgcutil:message key="jsp.editariniciativa.ficha.nombrelargo" /></td>
+								<td colspan="3"><html:text property="nombreLargo" size="89" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="300" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombreLargo, document.editarIniciativaForm.nombre, 300, document.editarIniciativaForm.sincronizarNombres.checked)" /></td>
 							</tr>
 
 							<%-- Campo descripción --%>
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.descripcion" /></td>
-								<td colspan="3"><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="descripcion" onkeypress="ejecutarPorDefecto(event)" cols="62" rows="7" styleClass="cuadroTexto" /></td>
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.descripcion" /></td>
+								<td colspan="3"><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="descripcion" onkeypress="ejecutarPorDefecto(event)" cols="88" rows="5" styleClass="cuadroTexto" /></td>
 
 							</tr>
 							
-							<!-- Campo año formulación -->
+							<!-- Campos tipo proyecto - años formulacion -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.anioformulacion" /></td>
-								<td colspan="3" >
-									<html:text property="anioFormulacion" size="5" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="4" styleClass="cuadroTexto" />
-
-								</td>
-							</tr>
-							
-							<!-- Campo tipo proyecto -->
-							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.tipoproyecto" /></td>
+								<!-- Tipo proyecto -->
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.tipoproyecto" /></td>
 								<td>
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										<select class="cuadroCombinado" name="selectTipoProyecto" id="selectTipoProyecto" >
@@ -405,51 +407,29 @@
 										</select>
 									</logic:equal>
 								</td>
-								<td align="right">&nbsp;</td>
-								<td width="7%" align="left">&nbsp;</td>
-							</tr>
+								
+								<!-- Año formulación -->	
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.anioformulacion" /></td>
+								<td colspan="1" >
+									<html:text property="anioFormulacion" size="5" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="4" styleClass="cuadroTexto" />
 
-							<!-- Campo enteEjecutor -->
-							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.enteejecutor" /></td>
-								<td colspan="3"><html:text property="enteEjecutor" size="63" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="50" styleClass="cuadroTexto" /></td>
+								</td>
+								
 							</tr>
-
-							<!-- Campo frecuencia -->
+							
+							<!-- Campos frecuencia - estatus-->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.frecuencia" /></td>
+								
+								<!-- Frecuencia -->
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.frecuencia" /></td>
 								<td><html:select property="frecuencia" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" styleClass="cuadroTexto" size="1">
 									<html:option value=""></html:option>
 									<html:optionsCollection property="frecuencias" value="frecuenciaId" label="nombre" />
 								</html:select></td>
-
-								<td align="right">&nbsp;</td>
-								<td width="7%" align="left">&nbsp;</td>
-							</tr>
-
-							<%-- Campo Tipo de Medición --%>
-							<tr>
-								<td align="right">&nbsp;</td>
-								<td>
-									<div>
-										<table style="border-spacing: 0px; padding: 0px; width: 290px; border-style:solid; border-width:1px; border-color:#666666; font-family:Verdana; font-size:11; color:#666666; text-decoration:none;">
-											<tr>
-												<td colspan="2"><b>&nbsp;<vgcutil:message key="jsp.editariniciativa.ficha.titulo.mediciones" /></b></td>
-											</tr>
-											<tr>
-												<td><html:radio property="tipoMedicion" value="0" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.editariniciativa.ficha.tipomedicion.enperiodo" /></td>
-												<td><html:radio property="tipoMedicion" value="1" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.editariniciativa.ficha.tipomedicion.alperiodo" /></td>
-											</tr>
-										</table>
-									</div>
-								</td>
-								<td align="right">&nbsp;</td>
-								<td width="7%" align="left">&nbsp;</td>
-							</tr>
-							
-							<!-- Campo Estatus -->
-							<tr>
-								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.estatus" /></td>
+														
+								
+								<!-- Estatus -->
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.estatus" /></td>
 								<td>
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										<select class="cuadroCombinado" name="selectEstatusType" id="selectEstatusType" >
@@ -480,10 +460,124 @@
 										</select>
 									</logic:equal>
 								</td>
-								<td align="right">&nbsp;</td>
-								<td width="7%" align="left">&nbsp;</td>
 								
+							</tr>				
+							
+							<%-- Campo Tipo de Medición --%>
+							<tr align="left">							 
+    							<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.titulo.mediciones" /></td>
+    							<td>
+    								<html:radio property="tipoMedicion" value="0" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.editariniciativa.ficha.tipomedicion.enperiodo" />
+    								&nbsp;&nbsp;
+    								<html:radio property="tipoMedicion" value="1" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.editariniciativa.ficha.tipomedicion.alperiodo" />
+    							</td>																								   															
 							</tr>
+							
+							<%-- Campo Responsable proy - cargo --%>
+							<tr>
+								<!-- Responsable Proyecto -->								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.reponsableproyecto" /></td>
+								
+								<td colspan="1"><html:text property="responsableProyecto" onkeypress="ejecutarPorDefecto(event)" size="33" maxlength="150" styleClass="cuadroTexto" />
+								
+								<!-- Cargo -->
+								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.cargo" /></td>
+								<td><html:text property="cargoResponsable" onkeypress="ejecutarPorDefecto(event)" size="31" maxlength="150" styleClass="cuadroTexto" />			
+							</tr>						
+																												
+							<%-- Campo Organizaciones involucradas --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.organizacionesinvolucradas" /></td>
+								<td colspan="3"><html:textarea  property="organizacionesInvolucradas" onkeypress="ejecutarPorDefecto(event)" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+											
+							<%-- Campo Objetivo Estrategico --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.objetivoestrategico" /></td>
+								<td colspan="3"><html:textarea  property="objetivoEstrategico" onkeypress="ejecutarPorDefecto(event)" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Fuente financiacion - monto --%>
+							<tr>
+								<!-- Fuente FInanciacion -->
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.fuentefinanciacion" /></td>
+								<td colspan="1"><html:text property="fuenteFinanciacion" onkeypress="ejecutarPorDefecto(event)" size="33" maxlength="150" styleClass="cuadroTexto" />
+								
+								<!-- Monto Financiamiento -->
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.monto" /></td>
+								<td colspan="1"><html:text property="montoFinanciamiento" onkeypress="" size="31" maxlength="150" styleClass="cuadroTexto" />			
+							</tr>	
+							<!-- Campo enteEjecutor
+							<tr>
+								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.enteejecutor" /></td>
+								<td colspan="3"><html:text property="enteEjecutor" size="63" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="50" styleClass="cuadroTexto" /></td>
+							</tr>  -->
+																																								
+						</table>
+
+					</vgcinterfaz:panelContenedor>
+					
+					<!-- Panel: Datos Básicos II -->
+					<vgcinterfaz:panelContenedor anchoPestana="105" nombre="datosBasicosII">
+						<vgcinterfaz:panelContenedorTitulo>
+							<vgcutil:message key="jsp.editariniciativa.pestana.datos.basicos.dos" />
+						</vgcinterfaz:panelContenedorTitulo>
+						<table class="bordeFichaDatos" cellpadding="5" cellspacing="4" border="0">											
+																												
+							<%-- Campo Iniciativa Estrategica--%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.iniciativaestrategica" /></td>
+								<td colspan="3"><html:textarea  property="iniciativaEstrategica" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+											
+							<%-- Campo Lider Iniciativa --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.lideriniciativa" /></td>
+								<td colspan="3"><html:textarea  property="liderIniciativa" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Tipo Iniciativa --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.tipoiniciativa" /></td>
+								<td colspan="3"><html:textarea  property="tipoIniciativa" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Poblacion Beneficiada --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.poblacionbeneficiada" /></td>
+								<td colspan="3"><html:textarea  property="poblacionBeneficiada" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Contexto --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.contexto" /></td>
+								<td colspan="3"><html:textarea  property="contexto" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Definicion problema --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.definicionproblema" /></td>
+								<td colspan="3"><html:textarea  property="definicionProblema" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Alcance --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.alcance" /></td>
+								<td colspan="3"><html:textarea  property="alcance" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Objetivo General --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.objetivogeneral" /></td>
+								<td colspan="3"><html:textarea  property="objetivoGeneral" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>
+							
+							<%-- Campo Objetivos Especificos --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.objetivosespecificos" /></td>
+								<td colspan="3"><html:textarea  property="objetivoEspecificos" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>											
+																																										
 						</table>
 
 					</vgcinterfaz:panelContenedor>
@@ -493,13 +587,13 @@
 						<vgcinterfaz:panelContenedorTitulo>
 							<vgcutil:message key="jsp.editariniciativa.pestana.responsables" />
 						</vgcinterfaz:panelContenedorTitulo>
-						<table class="panelContenedor" style="height: 110px; border-spacing: 0px; padding: 3px; boder:0px; border-collapse: collapse;">
+						<table class="panelContenedor" style="height: 160px; border-spacing: 0px; padding: 3px; boder:0px; border-collapse: collapse;">
 
 							<%-- Responsable de Fijar Meta--%>
 							<tr>
 								<td style="text-align: left; width: 200px;"><vgcutil:message key="jsp.editariniciativa.ficha.responsablefijarmeta" /></td>
 								<td>
-									<html:text style="width: 250px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableFijarMeta" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
+									<html:text style="width: 600px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableFijarMeta" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										&nbsp;<img style="cursor: pointer" onclick="seleccionarResponsableFijarMeta();" src="<html:rewrite page='/componentes/fichaDatos/selector.gif'/>" border="0" width="11" height="11" title="<vgcutil:message key="jsp.editariniciativa.ficha.seleccionarresponsable.fijar.meta" />">&nbsp;<img style="cursor: pointer" onclick="limpiarResponsableFijarMeta();" src="<html:rewrite page='/componentes/calendario/eliminar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.limpiar.alt" />">
 									</logic:notEqual>
@@ -510,7 +604,7 @@
 							<tr>
 								<td style="text-align: left; width: 200px;"><vgcutil:message key="jsp.editariniciativa.ficha.responsablelograrmeta" /></td>
 								<td>
-									<html:text style="width: 250px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableLograrMeta" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
+									<html:text style="width: 600px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableLograrMeta" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										&nbsp;<img style="cursor: pointer" onclick="seleccionarResponsableLograrMeta();" src="<html:rewrite page='/componentes/fichaDatos/selector.gif'/>" border="0" width="11" height="11" title="<vgcutil:message key="jsp.editariniciativa.ficha.seleccionarresponsable.lograr.meta" />">&nbsp;<img style="cursor: pointer" onclick="limpiarResponsableLograrMeta();" src="<html:rewrite page='/componentes/calendario/eliminar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.limpiar.alt" />">
 									</logic:notEqual>
@@ -521,7 +615,7 @@
 							<tr>
 								<td style="text-align: left; width: 200px;"><vgcutil:message key="jsp.editariniciativa.ficha.responsableseguimiento" /></td>
 								<td>
-									<html:text style="width: 250px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableSeguimiento" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
+									<html:text style="width: 600px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableSeguimiento" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										&nbsp;<img style="cursor: pointer" onclick="seleccionarResponsableSeguimiento();" src="<html:rewrite page='/componentes/fichaDatos/selector.gif'/>" border="0" width="11" height="11" title="<vgcutil:message key="jsp.editariniciativa.ficha.seleccionarresponsable.seguimiento" />">&nbsp;<img style="cursor: pointer" onclick="limpiarResponsableSeguimiento();" src="<html:rewrite page='/componentes/calendario/eliminar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.limpiar.alt" />">
 									</logic:notEqual>
@@ -532,7 +626,7 @@
 							<tr>
 								<td style="text-align: left; width: 200px;"><vgcutil:message key="jsp.editariniciativa.ficha.responsablecargarmeta" /></td>
 								<td>
-									<html:text style="width: 250px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableCargarMeta" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
+									<html:text style="width: 600px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableCargarMeta" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										&nbsp;<img style="cursor: pointer" onclick="seleccionarResponsableCargarMeta();" src="<html:rewrite page='/componentes/fichaDatos/selector.gif'/>" border="0" width="11" height="11" title="<vgcutil:message key="jsp.editariniciativa.ficha.seleccionarresponsable.cargar.meta" />">&nbsp;<img style="cursor: pointer" onclick="limpiarResponsableCargarMeta();" src="<html:rewrite page='/componentes/calendario/eliminar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.limpiar.alt" />">
 									</logic:notEqual>
@@ -543,13 +637,40 @@
 							<tr>
 								<td style="text-align: left; width: 200px;"><vgcutil:message key="jsp.editariniciativa.ficha.responsablecargarejecutado" /></td>
 								<td>
-									<html:text style="width: 250px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableCargarEjecutado" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
+									<html:text style="width: 600px;" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="responsableCargarEjecutado" onkeypress="ejecutarPorDefecto(event)" size="40" readonly="true" maxlength="50" styleClass="cuadroTexto" />
 									<logic:notEqual name="editarIniciativaForm" property="bloqueado" value="true">
 										&nbsp;<img style="cursor: pointer" onclick="seleccionarResponsableCargarEjecutado();" src="<html:rewrite page='/componentes/fichaDatos/selector.gif'/>" border="0" width="11" height="11" title="<vgcutil:message key="jsp.editariniciativa.ficha.seleccionarresponsable.cargar.ejecutado" />">&nbsp;<img style="cursor: pointer" onclick="limpiarResponsableCargarEjecutado();" src="<html:rewrite page='/componentes/calendario/eliminar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.limpiar.alt" />">
 									</logic:notEqual>
 								</td>
 							</tr>
+							</table>
+							
+							<table class="bordeFichaDatos" cellpadding="8" cellspacing="5" >
+							<tr>
+								<!-- Campo resultado Global -->
+								<td valign="bottom" colspan="1"><b><vgcutil:message key="jsp.editariniciativa.ficha.resultado.global" /></b></td>								
+							</tr>
+							
+							<tr>
+								<td valign="top"><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="resultado" onkeypress="ejecutarPorDefecto(event)" cols="114" rows="10" styleClass="cuadroTexto" /></td>
+							</tr>
+
+							<tr>
+							<!-- Campo Resultado Especifico -->
+								<td valign="bottom">
+									<b><vgcutil:message key="jsp.editariniciativa.ficha.resultado.especifico" />&nbsp;&nbsp;</b>
+									<html:select disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="ano" onchange="mostrarResultadoEspecifico();" styleClass="cuadroTexto">
+									<html:optionsCollection property="grupoAnos" value="clave" label="valor" />
+									</html:select>
+								</td>
+							</tr>
+
+							<tr>								
+								<td valign="top"><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="resultadoEspecificoIniciativa" cols="114" rows="10" styleClass="cuadroTexto" onblur="guardarResultadoEspecifico();" /></td>
+							</tr>
 						</table>
+							
+						
 					</vgcinterfaz:panelContenedor>
 
 					<!-- Panel: Alertas -->
@@ -604,33 +725,7 @@
 							<area shape="rect" coords="0,0,14,11" href="#" onmouseover="upAction('botonZonaAmarilla')" onmouseout="normalAction('botonZonaAmarilla')" onmousedown="iniciarConteoContinuo('alertaZonaAmarilla');aumentoConstante()" onmouseup="finalizarConteoContinuo()" />
 							<area shape="rect" coords="0,11,14,20" href="#" onmouseover="downAction('botonZonaAmarilla')" onmouseout="normalAction('botonZonaAmarilla')" onmousedown="iniciarConteoContinuo('alertaZonaAmarilla');decrementoConstante()" onmouseup="finalizarConteoContinuo()" />
 						</map>
-					</vgcinterfaz:panelContenedor>
-
-					<!-- Panel: Complementarios -->
-					<vgcinterfaz:panelContenedor anchoPestana="170" nombre="complementarios">
-						<vgcinterfaz:panelContenedorTitulo>
-							<vgcutil:message key="jsp.editariniciativa.pestana.datos.complementarios" />
-						</vgcinterfaz:panelContenedorTitulo>
-						<table class="panelContenedor" cellpadding="2" cellspacing="0" border="0">
-							<tr>
-								<!-- Campo resultado Global -->
-								<td valign="bottom"><b><vgcutil:message key="jsp.editariniciativa.ficha.resultado.global" /></b></td>
-
-								<!-- Campo Resultado Especifico -->
-								<td valign="bottom">
-									<b><vgcutil:message key="jsp.editariniciativa.ficha.resultado.especifico" />&nbsp;&nbsp;</b>
-									<html:select disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="ano" onchange="mostrarResultadoEspecifico();" styleClass="cuadroTexto">
-									<html:optionsCollection property="grupoAnos" value="clave" label="valor" />
-									</html:select>
-								</td>
-							</tr>
-
-							<tr>
-								<td valign="top"><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="resultado" onkeypress="ejecutarPorDefecto(event)" cols="37" rows="15" styleClass="cuadroTexto" /></td>
-								<td valign="top"><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="resultadoEspecificoIniciativa" cols="37" rows="15" styleClass="cuadroTexto" onblur="guardarResultadoEspecifico();" /></td>
-							</tr>
-						</table>
-					</vgcinterfaz:panelContenedor>
+					</vgcinterfaz:panelContenedor>					
 				</vgcinterfaz:contenedorPaneles>
 
 				<!-- Barra Inferior -->

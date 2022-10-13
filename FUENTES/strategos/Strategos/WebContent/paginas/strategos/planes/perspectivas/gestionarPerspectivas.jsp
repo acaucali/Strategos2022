@@ -64,18 +64,21 @@
     }
 	
 	function nuevaPerspectiva() 
-	{
-		window.location.href='<html:rewrite action="/planes/perspectivas/crearPerspectiva" />';
+	{		
+		//abrirVentanaModal('<html:rewrite action="/planes/perspectivas/crearPerspectiva"/>', "PerspectivaAdd", 680, 460);
+		window.location.href = '<html:rewrite action="/planes/perspectivas/crearPerspectiva" />';
 	}
 	
 	function modificarPerspectiva() 
 	{
-		<logic:equal scope="session" name="editarPerspectiva" value="true">
-			window.location.href='<html:rewrite action="/planes/perspectivas/modificarPerspectiva" />?perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />';
+		<logic:equal scope="session" name="editarPerspectiva" value="true">			
+			//abrirVentanaModal('<html:rewrite action="/planes/perspectivas/modificarPerspectiva"/>?perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />', "PerspectivaEdit", 680, 460);
+			window.location.href = '<html:rewrite action="/planes/perspectivas/modificarPerspectiva" />?perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />';
 		</logic:equal>
 		<logic:notEqual scope="session" name="editarPerspectiva" value="true">
-			<logic:equal scope="session" name="verPerspectiva" value="true">
-				window.location.href='<html:rewrite action="/planes/perspectivas/verPerspectiva" />?perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />';
+			<logic:equal scope="session" name="verPerspectiva" value="true">				
+				abrirVentanaModal('<html:rewrite action="/planes/perspectivas/verPerspectiva"/>?perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />', "PerspectivaEdit", 680, 460);
+				window.location.href = '<html:rewrite action="/planes/perspectivas/verPerspectiva"/>?perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />';
 			</logic:equal>
 		</logic:notEqual>
 	}
@@ -83,12 +86,12 @@
 	function modificarPlan() 
 	{	
 		var planId = '<bean:write name="gestionarPlanForm" property="planId" />';
-		<logic:equal scope="session" name="editarPlan" value="true">
-			window.location.href='<html:rewrite action="/planes/modificarPlan" />?planId=' + planId;
+		<logic:equal scope="session" name="editarPlan" value="true">			
+			abrirVentanaModal('<html:rewrite action="/planes/modificarPlan"/>?planId=' + planId, "PlanEdit", 450, 470);
 		</logic:equal>
 		<logic:notEqual scope="session" name="editarPlan" value="true">
-			<logic:equal scope="session" name="verPlan" value="true">
-				window.location.href='<html:rewrite action="/planes/verPlan" />?planId=' + planId;
+			<logic:equal scope="session" name="verPlan" value="true">				
+				abrirVentanaModal('<html:rewrite action="/planes/verPlan"/>?planId='+ planId, "PlanEdit", 450, 470);
 			</logic:equal>
 		</logic:notEqual>
 	}

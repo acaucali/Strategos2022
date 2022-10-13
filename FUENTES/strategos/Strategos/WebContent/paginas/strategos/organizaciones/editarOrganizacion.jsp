@@ -56,7 +56,7 @@
 			function cancelar() 
 			{
 				window.document.editarOrganizacionForm.action = '<html:rewrite action="/organizaciones/cancelarGuardarOrganizacion"/>';
-				window.document.editarOrganizacionForm.submit();			
+				window.document.editarOrganizacionForm.submit();				
 			}
 
 			function validar(forma) 
@@ -103,7 +103,7 @@
 			<html:hidden property="organizacionId" />
 			<html:hidden property="padreId" />
 
-			<vgcinterfaz:contenedorForma width="650px" height="425px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
+			<vgcinterfaz:contenedorForma width="860px" height="570px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
 				
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
@@ -118,7 +118,7 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Paneles --%>
-				<vgcinterfaz:contenedorPaneles height="300px" width="580px" nombre="editarOrganizacion">
+				<vgcinterfaz:contenedorPaneles height="450px" width="800px" nombre="editarOrganizacion">
 
 					<%-- Panel: Datos Básicos --%>
 					<vgcinterfaz:panelContenedor anchoPestana="110px" nombre="datosBasicos">
@@ -132,49 +132,49 @@
 
 							<!-- Nombre -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.nombre" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.nombre" /></td>
 								<td colspan="2">
 									<html:text property="nombre" size="65" maxlength="150" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Rif -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.rif" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.rif" /></td>
 								<td colspan="2">
 									<html:text property="rif" size="15" maxlength="15" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Fax -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.telefonos" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.telefonos" /></td>
 								<td colspan="2">
 									<html:text property="telefono" size="50" maxlength="50" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Campos de la ficha-->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.fax" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.fax" /></td>
 								<td colspan="2">
 									<html:text property="fax" size="50" maxlength="50" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Direccion-->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.direccion" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.direccion" /></td>
 								<td colspan="2">
 									<html:textarea property="direccion" rows="5" cols="65" styleClass="cuadroTexto" onkeyup="corregirLongitud(direccion, 150);" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Codigo Parcial de Enlace-->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.codigoparcialdeenlace" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.codigoparcialdeenlace" /></td>
 								<td colspan="2">
 									<html:text property="enlaceParcial" size="50" maxlength="50" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Mes de Cierre -->
 							<tr>
-								<td align="right"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.mesdecierre" /></td>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.mesdecierre" /></td>
 								<td colspan="2">
 									<html:select name="editarOrganizacionForm" property="mesCierre" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>">
 										<html:options collection="meses" property="clave" labelProperty="valor"></html:options>
@@ -193,19 +193,19 @@
 							<vgcutil:message key="jsp.editarorganizacion.pestana.descripcion" />
 						</vgcinterfaz:panelContenedorTitulo>
 
-						<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">
+						<table class="panelContenedor" cellspacing="5" cellpadding="0" border="0">
 							<!-- Campos de la ficha-->
 							<tr>
-								<td valign="top" align="right" colspan="2"><vgcutil:message key="jsp.editarorganizacion.pestana.descripcion" /></td>
-								<td valign="top" align="left"><html:textarea property="descripcion" rows="5" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+								<td  align="right" colspan="2"><vgcutil:message key="jsp.editarorganizacion.pestana.descripcion" /></td>
+								<td  align="left"><html:textarea property="descripcion" rows="7" cols="75" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 							</tr>
 							<tr>
-								<td valign="top" align="right" colspan="2"><vgcutil:message key="jsp.editarorganizacion.pestana.descripcion.observaciones" /></td>
-								<td valign="top" align="left"><html:textarea property="observaciones" rows="5" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+								<td  align="right" colspan="2"><vgcutil:message key="jsp.editarorganizacion.pestana.descripcion.observaciones" /></td>
+								<td  align="left"><html:textarea property="observaciones" rows="7" cols="75" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 							</tr>
 							<tr>
-								<td valign="top" align="right" colspan="2"><vgcutil:message key="jsp.editarorganizacion.pestana.descripcion.personaldirectivo" /></td>
-								<td valign="top" align="left"><html:textarea property="personalDirectivo" rows="5" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+								<td  align="right" colspan="2"><vgcutil:message key="jsp.editarorganizacion.pestana.descripcion.personaldirectivo" /></td>
+								<td  align="left"><html:textarea property="personalDirectivo" rows="7" cols="75" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 							</tr>
 						</table>
 					</vgcinterfaz:panelContenedor>
