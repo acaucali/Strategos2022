@@ -61,12 +61,23 @@ import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasDetalleSer
 import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasService;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasEvaluadasService;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPoblacionService;
+import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.TipoPoblacionService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TiposObjetivosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
+import com.strategos.nueva.bancoproyecto.strategos.model.IniciativaEstatusStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.MetodologiaStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.model.OrganizacionesStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.TipoProyectoStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.service.IniciativaEstatusService;
+import com.strategos.nueva.bancoproyecto.strategos.service.MetodologiaService;
 import com.strategos.nueva.bancoproyecto.strategos.service.OrganizacionService;
+import com.strategos.nueva.bancoproyecto.strategos.service.TipoProyectoService;
 import com.strategos.nueva.bancoproyectos.model.util.DatoIdea;
-
+import com.strategos.nueva.bancoproyecto.ideas.model.Proyectos;
+import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosPoblacion;
+import com.strategos.nueva.bancoproyecto.ideas.model.TipoPoblacion;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -89,7 +100,18 @@ public class ReportesRestController {
 	private IdeasEvaluadasService ideasEvaluadasService;
 	@Autowired
 	private EvaluacionIdeasService evaluacionService;
-	
+	@Autowired
+	private ProyectosService preproyectoService;
+	@Autowired
+	private TipoProyectoService tipoProyectoService;
+	@Autowired
+	private IniciativaEstatusService iniciativaEstatusService;
+	@Autowired
+	private MetodologiaService metodologiasService;
+	@Autowired
+	private TipoPoblacionService tipoPoblacionService;
+	@Autowired
+	private ProyectosPoblacionService proyectoPoblacionService;
 	
 	//Servicios Rest tabla - idea
 	private final Logger log = LoggerFactory.getLogger(IdeasProyectosRestController.class);
@@ -185,6 +207,81 @@ public class ReportesRestController {
 	            .contentType(MediaType.APPLICATION_PDF)
 	            .body(new InputStreamResource(bis));
 	  }
+	//reportes preproyectos
+	
+	@GetMapping("/preproyecto/excel/{orgId}") //preproyecto detalle
+	public @ResponseBody ResponseEntity<InputStreamResource> exportToXlsPreProyectos(@PathVariable Long orgId) throws IOException {
+			
+			List<Proyectos> proyectosOrg = preproyectoService.findAll();
+			List<Proyectos> preproyectosFin = new ArrayList();
+			ByteArrayInputStream bis;
+			
+			 if(orgId == 0) {
+				 bis = createReportXlsPreproyectos(proyectosOrg);
+			 }else {
+				 
+				 preproyectosFin = preproyectoService.findAllByDependenciaId(orgId);
+				 
+				 bis = createReportXlsPreproyectos(preproyectosFin);
+			 }
+			  
+
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Disposition", "attachment; filename=preproyectosDetalle.xls");
+
+		    return ResponseEntity
+		            .ok()
+		            .headers(headers)
+		            .body(new InputStreamResource(bis));
+	}
+	
+	@GetMapping("/preproyecto/pdf/{proyectoId}") //preproyecto detalle
+	public @ResponseBody ResponseEntity<InputStreamResource> exportToPDFPreproyectos(@PathVariable Long proyectoId) throws IOException {
+		
+		Proyectos pre = preproyectoService.findById(proyectoId);
+				
+		
+	    ByteArrayInputStream bis = createReportDetallePreproyecto(pre);
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Disposition", "inline; filename=preproyectosDetalle.pdf");
+
+
+	    return ResponseEntity
+	            .ok()
+	            .headers(headers)
+	            .contentType(MediaType.APPLICATION_PDF)
+	            .body(new InputStreamResource(bis));
+	}
+	
+	@GetMapping("/preproyecto/pdf/resumido/{orgId}")
+	public @ResponseBody ResponseEntity<InputStreamResource> exportToPDFPreproyectosResumido(@PathVariable Long orgId) throws IOException {
+		
+		List<Proyectos> proyectosOrg = preproyectoService.findAll();
+		List<Proyectos> preproyectosFin = new ArrayList();
+		ByteArrayInputStream bis;
+		
+		if(orgId == 0) { // todas las organizaciones
+			bis = createReportPreproyecto(proyectosOrg);
+		}else {
+			preproyectosFin = preproyectoService.findAllByDependenciaId(orgId);
+			bis = createReportPreproyecto(preproyectosFin);
+		}
+		
+	   
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Disposition", "inline; filename=preproyectos.pdf");
+
+
+	    return ResponseEntity
+	            .ok()
+	            .headers(headers)
+	            .contentType(MediaType.APPLICATION_PDF)
+	            .body(new InputStreamResource(bis));
+	  }
+	
+	//Funciones Reportes
 	
 	public  ByteArrayInputStream createReport(List<IdeasProyectos> ideas) {
 
@@ -366,6 +463,335 @@ public class ReportesRestController {
 		}
 	}
 	
+	
+	public  ByteArrayInputStream createReportXlsPreproyectos(List<Proyectos> proyectos) throws IOException{
+
+		int columns = 0;
+		
+		try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+			
+			Sheet sheet = workbook.createSheet("PreProyectos");
+			
+			org.apache.poi.ss.usermodel.Font headerFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
+            ((org.apache.poi.ss.usermodel.Font) headerFont).setBold(true);
+            headerFont.setColor(IndexedColors.BLUE.getIndex());
+
+            CellStyle headerCellStyle = workbook.createCellStyle();
+            headerCellStyle.setFont(headerFont);
+            headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            // Header Row
+            org.apache.poi.ss.usermodel.Font titleFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
+            ((org.apache.poi.ss.usermodel.Font) titleFont).setBold(true);
+            
+            CellStyle titleCellStyle = workbook.createCellStyle();
+            titleCellStyle.setFont(titleFont);
+            
+            Row titleRow = sheet.createRow(0);
+            Cell celdaTitle = titleRow.createCell(0);
+            celdaTitle.setCellValue("Listado de PreProyectos");
+            celdaTitle.setCellStyle(titleCellStyle);
+            
+            Row headerRow = sheet.createRow(2);
+            
+            int col = 0;
+            Cell cell;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Nombre Proyecto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Idea Propuesta");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Dependencia Responsable");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Profesional Responsable");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Teléfono Contacto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Correo electronico");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Fecha Radicación");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Año Formulación");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Tipología Proyecto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Estatus Proyecto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Fecha Estatus");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Relación Objetivos");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Código BDP");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Duración (meses)");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Costo Estimado");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Dependencia Lider");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Pertinencia");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Problemática / Necesidad");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Dependencias Estratégicas");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Socios Estratégicos");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Roles Entidades");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Posibles Fuentes Financiación");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Cobertura");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Población Beneficiaria");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Antecedentes");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Justificación");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Alcance del Proyecto");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Objetivo General");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Metodología");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+        
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Historico");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            int row=3;
+            int colu = 0;
+       	            
+            for(Proyectos pro: proyectos) {
+            	
+            	TipoProyectoStrategos tipo = tipoProyectoService.findById(pro.getTipoProyectoId());
+        		IniciativaEstatusStrategos est = iniciativaEstatusService.findById(pro.getEstatusId());
+        		TiposObjetivos tip = objetivosService.findById(pro.getTipoObjetivoId());
+        		MetodologiaStrategos met = metodologiasService.findById(pro.getMetodologiaId());
+        		
+        		
+        		List<ProyectosPoblacion> poblaciones = proyectoPoblacionService.findAllByProyectoId(pro.getProyectoId());
+        		
+        		OrganizacionesStrategos org = organizacionService.findById(pro.getDependenciaId());
+        		OrganizacionesStrategos orgLider = organizacionService.findById(pro.getDependenciaLider());
+        		
+        		SimpleDateFormat formateadorFecha = new SimpleDateFormat("dd/MM/yyyy");
+        		
+        		
+        		
+        		String fecha = formateadorFecha.format(pro.getFechaRadicacion());
+        		String fechaEstatus = formateadorFecha.format(pro.getFechaEstatus());
+        		String historico ="";
+        		if(pro.getHistorico() != null && pro.getHistorico()) {
+        			historico="Si";
+        		}else {
+        			historico="No";
+        		}
+            	
+            	Row headerRow2 = sheet.createRow(row);
+            	
+            	Cell celda = headerRow2.createCell(0);
+            	celda.setCellValue(pro.getNombreProyecto());
+            	
+            	if(pro.getIdeaId() != null) {
+            		IdeasProyectos idea = ideasProyectosService.findById(pro.getIdeaId());
+            		celda = headerRow2.createCell(1);
+                	celda.setCellValue(idea.getNombreIdea());
+            	}else {
+            		celda = headerRow2.createCell(1);
+                	celda.setCellValue("");
+            	}
+            	
+            	
+            	celda = headerRow2.createCell(2);
+            	celda.setCellValue(org.getNombre());          	
+            	
+            	celda = headerRow2.createCell(3);
+            	celda.setCellValue(pro.getProfesionalResponsable());
+            	
+            	celda = headerRow2.createCell(4);
+            	celda.setCellValue(pro.getContactoTelefono());
+            	
+            	celda = headerRow2.createCell(5);
+            	celda.setCellValue(pro.getContactoEmail());
+            	
+            	celda = headerRow2.createCell(6);
+            	celda.setCellValue(fecha);
+            	
+            	celda = headerRow2.createCell(7);
+            	celda.setCellValue(pro.getAnioFormulacion());            	
+            	
+            	celda = headerRow2.createCell(8);
+            	celda.setCellValue(tipo.getNombre());
+            	
+            	celda = headerRow2.createCell(9);
+            	celda.setCellValue(est.getNombre());
+                            	
+            	celda = headerRow2.createCell(10);
+            	celda.setCellValue(fechaEstatus);
+            	
+            	celda = headerRow2.createCell(11);
+            	celda.setCellValue(tip.getDescripcionObjetivo());
+            	
+            	celda = headerRow2.createCell(12);
+            	celda.setCellValue(pro.getCodigoBdp());
+            	
+            	celda = headerRow2.createCell(13);
+            	celda.setCellValue(pro.getDuracion().toString());            	            	
+                        	
+            	celda = headerRow2.createCell(14);
+            	celda.setCellValue(pro.getCostoEstimado());
+            	
+            	celda = headerRow2.createCell(15);
+            	celda.setCellValue(orgLider.getNombre());
+            	
+            	celda = headerRow2.createCell(16);
+            	celda.setCellValue(pro.getPertinencia());            	
+            	
+            	celda = headerRow2.createCell(17);
+            	celda.setCellValue(pro.getProblematica());
+            	
+            	celda = headerRow2.createCell(18);
+            	celda.setCellValue(pro.getDependenciasEstrategicas()); 
+            	
+            	celda = headerRow2.createCell(19);
+            	celda.setCellValue(pro.getSociosEstrategicos());            	
+            	
+            	celda = headerRow2.createCell(20);
+            	celda.setCellValue(pro.getRolesParticipantes());
+            	
+            	celda = headerRow2.createCell(21);
+            	celda.setCellValue(pro.getFinanciacion());
+            	
+            	celda = headerRow2.createCell(22);
+            	celda.setCellValue(pro.getCobertura());
+            	
+            	String poblacionesString = "";
+        		//poblaciones
+        		for(ProyectosPoblacion pre: poblaciones) {
+        			
+        			TipoPoblacion tipoPoblacion = tipoPoblacionService.findById(pre.getPoblacionId());
+        			poblacionesString+= tipoPoblacion.getPoblacion()+", ";
+        			
+        		}
+            	
+        		celda = headerRow2.createCell(23);
+            	celda.setCellValue(poblacionesString);
+            	
+            	celda = headerRow2.createCell(24);
+            	celda.setCellValue(pro.getAntecedentes());
+            	
+            	celda = headerRow2.createCell(25);
+            	celda.setCellValue(pro.getJustificacion());
+            	
+            	celda = headerRow2.createCell(26);
+            	celda.setCellValue(pro.getAlcance());
+            	
+            	celda = headerRow2.createCell(27);
+            	celda.setCellValue(pro.getObjetivoGeneral());
+            	
+            	celda = headerRow2.createCell(28);
+            	celda.setCellValue(met.getNombre());
+            	
+            	celda = headerRow2.createCell(29);
+            	celda.setCellValue(historico);
+            	
+            	row++;
+			}
+            
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+		}
+	}
+	
 	public  ByteArrayInputStream createReportXls(List<IdeasProyectos> ideas) throws IOException{
 
 		int columns = 0;
@@ -516,6 +942,11 @@ public class ReportesRestController {
             
             cell = headerRow.createCell(col);
             cell.setCellValue("Duración Total");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Información Adicional");
             cell.setCellStyle(headerCellStyle);
             col++;
         
@@ -669,6 +1100,14 @@ public class ReportesRestController {
                 	celda.setCellValue("");
             	}
             	
+            	if(ide.getInformacionAdicional() != null) {
+            		celda = headerRow2.createCell(24);
+                	celda.setCellValue(ide.getInformacionAdicional());
+            	}else {
+            		celda = headerRow2.createCell(24);
+                	celda.setCellValue("");
+            	}
+            	
             	
             	row++;
 			}
@@ -678,6 +1117,201 @@ public class ReportesRestController {
 		}
 	}
 	
+	public ByteArrayInputStream createReportDetallePreproyecto(Proyectos preproyecto) {
+
+		TipoProyectoStrategos tipo = tipoProyectoService.findById(preproyecto.getTipoProyectoId());
+		IniciativaEstatusStrategos est = iniciativaEstatusService.findById(preproyecto.getEstatusId());
+		TiposObjetivos tip = objetivosService.findById(preproyecto.getTipoObjetivoId());
+		MetodologiaStrategos met = metodologiasService.findById(preproyecto.getMetodologiaId());
+		
+		
+		List<ProyectosPoblacion> poblaciones = proyectoPoblacionService.findAllByProyectoId(preproyecto.getProyectoId());
+		
+		OrganizacionesStrategos org = organizacionService.findById(preproyecto.getDependenciaId());
+		OrganizacionesStrategos orgLider = organizacionService.findById(preproyecto.getDependenciaLider());
+		
+		SimpleDateFormat formateadorFecha = new SimpleDateFormat("dd/MM/yyyy");
+		
+		
+		
+		String fecha = formateadorFecha.format(preproyecto.getFechaRadicacion());
+		String fechaEstatus = formateadorFecha.format(preproyecto.getFechaEstatus());
+		String historico ="";
+		if(preproyecto.getHistorico() != null && preproyecto.getHistorico()) {
+			historico="Si";
+		}else {
+			historico="No";
+		}
+		
+	    Document document = new Document();
+	    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+	    try {
+
+	    	PdfWriter.getInstance(document, out);
+	        document.open();		
+    		
+    		document.addTitle("Reporte de Pre-Proyecto detalle");
+    		Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
+    		Paragraph p=new Paragraph("Nombre Pre-Proyecto: "+ preproyecto.getNombreProyecto(), font);
+    		p.setAlignment(Element.ALIGN_CENTER);
+    		document.add(p);
+    		document.add( Chunk.NEWLINE );
+    		
+    		PdfPTable table = new PdfPTable(2);
+    		
+    		Font fontCelda = FontFactory.getFont(FontFactory.HELVETICA, 9, Font.BOLD, BaseColor.BLACK);
+    		
+    		PdfPCell celda = new PdfPCell();
+    		
+    		if(preproyecto.getIdeaId() != null) {
+    			IdeasProyectos idea = ideasProyectosService.findById(preproyecto.getIdeaId());
+    			celda.setPhrase(new Phrase("Idea Propuesta", fontCelda));   		
+        		table.addCell(celda);
+        		table.addCell(idea.getNombreIdea());
+    		}else {
+    			celda.setPhrase(new Phrase("Idea Propuesta", fontCelda));   		
+        		table.addCell(celda);
+        		table.addCell("");
+    		}
+    		
+    		
+    		
+    		celda.setPhrase(new Phrase("Dependencia Responsable", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(org.getNombre());
+    		
+    		celda.setPhrase(new Phrase("Profesional Responsable", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getProfesionalResponsable());
+    		
+    		celda.setPhrase(new Phrase("Teléfono Contacto", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getContactoTelefono());
+    		
+    		celda.setPhrase(new Phrase("Correo electronico", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getContactoEmail());
+    		
+    		celda.setPhrase(new Phrase("Fecha Radicación", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(fecha);
+    		
+    		celda.setPhrase(new Phrase("Año Formulación", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getAnioFormulacion());
+    		
+    		celda.setPhrase(new Phrase("Tipología Proyecto", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(tipo.getNombre());
+    		
+    		celda.setPhrase(new Phrase("Estatus Proyecto", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(est.getNombre());
+    		
+    		celda.setPhrase(new Phrase("Fecha Estatus", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(fechaEstatus);
+    		
+    		celda.setPhrase(new Phrase("Relación Objetivos", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(tip.getDescripcionObjetivo());
+    		
+    		celda.setPhrase(new Phrase("Código BDP", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getCodigoBdp());
+    		
+    		celda.setPhrase(new Phrase("Duración (meses)", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getDuracion().toString());
+    		
+    		celda.setPhrase(new Phrase("Costo Estimado", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getCostoEstimado());
+    		
+    		celda.setPhrase(new Phrase("Dependencia Lider", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(orgLider.getNombre());
+    		
+    		celda.setPhrase(new Phrase("Pertinencia", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getPertinencia());
+    		
+    		celda.setPhrase(new Phrase("Problemática / Necesidad ", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getProblematica());
+    		
+    		celda.setPhrase(new Phrase("Dependencias Estratégicas", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getDependenciasEstrategicas());
+    		
+    		celda.setPhrase(new Phrase("Socios Estratégicos", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getSociosEstrategicos());
+    		
+    		celda.setPhrase(new Phrase("Roles Entidades", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getRolesParticipantes());
+    		
+    		celda.setPhrase(new Phrase("Posibles Fuentes Financiación", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getFinanciacion());
+    		
+    		celda.setPhrase(new Phrase("Cobertura", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getCobertura());
+    		
+    		String poblacionesString = "";
+    		//poblaciones
+    		for(ProyectosPoblacion pre: poblaciones) {
+    			
+    			TipoPoblacion tipoPoblacion = tipoPoblacionService.findById(pre.getPoblacionId());
+    			poblacionesString+= tipoPoblacion.getPoblacion()+", ";
+    			
+    		}
+    		celda.setPhrase(new Phrase("Población Beneficiaria", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(poblacionesString);
+    		
+    		celda.setPhrase(new Phrase("Antecedentes", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getAntecedentes());
+    		
+    		celda.setPhrase(new Phrase("Justificación", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getJustificacion());
+    		
+    		celda.setPhrase(new Phrase("Alcance del Proyecto", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getAlcance());
+    		
+    		celda.setPhrase(new Phrase("Objetivo General", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(preproyecto.getObjetivoGeneral());
+    		
+    		celda.setPhrase(new Phrase("Metodología", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(met.getNombre());
+    		
+    		celda.setPhrase(new Phrase("Historico", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(historico);
+    		
+    		document.add(table);        		 
+    		document.add( Chunk.NEWLINE );
+    		   		    		
+    		
+            document.close();
+	    	
+	    
+
+	    } catch (DocumentException ex) {
+
+	        System.out.println("error");
+	    }
+
+	    return new ByteArrayInputStream(out.toByteArray());
+	}
 	
 	public ByteArrayInputStream createReportDetalle(IdeasProyectos idea) {
 
@@ -809,6 +1443,10 @@ public class ReportesRestController {
     		table.addCell(celda);
     		table.addCell(idea.getDuracionTotal());
     		
+    		celda.setPhrase(new Phrase("Información Adicional", fontCelda));   		
+    		table.addCell(celda);
+    		table.addCell(idea.getInformacionAdicional());
+    		
     		document.add(table);        		 
     		document.add( Chunk.NEWLINE );
     		   		    		
@@ -825,7 +1463,46 @@ public class ReportesRestController {
 	    return new ByteArrayInputStream(out.toByteArray());
 	}
 
-	
+	public  ByteArrayInputStream createReportPreproyecto(List<Proyectos> proyectos) {
+
+		
+	    Document document = new Document();
+	    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+	    try {
+
+	    	PdfWriter.getInstance(document, out);
+	        document.open();		
+    		
+    		document.addTitle("Reporte preproyectos resumido");
+    		Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
+    		Paragraph p=new Paragraph("Listado resumido de Pre-Proyectos", font);
+    		p.setAlignment(Element.ALIGN_CENTER);
+    		document.add(p);
+    		document.add( Chunk.NEWLINE );
+    		
+    		PdfPTable table = new PdfPTable(5);
+
+    		addTableHeaderPreproyecto(table);  
+    		
+    	    		
+    		for(Proyectos pre: proyectos) {
+    			addRowsPreproyecto(table, pre);
+    		}
+    		
+    		
+    		document.add(table);            
+            document.close();
+	    	
+	    
+
+	    } catch (DocumentException ex) {
+
+	        System.out.println("error");
+	    }
+
+	    return new ByteArrayInputStream(out.toByteArray());
+	}
 
 	public void addTableHeader(PdfPTable table) {
 		
@@ -849,6 +1526,37 @@ public class ReportesRestController {
 			
 		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, BaseColor.BLACK);
 	    Stream.of(idea.getAnioFormulacion(),idea.getNombreIdea(), org.getNombre(), tip.getTipoPropuesta(), est.getEstatus())
+	      .forEach(columnas -> {
+	        PdfPCell header = new PdfPCell();
+	        header.setBorderWidth(1);
+	        header.setPhrase(new Phrase(columnas, font));
+	        table.addCell(header);
+	    });
+		
+	}
+	
+	public void addTableHeaderPreproyecto(PdfPTable table) {
+		
+		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, Font.BOLD, BaseColor.WHITE);
+	    Stream.of("Año", "Pre-Proyecto", "Dependencia", "Tipología", "Estatus")
+	      .forEach(columnTitle -> {
+	        PdfPCell header = new PdfPCell();
+	        header.setBackgroundColor(BaseColor.BLUE);
+	        header.setBorderWidth(1);
+	        header.setPhrase(new Phrase(columnTitle, font));
+	        table.addCell(header);
+	    });
+	}
+	
+	
+	public void addRowsPreproyecto(PdfPTable table, Proyectos proyecto) {
+		
+		OrganizacionesStrategos org = organizacionService.findById(proyecto.getDependenciaId());
+		TipoProyectoStrategos tip = tipoProyectoService.findById(proyecto.getTipoProyectoId());
+		IniciativaEstatusStrategos est = iniciativaEstatusService.findById(proyecto.getEstatusId());
+			
+		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, BaseColor.BLACK);
+	    Stream.of(proyecto.getAnioFormulacion(),proyecto.getNombreProyecto(), org.getNombre(), tip.getNombre(), est.getNombre())
 	      .forEach(columnas -> {
 	        PdfPCell header = new PdfPCell();
 	        header.setBorderWidth(1);

@@ -7,7 +7,11 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PaginasModule } from './paginas/paginas.module';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { LabelModule } from '@progress/kendo-angular-label';
+
 
 
 
@@ -20,7 +24,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     PaginasModule,    
-    HttpClientModule, NoopAnimationsModule,
+    HttpClientModule, NoopAnimationsModule, BrowserAnimationsModule, 
+    
   ],
   providers: [],
   bootstrap: [AppComponent],

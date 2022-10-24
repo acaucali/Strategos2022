@@ -65,6 +65,9 @@ export class GestionideasComponent implements OnInit {
 
   ngOnInit(): void {
     
+    localStorage.removeItem('objetivoId');
+    localStorage.removeItem('nombreObjetivo');
+
     if(this.organizacionId == undefined){
       this.organizacionId = localStorage.getItem('organizacion');
     }

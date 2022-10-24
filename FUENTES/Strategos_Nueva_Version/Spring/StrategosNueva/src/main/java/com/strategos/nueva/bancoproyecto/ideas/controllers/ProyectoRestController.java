@@ -1,6 +1,7 @@
 package com.strategos.nueva.bancoproyecto.ideas.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.strategos.nueva.bancoproyecto.ideas.model.EstatusIdeas;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
 import com.strategos.nueva.bancoproyecto.ideas.model.Proyectos;
+import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosPlan;
+import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosPoblacion;
+import com.strategos.nueva.bancoproyecto.ideas.model.TipoPoblacion;
+import com.strategos.nueva.bancoproyecto.ideas.model.TiposPropuestas;
+import com.strategos.nueva.bancoproyecto.ideas.service.EstatusIdeaService;
+import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPlanService;
+import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPoblacionService;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.TipoPoblacionService;
+import com.strategos.nueva.bancoproyecto.strategos.model.ClaseIndicadoresStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.IniciativaEstatusStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.OrganizacionesStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.PerspectivaStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.PlanStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.TipoProyectoStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.service.ClaseIndicadorService;
+import com.strategos.nueva.bancoproyecto.strategos.service.IniciativaEstatusService;
+import com.strategos.nueva.bancoproyecto.strategos.service.OrganizacionService;
+import com.strategos.nueva.bancoproyecto.strategos.service.PerspectivaService;
+import com.strategos.nueva.bancoproyecto.strategos.service.PlanService;
+import com.strategos.nueva.bancoproyecto.strategos.service.TipoProyectoService;
 import com.strategos.nueva.bancoproyectos.model.util.FIltroIdea;
+
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -37,6 +61,39 @@ public class ProyectoRestController {
 	
 	@Autowired
 	private ProyectosService proyectoService;
+	
+	@Autowired
+	private IdeasProyectosService ideasProyectosService;
+	
+	@Autowired
+	private OrganizacionService organizacionService;
+	
+	@Autowired
+	private ClaseIndicadorService claseService;
+	
+	@Autowired
+	private IniciativaEstatusService estatusService;
+	
+	@Autowired
+	private EstatusIdeaService estatusIdeaService;
+	
+	@Autowired
+	private PlanService planService;
+	
+	@Autowired
+	private PerspectivaService perspectivaService;
+	
+	@Autowired
+	private TipoProyectoService tipoService;
+	
+	@Autowired
+	private ProyectosPoblacionService proyectosPoblacionService;
+	
+	@Autowired
+	private TipoPoblacionService tipoPoblacionService;
+
+	@Autowired
+	private ProyectosPlanService proyectoPlanService;
 	
 	//Servicios Rest tabla - proyecto
 	
@@ -72,7 +129,7 @@ public class ProyectoRestController {
 					if(!tipoId.equals("undefined")) {
 						if(!tipoId.equals("0")) {
 							tipId = Long.parseLong(tipoId);
-							filtro.setPropuestaId(tipId);;
+							filtro.setTipoId(tipId);
 						}
 						
 					}
@@ -102,12 +159,61 @@ public class ProyectoRestController {
 					return proyectosFin;
 		}
 		
-		//servicio que trae la lista de idea
+		//servicio que trae la lista de proyectos por organizacion
 		@GetMapping("/proyecto/org/{id}")
 		public List<Proyectos> index(@PathVariable Long id){
 					
 			List<Proyectos> proyectosOrg = proyectoService.findAllByDependenciaId(id); 								
 			return proyectosOrg;
+		}
+		
+		//servicio que trae la lista de proyectos por estatus y organizacion
+		@GetMapping("/proyecto/orgestatus/{orgId}/{estatusId}")
+		public List<Proyectos> indexEstatusOrg(@PathVariable Long orgId ,@PathVariable Long estatusId){
+							
+			List<Proyectos> proyectosOrg = proyectoService.findAllByDependenciaIdAndEstatusId(orgId, estatusId); 								
+			return proyectosOrg;
+		}
+				
+				
+		//servicio que trae la lista de proyectos por estatus
+		@GetMapping("/proyecto/estatus/{estatusId}")
+		public List<Proyectos> indexEstatus(@PathVariable Long estatusId){
+							
+			List<Proyectos> proyectosOrg = proyectoService.findAllByEstatusId(estatusId); 								
+			return proyectosOrg;
+		}
+		
+		//servicio que trae la lista de proyectos por estatus y organizacion
+		@GetMapping("/proyecto/orgtipo/{orgId}/{isPreproyecto}")
+		public List<Proyectos> indexTipoOrg(@PathVariable Long orgId ,@PathVariable Boolean isPreproyecto){
+									
+			List<Proyectos> proyectosOrg = proyectoService.findAllByDependenciaIdAndIsPreproyecto(orgId, isPreproyecto); 								
+			return proyectosOrg;
+		}
+						
+						
+		//servicio que trae la lista de proyectos por estatus
+		@GetMapping("/proyecto/tipo/{isPreproyecto}")
+		public List<Proyectos> indexTipo(@PathVariable Boolean isPreproyecto){
+									
+			List<Proyectos> proyectosOrg = proyectoService.findAllByIsPreproyecto(isPreproyecto); 								
+			return proyectosOrg;
+		}
+		
+		//servicio que trae la lista de poblaciones
+		@GetMapping("/proyecto/poblacion/{id}")
+		public List<TipoPoblacion> indexPoblaciones(@PathVariable Long id){
+			
+			List<TipoPoblacion> poblacionesPro = new ArrayList<TipoPoblacion>();
+			List<ProyectosPoblacion> proyectos = proyectosPoblacionService.findAllByProyectoId(id);
+			
+			for(ProyectosPoblacion pro: proyectos) {
+				TipoPoblacion poblacion= tipoPoblacionService.findById(pro.getPoblacionId());
+				poblacionesPro.add(poblacion);
+			}
+											
+			return poblacionesPro;
 		}
 			
 		//servicio que muestra un proyecto
@@ -137,6 +243,7 @@ public class ProyectoRestController {
 		@PostMapping("/proyecto")
 		public ResponseEntity<?> create(@Valid @RequestBody Proyectos proyectoN, BindingResult result) {
 			
+			List<TipoPoblacion> proyectosPoblacion = new ArrayList();
 			Proyectos proyectoNew= null;
 			
 			Map<String, Object> response = new HashMap<>();
@@ -155,7 +262,45 @@ public class ProyectoRestController {
 				//sin iniciar
 				//crear estatus preproyecto
 				//cambiar idea a preproyecto
-				proyectoNew= proyectoService.save(proyectoN);
+				
+				if(proyectoN.getDependenciaId() != null) {
+					OrganizacionesStrategos org = organizacionService.findById(proyectoN.getDependenciaId());
+					proyectoN.setOrganizacion(org.getNombre());
+				}
+				if(proyectoN.getTipoProyectoId() != null) {
+					TipoProyectoStrategos tipo = tipoService.findById(proyectoN.getTipoProyectoId());
+					proyectoN.setTipo(tipo.getNombre());
+				}
+				if(proyectoN.getEstatusId() != null) {
+					IniciativaEstatusStrategos est = estatusService.findById(proyectoN.getEstatusId());
+					proyectoN.setEstatus(est.getNombre());
+					proyectoN.setFechaEstatus(new Date());
+				}
+				proyectoN.setHistorico(false);
+				proyectoN.setIsPreproyecto(true);
+				
+				
+				IdeasProyectos idea = ideasProyectosService.findById(proyectoN.getIdeaId());
+				
+				if(idea.getEstatusIdeaId() != null) {
+					EstatusIdeas est = estatusIdeaService.findById(new Long(6));
+					idea.setEstatus(est.getEstatus());
+					idea.setFechaEstatus(new Date());
+				}
+				
+				ideasProyectosService.save(idea);
+				
+				proyectosPoblacion = proyectoN.getPoblaciones();
+				
+				proyectoNew= proyectoService.save(proyectoN);	
+				
+				for(TipoPoblacion tip: proyectosPoblacion) {
+					ProyectosPoblacion proyectoPoblacion = new ProyectosPoblacion();
+					proyectoPoblacion.setProyectoId(proyectoNew.getProyectoId());
+					proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
+					proyectosPoblacionService.save(proyectoPoblacion);
+				}
+				
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
@@ -168,10 +313,11 @@ public class ProyectoRestController {
 		}
 		
 		//servicio que actualiza un proyecto
-		@PutMapping("/proyecto/{id}")
-		public ResponseEntity<?>  update(@Valid @RequestBody Proyectos proyecto, BindingResult result, @PathVariable Long id) {
+		@PutMapping("/proyecto/{id}/{tipo}")
+		public ResponseEntity<?>  update(@Valid @RequestBody Proyectos proyecto, BindingResult result, @PathVariable Long id, @PathVariable Byte tipo) {
 			Proyectos proyectoActual= proyectoService.findById(id);
 			Proyectos proyectoUpdated = null;
+			List<TipoPoblacion> proyectosPoblacion = new ArrayList();
 			Map<String, Object> response = new HashMap<>();
 			
 			if(result.hasErrors()) {
@@ -191,39 +337,167 @@ public class ProyectoRestController {
 			
 			try{
 							
-				proyectoActual.setAlcance(proyecto.getAlcance()); //idea
-				proyectoActual.setAnioFormulacion(proyecto.getAnioFormulacion());//idea
-				proyectoActual.setAntecedentes(proyecto.getAntecedentes());
-				proyectoActual.setCobertura(proyecto.getCobertura());
-				proyectoActual.setCodigoBdp(proyecto.getCodigoBdp());
-				proyectoActual.setContactoEmail(proyecto.getContactoEmail());//idea
-				proyectoActual.setContactoTelefono(proyecto.getContactoTelefono());//idea
-				proyectoActual.setCostoEstimado(proyecto.getCostoEstimado());
-				proyectoActual.setDependenciaId(proyecto.getDependenciaId());//idea
-				proyectoActual.setDependenciaLider(proyecto.getDependenciaLider());//idea
-				proyectoActual.setDependenciasEstrategicas(proyecto.getDependenciasEstrategicas());
-				proyectoActual.setDuracion(proyecto.getDuracion()); //>0
-				proyectoActual.setEstatusId(proyecto.getEstatusId());
-				proyectoActual.setFechaEstatus(proyecto.getFechaEstatus());
-				proyectoActual.setFechaFormulacion(proyecto.getFechaFormulacion());//idea
-				proyectoActual.setFechaRadicacion(proyecto.getFechaRadicacion());
-				proyectoActual.setFinanciacion(proyecto.getFinanciacion());//idea
-				proyectoActual.setHistorico(proyecto.getHistorico());
-				proyectoActual.setJustificacion(proyecto.getJustificacion());
-				proyectoActual.setMetodologiaId(proyecto.getMetodologiaId());//idea
-				proyectoActual.setNombreProyecto(proyecto.getNombreProyecto());//idea
-				proyectoActual.setObjetivoGeneral(proyecto.getObjetivoGeneral());//idea
-				proyectoActual.setPertinencia(proyecto.getPertinencia());
-				proyectoActual.setProblematica(proyecto.getProblematica());//idea
-				proyectoActual.setProfesionalResponsable(proyecto.getProfesionalResponsable());//idea
-				proyectoActual.setIdeaId(proyecto.getIdeaId());//idea
-				proyectoActual.setRolesParticipantes(proyecto.getRolesParticipantes());
-				proyectoActual.setSociosEstrategicos(proyecto.getSociosEstrategicos());
-				proyectoActual.setTipoObjetivoId(proyecto.getTipoObjetivoId());//idea
-				proyectoActual.setTipoProyectoId(proyecto.getTipoProyectoId());
-																			
-				proyectoUpdated=proyectoService.save(proyectoActual);
-			
+				if(tipo == 1) {// preproyecto
+					proyectoActual.setAlcance(proyecto.getAlcance()); //idea
+					proyectoActual.setAnioFormulacion(proyecto.getAnioFormulacion());//idea
+					proyectoActual.setAntecedentes(proyecto.getAntecedentes());
+					proyectoActual.setCobertura(proyecto.getCobertura());
+					proyectoActual.setCodigoBdp(proyecto.getCodigoBdp());
+					proyectoActual.setContactoEmail(proyecto.getContactoEmail());//idea
+					proyectoActual.setContactoTelefono(proyecto.getContactoTelefono());//idea
+					proyectoActual.setCostoEstimado(proyecto.getCostoEstimado());
+					proyectoActual.setDependenciaId(proyecto.getDependenciaId());//idea
+					proyectoActual.setDependenciaLider(proyecto.getDependenciaLider());//idea
+					proyectoActual.setDependenciasEstrategicas(proyecto.getDependenciasEstrategicas());
+					proyectoActual.setDuracion(proyecto.getDuracion()); //>0
+					proyectoActual.setEstatusId(proyecto.getEstatusId());
+					proyectoActual.setFechaEstatus(proyecto.getFechaEstatus());
+					proyectoActual.setFechaFormulacion(proyecto.getFechaFormulacion());//idea
+					proyectoActual.setFechaRadicacion(proyecto.getFechaRadicacion());
+					proyectoActual.setFinanciacion(proyecto.getFinanciacion());//idea
+					proyectoActual.setHistorico(proyecto.getHistorico());
+					proyectoActual.setJustificacion(proyecto.getJustificacion());
+					proyectoActual.setMetodologiaId(proyecto.getMetodologiaId());//idea
+					proyectoActual.setNombreProyecto(proyecto.getNombreProyecto());//idea
+					proyectoActual.setObjetivoGeneral(proyecto.getObjetivoGeneral());//idea
+					proyectoActual.setPertinencia(proyecto.getPertinencia());
+					proyectoActual.setProblematica(proyecto.getProblematica());//idea
+					proyectoActual.setProfesionalResponsable(proyecto.getProfesionalResponsable());//idea
+					proyectoActual.setIdeaId(proyecto.getIdeaId());//idea
+					proyectoActual.setRolesParticipantes(proyecto.getRolesParticipantes());
+					proyectoActual.setSociosEstrategicos(proyecto.getSociosEstrategicos());
+					proyectoActual.setTipoObjetivoId(proyecto.getTipoObjetivoId());//idea
+					proyectoActual.setTipoProyectoId(proyecto.getTipoProyectoId());
+					
+					proyectoActual.setIsPreproyecto(true);
+					
+					if(proyectoActual.getEstatusId() != null) {
+						IniciativaEstatusStrategos est = estatusService.findById(proyectoActual.getEstatusId());
+						proyectoActual.setEstatus(est.getNombre());
+						proyectoActual.setFechaEstatus(new Date());
+					}
+					
+					List<ProyectosPoblacion> proyectos = proyectosPoblacionService.findAllByProyectoId(id);
+					
+					for(ProyectosPoblacion pro: proyectos) {
+						proyectosPoblacionService.delete(pro.getProyectoPoblacionId());
+					}
+					//proyectoService.delete(id);
+					
+					proyectosPoblacion = proyecto.getPoblaciones();					
+									
+					for(TipoPoblacion tip: proyectosPoblacion) {
+						ProyectosPoblacion proyectoPoblacion = new ProyectosPoblacion();
+						proyectoPoblacion.setProyectoId(proyectoUpdated.getProyectoId());
+						proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
+						proyectosPoblacionService.save(proyectoPoblacion);
+					}
+					
+					
+					proyectoUpdated=proyectoService.save(proyectoActual);
+					
+				}else {//proyecto
+					
+					proyectoActual.setAlcance(proyecto.getAlcance()); //idea
+					proyectoActual.setAnioFormulacion(proyecto.getAnioFormulacion());//idea
+					proyectoActual.setAntecedentes(proyecto.getAntecedentes());
+					proyectoActual.setCobertura(proyecto.getCobertura());
+					proyectoActual.setCodigoBdp(proyecto.getCodigoBdp());
+					proyectoActual.setContactoEmail(proyecto.getContactoEmail());//idea
+					proyectoActual.setContactoTelefono(proyecto.getContactoTelefono());//idea
+					proyectoActual.setCostoEstimado(proyecto.getCostoEstimado());
+					proyectoActual.setDependenciaId(proyecto.getDependenciaId());//idea
+					proyectoActual.setDependenciaLider(proyecto.getDependenciaLider());//idea
+					proyectoActual.setDependenciasEstrategicas(proyecto.getDependenciasEstrategicas());
+					proyectoActual.setDuracion(proyecto.getDuracion()); //>0
+					proyectoActual.setEstatusId((long) 7);
+					proyectoActual.setFechaEstatus(proyecto.getFechaEstatus());
+					proyectoActual.setFechaFormulacion(proyecto.getFechaFormulacion());//idea
+					proyectoActual.setFechaRadicacion(proyecto.getFechaRadicacion());
+					proyectoActual.setFinanciacion(proyecto.getFinanciacion());//idea
+					proyectoActual.setHistorico(proyecto.getHistorico());
+					proyectoActual.setJustificacion(proyecto.getJustificacion());
+					proyectoActual.setMetodologiaId(proyecto.getMetodologiaId());//idea
+					proyectoActual.setNombreProyecto(proyecto.getNombreProyecto());//idea
+					proyectoActual.setObjetivoGeneral(proyecto.getObjetivoGeneral());//idea
+					proyectoActual.setPertinencia(proyecto.getPertinencia());
+					proyectoActual.setProblematica(proyecto.getProblematica());//idea
+					proyectoActual.setProfesionalResponsable(proyecto.getProfesionalResponsable());//idea
+					proyectoActual.setIdeaId(proyecto.getIdeaId());//idea
+					proyectoActual.setRolesParticipantes(proyecto.getRolesParticipantes());
+					proyectoActual.setSociosEstrategicos(proyecto.getSociosEstrategicos());
+					proyectoActual.setTipoObjetivoId(proyecto.getTipoObjetivoId());//idea
+					proyectoActual.setTipoProyectoId(proyecto.getTipoProyectoId());
+					proyectoActual.setFrecuencia(proyecto.getFrecuencia());
+					proyectoActual.setIsPreproyecto(false);
+					
+					if(proyectoActual.getEstatusId() != null) {
+						IniciativaEstatusStrategos est = estatusService.findById(proyectoActual.getEstatusId());
+						proyectoActual.setEstatus(est.getNombre());
+						proyectoActual.setFechaEstatus(new Date());
+					}
+					
+					List<ProyectosPoblacion> proyectos = proyectosPoblacionService.findAllByProyectoId(id);
+					
+					for(ProyectosPoblacion pro: proyectos) {
+						proyectosPoblacionService.delete(pro.getProyectoPoblacionId());
+					}
+					//proyectoService.delete(id);
+					
+					proyectosPoblacion = proyecto.getPoblaciones();					
+									
+					for(TipoPoblacion tip: proyectosPoblacion) {
+						ProyectosPoblacion proyectoPoblacion = new ProyectosPoblacion();
+						proyectoPoblacion.setProyectoId(proyectoUpdated.getProyectoId());
+						proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
+						proyectosPoblacionService.save(proyectoPoblacion);
+					}
+					
+					
+					proyectoUpdated=proyectoService.save(proyectoActual);
+					
+					// creacion del plan 
+					
+					PlanStrategos plan = new PlanStrategos();
+					
+					plan.setActivo((byte) 1);
+					plan.setAnoFinal(Integer.parseInt(proyecto.getAnioFormulacion()));
+					plan.setAnoInicial(Integer.parseInt(proyecto.getAnioFormulacion()));
+					plan.setNombre(proyecto.getNombreProyecto());
+					plan.setTipo((byte) 1);
+					plan.setRevision((byte) 0);
+					plan.setMetodologiaId(proyecto.getMetodologiaId());
+					plan.setOrganizacionId(proyecto.getDependenciaId());
+					ClaseIndicadoresStrategos clase = claseService.findByClaseRaiz(proyecto.getDependenciaId(), (byte) 0); 
+					
+					plan.setClaseId(clase.getClaseId());
+					
+					planService.save(plan);
+					
+					
+					ProyectosPlan proyectoPlan = new ProyectosPlan();
+					
+					proyectoPlan.setPlanId(plan.getPlanId());
+					proyectoPlan.setProyectoId(proyecto.getProyectoId());
+					
+					proyectoPlanService.save(proyectoPlan);
+					
+					PerspectivaStrategos perspectiva = new PerspectivaStrategos();
+				
+					perspectiva.setClaseId(plan.getClaseId());
+					perspectiva.setPlanId(plan.getPlanId());
+					perspectiva.setNombre(plan.getNombre());
+					perspectiva.setFrecuencia(proyecto.getFrecuencia());
+					perspectiva.setTipo(plan.getTipo());
+					perspectiva.setTipoCalculo((byte) 1);
+					perspectiva.setCreado(new Date());
+					
+					
+					perspectivaService.save(perspectiva);
+					
+				}
+				
+				
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al actualizar el proyecto en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -242,7 +516,31 @@ public class ProyectoRestController {
 			
 			try{
 				
+				Proyectos proyecto = proyectoService.findById(id);
+				
+				if(proyecto.getIdeaId() != null) {
+					IdeasProyectos idea = ideasProyectosService.findById(proyecto.getIdeaId());
+					
+					idea.setEstatusIdeaId((long) 2);
+					
+					if(idea.getEstatusIdeaId() != null) {
+						EstatusIdeas est = estatusIdeaService.findById(idea.getEstatusIdeaId());
+						idea.setEstatus(est.getEstatus());
+						idea.setFechaEstatus(new Date());
+					}
+					
+					ideasProyectosService.save(idea);
+				}
+				
+				
+				List<ProyectosPoblacion> proyectos = proyectosPoblacionService.findAllByProyectoId(id);
+				
+				for(ProyectosPoblacion pro: proyectos) {
+					proyectosPoblacionService.delete(pro.getProyectoPoblacionId());
+				}
 				proyectoService.delete(id);
+								
+				
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al eliminar el proyecto en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

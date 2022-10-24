@@ -28,7 +28,7 @@ public class TipoPoblacion implements Serializable{
 	private String poblacion;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "proyectoId", nullable = false)
+	@JoinColumn(name = "proyectoId", nullable = true) 
 	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "poblaciones" }, allowSetters = true)
 	private Proyectos proyecto;
 			

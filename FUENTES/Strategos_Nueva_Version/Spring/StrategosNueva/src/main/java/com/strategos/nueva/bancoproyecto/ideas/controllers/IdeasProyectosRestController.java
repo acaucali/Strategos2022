@@ -269,6 +269,7 @@ public class IdeasProyectosRestController {
 				ideasProyectosActual.setDocumentoId(ideasProyectos.getDocumentoId());
 				ideasProyectosActual.setTipoObjetivoId(ideasProyectos.getTipoObjetivoId());
 				ideasProyectosActual.setTipoPropuestaId(ideasProyectos.getTipoPropuestaId());
+				ideasProyectosActual.setInformacionAdicional(ideasProyectos.getInformacionAdicional());
 				
 				if(ideasProyectos.getDependenciaId() != null) {
 					OrganizacionesStrategos org = organizacionService.findById(ideasProyectos.getDependenciaId());

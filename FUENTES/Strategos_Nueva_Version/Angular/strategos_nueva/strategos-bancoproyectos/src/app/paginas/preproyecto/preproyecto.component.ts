@@ -10,6 +10,7 @@ import { OrganizacionStrategosService } from '../configuracion/services-util/org
 import { TipoProyectoStrategosService } from '../configuracion/services-util/tipoproyectostrategos.service';
 import { ProyectoService } from '../configuracion/services/proyectos.service';
 import { ModalService } from './detallepreproyecto/modal.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-preproyecto',
@@ -54,7 +55,9 @@ export class PreproyectoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
+    localStorage.removeItem('objetivoId');
+        
     if(this.organizacionId == undefined){
       this.organizacionId = localStorage.getItem('organizacion');
     }
@@ -75,26 +78,14 @@ export class PreproyectoComponent implements OnInit {
   }
 
   crearPreProyecto(){
-    this.preproyectoSeleccionado = new Proyectos();    
+       
+    this.preproyectoSeleccionado = new Proyectos();   
+    this.preproyectoSeleccionado.estatusId = 6;
+    this.preproyectoSeleccionado.fechaEstatus = new Date(); 
     this.modalService.abrirModal();
   }
 
-  descargarPDFResumido(){
-    if(this.isAdmin == true){
-      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/pdf/resumido/"+ 0);
-    }else{
-      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/pdf/resumido/"+this.organizacionId);
-    }
-  }
-
   
-  descargarXlsResumido(){
-    if(this.isAdmin == true){
-      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/"+ 0);
-    }else{
-      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/"+this.organizacionId);
-    }
-  }  
 
   limpiar(){
     this.tipoId = 0;
@@ -105,6 +96,9 @@ export class PreproyectoComponent implements OnInit {
   }
 
   buscar(){
+
+    console.log(this.organizacionFiltroId, this.tipoId, this.estatusId, this.anio, this.historico);
+
     this.preproyectos = null;
     this.elements = [];
     this.previous = [];
@@ -126,11 +120,11 @@ export class PreproyectoComponent implements OnInit {
     this.previous = [];
 
     if(this.isAdmin == true){
-      this.proyectoService.getProyectosList().subscribe(response =>{
+      this.proyectoService.getProyectosListTipoId(true).subscribe(response =>{
         this.preproyectos = response; 
       });
     }else{
-      this.proyectoService.getProyectosListId(this.organizacionId).subscribe(response =>{
+      this.proyectoService.getProyectosListOrgTipoId(this.organizacionId, true).subscribe(response =>{
         this.preproyectos = response;
       });  
     }
@@ -139,13 +133,64 @@ export class PreproyectoComponent implements OnInit {
 
   abrirModal(preproyecto: Proyectos){
     this.preproyectoSeleccionado= preproyecto;
+    if(this.preproyectoSeleccionado != undefined && this.preproyectoSeleccionado.proyectoId != null){
+      this.proyectoService.getPoblacionesListId(this.preproyectoSeleccionado.proyectoId).subscribe(response =>{this.preproyectoSeleccionado.poblaciones = response});
+      console.log(this.preproyectoSeleccionado);
+    }
     this.modalService.abrirModal();
   }
 
-  crearIdea(){
-    this.preproyectoSeleccionado = new Proyectos();
-    
-    this.modalService.abrirModal();
+ 
+  descargarPDF(preproyecto: Proyectos){
+    window.open(URL_BACKEND+"/api/strategos/bancoproyectos/preproyecto/pdf/" + preproyecto.proyectoId); 
+  }
+
+  descargarPDFResumido(){
+    if(this.isAdmin == true){
+      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/preproyecto/pdf/resumido/"+ 0);
+    }else{
+      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/preproyecto/pdf/resumido/"+this.organizacionId);
+    }
+  }
+
+  descargarXls(preproyecto: Proyectos){
+    window.open(URL_BACKEND+"/api/strategos/bancoproyectos/idea/excel/" + preproyecto.proyectoId); 
+  }
+
+  descargarXlsResumido(){
+    if(this.isAdmin == true){
+      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/preproyecto/excel/"+ 0);
+    }else{
+      window.open(URL_BACKEND+"/api/strategos/bancoproyectos/preproyecto/excel/"+this.organizacionId);
+    }
+  }
+
+  delete(preproyecto: Proyectos): void{
+
+    Swal.fire({
+      title: 'Está seguro?',
+      text:  `¿Seguro que desea eliminar el preproyecto ${preproyecto.nombreProyecto} ?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.proyectoService.delete(preproyecto.proyectoId).subscribe(
+          response =>{
+            this.getPreproyectos();
+            Swal.fire(
+              'Preproyecto eliminado!',
+              'El Preproyecto ha sido eliminado con éxito',
+              'success'
+            )
+          }
+        )
+      }
+    })
+
   }
 
 }

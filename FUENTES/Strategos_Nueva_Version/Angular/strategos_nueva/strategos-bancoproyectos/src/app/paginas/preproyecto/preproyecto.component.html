@@ -48,21 +48,21 @@
                   <div class="col-md-3">
                     <label for="exampleInputEmail1">Año Formulación</label>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
-                    [(ngModel)]="anio" maxlength="4" >
+                    [(ngModel)]="anio" name="anio" maxlength="4" >
                 </div>
                 <div class="col-md-3">
                     <label for="exampleInputEmail1">Tipologia</label>
-                    <select class="form-control" [(ngModel)]="tipoId" >
+                    <select class="form-control" [(ngModel)]="tipoId" name="tipoId">
                       <option [value]="undefined" selected>Seleccionar</option>
-                      <option *ngFor="let tipo of tipos" [value]="tipo.tipoId">{{tipo.nombre}}</option>
+                      <option *ngFor="let tipo of tipos" [value]="tipo.tipoProyectoId">{{tipo.nombre}}</option>
                     </select>
                 </div>
                 
                 <div class="col-md-3">
                     <label for="exampleInputEmail1">Estatus</label>
-                    <select class="form-control"[(ngModel)]="estatusId">
+                    <select class="form-control"[(ngModel)]="estatusId" name="estatusId">
                       <option [value]="undefined" selected>Seleccionar</option>
-                      <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.nombre}}</option>
+                      <option *ngFor="let est of estatus" [value]="est.id">{{est.nombre}}</option>
                     </select>
                 </div>
                 
@@ -71,13 +71,13 @@
                   <label>Historico</label>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input type="checkbox" id="customCheckbox1"
-                  [(ngModel)]="historico">
+                  [(ngModel)]="historico" name="historico">
                    
                 </div>
 
                 <div class="col-md-9" *ngIf="isAdmin == true">
                     <label for="exampleInputEmail1">Dependencia</label>
-                    <select class="form-control" required [(ngModel)]="organizacionFiltroId" >
+                    <select class="form-control" [(ngModel)]="organizacionFiltroId" name="organizacionFiltroId">
                       <option [value]="undefined" selected>Seleccionar</option>
                       <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
                     </select>
@@ -122,6 +122,23 @@
                   </tr>
                 </thead>
                 
+                <tbody>
+                  <tr *ngFor="let pre of preproyectos | paginate: {itemsPerPage: 10, currentPage: pagePrepro, id: 'pagePre'}">
+                    <td width="100" >
+                      
+                      <i class="fas fa-edit" (click)="abrirModal(pre)" style="cursor: pointer;"></i>
+                      &nbsp;
+                      <i class="fas fa-trash-alt" (click)='delete(pre)' style="cursor: pointer;"></i>
+                      &nbsp;
+                      <i class="far fa-file-pdf" (click)="descargarPDF(pre)"></i>
+                    </td>
+                    <td width="80">{{pre.anioFormulacion}} </td>
+                    <td >{{pre.nombreProyecto}} </td>
+                    <td >{{pre.organizacion}} </td>
+                    <td >{{pre.tipo}} </td>
+                    <td >{{pre.estatus}} </td>
+                  </tr>
+                </tbody>
                           
             </table>  
             

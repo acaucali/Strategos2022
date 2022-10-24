@@ -21,6 +21,13 @@ public interface ProyectosService {
 	
 	List<Proyectos> findAllByDependenciaId(Long dependenciaId);
 	
+	List<Proyectos> findAllByDependenciaIdAndEstatusId(Long dependenciaId, Long estatusId);
+	
+	List<Proyectos> findAllByEstatusId(Long estatusId);	
+	
+	List<Proyectos> findAllByDependenciaIdAndIsPreproyecto(Long dependenciaId, Boolean isPreproyecto);
+	
+	List<Proyectos> findAllByIsPreproyecto(Boolean isPreproyecto);
 	
 	public List<Proyectos> queryFiltros(FIltroIdea filtro);	
 	

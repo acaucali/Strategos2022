@@ -1,0 +1,85 @@
+<detalle-iniciativa [iniciativa]="iniciativaSeleccionada"></detalle-iniciativa>
+
+    <!-- Main content -->
+    <section class="content">
+      <h2>Actividades</h2>
+    
+      <!-- Default box -->
+      <div class="card">
+
+        <div class="card-header">
+            <button type="button" class="btn"  title="Crear Iniciativa" (click)=" crearIniciativa()">
+                <i class="fa-md fas fa-plus"></i>
+            </button>
+            <button type="button" class="btn" title="Descargar Resumido">
+              <i class="fas fa-table"></i>
+            </button>
+          
+            
+          <div class="card-tools">
+            
+          </div>
+        </div>
+        
+        
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="iniciativas?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="100">Acciones</td>
+                  <td width="80">Alerta</td>
+                  <td>Actividades</td>
+                  <td>% Completado</td>
+                  <td>% Programado</td>
+                  <td>Última Medición</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let ind of iniciativas | paginate: {itemsPerPage: 10, currentPage: pageInic, id: 'pageIni'}">
+                  <td width="100" >
+                    
+                    <i class="fas fa-edit" (click)="editarIniciativa(ind)" style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="fas fa-trash-alt" (click)='eliminarIniciativa(ind)' style="cursor: pointer;"></i>
+                    
+                  </td>
+                  <td width="80"> </td>
+                  <td >{{ind.nombreIniciativa}} </td>
+                  <td > </td>
+                  <td > </td>
+                  <td > </td>
+                  
+                </tr>
+              </tbody>
+                       
+            </table>
+        
+            <pagination-controls id="pageIni" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageInic = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+
+  <!-- /.content-wrapper -->
+

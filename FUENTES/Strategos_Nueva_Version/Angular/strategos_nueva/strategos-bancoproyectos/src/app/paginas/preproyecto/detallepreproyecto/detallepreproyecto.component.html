@@ -9,7 +9,7 @@
           </div>
           <div class="modal-body">
             <div class="container">
-              <form #ideaForm="ngForm">
+              <form #preProyectoForm="ngForm">
                 <div class="form-row">
                   <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                     <li class="nav-item">
@@ -37,24 +37,43 @@
                         <div class="row">
 
                             <div class="col-md-12">
-                                <label for="exampleInputEmail1">Idea Propuesta (*)</label>
-                                <select class="form-control" required [(ngModel)]="preproyecto.ideaId" name="ideaId"
-                                  required #ideaId="ngModel">
-                                  <option [value]="undefined" selected>Seleccionar</option>
-                                  <option *ngFor="let ide of ideas" [value]="ide.ideaId">{{ide.nombreIdea}}
-                                  </option>
-                                </select>
+                                <label for="exampleInputEmail1">Idea Propuesta</label>
+                                
+                                <kendo-combobox
+                                    [data]="data"
+                                    [valuePrimitive]="true"
+                                    textField="text"
+                                    valueField="value"
+                                    name="preproyecto.ideaId"
+                                    [(ngModel)]="preproyecto.ideaId"
+                                    [filterable]="true"
+                                    (filterChange)="handleFilter($event)"
+                                    (selectionChange)="seleccionarIdea($event)"
+                                    placeholder="Seleccionar"                                   
+                                    
+                                  >
+                                </kendo-combobox>
                             </div>
 
                             <div class="col-md-12">
                                 <br>
                                 <label for="exampleInputEmail1">Dependencia Responsable (*)</label>
-                                <select class="form-control" required [(ngModel)]="preproyecto.dependenciaId" name="dependenciaId"
-                                  required #dependenciaId="ngModel">
-                                  <option [value]="undefined" selected>Seleccionar</option>
-                                  <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}
-                                  </option>
-                                </select>
+                               
+                                <kendo-combobox
+                                    [data]="dataOrg"
+                                    [valuePrimitive]="true"
+                                    textField="text"
+                                    valueField="value"
+                                    name="preproyecto.dependenciaId"
+                                    [(ngModel)]="preproyecto.dependenciaId"
+                                    [filterable]="true"
+                                    (filterChange)="handleFilterOrg($event)"
+                                    placeholder="Seleccionar"
+                                    (selectionChange)="seleccionarOrg($event)"
+                                    
+                                  required>
+                                </kendo-combobox>
+                               
                             </div>
 
                             <div class="col-md-5">
@@ -130,11 +149,11 @@
                               <div class="col-md-2">
                                 <br>
                                 <label for="exampleInputEmail1">Fecha Estatus</label><br>
-                                <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="preproyecto.fechaEstatus"
+                                <input [matDatepicker]="myDatepicker2" class="form-control" [(ngModel)]="preproyecto.fechaEstatus"
                                   name="fechaEstatus" #fechaEstatus="ngModel" style="display:inline; width:150px;"
                                   placeholder="dd/mm/yyyy" disabled>
       
-                                <mat-datepicker #myDatepicker></mat-datepicker>
+                                <mat-datepicker #myDatepicker2></mat-datepicker>
                               </div>
 
                               <div class="col-md-12">
@@ -167,15 +186,15 @@
                               <div class="col-md-2">
                                 <br>
                                 <label for="exampleInputEmail1">Duración (meses) (*)</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                <input type="number" class="form-control" id="exampleInputEmail1"
                                   placeholder="Duración (meses)" [(ngModel)]="preproyecto.duracion" name="duracion"
-                                  required maxlength="50" #duracion="ngModel">
+                                  required maxlength="4" #duracion="ngModel" onKeyPress="if(this.value.length==4) return false;">
                               </div>
 
                               <div class="col-md-3">
                                 <br>
                                 <label for="exampleInputEmail1">Costo Estimado (*)</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1"
+                                <input type="number" class="form-control" id="exampleInputEmail1"
                                   placeholder="Costo Estimado" [(ngModel)]="preproyecto.costoEstimado" name="costoEstimado"
                                   required maxlength="50" #costoEstimado="ngModel">
                               </div>
@@ -183,12 +202,21 @@
                             <div class="col-md-12">
                                 <br>
                                 <label for="exampleInputEmail1">Dependencia Lider (*)</label>
-                                <select class="form-control" required [(ngModel)]="preproyecto.dependenciaLider" name="dependenciaLider"
-                                  required #dependenciaLider="ngModel">
-                                  <option [value]="undefined" selected>Seleccionar</option>
-                                  <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}
-                                  </option>
-                                </select>
+                                <kendo-combobox
+                                    [data]="dataOrg2"
+                                    [valuePrimitive]="true"
+                                    [valuePrimitive]="true"
+                                    textField="text"
+                                    valueField="value"
+                                    name="preproyecto.dependenciaLider"
+                                    [(ngModel)]="preproyecto.dependenciaLider"
+                                    [filterable]="true"
+                                    (filterChange)="handleFilterOrg2($event)"
+                                    placeholder="Seleccionar"
+                                    (selectionChange)="seleccionarOrgLid($event)"
+                                    >
+                                </kendo-combobox>
+                                
                             </div>
 
                         </div>
@@ -218,16 +246,16 @@
                             </div>
                             <div class="col-md-12">
                                 <br>
-                                <label>Socios Estratégicos (*)</label>
+                                <label>Socios Estratégicos</label>
                                 <textarea class="form-control" rows="1" placeholder="Socios Estratégicos"
-                                  [(ngModel)]="preproyecto.sociosEstrategicos" name="sociosEstrategicos" required maxlength="2000"
+                                  [(ngModel)]="preproyecto.sociosEstrategicos" name="sociosEstrategicos" maxlength="2000"
                                   #sociosEstrategicos="ngModel"></textarea>
                             </div>
                             <div class="col-md-12">
                                 <br>
-                                <label>Roles Entidades (*)</label>
+                                <label>Roles Entidades</label>
                                 <textarea class="form-control" rows="1" placeholder="Roles Entidades"
-                                  [(ngModel)]="preproyecto.rolesParticipantes" name="rolesParticipantes" required maxlength="2000"
+                                  [(ngModel)]="preproyecto.rolesParticipantes" name="rolesParticipantes" maxlength="2000"
                                   #rolesParticipantes="ngModel"></textarea>
                             </div>
                             <div class="col-md-12">
@@ -249,18 +277,24 @@
                                   #cobertura="ngModel"></textarea>
                             </div>
                             <div class="col-md-12">
-                                <label>Multiple (.select2-purple)</label>
-                                <div class="select2-purple">
-                                    <select class="select2" multiple="multiple" data-placeholder="Select a State" data-dropdown-css-class="select2-purple" style="width: 100%;">
-                                    <option>Alabama</option>
-                                    <option>Alaska</option>
-                                    <option>California</option>
-                                    <option>Delaware</option>
-                                    <option>Tennessee</option>
-                                    <option>Texas</option>
-                                    <option>Washington</option>
-                                    </select>
-                                </div>
+                                <br>
+                                <label>Población Beneficiaria (*)</label>
+                          
+                                <ng-multiselect-dropdown class="selectPoblacion"
+                                  [placeholder]="'Seleccionar'"
+                                  [settings]="dropdownSettings"
+                                  [data]="poblaciones"                                  
+                                  (onSelect)="onItemSelect($event)"
+                                  (onSelectAll)="onSelectAll($event)"
+                                  (unSelect)="unSelect($event)"
+                                  (unSelectAll)="unSelectAll($event)"
+                                  [(ngModel)]="preproyecto.poblaciones"
+                                  name="preproyecto.poblaciones"
+                                  style="width: 1100px" required>
+                                  
+                                </ng-multiselect-dropdown>
+                                
+                                
                             </div>
                             <div class="col-md-12">
                                 <br>
@@ -279,7 +313,7 @@
                             <div class="col-md-12">
                                 <br>
                                 <label>Alcance del Proyecto (*)</label>
-                                <textarea class="form-control" rows="2" placeholder="Alcance del Proyecto"
+                                <textarea class="form-control" rows="1" placeholder="Alcance del Proyecto"
                                   [(ngModel)]="preproyecto.alcance" name="alcance" required maxlength="2000"
                                   #alcance="ngModel"></textarea>
                             </div>
@@ -304,8 +338,9 @@
 
                             <div class="col-md-2" *ngIf="preproyecto.proyectoId">
                                 <br>
+                                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <label>Historico</label>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;
                                 <input type="checkbox" id="customCheckbox1" [(ngModel)]="preproyecto.historico" name="historico"
                                   #historico="ngModel">
       
@@ -323,6 +358,12 @@
             </div>
           </div>
           <div class="modal-footer">
+            <button *ngIf="!preproyecto.proyectoId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+            data-dismiss="modal" [disabled]="!preProyectoForm.form.valid">Crear</button>
+            <ng-template #elseBlock>
+              <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal"
+                [disabled]="!preProyectoForm.form.valid">Actualizar</button>
+            </ng-template>
             <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
           </div>
         </div>
@@ -330,3 +371,5 @@
     </div>
   
   </div>
+
+ 

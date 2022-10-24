@@ -143,6 +143,10 @@ public class IdeasProyectos implements Serializable{
 	@Column(nullable=true)
 	private String duracionTotal;
 	
+	@Size(max=2000)
+	@Column(nullable=true)
+	private String informacionAdicional;
+	
 	@Column(nullable=true)
 	private Long documentoId;
 	
@@ -406,6 +410,14 @@ public class IdeasProyectos implements Serializable{
 
 	public void setEvaluacion(EvaluacionIdeas evaluacion) {
 		this.evaluacion = evaluacion;
+	}
+	
+	public String getInformacionAdicional() {
+		return informacionAdicional;
+	}
+
+	public void setInformacionAdicional(String informacionAdicional) {
+		this.informacionAdicional = informacionAdicional;
 	}
 
 	private static final long serialVersionUID = 1L;

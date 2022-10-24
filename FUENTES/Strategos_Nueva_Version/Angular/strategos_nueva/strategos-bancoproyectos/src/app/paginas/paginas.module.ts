@@ -6,6 +6,12 @@ import { ModulosModule } from '../modulos/modulos.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { ConfiguracionComponent } from './configuracion/configuracion.component';
 import { PreproyectoComponent } from './preproyecto/preproyecto.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { PlanesComponent } from './planes/planes.component';
+import { IndicadoresComponent } from './planes/indicadores/indicadores.component';
+import { IniciativasComponent } from './planes/iniciativas/iniciativas.component';
+import { PlanComponent } from './planes/plan/plan.component';
+import { ProyectosComponent } from './proyectos/proyectos.component';
 
 
 @NgModule({
@@ -18,7 +24,7 @@ import { PreproyectoComponent } from './preproyecto/preproyecto.component';
     CommonModule,
     ModulosModule,
     AppRoutingModule,
-    
+   
 
   ]
 })

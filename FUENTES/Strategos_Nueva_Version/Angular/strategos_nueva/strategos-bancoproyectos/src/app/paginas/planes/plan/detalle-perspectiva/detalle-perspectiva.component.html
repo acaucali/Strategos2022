@@ -1,0 +1,61 @@
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn">
+
+    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width: 1200px;">
+          <div class="modal-header text-white" style="background-color: #007BFF; height: 50px;">
+            <h4 class="modal-title">{{titulo}}</h4>
+  
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form #perspectivaForm="ngForm">
+                <div class="form-row">
+                    
+                  <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                      <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel"
+                        aria-labelledby="custom-tabs-one-home-tab">
+                        <div class="row">
+                          <div class="col-md-12" >
+                            <label for="exampleInputEmail1">Objetivo (*)</label>
+                            <textarea class="form-control" rows="3" placeholder="Objetivo"
+                            [(ngModel)]="perspectiva.nombre" name="nombre" maxlength="30"
+                            #nombre="ngModel">{{objetivo}}</textarea>
+                            
+                          </div>
+  
+                          <div class="col-md-12">
+                            <br>
+                            <label for="exampleInputEmail1">Descripción (*)</label>
+                            <textarea class="form-control" rows="3" placeholder="Descripción"
+                            [(ngModel)]="perspectiva.descripcion" name="descripcion" maxlength="30"
+                            #descripcion="ngModel"></textarea>
+
+                          </div>
+  
+  
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+  
+  
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button *ngIf="!perspectiva.perspectivaId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+              data-dismiss="modal" [disabled]="!perspectivaForm.form.valid">Crear</button>
+            <ng-template #elseBlock>
+              <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal"
+                [disabled]="!perspectivaForm.form.valid">Actualizar</button>
+            </ng-template>
+            <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>

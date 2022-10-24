@@ -36,6 +36,8 @@ export class Proyectos {
     estatus: String;
     fechaEstatus: Date;
     historico: Boolean;
-    metodologiaId: number;   
+    metodologiaId: number;  
+    isPreproyecto: Boolean; 
+    frecuencia: number;
     poblaciones:  TipoPoblacion[];                                                                
 }

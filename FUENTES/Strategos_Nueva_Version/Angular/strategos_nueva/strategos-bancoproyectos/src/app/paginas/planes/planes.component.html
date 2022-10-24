@@ -1,0 +1,46 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+        <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-body">
+
+            <div class="card-header">
+                <div class="container-fluid">
+                    <h2>Proyecto: {{proyecto.nombreProyecto}}</h2>
+                    Organización: {{organizacion.nombre}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Plan: {{plan.nombre}}
+                </div><!-- /.container-fluid -->
+                <div class="card-tools">
+                    <button type="button" class="btn" class="btn" title="Regresar">
+                        <i class="fas fa-sign-out-alt" [routerLink]="['/gestionideas']"></i>
+                        Regresar
+                    </button>
+                </div>
+            </div>
+            <br>
+            
+            <div class="row">
+                <div class="col-md-5">
+                    <!--arbol planes-->
+                    <app-plan></app-plan>
+                </div>
+                <div class="col-md-7">
+                    <!--indicadores iniciativas-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--indicador-->
+                            <app-indicadores></app-indicadores>
+                        </div>
+                        <div class="col-md-12">
+                            <!--iniciativa-->
+                            <app-iniciativas></app-iniciativas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

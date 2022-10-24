@@ -1,0 +1,68 @@
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Registrar Mediciones</h1>
+            Objetivo: {{objetivo}}
+          </div>          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn" title="Descargar Resumido" >
+                <i class="fa-md far fa-file-excel" ></i>
+            </button>
+            
+            <br>
+        </div>
+        <div class="card-body">
+                         
+
+            <div class="table-responsive">
+                <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+                    <thead>
+                        <tr class="text-white bg-primary">                            
+                          <td *ngFor="let enc of encabezados" width="{{enc.tamanio}}">                            
+                            {{enc.valor}}                                                     
+                          </td>                   
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                      <tr *ngFor="let ind of indicadores">
+                        <ng-container *ngFor="let med of datos">                             
+                            
+                              <td *ngIf="med.ideaId == ind.indicadorId" >
+                                <span *ngIf="med.campo =='indicador'">
+                                    &nbsp;{{med.valor}}</span>
+                                
+                                <span *ngIf="med.campo =='series'" >&nbsp;{{med.valor}}</span>
+  
+                                <input type="text" id="{{med.id}}" [(ngModel)]="med.valor" oninput="this.value = this.value.replace(/[^1-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="med.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                              </td>
+                            
+                            
+                        </ng-container>                        
+                      </tr>
+                    </tbody> 
+  
+                </table>
+                    
+            </div>
+         
+
+            
+            <button (click)="registrar()" type="button" class="btn btn-primary" data-dismiss="modal" >Registrar</button> &nbsp;&nbsp;
+            <button (click)="regresar()" type="button" class="btn btn-danger" data-dismiss="modal" >Regresar</button>
+
+        </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>

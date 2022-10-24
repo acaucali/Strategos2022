@@ -34,6 +34,7 @@ export class IdeasProyectos {
     observaciones: String;
     objetivoGeneral: String;
     duracionTotal: String;
+    informacionAdicional: String;
     documentoId: number;
     evaluacion: EvaluacionIdeas;
 

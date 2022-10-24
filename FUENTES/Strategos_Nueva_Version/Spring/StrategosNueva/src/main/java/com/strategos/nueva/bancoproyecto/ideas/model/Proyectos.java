@@ -67,7 +67,7 @@ public class Proyectos implements Serializable{
 	@Column(nullable=false)
 	private String nombreProyecto;
 	
-	@Size(max=4)
+		
 	@Column(nullable=false)
 	private Integer duracion;
 	
@@ -95,7 +95,7 @@ public class Proyectos implements Serializable{
 	private String dependenciasEstrategicas;
 	
 	@Size(max=500)
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private String sociosEstrategicos;
 	
 	@Size(max=2500)
@@ -103,7 +103,7 @@ public class Proyectos implements Serializable{
 	private String cobertura;
 	
 	@Size(max=2500)
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private String rolesParticipantes;
 	
 	@Size(max=2500)
@@ -126,7 +126,7 @@ public class Proyectos implements Serializable{
 	@Column(nullable=false)
 	private String financiacion;
 	
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private Long ideaId;
 	
 	@Temporal(TemporalType.DATE)
@@ -153,11 +153,27 @@ public class Proyectos implements Serializable{
 	
 	@Column(nullable=false)
 	private Long metodologiaId;
+
+	@Column(nullable=true)
+	private Boolean isPreproyecto;
+	
+	@Column(nullable=true)
+	private Byte frecuencia;
 	
 	@JsonIgnoreProperties(value ={ "hibernateLazyInitializer", "handler", "proyecto" }, allowSetters = true)
-	@OneToMany(cascade= CascadeType.ALL, mappedBy="proyecto", fetch=FetchType.LAZY)
+	@OneToMany(cascade= CascadeType.MERGE, mappedBy="proyecto", fetch=FetchType.LAZY)
 	private List<TipoPoblacion> poblaciones;
 		
+	
+	
+	public Boolean getIsPreproyecto() {
+		return isPreproyecto;
+	}
+
+	public void setIsPreproyecto(Boolean isPreproyecto) {
+		this.isPreproyecto = isPreproyecto;
+	}
+
 	public Long getProyectoId() {
 		return proyectoId;
 	}
@@ -435,8 +451,19 @@ public class Proyectos implements Serializable{
 	}
 
 	public void setEstatus(String estatus) {
+
 		this.estatus = estatus;
 	}
+	
+	public Byte getFrecuencia() {
+		return frecuencia;
+	}
+
+	public void setFrecuencia(Byte frecuencia) {
+		this.frecuencia = frecuencia;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 }

@@ -92,5 +92,29 @@ public class ProyectosServiceImpl implements ProyectosService{
 		
 		return (List<Proyectos>)proyectosDao.findAllByDependenciaId(dependenciaId);
 	}
+
+	@Override
+	public List<Proyectos> findAllByDependenciaIdAndEstatusId(Long dependenciaId, Long estatusId) {
+		// TODO Auto-generated method stub
+		return (List<Proyectos>)proyectosDao.findAllByDependenciaIdAndEstatusId(dependenciaId, estatusId);
+	}
+
+	@Override
+	public List<Proyectos> findAllByEstatusId(Long estatusId) {
+		// TODO Auto-generated method stub
+		return (List<Proyectos>)proyectosDao.findAllByEstatusId(estatusId);
+	}
+
+	@Override
+	public List<Proyectos> findAllByDependenciaIdAndIsPreproyecto(Long dependenciaId, Boolean isPreproyecto) {
+		// TODO Auto-generated method stub
+		return (List<Proyectos>)proyectosDao.findAllByDependenciaIdAndIsPreproyecto(dependenciaId, isPreproyecto);
+	}
+
+	@Override
+	public List<Proyectos> findAllByIsPreproyecto(Boolean isPreproyecto) {
+		// TODO Auto-generated method stub
+		return (List<Proyectos>)proyectosDao.findAllByIsPreproyecto(isPreproyecto);
+	}
 			
 }

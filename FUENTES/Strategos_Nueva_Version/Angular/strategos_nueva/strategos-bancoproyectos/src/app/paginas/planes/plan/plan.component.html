@@ -1,0 +1,49 @@
+<detalle-perspectiva [perspectiva]="perspectivaSeleccionada"></detalle-perspectiva>
+    <!-- Main content -->
+    <section class="content">
+      <h2>Plan</h2>
+    
+        <!-- Default box -->
+        <div class="card">
+          
+            <div class="card-header">
+              <button type="button" class="btn"  title="Crear perspectiva" (click)="crearPerspectiva(selectedKeys.join())">
+                  <i class="fa-md fas fa-plus"></i>
+              </button>
+              <button type="button" class="btn" title="Editar perspectiva" (click)="editarPerspectiva(selectedKeys.join())">
+                  <i class="fas fa-edit" ></i>
+              </button>
+              <button type="button" class="btn" title="Eliminar perspectiva" (click)="eliminarPerspectiva(selectedKeys.join())">
+                <i class="fas fa-trash-alt" ></i>
+              </button>
+              <button type="button" class="btn" title="Descargar Resumido">
+                <i class="fa-md far fa-file-pdf" ></i>
+              </button>
+              <button type="button" class="btn" title="Descargar Resumido">
+                <i class="fa-md far fa-file-excel" ></i>
+              </button>
+              <br>
+              <br>
+              <div class="container-fluid">
+                <kendo-treeview [nodes]="arbol" 
+                  textField="text"
+                  [hasChildren]="hasChildren" 
+                  [children]="fetchChildren"
+                  style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 400;"
+                  kendoTreeViewExpandable
+                  [expandedKeys]="expandedKeys"
+                  kendoTreeViewSelectable [selectBy]="'id'"
+                  [(selectedKeys)]="selectedKeys"
+                  (nodeClick)="onClick(selectedKeys.join())"
+                  >
+                </kendo-treeview>
+              </div>
+
+            </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </section>
+
+  
+  

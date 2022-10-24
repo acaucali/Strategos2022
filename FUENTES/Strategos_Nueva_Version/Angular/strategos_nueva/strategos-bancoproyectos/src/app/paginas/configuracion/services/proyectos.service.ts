@@ -7,6 +7,7 @@ import { URL_BACKEND } from 'src/app/config/config';
 import { EstatusIdeas } from '../model/estatusideas';
 import swal from 'sweetalert2';
 import { Proyectos } from '../model/proyectos';
+import { TipoPoblacion } from '../model/tipopoblacion';
 
 
 @Injectable({
@@ -18,6 +19,7 @@ export class ProyectoService {
   private urlEndPoint:string =URL_BACKEND+'/api/strategos/bancoproyectos/proyecto';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
   public proyectos: Proyectos[];
+  public poblaciones: TipoPoblacion[];
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -39,6 +41,41 @@ export class ProyectoService {
     return this.http.get(`${this.urlEndPoint}/org/${id}`).pipe(map(res =>{
       this.proyectos = res as Proyectos[];
       return this.proyectos;
+    }));
+  }
+
+  getProyectosListEstatusOrgId(orgId: number, estatusId: any){
+    return this.http.get(`${this.urlEndPoint}/orgestatus/${orgId}/${estatusId}`).pipe(map(res =>{
+      this.proyectos = res as Proyectos[];
+      return this.proyectos;
+    }));
+  }
+
+  getProyectosListEstatusId(estatusId: number){
+    return this.http.get(`${this.urlEndPoint}/estatus/${estatusId}`).pipe(map(res =>{
+      this.proyectos = res as Proyectos[];
+      return this.proyectos;
+    }));
+  }
+
+  getProyectosListOrgTipoId(orgId: number, isPreproyecto: Boolean){
+    return this.http.get(`${this.urlEndPoint}/orgtipo/${orgId}/${isPreproyecto}`).pipe(map(res =>{
+      this.proyectos = res as Proyectos[];
+      return this.proyectos;
+    }));
+  }
+
+  getProyectosListTipoId(isPreproyecto: Boolean){
+    return this.http.get(`${this.urlEndPoint}/tipo/${isPreproyecto}`).pipe(map(res =>{
+      this.proyectos = res as Proyectos[];
+      return this.proyectos;
+    }));
+  }
+
+  getPoblacionesListId(id: number){
+    return this.http.get(`${this.urlEndPoint}/poblacion/${id}`).pipe(map(res =>{
+      this.poblaciones = res as TipoPoblacion[];
+      return this.poblaciones;
     }));
   }
 
@@ -78,8 +115,8 @@ export class ProyectoService {
     );
   }
 
-  update(proyectos: Proyectos): Observable<any>{
-    return this.http.put<any>(`${this.urlEndPoint}/${proyectos.proyectoId}`, proyectos, {headers: this.httpHeaders }).pipe(
+  update(proyectos: Proyectos, tipo: any): Observable<any>{
+    return this.http.put<any>(`${this.urlEndPoint}/${proyectos.proyectoId}/${tipo}`, proyectos, {headers: this.httpHeaders }).pipe(
       catchError(e =>{
         if(e.status==400){
           return throwError(e);

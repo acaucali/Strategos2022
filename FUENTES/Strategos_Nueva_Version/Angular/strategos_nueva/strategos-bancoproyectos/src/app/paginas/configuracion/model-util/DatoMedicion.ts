@@ -6,4 +6,5 @@ export class DatoMedicion {
     peso: String;
     id: number;
     ideaId: number;
+    tipo: String;
 }

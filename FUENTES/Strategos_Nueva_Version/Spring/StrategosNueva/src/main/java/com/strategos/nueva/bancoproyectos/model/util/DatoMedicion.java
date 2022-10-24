@@ -8,6 +8,8 @@ public class DatoMedicion {
 	private String peso;
 	private Long id;
 	private Long ideaId;
+	private String tipo; 
+	
 	
 	public String getCampo() {
 		return campo;
@@ -44,7 +46,14 @@ public class DatoMedicion {
 	}
 	public void setIdeaId(Long ideaId) {
 		this.ideaId = ideaId;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}	
+	
 	
 	
 }

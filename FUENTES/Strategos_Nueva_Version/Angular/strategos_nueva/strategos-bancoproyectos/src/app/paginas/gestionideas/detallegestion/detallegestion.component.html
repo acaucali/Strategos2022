@@ -123,11 +123,11 @@
                         <div class="col-md-2">
                           <br>
                           <label for="exampleInputEmail1">Fecha Estatus</label><br>
-                          <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="idea.fechaEstatus"
+                          <input [matDatepicker]="myDatepicker2" class="form-control" [(ngModel)]="idea.fechaEstatus"
                             name="fechaEstatus" #fechaEstatus="ngModel" style="display:inline; width:150px;"
                             placeholder="dd/mm/yyyy" disabled>
 
-                          <mat-datepicker #myDatepicker></mat-datepicker>
+                          <mat-datepicker #myDatepicker2></mat-datepicker>
                         </div>
 
                         
@@ -258,7 +258,7 @@
                         <div class="col-md-12">
                           <br>
                           <label>Capacidad Técnica (*)</label>
-                          <textarea class="form-control" rows="2" placeholder="Capacidad Técnica"
+                          <textarea class="form-control" rows="1" placeholder="Capacidad Técnica"
                             [(ngModel)]="idea.capacidadTecnica" name="capacidadTecnica" required maxlength="2000"
                             #capacidadTecnica="ngModel"></textarea>
                         </div>
@@ -268,6 +268,13 @@
                           <textarea class="form-control" rows="2" placeholder="Observaciones"
                             [(ngModel)]="idea.observaciones" name="observaciones" maxlength="2000"
                             #observaciones="ngModel"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br>
+                          <label>Información Adicional</label>
+                          <textarea class="form-control" rows="2" placeholder="Información Adicional"
+                            [(ngModel)]="idea.informacionAdicional" name="informacionAdicional" maxlength="2000"
+                            #informacionAdicional="ngModel"></textarea>
                         </div>
                       </div>
                     </div>

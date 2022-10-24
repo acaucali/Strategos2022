@@ -19,6 +19,9 @@ const routes: Routes = [
     { path: 'evaluaciondatos/:id', loadChildren: () => import('./gestionideas/evaluacion-datos/evaluaciondatos.module').then(m =>m.EvaluacionDatosModule)},
     { path: 'inicio', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
     { path: 'preproyecto', loadChildren: () => import('./preproyecto/preproyectos.module').then(m =>m.PreProyectoModule)},
+    { path: 'proyecto', loadChildren: () => import('./proyectos/proyectos.module').then(m =>m.ProyectoModule)},
+    { path: 'planes/:id', loadChildren: () => import('./planes/planes.module').then(m =>m.PlanesModule)},
+    { path: 'medicionindicador', loadChildren: () => import('./planes/indicadores/medicion-indicador/detalle-medicion/detalle-medicion.module').then(m =>m.DetalleMedicionModule)},
     { path: '**', component: Pagina404Component},
   ]}
 ];
