@@ -156,6 +156,9 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 							? Byte.parseByte(request.getParameter("selectHitoricoType"))
 							: HistoricoType.getFiltroHistoricoNoMarcado();
 
+			System.out.print("\n\nNumero iniciativas: " + tipo);
+			System.out.print("\n\nNumero iniciativas: " + ano);
+			System.out.print("\n\nNumero iniciativas: " + reporte.getEstatus());
 			FiltroForm filtro = new FiltroForm();
 			filtro.setHistorico(selectHitoricoType);
 			if (filtroNombre.equals(""))

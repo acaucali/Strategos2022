@@ -32,7 +32,7 @@
 
 		<script type="text/javascript">
 
-			var _formaEditada = null;
+			var _formaEditada = null;			
 			function confirmar() 
 			{
 				if (!validarTotal())

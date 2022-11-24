@@ -28,6 +28,7 @@ import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.util.StringUtil;
+import com.visiongc.commons.util.lang.ChainedRuntimeException;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
 
@@ -285,7 +286,7 @@ public class GuardarIniciativaAction extends VgcAction {
 		iniciativa.setTipoAlerta((byte) 0); // Calculo por alerta
 
 		if ((editarIniciativaForm.getDescripcion() != null) && (!editarIniciativaForm.getDescripcion().equals("")))
-			iniciativa.getMemoIniciativa().setDescripcion(editarIniciativaForm.getDescripcion());		
+			iniciativa.getMemoIniciativa().setDescripcion(editarIniciativaForm.getDescripcion());
 		else if (iniciativa.getMemoIniciativa() != null)
 			iniciativa.getMemoIniciativa().setDescripcion(null);
 
@@ -362,7 +363,13 @@ public class GuardarIniciativaAction extends VgcAction {
 					&& iniciativa.getEstatusId().longValue() != EstatusType.getEstatusSuspendido().longValue()
 					&& editarIniciativaForm.getEliminarMediciones())
 				iniciativa.setEstatusId(EstatusType.getEstatusSinIniciar());
-			respuesta = strategosIniciativasService.saveIniciativa(iniciativa, getUsuarioConectado(request), true);
+
+			try {
+				respuesta = strategosIniciativasService.saveIniciativa(iniciativa, getUsuarioConectado(request), true);
+			} catch (Throwable t) {
+				respuesta = 10007;
+			}
+
 		}
 		if (respuesta == VgcReturnCode.DB_OK)
 			respuesta = actualizarActividades(cambioFrecuencia, iniciativa, getUsuarioConectado(request),
@@ -406,6 +413,13 @@ public class GuardarIniciativaAction extends VgcAction {
 				forward = "crearIniciativa";
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
 					new ActionMessage("action.guardarregistro.duplicado"));
+		} else if (respuesta == VgcReturnCode.DB_CANCELED) {
+			editarIniciativaForm.setStatus(StatusUtil.getStatusNoSuccess());
+			forward = "crearIniciativa";
+			messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+					new ActionMessage("action.guardarregistro.modificar.no.ok"));
+			messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+					new ActionMessage("action.guardarregistro.organizacion.no.ok"));
 		}
 
 		strategosIniciativasService.close();

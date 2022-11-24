@@ -449,6 +449,10 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("mediciones.exportarxlsmediciones", false, true, "INDICADOR_MEDICION");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("mediciones.eliminarmedicionesfuturas", false, true, "INDICADOR_MEDICION");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("mediciones.eliminarmedicionparametros", false, true, "INDICADOR_MEDICION");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    
 	    actionRight = new StrutsActionRight("calculoindicadores.configurarcalculoindicadores", false, true, "INDICADOR_MEDICION_CALCULAR");
 	    this.mapa.put("calculoindicadores.configurarcalculoindicadores", actionRight);
@@ -1252,6 +1256,13 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicospdf", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicosxls", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    
+	    actionRight = new StrutsActionRight("reportes.iniciativas.medicionesatrasadas", false, false, "INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.iniciativas.medicionesatrasadaspdf", false, false, "INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.iniciativas.medicionesatrasadasxls", false, false, "INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    	  
 	    

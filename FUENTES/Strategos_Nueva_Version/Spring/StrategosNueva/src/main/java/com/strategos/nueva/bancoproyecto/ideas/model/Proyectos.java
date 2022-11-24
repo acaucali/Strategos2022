@@ -51,7 +51,6 @@ public class Proyectos implements Serializable{
 	@Column(nullable=true)
 	private Date fechaRadicacion; 
 	
-	//organizacion Id
 	@Column(nullable=false)
 	private Long tipoProyectoId;
 	
@@ -163,7 +162,46 @@ public class Proyectos implements Serializable{
 	@JsonIgnoreProperties(value ={ "hibernateLazyInitializer", "handler", "proyecto" }, allowSetters = true)
 	@OneToMany(cascade= CascadeType.MERGE, mappedBy="proyecto", fetch=FetchType.LAZY)
 	private List<TipoPoblacion> poblaciones;
+	
+	@Size(max=500)
+	@Column(nullable=true)
+	private String cooperante;
+				
+	@Size(max=500)
+	@Column(nullable=true)
+	private String dependenciasConvenio;
+	
+	@Size(max=100)
+	@Column(nullable=true)
+	private String numeroConvenio;	
+	
+	@Temporal(TemporalType.DATE)
+	@Column(nullable=true)
+	private Date fechaInicioConvenio;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(nullable=true)
+	private Date fechaCulminacionConvenio;
+	
+	@Size(max=200)
+	@Column(nullable=true)
+	private String nombreOperador;	
 		
+	@Size(max=200)
+	@Column(nullable=true)
+	private String contactoEmailOperador;
+	
+	@Size(max=200)
+	@Column(nullable=true)
+	private String contactoTelefonoOperador;
+		
+	@Size(max=500)
+	@Column(nullable=true)
+	private String recursosAsignados;
+	
+	@Size(max=500)
+	@Column(nullable=true)
+	private String prorrogas;
 	
 	
 	public Boolean getIsPreproyecto() {
@@ -461,8 +499,86 @@ public class Proyectos implements Serializable{
 
 	public void setFrecuencia(Byte frecuencia) {
 		this.frecuencia = frecuencia;
+	}	
+	
+	public String getCooperanteId() {
+		return cooperante;		
+	}
+	
+	public void setCooperanteId(String cooperanteId) {
+		this.cooperante = cooperanteId;
+	}
+	
+	public String getDependenciasConvenio() {
+		return dependenciasConvenio;
+	}
+	
+	public void setDependenciasConvenio(String dependenciasConvenio) {
+		this.dependenciasConvenio = dependenciasConvenio;
+	}
+	
+	public String getNumeroConvenio() {
+		return numeroConvenio;
+	}
+	
+	public void setNumeroConvenio(String numeroConvenio) {
+		this.numeroConvenio = numeroConvenio;
+	}
+	
+	public Date getFechaInicioConvenio() {
+		return fechaInicioConvenio;
 	}
 
+	public void setFechaInicioConvenio(Date fechaInicioConvenio) {
+		this.fechaInicioConvenio = fechaInicioConvenio;
+	}
+	
+	public Date getFechaCulminacionConvenio() {
+		return fechaCulminacionConvenio;
+	}
+
+	public void setFechaCulminacionConvenio(Date fechaCulminacionConvenio) {
+		this.fechaCulminacionConvenio = fechaCulminacionConvenio;
+	}
+	
+	public String getNombreOperador() {
+		return nombreOperador;
+	}
+	
+	public void setNombreOperador(String nombreOperador) {
+		this.nombreOperador = nombreOperador;
+	}
+		
+	public String getContactoEmailOperador() {
+		return contactoEmailOperador;
+	}
+	
+	public void setContactoEmailOperador(String contactoEmailOperador) {
+		this.contactoEmailOperador = contactoEmailOperador;
+	}
+	
+	public String getContactoTelefonoOperador() {
+		return contactoTelefonoOperador;
+	}
+	
+	public void setContactoTelefonoOperador(String contactoTelefonoOperador) {
+		this.contactoTelefonoOperador = contactoTelefonoOperador;
+	}
+	public String getRecursosAsignados() {
+		return recursosAsignados;
+	}
+	
+	public void setRecursosAsignados(String recursosAsignados) {
+		this.recursosAsignados = recursosAsignados;
+	}
+	
+	public String getProrrogas() {
+		return prorrogas;
+	}
+	
+	public void setProrrogas(String prorrogas) {
+		this.prorrogas = prorrogas;
+	}
 
 
 	private static final long serialVersionUID = 1L;

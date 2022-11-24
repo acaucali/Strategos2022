@@ -136,6 +136,7 @@
 										
 			function guardar() 
 			{
+												
 				<vgcinterfaz:mostrarPanelContenedorJs nombrePanel="datosBasicos" nombreContenedor="editarIniciativa"></vgcinterfaz:mostrarPanelContenedorJs>
 				if (validar(document.editarIniciativaForm)) 
 				{
@@ -149,7 +150,8 @@
 					window.document.editarIniciativaForm.submit();
 								
 																				
-				}				
+				}
+				
 			}
 			
 			function cancelar() 
@@ -346,7 +348,7 @@
 								<tr>
 									<td align="right"><b><vgcutil:message key="jsp.editariniciativa.ficha.organizacion" /></b></td>
 									<logic:equal name="editarIniciativaForm" property="iniciativaId" value="0">
-										<td align="right"><input type="button" style="width:40%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();"></td>
+										<td align="right"><input type="button" style="width:80%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();"></td>
 									</logic:equal>
 									<logic:notEqual name="editarIniciativaForm" property="iniciativaId" value="0">										
 										<td colspan="3"><bean:write name="editarIniciativaForm" property="organizacionNombre" /></td>

@@ -458,6 +458,11 @@
 	 {
 		 abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/datosBasicos" />', "Iniciativa", 520, 460);
 	 }
+	 
+	 function generarReporteMedicionesAtrasadas()
+	 {
+		 abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/medicionesAtrasadas" />', "Iniciativa", 520, 460);
+	 }
 	
 	
 </script>
@@ -581,6 +586,7 @@
 							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
 							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
 							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.mediciones.atrasadas" onclick="generarReporteMedicionesAtrasadas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
 							<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 								

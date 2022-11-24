@@ -272,23 +272,22 @@ public class ProyectoRestController {
 					proyectoN.setTipo(tipo.getNombre());
 				}
 				if(proyectoN.getEstatusId() != null) {
-					IniciativaEstatusStrategos est = estatusService.findById(proyectoN.getEstatusId());
+					IniciativaEstatusStrategos est = estatusService.findById(proyectoN.getEstatusId());					
 					proyectoN.setEstatus(est.getNombre());
 					proyectoN.setFechaEstatus(new Date());
-				}
+				}				
 				proyectoN.setHistorico(false);
 				proyectoN.setIsPreproyecto(true);
-				
-				
-				IdeasProyectos idea = ideasProyectosService.findById(proyectoN.getIdeaId());
-				
-				if(idea.getEstatusIdeaId() != null) {
+												
+															
+				if(proyectoN.getIdeaId() != null) {
+					IdeasProyectos idea = ideasProyectosService.findById(proyectoN.getIdeaId());
 					EstatusIdeas est = estatusIdeaService.findById(new Long(6));
 					idea.setEstatus(est.getEstatus());
 					idea.setFechaEstatus(new Date());
+					ideasProyectosService.save(idea);
 				}
 				
-				ideasProyectosService.save(idea);
 				
 				proyectosPoblacion = proyectoN.getPoblaciones();
 				
@@ -369,6 +368,14 @@ public class ProyectoRestController {
 					proyectoActual.setTipoObjetivoId(proyecto.getTipoObjetivoId());//idea
 					proyectoActual.setTipoProyectoId(proyecto.getTipoProyectoId());
 					
+					proyectoActual.setDependenciasConvenio(proyecto.getDependenciasConvenio());
+					proyectoActual.setNumeroConvenio(proyecto.getNumeroConvenio());
+					proyectoActual.setFechaInicioConvenio(proyecto.getFechaInicioConvenio());
+					proyectoActual.setFechaCulminacionConvenio(proyecto.getFechaCulminacionConvenio());
+					proyectoActual.setNombreOperador(proyecto.getNombreOperador());					
+					proyectoActual.setRecursosAsignados(proyecto.getRecursosAsignados());
+					proyectoActual.setProrrogas(proyecto.getProrrogas());
+					
 					proyectoActual.setIsPreproyecto(true);
 					
 					if(proyectoActual.getEstatusId() != null) {
@@ -431,6 +438,18 @@ public class ProyectoRestController {
 					proyectoActual.setFrecuencia(proyecto.getFrecuencia());
 					proyectoActual.setIsPreproyecto(false);
 					
+					proyectoActual.setCooperanteId(proyecto.getCooperanteId());
+					proyectoActual.setDependenciasConvenio(proyecto.getDependenciasConvenio());
+					proyectoActual.setNumeroConvenio(proyecto.getNumeroConvenio());
+					proyectoActual.setFechaInicioConvenio(proyecto.getFechaInicioConvenio());
+					proyectoActual.setFechaCulminacionConvenio(proyecto.getFechaCulminacionConvenio());
+					proyectoActual.setNombreOperador(proyecto.getNombreOperador());
+					proyectoActual.setContactoEmailOperador(proyecto.getContactoEmailOperador());
+					proyectoActual.setContactoTelefonoOperador(proyecto.getContactoTelefonoOperador());
+					proyectoActual.setRecursosAsignados(proyecto.getRecursosAsignados());
+					proyectoActual.setProrrogas(proyecto.getProrrogas());
+					
+					System.out.print("\n\n" + proyectoActual.getEstatusId() + "\n\n");
 					if(proyectoActual.getEstatusId() != null) {
 						IniciativaEstatusStrategos est = estatusService.findById(proyectoActual.getEstatusId());
 						proyectoActual.setEstatus(est.getNombre());

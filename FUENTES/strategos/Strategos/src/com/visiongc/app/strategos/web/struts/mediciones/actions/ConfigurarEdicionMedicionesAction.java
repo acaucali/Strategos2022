@@ -60,7 +60,8 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		editarMedicionesForm.clear();
 		
 		ActionMessages messages = getMessages(request);
-
+		
+			
 		boolean noExistenIndicadores = false;
 		editarMedicionesForm.setDesdeClase(Boolean.parseBoolean(request.getParameter("desdeClases")));
 		editarMedicionesForm.setDesdeIndicadorOrg(false);
@@ -343,7 +344,8 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 				editarMedicionesForm.setIniciativaId(null);
 				editarMedicionesForm.setOrganizacionId(null);
 				editarMedicionesForm.setFechaDesde(VgcFormatter.formatearFecha(ahora.getTime(), "formato.fecha.corta"));
-				editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(ahora.getTime(), "formato.fecha.corta"));
+				editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(ahora.getTime(), "formato.fecha.corta"));				
+				editarMedicionesForm.setAnioFinal(ahora.getTime().getYear()+1900);				
 				editarMedicionesForm.setAnoDesde(new Integer(anoActual).toString());
 				editarMedicionesForm.setAnoHasta(new Integer(anoActual).toString());
 
@@ -407,7 +409,9 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		fecha.set(1, Integer.parseInt(editarMedicionesForm.getAnoHasta()));
 		fecha.set(2, 11);
 		fecha.set(5, 31);
-		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta"));
+		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta"));		
+		editarMedicionesForm.setAnioFinal(fecha.getTime().getYear()+1900);		
+				
 	}
   
 	private String[] setup(EditarMedicionesForm editarMedicionesForm, HttpServletRequest request)
@@ -571,7 +575,8 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		editarMedicionesForm.setPeriodoDesde(PeriodoUtil.getPeriodoDeFecha(calFechaDesde, editarMedicionesForm.getFrecuencia()));
 		editarMedicionesForm.setPeriodosD(PeriodoUtil.getListaNumeros(editarMedicionesForm.getPeriodoDesde(), editarMedicionesForm.getPeriodoDesde()));
 		
-		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(calFechaHasta.getTime(), "formato.fecha.corta"));
+		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(calFechaHasta.getTime(), "formato.fecha.corta"));		
+		editarMedicionesForm.setAnioFinal(calFechaHasta.getTime().getYear()+1900);		
 		editarMedicionesForm.setAnosH(PeriodoUtil.getListaNumeros(new Integer(editarMedicionesForm.getFechaHasta().split("/")[2]), new Integer(editarMedicionesForm.getFechaHasta().split("/")[2])));
 		editarMedicionesForm.setAnoHasta(new Integer(calFechaHasta.get(1)).toString());
 		editarMedicionesForm.setPeriodoHasta(PeriodoUtil.getPeriodoDeFecha(calFechaHasta, editarMedicionesForm.getFrecuencia()));
@@ -601,4 +606,6 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		
 		return serie;
 	}
+	
+	
 }

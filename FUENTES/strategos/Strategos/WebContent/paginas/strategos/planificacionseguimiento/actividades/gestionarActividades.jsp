@@ -360,6 +360,7 @@
 			{
 				actualizar();					
 			}
+						
 
 			function editarMediciones(actividadId, tipo) 
 			{
@@ -701,6 +702,7 @@
 								</vgcinterfaz:menuAnidado>
 								<logic:notEqual name="gestionarActividadesForm" property="bloqueado" value="true">
 									<vgcinterfaz:botonMenu key="menu.mediciones.importar" onclick="importarMediciones();" permisoId="ACTIVIDAD_IMPORTAR" />
+									
 									<vgcinterfaz:botonMenu key="menu.mediciones.calcular" onclick="calcularIndicadores();" permisoId="ACTIVIDAD_CALCULAR" agregarSeparador="true" />
 									<vgcinterfaz:menuAnidado key="menu.mediciones.proteccion">
 										<vgcinterfaz:botonMenu key="menu.mediciones.proteccion.liberar" onclick="protegerLiberarMediciones(document.gestionarActividadesForm.seleccionados.value, false);" permisoId="ACTIVIDAD_PROTEGER_LIBERAR" aplicaOrganizacion="true" />

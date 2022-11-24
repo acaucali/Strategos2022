@@ -449,7 +449,7 @@
 			}
 		
 			function editarMediciones() 
-			{
+			{				
 				document.editarMedicionesForm.respuesta.value = "";
 				document.editarMedicionesForm.periodoDesde.value = document.getElementById('selectPeriodoInicial').value;
 				document.editarMedicionesForm.periodoHasta.value = document.getElementById('selectPeriodoFinal').value;
@@ -497,19 +497,38 @@
 
 			 		if (!fechaValida(document.editarMedicionesForm.fechaHasta))
 			 			return;
-		 		}
+		 		}			 	
 			 	
 			 	if (!validarRango(document.editarMedicionesForm.anoDesde, document.editarMedicionesForm.anoHasta, document.getElementById('selectPeriodoInicial'), document.getElementById('selectPeriodoFinal'), errMsRango))
-			 		return;
-			 		
-			 	document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
-				document.editarMedicionesForm.submit();
+			 		return;			 	
+			 	
+			 	
+			 	var periodoactual= obtenerPeriodoActual(document.editarMedicionesForm.frecuencia.value)
+			 	periodoactual = periodoactual +1;
+			 	if(periodoactual < document.editarMedicionesForm.periodoHasta.value || document.editarMedicionesForm.anioFinal.value < document.editarMedicionesForm.anoHasta.value){			 						 	
+				 	var alerta = confirm('Esta intentando cargar mediciones a futuro');
+				 	if(alerta){
+				 		var confirmacion = confirm('¿ESTA SEGURO DE REALIZAR ESTA ACCCION?');
+				 		if(confirmacion){
+				 			document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
+							document.editarMedicionesForm.submit();
+				 		}
+				 		else{
+					 		cancelar();
+					 	}
+				 	}else{
+				 		cancelar();
+				 	}
+			 	}else{
+			 		document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
+					document.editarMedicionesForm.submit();
+			 	}			 				 	
 			}
 
 			function onAceptar()
 			{
 				this.opener.document.<bean:write name="editarMedicionesForm" property="nombreForma" scope="session" />.<bean:write name="editarMedicionesForm" property="nombreCampoOculto" scope="session" />.value="Sucess";
-				this.opener.<bean:write name="editarMedicionesForm" property="funcionCierre" scope="session" />;
+				this.opener.<bean:write name="editarMedicionesForm" property="funcionCierre" scope="session" />;			
 				cancelar();
 			}
 			
@@ -541,7 +560,8 @@
 			<html:hidden property="respuesta" />
 			<html:hidden property="status" />
 			<html:hidden property="desdeReal" />
-			<html:hidden property="esAdmin" />
+			<html:hidden property="esAdmin" />			
+			<html:hidden property="anioFinal" />
 			
 			<input type="hidden" name="periodoDesdeAnt" value="1" />
 			<input type="hidden" name="periodoHastaAnt" value="1" />

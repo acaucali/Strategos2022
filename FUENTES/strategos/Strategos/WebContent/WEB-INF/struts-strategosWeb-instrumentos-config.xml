@@ -191,7 +191,7 @@
 		<!-- Mapeo del Action: Calcular indicadores -->
 		<action path="/instrumentos/calcularIndicadores" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.CalcularIndicadoresAction" scope="session" input="calcularIndicadores" parameter="calcularIndicadores" name="editarInstrumentosForm"></action>
 					
-		<!-- Mapeo del Action: Generar Reporte de Resumido Pdf de la Iniciativa Ejecucion-->
+		<!-- Mapeo del Action: Calcular indicadores -->		
 		<action path="/instrumentos/calcularIndicadoresEjecucion" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.CalcularIndicadoresEjecucionAction" name="editarInstrumentosForm" scope="session" parameter="calcularIndicadores"></action>
 		
 	</action-mappings>

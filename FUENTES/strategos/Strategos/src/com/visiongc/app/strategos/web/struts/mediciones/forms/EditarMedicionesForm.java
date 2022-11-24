@@ -99,6 +99,9 @@ public class EditarMedicionesForm extends EditarObjetoForm
 	private Boolean desdeReal;
 	private Boolean esAdmin;
 	
+	private Integer periodoFinal; 
+	private Integer anioFinal;
+	
 	public static final String SEPARADOR_SERIES = ":";
 	public static final String SEPARADOR_MEDICIONES = ";";
 	public static final String SEPARADOR_CAMPOS = "_";
@@ -1165,4 +1168,20 @@ public class EditarMedicionesForm extends EditarObjetoForm
 			this.columnas.add(columna);
 		}
   	}
+
+	public Integer getPeriodoFinal() {
+		return periodoFinal;
+	}
+
+	public void setPeriodoFinal(Integer periodoFinal) {
+		this.periodoFinal = periodoFinal;
+	}
+
+	public Integer getAnioFinal() {
+		return anioFinal;
+	}
+
+	public void setAnioFinal(Integer anioFinal) {
+		this.anioFinal = anioFinal;
+	}
 }

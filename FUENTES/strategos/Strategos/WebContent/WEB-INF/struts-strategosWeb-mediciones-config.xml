@@ -15,7 +15,8 @@
 	<global-forwards>
 		<forward name="configurarEdicionMediciones" path="/paginas/strategos/mediciones/configurarEdicionMediciones.jsp" />
 		<forward name="editarMediciones" path="/paginas/strategos/mediciones/editarMediciones.jsp" />
-		<forward name="protegerLiberarMediciones" path="/paginas/strategos/mediciones/protegerLiberarMediciones.jsp" />
+		<forward name="protegerLiberarMediciones" path="/paginas/strategos/mediciones/protegerLiberarMediciones.jsp" />		
+		<forward name="eliminarMedicionesFuturas" path="/paginas/strategos/mediciones/eliminarMedicionesFuturas.jsp" />			
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -45,8 +46,13 @@
 		<action path="/mediciones/imprimirMediciones" type="com.visiongc.app.strategos.web.struts.mediciones.actions.ImprimirMedicionesPDFAction"></action>
 
 		<!-- Mapeo del Action: Imprimir Mediciones en XLS -->
-		<action path="/mediciones/exportarXLSMediciones" type="com.visiongc.app.strategos.web.struts.mediciones.actions.ImprimirMedicionesXLSAction"></action>
+		<action path="/mediciones/exportarXLSMediciones" type="com.visiongc.app.strategos.web.struts.mediciones.actions.ImprimirMedicionesXLSAction"></action>		
 		
+		<!-- Mapeo del Action: Eliminar Mediciones a Futuro -->
+		<action path="/mediciones/eliminarMedicionParametros" type="com.visiongc.app.strategos.web.struts.mediciones.actions.EliminarMedicionParametrosAction" name="editarMedicionesForm" scope="session" parameter="eliminarMedicionesFuturas" input="calcularIndicadores"></action>
+		
+		<!-- Mapeo del Action: Eliminar Mediciones a Futuro -->
+		<action path="/mediciones/eliminarMedicionesFuturas" type="com.visiongc.app.strategos.web.struts.mediciones.actions.EliminarMedicionesFuturasAction" name="editarMedicionesForm" scope="session" parameter="eliminarMedicionesFuturas"></action>		
 
 	</action-mappings>
 

@@ -24,7 +24,6 @@ import swal from 'sweetalert2';
 import { ProyectosComponent } from '../proyectos.component';
 import { ModalService } from '../../gestionideas/detallegestion/modal.service';
 
-
 interface Item {
   text: String;
   value: number;
@@ -33,15 +32,13 @@ interface Item {
 @Component({
   selector: 'detalle-proyecto',
   templateUrl: './detalleproyecto.component.html',
-  styleUrls: ['./detalleproyecto.component.css']
+  styleUrls: ['./detalleproyecto.component.css'],
 })
 export class DetalleproyectoComponent implements OnInit {
-
   private errores: string[];
-  @Input() proyecto: Proyectos = new Proyectos;
+  @Input() proyecto: Proyectos = new Proyectos();
 
-  titulo: string = "Datos del Proyecto";
-
+  titulo: string = 'Datos del Proyecto';
 
   organizaciones: OrganizacionStrategos[];
   metodologias: MetodologiaStrategos[];
@@ -51,16 +48,13 @@ export class DetalleproyectoComponent implements OnInit {
   preproyectos: Array<Proyectos>;
   poblaciones: TipoPoblacion[];
   poblacionesProyecto: TipoPoblacion[] = new Array<TipoPoblacion>();
-  idea: IdeasProyectos = new IdeasProyectos();   
+  idea: IdeasProyectos = new IdeasProyectos();
 
-  
+  dropdownSettings: IDropdownSettings = {};
+  dropdownSettingsOrganizacion: IDropdownSettings = {};
+  dropdownSettingsIdea: IDropdownSettings = {};
 
-  
-  dropdownSettings:IDropdownSettings={};
-  dropdownSettingsOrganizacion:IDropdownSettings={};
-  dropdownSettingsIdea:IDropdownSettings={};
-
-  myForm:FormGroup;
+  myForm: FormGroup;
   disabled = false;
   ShowFilter = false;
   limitSelection = false;
@@ -72,92 +66,114 @@ export class DetalleproyectoComponent implements OnInit {
   public sourceOrg: Array<{ text: String; value: number }> = [];
 
   public data: Array<Item>;
-  public dataOrg: Array<{ text: String; value: number }>; 
-  public dataOrg2: Array<{ text: String; value: number }>; 
+  public dataOrg: Array<{ text: String; value: number }>;
+  public dataOrg2: Array<{ text: String; value: number }>;
 
   public selectedValue = 2;
 
   list: any;
 
-  constructor(public modalService: ModalService, private router: Router, private organizacionService: OrganizacionStrategosService, private ideaService: IdeasProyectosService,
-    private tipoService: TipoProyectoStrategosService, private alineacionService: TiposObejtivosService, private estatusService: IniciativaEstatusStrategosService,
-    private metodologiaService: MetodologiaStrategosService, private poblacionService: TipoPoblacionService, private fb: FormBuilder, private proyectoService: ProyectoService,
-    private proyectoComponent: ProyectosComponent) { }
+  constructor(
+    public modalService: ModalService,
+    private router: Router,
+    private organizacionService: OrganizacionStrategosService,
+    private ideaService: IdeasProyectosService,
+    private tipoService: TipoProyectoStrategosService,
+    private alineacionService: TiposObejtivosService,
+    private estatusService: IniciativaEstatusStrategosService,
+    private metodologiaService: MetodologiaStrategosService,
+    private poblacionService: TipoPoblacionService,
+    private fb: FormBuilder,
+    private proyectoService: ProyectoService,
+    private proyectoComponent: ProyectosComponent
+  ) {}
 
   ngOnInit(): void {
+    this.estatusService.getIniciativaEstatusList().subscribe((response) => {
+      this.estatus = response;
+    }); // obtiene los estatus
+    this.organizacionService.getOrganizacionesList().subscribe((response) => {
+      this.organizaciones = response;
+    });
+    this.alineacionService.getTiposObjetivoList().subscribe((response) => {
+      this.alineaciones = response;
+    });
+    this.metodologiaService.getMetodologiasList().subscribe((response) => {
+      this.metodologias = response;
+    });
+    this.tipoService.getTipoProyectosList().subscribe((response) => {
+      this.tipos = response;
+    });
+    this.poblacionService.getPoblacionesList().subscribe((response) => {
+      this.poblaciones = response;
+    });
 
-    this.estatusService.getIniciativaEstatusList().subscribe(response =>{this.estatus = response}); // obtiene los estatus
-    this.organizacionService.getOrganizacionesList().subscribe(response =>{this.organizaciones = response});
-    this.alineacionService.getTiposObjetivoList().subscribe(response =>{this.alineaciones = response});
-    this.metodologiaService.getMetodologiasList().subscribe(response =>{this.metodologias = response});
-    this.tipoService.getTipoProyectosList().subscribe(response =>{this.tipos = response});
-    this.poblacionService.getPoblacionesList().subscribe(response =>{this.poblaciones = response});
-
-    if(this.proyectoComponent.isAdmin == true){
-      this.proyectoService.getProyectosListTipoId(true).subscribe(response =>{
-        this.preproyectos = response; 
-        if(this.preproyectos.length >0){
-          this.preproyectos.forEach(pre =>{
-            this.source.push({text: pre.nombreProyecto, value: pre.proyectoId});
-          });
-        }
-        this.data = this.source;
-      });
-    }else{
-      this.proyectoService.getProyectosListOrgTipoId(this.proyectoComponent.organizacionId, true).subscribe(response =>{
-        this.preproyectos = response; 
-        if(this.preproyectos.length >0){
-          this.preproyectos.forEach(pre =>{
-            this.source.push({text: pre.nombreProyecto, value: pre.proyectoId});
-          });
-        }
-        this.data = this.source;
-      });  
+    if (this.proyectoComponent.isAdmin == true) {
+      this.proyectoService
+        .getProyectosListTipoId(true)
+        .subscribe((response) => {
+          this.preproyectos = response;
+          if (this.preproyectos.length > 0) {
+            this.preproyectos.forEach((pre) => {
+              this.source.push({
+                text: pre.nombreProyecto,
+                value: pre.proyectoId,
+              });
+            });
+          }
+          this.data = this.source;
+        });
+    } else {
+      this.proyectoService
+        .getProyectosListOrgTipoId(this.proyectoComponent.organizacionId, true)
+        .subscribe((response) => {
+          this.preproyectos = response;
+          if (this.preproyectos.length > 0) {
+            this.preproyectos.forEach((pre) => {
+              this.source.push({
+                text: pre.nombreProyecto,
+                value: pre.proyectoId,
+              });
+            });
+          }
+          this.data = this.source;
+        });
     }
 
-    this.organizacionService.getOrganizacionesList().subscribe(response =>{
+    this.organizacionService.getOrganizacionesList().subscribe((response) => {
       this.organizaciones = response;
-      if(this.organizaciones.length >0){
-        this.organizaciones.forEach(org =>{
-          this.sourceOrg.push({text: org.nombre, value: org.organizacionId});
+      if (this.organizaciones.length > 0) {
+        this.organizaciones.forEach((org) => {
+          this.sourceOrg.push({ text: org.nombre, value: org.organizacionId });
         });
       }
       this.dataOrg = this.sourceOrg;
       this.dataOrg2 = this.sourceOrg;
     });
 
-        
     this.dropdownSettings = {
-        singleSelection: false,
-        idField: 'tipoPoblacionId',
-        textField: 'poblacion',
-        selectAllText: 'Seleccionar Todo',
-        unSelectAllText: 'Quitar Todo',
-        limitSelection: -1,
-        clearSearchFilter: true,
-        maxHeight: 197,
-        itemsShowLimit: 3,
-        allowSearchFilter: true,
-        closeDropDownOnSelection: false,
-        showSelectedItemsAtTop: false,
+      singleSelection: false,
+      idField: 'tipoPoblacionId',
+      textField: 'poblacion',
+      selectAllText: 'Seleccionar Todo',
+      unSelectAllText: 'Quitar Todo',
+      limitSelection: -1,
+      clearSearchFilter: true,
+      maxHeight: 197,
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+      closeDropDownOnSelection: false,
+      showSelectedItemsAtTop: false,
     };
 
-    
-
     this.myForm = this.fb.group({
-        city: [this.selectedItems]
+      city: [this.selectedItems],
     });
-
-    
-
   }
 
-  ngAfterViewInit(): void{
-    
-  }
+  ngAfterViewInit(): void {}
 
-  
-  cerrarModal(){
+  cerrarModal() {
     this.modalService.cerrarModal();
   }
 
@@ -168,7 +184,7 @@ export class DetalleproyectoComponent implements OnInit {
     this.poblacionesProyecto.push(tipo);
   }
   onSelectAll(items: any) {
-    for(let item of items){
+    for (let item of items) {
       var tipo: TipoPoblacion = new TipoPoblacion();
       tipo.tipoPoblacionId = item.tipoPoblacionId;
       tipo.poblacion = item.poblacion;
@@ -177,33 +193,41 @@ export class DetalleproyectoComponent implements OnInit {
   }
 
   unSelect(item: any) {
-    this.poblacionesProyecto = this.poblacionesProyecto.filter(pobl => pobl.tipoPoblacionId != item.tipoPoblacionId);
+    this.poblacionesProyecto = this.poblacionesProyecto.filter(
+      (pobl) => pobl.tipoPoblacionId != item.tipoPoblacionId
+    );
   }
-  unSelectAll(items: any) {    
+  unSelectAll(items: any) {
     this.poblacionesProyecto = new Array<TipoPoblacion>();
   }
 
   public seleccionarIdea(proyecto: any): void {
-    console.log("proyecto", proyecto.value);
-    
-    this.proyectoService.getProyecto(proyecto.value).subscribe(pro => this.proyecto = pro);
-    this.proyecto.estatusId = 7;
+    console.log('proyecto', proyecto.value);
+
+    this.proyectoService
+      .getProyecto(proyecto.value)
+      .subscribe((pro) => (this.proyecto = pro));
+    this.proyecto.estatusId = 2;
   }
 
   public seleccionarOrg(org: any): void {
-    this.proyecto.dependenciaId = org.value; 
+    this.proyecto.dependenciaId = org.value;
   }
 
   public seleccionarOrgLid(org: any): void {
-    this.proyecto.dependenciaLider = org.value; 
+    this.proyecto.dependenciaLider = org.value;
   }
- 
+
   handleLimitSelection() {
-      if (this.limitSelection) {
-          this.dropdownSettings = Object.assign({}, this.dropdownSettings, { limitSelection: 2 });
-      } else {
-          this.dropdownSettings = Object.assign({}, this.dropdownSettings, { limitSelection: null });
-      }
+    if (this.limitSelection) {
+      this.dropdownSettings = Object.assign({}, this.dropdownSettings, {
+        limitSelection: 2,
+      });
+    } else {
+      this.dropdownSettings = Object.assign({}, this.dropdownSettings, {
+        limitSelection: null,
+      });
+    }
   }
 
   handleFilter(value) {
@@ -224,41 +248,38 @@ export class DetalleproyectoComponent implements OnInit {
     );
   }
 
-  create(){
-    
+  create() {
     this.proyecto.poblaciones = this.poblacionesProyecto;
     console.log(this.proyecto);
 
     this.proyectoService.create(this.proyecto).subscribe(
-      json => {
+      (json) => {
         swal.fire('Nuevo Proyecto', `${json.mensaje}`, 'success');
         this.cerrarModal();
         this.proyectoComponent.getProyectos();
         //this.ideaComponent.getIdeas();
       },
-      err =>{
+      (err) => {
         this.errores = err.error.errors as string[];
-        console.error('Código error: '+err.status);
+        console.error('Código error: ' + err.status);
         console.error(err.error.errors);
       }
     );
-    
   }
 
-  update(){
+  update() {
     console.log(this.proyecto);
-    this.proyectoService.update(this.proyecto, 2).subscribe(json =>{
-      swal.fire('Proyecto Actualizado',  `${json.mensaje}`, 'success')
-      this.cerrarModal();
-      this.proyectoComponent.getProyectos();
-    },
-    err =>{
-      this.errores = err.error.errors as string[];
-      console.error('Código error: '+err.status);
-      console.error(err.error.errors);
-    }
+    this.proyectoService.update(this.proyecto, 2).subscribe(
+      (json) => {
+        swal.fire('Proyecto Actualizado', `${json.mensaje}`, 'success');
+        this.cerrarModal();
+        this.proyectoComponent.getProyectos();
+      },
+      (err) => {
+        this.errores = err.error.errors as string[];
+        console.error('Código error: ' + err.status);
+        console.error(err.error.errors);
+      }
     );
-
   }
-
 }

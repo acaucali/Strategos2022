@@ -88,7 +88,7 @@ public final class EditarMedicionesAction extends VgcAction
 
 	    EditarMedicionesForm editarMedicionesForm = (EditarMedicionesForm)form;
 
-	    boolean editarMediciones = getPermisologiaUsuario(request).tienePermiso("INDICADOR_MEDICION_CARGAR");
+	    boolean editarMediciones = getPermisologiaUsuario(request).tienePermiso("INDICADOR_MEDICION_CARGAR");	    
 	    
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(getUsuarioConectado(request).getUsuarioId(), "Strategos.Forma.Configuracion.Columnas", "visorLista.Medicion");

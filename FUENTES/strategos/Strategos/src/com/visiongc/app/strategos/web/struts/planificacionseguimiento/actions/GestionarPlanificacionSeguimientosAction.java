@@ -46,10 +46,10 @@ public class GestionarPlanificacionSeguimientosAction extends VgcAction
 		gestionarActividadesForm.setVerForma(getPermisologiaUsuario(request).tienePermiso("ACTIVIDAD_VIEWALL"));
 		gestionarActividadesForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("ACTIVIDAD_EDIT"));
 		gestionarActividadesForm.setPagina(0);
-		
+		StrategosPryProyectosService strategosPryProyectosService = StrategosServiceFactory.getInstance().openStrategosPryProyectosService();
 		if ((iniciativaId != null) && (!iniciativaId.equals("")))
 		{
-			StrategosPryProyectosService strategosPryProyectosService = StrategosServiceFactory.getInstance().openStrategosPryProyectosService();
+			
 
 			Iniciativa iniciativa = strategosPryProyectosService.verificarProyectoIniciativa(new Long(iniciativaId), getUsuarioConectado(request));
 
