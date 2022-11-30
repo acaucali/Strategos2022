@@ -43,8 +43,14 @@
 		
 			function guardar() {				
 				if (validar(document.editarInstrumentosForm)) {
-					console.log(document.editarInstrumentosForm.anio.value);
-					window.document.editarInstrumentosForm.submit();					
+					
+					if(document.editarInstrumentosForm.anio.value == null || document.editarInstrumentosForm.anio.value == ''){						
+						alert('Por favor ingrese el año');						
+					}else{
+						window.document.editarInstrumentosForm.submit();
+					}
+						
+										
 				}	
 			}
 

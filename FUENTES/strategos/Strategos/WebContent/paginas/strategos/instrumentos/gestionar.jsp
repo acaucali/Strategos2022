@@ -74,14 +74,14 @@
 			anio.value = "";
 		var estatus = document.getElementById('estatus');
 		if (estatus != null)
-			estatus.value = 0;	
+			estatus.value = "";	
 		var convenio = document.getElementById('selectTipoConvenio');
 		if (convenio != null)
 			convenio.value = 0;	
 		var cooperativo = document.getElementById('selectCooperante');
 		if (cooperativo != null)
 			cooperativo.value = 0;
-		
+		window.location.href='<html:rewrite action="/instrumentos/gestionarInstrumentos?limpiar=1" />'
 	}
 	
 	function refrescarInstrumento(iniciativaSeleccionadaId)
@@ -293,15 +293,15 @@
 					<vgcinterfaz:menuBotones id="menuEdicion" key="menu.edicion">
 						<vgcinterfaz:botonMenu key="menu.edicion.nuevo" onclick="nuevoInstrumento();" permisoId="INSTRUMENTOS_ADD" />
 						<vgcinterfaz:botonMenu key="menu.edicion.modificar" onclick="modificarInstrumento();" permisoId="INSTRUMENTOS_EDIT" />
-						<vgcinterfaz:botonMenu key="menu.edicion.eliminar" onclick="eliminarInstrumento();" permisoId="INSTRUMENTOS_DELETE" />
+						<vgcinterfaz:botonMenu key="menu.edicion.eliminar" onclick="eliminarInstrumento();" permisoId="INSTRUMENTOS_DELETE" />											
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 			
 				<%-- Menú: Mediciones --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuMedicionesIndicadores" key="menu.mediciones">		
-					 	<vgcinterfaz:botonMenu key="menu.edicion.asignarpesos.instrumentos" onclick="asignarPesosInstrumentos();" permisoId="INSTRUMENTOS_ASIGNARPESOSINSTRUMENTOS" />
-						<vgcinterfaz:botonMenu key="menu.edicion.asignarpesos.iniciativas" onclick="asignarPesos();" permisoId="INSTRUMENTOS_ASIGNARPESOS" />												
+					 	<vgcinterfaz:botonMenu key="menu.edicion.asignarpesos.instrumentos" onclick="asignarPesosInstrumentos();" permisoId="INSTRUMENTOS" />
+						<vgcinterfaz:botonMenu key="menu.edicion.asignarpesos.iniciativas" onclick="asignarPesos();" permisoId="INSTRUMENTOS" />												
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 

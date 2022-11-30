@@ -59,6 +59,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		navBar.agregarUrlSinParametros(url, nombre, new Integer(2));
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
@@ -82,6 +83,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 			iniciativaId = Long.parseLong(request.getParameter("iniciativaSeleccionadaId"));
 		else if (iniciativaSeleccionadoId != null && !iniciativaSeleccionadoId.equals(""))
 			iniciativaId = Long.parseLong(iniciativaSeleccionadoId);
+		
+		
 
 		Long instrumentoId = null;
 		Long indicadorId = null;
@@ -89,8 +92,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 		Long indicadorAnioId = null;
 		if (request.getParameter("instrumentoId") != null && request.getParameter("instrumentoId") != "")
 			instrumentoId = Long.parseLong(request.getParameter("instrumentoId"));
-		else if (instrumentoSeleccionadoId != null)
-			instrumentoId = Long.parseLong(instrumentoSeleccionadoId);
+		else if (instrumentoSeleccionadoId != null && instrumentoSeleccionadoId != "")
+			instrumentoId = Long.parseLong(instrumentoSeleccionadoId);		
 		if (instrumentoId != null)
 			gestionarInstrumentosForm.setSeleccionados(instrumentoId.toString());
 		if (iniciativaId != null)
@@ -106,6 +109,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if (estatusSt != null && estatusSt != "") {
 			estatus = Byte.valueOf(estatusSt);
 		}
+			
+		
 		Long cooperanteId = (request.getParameter("cop") != null) && (request.getParameter("cop") != "")
 				&& (!request.getParameter("cop").equals("0"))
 						? Long.valueOf(Long.parseLong(request.getParameter("cop")))
@@ -131,17 +136,20 @@ public class GestionarInstrumentosAction extends VgcAction {
 
 		gestionarInstrumentosForm.setInstrumentoId(instrumentoId);
 
+		
+		
 		Map<String, String> filtros = new HashMap<String, String>();
-		int pagina = 0;
+			
+		int pagina = gestionarInstrumentosForm.getPagina();
 		String atributoOrden = null;
-		String tipoOrden = null;
+		String tipoOrden = null;		
 
 		if (atributoOrden == null)
 			atributoOrden = "nombreCorto";
 		if (tipoOrden == null)
 			tipoOrden = "ASC";
 		if (pagina < 1)
-			pagina = 1;
+			pagina = 1;				
 
 		if ((gestionarInstrumentosForm.getNombreCorto() != null) && gestionarInstrumentosForm.getNombreCorto() != "") {
 			filtros.put("nombreCorto", gestionarInstrumentosForm.getNombreCorto());
@@ -149,8 +157,9 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if ((gestionarInstrumentosForm.getAnio() != null) && gestionarInstrumentosForm.getAnio() != "") {
 			filtros.put("anio", gestionarInstrumentosForm.getAnio());
 		}
-		if ((gestionarInstrumentosForm.getEstatus() != null)) {
-			filtros.put("estatus", gestionarInstrumentosForm.getEstatus().toString());
+		if ((gestionarInstrumentosForm.getEstatus() != null)) {	
+			if((gestionarInstrumentosForm.getEstatus() != 0))
+				filtros.put("estatus", gestionarInstrumentosForm.getEstatus().toString());
 		}
 		if ((gestionarInstrumentosForm.getTiposConvenioId() != null)
 				&& gestionarInstrumentosForm.getTiposConvenioId() != 0) {
@@ -159,7 +168,12 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if ((gestionarInstrumentosForm.getCooperanteId() != null) && gestionarInstrumentosForm.getCooperanteId() != 0) {
 			filtros.put("cooperanteId", gestionarInstrumentosForm.getCooperanteId().toString());
 		}
-
+		
+		if(request.getParameter("limpiar") != null) {
+			if(request.getParameter("limpiar").equals("1")) 
+				filtros.clear();;
+		}		
+									
 		PaginaLista paginaInstrumentos = strategosInstrumentosService.getInstrumentos(pagina, 30, atributoOrden,
 				tipoOrden, true, filtros);
 
