@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { IniciativaEstatusStrategos } from '../../configuracion/model-util/IniciativaEstatusStrategos';
@@ -23,6 +23,12 @@ import { PreproyectoComponent } from '../../preproyecto/preproyecto.component';
 import swal from 'sweetalert2';
 import { ProyectosComponent } from '../proyectos.component';
 import { ModalService } from '../../gestionideas/detallegestion/modal.service';
+import { ProyectosDocumentosAnexos } from '../../configuracion/model/proyectosdocumentosanexos';
+import { ProyectosDocumentosService } from '../../configuracion/services/proyectosdocumentosanexos.service';
+import { URL_BACKEND } from 'src/app/config/config';
+import { DepartamentosService } from '../../configuracion/services/departamentos.service';
+import { Departamentos } from '../../configuracion/model/departamentos';
+import { ProyectosRegion } from '../../configuracion/model/proyectosregion';
 
 interface Item {
   text: String;
@@ -34,7 +40,7 @@ interface Item {
   templateUrl: './detalleproyecto.component.html',
   styleUrls: ['./detalleproyecto.component.css'],
 })
-export class DetalleproyectoComponent implements OnInit {
+export class DetalleproyectoComponent implements OnInit, AfterViewInit {
   private errores: string[];
   @Input() proyecto: Proyectos = new Proyectos();
 
@@ -53,11 +59,22 @@ export class DetalleproyectoComponent implements OnInit {
   dropdownSettings: IDropdownSettings = {};
   dropdownSettingsOrganizacion: IDropdownSettings = {};
   dropdownSettingsIdea: IDropdownSettings = {};
+  dropdownSettingsDepartamento: IDropdownSettings = {};
+
+  departamentos: Departamentos[] = [];
+  departamentoId: number;
+  departamentoNombre: String;
+  municipios: any[] = [];
+  municipiosSeleccionados: any[] = [];
+  municipiosMostrar: String[] = [];
+  muni: String[] = [];
+  proyectoRegion: ProyectosRegion[] = [];
 
   myForm: FormGroup;
   disabled = false;
   ShowFilter = false;
   limitSelection = false;
+  nuevoDepartamento = false;
 
   selectedItems: Array<any> = [];
   disableBangalore: any;
@@ -70,6 +87,11 @@ export class DetalleproyectoComponent implements OnInit {
   public dataOrg2: Array<{ text: String; value: number }>;
 
   public selectedValue = 2;
+
+  public documento: ProyectosDocumentosAnexos = new ProyectosDocumentosAnexos();
+  private urlEndPoint: string =
+    URL_BACKEND + '/api/strategos/bancoproyectos/documentoProyecto/';
+  private archivoSeleccionado: File;
 
   list: any;
 
@@ -85,7 +107,9 @@ export class DetalleproyectoComponent implements OnInit {
     private poblacionService: TipoPoblacionService,
     private fb: FormBuilder,
     private proyectoService: ProyectoService,
-    private proyectoComponent: ProyectosComponent
+    private proyectoComponent: ProyectosComponent,
+    private departamentosService: DepartamentosService,
+    public documentoService: ProyectosDocumentosService
   ) {}
 
   ngOnInit(): void {
@@ -106,6 +130,10 @@ export class DetalleproyectoComponent implements OnInit {
     });
     this.poblacionService.getPoblacionesList().subscribe((response) => {
       this.poblaciones = response;
+    });
+
+    this.departamentosService.getDepartamentosList().subscribe((response) => {
+      this.departamentos = response;
     });
 
     if (this.proyectoComponent.isAdmin == true) {
@@ -166,12 +194,29 @@ export class DetalleproyectoComponent implements OnInit {
       showSelectedItemsAtTop: false,
     };
 
+    this.dropdownSettingsDepartamento = {
+      singleSelection: false,
+      idField: 'c_digo_dane_del_municipio',
+      textField: 'municipio',
+      selectAllText: 'Seleccionar Todo',
+      unSelectAllText: 'Quitar Todo',
+      limitSelection: -1,
+      clearSearchFilter: true,
+      maxHeight: 197,
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+      closeDropDownOnSelection: false,
+      showSelectedItemsAtTop: false,
+    };
+
     this.myForm = this.fb.group({
       city: [this.selectedItems],
     });
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    console.log(' el proyecoto que trae: ' + this.proyecto);
+  }
 
   cerrarModal() {
     this.modalService.cerrarModal();
@@ -281,5 +326,96 @@ export class DetalleproyectoComponent implements OnInit {
         console.error(err.error.errors);
       }
     );
+  }
+
+  agregar(forma: NgForm) {
+    this.departamentosService
+      .getDepartamentoNombre(forma.value.departamentoId)
+      .subscribe((response) => {
+        this.departamentoNombre = response.departamentoNombre;
+      });
+    let municipio: String;
+    let pro: ProyectosRegion;
+    for (let index = 0; index < forma.value.municipio; index++) {
+      pro = {
+        proyectoRegion: undefined,
+        departamentoId: forma.value.departamentoId,
+        municipioId: forma.value.municipios[index].c_digo_dane_del_municipio,
+        proyectoId: undefined,
+      };
+      this.proyectoRegion.push(pro);
+    }
+    for (let mun of forma.value.municipios) {
+      municipio = mun.municipio;
+      this.muni.push(municipio);
+    }
+    console.log(this.proyectoRegion);
+    this.municipiosMostrar = this.muni;
+  }
+
+  onChange(value) {
+    this.departamentosService.getMunicipiosList(value).subscribe((response) => {
+      this.municipios = response;
+    });
+  }
+
+  seleccionarFoto(event) {
+    this.archivoSeleccionado = event.target.files[0];
+    console.log(this.archivoSeleccionado);
+  }
+
+  subirDocumento() {
+    this.documentoService
+      .subirDocumento(
+        this.proyecto.proyectoId,
+        this.documento,
+        this.archivoSeleccionado
+      )
+      .subscribe(
+        (json) => {
+          swal.fire('Documento subido', `${json.mensaje}`, 'success');
+          this.documento = json.documento;
+          this.proyecto.documentoId = this.documento.documentoId;
+          console.log(this.proyecto);
+          console.log(this.documento);
+        },
+        (err) => {
+          this.errores = err.error.errors as string[];
+          console.error('Código error: ' + err.status);
+          console.error(err.error.errors);
+        }
+      );
+  }
+
+  eliminarDocumento(): void {
+    swal
+      .fire({
+        title: 'Está seguro?',
+        text: `¿Seguro que desea eliminar el documento?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'No, cancelar!',
+      })
+      .then((result) => {
+        if (result.value) {
+          this.documentoService
+            .deleteDocumento(this.proyecto.documentoId)
+            .subscribe((response) => {
+              swal.fire(
+                'Documento eliminado!',
+                'El documento se ha eliminado con éxito',
+                'success'
+              );
+            });
+          this.proyecto.documentoId = 0;
+        }
+      });
+  }
+
+  descargarDocumento() {
+    window.open(`${this.urlEndPoint}download/${this.proyecto.documentoId}`);
   }
 }

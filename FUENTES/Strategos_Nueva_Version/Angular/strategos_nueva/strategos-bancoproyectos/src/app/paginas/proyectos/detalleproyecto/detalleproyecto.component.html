@@ -83,7 +83,7 @@
                       >Cooperación</a
                     >
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item" *ngIf="proyecto.proyectoId">
                     <a
                       class="nav-link"
                       id="custom-tabs-one-anexos-tab"
@@ -708,16 +708,110 @@
                     >
                       <div class="row">
                         <div class="col-md-12">
-                          <label>Cobertura (*)</label>
+                          <div class="card" style="width: 1100px">
+                            <div class="card-header">
+                              <button
+                                type="button"
+                                class="btn"
+                                (click)="nuevoDepartamento = true"
+                                title="Crear Idea"
+                              >
+                                <i class="fa-md fas fa-plus"></i>
+                              </button>
+                            </div>
+
+                            <div
+                              class="card-footer"
+                              *ngIf="nuevoDepartamento == true"
+                            >
+                              <form (ngSubmit)="agregar(forma)" #forma="ngForm">
+                                <div class="col-md-12">
+                                  <label for="exampleInputEmail1"
+                                    >Departamento</label
+                                  >
+
+                                  <select
+                                    class="form-control"
+                                    name="departamentoId"
+                                    [(ngModel)]="departamentoId"
+                                    #departamento="ngModel"
+                                    (ngModelChange)="onChange($event)"
+                                    required
+                                  >
+                                    <option [value]="undefined" selected>
+                                      Seleccionar
+                                    </option>
+                                    <option
+                                      *ngFor="let departamento of departamentos"
+                                      [value]="departamento.departamentosId"
+                                    >
+                                      {{ departamento.departamentoNombre }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="col-md-12">
+                                  <label for="exampleInputEmail1"
+                                    >Municipios</label
+                                  >
+                                  <ng-multiselect-dropdown
+                                    class="selectDepartamento"
+                                    [placeholder]="'Seleccionar'"
+                                    [settings]="dropdownSettingsDepartamento"
+                                    [data]="municipios"
+                                    (onSelect)="onItemSelect($event)"
+                                    (onSelectAll)="onSelectAll($event)"
+                                    (unSelect)="unSelect($event)"
+                                    (unSelectAll)="unSelectAll($event)"
+                                    [(ngModel)]="municipiosSeleccionados"
+                                    name="municipios"
+                                    style="width: 1100px"
+                                    required
+                                  >
+                                  </ng-multiselect-dropdown>
+                                </div>
+                                <div class="col-md-8">
+                                  <br />
+                                  <button type="submit" class="btn btn-primary">
+                                    Agregar</button
+                                  >&nbsp;&nbsp;
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+
+                          <div class="card" style="width: 1100px">
+                            <div class="card-body">
+                              <div class="table-responsive">
+                                <table
+                                  mdbTable
+                                  class="table table-bordered tabled-striped table-sm"
+                                  id="tabla"
+                                  style="border-collapse: collapse"
+                                >
+                                  <thead>
+                                    <tr class="text-white bg-primary">
+                                      <td width="100">Acciones</td>
+                                      <td>Departamentos</td>
+                                      <td>Municipios</td>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>
+                                        <i
+                                          class="fas fa-trash-alt"
+                                          style="cursor: pointer"
+                                        ></i>
+                                      </td>
+                                      <td>{{ departamentoNombre }}</td>
+                                      <td>{{ municipiosMostrar }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <button
-                          type="button"
-                          class="btn"
-                          (click)="cerrarModal()"
-                          title="Crear Idea"
-                        >
-                          <i class="fa-md fas fa-plus"></i>
-                        </button>
                       </div>
                     </div>
 
@@ -905,10 +999,91 @@
                       id="custom-tabs-one-anexos"
                       role="tabpanel"
                       aria-labelledby="custom-tabs-one-anexos-tab"
+                      *ngIf="proyecto.proyectoId"
                     >
                       <div class="row">
                         <div class="col-md-12">
-                          <label>Anexos (*)</label>
+                          <label>Documentos Anexos al Proyecto</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail"
+                            placeholder="Nombre del documento"
+                            [(ngModel)]="documento.tituloDocumento"
+                            name="tituloDocumento"
+                            maxlength="30"
+                            #tituloDocumento="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Descripción</label>
+                          <textarea
+                            class="form-control"
+                            rows="3"
+                            placeholder="Descripción"
+                            [(ngModel)]="documento.descripcion"
+                            name="descripcion"
+                            maxlength="30"
+                            #descripcion="ngModel"
+                          ></textarea>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <br />
+                          <label for="documento" style="font-size: medium"
+                            >Documento</label
+                          >
+                          <br />
+                          <input
+                            (change)="seleccionarFoto($event)"
+                            type="file"
+                            name="documento"
+                            class="form"
+                            accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.pdf"
+                            *ngIf="proyecto.proyectoId"
+                          />
+
+                          &nbsp; &nbsp;<button
+                            class="btn btn-rounded btn-primary"
+                            (click)="subirDocumento()"
+                            type="button"
+                            placement="bottom"
+                            ngbTooltip="Subir documento"
+                            style="font-size: 8px"
+                            *ngIf="proyecto.proyectoId"
+                          >
+                            <i class="fas fa-file-upload fa-2x"></i>
+                          </button>
+                          &nbsp;
+
+                          <div class="form-group" *ngIf="proyecto.proyectoId">
+                            <label style="font-size: medium" *ngIf="documento"
+                              >{{ documento.tituloDocumento }}
+                            </label>
+                            &nbsp; &nbsp;
+                            <button
+                              class="btn btn-rounded btn-primary"
+                              (click)="descargarDocumento()"
+                              type="button"
+                              placement="bottom"
+                              ngbTooltip="Descargar documento"
+                              style="font-size: 8px"
+                            >
+                              <i class="fas fa-download fa-2x"></i>
+                            </button>
+                            &nbsp;
+                            <button
+                              class="btn btn-rounded btn-danger"
+                              (click)="eliminarDocumento()"
+                              type="button"
+                              placement="bottom"
+                              ngbTooltip="Eliminar documento"
+                              style="font-size: 8px"
+                            >
+                              <i class="far fa-trash-alt fa-2x"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>

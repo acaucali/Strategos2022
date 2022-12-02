@@ -26,17 +26,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.strategos.nueva.bancoproyecto.ideas.model.Departamentos;
 import com.strategos.nueva.bancoproyecto.ideas.model.EstatusIdeas;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
 import com.strategos.nueva.bancoproyecto.ideas.model.Proyectos;
 import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosPlan;
 import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosPoblacion;
+import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosRegion;
 import com.strategos.nueva.bancoproyecto.ideas.model.TipoPoblacion;
 import com.strategos.nueva.bancoproyecto.ideas.model.TiposPropuestas;
+import com.strategos.nueva.bancoproyecto.ideas.service.DepartamentosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.EstatusIdeaService;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPlanService;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPoblacionService;
+import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosRegionService;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TipoPoblacionService;
 import com.strategos.nueva.bancoproyecto.strategos.model.ClaseIndicadoresStrategos;
@@ -94,6 +98,12 @@ public class ProyectoRestController {
 
 	@Autowired
 	private ProyectosPlanService proyectoPlanService;
+	
+	@Autowired
+	private ProyectosRegionService proyectoRegionService;
+	
+	@Autowired
+	private DepartamentosService departamentosService;
 	
 	//Servicios Rest tabla - proyecto
 	
@@ -215,6 +225,28 @@ public class ProyectoRestController {
 											
 			return poblacionesPro;
 		}
+		
+		//servicio que trae la lista de departamentos
+		@GetMapping("/proyecto/departamento/{id}")
+		public List<Departamentos> indexDepartamentos(@PathVariable Long id){
+			List<Departamentos> departamentos = new ArrayList<Departamentos>();
+			List<ProyectosRegion> proyectos = proyectoRegionService.findAllByDepartamentoId(id);
+			
+			for(ProyectosRegion pro: proyectos) {
+				Departamentos departamento = departamentosService.findById(pro.getDepartamentoId());
+				departamentos.add(departamento);
+			}
+			
+			return departamentos;
+		}
+		
+		@GetMapping("/proyecto/proyectosRegion/{id}")
+		public List<ProyectosRegion> indexProyectosRegion(@PathVariable Long id){
+			List<ProyectosRegion> proyectos = proyectoRegionService.findAllByProyectoId(id);
+			
+			return proyectos;
+		}
+		
 			
 		//servicio que muestra un proyecto
 		@GetMapping("/proyecto/{id}")
@@ -244,6 +276,7 @@ public class ProyectoRestController {
 		public ResponseEntity<?> create(@Valid @RequestBody Proyectos proyectoN, BindingResult result) {
 			
 			List<TipoPoblacion> proyectosPoblacion = new ArrayList();
+			List<ProyectosRegion> proyectosRegion = new ArrayList();
 			Proyectos proyectoNew= null;
 			
 			Map<String, Object> response = new HashMap<>();
@@ -300,6 +333,20 @@ public class ProyectoRestController {
 					proyectosPoblacionService.save(proyectoPoblacion);
 				}
 				
+				proyectosRegion = proyectoN.getDepartamentos();			
+				
+				if(proyectosRegion != null) {
+				
+					for(ProyectosRegion dep : proyectosRegion) {
+						ProyectosRegion proyectoRegion = new ProyectosRegion();
+						proyectoRegion.setProyectoId(proyectoNew.getProyectoId());
+						proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
+						proyectoRegion.setMunicipioId(dep.getMunicipioId());
+						System.out.print("\n\n PROYECTO REGION: " + proyectoRegion + "\n\n")	;
+						proyectoRegionService.save(proyectoRegion);
+					}
+				}
+				
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
@@ -317,6 +364,7 @@ public class ProyectoRestController {
 			Proyectos proyectoActual= proyectoService.findById(id);
 			Proyectos proyectoUpdated = null;
 			List<TipoPoblacion> proyectosPoblacion = new ArrayList();
+			List<ProyectosRegion> proyectosRegion = new ArrayList();
 			Map<String, Object> response = new HashMap<>();
 			
 			if(result.hasErrors()) {
@@ -400,6 +448,23 @@ public class ProyectoRestController {
 						proyectosPoblacionService.save(proyectoPoblacion);
 					}
 					
+					List<ProyectosRegion> proyectosReg = proyectoRegionService.findAllByDepartamentoId(id);
+					
+					for(ProyectosRegion pro : proyectosReg) {
+						proyectoRegionService.delete(pro.getProyectoRegionId());
+					}
+					
+					proyectosRegion = proyecto.getDepartamentos();
+					
+					if(proyectosRegion != null) {
+						for(ProyectosRegion dep : proyectosRegion) {
+							ProyectosRegion proyectoRegion = new ProyectosRegion();
+							proyectoRegion.setProyectoId(proyecto.getProyectoId());
+							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
+							proyectoRegion.setMunicipioId(dep.getMunicipioId());
+							proyectoRegionService.save(proyectoRegion);
+						}
+					}
 					
 					proyectoUpdated=proyectoService.save(proyectoActual);
 					
@@ -417,7 +482,7 @@ public class ProyectoRestController {
 					proyectoActual.setDependenciaLider(proyecto.getDependenciaLider());//idea
 					proyectoActual.setDependenciasEstrategicas(proyecto.getDependenciasEstrategicas());
 					proyectoActual.setDuracion(proyecto.getDuracion()); //>0
-					proyectoActual.setEstatusId((long) 7);
+					proyectoActual.setEstatusId(proyecto.getEstatusId());
 					proyectoActual.setFechaEstatus(proyecto.getFechaEstatus());
 					proyectoActual.setFechaFormulacion(proyecto.getFechaFormulacion());//idea
 					proyectoActual.setFechaRadicacion(proyecto.getFechaRadicacion());
@@ -448,10 +513,11 @@ public class ProyectoRestController {
 					proyectoActual.setContactoTelefonoOperador(proyecto.getContactoTelefonoOperador());
 					proyectoActual.setRecursosAsignados(proyecto.getRecursosAsignados());
 					proyectoActual.setProrrogas(proyecto.getProrrogas());
-					
-					System.out.print("\n\n" + proyectoActual.getEstatusId() + "\n\n");
+										
 					if(proyectoActual.getEstatusId() != null) {
+						System.out.print("\n\n" + proyectoActual.getEstatusId());
 						IniciativaEstatusStrategos est = estatusService.findById(proyectoActual.getEstatusId());
+						System.out.print("\n\n" + est);
 						proyectoActual.setEstatus(est.getNombre());
 						proyectoActual.setFechaEstatus(new Date());
 					}
@@ -467,11 +533,25 @@ public class ProyectoRestController {
 									
 					for(TipoPoblacion tip: proyectosPoblacion) {
 						ProyectosPoblacion proyectoPoblacion = new ProyectosPoblacion();
-						proyectoPoblacion.setProyectoId(proyectoUpdated.getProyectoId());
+						proyectoPoblacion.setProyectoId(proyecto.getProyectoId());
 						proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
 						proyectosPoblacionService.save(proyectoPoblacion);
 					}
 					
+					proyectosRegion = proyecto.getDepartamentos();
+					
+					if(proyectosRegion != null) {
+						for(ProyectosRegion dep : proyectosRegion) {
+							ProyectosRegion proyectoRegion = new ProyectosRegion();
+							proyectoRegion.setProyectoId(proyecto.getProyectoId());
+							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
+							System.out.print("\n\n\n" + dep.getMunicipioId()+ "\n\n\n" );
+							proyectoRegion.setMunicipioId(dep.getMunicipioId());
+							System.out.print("\n\n\n" + proyectoRegion.getMunicipioId() + "\n\n\n" );
+							System.out.print("\n\n PROYECTO REGION: " + proyectoRegion + "\n\n")	;
+							proyectoRegionService.save(proyectoRegion);
+						}
+					}
 					
 					proyectoUpdated=proyectoService.save(proyectoActual);
 					

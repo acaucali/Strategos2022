@@ -8,6 +8,7 @@ import { EstatusIdeas } from '../model/estatusideas';
 import swal from 'sweetalert2';
 import { Proyectos } from '../model/proyectos';
 import { TipoPoblacion } from '../model/tipopoblacion';
+import { ProyectosRegion } from '../model/proyectosregion';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class ProyectoService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   public proyectos: Proyectos[];
   public poblaciones: TipoPoblacion[];
+  public proyectosRegion: ProyectosRegion[];
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -103,6 +105,15 @@ export class ProyectoService {
       map((res) => {
         this.poblaciones = res as TipoPoblacion[];
         return this.poblaciones;
+      })
+    );
+  }
+
+  getProyectosRegionListId(id: number) {
+    return this.http.get(`${this.urlEndPoint}/proyectosRegion/${id}`).pipe(
+      map((res) => {
+        this.proyectosRegion = res as ProyectosRegion[];
+        return this.proyectosRegion;
       })
     );
   }

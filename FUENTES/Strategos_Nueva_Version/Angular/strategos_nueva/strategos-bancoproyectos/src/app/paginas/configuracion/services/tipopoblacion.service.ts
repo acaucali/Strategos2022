@@ -8,31 +8,31 @@ import { EstatusIdeas } from '../model/estatusideas';
 import swal from 'sweetalert2';
 import { TipoPoblacion } from '../model/tipopoblacion';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class TipoPoblacionService {
-
-  private urlEndPoint:string =URL_BACKEND+'/api/strategos/bancoproyectos/tipopoblacion';
-  private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
+  private urlEndPoint: string =
+    URL_BACKEND + '/api/strategos/bancoproyectos/tipopoblacion';
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   public poblaciones: TipoPoblacion[];
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {}
 
-  getPoblacionesList(){
-    return this.http.get(this.urlEndPoint).pipe(map(res =>{
-      this.poblaciones = res as TipoPoblacion[];
-      return this.poblaciones;
-    }));
+  getPoblacionesList() {
+    return this.http.get(this.urlEndPoint).pipe(
+      map((res) => {
+        this.poblaciones = res as TipoPoblacion[];
+        return this.poblaciones;
+      })
+    );
   }
 
   getPoblaciones(page: number): Observable<any> {
     //return of(tarjetas);
-    return this.http.get(this.urlEndPoint+ '/page/'+page).pipe(
+    return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
       map((response: any) => {
-        (response.content as TipoPoblacion[]).map(estatus=>{
+        (response.content as TipoPoblacion[]).map((estatus) => {
           return estatus;
         });
         return response;
@@ -40,22 +40,24 @@ export class TipoPoblacionService {
     );
   }
 
-  create(poblacion: TipoPoblacion) : Observable<any>{
-    return this.http.post<any>(this.urlEndPoint, poblacion, {headers: this.httpHeaders}).pipe(
-      catchError(e =>{
-        if(e.status==400){
+  create(poblacion: TipoPoblacion): Observable<any> {
+    return this.http
+      .post<any>(this.urlEndPoint, poblacion, { headers: this.httpHeaders })
+      .pipe(
+        catchError((e) => {
+          if (e.status == 400) {
+            return throwError(e);
+          }
+          console.error(e.error.mensaje);
+          swal.fire(e.error.mensaje, e.error.error, 'error');
           return throwError(e);
-        }
-        console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje,e.error.error, 'error');
-        return throwError(e);
-      })
-    );
+        })
+      );
   }
 
-  getPoblacion(id): Observable<TipoPoblacion>{
+  getPoblacion(id): Observable<TipoPoblacion> {
     return this.http.get<TipoPoblacion>(`${this.urlEndPoint}/${id}`).pipe(
-      catchError(e=>{
+      catchError((e) => {
         this.router.navigate(['/gestionideas']);
         console.error(e.error.mensaje);
         swal.fire('Error al editar', e.error.mensaje, 'error');
@@ -64,29 +66,34 @@ export class TipoPoblacionService {
     );
   }
 
-  update(poblacion: TipoPoblacion): Observable<any>{
-    return this.http.put<any>(`${this.urlEndPoint}/${poblacion.tipoPoblacionId}`, poblacion, {headers: this.httpHeaders }).pipe(
-      catchError(e =>{
-        if(e.status==400){
+  update(poblacion: TipoPoblacion): Observable<any> {
+    return this.http
+      .put<any>(`${this.urlEndPoint}/${poblacion.tipoPoblacionId}`, poblacion, {
+        headers: this.httpHeaders,
+      })
+      .pipe(
+        catchError((e) => {
+          if (e.status == 400) {
+            return throwError(e);
+          }
+          console.error(e.error.mensaje);
+          swal.fire(e.error.mensaje, e.error.error, 'error');
           return throwError(e);
-        }
-        console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje, e.error.error, 'error');
-        return throwError(e);
-      })
-    );
+        })
+      );
   }
 
-  delete(id: number): Observable<TipoPoblacion>{
-    return this.http.delete<TipoPoblacion>(`${this.urlEndPoint}/${id}`,{headers: this.httpHeaders }).pipe(
-      catchError(e =>{
-        console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje, e.error.error, 'error');
-        return throwError(e);
+  delete(id: number): Observable<TipoPoblacion> {
+    return this.http
+      .delete<TipoPoblacion>(`${this.urlEndPoint}/${id}`, {
+        headers: this.httpHeaders,
       })
-    );
+      .pipe(
+        catchError((e) => {
+          console.error(e.error.mensaje);
+          swal.fire(e.error.mensaje, e.error.error, 'error');
+          return throwError(e);
+        })
+      );
   }
-
-
 }
-

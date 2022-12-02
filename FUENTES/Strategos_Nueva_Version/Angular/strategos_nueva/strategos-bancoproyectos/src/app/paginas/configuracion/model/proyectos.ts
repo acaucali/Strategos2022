@@ -1,5 +1,6 @@
 import { logging } from 'protractor';
 import { TipoPoblacion } from './tipopoblacion';
+import { ProyectosRegion } from './proyectosregion';
 
 export class Proyectos {
   proyectoId: number;
@@ -49,4 +50,6 @@ export class Proyectos {
   contactoTelefonoOperador: String;
   recursosAsignados: String;
   prorrogas: String;
+  departamentos: ProyectosRegion[];
+  documentoId: number;
 }

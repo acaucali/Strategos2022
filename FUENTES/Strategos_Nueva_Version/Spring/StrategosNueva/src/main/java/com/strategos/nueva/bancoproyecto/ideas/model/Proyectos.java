@@ -203,6 +203,13 @@ public class Proyectos implements Serializable{
 	@Column(nullable=true)
 	private String prorrogas;
 	
+	@JsonIgnoreProperties(value ={ "hibernateLazyInitializer", "handler", "proyecto" }, allowSetters = true)
+	@OneToMany(cascade= CascadeType.MERGE, mappedBy="proyectoId", fetch=FetchType.LAZY)
+	private List<ProyectosRegion> departamentos;
+	
+	@Column(nullable=true)
+	private Long documentoId;
+	
 	
 	public Boolean getIsPreproyecto() {
 		return isPreproyecto;
@@ -580,6 +587,21 @@ public class Proyectos implements Serializable{
 		this.prorrogas = prorrogas;
 	}
 
+	public List<ProyectosRegion> getDepartamentos() {
+		return departamentos;
+	}
+
+	public void setDepartamentos(List<ProyectosRegion> departamentos) {
+		this.departamentos = departamentos;
+	}
+	
+	public Long getDocumentoId() {
+		return documentoId;
+	}
+
+	public void setDocumentoId(Long documentoId) {
+		this.documentoId = documentoId;
+	}
 
 	private static final long serialVersionUID = 1L;
 }
