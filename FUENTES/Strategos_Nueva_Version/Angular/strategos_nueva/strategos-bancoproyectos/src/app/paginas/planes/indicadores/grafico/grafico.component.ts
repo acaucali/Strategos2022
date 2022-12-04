@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import Chart from 'chart.js/auto';
+
 
 
 @Component({
@@ -9,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class GraficoComponent implements OnInit {
 
+  public chart: any;
   canvas: any;
   ctx: any;
 
@@ -20,10 +23,11 @@ export class GraficoComponent implements OnInit {
       let indId = params['id'];   
     });
 
-   
+
 
   }
 
+  
   
 
 }
