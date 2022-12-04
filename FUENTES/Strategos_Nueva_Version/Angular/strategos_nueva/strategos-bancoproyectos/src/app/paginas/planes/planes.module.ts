@@ -10,7 +10,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {MatSelectModule} from '@angular/material/select';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
-import { LabelModule } from '@progress/kendo-angular-label';
+
 import { PlanesComponent } from './planes.component';
 import { PlanesRoutingModule } from './planes-routing.module';
 import { IndicadoresComponent } from './indicadores/indicadores.component';
@@ -20,9 +20,12 @@ import { TreeViewModule } from '@progress/kendo-angular-treeview';
 import { DetallePerspectivaComponent } from './plan/detalle-perspectiva/detalle-perspectiva.component';
 import { DetalleIniciativaComponent } from './iniciativas/detalle-iniciativa/detalle-iniciativa.component';
 import { DetalleIndicadorComponent } from './indicadores/detalle-indicador/detalle-indicador.component';
-import { IniciativaService } from '../configuracion/services/iniciativa.service';
+
 import { MedicionIndicadorComponent } from './indicadores/medicion-indicador/medicion-indicador.component';
-import { DetalleMedicionComponent } from './indicadores/medicion-indicador/detalle-medicion/detalle-medicion.component';
+
+import { DetalleTareaComponent } from './iniciativas/tareas/detalle-tarea/detalle-tarea.component';
+import { MedicionTareasComponent } from './iniciativas/tareas/medicion-tareas/medicion-tareas.component';
+import { GraficoComponent } from './indicadores/grafico/grafico.component';
 
 
 

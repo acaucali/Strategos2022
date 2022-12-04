@@ -20,7 +20,7 @@ export class DetallePerspectivaComponent implements OnInit {
   @Input() perspectiva: Perspectiva = new Perspectiva;
   objetivo: string = "prueba";
 
-  titulo: string = "Datos de la Perspectiva";
+  titulo: string = "Datos del Objetivo";
 
   private plan: Plan = new Plan();
   private proyecto: Proyectos = new Proyectos();

@@ -22,6 +22,10 @@ const routes: Routes = [
     { path: 'proyecto', loadChildren: () => import('./proyectos/proyectos.module').then(m =>m.ProyectoModule)},
     { path: 'planes/:id', loadChildren: () => import('./planes/planes.module').then(m =>m.PlanesModule)},
     { path: 'medicionindicador', loadChildren: () => import('./planes/indicadores/medicion-indicador/detalle-medicion/detalle-medicion.module').then(m =>m.DetalleMedicionModule)},
+    { path: 'tareas', loadChildren: () => import('./planes/iniciativas/tareas/tareas.module').then(m =>m.TareasModule)},
+    { path: 'mediciontarea', loadChildren: () => import('./planes/iniciativas/tareas/medicion-tareas/mediciontareas.module').then(m =>m.MedicionTareaModule)},
+    { path: 'presupuesto', loadChildren: () => import('./planes/iniciativas/tareas/presupuesto/presupuesto.module').then(m =>m.PresupuestoModule)},    
+    { path: 'grafico/:id', loadChildren: () => import('./planes/indicadores/grafico/grafico.module').then(m =>m.GraficoModule)},
     { path: '**', component: Pagina404Component},
   ]}
 ];

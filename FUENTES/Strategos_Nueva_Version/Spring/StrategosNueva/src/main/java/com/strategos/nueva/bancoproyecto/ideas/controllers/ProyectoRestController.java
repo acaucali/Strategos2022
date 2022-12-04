@@ -305,22 +305,23 @@ public class ProyectoRestController {
 					proyectoN.setTipo(tipo.getNombre());
 				}
 				if(proyectoN.getEstatusId() != null) {
-					IniciativaEstatusStrategos est = estatusService.findById(proyectoN.getEstatusId());					
+					IniciativaEstatusStrategos est = estatusService.findById(proyectoN.getEstatusId());
 					proyectoN.setEstatus(est.getNombre());
 					proyectoN.setFechaEstatus(new Date());
-				}				
+				}
 				proyectoN.setHistorico(false);
 				proyectoN.setIsPreproyecto(true);
-												
-															
-				if(proyectoN.getIdeaId() != null) {
-					IdeasProyectos idea = ideasProyectosService.findById(proyectoN.getIdeaId());
+				
+				
+				IdeasProyectos idea = ideasProyectosService.findById(proyectoN.getIdeaId());
+				
+				if(idea.getEstatusIdeaId() != null) {
 					EstatusIdeas est = estatusIdeaService.findById(new Long(6));
 					idea.setEstatus(est.getEstatus());
 					idea.setFechaEstatus(new Date());
-					ideasProyectosService.save(idea);
 				}
 				
+				ideasProyectosService.save(idea);
 				
 				proyectosPoblacion = proyectoN.getPoblaciones();
 				
@@ -416,14 +417,6 @@ public class ProyectoRestController {
 					proyectoActual.setTipoObjetivoId(proyecto.getTipoObjetivoId());//idea
 					proyectoActual.setTipoProyectoId(proyecto.getTipoProyectoId());
 					
-					proyectoActual.setDependenciasConvenio(proyecto.getDependenciasConvenio());
-					proyectoActual.setNumeroConvenio(proyecto.getNumeroConvenio());
-					proyectoActual.setFechaInicioConvenio(proyecto.getFechaInicioConvenio());
-					proyectoActual.setFechaCulminacionConvenio(proyecto.getFechaCulminacionConvenio());
-					proyectoActual.setNombreOperador(proyecto.getNombreOperador());					
-					proyectoActual.setRecursosAsignados(proyecto.getRecursosAsignados());
-					proyectoActual.setProrrogas(proyecto.getProrrogas());
-					
 					proyectoActual.setIsPreproyecto(true);
 					
 					if(proyectoActual.getEstatusId() != null) {
@@ -503,7 +496,7 @@ public class ProyectoRestController {
 					proyectoActual.setFrecuencia(proyecto.getFrecuencia());
 					proyectoActual.setIsPreproyecto(false);
 					
-					proyectoActual.setCooperanteId(proyecto.getCooperanteId());
+					proyectoActual.setCooperante(proyecto.getCooperante());
 					proyectoActual.setDependenciasConvenio(proyecto.getDependenciasConvenio());
 					proyectoActual.setNumeroConvenio(proyecto.getNumeroConvenio());
 					proyectoActual.setFechaInicioConvenio(proyecto.getFechaInicioConvenio());
@@ -529,6 +522,7 @@ public class ProyectoRestController {
 					}
 					//proyectoService.delete(id);
 					
+					
 					proyectosPoblacion = proyecto.getPoblaciones();					
 									
 					for(TipoPoblacion tip: proyectosPoblacion) {
@@ -544,11 +538,8 @@ public class ProyectoRestController {
 						for(ProyectosRegion dep : proyectosRegion) {
 							ProyectosRegion proyectoRegion = new ProyectosRegion();
 							proyectoRegion.setProyectoId(proyecto.getProyectoId());
-							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
-							System.out.print("\n\n\n" + dep.getMunicipioId()+ "\n\n\n" );
+							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());							
 							proyectoRegion.setMunicipioId(dep.getMunicipioId());
-							System.out.print("\n\n\n" + proyectoRegion.getMunicipioId() + "\n\n\n" );
-							System.out.print("\n\n PROYECTO REGION: " + proyectoRegion + "\n\n")	;
 							proyectoRegionService.save(proyectoRegion);
 						}
 					}

@@ -1,0 +1,93 @@
+<detalle-tarea [tarea]="tareaSeleccionada"></detalle-tarea>
+<configuracion-tarea></configuracion-tarea>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Planificación y seguimiento</h1>
+            Objetivo: {{objetivo}}<br><br>
+            Actividad: {{actividad}} 
+          </div> 
+          <div class="col-sm-6">
+            <button (click)="regresar()" type="button" class="btn btn-primary" data-dismiss="modal" >Regresar</button>    
+          </div>
+                  
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <button type="button" class="btn" title="Crear Tarea" (click)="crearTarea()" >
+                <i class="fa-md fas fa-plus" ></i>
+            </button>
+            <button type="button" class="btn" title="Cargar Mediciones" (click)="cargarMedicion()">
+                <i class="fas fa-table" ></i>
+            </button>
+            <br>
+        </div>
+        <div class="card-body">
+                         
+
+            <div class="table-responsive">
+                <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+                    <thead>
+                        <tr class="text-white bg-primary">                            
+                            
+                            <td width="70">Acciones</td>
+                            <td width="80">Alerta</td>
+                            <td width="500">Tarea</td>
+                            <td width="100">% Completado</td>
+                            <td width="100">% Programado</td>
+                            <td width="100">Peso</td>
+                            <td width="120">Fecha Inicio</td>
+                            <td width="120">Fecha Culminación</td>
+                            <td width="120">Última Medición</td>
+                                             
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                        <tr *ngFor="let tar of tareas | paginate: {itemsPerPage: 10, currentPage: pageTare, id: 'pageTar'}">
+                            <td width="70" >
+          
+                              <i class="fas fa-edit" (click)="editarTarea(tar)" style="cursor: pointer;"></i>
+                              &nbsp;
+                              <i class="fas fa-trash-alt" (click)='eliminarTarea(tar)' style="cursor: pointer;"></i>
+                              &nbsp;
+                              <i class="fas fa-dollar-sign" (click)='presupuesto(tar)' style="cursor: pointer;"></i>
+                              
+                            </td>
+                            <td width="80"> 
+                              <div id="red" *ngIf="tar.alerta == 3"></div>
+                              <div id="yellow" *ngIf="tar.alerta == 2"></div>
+                              <div id="green" *ngIf="tar.alerta == 1"></div>
+                            </td>
+                            <td > {{tar.nombreActividad}}</td>
+                            <td > {{tar.completado}}</td>
+                            <td > {{tar.programado}}</td>
+                            <td > {{tar.peso}}</td>
+                            <td > {{tar.fechaInicio}}</td>
+                            <td > {{tar.fechaCulminacion}}</td>
+                            <td > {{tar.ultimaMedicion}}</td>
+                            
+                          </tr>
+
+                    </tbody> 
+  
+                </table>
+                
+                <pagination-controls id="pageTar" previousLabel="Anterior"
+                nextLabel="Siguiente" (pageChange)="pageTare = $event"></pagination-controls>
+
+            </div>
+         
+
+        </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>

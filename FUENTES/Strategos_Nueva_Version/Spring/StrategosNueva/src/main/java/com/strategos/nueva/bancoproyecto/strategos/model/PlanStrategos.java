@@ -25,7 +25,7 @@ public class PlanStrategos implements Serializable{
 	@Column(nullable=true)
 	private Long planImpactaId;
 	
-	@Size(max=50)
+	@Size(max=250)
 	@Column(nullable=true)
 	private String nombre;
 	

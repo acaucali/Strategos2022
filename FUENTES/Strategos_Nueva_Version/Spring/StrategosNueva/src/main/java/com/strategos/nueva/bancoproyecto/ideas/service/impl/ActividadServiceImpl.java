@@ -42,5 +42,11 @@ public class ActividadServiceImpl implements ActividadService{
 		
 		actividadDao.deleteById(id);
 	}
+
+	@Override
+	public List<Actividad> findAllByProyectoId(Long proyectoId) {
+		// TODO Auto-generated method stub
+		return actividadDao.findAllByProyectoId(proyectoId);
+	}
 			
 }

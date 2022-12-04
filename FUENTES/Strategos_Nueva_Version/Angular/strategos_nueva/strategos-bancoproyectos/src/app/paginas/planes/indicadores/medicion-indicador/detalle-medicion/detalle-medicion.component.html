@@ -15,13 +15,7 @@
     <!-- /.card-footer-->
     <!-- Default box -->
     <div class="card">
-        <div class="card-header">
-            <button type="button" class="btn" title="Descargar Resumido" >
-                <i class="fa-md far fa-file-excel" ></i>
-            </button>
-            
-            <br>
-        </div>
+      
         <div class="card-body">
                          
 
@@ -35,28 +29,74 @@
                         </tr>
                     </thead>                    
                     <tbody>
-                      <tr *ngFor="let ind of indicadores">
-                        <ng-container *ngFor="let med of datos">                             
-                            
-                              <td *ngIf="med.ideaId == ind.indicadorId" >
-                                <span *ngIf="med.campo =='indicador'">
-                                    &nbsp;{{med.valor}}</span>
-                                
-                                <span *ngIf="med.campo =='series'" >&nbsp;{{med.valor}}</span>
-  
-                                <input type="text" id="{{med.id}}" [(ngModel)]="med.valor" oninput="this.value = this.value.replace(/[^1-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="med.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+
+                      <ng-container *ngIf="serie !=3">
+                        <ng-container *ngIf="serie ==1">
+                          <tr *ngFor="let id of ids">
+                            <ng-container *ngIf="serie ==1 && datosReal?.length>0">
+                              <ng-container *ngFor="let medR of datosReal">
+                                <td *ngIf="medR.ideaId == id">
+                                  <span *ngIf="medR.campo =='indicador'">
+                                    &nbsp;{{medR.valor}}</span>                            
+                                  <span *ngIf="medR.campo =='series'" >&nbsp;{{medR.valor}}</span>
+                                  <input type="text" id="{{medR.id}}" [(ngModel)]="medR.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medR.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                                </td>
+                              </ng-container>
+                            </ng-container>
+                          </tr>
+                        </ng-container>
+                        <ng-container *ngIf="serie ==2">
+                          <tr *ngFor="let id of ids">
+                            <ng-container *ngIf="serie ==2 && datosMeta?.length>0">
+                              <ng-container *ngFor="let medM of datosMeta">
+                                <td *ngIf="medM.ideaId == id">
+                                  <span *ngIf="medM.campo =='indicador'">
+                                    &nbsp;{{medM.valor}}</span>                            
+                                  <span *ngIf="medM.campo =='series'" >&nbsp;{{medM.valor}}</span>
+                                  <input type="text" id="{{medM.id}}" [(ngModel)]="medM.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medM.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                                </td>
+                              </ng-container> 
+                            </ng-container>
+                          </tr>
+                        </ng-container>
+
+                      </ng-container>
+
+                      <ng-container *ngIf="serie ==3">
+                        <tr *ngFor="let id of ids">
+                          <ng-container *ngIf="serie ==3 && datosReal?.length>0">
+                            <ng-container *ngFor="let medR of datosReal">
+                              <td *ngIf="medR.ideaId == id">
+                                <span *ngIf="medR.campo =='indicador'">
+                                  &nbsp;{{medR.valor}}</span>                            
+                                <span *ngIf="medR.campo =='series'" >&nbsp;{{medR.valor}}</span>
+                                <input type="text" id="{{medR.id}}" [(ngModel)]="medR.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medR.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
                               </td>
-                            
-                            
-                        </ng-container>                        
-                      </tr>
+                            </ng-container>
+                          </ng-container>
+                        </tr>
+                        <tr *ngFor="let id of ids">
+                          <ng-container *ngIf="serie ==3 && datosMeta?.length>0">
+                            <ng-container *ngFor="let medM of datosMeta">
+                              <td *ngIf="medM.ideaId == id">
+                                <span *ngIf="medM.campo =='indicador'">
+                                  &nbsp;{{medM.valor}}</span>                            
+                                <span *ngIf="medM.campo =='series'" >&nbsp;{{medM.valor}}</span>
+                                <input type="text" id="{{medM.id}}" [(ngModel)]="medM.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medM.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                              </td>
+                            </ng-container> 
+                          </ng-container>
+                        </tr>
+                      </ng-container>
+
                     </tbody> 
   
                 </table>
                     
             </div>
          
-
+            <br>
+            <br>
             
             <button (click)="registrar()" type="button" class="btn btn-primary" data-dismiss="modal" >Registrar</button> &nbsp;&nbsp;
             <button (click)="regresar()" type="button" class="btn btn-danger" data-dismiss="modal" >Regresar</button>

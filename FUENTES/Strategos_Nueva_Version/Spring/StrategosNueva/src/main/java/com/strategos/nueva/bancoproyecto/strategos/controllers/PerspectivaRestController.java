@@ -120,7 +120,7 @@ public class PerspectivaRestController {
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "La perspectiva ha sido creado con Exito!");
+			response.put("mensaje", "El objetivo ha sido creado con Exito!");
 			response.put("perspectiva", perspectivaNew);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
@@ -247,7 +247,8 @@ public class PerspectivaRestController {
 					Arbol arbol = new Arbol();
 					arbol.setText(nod.getData().getNombre());
 					arbol.setId(nod.getData().getPerspectivaId().intValue());
-					arbol.setValor(nod.getData().getUltimaMedicionAnual());
+					arbol.setValor(nod.getData().getUltimaMedicionParcial());
+					arbol.setAlerta(nod.getData().getAlertaParcial());
 					if(nod.getChildren() != null) {
 						arbol.setItems(convertirArbol(nod.getChildren()));
 					}
@@ -266,7 +267,8 @@ public class PerspectivaRestController {
 				Arbol arbol = new Arbol();
 				arbol.setText(nod.getData().getNombre());
 				arbol.setId(nod.getData().getPerspectivaId().intValue());
-				arbol.setValor(nod.getData().getUltimaMedicionAnual());
+				arbol.setValor(nod.getData().getUltimaMedicionParcial());
+				arbol.setAlerta(nod.getData().getAlertaParcial());
 				if(nod.getChildren() != null) {
 					arbol.setItems(convertirArbol(nod.getChildren()));
 				}

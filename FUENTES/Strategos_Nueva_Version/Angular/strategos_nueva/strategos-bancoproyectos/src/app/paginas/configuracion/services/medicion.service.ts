@@ -7,13 +7,7 @@ import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 import { URL_BACKEND } from 'src/app/config/config';
-import { TiposPropuestas } from '../model/tipospropuestas';
-import { Plan } from '../model/plan';
-import { ProyectosPlan } from '../model/proyectosplan';
-import { Perspectiva } from '../model/perspectiva';
-import { Arbol } from '../model-util/arbol';
-import { Indicador } from '../model/indicador';
-import { Iniciativa } from '../model/iniciativa';
+
 import { Medicion } from '../model/medicion';
 import { DatoIdea } from '../model-util/DatoIdea';
 import { DatoMedicion } from '../model-util/DatoMedicion';
@@ -31,7 +25,7 @@ export class MedicionService {
   public mediciones: Medicion[];
   public encabezados: DatoIdea[];
   public datos: DatoMedicion[];  
-
+  public ids: number[];
    
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -40,6 +34,20 @@ export class MedicionService {
     return this.http.get(this.urlEndPoint).pipe(map(res =>{
       this.mediciones = res as Medicion[];
       return this.mediciones;
+    }));
+  }
+
+  getMedicionesIdsList(id: number, serie: number){
+    return this.http.get(`${this.urlEndPoint}/ids/${id}/${serie}`).pipe(map(res =>{
+      this.ids = res as number[];
+      return this.ids;
+    }));
+  }
+
+  getMedicionesIdsTareaList(id: number, serie: number){
+    return this.http.get(`${this.urlEndPoint}/ids/tareas/${id}/${serie}`).pipe(map(res =>{
+      this.ids = res as number[];
+      return this.ids;
     }));
   }
 
@@ -57,9 +65,62 @@ export class MedicionService {
     }));
   }
 
+  getMedicionesEncabezadosTareaList(id: number, frecuencia: number, anio: number, perInicial: number, perFin: number){
+    return this.http.get(`${this.urlEndPoint}/encabezados/tarea/${id}/${frecuencia}/${anio}/${perInicial}/${perFin}`).pipe(map(res =>{
+      this.encabezados = res as DatoIdea[];
+      return this.encabezados;
+    }));
+  }
+
+  getMedicionesEncabezadosPresupuestoList(){
+    return this.http.get(`${this.urlEndPoint}/encabezados/presupuesto`).pipe(map(res =>{
+      this.encabezados = res as DatoIdea[];
+      return this.encabezados;
+    }));
+  }
+
+  getMedicionesDatosPresupuestosList(id: number, anio: number, perInicial: number, perFin: number, serie: number){
+    return this.http.get(`${this.urlEndPoint}/mediciones/presupuesto/${id}/${anio}/${perInicial}/${perFin}/${serie}`).pipe(map(res =>{
+      this.datos = res as DatoMedicion[];
+      return this.datos;
+    }));
+  }
+
+  getMedicionesDatosTareaList(id: number, anio: number, perInicial: number, perFin: number, serie: number){
+    return this.http.get(`${this.urlEndPoint}/mediciones/tarea/${id}/${anio}/${perInicial}/${perFin}/${serie}`).pipe(map(res =>{
+      this.datos = res as DatoMedicion[];
+      return this.datos;
+    }));
+  }
   
-   create(medicion: Medicion) : Observable<any>{
-    return this.http.post<any>(`${this.urlEndPoint}`, {headers: this.httpHeaders}).pipe(
+   create(datos: DatoMedicion[], objId: number) : Observable<any>{
+    return this.http.post<any>(`${this.urlEndPoint}/${objId}`, datos,{headers: this.httpHeaders}).pipe(
+      catchError(e =>{
+        if(e.status==400){
+          return throwError(e);
+        }
+        console.error(e.error.mensaje);
+        swal.fire(e.error.mensaje,e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
+  createTarea(datos: DatoMedicion[], actId: number) : Observable<any>{
+    return this.http.post<any>(`${this.urlEndPoint}/tarea/${actId}`, datos,{headers: this.httpHeaders}).pipe(
+      catchError(e =>{
+        if(e.status==400){
+          return throwError(e);
+        }
+        console.error(e.error.mensaje);
+        swal.fire(e.error.mensaje,e.error.error, 'error');
+        return throwError(e);
+      })
+    );
+  }
+
+  createPresupuesto(datos: DatoMedicion[], anio: number) : Observable<any>{
+    return this.http.post<any>(`${this.urlEndPoint}/presupuesto/${anio}`, datos,{headers: this.httpHeaders}).pipe(
       catchError(e =>{
         if(e.status==400){
           return throwError(e);

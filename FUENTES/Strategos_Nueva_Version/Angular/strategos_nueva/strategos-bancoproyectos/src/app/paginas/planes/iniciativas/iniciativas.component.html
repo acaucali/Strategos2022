@@ -3,29 +3,6 @@
     <!-- Main content -->
     <section class="content">
       <h2>Actividades</h2>
-    
-      <!-- Default box -->
-      <div class="card">
-
-        <div class="card-header">
-            <button type="button" class="btn"  title="Crear Iniciativa" (click)=" crearIniciativa()">
-                <i class="fa-md fas fa-plus"></i>
-            </button>
-            <button type="button" class="btn" title="Descargar Resumido">
-              <i class="fas fa-table"></i>
-            </button>
-          
-            
-          <div class="card-tools">
-            
-          </div>
-        </div>
-        
-        
-        <!-- /.card-body -->
-        
-      </div>
-      <!-- /.card -->
 
     </section>
 
@@ -33,6 +10,10 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-body">
+
+        <button type="button" class="btn"  title="Crear Iniciativa" (click)=" crearIniciativa()">
+          <i class="fa-md fas fa-plus"></i>
+         </button>
             
         <div *ngIf="iniciativas?.length==0" class="alert alert-info">
             No hay registros en la base de datos!
@@ -54,17 +35,23 @@
               <tbody>
                 <tr *ngFor="let ind of iniciativas | paginate: {itemsPerPage: 10, currentPage: pageInic, id: 'pageIni'}">
                   <td width="100" >
-                    
+
+                    <i class="fas fa-table" (click)="planificacion(ind)" style="cursor: pointer;"></i>
+                    &nbsp;
                     <i class="fas fa-edit" (click)="editarIniciativa(ind)" style="cursor: pointer;"></i>
                     &nbsp;
                     <i class="fas fa-trash-alt" (click)='eliminarIniciativa(ind)' style="cursor: pointer;"></i>
                     
                   </td>
-                  <td width="80"> </td>
+                  <td width="80">
+                    <div id="red" *ngIf="ind.alerta == 3"></div>
+                    <div id="yellow" *ngIf="ind.alerta == 2"></div>
+                    <div id="green" *ngIf="ind.alerta == 1"></div>  
+                  </td>
                   <td >{{ind.nombreIniciativa}} </td>
-                  <td > </td>
-                  <td > </td>
-                  <td > </td>
+                  <td >{{ind.ultimaMedicion}} </td>
+                  <td >{{ind.ultimoProgramado}} </td>
+                  <td >{{ind.fechaUltimaMedicion}}</td>
                   
                 </tr>
               </tbody>

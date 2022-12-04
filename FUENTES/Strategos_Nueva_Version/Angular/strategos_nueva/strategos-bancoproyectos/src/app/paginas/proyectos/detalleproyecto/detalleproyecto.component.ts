@@ -252,7 +252,7 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
     this.proyectoService
       .getProyecto(proyecto.value)
       .subscribe((pro) => (this.proyecto = pro));
-    this.proyecto.estatusId = 2;
+    this.proyecto.estatusId = 7;
   }
 
   public seleccionarOrg(org: any): void {

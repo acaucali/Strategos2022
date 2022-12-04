@@ -5,6 +5,7 @@ import { DatoMedicion } from 'src/app/paginas/configuracion/model-util/DatoMedic
 import { MedicionService } from 'src/app/paginas/configuracion/services/medicion.service';
 import { Indicador } from '../../../../configuracion/model/indicador';
 import { IndicadorService } from '../../../../configuracion/services/indicador.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalle-medicion',
@@ -13,12 +14,17 @@ import { IndicadorService } from '../../../../configuracion/services/indicador.s
 })
 export class DetalleMedicionComponent implements OnInit {
 
+  private errores: string[];
   encabezados: DatoIdea[];
-  datos: DatoMedicion[];
+  datosReal: DatoMedicion[];
+  datosMeta: DatoMedicion[];
+  datosMediciones: DatoMedicion[] = new Array<DatoMedicion>();
   vacio: boolean = false;  
   registrado: boolean = false;
   indicadores: Indicador[];
   objetivo: any;
+  ids: number[];
+  serie: number;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private medicionService: MedicionService, public indicadorService: IndicadorService) { }
 
@@ -50,22 +56,85 @@ export class DetalleMedicionComponent implements OnInit {
     }
 
     console.log(serie);
+    this.serie = serie;
 
     this.indicadorService.getIndicadoresPerspectiva(Number(localStorage.getItem('objetivoId'))).subscribe(response =>{
       this.indicadores = response;
     });
 
+    this.medicionService.getMedicionesIdsList(objetivo, serie).subscribe(response=>{this.ids = response});
     this.medicionService.getMedicionesEncabezadosList(objetivo, frecuencia,anio, periodoIni, periodoFin).subscribe(response =>{this.encabezados = response});
-    this.medicionService.getMedicionesDatosList(objetivo, anio, periodoIni, periodoFin , serie).subscribe(response =>{this.datos = response});
+
+    if(serie == 3){
+      this.medicionService.getMedicionesDatosList(objetivo, anio, periodoIni, periodoFin , 1).subscribe(response =>{this.datosReal = response});
+      this.medicionService.getMedicionesDatosList(objetivo, anio, periodoIni, periodoFin , 2).subscribe(response =>{this.datosMeta = response});
+    }else{
+      if(serie == 1){
+        this.medicionService.getMedicionesDatosList(objetivo, anio, periodoIni, periodoFin , 1).subscribe(response =>{this.datosReal = response});
+      }
+      if(serie == 2){
+        this.medicionService.getMedicionesDatosList(objetivo, anio, periodoIni, periodoFin , 2).subscribe(response =>{this.datosMeta = response});
+      }
+
+    }
 
   }
 
   registrar(){
 
+    console.log(this.datosMeta);
+    console.log(this.datosReal);
+
+    if(this.serie ==3){
+      for(let data of this.datosReal){
+        this.datosMediciones.push(data);
+      }
+
+      for(let data of this.datosMeta){
+        this.datosMediciones.push(data);
+      }
+
+      this.medicionService.create(this.datosMediciones, Number(localStorage.getItem('objetivoId'))).subscribe(
+        json => {
+          swal.fire('Mediciones guardadas', `${json.mensaje}`, 'success');
+        },
+        err =>{
+          this.errores = err.error.errors as string[];
+          console.error('Código error: '+err.status);
+          console.error(err.error.errors);
+        }
+      );
+      
+    }else{
+      if(this.serie ==1 ){
+        this.medicionService.create(this.datosReal, Number(localStorage.getItem('objetivoId'))).subscribe(
+          json => {
+            swal.fire('Mediciones guardadas', `${json.mensaje}`, 'success');
+          },
+          err =>{
+            this.errores = err.error.errors as string[];
+            console.error('Código error: '+err.status);
+            console.error(err.error.errors);
+          }
+        );
+      }
+      if(this.serie ==2){
+        this.medicionService.create(this.datosMeta, Number(localStorage.getItem('objetivoId'))).subscribe(
+          json => {
+            swal.fire('Mediciones guardadas', `${json.mensaje}`, 'success');
+          },
+          err =>{
+            this.errores = err.error.errors as string[];
+            console.error('Código error: '+err.status);
+            console.error(err.error.errors);
+          }
+        );
+      }
+    }
   }
 
   regresar(){
-
+    this.router.navigate(['/', 'planes', localStorage.getItem('proyectoId')]);
   }
   
 }

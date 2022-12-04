@@ -9,6 +9,7 @@ public class Arbol {
 	private Integer id; 
 	
 	private Double valor;
+	private Byte alerta;
 	
 	private List<Arbol> items = new ArrayList();
 	
@@ -37,4 +38,11 @@ public class Arbol {
 	public void setItems(List<Arbol> items) {
 		this.items = items;
 	}
+	public Byte getAlerta() {
+		return alerta;
+	}
+	public void setAlerta(Byte alerta) {
+		this.alerta = alerta;
+	}
+	
 }

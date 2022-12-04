@@ -24,18 +24,18 @@
                           </div>
                           <br>
                           <div class="col-md-12" >
-                            <label for="exampleInputEmail1">Iniciativa (*)</label>
+                            <label for="exampleInputEmail1">Actividad (*)</label>
                             <input type="text" class="form-control" id="exampleInputEmail1"
                             placeholder="Iniciativa" [(ngModel)]="iniciativa.nombreIniciativa"
-                            name="nombreIniciativa" required maxlength="50" #nombreIniciativa="ngModel">
+                            name="nombreIniciativa" required maxlength="250" #nombreIniciativa="ngModel">
                             
                           </div>
   
                           <div class="col-md-12">
                             <br>
-                            <label for="exampleInputEmail1">Descripción (*)</label>
+                            <label for="exampleInputEmail1">Descripción</label>
                             <textarea class="form-control" rows="3" placeholder="Descripción"
-                            [(ngModel)]="iniciativa.descripcion" name="descripcion" maxlength="30"
+                            [(ngModel)]="iniciativa.descripcion" name="descripcion" maxlength="300"
                             #descripcion="ngModel"></textarea>
 
                           </div>
