@@ -21,7 +21,7 @@ public class MedicionStrategos implements Serializable{
 	private Double valor;
 	
 	@Column(nullable=true)
-	private Boolean protegido;
+	private Integer protegido;
 
 
 	public MedicionPkStrategos getMedicionPk() {
@@ -40,11 +40,11 @@ public class MedicionStrategos implements Serializable{
 		this.valor = valor;
 	}
 
-	public Boolean getProtegido() {
+	public Integer getProtegido() {
 		return protegido;
 	}
 
-	public void setProtegido(Boolean protegido) {
+	public void setProtegido(Integer protegido) {
 		this.protegido = protegido;
 	}
 	

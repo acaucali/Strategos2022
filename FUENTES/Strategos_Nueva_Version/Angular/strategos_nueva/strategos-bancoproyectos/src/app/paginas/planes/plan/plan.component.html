@@ -1,7 +1,7 @@
 <detalle-perspectiva [perspectiva]="perspectivaSeleccionada"></detalle-perspectiva>
     <!-- Main content -->
     <section class="content">
-      <h2>Plan</h2>
+  
     
         <!-- Default box -->
         <div class="card">
@@ -29,13 +29,29 @@
                   textField="text"
                   [hasChildren]="hasChildren" 
                   [children]="fetchChildren"
-                  style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 400;"
+                  style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 500;"
                   kendoTreeViewExpandable
                   [expandedKeys]="expandedKeys"
                   kendoTreeViewSelectable [selectBy]="'id'"
                   [(selectedKeys)]="selectedKeys"
                   (nodeClick)="onClick(selectedKeys.join())"
                   >
+                  <ng-template kendoTreeViewNodeTemplate let-dataItem>
+                   
+                    <div *ngIf="dataItem.alerta == 3">
+                      <img src="/assets/img/rojo.png"> &nbsp; &nbsp;{{ dataItem.text }}<span style="color:#0090ff">&nbsp; &nbsp;({{ dataItem.valor | number: '.1-2'}})</span>
+                    </div>
+
+                    <div *ngIf="dataItem.alerta == 1">
+                      <img src="/assets/img/verde.png"> &nbsp; &nbsp;{{ dataItem.text }}<span style="color:#0090ff">&nbsp; &nbsp;({{ dataItem.valor | number: '.1-2'}})</span>
+                    </div>
+
+                    <div *ngIf="dataItem.alerta == undefined">
+                      &nbsp; &nbsp;{{ dataItem.text }}
+                    </div>
+                    
+
+                  </ng-template>
                 </kendo-treeview>
               </div>
 

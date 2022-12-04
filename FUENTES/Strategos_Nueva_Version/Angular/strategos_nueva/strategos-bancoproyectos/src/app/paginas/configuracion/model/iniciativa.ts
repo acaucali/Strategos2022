@@ -6,4 +6,9 @@ export class Iniciativa {
     frecuencia: number;
     zonaVerde: number;
     zonaAmarilla: number;
+    fechaUltimaMedicion: String;
+    alerta: number;
+    ultimaMedicion: number;
+    ultimoProgramado: number;
+
 }

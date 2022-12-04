@@ -7,24 +7,32 @@
 
             <div class="card-header">
                 <div class="container-fluid">
-                    <h2>Proyecto: {{proyecto.nombreProyecto}}</h2>
-                    Organización: {{organizacion.nombre}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Plan: {{plan.nombre}}
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h2>Proyecto: {{proyecto.nombreProyecto}}</h2>
+                            <h3>Organización: {{organizacion.nombre}}</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn" class="btn" title="Regresar">
+                                <i class="fas fa-sign-out-alt" [routerLink]="['/gestionideas']"></i>
+                                Regresar
+                            </button>
+                        </div>
+                    </div>
+
+                    
                 </div><!-- /.container-fluid -->
-                <div class="card-tools">
-                    <button type="button" class="btn" class="btn" title="Regresar">
-                        <i class="fas fa-sign-out-alt" [routerLink]="['/gestionideas']"></i>
-                        Regresar
-                    </button>
-                </div>
+              
             </div>
             <br>
             
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <!--arbol planes-->
                     <app-plan></app-plan>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-12">
                     <!--indicadores iniciativas-->
                     <div class="row">
                         <div class="col-md-12">

@@ -12,3 +12,52 @@ a:link{
     list-style-type: none;
   
   }
+  .k-text-selection ::selection {
+    background-color: #0276fa;
+    color: white;
+}
+
+  #red {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #orange {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #yellow {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #green {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  

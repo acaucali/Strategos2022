@@ -20,7 +20,7 @@ export class DetalleIniciativaComponent implements OnInit {
   unidades: Unidad[];
   
   objetivo: string = "";
-  titulo: string = "Datos de la Iniciativa";
+  titulo: string = "Datos de la Actividad";
 
   constructor(public modalservice: ModalService, public iniciativaService: IniciativaService, public unidadService: UnidadService, public perspectivaService: PerspectivaService,
     private iniciativaComponent: IniciativasComponent) { }
@@ -36,7 +36,7 @@ export class DetalleIniciativaComponent implements OnInit {
     
     this.iniciativaService.create(this.iniciativa, localStorage.getItem('objetivoId')).subscribe(
       json => {
-      swal.fire('Nueva Iniciativa', `${json.mensaje}`, 'success');
+      swal.fire('Nueva Actividad', `${json.mensaje}`, 'success');
       this.cerrarModal();
       this.iniciativaComponent.getIniciativas();
     },
@@ -50,7 +50,7 @@ export class DetalleIniciativaComponent implements OnInit {
 
   update(): void{
     this.iniciativaService.update(this.iniciativa).subscribe(json =>{
-      swal.fire('Iniciativa Actualizada',  `${json.mensaje}`, 'success')
+      swal.fire('Actividad Actualizada',  `${json.mensaje}`, 'success')
       this.cerrarModal();
     },
     err =>{

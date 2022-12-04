@@ -3,6 +3,7 @@ import { Iniciativa } from '../../configuracion/model/iniciativa';
 import { IniciativaService } from '../../configuracion/services/iniciativa.service';
 import { ModalService } from './detalle-iniciativa/modal.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iniciativas',
@@ -18,7 +19,7 @@ export class IniciativasComponent implements OnInit {
 
 
 
-  constructor(public modalservice: ModalService, private iniciativaService: IniciativaService) { }
+  constructor(public modalservice: ModalService, private iniciativaService: IniciativaService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -75,6 +76,14 @@ export class IniciativasComponent implements OnInit {
       });
     }
     
+  }
+
+  planificacion(ini: Iniciativa){
+    if(localStorage.getItem('objetivoId') != null){
+      localStorage.setItem('actividad', ini.iniciativaId.toString());
+      localStorage.setItem('actividadNombre', ini.nombreIniciativa.toString());
+      this.router.navigate(['/', 'tareas']);
+    }
   }
 
 }

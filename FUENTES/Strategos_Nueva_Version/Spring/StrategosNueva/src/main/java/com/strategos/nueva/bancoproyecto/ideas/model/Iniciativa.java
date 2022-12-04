@@ -35,6 +35,19 @@ public class Iniciativa implements Serializable{
 	@Column(nullable=true)
 	private Double zonaAmarilla;
 	
+	@Size(max=10)
+	@Column(nullable=true)
+	private String fechaUltimaMedicion;
+	
+	@Column(nullable=true)
+	private Byte alerta;
+	
+	@Column(nullable=true)
+	private Double ultimaMedicion;
+	
+	@Column(nullable=true)
+	private Double ultimoProgramado;
+	
 		
 	public Long getIniciativaId() {
 		return iniciativaId;
@@ -83,6 +96,40 @@ public class Iniciativa implements Serializable{
 	public void setZonaAmarilla(Double zonaAmarilla) {
 		this.zonaAmarilla = zonaAmarilla;
 	}
+		
+	public String getFechaUltimaMedicion() {
+		return fechaUltimaMedicion;
+	}
+
+	public void setFechaUltimaMedicion(String fechaUltimaMedicion) {
+		this.fechaUltimaMedicion = fechaUltimaMedicion;
+	}
+
+	public Byte getAlerta() {
+		return alerta;
+	}
+
+	public void setAlerta(Byte alerta) {
+		this.alerta = alerta;
+	}
+
+	public Double getUltimaMedicion() {
+		return ultimaMedicion;
+	}
+
+	public void setUltimaMedicion(Double ultimaMedicion) {
+		this.ultimaMedicion = ultimaMedicion;
+	}
+
+	public Double getUltimoProgramado() {
+		return ultimoProgramado;
+	}
+
+	public void setUltimoProgramado(Double ultimoProgramado) {
+		this.ultimoProgramado = ultimoProgramado;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 }

@@ -25,7 +25,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.strategos.nueva.bancoproyecto.ideas.model.Actividad;
+import com.strategos.nueva.bancoproyecto.ideas.model.Iniciativa;
 import com.strategos.nueva.bancoproyecto.ideas.service.ActividadService;
+import com.strategos.nueva.bancoproyecto.ideas.service.IniciativaService;
+import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorTareaPk;
+import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorTareaStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.PerspectivaStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.service.IndicadorService;
+import com.strategos.nueva.bancoproyecto.strategos.service.IndicadorTareaService;
+import com.strategos.nueva.bancoproyecto.strategos.service.PerspectivaService;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -35,6 +44,18 @@ public class ActividadRestController {
 	@Autowired
 	private ActividadService actividadService;
 	
+	@Autowired
+	private IndicadorService indicadorService;
+
+	@Autowired
+	private PerspectivaService perspectivaService;
+	
+	@Autowired
+	private IniciativaService iniciativaService;
+	
+	@Autowired
+	private IndicadorTareaService indicadorTareaService;
+	
 	//Servicios Rest tabla - actividad 
 	
 		private final Logger log = LoggerFactory.getLogger(ActividadRestController.class);
@@ -43,6 +64,11 @@ public class ActividadRestController {
 		@GetMapping("/actividad")
 		public List<Actividad> index (){
 			return actividadService.findAll();
+		}
+		
+		@GetMapping("/actividad/tarea/{proyectoId}")
+		public List<Actividad> indexTarea (@PathVariable Long proyectoId){
+			return actividadService.findAllByProyectoId(proyectoId);
 		}
 			
 		//servicio que muestra un actividad 
@@ -69,8 +95,8 @@ public class ActividadRestController {
 		}
 		
 		//servicio que crea un actividad 
-		@PostMapping("/actividad")
-		public ResponseEntity<?> create(@Valid @RequestBody Actividad actividadN, BindingResult result) {
+		@PostMapping("/actividad/{id}/{perspectiva}/{orgId}")
+		public ResponseEntity<?> create(@PathVariable Long id, @PathVariable Long perspectiva, @PathVariable Long orgId, @Valid @RequestBody Actividad actividadN,  BindingResult result) {
 			
 			Actividad actividadNew= null;
 			
@@ -88,14 +114,45 @@ public class ActividadRestController {
 			
 			try { 
 				
+				actividadN.setProyectoId(id);
 				actividadNew= actividadService.save(actividadN);
+				
+				PerspectivaStrategos perspectivaN = perspectivaService.findById(perspectiva);
+				
+				IndicadorStrategos indicador = new IndicadorStrategos();
+				
+				indicador.setNombre(actividadN.getNombreActividad());
+				indicador.setNaturaleza((byte) 0);
+				indicador.setFrecuencia((byte) 3);
+				indicador.setNombreCorto(actividadN.getNombreActividad());
+				indicador.setPrioridad((byte) 0);
+				indicador.setMostrarEnArbol((byte) 1);
+				indicador.setClaseId(perspectivaN.getClaseId());
+				indicador.setAlertaMetaZonaVerde(actividadN.getZonaVerde());
+				indicador.setAlertaMetaZonaAmarilla(actividadN.getZonaAmarilla());
+				indicador.setOrganizacionId(orgId);
+				indicador.setUnidadId(actividadN.getUnidadId());
+				
+				
+				indicadorService.save(indicador);
+				
+				IndicadorTareaStrategos indicadorTarea = new IndicadorTareaStrategos();
+				
+				IndicadorTareaPk indicadorTareaPk = new IndicadorTareaPk();
+				
+				indicadorTareaPk.setActividadId(actividadNew.getActividadId());
+				indicadorTareaPk.setIndicadorId(indicador.getIndicadorId());
+				
+				indicadorTarea.setPk(indicadorTareaPk);
+				
+				indicadorTareaService.save(indicadorTarea);
 
 			}catch(DataAccessException e) {
 				response.put("mensaje", "Error al realizar el insert en la base de datos!");
 				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			response.put("mensaje", "La actividad ha sido creado con Exito!");
+			response.put("mensaje", "La tarea ha sido creado con Exito!");
 			response.put("actividad", actividadNew);
 			return new ResponseEntity<Map<String, Object>> (response,HttpStatus.CREATED);
 		}
@@ -123,7 +180,8 @@ public class ActividadRestController {
 			}
 			
 			try{
-							
+						
+				actividadActual.setAlerta(actividad.getAlerta());
 				actividadActual.setDescripcion(actividad.getDescripcion());
 				actividadActual.setNombreActividad(actividad.getNombreActividad());
 				actividadActual.setResponsableId(actividad.getResponsableId());
@@ -132,6 +190,10 @@ public class ActividadRestController {
 				actividadActual.setFechaCulminacion(actividad.getFechaCulminacion());
 				actividadActual.setFechaInicio(actividad.getFechaInicio());
 				actividadActual.setPeso(actividad.getPeso());
+				actividadActual.setCompletado(actividad.getCompletado());
+				actividadActual.setProgramado(actividad.getProgramado());
+				actividadActual.setUltimaMedicion(actividad.getUltimaMedicion());
+				actividadActual.setUnidadId(actividad.getUnidadId());
 																			
 				actividadUpdated=actividadService.save(actividadActual);
 			

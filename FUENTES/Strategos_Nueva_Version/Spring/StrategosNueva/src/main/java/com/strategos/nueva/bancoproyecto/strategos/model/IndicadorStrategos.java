@@ -195,6 +195,12 @@ public class IndicadorStrategos implements Serializable{
 
 	@Column(nullable=true, name="asignar_Inventario")
 	private Byte asignarInventario;
+	
+	@Column(nullable=true)
+	private String nombreUnidad;
+	
+	@Column(nullable=true)
+	private Double porcentajeCumplimiento;
 
 	public Long getIndicadorId() {
 		return indicadorId;
@@ -652,6 +658,22 @@ public class IndicadorStrategos implements Serializable{
 
 	public void setAsignarInventario(Byte asignarInventario) {
 		this.asignarInventario = asignarInventario;
+	}
+
+	public String getNombreUnidad() {
+		return nombreUnidad;
+	}
+
+	public void setNombreUnidad(String nombreUnidad) {
+		this.nombreUnidad = nombreUnidad;
+	}
+
+	public Double getPorcentajeCumplimiento() {
+		return porcentajeCumplimiento;
+	}
+
+	public void setPorcentajeCumplimiento(Double porcentajeCumplimiento) {
+		this.porcentajeCumplimiento = porcentajeCumplimiento;
 	}
 
 

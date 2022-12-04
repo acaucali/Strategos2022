@@ -4,38 +4,21 @@
     <section class="content">
       <h2>Indicadores</h2>
     
-      <!-- Default box -->
-      <div class="card">
-
-        <div class="card-header">
-            <button type="button" class="btn" (click)=" crearIndicador()" title="Crear Indicador">
-                <i class="fa-md fas fa-plus"></i>
-            </button>
-            <button type="button" class="btn" title="Descargar Resumido">
-              <i class="fas fa-chart-bar"></i>
-            </button>
-            
-            <button type="button" class="btn" (click)=" cargarMedicion()" title="Cargar Mediciones">
-              <i class="fas fa-table"></i>
-            </button>
-            
-          <div class="card-tools">
-            
-          </div>
-        </div>
-        
-        
-        <!-- /.card-body -->
-        
-      </div>
-      <!-- /.card -->
-
+    
     </section>
 
     <!-- /.card-footer-->
     <!-- Default box -->
     <div class="card">
       <div class="card-body">
+
+        <button type="button" class="btn" (click)=" crearIndicador()" title="Crear Indicador">
+          <i class="fa-md fas fa-plus"></i>
+      </button>
+        
+      <button type="button" class="btn" (click)=" cargarMedicion()" title="Cargar Mediciones">
+        <i class="fas fa-table"></i>
+      </button>
             
         <div *ngIf="indicadores?.length==0" class="alert alert-info">
             No hay registros en la base de datos!
@@ -45,33 +28,39 @@
             <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
               <thead>
                 <tr class="text-white bg-primary">
-                  <td width="100">Acciones</td>
-                  <td width="80">Alerta</td>
+                  <td width="80">Acciones</td>
+                  <td width="50">Alerta</td>
                   <td>Indicador</td>
-                  <td>Unidad</td>
-                  <td>Ejecutado</td>
-                  <td>Meta</td>
-                  <td>% Cumplimiento</td>
-                  <td>Última Medición</td>
+                  <td width="150">Unidad</td>
+                  <td width="70">Ejecutado</td>
+                  <td width="70">Meta</td>
+                  <td width="90">% Cumplimiento</td>
+                  <td width="70">Última Medición</td>
                 </tr>
               </thead>
               
               <tbody>
                 <tr *ngFor="let ind of indicadores | paginate: {itemsPerPage: 10, currentPage: pageIndi, id: 'pageInd'}">
-                  <td width="100" >
+                  <td width="80" >
                     
                     <i class="fas fa-edit" (click)="editarIndicador(ind)" style="cursor: pointer;"></i>
                     &nbsp;
                     <i class="fas fa-trash-alt" (click)='eliminarIndicador(ind)' style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="fas fa-chart-bar" (click)='graficar(ind)' style="cursor: pointer;"></i>
                     
                   </td>
-                  <td width="80">{{ind.alerta}} </td>
+                  <td width="50">
+                    <div id="red" *ngIf="ind.alerta == 3"></div>
+                    <div id="yellow" *ngIf="ind.alerta == 2"></div>
+                    <div id="green" *ngIf="ind.alerta == 1"></div>
+                  </td>
                   <td >{{ind.nombre}} </td>
-                  <td >{{ind.unidadId}} </td>
-                  <td >{{ind.ultimaMedicion}} </td>
-                  <td >{{ind.ultimoProgramado}} </td>
-                  <td >{{ind.ultimaMedicion}} </td>
-                  <td >{{ind.fechaUltimaMedicion}} </td>
+                  <td width="150">{{ind.nombreUnidad}} </td>
+                  <td width="70">{{ind.ultimaMedicion}} </td>
+                  <td width="70">{{ind.ultimoProgramado}} </td>
+                  <td width="90">{{ind.porcentajeCumplimiento | number: '.1-2' }} </td>
+                  <td width="70">{{ind.fechaUltimaMedicion}} </td>
                 </tr>
               </tbody>
               

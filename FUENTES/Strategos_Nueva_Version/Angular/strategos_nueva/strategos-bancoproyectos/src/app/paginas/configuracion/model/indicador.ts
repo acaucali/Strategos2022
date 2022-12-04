@@ -56,4 +56,6 @@ export class Indicador {
     responsableCargarEjecutadoId: number;
     tipoSumaMedicion: number;
     asignarInventario: number;
+    nombreUnidad: String;
+    porcentajeCumplimiento: number;
 }

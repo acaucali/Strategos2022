@@ -31,9 +31,11 @@ import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorPerspectiva;
 import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorPerspectivaPk;
 import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.model.PerspectivaStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.model.UnidadStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.service.IndicadorPerspectivaService;
 import com.strategos.nueva.bancoproyecto.strategos.service.IndicadorService;
 import com.strategos.nueva.bancoproyecto.strategos.service.PerspectivaService;
+import com.strategos.nueva.bancoproyecto.strategos.service.UnidadService;
 
 @CrossOrigin(origins= {"http://localhost:4200","*"})
 @RestController
@@ -45,6 +47,9 @@ public class IndicadorRestController {
 	
 	@Autowired
 	private PerspectivaService perspectivaService;
+	
+	@Autowired
+	private UnidadService unidadService;
 	
 	@Autowired
 	private IndicadorPerspectivaService indicadorPerspectivaService;
@@ -124,6 +129,11 @@ public class IndicadorRestController {
 				perspectiva = perspectivaService.findById(perspectivaId);
 				
 				indicadorN.setClaseId(perspectiva.getClaseId());
+				
+				if(indicadorN.getUnidadId() != null) {
+					UnidadStrategos und = unidadService.findById(indicadorN.getUnidadId());
+					indicadorN.setNombreUnidad(und.getNombre());
+				}
 				
 				
 				indicadorNew= indicadorService.save(indicadorN);
@@ -228,7 +238,8 @@ public class IndicadorRestController {
 				indicadorActual.setUnidadId(indicador.getUnidadId());
 				indicadorActual.setUrl(indicador.getUrl());
 				indicadorActual.setValorInicialCero(indicador.getValorInicialCero());
-																							
+				indicadorActual.setPorcentajeCumplimiento(indicador.getPorcentajeCumplimiento());
+				indicadorActual.setNombreUnidad(indicador.getNombreUnidad());
 				indicadorUpdated=indicadorService.save(indicadorActual);
 			
 			}catch(DataAccessException e) {

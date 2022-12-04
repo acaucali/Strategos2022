@@ -27,15 +27,15 @@
                             <label for="exampleInputEmail1">Indicador (*)</label>
                             <input type="text" class="form-control" id="exampleInputEmail1"
                             placeholder="Indicador" [(ngModel)]="indicador.nombre"
-                            name="nombre" required maxlength="50" #nombre="ngModel">
+                            name="nombre" required maxlength="100" #nombre="ngModel">
                             
                           </div>
   
                           <div class="col-md-12">
                             <br>
-                            <label for="exampleInputEmail1">Descripción (*)</label>
+                            <label for="exampleInputEmail1">Descripción </label>
                             <textarea class="form-control" rows="3" placeholder="Descripción"
-                            [(ngModel)]="indicador.descripcion" name="descripcion" maxlength="30"
+                            [(ngModel)]="indicador.descripcion" name="descripcion" maxlength="250"
                             #descripcion="ngModel"></textarea>
 
                           </div>
@@ -57,15 +57,11 @@
                             <select class="form-control" [(ngModel)]="indicador.frecuencia"
                               name="frecuencia" required #frecuencia="ngModel">
                               <option [value]="undefined" selected>Seleccionar</option>
-                              <option [value]="0">Diaria</option>
-                              <option [value]="1">Semanal</option>
-                              <option [value]="2">Quincenal</option>
+                         
                               <option [value]="3">Mensual</option>
-                              <option [value]="4">Bimensual</option>
+                             
                               <option [value]="5">Trimestral</option>
-                              <option [value]="6">Cuatrimestral</option>
-                              <option [value]="7">Semestral</option>
-                              <option [value]="8">Anual</option>
+                              
                             </select>
                           </div>
 

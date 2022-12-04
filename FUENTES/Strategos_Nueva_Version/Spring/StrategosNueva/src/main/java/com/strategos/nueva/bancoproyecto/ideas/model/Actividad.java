@@ -49,6 +49,24 @@ public class Actividad implements Serializable{
 	@Column(nullable=true)
 	private Long responsableId;
 	
+	@Column(nullable=true)
+	private Double ultimaMedicion;
+	
+	@Column(nullable=true)
+	private Double completado;
+	
+	@Column(nullable=true)
+	private Double programado;
+	
+	@Column(nullable=true)
+	private Long proyectoId;
+
+	@Column(nullable=true)
+	private Byte alerta;
+	
+	@Column(nullable=true)
+	private Long unidadId;
+	
 		
 	public Long getActividadId() {
 		return actividadId;
@@ -121,6 +139,58 @@ public class Actividad implements Serializable{
 	public void setResponsableId(Long responsableId) {
 		this.responsableId = responsableId;
 	}
+	
+	public Long getProyectoId() {
+		return proyectoId;
+	}
+
+	public void setProyectoId(Long proyectoId) {
+		this.proyectoId = proyectoId;
+	}
+	
+	public Double getUltimaMedicion() {
+		return ultimaMedicion;
+	}
+
+	public void setUltimaMedicion(Double ultimaMedicion) {
+		this.ultimaMedicion = ultimaMedicion;
+	}
+
+	public Double getCompletado() {
+		return completado;
+	}
+
+	public void setCompletado(Double completado) {
+		this.completado = completado;
+	}
+
+	public Double getProgramado() {
+		return programado;
+	}
+
+	public void setProgramado(Double programado) {
+		this.programado = programado;
+	}
+	
+
+	public Byte getAlerta() {
+		return alerta;
+	}
+
+	public void setAlerta(Byte alerta) {
+		this.alerta = alerta;
+	}
+
+	public Long getUnidadId() {
+		return unidadId;
+	}
+
+	public void setUnidadId(Long unidadId) {
+		this.unidadId = unidadId;
+	}
+
+
+
 
 	private static final long serialVersionUID = 1L;
 }

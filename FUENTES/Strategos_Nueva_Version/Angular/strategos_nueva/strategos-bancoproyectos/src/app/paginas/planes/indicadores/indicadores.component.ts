@@ -4,6 +4,7 @@ import { ModalService } from './detalle-indicador/modal.service';
 import { Indicador } from '../../configuracion/model/indicador';
 import Swal from 'sweetalert2';
 import { ModalIndicadorService } from './medicion-indicador/modal.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class IndicadoresComponent implements OnInit {
 
   indicadorSeleccionado: Indicador;
 
-  constructor(public modalservice: ModalService, public indicadorService: IndicadorService, public modalIndicador: ModalIndicadorService) { }
+  constructor(public modalservice: ModalService, public indicadorService: IndicadorService, public modalIndicador: ModalIndicadorService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -81,6 +82,12 @@ export class IndicadoresComponent implements OnInit {
     if(localStorage.getItem('objetivoId') != null){
       this.modalIndicador.abrirModal();
     }
+  }
+
+  graficar(ind: Indicador){    
+
+    this.router.navigate(['/grafico', ind.indicadorId]);
+
   }
 
 }

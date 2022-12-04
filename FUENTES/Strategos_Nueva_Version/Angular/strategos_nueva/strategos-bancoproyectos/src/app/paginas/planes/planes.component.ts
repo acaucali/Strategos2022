@@ -28,11 +28,24 @@ export class PlanesComponent implements OnInit {
 
   @ViewChild(IniciativasComponent) iniciativaComponent: IniciativasComponent;
   @ViewChild(IndicadoresComponent) indicadorComponent: IndicadoresComponent;
+  @ViewChild(PlanComponent) planComponent: PlanComponent;
 
   constructor(private organizacionesService: OrganizacionStrategosService, private proyectoService: ProyectoService, private activatedRoute: ActivatedRoute,
     private planService: PlanService) { }
 
   ngOnInit(): void {
+
+    localStorage.removeItem('anio');
+    localStorage.removeItem('periodoFin');
+    localStorage.removeItem('periodoIni');
+    localStorage.removeItem('frecuencia');
+    localStorage.removeItem('real');
+    localStorage.removeItem('meta');
+    localStorage.removeItem('tarea');
+    localStorage.removeItem('actividad');
+    localStorage.removeItem('actividadNombre');
+    localStorage.removeItem('tareaNombre');
+    
 
     this.organizacionId = localStorage.getItem('organizacion');
 
@@ -53,6 +66,7 @@ export class PlanesComponent implements OnInit {
         this.planService.getPlan(pro.planId).subscribe((pla) =>{ 
           this.plan= pla;
           localStorage.setItem('planId', pla.planId.toString());
+          this.planComponent.getPerspectivas();
         });
         this.planId = this.plan.planId;        
       });

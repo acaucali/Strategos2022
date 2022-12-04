@@ -1,0 +1,109 @@
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Registrar Mediciones</h1>
+            Actividad: {{objetivo}}
+          </div>          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+        
+        <div class="card-body">
+                         
+
+            <div class="table-responsive">
+                <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+                   
+                    <thead>
+                        <tr class="text-white bg-primary">                            
+                          <td *ngFor="let enc of encabezados" width="{{enc.tamanio}}">                            
+                            {{enc.valor}}                                                     
+                          </td>                   
+                        </tr>
+                    </thead>                    
+                    <tbody>
+
+                      <ng-container *ngIf="serie !=3">
+                        <ng-container *ngIf="serie ==1">
+                          <tr *ngFor="let id of ids">
+                            <ng-container *ngIf="serie ==1 && datosReal?.length>0">
+                              <ng-container *ngFor="let medR of datosReal">
+                                <td *ngIf="medR.ideaId == id">
+                                  <span *ngIf="medR.campo =='indicador'">
+                                    &nbsp;{{medR.valor}}</span>                            
+                                  <span *ngIf="medR.campo =='series'" >&nbsp;{{medR.valor}}</span>
+                                  <input type="text" id="{{medR.id}}" [(ngModel)]="medR.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medR.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                                </td>
+                              </ng-container>
+                            </ng-container>
+                          </tr>
+                        </ng-container>
+                        <ng-container *ngIf="serie ==2">
+                          <tr *ngFor="let id of ids">
+                            <ng-container *ngIf="serie ==2 && datosMeta?.length>0">
+                              <ng-container *ngFor="let medM of datosMeta">
+                                <td *ngIf="medM.ideaId == id">
+                                  <span *ngIf="medM.campo =='indicador'">
+                                    &nbsp;{{medM.valor}}</span>                            
+                                  <span *ngIf="medM.campo =='series'" >&nbsp;{{medM.valor}}</span>
+                                  <input type="text" id="{{medM.id}}" [(ngModel)]="medM.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medM.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                                </td>
+                              </ng-container> 
+                            </ng-container>
+                          </tr>
+                        </ng-container>
+
+                      </ng-container>
+
+                      <ng-container *ngIf="serie ==3">
+                        <tr *ngFor="let id of ids">
+                          <ng-container *ngIf="serie ==3 && datosReal?.length>0">
+                            <ng-container *ngFor="let medR of datosReal">
+                              <td *ngIf="medR.ideaId == id">
+                                <span *ngIf="medR.campo =='indicador'">
+                                  &nbsp;{{medR.valor}}</span>                            
+                                <span *ngIf="medR.campo =='series'" >&nbsp;{{medR.valor}}</span>
+                                <input type="text" id="{{medR.id}}" [(ngModel)]="medR.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medR.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                              </td>
+                            </ng-container>
+                          </ng-container>
+                        </tr>
+                        <tr *ngFor="let id of ids">
+                          <ng-container *ngIf="serie ==3 && datosMeta?.length>0">
+                            <ng-container *ngFor="let medM of datosMeta">
+                              <td *ngIf="medM.ideaId == id">
+                                <span *ngIf="medM.campo =='indicador'">
+                                  &nbsp;{{medM.valor}}</span>                            
+                                <span *ngIf="medM.campo =='series'" >&nbsp;{{medM.valor}}</span>
+                                <input type="text" id="{{medM.id}}" [(ngModel)]="medM.valor" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;" *ngIf="medM.campo =='medicion'" style="width: 150px" class="form-control" data-toggle="tab">
+                              </td>
+                            </ng-container> 
+                          </ng-container>
+                        </tr>
+                      </ng-container>
+
+                    </tbody> 
+  
+                </table>
+                    
+            </div>
+         
+            <br>
+            <br>
+            
+            <button (click)="registrar()" type="button" class="btn btn-primary" data-dismiss="modal" >Registrar</button> &nbsp;&nbsp;
+            <button (click)="regresar()" type="button" class="btn btn-danger" data-dismiss="modal" >Regresar</button>
+
+        </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>

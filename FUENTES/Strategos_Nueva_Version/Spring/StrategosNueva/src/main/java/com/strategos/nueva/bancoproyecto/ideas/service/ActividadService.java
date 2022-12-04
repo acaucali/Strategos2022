@@ -17,4 +17,6 @@ public interface ActividadService {
 	
 	public void delete(Long id);
 	
+	List<Actividad> findAllByProyectoId(Long proyectoId);
+	
 }
