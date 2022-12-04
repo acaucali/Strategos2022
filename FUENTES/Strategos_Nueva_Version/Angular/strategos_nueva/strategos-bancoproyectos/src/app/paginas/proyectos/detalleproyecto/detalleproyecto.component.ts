@@ -19,6 +19,7 @@ import { ProyectoService } from '../../configuracion/services/proyectos.service'
 import { TipoPoblacionService } from '../../configuracion/services/tipopoblacion.service';
 import { TiposObejtivosService } from '../../configuracion/services/tiposobjetivos.service';
 
+import Swal from 'sweetalert2';
 import { PreproyectoComponent } from '../../preproyecto/preproyecto.component';
 import swal from 'sweetalert2';
 import { ProyectosComponent } from '../proyectos.component';
@@ -29,6 +30,8 @@ import { URL_BACKEND } from 'src/app/config/config';
 import { DepartamentosService } from '../../configuracion/services/departamentos.service';
 import { Departamentos } from '../../configuracion/model/departamentos';
 import { ProyectosRegion } from '../../configuracion/model/proyectosregion';
+import { SwitchComponent } from '@progress/kendo-angular-inputs';
+import { ProyectosregionService } from '../../configuracion/services/proyectosregion.service';
 
 interface Item {
   text: String;
@@ -66,8 +69,6 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
   departamentoNombre: String;
   municipios: any[] = [];
   municipiosSeleccionados: any[] = [];
-  municipiosMostrar: String[] = [];
-  muni: String[] = [];
   proyectoRegion: ProyectosRegion[] = [];
 
   myForm: FormGroup;
@@ -109,6 +110,7 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
     private proyectoService: ProyectoService,
     private proyectoComponent: ProyectosComponent,
     private departamentosService: DepartamentosService,
+    private proyectoRegionService: ProyectosregionService,
     public documentoService: ProyectosDocumentosService
   ) {}
 
@@ -203,7 +205,7 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
       limitSelection: -1,
       clearSearchFilter: true,
       maxHeight: 197,
-      itemsShowLimit: 3,
+      itemsShowLimit: 5,
       allowSearchFilter: true,
       closeDropDownOnSelection: false,
       showSelectedItemsAtTop: false,
@@ -214,9 +216,7 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    console.log(' el proyecoto que trae: ' + this.proyecto);
-  }
+  ngAfterViewInit(): void {}
 
   cerrarModal() {
     this.modalService.cerrarModal();
@@ -329,33 +329,57 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
   }
 
   agregar(forma: NgForm) {
-    this.departamentosService
-      .getDepartamentoNombre(forma.value.departamentoId)
-      .subscribe((response) => {
-        this.departamentoNombre = response.departamentoNombre;
-      });
     let municipio: String;
     let pro: ProyectosRegion;
-    for (let index = 0; index < forma.value.municipio; index++) {
+    console.log(forma);
+    for (let mun of forma.value.municipios) {
+      let nombre;
+      var values = forma.value.departamentoId.split('-');
       pro = {
-        proyectoRegion: undefined,
-        departamentoId: forma.value.departamentoId,
-        municipioId: forma.value.municipios[index].c_digo_dane_del_municipio,
+        proyectoRegionId: undefined,
+        departamentoId: values[0],
+        municipioId: mun.c_digo_dane_del_municipio,
         proyectoId: undefined,
+        departamentoNombre: values[1],
+        municipioNombre: mun.municipio,
       };
       this.proyectoRegion.push(pro);
     }
-    for (let mun of forma.value.municipios) {
-      municipio = mun.municipio;
-      this.muni.push(municipio);
-    }
     console.log(this.proyectoRegion);
-    this.municipiosMostrar = this.muni;
+    this.proyecto.departamentos = this.proyectoRegion;
   }
 
   onChange(value) {
-    this.departamentosService.getMunicipiosList(value).subscribe((response) => {
-      this.municipios = response;
+    var values = value.split('-');
+    this.departamentosService
+      .getMunicipiosList(values[0])
+      .subscribe((response) => {
+        this.municipios = response;
+      });
+  }
+
+  deleteMun(dep: ProyectosRegion): void {
+    Swal.fire({
+      title: 'Está seguro?',
+      text: `¿Seguro que desea eliminar el municipio ${dep.municipioNombre} ?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.proyectoRegionService
+          .delete(dep.proyectoRegionId)
+          .subscribe((response) => {
+            swal.fire(
+              'Municipio eliminado',
+              'El Municipio ha sido eliminado con éxito',
+              'success'
+            );
+          });
+      }
     });
   }
 

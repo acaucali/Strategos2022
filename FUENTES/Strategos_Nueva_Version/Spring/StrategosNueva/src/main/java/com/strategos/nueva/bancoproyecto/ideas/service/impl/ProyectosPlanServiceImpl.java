@@ -56,8 +56,7 @@ public class ProyectosPlanServiceImpl implements ProyectosPlanService{
 	}
 
 	@Override
-	public ProyectosPlan findAllByProyectoId(Long proyectoId) {
-		// TODO Auto-generated method stub
+	public ProyectosPlan findAllByProyectoId(Long proyectoId) {		
 		return proyectosDao.findAllByProyectoId(proyectoId);
 	}
 	

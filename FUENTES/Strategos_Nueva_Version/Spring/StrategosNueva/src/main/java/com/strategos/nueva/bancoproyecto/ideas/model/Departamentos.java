@@ -29,7 +29,7 @@ public class Departamentos implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "proyectoId", nullable = true) 
-	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "poblaciones" }, allowSetters = true)
+	@JsonIgnoreProperties(value={ "hibernateLazyInitializer", "handler", "departamentos" }, allowSetters = true)
 	private Proyectos proyecto;
 
 	public Long getDepartamentosId() {

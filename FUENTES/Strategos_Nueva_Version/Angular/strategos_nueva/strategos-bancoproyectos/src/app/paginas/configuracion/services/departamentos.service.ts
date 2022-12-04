@@ -18,6 +18,7 @@ export class DepartamentosService {
   public departamentos: Departamentos[];
   public departamento: Departamentos;
   public municipios: any[] = [];
+  public municipio: any;
 
   constructor(private http: HttpClient, private router: Router) {}
 

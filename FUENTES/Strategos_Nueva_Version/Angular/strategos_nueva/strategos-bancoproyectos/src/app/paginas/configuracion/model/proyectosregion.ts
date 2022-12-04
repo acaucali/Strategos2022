@@ -1,6 +1,8 @@
 export class ProyectosRegion {
-  proyectoRegion: number;
+  proyectoRegionId: number;
   departamentoId: number;
   municipioId: String;
   proyectoId: number;
+  departamentoNombre: String;
+  municipioNombre: String;
 }

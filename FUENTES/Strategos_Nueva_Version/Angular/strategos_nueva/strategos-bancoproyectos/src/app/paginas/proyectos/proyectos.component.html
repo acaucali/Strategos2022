@@ -1,157 +1,225 @@
 <detalle-proyecto [proyecto]="proyectoSeleccionado"></detalle-proyecto>
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Proyectos</h1>
-            Organización: {{organizacion.nombre}} 
-          </div>
-          
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Proyectos</h1>
+          Organización: {{ organizacion.nombre }}
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-
-      <!-- Default box -->
-      <div class="card">
-
-        
-
-        <div class="card-header">
-            <button type="button" class="btn" (click)="crearProyecto()" title="Crear Idea">
-                <i class="fa-md fas fa-plus"></i>
-            </button>
-            <button type="button" class="btn" title="Descargar Resumido">
-                <i class="fa-md far fa-file-pdf" (click)="descargarPDFResumido()"></i>
-            </button>
-            
-            <button type="button" class="btn" title="Descargar Resumido">
-              <i class="fa-md far fa-file-excel" (click)="descargarXlsResumido()"></i>
-            </button>
-
-            <button type="button" class="btn" class="btn" data-card-widget="collapse" title="Buscar">
-                <i class="fa-md fas fa-filter"></i>
-            </button>
-          
-
-          <div class="card-tools">
-            
-          </div>
-        </div>
-        <div class="card-footer">
-            <div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label for="exampleInputEmail1">Año Formulación</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
-                    [(ngModel)]="anio" name="anio" maxlength="4" >
-                </div>
-                <div class="col-md-3">
-                    <label for="exampleInputEmail1">Tipologia</label>
-                    <select class="form-control" [(ngModel)]="tipoId" name="tipoId">
-                      <option [value]="undefined" selected>Seleccionar</option>
-                      <option *ngFor="let tipo of tipos" [value]="tipo.tipoProyectoId">{{tipo.nombre}}</option>
-                    </select>
-                </div>
-                
-                <div class="col-md-3">
-                    <label for="exampleInputEmail1">Estatus</label>
-                    <select class="form-control"[(ngModel)]="estatusId" name="estatusId">
-                      <option [value]="undefined" selected>Seleccionar</option>
-                      <option *ngFor="let est of estatus" [value]="est.id">{{est.nombre}}</option>
-                    </select>
-                </div>
-                
-                <div class="col-md-3">
-                  <br>
-                  <label>Historico</label>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="checkbox" id="customCheckbox1"
-                  [(ngModel)]="historico" name="historico">
-                   
-                </div>
-
-                <div class="col-md-9" *ngIf="isAdmin == true">
-                    <label for="exampleInputEmail1">Dependencia</label>
-                    <select class="form-control" [(ngModel)]="organizacionFiltroId" name="organizacionFiltroId">
-                      <option [value]="undefined" selected>Seleccionar</option>
-                      <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
-                    </select>
-                </div>
-
-                <div class="col-md-8">
-                    <br>
-                    <button type="submit" class="btn btn-primary" (click)="buscar()">Filtrar</button>&nbsp;&nbsp;
-                    <button type="submit" class="btn btn-primary" (click)="limpiar()">Limpiar</button>
-                </div>
-
-                </div>
-            </div>
-        </div>
-        
-        <!-- /.card-body -->
-        
       </div>
-      <!-- /.card -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
 
-    </section>
-
-    <!-- /.card-footer-->
+  <!-- Main content -->
+  <section class="content">
     <!-- Default box -->
     <div class="card">
-      <div class="card-body">
-            
-        <div *ngIf="proyectos?.length==0" class="alert alert-info">
-            No hay registros en la base de datos!
-        </div>
-    
-        <div class="table-responsive">
-            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
-                <thead>
-                  <tr class="text-white bg-primary">
-                    <td width="100">Acciones</td>
-                    <td width="80">Año</td>
-                    <td>Preproyecto</td>
-                    <td>Dependencia</td>
-                    <td>Tipologia</td>
-                    <td>Estatus</td>
-                    <td>Planificación</td>
-                  </tr>
-                </thead>
-                
-                <tbody>
-                  <tr *ngFor="let pro of proyectos | paginate: {itemsPerPage: 10, currentPage: pagePrepro, id: 'pagePre'}">
-                    <td width="100" >
-                      
-                      <i class="fas fa-edit" (click)="abrirModal(pro)" style="cursor: pointer;"></i>
-                      &nbsp;
-                      <i class="fas fa-trash-alt" (click)='delete(pro)' style="cursor: pointer;"></i>
-                      &nbsp;
-                      <i class="far fa-file-pdf" (click)="descargarPDF(pro)"></i>
-                    </td>
-                    <td width="80">{{pro.anioFormulacion}} {{pro.proyectoId}}</td>
-                    <td >{{pro.nombreProyecto}} </td>
-                    <td >{{pro.organizacion}} </td>
-                    <td >{{pro.tipo}} </td>
-                    <td >{{pro.estatus}} </td>
-                    <td> <button type="submit" class="btn btn-primary" [routerLink]="['/planes', pro.proyectoId]">Plan</button>&nbsp;&nbsp; </td>
-                  </tr>
-                </tbody>
-                          
-            </table>  
-            
-            <pagination-controls id="pagePre" previousLabel="Anterior"
-              nextLabel="Siguiente" (pageChange)="pagePrepro = $event"></pagination-controls>
-        </div>
-  
-      </div>
-    </div>  
-    
-    <!-- /.content -->
-</div>
-  <!-- /.content-wrapper -->
+      <div class="card-header">
+        <button
+          type="button"
+          class="btn"
+          (click)="crearProyecto()"
+          title="Crear Idea"
+        >
+          <i class="fa-md fas fa-plus"></i>
+        </button>
+        <button type="button" class="btn" title="Descargar Resumido">
+          <i class="fa-md far fa-file-pdf" (click)="descargarPDFResumido()"></i>
+        </button>
 
+        <button type="button" class="btn" title="Descargar Resumido">
+          <i
+            class="fa-md far fa-file-excel"
+            (click)="descargarXlsResumido()"
+          ></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn"
+          class="btn"
+          data-card-widget="collapse"
+          title="Buscar"
+        >
+          <i class="fa-md fas fa-filter"></i>
+        </button>
+
+        <div class="card-tools"></div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <div class="row">
+            <div class="col-md-3">
+              <label for="exampleInputEmail1">Año Formulación</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleInputEmail1"
+                placeholder="Año Formulación"
+                [(ngModel)]="anio"
+                name="anio"
+                maxlength="4"
+              />
+            </div>
+            <div class="col-md-3">
+              <label for="exampleInputEmail1">Tipologia</label>
+              <select class="form-control" [(ngModel)]="tipoId" name="tipoId">
+                <option [value]="undefined" selected>Seleccionar</option>
+                <option
+                  *ngFor="let tipo of tipos"
+                  [value]="tipo.tipoProyectoId"
+                >
+                  {{ tipo.nombre }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label for="exampleInputEmail1">Estatus</label>
+              <select
+                class="form-control"
+                [(ngModel)]="estatusId"
+                name="estatusId"
+              >
+                <option [value]="undefined" selected>Seleccionar</option>
+                <option *ngFor="let est of estatus" [value]="est.id">
+                  {{ est.nombre }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <br />
+              <label>Historico</label>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <input
+                type="checkbox"
+                id="customCheckbox1"
+                [(ngModel)]="historico"
+                name="historico"
+              />
+            </div>
+
+            <div class="col-md-9" *ngIf="isAdmin == true">
+              <label for="exampleInputEmail1">Dependencia</label>
+              <select
+                class="form-control"
+                [(ngModel)]="organizacionFiltroId"
+                name="organizacionFiltroId"
+              >
+                <option [value]="undefined" selected>Seleccionar</option>
+                <option
+                  *ngFor="let org of organizaciones"
+                  [value]="org.organizacionId"
+                >
+                  {{ org.nombre }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-8">
+              <br />
+              <button type="submit" class="btn btn-primary" (click)="buscar()">
+                Filtrar</button
+              >&nbsp;&nbsp;
+              <button type="submit" class="btn btn-primary" (click)="limpiar()">
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </section>
+
+  <!-- /.card-footer-->
+  <!-- Default box -->
+  <div class="card">
+    <div class="card-body">
+      <div *ngIf="proyectos?.length == 0" class="alert alert-info">
+        No hay registros en la base de datos!
+      </div>
+
+      <div class="table-responsive">
+        <table
+          mdbTable
+          class="table table-bordered tabled-striped table-sm"
+          id="tabla"
+          style="border-collapse: collapse"
+        >
+          <thead>
+            <tr class="text-white bg-primary">
+              <td width="100">Acciones</td>
+              <td width="80">Año</td>
+              <td>Proyecto</td>
+              <td>Dependencia</td>
+              <td>Tipologia</td>
+              <td>Estatus</td>
+              <td>Planificación</td>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="
+                let pro of proyectos
+                  | paginate
+                    : {
+                        itemsPerPage: 10,
+                        currentPage: pagePrepro,
+                        id: 'pagePre'
+                      }
+              "
+            >
+              <td width="100">
+                <i
+                  class="fas fa-edit"
+                  (click)="abrirModal(pro)"
+                  style="cursor: pointer"
+                ></i>
+                &nbsp;
+                <i
+                  class="fas fa-trash-alt"
+                  (click)="delete(pro)"
+                  style="cursor: pointer"
+                ></i>
+                &nbsp;
+                <i class="far fa-file-pdf" (click)="descargarPDF(pro)"></i>
+              </td>
+              <td width="80">{{ pro.anioFormulacion }} {{ pro.proyectoId }}</td>
+              <td>{{ pro.nombreProyecto }}</td>
+              <td>{{ pro.organizacion }}</td>
+              <td>{{ pro.tipo }}</td>
+              <td>{{ pro.estatus }}</td>
+              <td>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [routerLink]="['/planes', pro.proyectoId]"
+                >
+                  Plan</button
+                >&nbsp;&nbsp;
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <pagination-controls
+          id="pagePre"
+          previousLabel="Anterior"
+          nextLabel="Siguiente"
+          (pageChange)="pagePrepro = $event"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

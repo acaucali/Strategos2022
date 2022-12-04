@@ -42,7 +42,7 @@ export class Proyectos {
   poblaciones: TipoPoblacion[];
   cooperante: String;
   dependenciasConvenio: String;
-  numeroConvenio: number;
+  numeroConvenio: String;
   fechaInicioConvenio: Date;
   fechaCulminacionConvenio: Date;
   nombreOperador: String;

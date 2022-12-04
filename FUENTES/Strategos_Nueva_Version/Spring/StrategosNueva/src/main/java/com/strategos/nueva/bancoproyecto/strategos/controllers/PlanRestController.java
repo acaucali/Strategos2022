@@ -52,8 +52,8 @@ public class PlanRestController {
 		}
 		
 		@GetMapping("/plan/proyecto/{id}")
-		public ProyectosPlan indexPlan(@PathVariable Long id){					
-			ProyectosPlan proyectoPlan = (ProyectosPlan) proyectoPlanService.findAllByProyectoId(id); 				
+		public ProyectosPlan indexPlan(@PathVariable Long id){							
+			ProyectosPlan proyectoPlan = (ProyectosPlan) proyectoPlanService.findAllByProyectoId(id);			
 			return proyectoPlan;
 		}
 			

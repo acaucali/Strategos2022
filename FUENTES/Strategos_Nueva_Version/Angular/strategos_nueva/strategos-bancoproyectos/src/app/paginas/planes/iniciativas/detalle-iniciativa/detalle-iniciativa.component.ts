@@ -11,58 +11,73 @@ import { IniciativasComponent } from '../iniciativas.component';
 @Component({
   selector: 'detalle-iniciativa',
   templateUrl: './detalle-iniciativa.component.html',
-  styleUrls: ['./detalle-iniciativa.component.css']
+  styleUrls: ['./detalle-iniciativa.component.css'],
 })
 export class DetalleIniciativaComponent implements OnInit {
-
   private errores: string[];
-  @Input() iniciativa: Iniciativa = new Iniciativa;
+  @Input() iniciativa: Iniciativa = new Iniciativa();
   unidades: Unidad[];
-  
-  objetivo: string = "";
-  titulo: string = "Datos de la Actividad";
+  ngSelect = 3;
 
-  constructor(public modalservice: ModalService, public iniciativaService: IniciativaService, public unidadService: UnidadService, public perspectivaService: PerspectivaService,
-    private iniciativaComponent: IniciativasComponent) { }
+  objetivo: string = '';
+  titulo: string = 'Datos de la Actividad';
+
+  constructor(
+    public modalservice: ModalService,
+    public iniciativaService: IniciativaService,
+    public unidadService: UnidadService,
+    public perspectivaService: PerspectivaService,
+    private iniciativaComponent: IniciativasComponent
+  ) {}
 
   ngOnInit(): void {
-    this.unidadService.getUnidadesList().subscribe(response =>{this.unidades = response});
-    if(localStorage.getItem('objetivoId') != null){
-      this.perspectivaService.getPerspectiva(localStorage.getItem('objetivoId')).subscribe(response =>{this.objetivo = response.nombre.toString()});
+    this.unidadService.getUnidadesList().subscribe((response) => {
+      this.unidades = response;
+    });
+    if (localStorage.getItem('objetivoId') != null) {
+      this.perspectivaService
+        .getPerspectiva(localStorage.getItem('objetivoId'))
+        .subscribe((response) => {
+          this.objetivo = response.nombre.toString();
+        });
     }
   }
 
-  create(): void{
-    
-    this.iniciativaService.create(this.iniciativa, localStorage.getItem('objetivoId')).subscribe(
-      json => {
-      swal.fire('Nueva Actividad', `${json.mensaje}`, 'success');
-      this.cerrarModal();
-      this.iniciativaComponent.getIniciativas();
-    },
-    err =>{
-      this.errores = err.error.errors as string[];
-      console.error('Código error: '+err.status);
-      console.error(err.error.errors);
-    }
+  create(): void {
+    console.log(this.iniciativa);
+    this.iniciativa.frecuencia = this.ngSelect;
+    console.log(this.iniciativa);
+    this.iniciativaService
+      .create(this.iniciativa, localStorage.getItem('objetivoId'))
+      .subscribe(
+        (json) => {
+          swal.fire('Nueva Actividad', `${json.mensaje}`, 'success');
+          this.cerrarModal();
+          this.iniciativaComponent.getIniciativas();
+        },
+        (err) => {
+          this.errores = err.error.errors as string[];
+          console.error('Código error: ' + err.status);
+          console.error(err.error.errors);
+        }
+      );
+  }
+
+  update(): void {
+    this.iniciativaService.update(this.iniciativa).subscribe(
+      (json) => {
+        swal.fire('Actividad Actualizada', `${json.mensaje}`, 'success');
+        this.cerrarModal();
+      },
+      (err) => {
+        this.errores = err.error.errors as string[];
+        console.error('Código error: ' + err.status);
+        console.error(err.error.errors);
+      }
     );
   }
 
-  update(): void{
-    this.iniciativaService.update(this.iniciativa).subscribe(json =>{
-      swal.fire('Actividad Actualizada',  `${json.mensaje}`, 'success')
-      this.cerrarModal();
-    },
-    err =>{
-      this.errores = err.error.errors as string[];
-      console.error('Código error: '+err.status);
-      console.error(err.error.errors);
-    }
-    );
-  }
-
-  cerrarModal(){
+  cerrarModal() {
     this.modalservice.cerrarModal();
   }
-
 }

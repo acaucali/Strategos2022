@@ -23,7 +23,7 @@ public class Iniciativa implements Serializable{
 	private String nombreIniciativa;
 	
 	@Size(max=2000)
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private String descripcion;
 	
 	@Column(nullable=true)

@@ -245,8 +245,7 @@ public class ProyectoRestController {
 			List<ProyectosRegion> proyectos = proyectoRegionService.findAllByProyectoId(id);
 			
 			return proyectos;
-		}
-		
+		}	
 			
 		//servicio que muestra un proyecto
 		@GetMapping("/proyecto/{id}")
@@ -342,8 +341,7 @@ public class ProyectoRestController {
 						ProyectosRegion proyectoRegion = new ProyectosRegion();
 						proyectoRegion.setProyectoId(proyectoNew.getProyectoId());
 						proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
-						proyectoRegion.setMunicipioId(dep.getMunicipioId());
-						System.out.print("\n\n PROYECTO REGION: " + proyectoRegion + "\n\n")	;
+						proyectoRegion.setMunicipioId(dep.getMunicipioId());						
 						proyectoRegionService.save(proyectoRegion);
 					}
 				}
@@ -455,6 +453,8 @@ public class ProyectoRestController {
 							proyectoRegion.setProyectoId(proyecto.getProyectoId());
 							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
 							proyectoRegion.setMunicipioId(dep.getMunicipioId());
+							proyectoRegion.setDepartamentoNombre(dep.getDepartamentoNombre());
+							proyectoRegion.setMunicipioNombre(dep.getMunicipioNombre());
 							proyectoRegionService.save(proyectoRegion);
 						}
 					}
@@ -540,6 +540,8 @@ public class ProyectoRestController {
 							proyectoRegion.setProyectoId(proyecto.getProyectoId());
 							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());							
 							proyectoRegion.setMunicipioId(dep.getMunicipioId());
+							proyectoRegion.setDepartamentoNombre(dep.getDepartamentoNombre());
+							proyectoRegion.setMunicipioNombre(dep.getMunicipioNombre());
 							proyectoRegionService.save(proyectoRegion);
 						}
 					}

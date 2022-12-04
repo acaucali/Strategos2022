@@ -1151,9 +1151,12 @@ public class ReportesRestController {
 	    	PdfWriter.getInstance(document, out);
 	        document.open();		
     		
-    		document.addTitle("Reporte de Pre-Proyecto detalle");
+	        if(preproyecto.getEstatusId() == 6)
+	        	document.addTitle("Reporte de Pre-Proyecto detalle");
+	        else
+	        	document.addTitle("Reporte de Proyecto detalle");
     		Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
-    		Paragraph p=new Paragraph("Nombre Pre-Proyecto: "+ preproyecto.getNombreProyecto(), font);
+    		Paragraph p=new Paragraph("Nombre Proyecto: "+ preproyecto.getNombreProyecto(), font);
     		p.setAlignment(Element.ALIGN_CENTER);
     		document.add(p);
     		document.add( Chunk.NEWLINE );
@@ -1474,9 +1477,9 @@ public class ReportesRestController {
 	    	PdfWriter.getInstance(document, out);
 	        document.open();		
     		
-    		document.addTitle("Reporte preproyectos resumido");
+    		document.addTitle("Reporte proyectos resumido");
     		Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
-    		Paragraph p=new Paragraph("Listado resumido de Pre-Proyectos", font);
+    		Paragraph p=new Paragraph("Listado resumido de Proyectos", font);
     		p.setAlignment(Element.ALIGN_CENTER);
     		document.add(p);
     		document.add( Chunk.NEWLINE );
@@ -1538,7 +1541,7 @@ public class ReportesRestController {
 	public void addTableHeaderPreproyecto(PdfPTable table) {
 		
 		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, Font.BOLD, BaseColor.WHITE);
-	    Stream.of("Año", "Pre-Proyecto", "Dependencia", "Tipología", "Estatus")
+	    Stream.of("Año", "Proyecto", "Dependencia", "Tipología", "Estatus")
 	      .forEach(columnTitle -> {
 	        PdfPCell header = new PdfPCell();
 	        header.setBackgroundColor(BaseColor.BLUE);

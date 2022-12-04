@@ -1,54 +1,53 @@
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-        <!-- /.card-footer-->
-    <!-- Default box -->
-    <div class="card">
-        <div class="card-body">
-
-            <div class="card-header">
-                <div class="container-fluid">
-
-                    <div class="row">
-                        <div class="col-md-9">
-                            <h2>Proyecto: {{proyecto.nombreProyecto}}</h2>
-                            <h3>Organización: {{organizacion.nombre}}</h3>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn" class="btn" title="Regresar">
-                                <i class="fas fa-sign-out-alt" [routerLink]="['/gestionideas']"></i>
-                                Regresar
-                            </button>
-                        </div>
-                    </div>
-
-                    
-                </div><!-- /.container-fluid -->
-              
+  <!-- Content Header (Page header) -->
+  <!-- /.card-footer-->
+  <!-- Default box -->
+  <div class="card">
+    <div class="card-body">
+      <div class="card-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-9">
+              <h2>Organización: {{ organizacion.nombre }}</h2>
+              <h2>Proyecto: {{ proyecto.nombreProyecto }}</h2>
             </div>
-            <br>
-            
-            <div class="row">
-                <div class="col-md-12">
-                    <!--arbol planes-->
-                    <app-plan></app-plan>
-                </div>
-                <div class="col-md-12">
-                    <!--indicadores iniciativas-->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <!--indicador-->
-                            <app-indicadores></app-indicadores>
-                        </div>
-                        <div class="col-md-12">
-                            <!--iniciativa-->
-                            <app-iniciativas></app-iniciativas>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-3">
+              <button type="button" class="btn" class="btn" title="Regresar">
+                <i
+                  class="fas fa-sign-out-alt"
+                  [routerLink]="['/gestionideas']"
+                ></i>
+                Regresar
+              </button>
             </div>
+          </div>
         </div>
-    </div>
+        <!-- /.container-fluid -->
+      </div>
+      <br />
 
-    <!-- /.content -->
+      <div class="row">
+        <div class="col-md-12">
+          <!--arbol planes-->
+          <app-plan></app-plan>
+        </div>
+        <div class="col-md-12">
+          <!--indicadores iniciativas-->
+          <div class="row">
+            <div class="col-md-12">
+              <!--indicador-->
+              <app-indicadores></app-indicadores>
+            </div>
+            <div class="col-md-12">
+              <!--iniciativa-->
+              <app-iniciativas></app-iniciativas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

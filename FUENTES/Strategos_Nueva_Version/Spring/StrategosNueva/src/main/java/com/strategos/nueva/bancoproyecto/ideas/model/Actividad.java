@@ -26,7 +26,7 @@ public class Actividad implements Serializable{
 	private String nombreActividad;
 	
 	@Size(max=2000)
-	@Column(nullable=false)
+	@Column(nullable=true)
 	private String descripcion;
 	
 	@Column(nullable=true)

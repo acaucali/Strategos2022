@@ -19,12 +19,20 @@ public class ProyectosRegion implements Serializable{
 	private Long proyectoRegionId;
 	
 	private Long departamentoId;
-	
-	
-	@Size(max=200)	
+		
+	@Size(max=250)
+	@Column(nullable=true)
 	private String municipioId;
 	
 	private Long proyectoId;
+	
+	@Size(max=250)
+	@Column(nullable=true)
+	private String municipioNombre;
+	
+	@Size(max=250)
+	@Column(nullable=true)
+	private String departamentoNombre;
 	
 	public void setProyectoRegionId(Long proyectoRegionId){
 		this.proyectoRegionId = proyectoRegionId;
@@ -57,6 +65,24 @@ public class ProyectosRegion implements Serializable{
 	public void setProyectoId(Long proyectoId) {
 		this.proyectoId = proyectoId;
 	}
+	
+	public String getMunicipioNombre() {
+		return municipioNombre;
+	}
+
+	public void setMunicipioNombre(String municipioNombre) {
+		this.municipioNombre = municipioNombre;
+	}
+
+	public String getDepartamentoNombre() {
+		return departamentoNombre;
+	}
+
+	public void setDepartamentoNombre(String departamentoNombre) {
+		this.departamentoNombre = departamentoNombre;
+	}
+
+
 
 	private static final long serialVersionUID = 1L;
 

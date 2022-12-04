@@ -12,60 +12,75 @@ import { UnidadService } from 'src/app/paginas/configuracion/services/unidad.ser
 @Component({
   selector: 'detalle-tarea',
   templateUrl: './detalle-tarea.component.html',
-  styleUrls: ['./detalle-tarea.component.css']
+  styleUrls: ['./detalle-tarea.component.css'],
 })
 export class DetalleTareaComponent implements OnInit {
-
   private errores: string[];
-  @Input() tarea: Actividad = new Actividad;
+  @Input() tarea: Actividad = new Actividad();
   unidades: Unidad[];
-  
-  objetivo: string = "";
-  titulo: string = "Datos de la Tarea";
+  ngSelect: number = 89;
+
+  objetivo: string = '';
+  titulo: string = 'Datos de la Tarea';
 
   responsables: Responsable[];
 
-  constructor(public modalservice: ModalService, public tareaService: ActividadService, private responsableService: ResponsableService, private tareaComponent: TareasComponent,
-    public unidadService: UnidadService) { }
+  constructor(
+    public modalservice: ModalService,
+    public tareaService: ActividadService,
+    private responsableService: ResponsableService,
+    private tareaComponent: TareasComponent,
+    public unidadService: UnidadService
+  ) {}
 
   ngOnInit(): void {
-    this.responsableService.getResponsablesList().subscribe(response => {this.responsables = response});
-    this.unidadService.getUnidadesList().subscribe(response =>{this.unidades = response});
+    this.responsableService.getResponsablesList().subscribe((response) => {
+      this.responsables = response;
+    });
+    this.unidadService.getUnidadesList().subscribe((response) => {
+      this.unidades = response;
+    });
     this.objetivo = localStorage.getItem('actividadNombre');
   }
 
-  cerrarModal(){
+  cerrarModal() {
     this.modalservice.cerrarModal();
   }
 
-  update(){
-
-    this.tareaService.update(this.tarea).subscribe(json =>{
-      swal.fire('Tarea Actualizada',  `${json.mensaje}`, 'success')
-      this.cerrarModal();
-    },
-    err =>{
-      this.errores = err.error.errors as string[];
-      console.error('Código error: '+err.status);
-      console.error(err.error.errors);
-    }
+  update() {
+    this.tareaService.update(this.tarea).subscribe(
+      (json) => {
+        swal.fire('Tarea Actualizada', `${json.mensaje}`, 'success');
+        this.cerrarModal();
+      },
+      (err) => {
+        this.errores = err.error.errors as string[];
+        console.error('Código error: ' + err.status);
+        console.error(err.error.errors);
+      }
     );
-
   }
 
-  create(){
-
-    this.tareaService.create(this.tarea, Number(localStorage.getItem('actividad')), Number(localStorage.getItem('objetivoId')), Number(localStorage.getItem('organizacion'))).subscribe(json =>{
-      swal.fire('Nueva Tarea',  `${json.mensaje}`, 'success')
-      this.cerrarModal();
-      this.tareaComponent.getTareas();
-    },err =>{
-      this.errores = err.error.errors as string[];
-      console.error('Código error: '+err.status);
-      console.error(err.error.errors);
-    }
-    );
-
+  create() {
+    this.tareaService
+      .create(
+        this.tarea,
+        Number(localStorage.getItem('actividad')),
+        Number(localStorage.getItem('objetivoId')),
+        Number(localStorage.getItem('organizacion'))
+      )
+      .subscribe(
+        (json) => {
+          swal.fire('Nueva Tarea', `${json.mensaje}`, 'success');
+          this.cerrarModal();
+          this.tareaComponent.getTareas();
+        },
+        (err) => {
+          this.errores = err.error.errors as string[];
+          console.error('Código error: ' + err.status);
+          console.error(err.error.errors);
+        }
+      );
+    this.ngSelect = 98;
   }
-
 }
