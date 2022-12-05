@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { of } from 'rxjs';
 import { Arbol } from '../../configuracion/model-util/arbol';
 import { PerspectivaService } from '../../configuracion/services/perspectiva.service';
@@ -17,6 +17,8 @@ import { IniciativasComponent } from '../iniciativas/iniciativas.component';
   styleUrls: ['./plan.component.css']
 })
 export class PlanComponent implements OnInit, AfterViewInit {
+
+  @ViewChild("treeview") treeview: ElementRef;
 
   nodoSeleccionado: Arbol;
   public ver: boolean=false;
@@ -95,10 +97,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   onClick(id) {
     localStorage.setItem('objetivoId', id);
-
     this.perspectivaService.getPerspectiva(id).subscribe(response => localStorage.setItem('nombreObjetivo', response.nombre.toString()));
-    
-    console.log("seleccionado", id);
     this.componentePadre.getIndicadoresIniciativas();    
   }
 

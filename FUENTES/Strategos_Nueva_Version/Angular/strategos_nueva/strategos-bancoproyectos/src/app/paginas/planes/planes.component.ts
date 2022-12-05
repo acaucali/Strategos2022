@@ -45,6 +45,10 @@ export class PlanesComponent implements OnInit {
     localStorage.removeItem('actividad');
     localStorage.removeItem('actividadNombre');
     localStorage.removeItem('tareaNombre');
+    localStorage.removeItem("indicador");
+    localStorage.removeItem("periodos");
+    localStorage.removeItem("reales");
+    localStorage.removeItem("metas");
     
 
     this.organizacionId = localStorage.getItem('organizacion');

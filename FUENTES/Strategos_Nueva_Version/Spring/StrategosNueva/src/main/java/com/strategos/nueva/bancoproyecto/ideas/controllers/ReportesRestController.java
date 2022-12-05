@@ -49,27 +49,34 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.strategos.nueva.bancoproyecto.ideas.model.Actividad;
 import com.strategos.nueva.bancoproyecto.ideas.model.EstatusIdeas;
 import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeas;
 import com.strategos.nueva.bancoproyecto.ideas.model.EvaluacionIdeasDetalle;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasEvaluadas;
 import com.strategos.nueva.bancoproyecto.ideas.model.IdeasProyectos;
+import com.strategos.nueva.bancoproyecto.ideas.model.Presupuesto;
 import com.strategos.nueva.bancoproyecto.ideas.model.TiposObjetivos;
 import com.strategos.nueva.bancoproyecto.ideas.model.TiposPropuestas;
+import com.strategos.nueva.bancoproyecto.ideas.service.ActividadService;
 import com.strategos.nueva.bancoproyecto.ideas.service.EstatusIdeaService;
 import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasDetalleService;
 import com.strategos.nueva.bancoproyecto.ideas.service.EvaluacionIdeasService;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasEvaluadasService;
 import com.strategos.nueva.bancoproyecto.ideas.service.IdeasProyectosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.PresupuestoDatosService;
+import com.strategos.nueva.bancoproyecto.ideas.service.PresupuestoService;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPoblacionService;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TipoPoblacionService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TiposObjetivosService;
 import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
+import com.strategos.nueva.bancoproyecto.strategos.model.IndicadorStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.model.IniciativaEstatusStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.model.MetodologiaStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.model.OrganizacionesStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.model.TipoProyectoStrategos;
+import com.strategos.nueva.bancoproyecto.strategos.service.IndicadorTareaService;
 import com.strategos.nueva.bancoproyecto.strategos.service.IniciativaEstatusService;
 import com.strategos.nueva.bancoproyecto.strategos.service.MetodologiaService;
 import com.strategos.nueva.bancoproyecto.strategos.service.OrganizacionService;
@@ -112,6 +119,14 @@ public class ReportesRestController {
 	private TipoPoblacionService tipoPoblacionService;
 	@Autowired
 	private ProyectosPoblacionService proyectoPoblacionService;
+	@Autowired
+	private ActividadService actividadService;
+	@Autowired
+	private IndicadorTareaService indicadorTareaService;	
+	@Autowired
+	private PresupuestoService presupuestoService;	
+	@Autowired
+	private PresupuestoDatosService presupuestoDatosService;
 	
 	//Servicios Rest tabla - idea
 	private final Logger log = LoggerFactory.getLogger(IdeasProyectosRestController.class);
@@ -280,6 +295,27 @@ public class ReportesRestController {
 	            .contentType(MediaType.APPLICATION_PDF)
 	            .body(new InputStreamResource(bis));
 	  }
+	
+	
+	@GetMapping("/presupuesto/excel/{actId}") //preproyecto detalle
+	public @ResponseBody ResponseEntity<InputStreamResource> exportToXlsPresupuesto(@PathVariable Long actId) throws IOException {
+			
+			List<IndicadorStrategos> indicadores = new ArrayList<IndicadorStrategos>();		
+			List<Actividad> actividades = actividadService.findAllByProyectoId(actId);
+		
+			ByteArrayInputStream bis;
+								 
+			bis = createReportXlsPresupuestos(actividades);
+		
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Disposition", "attachment; filename=presupuesto.xls");
+
+		    return ResponseEntity
+		            .ok()
+		            .headers(headers)
+		            .body(new InputStreamResource(bis));
+	}
+	
 	
 	//Funciones Reportes
 	
@@ -458,6 +494,86 @@ public class ReportesRestController {
 			}
             
                                               
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+		}
+	}
+	
+	
+	public  ByteArrayInputStream createReportXlsPresupuestos(List<Actividad> actividades) throws IOException{
+		
+		List<Presupuesto> presupuestos = presupuestoService.findAll();
+
+		int columns = 0;
+		
+		try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+			
+			Sheet sheet = workbook.createSheet("Presupuestos");
+			
+			org.apache.poi.ss.usermodel.Font headerFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
+            ((org.apache.poi.ss.usermodel.Font) headerFont).setBold(true);
+            headerFont.setColor(IndexedColors.BLUE.getIndex());
+
+            CellStyle headerCellStyle = workbook.createCellStyle();
+            headerCellStyle.setFont(headerFont);
+            headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            // Header Row
+            org.apache.poi.ss.usermodel.Font titleFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
+            ((org.apache.poi.ss.usermodel.Font) titleFont).setBold(true);
+            
+            CellStyle titleCellStyle = workbook.createCellStyle();
+            titleCellStyle.setFont(titleFont);
+            
+            Row titleRow = sheet.createRow(0);
+            Cell celdaTitle = titleRow.createCell(0);
+            celdaTitle.setCellValue("Listado de Presupuestos");
+            celdaTitle.setCellStyle(titleCellStyle);
+            
+            Row headerRow = sheet.createRow(2);
+            
+            int col = 0;
+            Cell cell;
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            for(Presupuesto pre: presupuestos) {
+            	
+            	cell = headerRow.createCell(col);
+                cell.setCellValue(pre.getPresupuesto());
+                cell.setCellStyle(headerCellStyle);
+                col++;
+            	
+            }      
+            
+            cell = headerRow.createCell(col);
+            cell.setCellValue("Total");
+            cell.setCellStyle(headerCellStyle);
+            col++;
+            
+            int row=3;
+            int colu = 0;
+       	            
+            for(Actividad act: actividades) {//real
+            	
+            	Row headerRow2 = sheet.createRow(row);
+            	
+            	Cell celda = headerRow2.createCell(0);
+            	celda.setCellValue(act.getNombreActividad());
+            	
+            	for(Presupuesto pre: presupuestos) {
+            		
+            	}
+            	
+            	
+            	row++;
+			}
+            
+            
+            
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
 		}
@@ -1586,6 +1702,15 @@ public class ReportesRestController {
 		System.out.println("After Sorting: "+ puntajes);   
 		
 		return puntajes;
+	}
+	
+	public Double acumularPresupuesto() {
+		
+		Double valor=0.0;
+		
+		
+		
+		return valor;
 	}
 	
 	

@@ -25,7 +25,7 @@ const routes: Routes = [
     { path: 'tareas', loadChildren: () => import('./planes/iniciativas/tareas/tareas.module').then(m =>m.TareasModule)},
     { path: 'mediciontarea', loadChildren: () => import('./planes/iniciativas/tareas/medicion-tareas/mediciontareas.module').then(m =>m.MedicionTareaModule)},
     { path: 'presupuesto', loadChildren: () => import('./planes/iniciativas/tareas/presupuesto/presupuesto.module').then(m =>m.PresupuestoModule)},    
-    { path: 'grafico/:id', loadChildren: () => import('./planes/indicadores/grafico/grafico.module').then(m =>m.GraficoModule)},
+    { path: 'grafico', loadChildren: () => import('./planes/indicadores/grafico/grafico.module').then(m =>m.GraficoModule)},
     { path: '**', component: Pagina404Component},
   ]}
 ];

@@ -26,12 +26,14 @@ import { MedicionIndicadorComponent } from './indicadores/medicion-indicador/med
 import { DetalleTareaComponent } from './iniciativas/tareas/detalle-tarea/detalle-tarea.component';
 import { MedicionTareasComponent } from './iniciativas/tareas/medicion-tareas/medicion-tareas.component';
 import { GraficoComponent } from './indicadores/grafico/grafico.component';
+import { ConfigGraficoComponent } from './indicadores/grafico/config-grafico/config-grafico.component';
 
 
 
 
 @NgModule({
-  declarations: [PlanesComponent, PlanComponent, IniciativasComponent, IndicadoresComponent, DetallePerspectivaComponent, DetalleIniciativaComponent, DetalleIndicadorComponent, MedicionIndicadorComponent],
+  declarations: [PlanesComponent, PlanComponent, IniciativasComponent, IndicadoresComponent, DetallePerspectivaComponent, DetalleIniciativaComponent, DetalleIndicadorComponent, MedicionIndicadorComponent ,ConfigGraficoComponent],
+  
   imports: [
     CommonModule, PlanesRoutingModule, NgxPaginationModule,  FormsModule, ReactiveFormsModule, MatDatepickerModule, MatNativeDateModule,  NgMultiSelectDropDownModule.forRoot(),
     MatSelectModule, DropDownsModule, InputsModule, TreeViewModule

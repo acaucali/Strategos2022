@@ -49,8 +49,8 @@
                     <div id="green" *ngIf="ind.alerta == 1"></div>  
                   </td>
                   <td >{{ind.nombreIniciativa}} </td>
-                  <td >{{ind.ultimaMedicion}} </td>
-                  <td >{{ind.ultimoProgramado}} </td>
+                  <td >{{ind.ultimaMedicion | number: '.1-2'}} </td>
+                  <td >{{ind.ultimoProgramado | number: '.1-2'}} </td>
                   <td >{{ind.fechaUltimaMedicion}}</td>
                   
                 </tr>

@@ -1,2 +1,34 @@
-<canvas  id="MyChart" >{{ chart }}</canvas>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h2>Graficar Indicador</h2>
+                    <h2>Indicador: {{indicador}}</h2>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn" class="btn" title="Regresar">
+                        <i class="fas fa-sign-out-alt" (click)="regresar()" style="cursor: pointer;"></i>
+                        Regresar
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+        
+        <div class="card-body">
+            <canvas  id="MyChart" >{{ chart }}</canvas>
+        </div>
+    </div>
+
+    <!-- /.content -->
+</div>
+
+
+
 
