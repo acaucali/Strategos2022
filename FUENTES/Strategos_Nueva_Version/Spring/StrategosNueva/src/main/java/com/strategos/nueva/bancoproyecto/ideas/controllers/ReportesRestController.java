@@ -1251,6 +1251,8 @@ public class ReportesRestController {
 		
 		SimpleDateFormat formateadorFecha = new SimpleDateFormat("dd/MM/yyyy");
 		
+		NumberFormat formatoNumero = NumberFormat.getNumberInstance();
+		Integer costo = Integer.parseInt( preproyecto.getCostoEstimado());
 		
 		
 		String fecha = formateadorFecha.format(preproyecto.getFechaRadicacion());
@@ -1292,6 +1294,10 @@ public class ReportesRestController {
     		document.add( Chunk.NEWLINE );
     		
     		PdfPTable table = new PdfPTable(2);
+    		
+    		float[] medidaCeldas = {2.40f,6.70f};
+    		table.setWidths(medidaCeldas);
+    		table.setWidthPercentage(100);
     		
     		Font fontCelda = FontFactory.getFont(FontFactory.HELVETICA, 9, Font.BOLD, BaseColor.BLACK);
     		
@@ -1360,7 +1366,7 @@ public class ReportesRestController {
     		
     		celda.setPhrase(new Phrase("Costo Estimado", fontCelda));   		
     		table.addCell(celda);
-    		table.addCell(preproyecto.getCostoEstimado());
+    		table.addCell(formatoNumero.format(costo));
     		
     		celda.setPhrase(new Phrase("Dependencia Lider", fontCelda));   		
     		table.addCell(celda);
@@ -1545,8 +1551,8 @@ public class ReportesRestController {
     		document.add(p);
     		document.add( Chunk.NEWLINE );
     		
-    		PdfPTable table = new PdfPTable(2);
-    		
+    		PdfPTable table = new PdfPTable(2);    	
+    	    		 
     		Font fontCelda = FontFactory.getFont(FontFactory.HELVETICA, 9, Font.BOLD, BaseColor.BLACK);
     		
     		PdfPCell celda = new PdfPCell();
@@ -1682,6 +1688,10 @@ public class ReportesRestController {
     		document.add( Chunk.NEWLINE );
     		
     		PdfPTable table = new PdfPTable(6);
+    		
+    		float[] medidaCeldas = {1.0f,6.70f,2.10f,2.10f,1.60f,2.10f};
+    		table.setWidths(medidaCeldas);
+    		table.setWidthPercentage(100);
 
     		addTableHeaderPreproyecto(table);  
     		
