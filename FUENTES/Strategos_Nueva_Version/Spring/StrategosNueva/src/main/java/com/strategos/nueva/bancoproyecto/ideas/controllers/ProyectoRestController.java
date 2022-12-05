@@ -515,6 +515,7 @@ public class ProyectoRestController {
 						proyectoActual.setFechaEstatus(new Date());
 					}
 					
+					/*
 					List<ProyectosPoblacion> proyectos = proyectosPoblacionService.findAllByProyectoId(id);
 					
 					for(ProyectosPoblacion pro: proyectos) {
@@ -531,6 +532,7 @@ public class ProyectoRestController {
 						proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
 						proyectosPoblacionService.save(proyectoPoblacion);
 					}
+					*/
 					
 					proyectosRegion = proyecto.getDepartamentos();
 					
@@ -550,44 +552,54 @@ public class ProyectoRestController {
 					
 					proyectoUpdated=proyectoService.save(proyectoActual);
 					
-					// creacion del plan 
-					
-					PlanStrategos plan = new PlanStrategos();
-					
-					plan.setActivo((byte) 1);
-					plan.setAnoFinal(Integer.parseInt(proyecto.getAnioFormulacion()));
-					plan.setAnoInicial(Integer.parseInt(proyecto.getAnioFormulacion()));
-					plan.setNombre(proyecto.getNombreProyecto());
-					plan.setTipo((byte) 1);
-					plan.setRevision((byte) 0);
-					plan.setMetodologiaId(proyecto.getMetodologiaId());
-					plan.setOrganizacionId(proyecto.getDependenciaId());
-					ClaseIndicadoresStrategos clase = claseService.findByClaseRaiz(proyecto.getDependenciaId(), (byte) 0); 
-					
-					plan.setClaseId(clase.getClaseId());
-					
-					planService.save(plan);
 					
 					
-					ProyectosPlan proyectoPlan = new ProyectosPlan();
+					ProyectosPlan proyectoPlanAct = proyectoPlanService.findAllByProyectoId(id);		
 					
-					proyectoPlan.setPlanId(plan.getPlanId());
-					proyectoPlan.setProyectoId(proyecto.getProyectoId());
+					if(proyectoPlanAct == null) {
+						
+						// creacion del plan 
+						
+						PlanStrategos plan = new PlanStrategos();
+						
+						plan.setActivo((byte) 1);
+						plan.setAnoFinal(Integer.parseInt(proyecto.getAnioFormulacion()));
+						plan.setAnoInicial(Integer.parseInt(proyecto.getAnioFormulacion()));
+						plan.setNombre(proyecto.getNombreProyecto());
+						plan.setTipo((byte) 1);
+						plan.setRevision((byte) 0);
+						plan.setMetodologiaId(proyecto.getMetodologiaId());
+						plan.setOrganizacionId(proyecto.getDependenciaId());
+						ClaseIndicadoresStrategos clase = claseService.findByClaseRaiz(proyecto.getDependenciaId(), (byte) 0); 
+						
+						plan.setClaseId(clase.getClaseId());
+						
+						planService.save(plan);
+						
+						
+						ProyectosPlan proyectoPlan = new ProyectosPlan();
+						
+						proyectoPlan.setPlanId(plan.getPlanId());
+						proyectoPlan.setProyectoId(proyecto.getProyectoId());
+						
+						proyectoPlanService.save(proyectoPlan);
+						
+						PerspectivaStrategos perspectiva = new PerspectivaStrategos();
 					
-					proyectoPlanService.save(proyectoPlan);
+						perspectiva.setClaseId(plan.getClaseId());
+						perspectiva.setPlanId(plan.getPlanId());
+						perspectiva.setNombre(plan.getNombre());
+						perspectiva.setFrecuencia(proyecto.getFrecuencia());
+						perspectiva.setTipo(plan.getTipo());
+						perspectiva.setTipoCalculo((byte) 1);
+						perspectiva.setCreado(new Date());
+						
+						
+						perspectivaService.save(perspectiva);
+						
+					}
 					
-					PerspectivaStrategos perspectiva = new PerspectivaStrategos();
-				
-					perspectiva.setClaseId(plan.getClaseId());
-					perspectiva.setPlanId(plan.getPlanId());
-					perspectiva.setNombre(plan.getNombre());
-					perspectiva.setFrecuencia(proyecto.getFrecuencia());
-					perspectiva.setTipo(plan.getTipo());
-					perspectiva.setTipoCalculo((byte) 1);
-					perspectiva.setCreado(new Date());
 					
-					
-					perspectivaService.save(perspectiva);
 					
 				}
 				

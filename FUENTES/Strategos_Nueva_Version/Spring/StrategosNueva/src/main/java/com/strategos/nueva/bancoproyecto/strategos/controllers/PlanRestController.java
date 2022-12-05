@@ -24,10 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.strategos.nueva.bancoproyecto.ideas.model.Proyectos;
 import com.strategos.nueva.bancoproyecto.ideas.model.ProyectosPlan;
 import com.strategos.nueva.bancoproyecto.ideas.service.ProyectosPlanService;
-import com.strategos.nueva.bancoproyecto.ideas.service.TiposPropuestasService;
+
 import com.strategos.nueva.bancoproyecto.strategos.model.PlanStrategos;
 import com.strategos.nueva.bancoproyecto.strategos.service.PlanService;
 

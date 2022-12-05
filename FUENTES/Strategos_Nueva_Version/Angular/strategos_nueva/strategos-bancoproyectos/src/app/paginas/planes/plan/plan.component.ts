@@ -97,7 +97,9 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
   onClick(id) {
     localStorage.setItem('objetivoId', id);
+
     this.perspectivaService.getPerspectiva(id).subscribe(response => localStorage.setItem('nombreObjetivo', response.nombre.toString()));
+
     this.componentePadre.getIndicadoresIniciativas();    
   }
 

@@ -39,7 +39,7 @@ export class GraficoComponent implements OnInit {
 
   createChart() {
     this.chart = new Chart('MyChart', {
-      type: 'line', //this denotes tha type of chart
+      type: 'bar', //this denotes tha type of chart
 
       data: {
         // values on X-Axis

@@ -19,7 +19,7 @@ import { ProyectosDocumentosAnexos } from '../model/proyectosdocumentosanexos';
 })
 export class ProyectosDocumentosService {
   private urlEndPoint: string =
-    URL_BACKEND + '/api/strategos/bancoproyectos/documento';
+    URL_BACKEND + '/api/strategos/bancoproyectos/documentoProyecto';
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   public documentos: ProyectosDocumentosAnexos[];
 
