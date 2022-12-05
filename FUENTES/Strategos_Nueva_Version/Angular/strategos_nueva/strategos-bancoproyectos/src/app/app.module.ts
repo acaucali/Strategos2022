@@ -11,6 +11,7 @@ import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LabelModule } from '@progress/kendo-angular-label';
+import { ConfigGraficoComponent } from './paginas/planes/indicadores/grafico/config-grafico/config-grafico.component';
 
 
 
@@ -18,7 +19,7 @@ import { LabelModule } from '@progress/kendo-angular-label';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

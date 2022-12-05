@@ -1,4 +1,5 @@
 <detalle-indicador [indicador]="indicadorSeleccionado"></detalle-indicador>
+<config-grafico></config-grafico>
 <medicion-indicador></medicion-indicador>
     <!-- Main content -->
     <section class="content">
@@ -34,7 +35,7 @@
                   <td width="150">Unidad</td>
                   <td width="70">Ejecutado</td>
                   <td width="70">Meta</td>
-                  <td width="90">% Cumplimiento</td>
+                  <td width="120">% Cumplimiento</td>
                   <td width="70">Última Medición</td>
                 </tr>
               </thead>
@@ -59,7 +60,7 @@
                   <td width="150">{{ind.nombreUnidad}} </td>
                   <td width="70">{{ind.ultimaMedicion}} </td>
                   <td width="70">{{ind.ultimoProgramado}} </td>
-                  <td width="90">{{ind.porcentajeCumplimiento | number: '.1-2' }} </td>
+                  <td width="120">{{ind.porcentajeCumplimiento | number: '.1-2' }} </td>
                   <td width="70">{{ind.fechaUltimaMedicion}} </td>
                 </tr>
               </tbody>

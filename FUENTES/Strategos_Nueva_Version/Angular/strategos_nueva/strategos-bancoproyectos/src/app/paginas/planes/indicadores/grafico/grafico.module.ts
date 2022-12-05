@@ -9,6 +9,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GraficoComponent } from './grafico.component';
 import { GraficoRoutingModule } from './graficorouting.module';
+import { ConfigGraficoComponent } from './config-grafico/config-grafico.component';
 
 
 

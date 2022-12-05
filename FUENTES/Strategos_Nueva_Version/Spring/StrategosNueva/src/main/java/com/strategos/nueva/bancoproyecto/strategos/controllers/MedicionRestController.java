@@ -318,6 +318,77 @@ public class MedicionRestController {
 
 		return ids;
 	}
+	
+	
+	@GetMapping("/medicion/periodos/grafico/{anio}/{perIni}/{perFin}")
+	public List<String> getPeriodos(@PathVariable Integer anio, @PathVariable Integer perIni, @PathVariable Integer perFin) {
+
+		List<String> periodos = new ArrayList<String>();
+
+		for(int x=perIni; x<=perFin; x++) {
+			
+			String per= x+"-"+anio;
+			periodos.add(per);
+			
+		}
+		
+		return periodos;
+	}
+	
+	
+	@GetMapping("/medicion/real/grafico/{ind}/{anio}/{perIni}/{perFin}")//0
+	public List<String> getRealGrafico(@PathVariable Long ind, @PathVariable Integer anio, @PathVariable Integer perIni, @PathVariable Integer perFin) {
+
+		List<String> datos = new ArrayList<String>();
+		
+		List<MedicionStrategos> mediciones = new ArrayList<MedicionStrategos>();
+
+		for(int x=perIni; x<=perFin; x++) {
+			
+			String dato = "";
+			
+			mediciones = medicionService.findByPeriodos(ind, (long) 0, anio, x, x);
+			if (mediciones.size() > 0) {
+				for (MedicionStrategos med : mediciones) {
+					dato = med.getValor().toString();
+					datos.add(dato);
+				}
+			}else {
+				datos.add(dato);
+			}
+						
+		}
+		
+		return datos;
+	}
+	
+	@GetMapping("/medicion/meta/grafico/{ind}/{anio}/{perIni}/{perFin}")//1
+	public List<String> getMetaGrafico(@PathVariable Long ind, @PathVariable Integer anio, @PathVariable Integer perIni, @PathVariable Integer perFin) {
+
+		List<String> datos = new ArrayList<String>();
+		
+		List<MedicionStrategos> mediciones = new ArrayList<MedicionStrategos>();
+
+		for(int x=perIni; x<=perFin; x++) {
+			
+			String dato = "";
+			
+			mediciones = medicionService.findByPeriodos(ind, (long) 1, anio, x, x);
+			if (mediciones.size() > 0) {
+				for (MedicionStrategos med : mediciones) {
+					dato = med.getValor().toString();
+					datos.add(dato);
+				}
+			}else {
+				datos.add(dato);
+			}
+						
+		}
+		
+		return datos;
+	}
+	
+	
 
 	// ids indicadores
 
@@ -619,6 +690,7 @@ public class MedicionRestController {
 		List<PresupuestoDatos> medicionesReal = new ArrayList<PresupuestoDatos>();
 		List<PresupuestoDatos> medicionesMeta = new ArrayList<PresupuestoDatos>();
 
+			
 		
 		//buscar periodos
 		
@@ -650,7 +722,7 @@ public class MedicionRestController {
 
 				datos.add(dato);
 				
-				medicionesReal = presupuestoDatosService.findByPeriodos(tarId, (long)0, anio, perIni, perFin);	
+				medicionesReal = presupuestoDatosService.findByPeriodos(tarId, (long)0, anio, x, x);	
 				
 				if (medicionesReal.size() > 0) {
 					
@@ -695,7 +767,7 @@ public class MedicionRestController {
 
 				datos.add(dato);
 				
-				medicionesMeta = presupuestoDatosService.findByPeriodos(tarId, (long)1, anio, perIni, perFin);
+				medicionesMeta = presupuestoDatosService.findByPeriodos(tarId, (long)1, anio, x, x);
 				
 				if (medicionesMeta.size() > 0) {
 					
@@ -939,6 +1011,8 @@ public class MedicionRestController {
 				Double promedio = 0.0;
 				Double promedioMeta = 0.0;
 				Double promedioReal = 0.0;
+				String fecha ="";
+				Boolean noPeso =false;
 				
 				for (Actividad act : actividades) {					
 					
@@ -952,6 +1026,7 @@ public class MedicionRestController {
 						ind.setAlerta(CalcularAlerta(ind));
 
 						ind.setPorcentajeCumplimiento(CalcularLogro(ind));
+						fecha = ind.getFechaUltimaMedicion();
 						indicadorService.save(ind);
 						promedio = promedio + ind.getPorcentajeCumplimiento();
 						
@@ -962,11 +1037,30 @@ public class MedicionRestController {
 						
 						actividadService.save(act);
 						
-						Double calculo = ((ind.getUltimaMedicion() * act.getPeso())/100);
-						Double calculoMeta = ((ind.getUltimoProgramado() * act.getPeso())/100);
+						if(act.getPeso() == null || act.getPeso() == 0) {
+							
+							Double calculo = ((ind.getUltimaMedicion())/actividades.size());
+							Double calculoMeta = ((ind.getUltimoProgramado())/actividades.size());
+							
+							
+							
+							
+							promedioReal = (promedioReal + calculo);
+							promedioMeta = (promedioMeta + calculoMeta);
+							
+							
+							
+						}else {
+							
+							Double calculo = ((ind.getUltimaMedicion() * act.getPeso())/100);
+							Double calculoMeta = ((ind.getUltimoProgramado() * act.getPeso())/100);
+							
+							promedioReal = promedioReal + calculo;
+							promedioMeta = promedioMeta + calculoMeta;
+							
+						}
 						
-						promedioReal = promedioReal + calculo;
-						promedioMeta = promedioMeta + calculo;
+						
 				
 						
 					}
@@ -978,8 +1072,11 @@ public class MedicionRestController {
 				
 				Iniciativa iniciativa =  iniciativaService.findById(actId);	
 				
-				iniciativa.setUltimaMedicion(promedioReal*100);
-				iniciativa.setUltimoProgramado(promedioMeta*100);
+				
+				
+				iniciativa.setUltimaMedicion(promedioReal);
+				iniciativa.setUltimoProgramado(promedioMeta);
+				iniciativa.setFechaUltimaMedicion(fecha);
 				
 				Byte alerta = 0;// 1-verde, 2-amarillo, 3-rojo
 				Double alertaVerde = 0.0;

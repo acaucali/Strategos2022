@@ -12,10 +12,7 @@ a:link{
     list-style-type: none;
   
   }
-  .k-text-selection ::selection {
-    background-color: #0276fa;
-    color: white;
-}
+
 
   #red {
     width: 0.5rem;

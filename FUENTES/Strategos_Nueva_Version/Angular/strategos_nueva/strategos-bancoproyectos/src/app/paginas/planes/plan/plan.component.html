@@ -26,6 +26,7 @@
               <br>
               <div class="container-fluid">
                 <kendo-treeview [nodes]="arbol" 
+                  #treeview
                   textField="text"
                   [hasChildren]="hasChildren" 
                   [children]="fetchChildren"

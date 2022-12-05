@@ -26,6 +26,8 @@ export class MedicionService {
   public encabezados: DatoIdea[];
   public datos: DatoMedicion[];  
   public ids: number[];
+
+  public datosGrafico: String[];
    
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -41,6 +43,27 @@ export class MedicionService {
     return this.http.get(`${this.urlEndPoint}/ids/${id}/${serie}`).pipe(map(res =>{
       this.ids = res as number[];
       return this.ids;
+    }));
+  }
+
+  getMedicionesPeriodosGraficoList(anio: number, perIni: number, perFin: number){
+    return this.http.get(`${this.urlEndPoint}/periodos/grafico/${anio}/${perIni}/${perFin}`).pipe(map(res =>{
+      this.datosGrafico = res as String[];
+      return this.datosGrafico;
+    }));
+  }
+
+  getMedicionesMetaGraficoList(ind: number, anio: number, perIni: number, perFin: number){
+    return this.http.get(`${this.urlEndPoint}/meta/grafico/${ind}/${anio}/${perIni}/${perFin}`).pipe(map(res =>{
+      this.datosGrafico = res as String[];
+      return this.datosGrafico;
+    }));
+  }
+
+  getMedicionesRealGraficoList(ind: number, anio: number, perIni: number, perFin: number){
+    return this.http.get(`${this.urlEndPoint}/real/grafico/${ind}/${anio}/${perIni}/${perFin}`).pipe(map(res =>{
+      this.datosGrafico = res as String[];
+      return this.datosGrafico;
     }));
   }
 
