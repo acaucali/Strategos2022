@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -227,7 +228,7 @@ public class ReportesRestController {
 			  
 
 		    HttpHeaders headers = new HttpHeaders();
-		    headers.add("Content-Disposition", "attachment; filename=preproyectosDetalle.xls");
+		    headers.add("Content-Disposition", "attachment; filename=proyectosDetalle.xls");
 
 		    return ResponseEntity
 		            .ok()
@@ -244,8 +245,10 @@ public class ReportesRestController {
 	    ByteArrayInputStream bis = createReportDetallePreproyecto(pre);
 
 	    HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Disposition", "inline; filename=preproyectosDetalle.pdf");
-
+	    if(pre.getIsPreproyecto())
+	    	headers.add("Content-Disposition", "inline; filename=preproyectosDetalle.pdf");
+	    else
+	    	headers.add("Content-Disposition", "inline; filename=proyectoDetalle.pdf");
 
 	    return ResponseEntity
 	            .ok()
@@ -271,7 +274,7 @@ public class ReportesRestController {
 	   
 
 	    HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Disposition", "inline; filename=preproyectos.pdf");
+	    headers.add("Content-Disposition", "inline; filename=proyectos.pdf");
 
 
 	    return ResponseEntity
@@ -296,7 +299,7 @@ public class ReportesRestController {
     		
     		document.addTitle("Reporte ideas resumido");
     		Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
-    		Paragraph p=new Paragraph("Listado resumido de Ideas de Proyecto", font);
+    		Paragraph p=new Paragraph("Listado resumido de Ideas de Pre-Proyecto", font);
     		p.setAlignment(Element.ALIGN_CENTER);
     		document.add(p);
     		document.add( Chunk.NEWLINE );
@@ -470,7 +473,7 @@ public class ReportesRestController {
 		
 		try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
 			
-			Sheet sheet = workbook.createSheet("PreProyectos");
+			Sheet sheet = workbook.createSheet("Proyectos");
 			
 			org.apache.poi.ss.usermodel.Font headerFont = (org.apache.poi.ss.usermodel.Font) workbook.createFont();
             ((org.apache.poi.ss.usermodel.Font) headerFont).setBold(true);
@@ -489,7 +492,7 @@ public class ReportesRestController {
             
             Row titleRow = sheet.createRow(0);
             Cell celdaTitle = titleRow.createCell(0);
-            celdaTitle.setCellValue("Listado de PreProyectos");
+            celdaTitle.setCellValue("Listado de Proyectos");
             celdaTitle.setCellStyle(titleCellStyle);
             
             Row headerRow = sheet.createRow(2);
@@ -1136,6 +1139,13 @@ public class ReportesRestController {
 		
 		String fecha = formateadorFecha.format(preproyecto.getFechaRadicacion());
 		String fechaEstatus = formateadorFecha.format(preproyecto.getFechaEstatus());
+		String fechaConvenioIn  = "";
+		String fechaConvenioFin = "";
+		if(preproyecto.getFechaInicioConvenio() != null)
+			fechaConvenioIn = formateadorFecha.format(preproyecto.getFechaInicioConvenio());
+		if(preproyecto.getFechaCulminacionConvenio() != null)
+			fechaConvenioFin = formateadorFecha.format(preproyecto.getFechaCulminacionConvenio());
+		
 		String historico ="";
 		if(preproyecto.getHistorico() != null && preproyecto.getHistorico()) {
 			historico="Si";
@@ -1150,15 +1160,19 @@ public class ReportesRestController {
 
 	    	PdfWriter.getInstance(document, out);
 	        document.open();		
+	        Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
     		
-	        if(preproyecto.getEstatusId() == 6)
+	        if(preproyecto.getIsPreproyecto()) {
 	        	document.addTitle("Reporte de Pre-Proyecto detalle");
-	        else
+	        	Paragraph p=new Paragraph("Nombre Pre-Proyecto: "+ preproyecto.getNombreProyecto(), font);
+        		p.setAlignment(Element.ALIGN_CENTER);
+        		document.add(p);
+	        }else {
 	        	document.addTitle("Reporte de Proyecto detalle");
-    		Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
-    		Paragraph p=new Paragraph("Nombre Proyecto: "+ preproyecto.getNombreProyecto(), font);
-    		p.setAlignment(Element.ALIGN_CENTER);
-    		document.add(p);
+	        	Paragraph p=new Paragraph("Nombre Proyecto: "+ preproyecto.getNombreProyecto(), font);
+	        	p.setAlignment(Element.ALIGN_CENTER);
+	        	document.add(p);
+	        }
     		document.add( Chunk.NEWLINE );
     		
     		PdfPTable table = new PdfPTable(2);
@@ -1299,6 +1313,73 @@ public class ReportesRestController {
     		celda.setPhrase(new Phrase("Historico", fontCelda));   		
     		table.addCell(celda);
     		table.addCell(historico);
+    		
+    		if(!preproyecto.getIsPreproyecto()) {
+    		
+    			celda.setPhrase(new Phrase("Cooperante", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getCooperante() != null) 
+    				table.addCell(preproyecto.getCooperante());
+    			else
+    				table.addCell("");
+    		
+    			celda.setPhrase(new Phrase("Dependencias Convenio", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getDependenciasConvenio() != null) 
+    				table.addCell(preproyecto.getDependenciasConvenio());
+    			else
+    				table.addCell("");
+    		    		
+    			celda.setPhrase(new Phrase("Número Convenio", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getNumeroConvenio() != null) 
+    				table.addCell(preproyecto.getNumeroConvenio());
+    			else
+    				table.addCell("");
+    		    		
+    			celda.setPhrase(new Phrase("Fecha Inicio Convenio", fontCelda));   		
+    			table.addCell(celda);
+    			table.addCell(fechaConvenioIn);
+    		
+    			celda.setPhrase(new Phrase("Fecha Culminación Convenio", fontCelda));   		
+    			table.addCell(celda);
+    			table.addCell(fechaConvenioFin);
+    		
+    			celda.setPhrase(new Phrase("Nombre Operador", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getNombreOperador() != null) 
+    				table.addCell(preproyecto.getNombreOperador());
+    			else
+    				table.addCell("");
+    		
+    			celda.setPhrase(new Phrase("Contacto Email Operador", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getContactoEmailOperador() != null) 
+    				table.addCell(preproyecto.getContactoEmailOperador());
+    			else
+    				table.addCell("");
+    		
+    			celda.setPhrase(new Phrase("Contacto Telefono Operador", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getContactoTelefonoOperador() != null) 
+    				table.addCell(preproyecto.getContactoTelefonoOperador());
+    			else
+    				table.addCell("");
+    		
+    			celda.setPhrase(new Phrase("Recursos Asignados", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getRecursosAsignados() != null) 
+    				table.addCell(preproyecto.getRecursosAsignados());
+    			else
+    				table.addCell("");
+    		
+    			celda.setPhrase(new Phrase("Prorrogas", fontCelda));   		
+    			table.addCell(celda);
+    			if(preproyecto.getProrrogas() != null) 
+    				table.addCell(preproyecto.getProrrogas());
+    			else
+    				table.addCell("");
+    		}
     		
     		document.add(table);        		 
     		document.add( Chunk.NEWLINE );
@@ -1484,7 +1565,7 @@ public class ReportesRestController {
     		document.add(p);
     		document.add( Chunk.NEWLINE );
     		
-    		PdfPTable table = new PdfPTable(5);
+    		PdfPTable table = new PdfPTable(6);
 
     		addTableHeaderPreproyecto(table);  
     		
@@ -1541,7 +1622,7 @@ public class ReportesRestController {
 	public void addTableHeaderPreproyecto(PdfPTable table) {
 		
 		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, Font.BOLD, BaseColor.WHITE);
-	    Stream.of("Año", "Proyecto", "Dependencia", "Tipología", "Estatus")
+	    Stream.of("Año", "Proyecto", "Dependencia", "Tipología", "Estatus", "Costo Estimado")
 	      .forEach(columnTitle -> {
 	        PdfPCell header = new PdfPCell();
 	        header.setBackgroundColor(BaseColor.BLUE);
@@ -1557,9 +1638,11 @@ public class ReportesRestController {
 		OrganizacionesStrategos org = organizacionService.findById(proyecto.getDependenciaId());
 		TipoProyectoStrategos tip = tipoProyectoService.findById(proyecto.getTipoProyectoId());
 		IniciativaEstatusStrategos est = iniciativaEstatusService.findById(proyecto.getEstatusId());
+		NumberFormat formatoNumero = NumberFormat.getNumberInstance();
+		Integer costo = Integer.parseInt( proyecto.getCostoEstimado());
 			
 		Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, BaseColor.BLACK);
-	    Stream.of(proyecto.getAnioFormulacion(),proyecto.getNombreProyecto(), org.getNombre(), tip.getNombre(), est.getNombre())
+	    Stream.of(proyecto.getAnioFormulacion(),proyecto.getNombreProyecto(), org.getNombre(), tip.getNombre(), est.getNombre(),formatoNumero.format(costo)) 
 	      .forEach(columnas -> {
 	        PdfPCell header = new PdfPCell();
 	        header.setBorderWidth(1);

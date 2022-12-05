@@ -343,10 +343,10 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
         departamentoNombre: values[1],
         municipioNombre: mun.municipio,
       };
-      this.proyectoRegion.push(pro);
+      this.proyecto.departamentos.push(pro);
     }
-    console.log(this.proyectoRegion);
-    this.proyecto.departamentos = this.proyectoRegion;
+    console.log(this.proyecto.departamentos);
+    this.nuevoDepartamento = false;
   }
 
   onChange(value) {
@@ -373,6 +373,10 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
         this.proyectoRegionService
           .delete(dep.proyectoRegionId)
           .subscribe((response) => {
+            const jsLibraries = ['react', 'redux', 'vue', 'D3', 'Chart'];
+            const filteredLibraries = jsLibraries.filter(
+              (item) => item !== 'react'
+            );
             swal.fire(
               'Municipio eliminado',
               'El Municipio ha sido eliminado con éxito',

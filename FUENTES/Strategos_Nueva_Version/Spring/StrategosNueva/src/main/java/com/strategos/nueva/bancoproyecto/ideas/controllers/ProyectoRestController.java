@@ -536,13 +536,15 @@ public class ProyectoRestController {
 					
 					if(proyectosRegion != null) {
 						for(ProyectosRegion dep : proyectosRegion) {
-							ProyectosRegion proyectoRegion = new ProyectosRegion();
-							proyectoRegion.setProyectoId(proyecto.getProyectoId());
-							proyectoRegion.setDepartamentoId(dep.getDepartamentoId());							
-							proyectoRegion.setMunicipioId(dep.getMunicipioId());
-							proyectoRegion.setDepartamentoNombre(dep.getDepartamentoNombre());
-							proyectoRegion.setMunicipioNombre(dep.getMunicipioNombre());
-							proyectoRegionService.save(proyectoRegion);
+							if(dep.getProyectoRegionId() == null) {
+								ProyectosRegion proyectoRegion = new ProyectosRegion();
+								proyectoRegion.setProyectoId(proyecto.getProyectoId());
+								proyectoRegion.setDepartamentoId(dep.getDepartamentoId());
+								proyectoRegion.setMunicipioId(dep.getMunicipioId());
+								proyectoRegion.setDepartamentoNombre(dep.getDepartamentoNombre());
+								proyectoRegion.setMunicipioNombre(dep.getMunicipioNombre());
+								proyectoRegionService.save(proyectoRegion);
+							}
 						}
 					}
 					
