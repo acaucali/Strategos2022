@@ -26,8 +26,12 @@ export class PlanComponent implements OnInit, AfterViewInit {
   public habilitar: boolean=false;
   nombrePerspectiva: any;
 
-  public expandedKeys: any[] = ['0', '1'];
-  public selectedKeys: any[] = ['0'];
+  public expandedKeys: any[] = ["0", "0_0", "0_1", "0_2", "0_3", "0_4", "0_5", "0_6", "0_7", "0_8", "0_9", "0_10"
+  ,"0_11", "0_12", "0_13", "0_14", "0_15", "0_16", "0_17", "0_18", "0_19", "0_20",
+  "0_21", "0_22", "0_23", "0_24", "0_25", "0_26", "0_27", "0_28", "0_29", "0_30",
+  "0_31", "0_32", "0_33", "0_34", "0_35", "0_36", "0_37", "0_38", "0_39", "0_40",
+  "0_41", "0_42", "0_43", "0_44", "0_45", "0_46", "0_47", "0_48", "0_49", "0_50"];
+  public selectedKeys: any[] = [0];
 
   public planId: any;  
  
@@ -41,7 +45,12 @@ export class PlanComponent implements OnInit, AfterViewInit {
   constructor(private perspectivaService: PerspectivaService, public modalservice: ModalService, public componentePadre: PlanesComponent) { }
 
   ngOnInit(): void {   
-    
+
+    if(localStorage.getItem('objetivoId') != null){
+      this.selectedKeys =[Number(localStorage.getItem('objetivoId'))];
+    }
+
+
     this.perspectivaService.getPerspectivasArbol(localStorage.getItem('planId')).subscribe(response => this.arbol = response);
   }
 
@@ -100,6 +109,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
 
     this.perspectivaService.getPerspectiva(id).subscribe(response => localStorage.setItem('nombreObjetivo', response.nombre.toString()));
 
+   
     this.componentePadre.getIndicadoresIniciativas();    
   }
 
@@ -107,6 +117,7 @@ export class PlanComponent implements OnInit, AfterViewInit {
     
     this.arbol = [];
     this.perspectivaService.getPerspectivasArbol(localStorage.getItem('planId')).subscribe(response => this.arbol = response);
+    
     
   }
 

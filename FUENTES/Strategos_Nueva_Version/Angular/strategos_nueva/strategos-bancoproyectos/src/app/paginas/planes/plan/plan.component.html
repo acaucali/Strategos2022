@@ -17,9 +17,6 @@
                 <i class="fas fa-trash-alt" ></i>
               </button>
               <button type="button" class="btn" title="Descargar Resumido">
-                <i class="fa-md far fa-file-pdf" ></i>
-              </button>
-              <button type="button" class="btn" title="Descargar Resumido">
                 <i class="fa-md far fa-file-excel" ></i>
               </button>
               <br>
@@ -32,8 +29,10 @@
                   [children]="fetchChildren"
                   style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 500;"
                   kendoTreeViewExpandable
-                  [expandedKeys]="expandedKeys"
-                  kendoTreeViewSelectable [selectBy]="'id'"
+        
+                  [(expandedKeys)]="expandedKeys"
+                  kendoTreeViewSelectable 
+                  [selectBy]="'id'"
                   [(selectedKeys)]="selectedKeys"
                   (nodeClick)="onClick(selectedKeys.join())"
                   >

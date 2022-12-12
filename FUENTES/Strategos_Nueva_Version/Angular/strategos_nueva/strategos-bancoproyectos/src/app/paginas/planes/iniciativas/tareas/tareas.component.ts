@@ -24,6 +24,18 @@ export class TareasComponent implements OnInit {
   constructor(public modalservice: ModalService, private actividadService: ActividadService, public modalConfigservice: ModalConfigService, private router: Router) { }
 
   ngOnInit(): void {
+
+    localStorage.removeItem('anio');
+    localStorage.removeItem('periodoFin');
+    localStorage.removeItem('periodoIni');
+    localStorage.removeItem('frecuencia');
+    localStorage.removeItem('real');
+    localStorage.removeItem('meta');
+    localStorage.removeItem('tarea');
+    localStorage.removeItem('tareaNombre');
+ 
+    
+
     if(localStorage.getItem('objetivoId') != null){
       var objetivo = Number(localStorage.getItem('objetivoId'));
       this.actividad = localStorage.getItem('actividadNombre');
@@ -34,7 +46,7 @@ export class TareasComponent implements OnInit {
   }
 
   regresar(){
-
+    this.router.navigate(['/', 'planes', localStorage.getItem('proyectoId')]);
   }
 
   crearTarea(){

@@ -17,7 +17,7 @@ export class MedicionIndicadorComponent implements OnInit {
   anio: number = this.today.getFullYear();
   periodoIni: number;
   periodoFin: number;
-  frecuencia: number;
+  frecuencia: number = 1;
   real: Boolean;
   meta: Boolean;
 

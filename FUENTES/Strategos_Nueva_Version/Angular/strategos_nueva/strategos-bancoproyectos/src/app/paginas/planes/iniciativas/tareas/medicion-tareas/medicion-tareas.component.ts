@@ -25,6 +25,7 @@ export class MedicionTareasComponent implements OnInit {
   objetivo: any;
   ids: number[];
   serie: number;
+  actividad: any;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private medicionService: MedicionService, public indicadorService: IndicadorService) { }
 
@@ -35,6 +36,8 @@ export class MedicionTareasComponent implements OnInit {
       var objetivo = Number(localStorage.getItem('objetivoId'));
       this.objetivo = localStorage.getItem('nombreObjetivo');
     }
+
+    this.actividad = localStorage.getItem('actividadNombre');
     var anio = Number(localStorage.getItem('anio'));
     var periodoFin =Number(localStorage.getItem('periodoFin'));
     var periodoIni =Number(localStorage.getItem('periodoIni'));
@@ -131,7 +134,7 @@ export class MedicionTareasComponent implements OnInit {
   }
 
   regresar(){
-    this.router.navigate(['/', 'planes', localStorage.getItem('proyectoId')]);
+    this.router.navigate(['/', 'tareas']);
   }
 
   limpiarVariables(){

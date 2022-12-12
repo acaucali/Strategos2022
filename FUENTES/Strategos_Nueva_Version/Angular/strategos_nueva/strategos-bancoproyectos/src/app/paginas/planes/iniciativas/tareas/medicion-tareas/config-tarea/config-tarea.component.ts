@@ -12,12 +12,15 @@ export class ConfigTareaComponent implements OnInit {
 
   private errores: string[];
   
+  today = new Date();
+  anio: number = this.today.getFullYear();
+
   objetivo: any;
   titulo: string = "Mediciones de Tareas";
-  anio: number;
+
   periodoIni: number;
   periodoFin: number;
-  frecuencia: number;
+  frecuencia: number=1;
   real: Boolean;
   meta: Boolean;
   

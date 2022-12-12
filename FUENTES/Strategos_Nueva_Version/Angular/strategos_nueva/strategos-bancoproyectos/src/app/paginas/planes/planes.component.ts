@@ -3,7 +3,7 @@ import { OrganizacionStrategos } from '../configuracion/model-util/organizacions
 import { OrganizacionStrategosService } from '../configuracion/services-util/organizacionstrategos.service';
 import { ProyectoService } from '../configuracion/services/proyectos.service';
 import { Proyectos } from '../configuracion/model/proyectos';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Plan } from '../configuracion/model/plan';
 import { PlanService } from '../configuracion/services/plan.service';
 import { ProyectosPlan } from '../configuracion/model/proyectosplan';
@@ -31,7 +31,7 @@ export class PlanesComponent implements OnInit {
   @ViewChild(PlanComponent) planComponent: PlanComponent;
 
   constructor(private organizacionesService: OrganizacionStrategosService, private proyectoService: ProyectoService, private activatedRoute: ActivatedRoute,
-    private planService: PlanService) { }
+    private planService: PlanService, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -84,7 +84,11 @@ export class PlanesComponent implements OnInit {
   getIndicadoresIniciativas(){
     this.indicadorComponent.getIndicadores();
     this.iniciativaComponent.getIniciativas();
-    console.log("padre");
+
+  }
+
+  regresar(){
+    this.router.navigate(['/', 'proyecto']);
   }
 
 }

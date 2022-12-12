@@ -17,10 +17,11 @@ export class PresupuestoComponent implements OnInit {
   tarea: any;
   objetivo: any;
   encabezados: DatoIdea[];
-  anio: number;
+  today = new Date();
+  anio: number = this.today.getFullYear();
   periodoIni: number;
   periodoFin: number;
-  frecuencia: number;
+  frecuencia: number =1;
   real: Boolean;
   meta: Boolean;
   serie: number;
@@ -103,7 +104,7 @@ export class PresupuestoComponent implements OnInit {
   }
 
   regresar(){
-    this.router.navigate(['/', 'planes', localStorage.getItem('proyectoId')]);
+    this.router.navigate(['/', 'tareas']);
   }
 
   calcular(){

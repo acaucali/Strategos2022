@@ -12,13 +12,14 @@
               <h2>Proyecto: {{ proyecto.nombreProyecto }}</h2>
             </div>
             <div class="col-md-3">
-              <button type="button" class="btn" class="btn" title="Regresar">
-                <i
-                  class="fas fa-sign-out-alt"
-                  [routerLink]="['/gestionideas']"
-                ></i>
-                Regresar
-              </button>
+              <button
+            (click)="regresar()"
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal"
+          >
+            Regresar
+          </button>
             </div>
           </div>
         </div>
