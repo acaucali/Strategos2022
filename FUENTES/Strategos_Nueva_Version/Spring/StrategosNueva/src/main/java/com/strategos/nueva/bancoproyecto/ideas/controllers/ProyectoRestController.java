@@ -434,7 +434,7 @@ public class ProyectoRestController {
 									
 					for(TipoPoblacion tip: proyectosPoblacion) {
 						ProyectosPoblacion proyectoPoblacion = new ProyectosPoblacion();
-						proyectoPoblacion.setProyectoId(proyectoUpdated.getProyectoId());
+						proyectoPoblacion.setProyectoId(proyectoActual.getProyectoId());
 						proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
 						proyectosPoblacionService.save(proyectoPoblacion);
 					}
@@ -513,6 +513,23 @@ public class ProyectoRestController {
 						System.out.print("\n\n" + est);
 						proyectoActual.setEstatus(est.getNombre());
 						proyectoActual.setFechaEstatus(new Date());
+					}
+					
+					
+					List<ProyectosPoblacion> proyectos = proyectosPoblacionService.findAllByProyectoId(id);
+					
+					for(ProyectosPoblacion pro: proyectos) {
+						proyectosPoblacionService.delete(pro.getProyectoPoblacionId());
+					}
+					//proyectoService.delete(id);
+					
+					proyectosPoblacion = proyecto.getPoblaciones();					
+									
+					for(TipoPoblacion tip: proyectosPoblacion) {
+						ProyectosPoblacion proyectoPoblacion = new ProyectosPoblacion();
+						proyectoPoblacion.setProyectoId(proyectoActual.getProyectoId());
+						proyectoPoblacion.setPoblacionId(tip.getTipoPoblacionId());
+						proyectosPoblacionService.save(proyectoPoblacion);
 					}
 					
 					/*
