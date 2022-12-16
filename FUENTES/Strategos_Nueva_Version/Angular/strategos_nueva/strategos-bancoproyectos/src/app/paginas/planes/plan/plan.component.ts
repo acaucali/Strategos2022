@@ -1,7 +1,15 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { of } from 'rxjs';
 import { Arbol } from '../../configuracion/model-util/arbol';
 import { PerspectivaService } from '../../configuracion/services/perspectiva.service';
+import { URL_BACKEND } from 'src/app/config/config';
 import { PlanesComponent } from '../planes.component';
 import { Plan } from '../../configuracion/model/plan';
 import { Perspectiva } from '../../configuracion/model/perspectiva';
@@ -10,68 +18,68 @@ import Swal from 'sweetalert2';
 import { IndicadoresComponent } from '../indicadores/indicadores.component';
 import { IniciativasComponent } from '../iniciativas/iniciativas.component';
 
-
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.component.html',
-  styleUrls: ['./plan.component.css']
+  styleUrls: ['./plan.component.css'],
 })
 export class PlanComponent implements OnInit, AfterViewInit {
-
-  @ViewChild("treeview") treeview: ElementRef;
+  @ViewChild('treeview') treeview: ElementRef;
 
   nodoSeleccionado: Arbol;
-  public ver: boolean=false;
+  public ver: boolean = false;
   public arbol: any[];
-  public habilitar: boolean=false;
+  public habilitar: boolean = false;
   nombrePerspectiva: any;
 
   public expandedKeys: any[] = ['0', '1'];
   public selectedKeys: any[] = ['0'];
 
-  public planId: any;  
- 
+  public planId: any;
+
   perspectivaSeleccionada: Perspectiva;
 
   public hasChildren = (item: any) => item.items && item.items.length > 0;
   public fetchChildren = (item: any) => of(item.items);
 
-  
+  constructor(
+    private perspectivaService: PerspectivaService,
+    public modalservice: ModalService,
+    public componentePadre: PlanesComponent
+  ) {}
 
-  constructor(private perspectivaService: PerspectivaService, public modalservice: ModalService, public componentePadre: PlanesComponent) { }
-
-  ngOnInit(): void {   
-    
-    this.perspectivaService.getPerspectivasArbol(localStorage.getItem('planId')).subscribe(response => this.arbol = response);
+  ngOnInit(): void {
+    this.perspectivaService
+      .getPerspectivasArbol(localStorage.getItem('planId'))
+      .subscribe((response) => (this.arbol = response));
   }
 
-  ngAfterViewInit() {
-    
-  }
+  ngAfterViewInit() {}
 
-  crearPerspectiva(id: string){
-    if(id != '0'){
+  crearPerspectiva(id: string) {
+    if (id != '0') {
       this.perspectivaSeleccionada = new Perspectiva();
-      this.perspectivaSeleccionada.padreId = Number(id);    
-      this.modalservice.abrirModal();    
+      this.perspectivaSeleccionada.padreId = Number(id);
+      this.modalservice.abrirModal();
     }
     console.log(this.perspectivaSeleccionada);
   }
 
-  editarPerspectiva(id: string){
-    if(id != '0'){
-      this.perspectivaService.getPerspectiva(Number(id)).subscribe(response =>{
-        this.perspectivaSeleccionada = response;
-        this.modalservice.abrirModal();
-      });
-    }    
+  editarPerspectiva(id: string) {
+    if (id != '0') {
+      this.perspectivaService
+        .getPerspectiva(Number(id))
+        .subscribe((response) => {
+          this.perspectivaSeleccionada = response;
+          this.modalservice.abrirModal();
+        });
+    }
   }
 
-  eliminarPerspectiva(id: string){
-   
+  eliminarPerspectiva(id: string) {
     Swal.fire({
       title: 'Está seguro?',
-      text:  `¿Seguro que desea eliminar la perspectiva?`,
+      text: `¿Seguro que desea eliminar la perspectiva?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -80,34 +88,50 @@ export class PlanComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'No, cancelar!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.perspectivaService.delete(Number(id)).subscribe(
-          response =>{
-            this.getPerspectivas();
-            Swal.fire(
-              'Perspectiva eliminada!',
-              'La perspectiva ha sido eliminada con éxito',
-              'success'
-            )
-          }
-        )
+        this.perspectivaService.delete(Number(id)).subscribe((response) => {
+          this.getPerspectivas();
+          Swal.fire(
+            'Perspectiva eliminada!',
+            'La perspectiva ha sido eliminada con éxito',
+            'success'
+          );
+        });
       }
-    })
-
+    });
   }
 
   onClick(id) {
     localStorage.setItem('objetivoId', id);
 
-    this.perspectivaService.getPerspectiva(id).subscribe(response => localStorage.setItem('nombreObjetivo', response.nombre.toString()));
+    this.perspectivaService
+      .getPerspectiva(id)
+      .subscribe((response) =>
+        localStorage.setItem('nombreObjetivo', response.nombre.toString())
+      );
 
-    this.componentePadre.getIndicadoresIniciativas();    
+    this.componentePadre.getIndicadoresIniciativas();
   }
 
-  getPerspectivas(){
-    
+  getPerspectivas() {
     this.arbol = [];
-    this.perspectivaService.getPerspectivasArbol(localStorage.getItem('planId')).subscribe(response => this.arbol = response);
-    
+    this.perspectivaService
+      .getPerspectivasArbol(localStorage.getItem('planId'))
+      .subscribe((response) => (this.arbol = response));
   }
 
+  decargarResumido() {
+    window.open(
+      URL_BACKEND +
+        '/api/strategos/bancoproyectos/plan/pdf/' +
+        localStorage.getItem('planId')
+    );
+  }
+
+  decargarResumidoXLS() {
+    window.open(
+      URL_BACKEND +
+        '/api/strategos/bancoproyectos/plan/excel/' +
+        localStorage.getItem('planId')
+    );
+  }
 }

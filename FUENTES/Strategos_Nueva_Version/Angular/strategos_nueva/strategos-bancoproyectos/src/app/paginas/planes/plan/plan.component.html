@@ -1,66 +1,95 @@
-<detalle-perspectiva [perspectiva]="perspectivaSeleccionada"></detalle-perspectiva>
-    <!-- Main content -->
-    <section class="content">
-  
-    
-        <!-- Default box -->
-        <div class="card">
-          
-            <div class="card-header">
-              <button type="button" class="btn"  title="Crear perspectiva" (click)="crearPerspectiva(selectedKeys.join())">
-                  <i class="fa-md fas fa-plus"></i>
-              </button>
-              <button type="button" class="btn" title="Editar perspectiva" (click)="editarPerspectiva(selectedKeys.join())">
-                  <i class="fas fa-edit" ></i>
-              </button>
-              <button type="button" class="btn" title="Eliminar perspectiva" (click)="eliminarPerspectiva(selectedKeys.join())">
-                <i class="fas fa-trash-alt" ></i>
-              </button>
-              <button type="button" class="btn" title="Descargar Resumido">
-                <i class="fa-md far fa-file-pdf" ></i>
-              </button>
-              <button type="button" class="btn" title="Descargar Resumido">
-                <i class="fa-md far fa-file-excel" ></i>
-              </button>
-              <br>
-              <br>
-              <div class="container-fluid">
-                <kendo-treeview [nodes]="arbol" 
-                  #treeview
-                  textField="text"
-                  [hasChildren]="hasChildren" 
-                  [children]="fetchChildren"
-                  style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 500;"
-                  kendoTreeViewExpandable
-                  [expandedKeys]="expandedKeys"
-                  kendoTreeViewSelectable [selectBy]="'id'"
-                  [(selectedKeys)]="selectedKeys"
-                  (nodeClick)="onClick(selectedKeys.join())"
-                  >
-                  <ng-template kendoTreeViewNodeTemplate let-dataItem>
-                   
-                    <div *ngIf="dataItem.alerta == 3">
-                      <img src="/assets/img/rojo.png"> &nbsp; &nbsp;{{ dataItem.text }}<span style="color:#0090ff">&nbsp; &nbsp;({{ dataItem.valor | number: '.1-2'}})</span>
-                    </div>
-
-                    <div *ngIf="dataItem.alerta == 1">
-                      <img src="/assets/img/verde.png"> &nbsp; &nbsp;{{ dataItem.text }}<span style="color:#0090ff">&nbsp; &nbsp;({{ dataItem.valor | number: '.1-2'}})</span>
-                    </div>
-
-                    <div *ngIf="dataItem.alerta == undefined">
-                      &nbsp; &nbsp;{{ dataItem.text }}
-                    </div>
-                    
-
-                  </ng-template>
-                </kendo-treeview>
-              </div>
-
+<detalle-perspectiva
+  [perspectiva]="perspectivaSeleccionada"
+></detalle-perspectiva>
+<!-- Main content -->
+<section class="content">
+  <!-- Default box -->
+  <div class="card">
+    <div class="card-header">
+      <button
+        type="button"
+        class="btn"
+        title="Crear perspectiva"
+        (click)="crearPerspectiva(selectedKeys.join())"
+      >
+        <i class="fa-md fas fa-plus"></i>
+      </button>
+      <button
+        type="button"
+        class="btn"
+        title="Editar perspectiva"
+        (click)="editarPerspectiva(selectedKeys.join())"
+      >
+        <i class="fas fa-edit"></i>
+      </button>
+      <button
+        type="button"
+        class="btn"
+        title="Eliminar perspectiva"
+        (click)="eliminarPerspectiva(selectedKeys.join())"
+      >
+        <i class="fas fa-trash-alt"></i>
+      </button>
+      <button
+        type="button"
+        class="btn"
+        title="Descargar Resumido"
+        (click)="decargarResumido()"
+      >
+        <i class="fa-md far fa-file-pdf"></i>
+      </button>
+      <button
+        type="button"
+        class="btn"
+        title="Descargar Resumido"
+        (click)="decargarResumidoXLS()"
+      >
+        <i class="fa-md far fa-file-excel"></i>
+      </button>
+      <br />
+      <br />
+      <div class="container-fluid">
+        <kendo-treeview
+          [nodes]="arbol"
+          #treeview
+          textField="text"
+          [hasChildren]="hasChildren"
+          [children]="fetchChildren"
+          style="
+            font-family: Roboto, 'Helvetica Neue', 'sans-serif';
+            font-size: medium;
+            font-weight: 500;
+          "
+          kendoTreeViewExpandable
+          [expandedKeys]="expandedKeys"
+          kendoTreeViewSelectable
+          [selectBy]="'id'"
+          [(selectedKeys)]="selectedKeys"
+          (nodeClick)="onClick(selectedKeys.join())"
+        >
+          <ng-template kendoTreeViewNodeTemplate let-dataItem>
+            <div *ngIf="dataItem.alerta == 3">
+              <img src="/assets/img/rojo.png" /> &nbsp; &nbsp;{{ dataItem.text
+              }}<span style="color: #0090ff"
+                >&nbsp; &nbsp;({{ dataItem.valor | number : ".1-2" }})</span
+              >
             </div>
-          <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-    </section>
 
-  
-  
+            <div *ngIf="dataItem.alerta == 1">
+              <img src="/assets/img/verde.png" /> &nbsp; &nbsp;{{ dataItem.text
+              }}<span style="color: #0090ff"
+                >&nbsp; &nbsp;({{ dataItem.valor | number : ".1-2" }})</span
+              >
+            </div>
+
+            <div *ngIf="dataItem.alerta == undefined">
+              &nbsp; &nbsp;{{ dataItem.text }}
+            </div>
+          </ng-template>
+        </kendo-treeview>
+      </div>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</section>

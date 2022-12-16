@@ -16,7 +16,7 @@ public class IndicadorPerspectiva implements Serializable{
 
 	@EmbeddedId
 	private IndicadorPerspectivaPk pk;
-	
+		
 	@Column(nullable=true)
 	private Double peso;
 			
@@ -27,7 +27,7 @@ public class IndicadorPerspectiva implements Serializable{
 	public void setPk(IndicadorPerspectivaPk pk) {
 		this.pk = pk;
 	}
-
+	
 	public Double getPeso() {
 		return peso;
 	}
