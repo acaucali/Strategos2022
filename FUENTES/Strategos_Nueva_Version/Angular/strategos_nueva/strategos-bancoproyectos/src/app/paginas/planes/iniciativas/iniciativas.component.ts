@@ -22,6 +22,7 @@ export class IniciativasComponent implements OnInit {
   constructor(public modalservice: ModalService, private iniciativaService: IniciativaService, private router: Router) { }
 
   ngOnInit(): void {
+    this.getIniciativas();
   }
 
   crearIniciativa(){

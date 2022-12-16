@@ -243,8 +243,8 @@ export class ProyectosComponent implements OnInit {
           .subscribe((response) => {
             this.getProyectos();
             Swal.fire(
-              'Preproyecto eliminado!',
-              'El Preproyecto ha sido eliminado con éxito',
+              'Proyecto eliminado!',
+              'El Proyecto ha sido eliminado con éxito',
               'success'
             );
           });

@@ -30,6 +30,15 @@ export class TareasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    localStorage.removeItem('anio');
+    localStorage.removeItem('periodoFin');
+    localStorage.removeItem('periodoIni');
+    localStorage.removeItem('frecuencia');
+    localStorage.removeItem('real');
+    localStorage.removeItem('meta');
+    localStorage.removeItem('tarea');
+    localStorage.removeItem('tareaNombre');
+
     if (localStorage.getItem('objetivoId') != null) {
       var objetivo = Number(localStorage.getItem('objetivoId'));
       this.actividad = localStorage.getItem('actividadNombre');
@@ -43,7 +52,9 @@ export class TareasComponent implements OnInit {
     }
   }
 
-  regresar() {}
+  regresar() {
+    this.router.navigate(['/', 'planes', localStorage.getItem('proyectoId')]);
+  }
 
   crearTarea() {
     this.tareaSeleccionada = new Actividad();

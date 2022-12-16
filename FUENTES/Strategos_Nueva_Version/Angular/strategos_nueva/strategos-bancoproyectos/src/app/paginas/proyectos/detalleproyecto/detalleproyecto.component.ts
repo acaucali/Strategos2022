@@ -249,9 +249,12 @@ export class DetalleproyectoComponent implements OnInit, AfterViewInit {
   public seleccionarIdea(proyecto: any): void {
     console.log('proyecto', proyecto.value);
 
-    this.proyectoService
-      .getProyecto(proyecto.value)
-      .subscribe((pro) => (this.proyecto = pro));
+    this.proyectoService.getProyecto(proyecto.value).subscribe(
+      (pro) => {
+        this.proyecto = pro;
+        this.proyectoService.getPoblacionesListId(this.proyecto.proyectoId).subscribe(response =>{this.proyecto.poblaciones = response});
+      });
+              
     this.proyecto.estatusId = 7;
   }
 

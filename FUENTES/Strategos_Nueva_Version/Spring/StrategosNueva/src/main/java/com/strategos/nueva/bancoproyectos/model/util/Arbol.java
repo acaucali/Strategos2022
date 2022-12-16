@@ -10,6 +10,7 @@ public class Arbol {
 	
 	private Double valor;
 	private Byte alerta;
+	private Boolean isPadre;
 	
 	private List<Arbol> items = new ArrayList();
 	
@@ -43,6 +44,12 @@ public class Arbol {
 	}
 	public void setAlerta(Byte alerta) {
 		this.alerta = alerta;
+	}
+	public Boolean getIsPadre() {
+		return isPadre;
+	}
+	public void setIsPadre(Boolean isPadre) {
+		this.isPadre = isPadre;
 	}
 	
 }

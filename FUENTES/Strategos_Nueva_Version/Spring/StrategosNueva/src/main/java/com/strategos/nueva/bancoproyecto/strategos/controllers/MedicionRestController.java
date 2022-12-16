@@ -1,5 +1,6 @@
 package com.strategos.nueva.bancoproyecto.strategos.controllers;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -473,24 +474,25 @@ public class MedicionRestController {
 				dato.setTipo("real");
 
 				datos.add(dato);
+				
+				for (int x = perIni; x <= perFin; x++) {
+					
+					medicionesReal = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 0, anio, x, x);
+					if (medicionesReal.size() > 0) {
+						for (MedicionStrategos med : medicionesReal) {
+							dato = new DatoMedicion();
+							dato.setCampo("medicion");
+				
+							dato.setValor(String.format("%.0f", med.getValor()));
+							dato.setTamanio("50");
+							dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
+							dato.setId(med.getMedicionPk().getSerieId());
+							dato.setIdeaId(ind.getIndicadorId());
+							dato.setTipo("real");
 
-				// buscar mediciones
-				medicionesReal = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 0, anio, perIni, perFin);
-				if (medicionesReal.size() > 0) {
-					for (MedicionStrategos med : medicionesReal) {
-						dato = new DatoMedicion();
-						dato.setCampo("medicion");
-						dato.setValor("" + med.getValor());
-						dato.setTamanio("50");
-						dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
-						dato.setId(med.getMedicionPk().getSerieId());
-						dato.setIdeaId(ind.getIndicadorId());
-						dato.setTipo("real");
-
-						datos.add(dato);
-					}
-				} else {
-					for (int x = perIni; x <= perFin; x++) {
+							datos.add(dato);
+						}
+					}else {
 						dato = new DatoMedicion();
 						dato.setCampo("medicion");
 						dato.setValor("");
@@ -502,7 +504,10 @@ public class MedicionRestController {
 
 						datos.add(dato);
 					}
+					
 				}
+				
+				
 			} else if (serie == 2) {// meta
 
 				dato = new DatoMedicion();
@@ -515,23 +520,26 @@ public class MedicionRestController {
 				dato.setTipo("meta");
 
 				datos.add(dato);
+				
+				
+				for (int x = perIni; x <= perFin; x++) {
+					
+					
+					medicionesMeta = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 1, anio, x, x);
+					if (medicionesMeta.size() > 0) {
+						for (MedicionStrategos med : medicionesMeta) {
+							dato = new DatoMedicion();
+							dato.setCampo("medicion");
+							dato.setValor(String.format("%.0f", med.getValor()));
+							dato.setTamanio("50");
+							dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
+							dato.setId(med.getMedicionPk().getSerieId());
+							dato.setIdeaId(ind.getIndicadorId());
+							dato.setTipo("meta");
 
-				medicionesMeta = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 1, anio, perIni, perFin);
-				if (medicionesMeta.size() > 0) {
-					for (MedicionStrategos med : medicionesMeta) {
-						dato = new DatoMedicion();
-						dato.setCampo("medicion");
-						dato.setValor("" + med.getValor());
-						dato.setTamanio("50");
-						dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
-						dato.setId(med.getMedicionPk().getSerieId());
-						dato.setIdeaId(ind.getIndicadorId());
-						dato.setTipo("meta");
-
-						datos.add(dato);
-					}
-				} else {
-					for (int x = perIni; x <= perFin; x++) {
+							datos.add(dato);
+						}
+					}else {
 						dato = new DatoMedicion();
 						dato.setCampo("medicion");
 						dato.setValor("");
@@ -543,7 +551,11 @@ public class MedicionRestController {
 
 						datos.add(dato);
 					}
+					
+					
+					
 				}
+				
 			}
 
 		}
@@ -601,23 +613,23 @@ public class MedicionRestController {
 
 				datos.add(dato);
 
-				// buscar mediciones
-				medicionesReal = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 0, anio, perIni, perFin);
-				if (medicionesReal.size() > 0) {
-					for (MedicionStrategos med : medicionesReal) {
-						dato = new DatoMedicion();
-						dato.setCampo("medicion");
-						dato.setValor("" + med.getValor());
-						dato.setTamanio("50");
-						dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
-						dato.setId(med.getMedicionPk().getSerieId());
-						dato.setIdeaId(ind.getIndicadorId());
-						dato.setTipo("real");
+				for (int x = perIni; x <= perFin; x++) {
+					
+					medicionesReal = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 0, anio, x, x);
+					if (medicionesReal.size() > 0) {
+						for (MedicionStrategos med : medicionesReal) {
+							dato = new DatoMedicion();
+							dato.setCampo("medicion");
+							dato.setValor(String.format("%.0f", med.getValor()));
+							dato.setTamanio("50");
+							dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
+							dato.setId(med.getMedicionPk().getSerieId());
+							dato.setIdeaId(ind.getIndicadorId());
+							dato.setTipo("real");
 
-						datos.add(dato);
-					}
-				} else {
-					for (int x = perIni; x <= perFin; x++) {
+							datos.add(dato);
+						}
+					}else {
 						dato = new DatoMedicion();
 						dato.setCampo("medicion");
 						dato.setValor("");
@@ -629,7 +641,9 @@ public class MedicionRestController {
 
 						datos.add(dato);
 					}
+					
 				}
+
 			} else if (serie == 2) {// meta
 
 				dato = new DatoMedicion();
@@ -643,22 +657,24 @@ public class MedicionRestController {
 
 				datos.add(dato);
 
-				medicionesMeta = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 1, anio, perIni, perFin);
-				if (medicionesMeta.size() > 0) {
-					for (MedicionStrategos med : medicionesMeta) {
-						dato = new DatoMedicion();
-						dato.setCampo("medicion");
-						dato.setValor("" + med.getValor());
-						dato.setTamanio("50");
-						dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
-						dato.setId(med.getMedicionPk().getSerieId());
-						dato.setIdeaId(ind.getIndicadorId());
-						dato.setTipo("meta");
+				for (int x = perIni; x <= perFin; x++) {
+					
+					
+					medicionesMeta = medicionService.findByPeriodos(ind.getIndicadorId(), (long) 1, anio, x, x);
+					if (medicionesMeta.size() > 0) {
+						for (MedicionStrategos med : medicionesMeta) {
+							dato = new DatoMedicion();
+							dato.setCampo("medicion");
+							dato.setValor(String.format("%.0f", med.getValor()));
+							dato.setTamanio("50");
+							dato.setPeso(anio + "-" + med.getMedicionPk().getPeriodo());
+							dato.setId(med.getMedicionPk().getSerieId());
+							dato.setIdeaId(ind.getIndicadorId());
+							dato.setTipo("meta");
 
-						datos.add(dato);
-					}
-				} else {
-					for (int x = perIni; x <= perFin; x++) {
+							datos.add(dato);
+						}
+					}else {
 						dato = new DatoMedicion();
 						dato.setCampo("medicion");
 						dato.setValor("");
@@ -670,7 +686,12 @@ public class MedicionRestController {
 
 						datos.add(dato);
 					}
+					
+					
+					
 				}
+				
+				
 			}
 
 		}
@@ -729,7 +750,7 @@ public class MedicionRestController {
 					for (PresupuestoDatos pre : medicionesReal) {
 						dato = new DatoMedicion();
 						dato.setCampo("medicion");
-						dato.setValor("" + pre.getValor());
+						dato.setValor(String.format("%.0f", pre.getValor()));
 						dato.setTamanio("50");
 						dato.setPeso(""+x);
 						dato.setId(pre.getSerieId());
@@ -774,7 +795,7 @@ public class MedicionRestController {
 					for (PresupuestoDatos pre : medicionesMeta) {
 						dato = new DatoMedicion();
 						dato.setCampo("medicion");
-						dato.setValor("" + pre.getValor());
+						dato.setValor(String.format("%.0f", pre.getValor()));
 						dato.setTamanio("50");
 						dato.setPeso(""+x);
 						dato.setId(pre.getSerieId());

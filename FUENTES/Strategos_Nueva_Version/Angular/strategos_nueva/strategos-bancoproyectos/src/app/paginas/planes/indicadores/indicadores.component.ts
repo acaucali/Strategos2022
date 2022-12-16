@@ -26,6 +26,7 @@ export class IndicadoresComponent implements OnInit {
   ngOnInit(): void {
     localStorage.removeItem('indicadorNombre');
     localStorage.removeItem('indicadorNombre');
+    this.getIndicadores();
   }
 
   crearIndicador(){

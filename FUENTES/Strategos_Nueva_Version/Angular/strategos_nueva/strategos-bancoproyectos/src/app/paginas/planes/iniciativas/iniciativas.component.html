@@ -24,7 +24,7 @@
               <thead>
                 <tr class="text-white bg-primary">
                   <td width="100">Acciones</td>
-                  <td width="80">Alerta</td>
+                  <td width="70">Alerta</td>
                   <td>Actividades</td>
                   <td>% Completado</td>
                   <td>% Programado</td>
@@ -43,7 +43,7 @@
                     <i class="fas fa-trash-alt" (click)='eliminarIniciativa(ind)' style="cursor: pointer;"></i>
                     
                   </td>
-                  <td width="80">
+                  <td width="70">
                     <div id="red" *ngIf="ind.alerta == 3"></div>
                     <div id="yellow" *ngIf="ind.alerta == 2"></div>
                     <div id="green" *ngIf="ind.alerta == 1"></div>  
