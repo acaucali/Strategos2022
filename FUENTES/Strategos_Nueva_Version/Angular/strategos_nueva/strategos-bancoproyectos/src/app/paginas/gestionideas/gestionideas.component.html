@@ -22,6 +22,7 @@
         
 
         <div class="card-header">
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" (click)="crearIdea()" title="Crear Idea"> -->
             <button type="button" class="btn" (click)="crearIdea()" title="Crear Idea">
                 <i class="fa-md fas fa-plus"></i>
             </button>
@@ -37,6 +38,7 @@
                 <i class="fa-md fas fa-filter"></i>
             </button>
 
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" class="btn" title="Ponderación Idea"> -->
             <button type="button" class="btn" class="btn" title="Ponderación Idea">
               <i class="fas fa-arrow-alt-circle-right" [routerLink]="['/ponderacion']"></i>
             </button>
@@ -129,9 +131,11 @@
                 <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageIdea, id: 'pageIde'}">
                   <td width="100" >
                     
-                    <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
                     &nbsp;
-                    <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
                     &nbsp;
                     <i class="far fa-file-pdf" (click)="descargarPDF(el)"></i>
                   </td>

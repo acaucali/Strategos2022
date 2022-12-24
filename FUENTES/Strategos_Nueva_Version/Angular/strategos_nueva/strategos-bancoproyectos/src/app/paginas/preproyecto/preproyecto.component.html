@@ -22,7 +22,8 @@
         
 
         <div class="card-header">
-            <button type="button" class="btn" (click)="crearPreProyecto()" title="Crear Idea">
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" (click)="crearPreProyecto()" title="Crear Idea"> -->
+            <button  type="button" class="btn" (click)="crearPreProyecto()" title="Crear Idea">
                 <i class="fa-md fas fa-plus"></i>
             </button>
             <button type="button" class="btn" title="Descargar Resumido">
@@ -126,9 +127,11 @@
                   <tr *ngFor="let pre of preproyectos | paginate: {itemsPerPage: 10, currentPage: pagePrepro, id: 'pagePre'}">
                     <td width="100" >
                       
-                      <i class="fas fa-edit" (click)="abrirModal(pre)" style="cursor: pointer;"></i>
+                      <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-edit" (click)="abrirModal(pre)" style="cursor: pointer;"></i> -->
+                      <i  class="fas fa-edit" (click)="abrirModal(pre)" style="cursor: pointer;"></i>
                       &nbsp;
-                      <i class="fas fa-trash-alt" (click)='delete(pre)' style="cursor: pointer;"></i>
+                      <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-trash-alt" (click)='delete(pre)' style="cursor: pointer;"></i> -->
+                      <i  class="fas fa-trash-alt" (click)='delete(pre)' style="cursor: pointer;"></i>
                       &nbsp;
                       <i class="far fa-file-pdf" (click)="descargarPDF(pre)"></i>
                     </td>

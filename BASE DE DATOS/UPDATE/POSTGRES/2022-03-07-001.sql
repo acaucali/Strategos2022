@@ -79,3 +79,16 @@ ALTER TABLE instrumento_peso
   
 UPDATE afw_permiso set permiso = 'Desasociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_DELETE';
 UPDATE afw_permiso set permiso = 'Asociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_ADD';
+
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('BANCOPROYECTOS', 'BancoProyectos', NULL , 0, 14, 1, 'BancoProyectos');
+
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('BANCOPROYECTOS_PROYECTOS', 'Proyectos', 'BANCOPROYECTOS' , 2, 14, 1, 'Proyectos');
+
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('BANCOPROYECTOS_PROYECTOS_ADD', 'Crear', 'BANCOPROYECTOS_PROYECTOS' , 3, 14, 1, 'Crear');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('BANCOPROYECTOS_PROYECTOS_EDIT', 'Modificar', 'BANCOPROYECTOS_PROYECTOS' , 3, 14, 1, 'Modificar');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('BANCOPROYECTOS_PROYECTOS_DELETE', 'Eliminar', 'BANCOPROYECTOS_PROYECTOS' , 3, 14, 1, 'Eliminar');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('BANCOPROYECTOS_PROYECTOS_VIEW', 'Ver', 'BANCOPROYECTOS_PROYECTOS' , 3, 14, 1, 'Ver');
+
+
+
+

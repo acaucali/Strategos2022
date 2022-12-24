@@ -13,11 +13,13 @@
     <div class="card">
       <div class="card-body">
 
-        <button type="button" class="btn" (click)=" crearIndicador()" title="Crear Indicador">
+        <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" (click)=" crearIndicador()" title="Crear Indicador"> -->
+        <button  type="button" class="btn" (click)=" crearIndicador()" title="Crear Indicador">
           <i class="fa-md fas fa-plus"></i>
       </button>
         
-      <button type="button" class="btn" (click)=" cargarMedicion()" title="Cargar Mediciones">
+      <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" (click)=" cargarMedicion()" title="Cargar Mediciones"> -->
+      <button  type="button" class="btn" (click)=" cargarMedicion()" title="Cargar Mediciones">
         <i class="fas fa-table"></i>
       </button>
             
@@ -44,11 +46,14 @@
                 <tr *ngFor="let ind of indicadores | paginate: {itemsPerPage: 10, currentPage: pageIndi, id: 'pageInd'}">
                   <td width="80" >
                     
-                    <i class="fas fa-edit" (click)="editarIndicador(ind)" style="cursor: pointer;"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-edit" (click)="editarIndicador(ind)" style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-edit" (click)="editarIndicador(ind)" style="cursor: pointer;"></i>
                     &nbsp;
-                    <i class="fas fa-trash-alt" (click)='eliminarIndicador(ind)' style="cursor: pointer;"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-trash-alt" (click)='eliminarIndicador(ind)' style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-trash-alt" (click)='eliminarIndicador(ind)' style="cursor: pointer;"></i>
                     &nbsp;
-                    <i class="fas fa-chart-bar" (click)='graficar(ind)' style="cursor: pointer;"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-chart-bar" (click)='graficar(ind)' style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-chart-bar" (click)='graficar(ind)' style="cursor: pointer;"></i>
                     
                   </td>
                   <td width="50">

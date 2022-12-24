@@ -29,6 +29,7 @@
   <!-- Default box -->
   <div class="card">
     <div class="card-header">
+      <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" -->
       <button
         type="button"
         class="btn"
@@ -37,6 +38,7 @@
       >
         <i class="fa-md fas fa-plus"></i>
       </button>
+      <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" -->
       <button
         type="button"
         class="btn"
@@ -85,19 +87,22 @@
               "
             >
               <td width="70">
+                <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" -->
                 <i
                   class="fas fa-edit"
                   (click)="editarTarea(tar)"
                   style="cursor: pointer"
                 ></i>
                 &nbsp;
+                <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" -->
                 <i
                   class="fas fa-trash-alt"
                   (click)="eliminarTarea(tar)"
                   style="cursor: pointer"
                 ></i>
                 &nbsp;
-                <i
+                <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" -->
+                <i 
                   class="fas fa-dollar-sign"
                   (click)="presupuesto(tar)"
                   style="cursor: pointer"

@@ -22,7 +22,8 @@
         
 
         <div class="card-header">
-            <button type="button" class="btn" title="Crear Evaluacion">
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" title="Crear Evaluacion"> -->
+            <button  type="button" class="btn" title="Crear Evaluacion">
                 <i class="fa-md fas fa-plus" [routerLink]="['/evaluacion', 0]"></i>
             </button>
 
@@ -70,11 +71,14 @@
                 <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageEva, id: 'pageEv'}">
                   <td width="100" >
                     
-                    <i class="fas fa-edit" style="cursor: pointer;" [routerLink]="['/evaluacion', el.evaluacionId]"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-edit" style="cursor: pointer;" [routerLink]="['/evaluacion', el.evaluacionId]"></i> -->
+                    <i  class="fas fa-edit" style="cursor: pointer;" [routerLink]="['/evaluacion', el.evaluacionId]"></i>
                     &nbsp;
-                    <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
                     &nbsp;
-                    <i class="fas fa-table" [routerLink]="['/evaluaciondatos', el.evaluacionId]"></i>
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-table" [routerLink]="['/evaluaciondatos', el.evaluacionId]"></i> -->
+                    <i  class="fas fa-table" [routerLink]="['/evaluaciondatos', el.evaluacionId]"></i>
                   </td>
                   <td width="150">{{el.fechaEvaluacion |  date:"dd-MM-yyyy"}} </td>
                   <td >{{el.observacion}} </td>
