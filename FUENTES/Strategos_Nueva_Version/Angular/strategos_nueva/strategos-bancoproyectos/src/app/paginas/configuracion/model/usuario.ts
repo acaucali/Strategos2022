@@ -1,21 +1,17 @@
 export class Usuario {
 
     usuarioId: number;
-    fullName: String;
-    user: String;
+    fullName: string;
+    username: string;
     isAdmin: Boolean;
-    isConnected: Boolean;
-    isSystem: Boolean;
     timeStamp: Date;
     creado: Date;
     modificado: Date;
-    creadoId: number;
-    modificadoId: number;
-    instancia: String;
+    instancia: string;
     estatus: number;
-    bloqueado: Boolean;
-    pwd: String;
-    ultimaModifPwd: Date;
-    deshabilitado: Boolean;
-    forzarCambiarpwd: Boolean;
+    habilitado: Boolean;
+    pwd: string;
+    pass: string;
+    tipo: number; 
+    roles: string[]=[];
 }

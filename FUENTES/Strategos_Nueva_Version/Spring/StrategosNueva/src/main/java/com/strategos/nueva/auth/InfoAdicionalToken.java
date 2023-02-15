@@ -10,19 +10,21 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.stereotype.Component;
 
-import com.strategos.nueva.bancoproyecto.strategos.model.UsuarioStrategos;
-import com.strategos.nueva.bancoproyecto.strategos.service.UsuarioService;
+import com.strategos.nueva.bancoproyecto.ideas.model.Usuario;
+import com.strategos.nueva.bancoproyecto.ideas.service.UsuariosService;
+
+
 
 @Component
 public class InfoAdicionalToken implements TokenEnhancer{
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private UsuariosService usuarioService;
 
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 		
-		UsuarioStrategos usuario = usuarioService.findByUser(authentication.getName());
+		Usuario usuario = usuarioService.findByUsername(authentication.getName());
 		Map<String, Object> info = new HashMap<>();
 		info.put("name","user: ".concat(authentication.getName()));
 		info.put("userid", usuario.getUsuarioId());

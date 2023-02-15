@@ -19,23 +19,28 @@ import org.springframework.web.filter.CorsFilter;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 
+	/*
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/strategos/bancoproyectos/**", "/api/strategos/bancoproyectos/usuario/**").permitAll()
 		.anyRequest().permitAll()
 		.and().cors().configurationSource(corsConfigurationSource());
 		
+	}*/
+	
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/strategos/bancoproyectos/**", "/api/strategos/bancoproyectos/usuario/**").permitAll()
+		.anyRequest().authenticated()
+		.and().cors().configurationSource(corsConfigurationSource());
 	}
 	
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
-		
 		CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200","*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("*");
-        configuration.setAllowedHeaders(Arrays.asList("Origin.Accept","X-Requested-With","Content-Type","Access-Control-Request-Method", "Access-Control-Request-Headers","Authorization", ""));
-        configuration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -46,6 +51,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(corsConfigurationSource()));
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		return bean;
-	}	
+	}
 	
 }

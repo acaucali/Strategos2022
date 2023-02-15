@@ -25,7 +25,7 @@ import { ConfigGraficoComponent } from './paginas/planes/indicadores/grafico/con
     BrowserModule,
     AppRoutingModule,
     PaginasModule,    
-    HttpClientModule, NoopAnimationsModule, BrowserAnimationsModule, 
+    HttpClientModule, NoopAnimationsModule, BrowserAnimationsModule
     
   ],
   providers: [],

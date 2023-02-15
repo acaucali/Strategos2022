@@ -1,5 +1,6 @@
 export const URL_BACKEND = 'http://localhost:9090';
 export const URL_FRONT = 'http://localhost:4200/';
+export const URL_AUTH = 'http://localhost:9090/oauth/token';
 export const ORGANIZACION_ID = 5436; //52
 export const STRATEGOS =
   'http://localhost:8095/Strategos/organizaciones/gestionarOrganizaciones.action?mostrarMisionVision=undefined';

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { STRATEGOS } from 'src/app/config/config';
+import { AuthService } from 'src/app/paginas/configuracion/services-util/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,13 +10,14 @@ import { STRATEGOS } from 'src/app/config/config';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(public authService:AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   regresar(){
-    window.location.href=STRATEGOS;
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

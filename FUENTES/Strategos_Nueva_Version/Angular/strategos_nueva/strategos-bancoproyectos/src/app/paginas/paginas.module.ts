@@ -12,18 +12,23 @@ import { IndicadoresComponent } from './planes/indicadores/indicadores.component
 import { IniciativasComponent } from './planes/iniciativas/iniciativas.component';
 import { PlanComponent } from './planes/plan/plan.component';
 import { ProyectosComponent } from './proyectos/proyectos.component';
+import { LoginComponent } from './login/login.component';
+import { InicioComponent } from './inicio/inicio.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     ManinpageComponent,
     Pagina404Component,
-    ConfiguracionComponent
+    ConfiguracionComponent,
+    LoginComponent,
+    InicioComponent
   ],
   imports: [
     CommonModule,
     ModulosModule,
-    AppRoutingModule,
+    AppRoutingModule, FormsModule
    
 
   ]

@@ -2,22 +2,24 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ManinpageComponent } from './maninpage/maninpage.component';
 import { Pagina404Component } from './pagina404/pagina404.component';
+import { LoginComponent } from './login/login.component';
+
+import { InicioComponent } from './inicio/inicio.component';
 
 
 
 
 const routes: Routes = [
   
-  {path: '', 
+  {path: 'banco', 
   component: ManinpageComponent,
   children: [
-    { path: '', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
+    { path: 'inicio', component: InicioComponent},
     { path: 'gestionideas', loadChildren: () => import('./gestionideas/gestionideas.module').then(m =>m.GestionIdeasModule)},
     { path: 'criterios', loadChildren: () => import('./configuracion/tablas/criterios/criterios.module').then(m =>m.CriteriosModule)},
     { path: 'ponderacion', loadChildren: () => import('./gestionideas/ponderacion-ideas/ponderacion.module').then(m =>m.PonderacionModule)},
     { path: 'evaluacion/:evaId', loadChildren: () => import('./gestionideas/evaluacion/evaluacion.module').then(m =>m.EvaluacionModule)},
     { path: 'evaluaciondatos/:id', loadChildren: () => import('./gestionideas/evaluacion-datos/evaluaciondatos.module').then(m =>m.EvaluacionDatosModule)},
-    { path: 'inicio', loadChildren: () => import('./inicio/inicio.module').then(m =>m.InicioModule)},
     { path: 'preproyecto', loadChildren: () => import('./preproyecto/preproyectos.module').then(m =>m.PreProyectoModule)},
     { path: 'proyecto', loadChildren: () => import('./proyectos/proyectos.module').then(m =>m.ProyectoModule)},
     { path: 'planes/:id', loadChildren: () => import('./planes/planes.module').then(m =>m.PlanesModule)},
@@ -28,6 +30,7 @@ const routes: Routes = [
     { path: 'grafico', loadChildren: () => import('./planes/indicadores/grafico/grafico.module').then(m =>m.GraficoModule)},
     { path: '**', component: Pagina404Component},
   ]}
+ 
 ];
  
 @NgModule({
