@@ -5,6 +5,7 @@ import { Pagina404Component } from './pagina404/pagina404.component';
 import { LoginComponent } from './login/login.component';
 
 import { InicioComponent } from './inicio/inicio.component';
+import { UsuarioModule } from './usuarios/usuarios.module';
 
 
 
@@ -28,6 +29,7 @@ const routes: Routes = [
     { path: 'mediciontarea', loadChildren: () => import('./planes/iniciativas/tareas/medicion-tareas/mediciontareas.module').then(m =>m.MedicionTareaModule)},
     { path: 'presupuesto', loadChildren: () => import('./planes/iniciativas/tareas/presupuesto/presupuesto.module').then(m =>m.PresupuestoModule)},    
     { path: 'grafico', loadChildren: () => import('./planes/indicadores/grafico/grafico.module').then(m =>m.GraficoModule)},
+    { path: 'usuarios', loadChildren: () => import('./usuarios/usuarios.module').then(m =>m.UsuarioModule)},
     { path: '**', component: Pagina404Component},
   ]}
  

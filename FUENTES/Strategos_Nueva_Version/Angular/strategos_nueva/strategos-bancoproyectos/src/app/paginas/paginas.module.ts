@@ -15,6 +15,8 @@ import { ProyectosComponent } from './proyectos/proyectos.component';
 import { LoginComponent } from './login/login.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { FormsModule } from '@angular/forms';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { DetalleUsuariosComponent } from './usuarios/detalle-usuarios/detalle-usuarios.component';
 
 
 @NgModule({
