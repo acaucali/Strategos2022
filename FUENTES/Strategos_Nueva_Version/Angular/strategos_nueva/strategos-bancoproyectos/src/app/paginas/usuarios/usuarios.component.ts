@@ -28,6 +28,7 @@ export class UsuariosComponent implements OnInit {
   constructor(private router: Router, private usuariosService: UsuariosService, private modalService: ModalService) { }
 
   ngOnInit(): void {
+    this.getUsuarios();
   }
 
   delete(usuario: Usuario): void{

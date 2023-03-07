@@ -1,1 +1,66 @@
-<p>detalle-usuarios works!</p>
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn"> 
+
+    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #007BFF;">
+              <h4 class="modal-title">{{titulo}}</h4>
+              <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form  #usuarioForm="ngForm">
+                      <div class="form-row">       
+                                                               
+                        <div class="col-md-12">
+                            <label for="exampleInputEmail1">Usuario</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Usuario"
+                            [(ngModel)]="usuario.username" name="username" #username="ngModel">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="exampleInputEmail1">Nombre Completo</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nombre Completo"
+                            [(ngModel)]="usuario.fullName" name="fullName" #fullName="ngModel">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="exampleInputEmail1">Contraseña</label>
+                            <input type="password" class="form-control" id="exampleInputEmail1" placeholder="Contraseña"
+                            [(ngModel)]="usuario.pass" name="pass" #pass="ngModel">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="exampleInputEmail1">Estatus</label>
+                           
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="exampleInputEmail1">Administrador</label>
+                           
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label for="exampleInputEmail1">Habilitado</label>
+                           
+                        </div>
+ 
+                        
+                      </div>   
+                    </form>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="!usuario.usuarioId else elseBlock" (click)="create()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!usuarioForm.form.valid">Crear</button>
+                <ng-template #elseBlock>
+                    <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!usuarioForm.form.valid">Actualizar</button>
+                </ng-template>
+              <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+</div>
