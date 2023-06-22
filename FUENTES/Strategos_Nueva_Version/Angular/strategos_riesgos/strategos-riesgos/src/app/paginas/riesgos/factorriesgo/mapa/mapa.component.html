@@ -1,0 +1,145 @@
+<div class="container mb-5 my-5">
+  <br>
+  <br>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-10">
+          <h3><b>Mapa de Calor</b></h3>
+          <label for="proceso" style="font-size: medium; font-weight: bold">Proceso/Subproceso</label>&nbsp;&nbsp;&nbsp;&nbsp;
+          <label for="proceso" style="font-size: medium; font-weight: normal;">{{proceso.procesoNombre}}</label>
+          <br>
+          <label for="ejercicio" style="font-size: medium; font-weight: bold">Ejercicio</label>&nbsp;&nbsp;&nbsp;&nbsp;
+          <label for="proceso"
+          style="font-size: medium; font-weight: normal">{{ejercicio.fechaEjercicio |  date:"dd-MM-yyyy"}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+          <label for="ejercicio" style="font-size: medium; font-weight: normal">{{ejercicio.ejercicioDescripcion}} </label>
+          
+        </div>
+        
+        <div class="col-md-2">
+          <button
+            (click)="regresar()"
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal">Regresar</button>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  
+    <br>
+   
+    <div class="row">
+      <div class="col-lg-12">
+        <table class="table" id="tablaMapa">
+          <tr *ngFor="let pro of probabilidades">
+            <td>
+              {{pro.probabilidadNombre}}
+            </td>
+  
+            <td *ngFor="let imp of impactos " id="{{pro.probabilidadPuntaje}}-{{imp.tipoImpactoPuntaje}}" width="180"
+              height="50" style="border: 1px solid black; ">
+              <div *ngFor="let obj of objetosMapa" width="180" height="70" id="mapa">
+                <div id="green"
+                  *ngIf="obj.probabilidad == pro.probabilidadPuntaje && obj.impacto == imp.tipoImpactoPuntaje  && obj.color =='verde'"
+                  width="250" height="70">
+                  <label>
+                    <br>
+                    <br>
+                  </label>
+                  <label (click)="obtenerDetalle(obj)" style="cursor: pointer;" *ngIf="obj.cantidadId >0">
+                      ({{obj.cantidadId}})
+                  </label>
+  
+                </div>
+                <div id="yellow"
+                  *ngIf="obj.probabilidad == pro.probabilidadPuntaje && obj.impacto == imp.tipoImpactoPuntaje  && obj.color =='amarillo'"
+                  width="250" height="70">
+                  <label>
+                    <br>
+                    <br>
+                  </label>
+                  <label (click)="obtenerDetalle(obj)" style="cursor: pointer;" *ngIf="obj.cantidadId >0">
+                      ({{obj.cantidadId}})
+                  </label>
+                </div>
+                <div id="orange"
+                  *ngIf="obj.probabilidad == pro.probabilidadPuntaje && obj.impacto == imp.tipoImpactoPuntaje  && obj.color =='naranja'"
+                  width="250" height="70">
+                  <label>
+                    <br>
+                    <br>
+                  </label>
+                  <label (click)="obtenerDetalle(obj)" style="cursor: pointer;" *ngIf="obj.cantidadId >0">
+                      ({{obj.cantidadId}})
+                  </label>
+                </div>
+                <div id="red"
+                  *ngIf="obj.probabilidad == pro.probabilidadPuntaje && obj.impacto == imp.tipoImpactoPuntaje  && obj.color =='rojo'"
+                  width="250" height="70">
+                  <label>
+                    <br>
+                    <br>
+                  </label>
+                  <label (click)="obtenerDetalle(obj)" style="cursor: pointer;" *ngIf="obj.cantidadId >0">
+                     ({{obj.cantidadId}})
+                  </label>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td *ngFor="let imp of impactos ">
+              {{imp.tipoImpacto}}
+            </td>
+          </tr>
+        </table>
+  
+      </div>
+  
+      <div class="col-lg-12" *ngIf="factores?.length >0">
+        <br>
+        
+        <table class="table " id="tablaf" width="100%">
+          <thead>
+            <tr class="text-white bg-primary">
+              <td>Alerta</td>
+              <td>Riesgo</td>
+              <td>Probabilidad</td>
+              <td>Impacto</td>
+              <td>Riesgo Inherente</td>
+              <td>Riesgo Residual</td>
+              <td>Estatus</td>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let factor of factores | paginate: {itemsPerPage: 5, currentPage: pageFac, id: 'pageFac'}">
+  
+              <td>
+                <div id="alert-red" *ngIf="factor.alerta == 'rojo'"></div>
+                <div id="alert-orange" *ngIf="factor.alerta == 'naranja'"></div>
+                <div id="alert-yellow" *ngIf="factor.alerta == 'amarillo'"></div>
+                <div id="alert-green" *ngIf="factor.alerta == 'verde'"></div>
+              </td>
+              <td>{{factor.factorRiesgo}} </td>
+              <td>{{factor.probabilidad}} </td>
+              <td>{{factor.impacto}} </td>
+              <td>{{factor.severidad}} </td>
+              <td>{{factor.riesgoResidual}} </td>
+              <td>
+                <div *ngIf="factor.estatus == 0">Pendiente</div>
+                <div *ngIf="factor.estatus == 1">Mitigado</div>
+              </td> 
+              
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="pageFac" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageFac = $event">
+        </pagination-controls>
+      </div>
+    </div>
+  </div>

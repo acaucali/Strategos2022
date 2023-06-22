@@ -1,0 +1,101 @@
+<detalle-calificacion [calificacion]="calificacionSeleccionada"></detalle-calificacion>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Calificaciones de Riesgo</h1>
+            
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+          <button class="btn btn-rounded bg-white" (click)="crearCliente()" type="button" placement="bottom" ngbTooltip="Crear Calificación">
+            <i class="far fa-plus-square fa-lg"></i>
+          </button>
+          <button class="btn btn-rounded bg-white " (click)="descargarPDF()" type="button" *ngIf="calificaciones && calificaciones.length>0"
+            placement="bottom" ngbTooltip="Descargar PDF"><i class="far fa-file-pdf fa-lg"></i>
+          </button>
+                      
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        
+        
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="calificaciones?.length==0" class="alert alert-info">
+          No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="50">Acciones</td>
+                  <td>Calificación</td>
+                  <td>Rango mínimo</td>
+                  <td>Rango máximo</td>
+                  <td>Color</td>
+                  <td>Acción a tomar</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageCali, id: 'pageCal'}">
+                  <td width="50" >
+                      &nbsp;
+                    <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
+                    &nbsp;&nbsp;
+                    <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                  </td>
+                  <td >{{el.calificacionesRiesgo}} </td>
+                  <td >{{el.calificacionesRiesgoMinimo}} </td>
+                  <td >{{el.calificacionesRiesgoMaximo}} </td>
+                  <td >
+                    <div id="red" *ngIf="el.calificacionesRiesgoColor == 'rojo'"></div>
+                    <div id="orange" *ngIf="el.calificacionesRiesgoColor == 'naranja'"></div>
+                    <div id="yellow" *ngIf="el.calificacionesRiesgoColor == 'amarillo'"></div>
+                    <div id="green" *ngIf="el.calificacionesRiesgoColor == 'verde'"></div>
+                  </td>
+                  <td >{{el.calificacionesRiesgoAccion}} </td>
+                </tr>
+              </tbody>
+              
+            </table>
+            <pagination-controls id="pageCal" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageCali = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->

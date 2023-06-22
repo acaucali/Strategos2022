@@ -1,0 +1,75 @@
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn">
+
+    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-white" style="background-color: #007BFF;">
+            <h5 class="modal-title">{{titulo}}</h5>
+            <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form #ejercicioForm="ngForm">
+                <div class="form-row">
+                  <div class="form-group col-md-7">
+                    <label for="descripcion" style="font-size: medium">Descripción</label>
+                    <textarea class="form-control" rows="5" placeholder="Descripción" [(ngModel)]="ejercicio.ejercicioDescripcion"
+                      name="ejercicioDescripcion" required maxlength="500" #descripcion="ngModel"></textarea>
+                      <div class="alert alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                        <div *ngIf="descripcion.errors.required">
+                          Descripción es requerido
+                        </div>
+                      </div>  
+                  </div>
+                  <div class="form-group col-md-5">
+                      <label for="estatus" style="font-size: medium">Estatus</label>
+                      <select class="form-control" [(ngModel)]="ejercicio.ejercicioEstatus" name="ejercicioEstatus" required #estatus="ngModel">
+                        <option [value]="undefined" selected>Seleccionar</option>
+                        <option [value]="0">En Proceso</option>
+                        <option [value]="1">Culminado</option>
+                      </select>
+                      <div class="alert alert-danger" *ngIf="estatus.invalid && (estatus.dirty || estatus.touched)">
+                        <div *ngIf="estatus.errors.required">
+                          Estatus es requerido
+                        </div>
+                      </div>
+  
+                   
+                      <br>
+  
+                    <label for="fecha" style="font-size: medium">Fecha</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <br>
+                      
+                      <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="ejercicio.fechaEjercicio" name="fechaEjercicio" required #fecha="ngModel" 
+                      style="display:inline; width:250px;" placeholder="dd-mm-yyyy">
+                      <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
+                      <mat-datepicker #myDatepicker></mat-datepicker>
+  
+  
+                      <div class="alert alert-danger" *ngIf="fecha.invalid && (fecha.dirty || fecha.touched)">
+                        <div *ngIf="fecha.errors.required">
+                          Fecha es requerido
+                        </div>
+                      </div>
+                   
+                    
+                  </div>
+  
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button *ngIf="!ejercicio.ejercicioId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+              data-dismiss="modal" [disabled]="!ejercicioForm.form.valid">Crear</button>
+            <ng-template #elseBlock>
+              <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!ejercicioForm.form.valid">Actualizar</button>
+            </ng-template>
+            <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

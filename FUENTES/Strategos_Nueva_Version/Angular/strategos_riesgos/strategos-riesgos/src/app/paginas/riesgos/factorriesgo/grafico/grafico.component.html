@@ -1,0 +1,45 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-9">
+            <label for="proceso" style="font-size: medium; font-weight: bold">Proceso/Subproceso</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <label for="proceso" style="font-size: medium; font-weight: normal;">{{proceso.procesoNombre}}</label>
+            <br>
+            <label for="ejercicio" style="font-size: medium; font-weight: bold">Ejercicio</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <label for="proceso"
+            style="font-size: medium; font-weight: normal">{{ejercicio.fechaEjercicio |  date:"dd-MM-yyyy"}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <label for="ejercicio" style="font-size: medium; font-weight: normal">{{ejercicio.ejercicioDescripcion}} </label>
+            
+          </div>
+          <div class="col-md-1">
+            <button
+              (click)="descargar()"
+              type="button"
+              class="btn btn-success"
+              data-dismiss="modal">Descargar</button>
+          </div>
+          <div class="col-md-2">
+            <button
+              (click)="regresar()"
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal">Regresar</button>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+        <canvas id="MyChart2">{{ chart }}</canvas>
+      </div>
+    </div>
+  
+    <!-- /.content -->
+  </div>
+  

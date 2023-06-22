@@ -1,0 +1,42 @@
+<detalle-producto [producto]= "productoSeleccionado"  [proceso]="proceso"></detalle-producto>
+
+
+<div class="container">
+    <span style="font-size: large"><h1>Producto/Servicio</h1></span>
+    <div class="text-left">
+      <button class="btn btn-rounded bg-white" (click)="crearProducto()" type="button" placement="bottom" ngbTooltip="Crear Producto">
+        <i class="far fa-plus-square fa-lg"></i></button>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla">
+            <thead>
+            <tr class="text-white bg-primary">
+                <td width="50">Acciones</td>
+                <td>Producto</td>
+                <td>Caracteristica</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let el of elements | paginate: {itemsPerPage: 5, currentPage: pagePro, id: 'pageProd'}">
+                <td width="50" >
+                <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <i class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                </td>
+                <td >{{el.procesoProductoServicio}} </td>
+                <td >{{el.procesoProductoCaracteristica}} </td>
+                
+            </tr>
+            </tbody>
+            
+        </table>
+        <pagination-controls id="pageProd" previousLabel="Anterior"
+        nextLabel="Siguiente" (pageChange)="pagePro = $event"></pagination-controls>
+        </div>
+    </div>
+  
+  </div>
+
+

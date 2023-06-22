@@ -1,0 +1,82 @@
+<selector-ideas [org]="organizacionId"></selector-ideas>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 *ngIf="!evaluacion.evaluacionId">Nueva Evaluación</h1>           
+            <h1 *ngIf="evaluacion.evaluacionId">Modificar Evaluación</h1>    
+          </div>          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+
+        <form  #evaluacionForm="ngForm">
+          <div class="form-row">       
+                                                   
+            <div class="col-md-12">
+                <label for="exampleInputEmail1">Fecha Evaluación</label>   
+                <br>           
+                  <input matInput [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="evaluacion.fechaEvaluacion" name="fechaEvaluacion" #fechaEvaluacion="ngModel" 
+                  style="display:inline; width:250px;" placeholder="dd/mm/yyyy" >
+                  <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
+                  <mat-datepicker #myDatepicker></mat-datepicker>
+            </div>
+            <div class="col-md-12">
+                <br>
+                <label>Descripción</label>
+                <textarea class="form-control" rows="3" placeholder="Descripción"
+                [(ngModel)]="evaluacion.observacion" name="observacion" #observacion="ngModel"></textarea>                           
+            </div>  
+            
+          </div>   
+        </form>  
+
+        <div class="card-header">
+            <button type="button" class="btn" (click)="seleccionarIdea()" title="Seleccionar Idea">
+                <i class="fa-md fas fa-plus"></i>
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td>Ideas Proyecto</td>
+                  <td>Dependencia</td>                  
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let ide of ideas | paginate: {itemsPerPage: 10, currentPage: pageEva, id: 'pageEv'}">                  
+                  <td >{{ide.nombreIdea}} </td>
+                  <td >{{ide.organizacion}} </td>                  
+                </tr>
+              </tbody>
+         
+            </table>
+        
+            <pagination-controls id="pageEv" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageEva = $event"></pagination-controls>
+        
+        </div>
+
+        <div class="modal-footer">
+          <button *ngIf="!evaluacion.evaluacionId else elseBlock" (click)="create()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!evaluacionForm.form.valid">Crear</button>
+          <ng-template #elseBlock>
+              <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!evaluacionForm.form.valid">Actualizar</button>
+          </ng-template>
+          <button [routerLink]="['/ponderacion']" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        </div>
+
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>

@@ -1,0 +1,77 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+        <div class="card-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-9">
+                <h2>Procesos / Subprocesos</h2>
+
+                <button class="btn btn-rounded btn-primary" (click)="crearProceso(selectedKeys.join())" type="button" placement="bottom"
+                    ngbTooltip="Crear proceso" style="font-size: 8px"><i class="far fa-plus-square fa-2x"></i>
+                </button>&nbsp;
+                &nbsp;
+                <button class="btn btn-rounded btn-primary" (click)="editarProceso(selectedKeys.join())" type="button" placement="bottom"
+                    ngbTooltip="Editar proceso" style="font-size: 8px" *ngIf="selectedKeys.join() !='0'"><i class="far fa-edit fa-2x"></i>
+                </button>&nbsp; &nbsp;
+                <button class="btn btn-rounded btn-danger" (click)="eliminarProceso(selectedKeys.join())" type="button" placement="bottom"
+                    ngbTooltip="Eliminar proceso" style="font-size: 8px" *ngIf="selectedKeys.join() !='0'"><i class="far fa-trash-alt fa-2x"></i>
+                </button>
+                
+              </div>
+              
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <br />
+  
+        <div class="row">
+          <div class="col-md-12">
+            <!--arbol planes-->
+            <kendo-treeview [nodes]="arbol" textField="text" [hasChildren]="hasChildren" [children]="fetchChildren" style="font-family: Roboto,'Helvetica Neue', 'sans-serif'; font-size: medium;font-weight: 400;"
+            kendoTreeViewExpandable [expandedKeys]="expandedKeys" kendoTreeViewSelectable [selectBy]="'id'"
+            [(selectedKeys)]="selectedKeys">
+            </kendo-treeview>
+          </div>
+          <div class="col-md-12" *ngIf="ver">
+            <!--indicadores iniciativas-->
+            <div class="row">
+              <div class="col-md-12">
+                <!--indicador-->
+                  <ul class="nav nav-tabs my-3" id="myTab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><span style="font-size: medium; color: black;">Proceso</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" *ngIf="habilitar"><span style="font-size: medium; color: black;">Productos</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false" *ngIf="habilitar"><span style="font-size: medium; color: black;">Caracterizacion</span></a>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                      <form-proceso [proceso]="procesoSeleccionado"></form-proceso>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                      <app-producto [proceso]="procesoSeleccionado"></app-producto>
+                    </div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                      <app-caracterizacion [proceso]="procesoSeleccionado"></app-caracterizacion>
+                    </div>  
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  

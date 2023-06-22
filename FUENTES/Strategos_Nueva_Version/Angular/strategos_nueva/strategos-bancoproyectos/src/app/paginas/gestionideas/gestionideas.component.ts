@@ -59,8 +59,7 @@ export class GestionideasComponent implements OnInit {
 
   constructor(private ideasService: IdeasProyectosService, private organizacionesService: OrganizacionStrategosService, private estatusService: EstatusIdeaService, private propuestasService: TiposPropuestaService,
     private objetivosService: TiposObejtivosService, public modalservice: ModalService, private router: Router, public documentoService: IdeasDocumentosService) {
-      this.urlTree = this.router.parseUrl(this.router.url);
-      this.organizacionId = this.urlTree.queryParams['id'];    
+        
   }
 
   ngOnInit(): void {

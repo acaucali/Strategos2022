@@ -1,0 +1,71 @@
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn">
+
+    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-white" style="background-color: #007BFF;">
+            <h5 class="modal-title">{{titulo}}</h5>
+            <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form #Form="ngForm">
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <label for="tipo" style="font-size: medium">Causa</label>
+                    <kendo-combobox [data]="listItems" [allowCustom]=true class="form-control" [(ngModel)]="causa.causa"
+                      name="causa" required #nombre="ngModel">
+                    </kendo-combobox>
+                    <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                      <div *ngIf="nombre.errors.required">
+                        Causa es requerido
+                      </div>
+                    </div>
+                  </div>
+  
+  
+                  <div class="form-group col-md-12">
+                    <label for="inputAddress2" style="font-size: medium">Descripción</label>
+                    <textarea class="form-control" rows="5" placeholder="Descripción" maxlength="500"
+                      [(ngModel)]="causa.descripcionCausa" name="descripcionCausa"></textarea>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="tipo" style="font-size: medium">Probabilidad</label>
+                    <select class="form-control" required [(ngModel)]="causa.probabilidadId" name="probabilidadId" #probabilidad="ngModel">
+                      <option [value]="undefined" selected>Seleccionar</option>
+                      <option *ngFor="let pro of probabilidades" [value]="pro.probabilidadPuntaje">
+                        {{pro.probabilidadNombre}} &nbsp;
+                        ( {{pro.probabilidadPuntaje}} ) </option>
+                    </select>
+                    <div class="alert alert-danger" *ngIf="probabilidad.invalid && (probabilidad.dirty || probabilidad.touched)">
+                      <div *ngIf="probabilidad.errors.required">
+                        Probabilidad es requerida
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <br>
+                    <br>
+  
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button *ngIf="!causa.causaRiesgoId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+              data-dismiss="modal" [disabled]="!Form.form.valid">Crear</button>
+            <ng-template #elseBlock>
+              <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal"
+                [disabled]="!Form.form.valid">Actualizar</button>
+            </ng-template>
+            <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>

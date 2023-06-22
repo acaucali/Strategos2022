@@ -1,0 +1,265 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Registrar Presupuesto</h1>
+                    <h2>Tarea: {{tarea}}</h2>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+
+
+            <form #medicionForm="ngForm">
+                <div class="form-row">
+
+                    <div class="card-body">
+                        <div class="tab-content" id="custom-tabs-one-tabContent">
+                            <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel"
+                                aria-labelledby="custom-tabs-one-home-tab">
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <br>
+                                        <label for="exampleInputEmail1">Frecuencia (*)</label>
+                                        <select class="form-control" [(ngModel)]="frecuencia" name="frecuencia"
+                                            required>
+                                            <option [value]="undefined" selected>Seleccionar</option>
+                                            <option [value]="1">Mensual</option>
+                                            <option [value]="2">Trimestral</option>
+                                        </select>
+                                    </div>
+
+                                    <br>
+                                    <br>
+                                    <div class="col-md-2">
+                                        <br>
+                                        <label for="exampleInputEmail1">Año</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1"
+                                            placeholder="Año" maxlength="4" [(ngModel)]="anio" name="anio" required>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <br>
+                                        <label for="exampleInputEmail1">Periodo Inicio</label>
+
+                                        <div *ngIf="this.frecuencia==1">
+                                            <select class="form-control" [(ngModel)]="periodoIni" name="periodoIni"
+                                                required>
+                                                <option [value]="undefined" selected>Seleccionar</option>
+                                                <option [value]="1">1</option>
+                                                <option [value]="2">2</option>
+                                                <option [value]="3">3</option>
+                                                <option [value]="4">4</option>
+                                                <option [value]="5">5</option>
+                                                <option [value]="6">6</option>
+                                                <option [value]="7">7</option>
+                                                <option [value]="8">8</option>
+                                                <option [value]="8">9</option>
+                                                <option [value]="10">10</option>
+                                                <option [value]="11">11</option>
+                                                <option [value]="12">12</option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="this.frecuencia==2">
+                                            <select class="form-control" [(ngModel)]="periodoIni" name="periodoIni"
+                                                required>
+                                                <option [value]="undefined" selected>Seleccionar</option>
+                                                <option [value]="1">1</option>
+                                                <option [value]="2">2</option>
+                                                <option [value]="3">3</option>
+                                                <option [value]="4">4</option>
+                                            </select>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <br>
+                                        <label for="exampleInputEmail1">Periodo Fin</label>
+
+                                        <div *ngIf="this.frecuencia==1">
+                                            <select class="form-control" [(ngModel)]="periodoFin" name="periodoFin"
+                                                required>
+                                                <option [value]="undefined" selected>Seleccionar</option>
+                                                <option [value]="1">1</option>
+                                                <option [value]="2">2</option>
+                                                <option [value]="3">3</option>
+                                                <option [value]="4">4</option>
+                                                <option [value]="5">5</option>
+                                                <option [value]="6">6</option>
+                                                <option [value]="7">7</option>
+                                                <option [value]="8">8</option>
+                                                <option [value]="8">9</option>
+                                                <option [value]="10">10</option>
+                                                <option [value]="11">11</option>
+                                                <option [value]="12">12</option>
+                                            </select>
+                                        </div>
+
+                                        <div *ngIf="this.frecuencia==2">
+                                            <select class="form-control" [(ngModel)]="periodoFin" name="periodoFin"
+                                                required>
+                                                <option [value]="undefined" selected>Seleccionar</option>
+                                                <option [value]="1">1</option>
+                                                <option [value]="2">2</option>
+                                                <option [value]="3">3</option>
+                                                <option [value]="4">4</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <br>
+                                        <label>Real</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" id="customCheckbox1" [(ngModel)]="real" name="real">
+
+                                    </div>
+                                    <div class="col-md-1">
+                                        <br>
+                                        <label>Meta</label>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" id="customCheckbox1" [(ngModel)]="meta" name="meta">
+
+                                    </div>
+                                    <div class="col-md-10">
+                                        <br>
+                                        <button (click)="calcular()" type="button" class="btn btn-success"
+                                            data-dismiss="modal">Buscar</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+
+        </div>
+        <div class="card-body">
+
+
+            <div class="table-responsive">
+                <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla"
+                    style="border-collapse: collapse;">
+
+                    <thead>
+                        <tr class="text-white bg-primary">
+                            <td *ngFor="let enc of encabezados" width="{{enc.tamanio}}">
+                               <p style="text-align: center;">
+                                {{enc.valor}}
+                               </p>
+                               
+                                
+                            </td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <ng-container *ngIf="serie !=3">
+                            <ng-container *ngIf="serie ==1">
+                                <tr *ngFor="let per of periodos">
+                                    <ng-container *ngIf="serie ==1 && datosReal?.length>0">
+                                        <ng-container *ngFor="let medR of datosReal">
+                                            <td *ngIf="medR.peso == per">
+                                                <span *ngIf="medR.campo =='periodo'">
+                                                    &nbsp;{{medR.valor}}</span>
+                                                <span *ngIf="medR.campo =='series'">&nbsp;{{medR.valor}}</span>
+                                                <input type="text" id="{{medR.id}}" [(ngModel)]="medR.valor"
+                                                    oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+                                                    onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;"
+                                                    *ngIf="medR.campo =='medicion'" style="width: 250px"
+                                                    class="form-control" data-toggle="tab">
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="serie ==2">
+                                <tr *ngFor="let per of periodos">
+                                    <ng-container *ngIf="serie ==2 && datosMeta?.length>0">
+                                        <ng-container *ngFor="let medM of datosMeta">
+                                            <td *ngIf="medM.peso == per">
+                                                <span *ngIf="medM.campo =='periodo'">
+                                                    &nbsp;{{medM.valor}}</span>
+                                                <span *ngIf="medM.campo =='series'">&nbsp;{{medM.valor}}</span>
+                                                <input type="text" id="{{medM.id}}" [(ngModel)]="medM.valor"
+                                                    oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+                                                    onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;"
+                                                    *ngIf="medM.campo =='medicion'" style="width: 250px"
+                                                    class="form-control" data-toggle="tab">
+                                            </td>
+                                        </ng-container>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+
+                        </ng-container>
+
+                        <ng-container *ngIf="serie ==3">
+                            <tr *ngFor="let per of periodos">
+                                <ng-container *ngIf="serie ==3 && datosReal?.length>0">
+                                    <ng-container *ngFor="let medR of datosReal">
+                                        <td *ngIf="medR.peso == per">
+                                            <span *ngIf="medR.campo =='periodo'">
+                                                &nbsp;{{medR.valor}}</span>
+                                            <span *ngIf="medR.campo =='series'">&nbsp;{{medR.valor}}</span>
+                                            <input type="text" id="{{medR.id}}" [(ngModel)]="medR.valor"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+                                                onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;"
+                                                *ngIf="medR.campo =='medicion'" style="width: 250px"
+                                                class="form-control" data-toggle="tab">
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </tr>
+                            <tr *ngFor="let per of periodos">
+                                <ng-container *ngIf="serie ==3 && datosMeta?.length>0">
+                                    <ng-container *ngFor="let medM of datosMeta">
+                                        <td *ngIf="medM.peso == per">
+                                            <span *ngIf="medM.campo =='periodo'">
+                                                &nbsp;{{medM.valor}}</span>
+                                            <span *ngIf="medM.campo =='series'">&nbsp;{{medM.valor}}</span>
+                                            <input type="text" id="{{medM.id}}" [(ngModel)]="medM.valor"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"
+                                                onKeyDown="if(this.value.length==15 && event.keyCode!=8 && event.keyCode !=9) return false;"
+                                                *ngIf="medM.campo =='medicion'" style="width: 250px"
+                                                class="form-control" data-toggle="tab">
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                            </tr>
+                        </ng-container>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <button (click)="registrar()" type="button" class="btn btn-primary" data-dismiss="modal">Registrar</button>
+            &nbsp;&nbsp;
+            <button (click)="regresar()" type="button" class="btn btn-danger" data-dismiss="modal">Regresar</button>
+
+        </div>
+    </div>
+
+    <!-- /.content -->
+</div>

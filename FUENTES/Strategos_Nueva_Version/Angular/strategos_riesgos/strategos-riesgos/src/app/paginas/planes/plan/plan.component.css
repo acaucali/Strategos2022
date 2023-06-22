@@ -1,0 +1,60 @@
+a:link{
+    color: white;
+}
+.example-tree-invisible {
+    display: none;
+  }
+  
+.example-tree ul,
+.example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  
+  }
+
+
+  #red {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #orange {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #yellow {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  #green {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  

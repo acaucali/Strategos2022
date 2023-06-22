@@ -1,0 +1,163 @@
+<detallegestion [idea]="ideaSeleccionada"></detallegestion>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Gestión Ideas</h1>
+            Organización: {{organizacion.nombre}} 
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" (click)="crearIdea()" title="Crear Idea"> -->
+            <button type="button" class="btn" (click)="crearIdea()" title="Crear Idea">
+                <i class="fa-md fas fa-plus"></i>
+            </button>
+            <button type="button" class="btn" title="Descargar Resumido">
+                <i class="fa-md far fa-file-pdf" (click)="descargarPDFResumido()"></i>
+            </button>
+            
+            <button type="button" class="btn" title="Descargar Resumido">
+              <i class="fa-md far fa-file-excel" (click)="descargarXlsResumido()"></i>
+            </button>
+
+            <button type="button" class="btn" class="btn" data-card-widget="collapse" title="Buscar">
+                <i class="fa-md fas fa-filter"></i>
+            </button>
+
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" class="btn" title="Ponderación Idea"> -->
+            <button type="button" class="btn" class="btn" title="Ponderación Idea">
+              <i class="fas fa-arrow-alt-circle-right" [routerLink]="['/ponderacion']"></i>
+            </button>
+
+          <div class="card-tools">
+            
+          </div>
+        </div>
+        <div class="card-footer">
+            <div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Año Formulación</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Año Formulación"
+                        [(ngModel)]="anio" maxlength="4" >
+                    </div>
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Tipo Propuesta</label>
+                        <select class="form-control" [(ngModel)]="propuestaId" >
+                          <option [value]="undefined" selected>Seleccionar</option>
+                          <option *ngFor="let pro of propuestas" [value]="pro.tipoPropuestaId">{{pro.tipoPropuesta}}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="exampleInputEmail1">Estatus</label>
+                        <select class="form-control"[(ngModel)]="estatusId">
+                          <option [value]="undefined" selected>Seleccionar</option>
+                          <option *ngFor="let est of estatus" [value]="est.estatusIdeaId">{{est.estatus}}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                      <br>
+                      <label>Historico</label>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <input type="checkbox" id="customCheckbox1"
+                      [(ngModel)]="historico">
+                       
+                    </div>
+
+                    <div class="col-md-9" *ngIf="isAdmin == true">
+                        <label for="exampleInputEmail1">Dependencia</label>
+                        <select class="form-control" required [(ngModel)]="organizacionFiltroId" >
+                          <option [value]="undefined" selected>Seleccionar</option>
+                          <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-8">
+                        <br>
+                        <button type="submit" class="btn btn-primary" (click)="buscar()">Filtrar</button>&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" (click)="limpiar()">Limpiar</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="ideas?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="100">Acciones</td>
+                  <td width="80">Año</td>
+                  <td>Ideas Proyecto</td>
+                  <td>Dependencia</td>
+                  <td>Tipo Propuesta</td>
+                  <td>Estatus</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageIdea, id: 'pageIde'}">
+                  <td width="100" >
+                    
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i>
+                    &nbsp;
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="far fa-file-pdf" (click)="descargarPDF(el)"></i>
+                  </td>
+                  <td width="80">{{el.anioFormulacion}} </td>
+                  <td >{{el.nombreIdea}} </td>
+                  <td >{{el.organizacion}} </td>
+                  <td >{{el.propuesta}} </td>
+                  <td >{{el.estatus}} </td>
+                </tr>
+              </tbody>
+         
+            </table>
+        
+            <pagination-controls id="pageIde" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageIdea = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+

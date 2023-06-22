@@ -1,0 +1,102 @@
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Ponderación Ideas</h1>
+           
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn" title="Crear Evaluacion"> -->
+            <button  type="button" class="btn" title="Crear Evaluacion">
+                <i class="fa-md fas fa-plus" [routerLink]="['/evaluacion', 0]"></i>
+            </button>
+
+            <button type="button" class="btn" title="Descargar Resumido">
+              <i class="fa-md far fa-file-pdf" ></i>
+            </button>
+           
+            
+          <div class="card-tools">
+          
+            <button type="button" class="btn" class="btn" title="Regresar">
+              <i class="fas fa-sign-out-alt" [routerLink]="['/gestionideas']"></i>
+              Regresar
+            </button>
+          </div>
+        </div>
+                
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="ponderaciones?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="100">Acciones</td>
+                  <td width="150">Fecha Evaluación</td>
+                  <td>Descripción</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageEva, id: 'pageEv'}">
+                  <td width="100" >
+                    
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-edit" style="cursor: pointer;" [routerLink]="['/evaluacion', el.evaluacionId]"></i> -->
+                    <i  class="fas fa-edit" style="cursor: pointer;" [routerLink]="['/evaluacion', el.evaluacionId]"></i>
+                    &nbsp;
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i> -->
+                    <i  class="fas fa-trash-alt" (click)='delete(el)' style="cursor: pointer;"></i>
+                    &nbsp;
+                    <!-- <i *ngIf="authService.hasRole('ROLE_ADMIN')" class="fas fa-table" [routerLink]="['/evaluaciondatos', el.evaluacionId]"></i> -->
+                    <i  class="fas fa-table" [routerLink]="['/evaluaciondatos', el.evaluacionId]"></i>
+                  </td>
+                  <td width="150">{{el.fechaEvaluacion |  date:"dd-MM-yyyy"}} </td>
+                  <td >{{el.observacion}} </td>
+
+                </tr>
+              </tbody>
+         
+            </table>
+        
+            <pagination-controls id="pageEv" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageEva = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+

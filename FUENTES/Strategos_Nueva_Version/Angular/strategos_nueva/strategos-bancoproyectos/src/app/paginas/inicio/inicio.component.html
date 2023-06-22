@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Inicio</h1>
+            <h1>Bienvenido al Banco de Proyectos</h1>
           </div>
           
         </div>
@@ -17,23 +17,39 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Title</h3>
+          <h3 class="card-title"></h3>
 
           <div class="card-tools">
+            <!--
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
             </button>
+            
             <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
               <i class="fas fa-times"></i>
             </button>
+            -->
           </div>
         </div>
         <div class="card-body">
-          Start creating your amazing application!
+          <h3>
+            <b>Seleccione la Organización</b>
+          </h3>
+          
+          <br>
+          <div class="col-sm-12">
+          
+            <select class="form-control selcls" [(ngModel)]="id" (change)="seleccionarProceso()" style="display:inline">
+              <option [ngValue]="undefined" selected>Organizaciones</option>
+              <option *ngFor="let org of organizaciones" [value]="org.organizacionId">{{org.nombre}}</option>
+            </select>
+
+          </div>
+
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-          Footer
+         
         </div>
         <!-- /.card-footer-->
       </div>

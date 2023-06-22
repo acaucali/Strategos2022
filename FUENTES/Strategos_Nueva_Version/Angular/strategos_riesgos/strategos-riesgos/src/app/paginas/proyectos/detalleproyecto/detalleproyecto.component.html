@@ -1,0 +1,1143 @@
+<div *ngIf="modalService.modal" class="abrir-modal animacion fadeIn">
+  <div
+    *ngIf="modalService.modal"
+    class="modal my-5"
+    tabindex="-1"
+    role="dialog"
+    style="display: block"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" style="width: 1200px">
+        <div
+          class="modal-header text-white"
+          style="background-color: #007bff; height: 50px"
+        >
+          <h4 class="modal-title">{{ titulo }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <form #proyectoForm="ngForm">
+              <div class="form-row">
+                <ul
+                  class="nav nav-tabs"
+                  id="custom-tabs-one-tab"
+                  role="tablist"
+                >
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active"
+                      id="custom-tabs-one-home-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-one-home"
+                      role="tab"
+                      aria-controls="custom-tabs-one-home"
+                      aria-selected="true"
+                      >Parte I</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-one-profile-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-one-profile"
+                      role="tab"
+                      aria-controls="custom-tabs-one-profile"
+                      aria-selected="false"
+                      >Parte II</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-one-messages-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-one-messages"
+                      role="tab"
+                      aria-controls="custom-tabs-one-messages"
+                      aria-selected="false"
+                      >Parte III</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-one-parteiv-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-one-parteiv"
+                      role="tab"
+                      aria-controls="custom-tabs-one-parteiv"
+                      aria-selected="false"
+                      >Parte IV</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-one-cooperacion-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-one-cooperacion"
+                      role="tab"
+                      aria-controls="custom-tabs-one-cooperacion"
+                      aria-selected="false"
+                      >Cooperación</a
+                    >
+                  </li>
+                  <li class="nav-item" *ngIf="proyecto.proyectoId">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-one-anexos-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-one-anexos"
+                      role="tab"
+                      aria-controls="custom-tabs-one-anexos"
+                      aria-selected="false"
+                      >Anexos</a
+                    >
+                  </li>
+                </ul>
+                <div class="card-body">
+                  <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <!--      PARTE 1      -->
+
+                    <div
+                      class="tab-pane fade show active"
+                      id="custom-tabs-one-home"
+                      role="tabpanel"
+                      aria-labelledby="custom-tabs-one-home-tab"
+                    >
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label for="exampleInputEmail1">PreProyecto</label>
+
+                          <kendo-combobox
+                            [data]="data"
+                            [valuePrimitive]="true"
+                            textField="text"
+                            valueField="value"
+                            name="proyecto.proyectoId"
+                            [(ngModel)]="proyecto.proyectoId"
+                            [filterable]="true"
+                            (filterChange)="handleFilter($event)"
+                            (selectionChange)="seleccionarIdea($event)"
+                            placeholder="Seleccionar"
+                          >
+                          </kendo-combobox>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Dependencia Responsable (*)</label
+                          >
+
+                          <kendo-combobox
+                            [data]="dataOrg"
+                            [valuePrimitive]="true"
+                            textField="text"
+                            valueField="value"
+                            name="proyecto.dependenciaId"
+                            [(ngModel)]="proyecto.dependenciaId"
+                            [filterable]="true"
+                            (filterChange)="handleFilterOrg($event)"
+                            placeholder="Seleccionar"
+                            (selectionChange)="seleccionarOrg($event)"
+                            required
+                          >
+                          </kendo-combobox>
+                        </div>
+
+                        <div class="col-md-5">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Profesional Responsable (*)</label
+                          >
+
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Profesional Responsable"
+                            [(ngModel)]="proyecto.profesionalResponsable"
+                            name="profesionalResponsable"
+                            required
+                            maxlength="50"
+                            #profesionalResponsable="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-3">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Teléfono Contacto (*)</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Teléfono Contacto"
+                            [(ngModel)]="proyecto.contactoTelefono"
+                            name="contactoTelefono"
+                            required
+                            maxlength="50"
+                            #contactoTelefono="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-4">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Correo electronico (*)</label
+                          >
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Correo electronico"
+                            [(ngModel)]="proyecto.contactoEmail"
+                            name="contactoEmail"
+                            required
+                            maxlength="50"
+                            #contactoEmail="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Fecha Radicación (*)</label
+                          ><br />
+                          <input
+                            [matDatepicker]="myDatepicker"
+                            class="form-control"
+                            [(ngModel)]="proyecto.fechaRadicacion"
+                            name="fechaRadicacion"
+                            #fechaRadicacion="ngModel"
+                            style="display: inline; width: 120px"
+                            placeholder="dd/mm/yyyy"
+                          />
+                          <mat-datepicker-toggle
+                            [for]="myDatepicker"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #myDatepicker></mat-datepicker>
+                        </div>
+
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Año Formulación (*)</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Año Formulación"
+                            [(ngModel)]="proyecto.anioFormulacion"
+                            name="anioFormulacion"
+                            required
+                            maxlength="4"
+                            #anioFormulacion="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-3">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Tipología Proyecto (*)</label
+                          >
+                          <select
+                            class="form-control"
+                            required
+                            [(ngModel)]="proyecto.tipoProyectoId"
+                            name="tipoProyectoId"
+                            required
+                            #tipoProyectoId="ngModel"
+                          >
+                            <option [value]="undefined" selected>
+                              Seleccionar
+                            </option>
+                            <option
+                              *ngFor="let tip of tipos"
+                              [value]="tip.tipoProyectoId"
+                            >
+                              {{ tip.nombre }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Estatus Proyecto</label
+                          >
+                          <select
+                            *ngIf="proyecto.proyectoId"
+                            class="form-control"
+                            [(ngModel)]="proyecto.estatusId"
+                            name="estatusId"
+                            #estatusId="ngModel"
+                          >
+                            <option [value]="undefined" selected>
+                              Seleccionar
+                            </option>
+                            <option
+                              *ngFor="let est of estatus"
+                              [value]="est.id"
+                            >
+                              {{ est.nombre }}
+                            </option>
+                          </select>
+                          <select
+                            *ngIf="!proyecto.proyectoId"
+                            class="form-control"
+                            [(ngModel)]="proyecto.estatusId"
+                            name="estatusId"
+                            #estatusId="ngModel"
+                            disabled
+                          >
+                            <option [value]="undefined" selected>
+                              Seleccionar
+                            </option>
+                            <option
+                              *ngFor="let est of estatus"
+                              [value]="est.id"
+                            >
+                              {{ est.nombre }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1">Fecha Estatus</label
+                          ><br />
+                          <input
+                            [matDatepicker]="myDatepicker2"
+                            class="form-control"
+                            [(ngModel)]="proyecto.fechaEstatus"
+                            name="fechaEstatus"
+                            #fechaEstatus="ngModel"
+                            style="display: inline; width: 150px"
+                            placeholder="dd/mm/yyyy"
+                            disabled
+                          />
+
+                          <mat-datepicker #myDatepicker2></mat-datepicker>
+                        </div>
+
+                        <div class="col-md-12">
+                          <br />
+                          <label>Nombre Proyecto(*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Nombre Proyecto"
+                            [(ngModel)]="proyecto.nombreProyecto"
+                            name="nombreProyecto"
+                            required
+                            maxlength="2000"
+                            #nombreProyecto="ngModel"
+                          ></textarea>
+                        </div>
+
+                        <div class="col-md-5">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Relación Objetivos (*)</label
+                          >
+                          <select
+                            class="form-control"
+                            required
+                            [(ngModel)]="proyecto.tipoObjetivoId"
+                            name="tipoObjetivoId"
+                            required
+                            #tipoObjetivoId="ngModel"
+                          >
+                            <option [value]="undefined" selected>
+                              Seleccionar
+                            </option>
+                            <option
+                              *ngFor="let ali of alineaciones"
+                              [value]="ali.tipoObjetivoId"
+                            >
+                              {{ ali.descripcionObjetivo }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1">Código BDP (*)</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Código BDP"
+                            [(ngModel)]="proyecto.codigoBdp"
+                            name="codigoBdp"
+                            required
+                            maxlength="50"
+                            #codigoBdp="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Duración (meses) (*)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Duración (meses)"
+                            [(ngModel)]="proyecto.duracion"
+                            name="duracion"
+                            required
+                            maxlength="4"
+                            #duracion="ngModel"
+                            onKeyPress="if(this.value.length==4) return false;"
+                          />
+                        </div>
+
+                        <div class="col-md-3">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Costo Estimado (*)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Costo Estimado"
+                            [(ngModel)]="proyecto.costoEstimado"
+                            name="costoEstimado"
+                            required
+                            maxlength="50"
+                            #costoEstimado="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-12">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Dependencia Lider (*)</label
+                          >
+                          <kendo-combobox
+                            [data]="dataOrg2"
+                            [valuePrimitive]="true"
+                            [valuePrimitive]="true"
+                            textField="text"
+                            valueField="value"
+                            name="proyecto.dependenciaLider"
+                            [(ngModel)]="proyecto.dependenciaLider"
+                            [filterable]="true"
+                            (filterChange)="handleFilterOrg2($event)"
+                            placeholder="Seleccionar"
+                            (selectionChange)="seleccionarOrgLid($event)"
+                          >
+                          </kendo-combobox>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--      PARTE 2      -->
+
+                    <div
+                      class="tab-pane fade"
+                      id="custom-tabs-one-profile"
+                      role="tabpanel"
+                      aria-labelledby="custom-tabs-one-profile-tab"
+                    >
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Pertinencia (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Pertinencia"
+                            [(ngModel)]="proyecto.pertinencia"
+                            name="pertinencia"
+                            required
+                            maxlength="2000"
+                            #pertinencia="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Problemática / Necesidad (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Problemática / Necesidad"
+                            [(ngModel)]="proyecto.problematica"
+                            name="problematica"
+                            required
+                            maxlength="2000"
+                            #problematica="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Dependencias Estratégicas(*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Dependencias Estratégicas"
+                            [(ngModel)]="proyecto.dependenciasEstrategicas"
+                            name="dependenciasEstrategicas"
+                            required
+                            maxlength="2000"
+                            #dependenciasEstrategicas="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Socios Estratégicos</label>
+                          <textarea
+                            class="form-control"
+                            rows="1"
+                            placeholder="Socios Estratégicos"
+                            [(ngModel)]="proyecto.sociosEstrategicos"
+                            name="sociosEstrategicos"
+                            maxlength="2000"
+                            #sociosEstrategicos="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Roles Entidades</label>
+                          <textarea
+                            class="form-control"
+                            rows="1"
+                            placeholder="Roles Entidades"
+                            [(ngModel)]="proyecto.rolesParticipantes"
+                            name="rolesParticipantes"
+                            maxlength="2000"
+                            #rolesParticipantes="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Posibles Fuentes Financiación (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Posibles Fuentes Financiación"
+                            [(ngModel)]="proyecto.financiacion"
+                            name="financiacion"
+                            required
+                            maxlength="2000"
+                            #financiacion="ngModel"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--      PARTE 3      -->
+                    <div
+                      class="tab-pane fade"
+                      id="custom-tabs-one-messages"
+                      role="tabpanel"
+                      aria-labelledby="custom-tabs-one-messages-tab"
+                    >
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Cobertura (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="1"
+                            placeholder="Cobertura"
+                            [(ngModel)]="proyecto.cobertura"
+                            name="cobertura"
+                            required
+                            maxlength="2000"
+                            #cobertura="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Población Beneficiaria (*)</label>
+
+                          <ng-multiselect-dropdown
+                            class="selectPoblacion"
+                            [placeholder]="'Seleccionar'"
+                            [settings]="dropdownSettings"
+                            [data]="poblaciones"
+                            (onSelect)="onItemSelect($event)"
+                            (onSelectAll)="onSelectAll($event)"
+                            (unSelect)="unSelect($event)"
+                            (unSelectAll)="unSelectAll($event)"
+                            [(ngModel)]="proyecto.poblaciones"
+                            name="proyecto.poblaciones"
+                            style="width: 1100px"
+                          >
+                          </ng-multiselect-dropdown>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Antecedentes (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="1"
+                            placeholder="Antecedentes"
+                            [(ngModel)]="proyecto.antecedentes"
+                            name="antecedentes"
+                            required
+                            maxlength="2000"
+                            #antecedentes="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Justificación(*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Justificación"
+                            [(ngModel)]="proyecto.justificacion"
+                            name="justificacion"
+                            required
+                            maxlength="2000"
+                            #justificacion="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Alcance del Proyecto (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="1"
+                            placeholder="Alcance del Proyecto"
+                            [(ngModel)]="proyecto.alcance"
+                            name="alcance"
+                            required
+                            maxlength="2000"
+                            #alcance="ngModel"
+                          ></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Objetivo General (*)</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            placeholder="Objetivo General"
+                            [(ngModel)]="proyecto.objetivoGeneral"
+                            name="objetivoGeneral"
+                            required
+                            maxlength="2000"
+                            #objetivoGeneral="ngModel"
+                          ></textarea>
+                        </div>
+
+                        <div class="col-md-5">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Metodología (*)</label
+                          >
+                          <select
+                            class="form-control"
+                            required
+                            [(ngModel)]="proyecto.metodologiaId"
+                            name="metodologiaId"
+                            required
+                            #metodologiaId="ngModel"
+                          >
+                            <option [value]="undefined" selected>
+                              Seleccionar
+                            </option>
+                            <option
+                              *ngFor="let met of metodologias"
+                              [value]="met.metodologiaId"
+                            >
+                              {{ met.nombre }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
+                          <br />
+                          <label for="exampleInputEmail1">Frecuencia (*)</label>
+                          <select
+                            class="form-control"
+                            [(ngModel)]="proyecto.frecuencia"
+                            name="frecuencia"
+                            required
+                            #frecuencia="ngModel"
+                          >
+                            <option [value]="undefined" selected>
+                              Seleccionar
+                            </option>
+                            <option [value]="0">Diaria</option>
+                            <option [value]="1">Semanal</option>
+                            <option [value]="2">Quincenal</option>
+                            <option [value]="3">Mensual</option>
+                            <option [value]="4">Bimensual</option>
+                            <option [value]="5">Trimestral</option>
+                            <option [value]="6">Cuatrimestral</option>
+                            <option [value]="7">Semestral</option>
+                            <option [value]="8">Anual</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-2" *ngIf="proyecto.proyectoId">
+                          <br />
+                          <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <label>Historico</label>
+                          &nbsp;&nbsp;
+                          <input
+                            type="checkbox"
+                            id="customCheckbox1"
+                            [(ngModel)]="proyecto.historico"
+                            name="historico"
+                            #historico="ngModel"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--      PARTE 4      -->
+
+                    <div
+                      class="tab-pane fade"
+                      id="custom-tabs-one-parteiv"
+                      role="tabpanel"
+                      aria-labelledby="custom-tabs-one-parteiv-tab"
+                    >
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="card" style="width: 1100px">
+                            <div class="card-header">
+                              <button
+                                type="button"
+                                class="btn"
+                                (click)="nuevoDepartamento = true"
+                                title="Crear Idea"
+                              >
+                                <i class="fa-md fas fa-plus"></i>
+                              </button>
+                            </div>
+
+                            <div
+                              class="card-footer"
+                              *ngIf="nuevoDepartamento == true"
+                            >
+                              <form (ngSubmit)="agregar(forma)" #forma="ngForm">
+                                <div class="col-md-12">
+                                  <label for="exampleInputEmail1"
+                                    >Departamento</label
+                                  >
+
+                                  <select
+                                    class="form-control"
+                                    name="departamentoId"
+                                    [(ngModel)]="departamentoId"
+                                    #departamento="ngModel"
+                                    (ngModelChange)="onChange($event)"
+                                    required
+                                  >
+                                    <option [value]="undefined" selected>
+                                      Seleccionar
+                                    </option>
+                                    <option
+                                      *ngFor="let departamento of departamentos"
+                                      [value]="
+                                        departamento.departamentosId +
+                                        '-' +
+                                        departamento.departamentoNombre
+                                      "
+                                    >
+                                      {{ departamento.departamentoNombre }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="col-md-12">
+                                  <label for="exampleInputEmail1"
+                                    >Municipios</label
+                                  >
+                                  <ng-multiselect-dropdown
+                                    class="selectDepartamento"
+                                    [placeholder]="'Seleccionar'"
+                                    [settings]="dropdownSettingsDepartamento"
+                                    [data]="municipios"
+                                    [(ngModel)]="municipiosSeleccionados"
+                                    name="municipios"
+                                    style="width: 1100px"
+                                  >
+                                  </ng-multiselect-dropdown>
+                                </div>
+                                <div class="col-md-8">
+                                  <br />
+                                  <button type="submit" class="btn btn-primary">
+                                    Agregar</button
+                                  >&nbsp;&nbsp;
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+
+                          <div class="card" style="width: 1100px">
+                            <div class="card-body">
+                              <div
+                                class="table-responsive"
+                                style="overflow-y: scroll"
+                              >
+                                <table
+                                  mdbTable
+                                  class="table table-bordered tabled-striped table-sm"
+                                  id="tabla"
+                                  style="
+                                    border-collapse: collapse;
+                                    overflow-y: scroll;
+                                  "
+                                >
+                                  <thead>
+                                    <tr class="text-white bg-primary">
+                                      <td width="70" ALIGN="center">
+                                        Acciones
+                                      </td>
+                                      <td ALIGN="center">Departamentos</td>
+                                      <td ALIGN="center">Municipios</td>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      *ngFor="let dep of proyecto.departamentos"
+                                    >
+                                      <td ALIGN="center">
+                                        <i
+                                          class="fas fa-trash-alt"
+                                          (click)="deleteMun(dep)"
+                                          style="cursor: pointer"
+                                        ></i>
+                                      </td>
+                                      <td ALIGN="center">
+                                        {{ dep.departamentoNombre }}
+                                      </td>
+                                      <td ALIGN="center">
+                                        {{ dep.municipioNombre }}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!---- COOPERACION ---->
+
+                    <div
+                      class="tab-pane fade"
+                      id="custom-tabs-one-cooperacion"
+                      role="tabpanel"
+                      aria-labelledby="custom-tabs-one-cooperante-tab"
+                    >
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Cooperante</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Cooperante"
+                            [(ngModel)]="proyecto.cooperante"
+                            name="cooperante"
+                            maxlength="100"
+                            #cooperante="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-12">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Dependencias Implementan el convenio</label
+                          >
+
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Dependencias Implementan el convenio"
+                            [(ngModel)]="proyecto.dependenciasConvenio"
+                            name="dependenciasConvenio"
+                            maxlength="100"
+                            #dependenciasConvenio="ngModel"
+                          />
+                        </div>
+
+                        <div class="col-md-7">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Número del Convenio
+                          </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Número del convenio"
+                            [(ngModel)]="proyecto.numeroConvenio"
+                            name="numeroConvenio"
+                            maxlength="100"
+                            #numeroConvenio="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1">Fecha Inicio</label
+                          ><br />
+                          <input
+                            [matDatepicker]="myDatepicker3"
+                            class="form-control"
+                            [(ngModel)]="proyecto.fechaInicioConvenio"
+                            name="fechaInicioConvenio"
+                            #fechaInicioConvenio="ngModel"
+                            style="display: inline; width: 120px"
+                            placeholder="dd/mm/yyyy"
+                          />
+                          <mat-datepicker-toggle
+                            [for]="myDatepicker3"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #myDatepicker3></mat-datepicker>
+                        </div>
+                        <div class="col-md-2">
+                          <br />
+                          <label for="exampleInputEmail1"
+                            >Fecha Culminación</label
+                          ><br />
+                          <input
+                            [matDatepicker]="myDatepicker4"
+                            class="form-control"
+                            [(ngModel)]="proyecto.fechaCulminacionConvenio"
+                            name="fechaCulminacionConvenio"
+                            #fechaCulminacionConvenio="ngModel"
+                            style="display: inline; width: 120px"
+                            placeholder="dd/mm/yyyy"
+                          />
+                          <mat-datepicker-toggle
+                            [for]="myDatepicker4"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #myDatepicker4></mat-datepicker>
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Nombre Operador de Recursos</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Nombre Operador de Recursos"
+                            [(ngModel)]="proyecto.nombreOperador"
+                            name="nombreOperador"
+                            maxlength="100"
+                            #nombreOperador="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-6">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Correo Operador</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Correo Operador"
+                            [(ngModel)]="proyecto.contactoEmailOperador"
+                            name="contactoEmailOperador"
+                            maxlength="100"
+                            #contactoEmailOperador="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-6">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Teléfono Operador</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Teléfono Operador"
+                            [(ngModel)]="proyecto.contactoTelefonoOperador"
+                            name="contactoTelefonoOperador"
+                            maxlength="100"
+                            #contactoTelefonoOperador="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Recursos Asignados</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Recursos Asignados"
+                            [(ngModel)]="proyecto.recursosAsignados"
+                            name="recursosAsignados"
+                            maxlength="100"
+                            #recursosAsignados="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label for="exampleInputEmail1">
+                            Prorrogas o Enmiendas</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail1"
+                            placeholder="Prorrogas o Enmiendas"
+                            [(ngModel)]="proyecto.prorrogas"
+                            name="prorrogas"
+                            maxlength="100"
+                            #prorrogas="ngModel"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!---- ANEXOS ---->
+
+                    <div
+                      class="tab-pane fade"
+                      id="custom-tabs-one-anexos"
+                      role="tabpanel"
+                      aria-labelledby="custom-tabs-one-anexos-tab"
+                      *ngIf="proyecto.proyectoId"
+                    >
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Documentos Anexos al Proyecto</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="exampleInputEmail"
+                            placeholder="Nombre del documento"
+                            [(ngModel)]="documento.tituloDocumento"
+                            name="tituloDocumento"
+                            maxlength="30"
+                            #tituloDocumento="ngModel"
+                          />
+                        </div>
+                        <div class="col-md-12">
+                          <br />
+                          <label>Descripción</label>
+                          <textarea
+                            class="form-control"
+                            rows="3"
+                            placeholder="Descripción"
+                            [(ngModel)]="documento.descripcion"
+                            name="descripcion"
+                            maxlength="30"
+                            #descripcion="ngModel"
+                          ></textarea>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                          <br />
+                          <label for="documento" style="font-size: medium"
+                            >Documento</label
+                          >
+                          <br />
+                          <input
+                            (change)="seleccionarFoto($event)"
+                            type="file"
+                            name="documento"
+                            class="form"
+                            accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.pdf"
+                            *ngIf="proyecto.proyectoId"
+                          />
+
+                          &nbsp; &nbsp;<button
+                            class="btn btn-rounded btn-primary"
+                            (click)="subirDocumento()"
+                            type="button"
+                            placement="bottom"
+                            ngbTooltip="Subir documento"
+                            style="font-size: 8px"
+                            *ngIf="proyecto.proyectoId"
+                          >
+                            <i class="fas fa-file-upload fa-2x"></i>
+                          </button>
+                          &nbsp;
+
+                          <div class="form-group" *ngIf="proyecto.proyectoId">
+                            <label style="font-size: medium" *ngIf="documento"
+                              >{{ documento.tituloDocumento }}
+                            </label>
+                            &nbsp; &nbsp;
+                            <button
+                              class="btn btn-rounded btn-primary"
+                              (click)="descargarDocumento()"
+                              type="button"
+                              placement="bottom"
+                              ngbTooltip="Descargar documento"
+                              style="font-size: 8px"
+                            >
+                              <i class="fas fa-download fa-2x"></i>
+                            </button>
+                            &nbsp;
+                            <button
+                              class="btn btn-rounded btn-danger"
+                              (click)="eliminarDocumento()"
+                              type="button"
+                              placement="bottom"
+                              ngbTooltip="Eliminar documento"
+                              style="font-size: 8px"
+                            >
+                              <i class="far fa-trash-alt fa-2x"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            *ngIf="!proyecto.proyectoId; else elseBlock"
+            (click)="create()"
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal"
+            [disabled]="!proyectoForm.form.valid"
+          >
+            Crear
+          </button>
+          <ng-template #elseBlock>
+            <button
+              (click)="update()"
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              [disabled]="!proyectoForm.form.valid"
+            >
+              Actualizar
+            </button>
+          </ng-template>
+          <button
+            (click)="cerrarModal()"
+            type="button"
+            class="btn btn-danger"
+            data-dismiss="modal"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

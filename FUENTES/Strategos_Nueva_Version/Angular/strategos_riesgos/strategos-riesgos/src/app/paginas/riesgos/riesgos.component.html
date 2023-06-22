@@ -1,0 +1,42 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+        <div class="card-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-9">
+                <h2>Procesos/Subprocesos</h2>
+
+                <select class="form-control selcls" [(ngModel)]="id" (change)="seleccionarProceso()" style="display:inline">
+                    <option [ngValue]="undefined" selected>Procesos/Subprocesos</option>
+                    <option *ngFor="let proceso of procesos" [value]="proceso.procesosId">{{proceso.procesoNombre}}</option>
+                </select>
+                <br>
+              </div>
+              
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <br />
+  
+        <div class="row">
+          <div class="col-md-12">
+            <!--arbol planes-->
+            <app-riesgo [id]="procesoId"></app-riesgo>
+          </div>
+          <div class="col-md-12">
+            <!--indicadores iniciativas-->
+            <app-ejercicios [id]="procesoId"></app-ejercicios>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  

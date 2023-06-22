@@ -1,0 +1,94 @@
+<detalle-usuarios [usuario]="usuarioSeleccionado"></detalle-usuarios>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Usuarios</h1>
+            
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <button type="button" class="btn" (click)="crearUsuario()">
+                <i class="fa-md fas fa-plus"></i>
+            </button>
+                      
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        
+        
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="usuarios?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+        </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                  <td width="100">Acciones</td>
+                  <td>Usuario</td>
+                  <td width="100">Administrador</td>
+                  <td width="100">Estatus</td>
+                  <td width="100">Habilitado</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let user of usuarios | paginate: {itemsPerPage: 10, currentPage: pageUsuario, id: 'pageUser'}">
+                  <td width="100" >
+                    
+                    <i class="fas fa-edit" (click)="abrirModal(user)" style="cursor: pointer;"></i>
+                    &nbsp;
+                    <i class="fas fa-trash-alt" (click)='delete(user)' style="cursor: pointer;"></i>
+                   
+                  </td>
+                  <td >{{user.username}} </td>
+                  <td td width="100">{{user.isAdmin}} </td>
+                  <td td width="100">{{user.estatus}} </td>
+                  <td td width="100">{{user.habilitado}} </td>
+                </tr>
+              </tbody>
+         
+            </table>
+        
+            <pagination-controls id="pageUser" previousLabel="Anterior"
+              nextLabel="Siguiente" (pageChange)="pageUsuario = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+

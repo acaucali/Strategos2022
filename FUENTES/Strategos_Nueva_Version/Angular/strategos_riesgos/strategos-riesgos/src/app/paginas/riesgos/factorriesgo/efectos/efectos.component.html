@@ -1,0 +1,36 @@
+<detalle-efecto-factor [efecto]="efectoSeleccionado" [factor]="factor"></detalle-efecto-factor>
+<div class="container">
+  <span style="font-size: large">Efectos de Riesgo</span>
+  <div class="text-left">
+    <button class="btn btn-rounded bg-white" (click)="crearEfecto()" type="button" placement="bottom"
+      ngbTooltip="Crear Efecto">
+      <i class="far fa-plus-square fa-lg"></i></button>
+  </div>
+  <div>
+      <table class="table" id="tabla" width="100%">
+          <thead>
+            <tr class="text-white bg-primary">
+              <td width="20%">Acciones</td>
+              <td witdh="60%">Efecto</td>
+              <td witdh="20%">Impacto</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let efecto of efectos | paginate: {itemsPerPage: 5, currentPage: pageEfecto, id: 'pageEfe'}">
+              <td width="20%" >
+                <i class="fas fa-edit" (click)="abrirModal(efecto)" style="cursor: pointer;"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <i class="fas fa-trash-alt" (click)='delete(efecto)' style="cursor: pointer;"></i>
+              </td>
+              <td witdh="60%">{{efecto.efectoNombre}}</td>
+              <td witdh="20%">{{efecto.tipoImpactoId}} </td>
+              
+            </tr>
+          </tbody>
+        </table>
+        <pagination-controls id="pageEfe" previousLabel="Anterior"
+        nextLabel="Siguiente" (pageChange)="pageEfecto = $event"></pagination-controls>
+        <h5 ALIGN=RIGHT>Promedio: {{promedio}}</h5>
+  </div>
+
+</div>

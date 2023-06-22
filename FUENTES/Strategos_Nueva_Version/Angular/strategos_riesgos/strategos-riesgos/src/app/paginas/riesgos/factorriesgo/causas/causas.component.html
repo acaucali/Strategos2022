@@ -1,0 +1,39 @@
+<detalle-causa-factor  [causa]= "causaSeleccionada"  [factor]="factor"></detalle-causa-factor>
+<div class="container">
+        <span style="font-size: large">Causas</span>
+   
+  <div class="text-left">
+    <button class="btn btn-rounded bg-white" (click)="crearCausa()" type="button" placement="bottom" ngbTooltip="Crear Causa">
+      <i class="far fa-plus-square fa-lg"></i></button>
+  </div>
+  
+  <div>
+    <table  class="table" id="tablacau" width="100%">
+      <thead>
+        <tr class="text-white bg-primary">
+          <td width="20%">Acciones</td>
+          <td witdh="60%">Causa</td>
+          <td width="20%">Probabilidad</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let causa of causas | paginate: {itemsPerPage: 4, currentPage: page, id: 'pageCau'}">
+          <td width="20%" >
+            <i class="fas fa-edit" (click)="abrirModal(causa)" style="cursor: pointer;"></i>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="fas fa-trash-alt" (click)='delete(causa)' style="cursor: pointer;"></i>
+          </td>
+          <td witdh="60%">{{causa.causa}}</td>
+          <td witdh="20%">{{causa.probabilidadId}} </td>
+          
+        </tr>
+      </tbody>
+      
+    </table>
+    <pagination-controls id="pageCau" previousLabel="Anterior"
+    nextLabel="Siguiente" (pageChange)="page = $event"></pagination-controls>
+    <h5 ALIGN=RIGHT>Promedio: {{promedio}}</h5>
+  </div>
+  
+
+</div>

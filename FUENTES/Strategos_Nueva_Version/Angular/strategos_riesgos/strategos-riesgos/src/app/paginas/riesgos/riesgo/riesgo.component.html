@@ -1,0 +1,39 @@
+<label style="font-size: large">
+    <h3>Factores de riesgo pendientes por mitigar</h3>
+</label>
+<div>
+    <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+        <thead>
+            <tr class="text-white bg-primary">
+                <td width="50">Alerta</td>
+                <td>Riesgo</td>
+                <td>Probabilidad</td>
+                <td>Impacto</td>
+                <td>Riesgo Inherente</td>
+                <td>Estatus</td>
+                <td>Fecha Ultimo Ejercicio</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let factor of factores | paginate: {itemsPerPage: 4, currentPage: pageRie, id: 'pageRies'}">
+                <td width="50">
+                    <div id="red" *ngIf="factor.alerta == 'rojo'"></div>
+                    <div id="orange" *ngIf="factor.alerta == 'naranja'"></div>
+                    <div id="yellow" *ngIf="factor.alerta == 'amarillo'"></div>
+                    <div id="green" *ngIf="factor.alerta == 'verde'"></div>
+                </td>
+                <td>{{factor.factorRiesgo}} </td>
+                <td>{{factor.probabilidad}} </td>
+                <td>{{factor.impacto}} </td>
+                <td>{{factor.severidad}} </td>
+                <td>
+                    <div *ngIf="factor.estatus == 0">Pendiente</div>
+                    <div *ngIf="factor.estatus == 1">Mitigado</div>
+                </td>
+                <td> </td>
+            </tr>
+        </tbody>
+    </table>
+    <pagination-controls id="pageRies" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageRie = $event" *ngIf="factores?.length!=0">
+    </pagination-controls>
+</div>

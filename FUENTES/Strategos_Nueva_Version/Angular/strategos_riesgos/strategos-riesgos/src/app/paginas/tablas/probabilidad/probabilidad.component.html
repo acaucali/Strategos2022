@@ -1,0 +1,85 @@
+<detalle-probabilidad [probabilidad]= "probabilidadSeleccionado"></detalle-probabilidad>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Probabilidades de Riesgo</h1>
+            
+          </div>
+          
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+
+        
+
+        <div class="card-header">
+            <button class="btn btn-rounded bg-white" (click)="crearProbabilidad()" type="button" placement="bottom" ngbTooltip="Crear Probabilidad de riesgo"><i class="far fa-plus-square fa-lg"></i></button>
+            <button class="btn btn-rounded bg-white" (click)="descargarPDF()" type="button" *ngIf="probabilidades && probabilidades.length>0" placement="bottom" ngbTooltip="Descargar PDF"><i class="far fa-file-pdf fa-lg"></i></button>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        
+        
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+
+    </section>
+
+    <!-- /.card-footer-->
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-body">
+            
+        <div *ngIf="probabilidades?.length==0" class="alert alert-info">
+            No hay registros en la base de datos!
+          </div>
+    
+        <div class="table-responsive">
+            <table mdbTable class="table table-bordered tabled-striped table-sm" id="tabla" style="border-collapse: collapse;">
+              <thead>
+                <tr class="text-white bg-primary">
+                    <td width="50">Acciones</td>
+                    <td>Probabilidad</td>
+                    <td>Puntaje</td>
+                    <td>Descripción</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr *ngFor="let el of elements | paginate: {itemsPerPage: 10, currentPage: pageProR, id: 'pageProRi'}">
+                  <td width="50" >
+                    <i class="fas fa-edit" (click)="abrirModal(el)" style="cursor: pointer;"></i> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fas fa-trash-alt" (click)='delete(el)'  style="cursor: pointer;"></i>
+                  </td>
+                  <td >{{el.probabilidadNombre}} </td>
+                  <td >{{el.probabilidadPuntaje}} </td>
+                  <td >{{el.probabilidadDescripcion}} </td>
+                </tr>
+              </tbody>
+             
+            </table>
+            <pagination-controls id="pageProRi" previousLabel="Anterior"
+            nextLabel="Siguiente" (pageChange)="pageProR = $event"></pagination-controls>
+        
+        </div>
+  
+      </div>
+    </div>  
+    
+    <!-- /.content -->
+</div>

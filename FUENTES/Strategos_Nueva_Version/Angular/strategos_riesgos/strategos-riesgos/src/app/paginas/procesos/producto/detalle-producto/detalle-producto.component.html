@@ -1,0 +1,52 @@
+<div *ngIf="modalservice.modal" class="abrir-modal animacion fadeIn">
+
+    <div *ngIf="modalservice.modal" class="modal my-5" tabindex="-1" role="dialog" style="display:block;">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-white" style="background-color: #007BFF;">
+            <h5 class="modal-title">{{titulo}}</h5>
+            <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form #productoForm="ngForm">
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <label for="servicio" style="font-size: medium">Producto</label>
+                    <input type="text" class="form-control" placeholder="Producto" [(ngModel)]="producto.procesoProductoServicio"
+                      name="procesoProductoServicio" required #servicio="ngModel" maxlength="50">
+  
+                    <div class="alert alert-danger" *ngIf="servicio.invalid && (servicio.dirty || servicio.touched)">
+                      <div *ngIf="servicio.errors.required">
+                        Servicio es requerido
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="form-group col-md-12">
+                    <label for="caracteristica" style="font-size: medium">Caracteristica</label>
+                    <textarea class="form-control" rows="5" placeholder="Caracteristica" [(ngModel)]="producto.procesoProductoCaracteristica"
+                      name="procesoProductoCaracteristica" maxlength="150"></textarea>
+                  </div>
+                </div>
+  
+  
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button *ngIf="!producto.procesoProductoId else elseBlock" (click)="create()" type="button" class="btn btn-primary"
+              data-dismiss="modal" [disabled]="!productoForm.form.valid">Crear</button>
+            <ng-template #elseBlock>
+              <button (click)="update()" type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!productoForm.form.valid">Actualizar</button>
+            </ng-template>
+            <button (click)="cerrarModal()" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>

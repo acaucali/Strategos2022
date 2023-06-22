@@ -1,0 +1,33 @@
+<div class="row">   
+    <div class="col-md-12">
+      <label>Nombre del Documento</label>
+      <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nombre del Documento"
+      >
+  </div>
+  <div class="col-md-12">
+        <label>Descripción</label>
+        <textarea class="form-control" rows="3" placeholder="Descripción"
+        ></textarea>
+  </div>
+    
+      <div class="form-group col-md-12" >
+        <label for="documento" style="font-size: medium">Documento</label> <br>
+        <input type="file" name="documento" class="form"
+          accept=".xlsx,.xls,.doc, .docx,.ppt,.pptx,.pdf" >
+          &nbsp; &nbsp;<button class="btn btn-rounded btn-primary" type="button" placement="bottom"
+          ngbTooltip="Subir documento" style="font-size: 8px" ><i class="fas fa-file-upload fa-2x"></i></button>
+          &nbsp;
+            <!--
+            <div class="form-group" *ngIf="proceso.procesosId && proceso.procesoDocumento >0">
+              <label style="font-size: medium" *ngIf="documento">{{documento.documentoNombre}}</label> &nbsp; &nbsp;
+              <button class="btn btn-rounded btn-primary" (click)="descargarDocumento()" type="button" placement="bottom"
+                ngbTooltip="Descargar documento" style="font-size: 8px"><i class="fas fa-download fa-2x"></i></button>
+              &nbsp;
+              <button class="btn btn-rounded btn-danger" (click)="eliminarDocumento()" type="button" placement="bottom"
+                ngbTooltip="Eliminar documento" style="font-size: 8px"><i class="far fa-trash-alt fa-2x"></i></button>
+      
+            </div>
+            -->
+      </div>  
+      
+</div>  
