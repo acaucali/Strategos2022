@@ -2,6 +2,8 @@ package com.visiongc.app.strategos.impl;
 
 import com.visiongc.app.strategos.StrategosConfiguration;
 import com.visiongc.app.strategos.StrategosService;
+import com.visiongc.app.strategos.cargos.StrategosCargosService;
+import com.visiongc.app.strategos.cargos.impl.StrategosCargosServiceImpl;
 import com.visiongc.app.strategos.categoriasmedicion.StrategosCategoriasService;
 import com.visiongc.app.strategos.categoriasmedicion.impl.StrategosCategoriasServiceImpl;
 import com.visiongc.app.strategos.causas.StrategosCausasService;
@@ -113,7 +115,7 @@ public class StrategosServiceFactory extends VgcDefaultServiceFactory implements
     }
     catch (Throwable ex)
     {
-      throw new ChainedRuntimeException("No se pudo inicializar la factoría de Servicios de Framework", ex);
+      throw new ChainedRuntimeException("No se pudo inicializar la factorï¿½a de Servicios de Framework", ex);
     }
   }
   
@@ -130,6 +132,11 @@ public class StrategosServiceFactory extends VgcDefaultServiceFactory implements
   public StrategosCategoriasService openStrategosCategoriasService()
   {
     return new StrategosCategoriasServiceImpl(persistenceSessionFactory.openCategoriasPersistenceSession(), true, this, VgcResourceManager.getMessageResources("Strategos"));
+  }
+  
+  public StrategosCargosService openStrategosCargosService()
+  {
+	  return new StrategosCargosServiceImpl(persistenceSessionFactory.openCargosPersistenceSession(), true, this,VgcResourceManager.getMessageResources("Strategos"));
   }
   
   public StrategosCategoriasService openStrategosCategoriasService(StrategosService strategosService) {

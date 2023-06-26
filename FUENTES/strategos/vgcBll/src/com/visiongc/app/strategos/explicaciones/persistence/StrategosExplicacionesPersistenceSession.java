@@ -3,6 +3,8 @@ package com.visiongc.app.strategos.explicaciones.persistence;
 import com.visiongc.app.strategos.explicaciones.model.AdjuntoExplicacion;
 import com.visiongc.app.strategos.persistence.StrategosPersistenceSession;
 import com.visiongc.commons.util.PaginaLista;
+
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +22,7 @@ public abstract interface StrategosExplicacionesPersistenceSession
   public abstract Long getNumeroExplicaciones(Long paramLong);
   
   public abstract AdjuntoExplicacion getAdjunto(Long parmaLong);
+  
+  public abstract List<AdjuntoExplicacion> getAdjuntos();
+
 }

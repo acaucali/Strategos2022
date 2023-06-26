@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.modulo.codigoEnlace.actions;
 
@@ -18,6 +18,7 @@ import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.modulo.codigoenlace.StrategosCodigoEnlaceService;
 import com.visiongc.app.strategos.modulo.codigoenlace.model.CodigoEnlace;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 
@@ -27,18 +28,20 @@ import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
  */
 public class ReporteCodigoEnlaceAction extends VgcReporteBasicoAction
 {
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		return mensajes.getMessage("action.reporte.codigo.enlace.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 	    String atributoOrden = request.getParameter("atributoOrden");
 	    String tipoOrden = request.getParameter("tipoOrden");
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 			atributoOrden = "codigo";
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 			tipoOrden = "ASC";
 		else if (tipoOrden.toUpperCase().indexOf("ASC") != -1)
 			tipoOrden = "ASC";
@@ -64,7 +67,7 @@ public class ReporteCodigoEnlaceAction extends VgcReporteBasicoAction
 	    List<CodigoEnlace> codigoEnlaces = strategosCodigoEnlaceService.getCodigoEnlace(0, 0, atributoOrden, tipoOrden, false, null).getLista();
 
 	    tabla.setFormatoFont(font.style());
-	    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+	    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
 	    tabla.agregarCelda(mensajes.getMessage("action.reporte.columna.codigo"));
 	    tabla.agregarCelda(mensajes.getMessage("action.reporte.columna.descripcion"));
@@ -72,15 +75,15 @@ public class ReporteCodigoEnlaceAction extends VgcReporteBasicoAction
 	    tabla.agregarCelda(mensajes.getMessage("action.reporte.columna.categoria"));
 
 	    tabla.setDefaultAlineacionHorizontal();
-	    if ((codigoEnlaces != null) && (codigoEnlaces.size() > 0)) 
+	    if ((codigoEnlaces != null) && (codigoEnlaces.size() > 0))
 	    {
-	    	for (Iterator<CodigoEnlace> iter = codigoEnlaces.iterator(); iter.hasNext(); ) 
+	    	for (Iterator<CodigoEnlace> iter = codigoEnlaces.iterator(); iter.hasNext(); )
 	    	{
-	    		CodigoEnlace codigoEnlace = (CodigoEnlace)iter.next();
+	    		CodigoEnlace codigoEnlace = iter.next();
 
 	    		tabla.setDefaultAlineacionHorizontal();
 	    		tabla.agregarCelda(codigoEnlace.getCodigo());
-	    		tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+	    		tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 	    		tabla.agregarCelda(codigoEnlace.getNombre());
 	    		if (codigoEnlace.getBi() != null)
 	    			tabla.agregarCelda(codigoEnlace.getBi().toString());

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.email.actions;
 
@@ -22,7 +22,6 @@ import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
 import com.visiongc.app.strategos.responsables.StrategosResponsablesService;
 import com.visiongc.app.strategos.responsables.model.Responsable;
 import com.visiongc.app.strategos.responsables.model.util.ConfiguracionResponsable;
-
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 
@@ -32,17 +31,19 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class ValidarEmailAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String tipoObjeto = (request.getParameter("tipoObjeto") != null ? request.getParameter("tipoObjeto") : null);
 		Long objetoId = (request.getParameter("objetoId") != null ? Long.parseLong(request.getParameter("objetoId")) : null);
-		  
+
 		boolean hayResponsabilidad = false;
 		boolean hayEmail = false;
 		String to = "";
@@ -51,8 +52,8 @@ public class ValidarEmailAction extends VgcAction
 		if (tipoObjeto != null)
 		{
 			StrategosResponsablesService strategosResponsablesService = StrategosServiceFactory.getInstance().openStrategosResponsablesService();
-			ConfiguracionResponsable configuracionResponsable = strategosResponsablesService.getConfiguracionResponsable(); 
-			
+			ConfiguracionResponsable configuracionResponsable = strategosResponsablesService.getConfiguracionResponsable();
+
 			if (tipoObjeto.equals("Indicador"))
 			{
 				StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -71,7 +72,7 @@ public class ValidarEmailAction extends VgcAction
 						hayResponsabilidad = indicador.getResponsableCargarMetaId() != null;
 					if (!hayResponsabilidad)
 						hayResponsabilidad = indicador.getResponsableCargarEjecutadoId() != null;
-					
+
 					Responsable responsable = null;
 					if (configuracionResponsable.getEnviarResponsableLograrMeta())
 					{
@@ -83,12 +84,12 @@ public class ValidarEmailAction extends VgcAction
 								if (responsable.getEmail() != null && !responsable.getEmail().equals(""))
 								{
 									hayEmail = true;
-									to = responsable.getEmail(); 
+									to = responsable.getEmail();
 								}
 							}
 						}
 					}
-	
+
 					if (configuracionResponsable.getEnviarResponsableSeguimiento())
 					{
 						if (indicador.getResponsableSeguimientoId() != null)
@@ -107,7 +108,7 @@ public class ValidarEmailAction extends VgcAction
 							}
 						}
 					}
-					
+
 					if (configuracionResponsable.getEnviarResponsableFijarMeta())
 					{
 						if (indicador.getResponsableFijarMetaId() != null)
@@ -128,7 +129,7 @@ public class ValidarEmailAction extends VgcAction
 							}
 						}
 					}
-					
+
 					if (configuracionResponsable.getEnviarResponsableCargarMeta())
 					{
 						if (indicador.getResponsableCargarMetaId() != null)
@@ -190,7 +191,7 @@ public class ValidarEmailAction extends VgcAction
 						hayResponsabilidad = iniciativa.getResponsableCargarMetaId() != null;
 					if (!hayResponsabilidad)
 						hayResponsabilidad = iniciativa.getResponsableCargarEjecutadoId() != null;
-					
+
 					Responsable responsable = null;
 					if (configuracionResponsable.getEnviarResponsableLograrMeta())
 					{
@@ -202,12 +203,12 @@ public class ValidarEmailAction extends VgcAction
 								if (responsable.getEmail() != null && !responsable.getEmail().equals(""))
 								{
 									hayEmail = true;
-									to = responsable.getEmail(); 
+									to = responsable.getEmail();
 								}
 							}
 						}
 					}
-	
+
 					if (configuracionResponsable.getEnviarResponsableSeguimiento())
 					{
 						if (iniciativa.getResponsableSeguimientoId() != null)
@@ -290,7 +291,7 @@ public class ValidarEmailAction extends VgcAction
 						}
 					}
 				}
-				
+
 				strategosIniciativasService.close();
 			}
 			else if (tipoObjeto.equals("Actividad"))
@@ -311,7 +312,7 @@ public class ValidarEmailAction extends VgcAction
 						hayResponsabilidad = actividad.getResponsableCargarMetaId() != null;
 					if (!hayResponsabilidad)
 						hayResponsabilidad = actividad.getResponsableCargarEjecutadoId() != null;
-					
+
 					Responsable responsable = null;
 					if (configuracionResponsable.getEnviarResponsableLograrMeta())
 					{
@@ -323,12 +324,12 @@ public class ValidarEmailAction extends VgcAction
 								if (responsable.getEmail() != null && !responsable.getEmail().equals(""))
 								{
 									hayEmail = true;
-									to = responsable.getEmail(); 
+									to = responsable.getEmail();
 								}
 							}
 						}
 					}
-	
+
 					if (configuracionResponsable.getEnviarResponsableSeguimiento())
 					{
 						if (actividad.getResponsableSeguimientoId() != null)
@@ -368,7 +369,7 @@ public class ValidarEmailAction extends VgcAction
 							}
 						}
 					}
-					
+
 					if (configuracionResponsable.getEnviarResponsableCargarMeta())
 					{
 						if (actividad.getResponsableCargarMetaId() != null)
@@ -423,7 +424,7 @@ public class ValidarEmailAction extends VgcAction
 					subject = "Perspectiva: " + perspectiva.getNombre();
 					if (!hayResponsabilidad)
 						hayResponsabilidad = perspectiva.getResponsableId() != null;
-					
+
 					Responsable responsable = null;
 					if (perspectiva.getResponsableId() != null)
 					{
@@ -433,17 +434,17 @@ public class ValidarEmailAction extends VgcAction
 							if (responsable.getEmail() != null && !responsable.getEmail().equals(""))
 							{
 								hayEmail = true;
-								to = responsable.getEmail(); 
+								to = responsable.getEmail();
 							}
 						}
 					}
 				}
 				strategosPerspectivasService.close();
 			}
-			
+
 			strategosResponsablesService.close();
 		}
-		
+
 		request.setAttribute("ajaxResponse", (hayResponsabilidad ? "true" : "false") + "|" + (hayEmail ? "true" : "false") + "|" + (!to.equals("") ? to : "") + "|" + (!cc.equals("") ? cc : "") + "|" + (!subject.equals("") ? subject : ""));
 	    return mapping.findForward("ajaxResponse");
 	}

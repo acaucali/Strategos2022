@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
@@ -24,10 +24,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class EliminarVistaDatosAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -41,11 +43,11 @@ public class EliminarVistaDatosAction extends VgcAction
 		if (reporteId != null)
 		{
 			reportesService.unlockObject(request.getSession().getId(), reporteId);
-	
+
 			boolean bloqueado = !reportesService.lockForDelete(request.getSession().getId(), reporteId);
-	
+
 			Reporte reporte = (Reporte)reportesService.load(Reporte.class, new Long(reporteId));
-	
+
 			if (reporte != null)
 			{
 				if (bloqueado)
@@ -54,16 +56,16 @@ public class EliminarVistaDatosAction extends VgcAction
 				{
 					reporte.setReporteId(Long.valueOf(reporteId));
 					int res = reportesService.deleteReporte(reporte, getUsuarioConectado(request));
-					
+
 					if (res == 10004)
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", reporte.getNombre()));
 					else
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", reporte.getNombre()));
 				}
 			}
-			else 
+			else
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
-	
+
 			reportesService.unlockObject(request.getSession().getId(), reporteId);
 		}
 		reportesService.close();

@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
@@ -7,22 +18,16 @@ import com.visiongc.app.strategos.web.struts.vistasdatos.forms.SeleccionarOrgani
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public final class SeleccionarOrganizacionAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -52,7 +57,7 @@ public final class SeleccionarOrganizacionAction extends VgcAction
         if (seleccionarOrganizacionForm.getFuncionCierre().indexOf(";") < 0)
           seleccionarOrganizacionForm
             .setFuncionCierre(seleccionarOrganizacionForm
-            .getFuncionCierre() + 
+            .getFuncionCierre() +
             ";");
       }
       else {
@@ -91,8 +96,8 @@ public final class SeleccionarOrganizacionAction extends VgcAction
 
   private List getListaOrganizaciones(List organizaciones, StrategosOrganizacionesService strategosOrganizacionesService)
   {
-    for (int i = 0; i < organizaciones.size(); i++) {
-      OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos)organizaciones.get(i);
+    for (Object organizacione : organizaciones) {
+      OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos)organizacione;
 
       organizacionStrategos.setRutaCompleta(strategosOrganizacionesService.getRutaCompletaNombresOrganizacion(organizacionStrategos.getOrganizacionId(), "\\"));
     }

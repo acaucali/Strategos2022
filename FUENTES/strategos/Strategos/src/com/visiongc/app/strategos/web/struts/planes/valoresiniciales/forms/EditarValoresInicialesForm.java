@@ -1,15 +1,17 @@
 package com.visiongc.app.strategos.web.struts.planes.valoresiniciales.forms;
 
-import com.visiongc.app.strategos.planes.model.util.ValorInicialIndicador;
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.struts.validator.ValidatorActionForm;
+
+import com.visiongc.app.strategos.planes.model.util.ValorInicialIndicador;
+import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 
 public class EditarValoresInicialesForm extends ValidatorActionForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long organizacionId;
 	private String nombreOrganizacion;
 	private Long planId;
@@ -25,108 +27,108 @@ public class EditarValoresInicialesForm extends ValidatorActionForm
 	{
 		return this.organizacionId;
 	}
-	
-	public void setOrganizacionId(Long organizacionId) 
+
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
 
-	public String getNombreOrganizacion() 
+	public String getNombreOrganizacion()
 	{
 		return this.nombreOrganizacion;
 	}
-	
-	public void setNombreOrganizacion(String nombreOrganizacion) 
+
+	public void setNombreOrganizacion(String nombreOrganizacion)
 	{
 		this.nombreOrganizacion = nombreOrganizacion;
 	}
-	
-	public Long getPlanId() 
+
+	public Long getPlanId()
 	{
 		return this.planId;
 	}
 
-	public void setPlanId(Long planId) 
+	public void setPlanId(Long planId)
 	{
 		this.planId = planId;
 	}
-	
-	public String getNombrePlan() 
+
+	public String getNombrePlan()
 	{
 		return this.nombrePlan;
 	}
 
-	public void setNombrePlan(String nombrePlan) 
+	public void setNombrePlan(String nombrePlan)
 	{
 		this.nombrePlan = nombrePlan;
 	}
 
-	public List<ValorInicialIndicador> getValoresInicialesIndicadores() 
+	public List<ValorInicialIndicador> getValoresInicialesIndicadores()
 	{
 		return this.valoresInicialesIndicadores;
 	}
 
-	public void setValoresInicialesIndicadores(List<ValorInicialIndicador> valoresInicialesIndicadores) 
+	public void setValoresInicialesIndicadores(List<ValorInicialIndicador> valoresInicialesIndicadores)
 	{
 		this.valoresInicialesIndicadores = valoresInicialesIndicadores;
 	}
 
-	public boolean isEstablecerMetasSoloIndicadoresSeleccionados() 
+	public boolean isEstablecerMetasSoloIndicadoresSeleccionados()
 	{
 		return this.establecerMetasSoloIndicadoresSeleccionados;
 	}
-	
-	public void setEstablecerMetasSoloIndicadoresSeleccionados(boolean establecerMetasSoloIndicadoresSeleccionados) 
+
+	public void setEstablecerMetasSoloIndicadoresSeleccionados(boolean establecerMetasSoloIndicadoresSeleccionados)
 	{
 		this.establecerMetasSoloIndicadoresSeleccionados = establecerMetasSoloIndicadoresSeleccionados;
 	}
-	
-	public boolean isMostrarUnidadMedida() 
+
+	public boolean isMostrarUnidadMedida()
 	{
 		return this.mostrarUnidadMedida;
 	}
-	
-	public void setMostrarUnidadMedida(boolean mostrarUnidadMedida) 
+
+	public void setMostrarUnidadMedida(boolean mostrarUnidadMedida)
 	{
 		this.mostrarUnidadMedida = mostrarUnidadMedida;
 	}
-	
-	public boolean isMostrarCodigoEnlace() 
+
+	public boolean isMostrarCodigoEnlace()
 	{
 	  return this.mostrarCodigoEnlace;
 	}
 
-	public void setMostrarCodigoEnlace(boolean mostrarCodigoEnlace) 
+	public void setMostrarCodigoEnlace(boolean mostrarCodigoEnlace)
 	{
 		this.mostrarCodigoEnlace = mostrarCodigoEnlace;
 	}
 
-	public Long getSerieId() 
+	public Long getSerieId()
 	{
 		return SerieTiempo.getSerieMetaId();
 	}
 
-	public Boolean getVisualizarIndicadoresCompuestos() 
+	public Boolean getVisualizarIndicadoresCompuestos()
 	{
 		return this.visualizarIndicadoresCompuestos;
 	}
 
-	public void setVisualizarIndicadoresCompuestos(Boolean visualizarIndicadoresCompuestos) 
+	public void setVisualizarIndicadoresCompuestos(Boolean visualizarIndicadoresCompuestos)
 	{
 		this.visualizarIndicadoresCompuestos = visualizarIndicadoresCompuestos;
 	}
 
-	public boolean getBloquear() 
+	public boolean getBloquear()
 	{
 	  return this.bloquear;
 	}
 
-	public void setBloquear(boolean bloquear) 
+	public void setBloquear(boolean bloquear)
 	{
 		this.bloquear = bloquear;
 	}
-	
-	public void clear() 
+
+	public void clear()
 	{
 		this.organizacionId = null;
 		this.nombreOrganizacion = null;

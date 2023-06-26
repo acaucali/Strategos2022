@@ -11,7 +11,7 @@ public class EditarPlantillaPlanesForm extends EditarObjetoForm
 	private String nombreIndicadorSingular;
 	private String nombreIniciativaSingular;
 	private String nombreActividadSingular;
-  
+
 	private String textoNiveles;
 	public static final String SEPARADOR_PERSPECTIVAS = "!@!";
 	public static final String SEPARADOR_ATRIBUTOS_PERSPECTIVAS = "!-!";
@@ -21,82 +21,83 @@ public class EditarPlantillaPlanesForm extends EditarObjetoForm
 		return this.plantillaPlanesId;
 	}
 
-	public void setPlantillaPlanesId(Long plantillaPlanesId) 
+	public void setPlantillaPlanesId(Long plantillaPlanesId)
 	{
 		this.plantillaPlanesId = plantillaPlanesId;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() 
+	public String getDescripcion()
 	{
 		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) 
+	public void setDescripcion(String descripcion)
 	{
 		this.descripcion = descripcion;
 	}
 
-	public String getNombreActividadSingular() 
+	public String getNombreActividadSingular()
 	{
 		return this.nombreActividadSingular;
 	}
 
-	public void setNombreActividadSingular(String nombreActividadSingular) 
+	public void setNombreActividadSingular(String nombreActividadSingular)
 	{
 		this.nombreActividadSingular = nombreActividadSingular;
 	}
 
-	public String getNombreIndicadorSingular() 
+	public String getNombreIndicadorSingular()
 	{
 		return this.nombreIndicadorSingular;
 	}
 
-	public void setNombreIndicadorSingular(String nombreIndicadorSingular) 
+	public void setNombreIndicadorSingular(String nombreIndicadorSingular)
 	{
 		this.nombreIndicadorSingular = nombreIndicadorSingular;
 	}
 
-	public String getNombreIniciativaSingular() 
+	public String getNombreIniciativaSingular()
 	{
 		return this.nombreIniciativaSingular;
 	}
 
-	public void setNombreIniciativaSingular(String nombreIniciativaSingular) 
+	public void setNombreIniciativaSingular(String nombreIniciativaSingular)
 	{
 		this.nombreIniciativaSingular = nombreIniciativaSingular;
 	}
 
-	public String getTextoNiveles() 
+	public String getTextoNiveles()
 	{
 		return this.textoNiveles;
 	}
 
-	public void setTextoNiveles(String textoNiveles) 
+	public void setTextoNiveles(String textoNiveles)
 	{
 		this.textoNiveles = textoNiveles;
 	}
 
-	public String getSeparadorPerspectivas() 
+	public String getSeparadorPerspectivas()
 	{
 		return "!@!";
 	}
 
-	public String getSeparadorAtributosPerspectivas() 
+	public String getSeparadorAtributosPerspectivas()
 	{
 		return "!-!";
 	}
 
-	public void clear() 
+	@Override
+	public void clear()
 	{
 		this.plantillaPlanesId = new Long(0L);
 		this.nombre = null;

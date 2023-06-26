@@ -1,5 +1,14 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.paginas.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.presentaciones.StrategosPaginasService;
@@ -9,25 +18,19 @@ import com.visiongc.app.strategos.web.struts.presentaciones.paginas.forms.Editar
 import com.visiongc.app.strategos.web.struts.presentaciones.vistas.forms.GestionarVistasForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class EditarPaginaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-    
+
 		String forward = mapping.getParameter();
 
 		EditarPaginaForm editarPaginaForm = (EditarPaginaForm)form;
@@ -70,7 +73,7 @@ public class EditarPaginaAction extends VgcAction
 			else
 			{
 				strategosPaginasService.unlockObject(request.getSession().getId(), new Long(paginaId));
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
 			}
@@ -97,9 +100,9 @@ public class EditarPaginaAction extends VgcAction
 
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
-    
+
 		return mapping.findForward(forward);
 	}
 }

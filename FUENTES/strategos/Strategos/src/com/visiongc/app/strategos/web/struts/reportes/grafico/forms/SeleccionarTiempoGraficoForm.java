@@ -1,7 +1,8 @@
 package com.visiongc.app.strategos.web.struts.reportes.grafico.forms;
 
-import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 import java.util.List;
+
+import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 
 public class SeleccionarTiempoGraficoForm extends SelectorListaForm
 {

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planes.indicadores.forms;
 
@@ -27,77 +27,78 @@ public class ImportarProgramadoForm extends EditarObjetoForm
 	private String nombreCampoOculto = null;
 	private String funcionCierre;
 
-	public String getNombreForma() 
+	public String getNombreForma()
 	{
 		return nombreForma;
 	}
 
-	public void setNombreForma(String nombreForma) 
+	public void setNombreForma(String nombreForma)
 	{
 		this.nombreForma = nombreForma;
 	}
 
-	public String getNombreCampoOculto() 
+	public String getNombreCampoOculto()
 	{
 		return nombreCampoOculto;
 	}
 
-	public void setNombreCampoOculto(String nombreCampoOculto) 
+	public void setNombreCampoOculto(String nombreCampoOculto)
 	{
 		this.nombreCampoOculto = nombreCampoOculto;
 	}
 
-	public String getNombreCampoValor() 
+	public String getNombreCampoValor()
 	{
 		return nombreCampoValor;
 	}
 
-	public void setNombreCampoValor(String nombreCampoValor) 
+	public void setNombreCampoValor(String nombreCampoValor)
 	{
 		this.nombreCampoValor = nombreCampoValor;
 	}
 
-	public String getFuncionCierre() 
+	public String getFuncionCierre()
 	{
 		return funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
-	
-	public String getValoresSeleccionados() 
+
+	public String getValoresSeleccionados()
 	{
 		return valoresSeleccionados;
 	}
 
-	public void setValoresSeleccionados(String valoresSeleccionados) 
+	public void setValoresSeleccionados(String valoresSeleccionados)
 	{
 		this.valoresSeleccionados = valoresSeleccionados;
 	}
 
-	public String getAnoSeleccion() 
+	public String getAnoSeleccion()
 	{
 		return this.anoSeleccion;
 	}
 
-	public void setAnoSeleccion(String anoSeleccion) 
+	public void setAnoSeleccion(String anoSeleccion)
 	{
 		this.anoSeleccion = anoSeleccion;
 	}
-	  
-	public List<ObjetoClaveValor> getGrupoAnos() 
+
+	public List<ObjetoClaveValor> getGrupoAnos()
 	{
 		return this.grupoAnos;
 	}
-	
-	public void setGrupoAnos(List<ObjetoClaveValor> grupoAnos) 
+
+	public void setGrupoAnos(List<ObjetoClaveValor> grupoAnos)
 	{
 		this.grupoAnos = grupoAnos;
 	}
-	
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);

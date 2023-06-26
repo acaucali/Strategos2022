@@ -1,7 +1,11 @@
 package com.visiongc.app.strategos.web.struts.planes.actions;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
@@ -11,22 +15,18 @@ import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguration;
 import com.visiongc.app.strategos.web.struts.planes.forms.VisualizarPlanForm;
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.ObjetoClaveValor;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.util.PermisologiaUsuario;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class VisualizarPlanAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -44,16 +44,16 @@ public class VisualizarPlanAction extends VgcAction
 
 		boolean autorizado = permisologiaUsuario.tienePermiso("PLAN", visualizarPlanForm.getOrganizacionId().longValue());
 
-		if (!autorizado) 
+		if (!autorizado)
 			autorizado = strategosPlanesService.tienePermisoPlan(getUsuarioConectado(request), visualizarPlanForm.getPlanId(), "PLAN");
-		if (!autorizado) 
+		if (!autorizado)
 			return mapping.findForward("permisoNegado");
 
 		getBarraAreas(request, "strategos").setBotonSeleccionado("planes");
 
 		String forward = mapping.getParameter();
-		
-		if (visualizarPlanForm.getMostrarTipoVistaDetallada() == null) 
+
+		if (visualizarPlanForm.getMostrarTipoVistaDetallada() == null)
 		{
 			visualizarPlanForm.setMostrarTipoVistaDetallada(new Boolean(StrategosWebConfiguration.getInstance().getBoolean("com.visiongc.app.strategos.web.planes.mostrartipovistadetallada")));
 			visualizarPlanForm.setMostrarTipoVistaResumen(new Boolean(StrategosWebConfiguration.getInstance().getBoolean("com.visiongc.app.strategos.web.planes.mostrartipovistaresumen")));
@@ -61,7 +61,7 @@ public class VisualizarPlanAction extends VgcAction
 			visualizarPlanForm.setMostrarTipoVistaArbol(new Boolean(StrategosWebConfiguration.getInstance().getBoolean("com.visiongc.app.strategos.web.planes.mostrartipovistaarbol")));
 		}
 
-		if ((visualizarPlanForm.getPlanId() != null) && (visualizarPlanForm.getPlanId().byteValue() != 0)) 
+		if ((visualizarPlanForm.getPlanId() != null) && (visualizarPlanForm.getPlanId().byteValue() != 0))
 		{
 			Plan plan = (Plan)strategosPlanesService.load(Plan.class, visualizarPlanForm.getPlanId());
 			visualizarPlanForm.setNombrePlan(plan.getNombre());
@@ -72,10 +72,10 @@ public class VisualizarPlanAction extends VgcAction
 				plantillaPlan.getElementos().size();
 			visualizarPlanForm.setPlantillaPlan(plantillaPlan);
 			visualizarPlanForm.setAnos(PeriodoUtil.getListaNumeros(new Integer(plan.getAnoInicial()), new Integer(plan.getAnoFinal())));
-			
+
 			strategosPlanesService.close();
-		} 
-		else 
+		}
+		else
 			return getForwardBack(request, 2, true);
 
 		return mapping.findForward(forward);

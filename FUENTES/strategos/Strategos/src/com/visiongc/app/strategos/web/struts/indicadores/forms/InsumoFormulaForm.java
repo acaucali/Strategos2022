@@ -11,18 +11,18 @@ public class InsumoFormulaForm
 	{
 		return this.indice;
 	}
-	
-	public void setIndice(int indice) 
+
+	public void setIndice(int indice)
 	{
 		this.indice = indice;
 	}
-	
-	public List<?> getPath() 
+
+	public List<?> getPath()
 	{
 		return this.path;
 	}
-  
-	public void setPath(List<?> path) 
+
+	public void setPath(List<?> path)
 	{
 		this.path = path;
 	}

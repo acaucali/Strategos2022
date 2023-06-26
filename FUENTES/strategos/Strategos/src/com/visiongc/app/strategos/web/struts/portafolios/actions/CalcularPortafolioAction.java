@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.actions;
 
@@ -33,10 +33,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class CalcularPortafolioAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    super.execute(mapping, form, request, response);
@@ -51,7 +53,7 @@ public class CalcularPortafolioAction extends VgcAction
 	    if (portafolio != null)
 	    {
 	    	portafolio.setId(Long.valueOf(id));
-	    	
+
 			Map<String, String> filtros = new HashMap<String, String>();
 			StrategosPaginasService strategosPaginasService = StrategosServiceFactory.getInstance().openStrategosPaginasService();
 		    filtros = new HashMap<String, String>();

@@ -1,28 +1,30 @@
 package com.visiongc.app.strategos.web.struts.problemas.clasesproblemas.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.problemas.StrategosClasesProblemasService;
-import com.visiongc.app.strategos.problemas.model.ClaseProblemas;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.problemas.StrategosClasesProblemasService;
+import com.visiongc.app.strategos.problemas.model.ClaseProblemas;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EliminarClaseProblemasAction extends VgcAction
 {
 	private static final String ACTION_KEY = "EliminarClaseProblemasAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -39,7 +41,7 @@ public class EliminarClaseProblemasAction extends VgcAction
 			cancelar = true;
 		else if ((claseId == null) || (claseId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(claseId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(claseId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
@@ -53,9 +55,9 @@ public class EliminarClaseProblemasAction extends VgcAction
 
 		ClaseProblemas claseProblemas = (ClaseProblemas)strategosClaseProblemasService.load(ClaseProblemas.class, new Long(claseId));
 
-		if (claseProblemas != null) 
+		if (claseProblemas != null)
 		{
-			if ((claseProblemas.getHijos() == null) || ((claseProblemas.getHijos() != null) && (claseProblemas.getHijos().size() == 0))) 
+			if ((claseProblemas.getHijos() == null) || ((claseProblemas.getHijos() != null) && (claseProblemas.getHijos().size() == 0)))
 			{
 				if (claseProblemas.getPadre() != null)
 				{
@@ -69,10 +71,10 @@ public class EliminarClaseProblemasAction extends VgcAction
 
 						if (res == 10004)
 							messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", claseProblemas.getNombre()));
-						else 
+						else
 						{
 							messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", claseProblemas.getNombre()));
-							
+
 							ClaseProblemas padre = claseProblemas.getPadre();
 							request.setAttribute("GestionarClasesProblemasAction.reloadId", padre.getClaseId());
 						}
@@ -81,10 +83,10 @@ public class EliminarClaseProblemasAction extends VgcAction
 				else
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.nodoraiz", claseProblemas.getNombre()));
 			}
-			else 
+			else
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", claseProblemas.getNombre()));
 		}
-		else 
+		else
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 		strategosClaseProblemasService.close();

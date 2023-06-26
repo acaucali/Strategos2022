@@ -52,7 +52,8 @@ public class EditarSerieTiempoForm extends EditarObjetoForm
     this.preseleccionada = preseleccionada;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.serieId = new Long(0L);
     this.nombre = null;
     this.identificador = null;

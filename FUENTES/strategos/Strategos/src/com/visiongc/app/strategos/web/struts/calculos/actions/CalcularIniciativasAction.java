@@ -1,7 +1,23 @@
 package com.visiongc.app.strategos.web.struts.calculos.actions;
 
+import java.io.ByteArrayInputStream;
+import java.util.Calendar;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import com.visiongc.app.strategos.web.struts.calculos.forms.CalculoIndicadoresForm;
-import com.visiongc.app.strategos.web.struts.calculos.forms.CalculoIndicadoresForm.CalcularStatus;
 import com.visiongc.app.strategos.web.struts.servicio.forms.ServicioForm;
 import com.visiongc.commons.impl.VgcAbstractService;
 import com.visiongc.commons.struts.action.VgcAction;
@@ -19,34 +35,21 @@ import com.visiongc.framework.util.FrameworkConnection;
 import com.visiongc.framework.web.struts.forms.servicio.GestionarServiciosForm;
 import com.visiongc.servicio.strategos.calculos.CalcularManager;
 import com.visiongc.servicio.strategos.servicio.model.Servicio;
-import java.io.ByteArrayInputStream;
-import java.util.Calendar;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class CalcularIniciativasAction
   extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     CalculoIndicadoresForm calculoIndicadoresForm = (CalculoIndicadoresForm)form;
     if ((calculoIndicadoresForm.getIndicadorId() != null) && (calculoIndicadoresForm.getIndicadorId().longValue() == 0L)) {
       calculoIndicadoresForm.setIndicadorId(null);
@@ -68,20 +71,20 @@ public class CalcularIniciativasAction
     }
     Calcular(request, calculoIndicadoresForm);
     calculoIndicadoresForm.setCalculado(new Boolean(true));
-    
+
     return mapping.findForward(forward);
   }
-  
+
   private void Calcular(HttpServletRequest request, CalculoIndicadoresForm calculoIndicadoresForm)
     throws Exception
   {
     ServicioForm servicioForm = new ServicioForm();
     StringBuffer log = new StringBuffer();
-    
+
     ActionMessages messages = getMessages(request);
     FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
     Configuracion configuracion = frameworkService.getConfiguracion("Strategos.Servicios.Configuracion");
-    
+
     String showPresentacion = request.getParameter("showPresentacion") != null ? request.getParameter("showPresentacion").toString() : "0";
     ConfiguracionUsuario presentacion = new ConfiguracionUsuario();
     ConfiguracionUsuarioPK pk = new ConfiguracionUsuarioPK();
@@ -105,7 +108,7 @@ public class CalcularIniciativasAction
       doc.getDocumentElement().normalize();
       NodeList nList = doc.getElementsByTagName("properties");
       Element eElement = (Element)nList.item(0);
-      
+
       String url = VgcAbstractService.getTagValue("url", eElement);
       String driver = VgcAbstractService.getTagValue("driver", eElement);
       String user = VgcAbstractService.getTagValue("user", eElement);
@@ -120,21 +123,21 @@ public class CalcularIniciativasAction
       else
       {
         Usuario usuario = getUsuarioConectado(request);
-        
+
         com.visiongc.commons.util.VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
         log.append(messageResources.getResource("jsp.asistente.calculo.log.titulocalculo.iniciativas") + "\n");
-        
+
         Calendar ahora = Calendar.getInstance();
         String[] argsReemplazo = new String[2];
         argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
         argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
         log.append(messageResources.getResource("jsp.asistente.calculo.log.fechainiciocalculo", argsReemplazo) + "\n\n");
-        
+
         servicioForm.setProperty("url", url);
         servicioForm.setProperty("driver", driver);
         servicioForm.setProperty("user", user);
         servicioForm.setProperty("password", password);
-        
+
         servicioForm.setProperty("logMediciones", calculoIndicadoresForm.getReportarIndicadores().toString());
         servicioForm.setProperty("logErrores", calculoIndicadoresForm.getReportarErrores().toString());
         servicioForm.setProperty("tomarPeriodosSinMedicionConValorCero", calculoIndicadoresForm.getPeriodosCero() != null ? calculoIndicadoresForm.getPeriodosCero().toString() : "");
@@ -164,30 +167,30 @@ public class CalcularIniciativasAction
         servicioForm.setProperty("iniciativaId", calculoIndicadoresForm.getIniciativaId() != null ? calculoIndicadoresForm.getIniciativaId().toString() : "");
         servicioForm.setProperty("porNombre", calculoIndicadoresForm.getPorNombre() != null ? calculoIndicadoresForm.getPorNombre().toString() : "");
         servicioForm.setProperty("nombreIndicador", calculoIndicadoresForm.getNombreIndicador() != null ? calculoIndicadoresForm.getNombreIndicador() : "");
-        
+
         servicioForm.setProperty("logConsolaMetodos", Boolean.valueOf(false).toString());
         servicioForm.setProperty("logConsolaDetallado", Boolean.valueOf(false).toString());
         servicioForm.setProperty("usuarioId", usuario.getUsuarioId().toString());
-        
+
         servicioForm.setProperty("activarSheduler", Boolean.valueOf(true).toString());
         servicioForm.setProperty("unidadTiempo", Integer.valueOf(3).toString());
         servicioForm.setProperty("numeroEjecucion", Integer.valueOf(1).toString());
-        
+
         servicioForm.setProperty("calcularIniciativas", "true");
-        
+
         StringBuffer logBefore = log;
         new CalcularManager(servicioForm.Get(), log, com.visiongc.servicio.web.importar.util.VgcMessageResources.getVgcMessageResources("StrategosWeb")).Ejecutar();
         log = logBefore;
-        
+
         calculoIndicadoresForm.setStatus(CalculoIndicadoresForm.CalcularStatus.getCalcularStatusCalculado());
-        
+
         ahora = Calendar.getInstance();
         argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
         argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
-        
+
         log.append("\n\n");
         log.append(messageResources.getResource("jsp.asistente.calculo.log.fechafin.programada", argsReemplazo) + "\n\n");
-        
+
         request.getSession().setAttribute("verArchivoLog", log);
         if (usuario != null)
         {
@@ -198,7 +201,7 @@ public class CalcularIniciativasAction
           servicio.setNombre(messageResources.getResource("jsp.asistente.calculo.log.titulocalculo.iniciativas"));
           servicio.setMensaje(messageResources.getResource("jsp.asistente.calculo.log.fechafin.programada", argsReemplazo));
           servicio.setEstatus(CalculoIndicadoresForm.CalcularStatus.getCalcularStatusCalculado());
-          
+
           frameworkService.registrarAuditoriaEvento(servicio, usuario, tipoEvento);
         }
       }

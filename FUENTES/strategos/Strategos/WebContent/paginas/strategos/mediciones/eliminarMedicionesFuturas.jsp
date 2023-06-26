@@ -315,10 +315,10 @@
 				document.editarMedicionesForm.periodoHasta.value = document
 						.getElementById('selectPeriodoFinal').value;				
 
-				var xml = '&funcion=eliminar';				
+				var xml = '&funcion=eliminar';
 				activarBloqueoEspera();
 				document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/eliminarMedicionesFuturas"/>?anio=' + document.editarMedicionesForm.anoHasta.value
-						+ xml;
+						+ xml + '&source=' + document.editarMedicionesForm.sourceScreen.value;
 				document.editarMedicionesForm.submit();
 			}
 

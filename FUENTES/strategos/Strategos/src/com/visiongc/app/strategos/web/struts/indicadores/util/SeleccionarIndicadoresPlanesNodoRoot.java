@@ -1,23 +1,27 @@
 package com.visiongc.app.strategos.web.struts.indicadores.util;
 
-import com.visiongc.framework.arboles.NodoArbol;
 import java.util.Collection;
+
+import com.visiongc.framework.arboles.NodoArbol;
 
 public class SeleccionarIndicadoresPlanesNodoRoot
   implements NodoArbol
 {
   private Collection nodoArbolHijos;
 
-  public String getNodoArbolId()
+  @Override
+public String getNodoArbolId()
   {
     return "0";
   }
 
-  public String getNodoArbolNombre() {
+  @Override
+public String getNodoArbolNombre() {
     return "planes";
   }
 
-  	public String getNodoArbolNombreImagen(Byte tipo) 
+  	@Override
+	public String getNodoArbolNombreImagen(Byte tipo)
   	{
   		if (tipo == 1)
   			return "PlanNodoRoot";
@@ -25,52 +29,64 @@ public class SeleccionarIndicadoresPlanesNodoRoot
   			return "";
   	}
 
-  	public String getNodoArbolNombreToolTipImagen(Byte tipo)
+  	@Override
+	public String getNodoArbolNombreToolTipImagen(Byte tipo)
   	{
   		return "";
   	}
-  
-  public Collection getNodoArbolHijos() {
+
+  @Override
+public Collection getNodoArbolHijos() {
     return this.nodoArbolHijos;
   }
 
-  public void setNodoArbolHijos(Collection nodoArbolHijos) {
+  @Override
+public void setNodoArbolHijos(Collection nodoArbolHijos) {
     this.nodoArbolHijos = nodoArbolHijos;
   }
 
-  public boolean getNodoArbolHijosCargados() {
+  @Override
+public boolean getNodoArbolHijosCargados() {
     return true;
   }
 
-  public String getNodoArbolNombreCampoId() {
+  @Override
+public String getNodoArbolNombreCampoId() {
     return "nodoArbolId";
   }
 
-  public String getNodoArbolNombreCampoNombre() {
+  @Override
+public String getNodoArbolNombreCampoNombre() {
     return "nodoArbolNombre";
   }
 
-  public String getNodoArbolNombreCampoPadreId() {
+  @Override
+public String getNodoArbolNombreCampoPadreId() {
     return null;
   }
 
-  public void setNodoArbolPadre(NodoArbol nodoArbol)
+  @Override
+public void setNodoArbolPadre(NodoArbol nodoArbol)
   {
   }
 
-  public NodoArbol getNodoArbolPadre() {
+  @Override
+public NodoArbol getNodoArbolPadre() {
     return null;
   }
 
-  public String getNodoArbolPadreId() {
+  @Override
+public String getNodoArbolPadreId() {
     return null;
   }
 
-  public void setNodoArbolHijosCargados(boolean cargados)
+  @Override
+public void setNodoArbolHijosCargados(boolean cargados)
   {
   }
 
-  public void setNodoArbolNombre(String nombre)
+  @Override
+public void setNodoArbolNombre(String nombre)
   {
   }
 }

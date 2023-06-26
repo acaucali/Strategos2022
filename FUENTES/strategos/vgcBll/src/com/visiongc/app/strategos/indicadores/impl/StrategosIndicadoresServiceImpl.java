@@ -451,10 +451,7 @@ public class StrategosIndicadoresServiceImpl
     
     return indicadores;
   }
-  
-  
-  
-  
+   
   public PaginaLista getIndicadoresLogroPlan(int pagina, int tamanoPagina, String orden, String tipoOrden, boolean getTotal, Map filtros)
   {
     return persistenceSession.getIndicadores(pagina, tamanoPagina, orden, tipoOrden, getTotal, filtros);
@@ -599,7 +596,8 @@ public class StrategosIndicadoresServiceImpl
   }
   
   private void setSeriesIndicadorForSave(Indicador indicador)
-  {	  	          
+  {	  	   
+	  
       if(indicador.getSeriesIndicador() == null)
       {
           indicador.setSeriesIndicador(new HashSet());
@@ -612,16 +610,21 @@ public class StrategosIndicadoresServiceImpl
           serieIndicador.setNaturaleza(indicador.getNaturaleza());
           indicador.getSeriesIndicador().add(serieIndicador);          
       }
-      for(Iterator i = indicador.getSeriesIndicador().iterator(); i.hasNext();)
-      {
-    	      	  
-          SerieIndicador serieIndicador = (SerieIndicador)i.next();
+      
+      for(Iterator iter = indicador.getSeriesIndicador().iterator(); iter.hasNext();) {
+    	  SerieIndicador serieIndicador = (SerieIndicador)iter.next();
+    	  
           Byte naturaleza = indicador.getNaturaleza();
           serieIndicador.setNaturaleza(naturaleza);
-          serieIndicador.getPk().setIndicadorId(indicador.getIndicadorId());         
+          serieIndicador.getPk().setIndicadorId(indicador.getIndicadorId());       
+          
+          Set formulasSerie = serieIndicador.getFormulas();
+          if(formulasSerie.size() > 0) {
+        	  
+          }
                     
           if(serieIndicador.getFormulas() != null && serieIndicador.getFormulas().size() > 0)
-          {        	  
+          {        
               for(Iterator j = serieIndicador.getFormulas().iterator(); j.hasNext();)
               {            	  
                   Formula formula = (Formula)j.next();
@@ -629,7 +632,7 @@ public class StrategosIndicadoresServiceImpl
                   formula.getPk().setSerieId(serieIndicador.getPk().getSerieId());
                   formula.getPk().setIndicadorId(indicador.getIndicadorId());
                   if(formula.getInsumos() != null && formula.getInsumos().size() > 0)
-                  {                	  
+                  { 
                       InsumoFormula insumo;
                       for(Iterator k = formula.getInsumos().iterator(); k.hasNext(); insumo.getPk().setPadreId(indicador.getIndicadorId()))
                           insumo = (InsumoFormula)k.next();
@@ -642,7 +645,7 @@ public class StrategosIndicadoresServiceImpl
   }
   
   public int saveIndicador(Indicador indicador, Usuario usuario)
-  {	  	 
+  {	 
     boolean transActiva = false;
     boolean transActivaViene = false;
     int resultado = 10000;
@@ -665,13 +668,16 @@ public class StrategosIndicadoresServiceImpl
       
       if ((indicador.getIndicadorId() == null) || (indicador.getIndicadorId().longValue() == 0L))
       {    	  
+    	  
         if (persistenceSession.existsObject(indicador, fieldNames, fieldValues)) {
           resultado = 10003;
         }
         else {
           indicador.setIndicadorId(new Long(persistenceSession.getUniqueId()));
           
-          setSeriesIndicadorForSave(indicador);                  
+          System.out.print("\n\nndicaodr: " + indicador + "\n\n");
+          setSeriesIndicadorForSave(indicador);                
+          
           if ((indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoNominal())) || (indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoOrdinal())))
           {
             for (Iterator i = indicador.getEscalaCualitativa().iterator(); i.hasNext();) {
@@ -709,11 +715,8 @@ public class StrategosIndicadoresServiceImpl
         }
         else {
           Indicador indicadorOriginal = getIndicadorValoresOriginales(indicador.getIndicadorId());
-          
           setSeriesIndicadorForSave(indicador);
-          
           resultado = persistenceSession.update(indicador, usuario);
-          
           if (resultado == 10000) {
             resultado = verificarCambiosIndicador(indicador, indicadorOriginal);
           }

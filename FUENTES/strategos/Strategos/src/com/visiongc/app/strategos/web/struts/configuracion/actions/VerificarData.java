@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.configuracion.actions;
 
@@ -23,19 +23,21 @@ import com.visiongc.framework.model.Usuario;
  */
 public class VerificarData extends VgcAction
 {
-	  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+	  @Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	  {
 	  }
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	  @Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	  {
 		  super.execute(mapping, form, request, response);
 
 		  String forward = mapping.getParameter();
-		  
+
 		  return mapping.findForward(forward);
 	  }
-	  
+
 	  public void SetData(Usuario usuario)
 	  {
 		  StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();

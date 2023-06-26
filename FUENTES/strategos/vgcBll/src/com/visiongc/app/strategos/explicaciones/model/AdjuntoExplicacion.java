@@ -14,15 +14,16 @@ public class AdjuntoExplicacion
   private Explicacion explicacion;
   private String titulo;
   private String ruta;
-
+  private byte[] archivoBytes;
+  private Blob archivo;
 
   
-  public AdjuntoExplicacion(AdjuntoExplicacionPK pk, String titulo, String ruta, Explicacion explicacion)
+  public AdjuntoExplicacion(AdjuntoExplicacionPK pk, String titulo, String ruta, Explicacion explicacion, byte[] archivoByte)
   {
     this.pk = pk;
     this.titulo = titulo;
-    this.ruta=ruta;
     this.explicacion = explicacion;
+    this.archivoBytes = archivoByte;
   }
   
 
@@ -88,4 +89,24 @@ public class AdjuntoExplicacion
   {
     return new HashCodeBuilder().append(getPk()).toHashCode();
   }
+
+
+public Blob getArchivo() {
+	return archivo;
+}
+
+
+public void setArchivo(Blob adjuntoBinario) {
+	this.archivo = adjuntoBinario;
+}
+
+
+public byte[] getArchivoBytes() {
+	return archivoBytes;
+}
+
+
+public void setArchivoBytes(byte[] archivoBytes) {
+	this.archivoBytes = archivoBytes;
+}
 }

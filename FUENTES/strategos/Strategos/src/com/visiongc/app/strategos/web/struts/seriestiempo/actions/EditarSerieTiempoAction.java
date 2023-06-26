@@ -1,34 +1,37 @@
 package com.visiongc.app.strategos.web.struts.seriestiempo.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.seriestiempo.StrategosSeriesTiempoService;
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.app.strategos.web.struts.seriestiempo.forms.EditarSerieTiempoForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.seriestiempo.StrategosSeriesTiempoService;
+import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
+import com.visiongc.app.strategos.web.struts.seriestiempo.forms.EditarSerieTiempoForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EditarSerieTiempoAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		EditarSerieTiempoForm editarSerieTiempoForm = (EditarSerieTiempoForm)form;
-		
+
 		ActionMessages messages = getMessages(request);
 
 		String serieId = request.getParameter("serieId");
@@ -40,7 +43,7 @@ public class EditarSerieTiempoAction extends VgcAction
 		if ((serieId != null) && (!serieId.equals("")) && (!serieId.equals("0")))
 		{
 			bloqueado = !strategosSeriesTiempoService.lockForUpdate(request.getSession().getId(), serieId, null);
-			
+
 			editarSerieTiempoForm.setBloqueado(new Boolean(bloqueado));
 
 			SerieTiempo serieTiempo = (SerieTiempo)strategosSeriesTiempoService.load(SerieTiempo.class, new Long(serieId));
@@ -49,7 +52,7 @@ public class EditarSerieTiempoAction extends VgcAction
 			{
 				if (bloqueado)
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.bloqueado"));
-				
+
 				editarSerieTiempoForm.setSerieId(serieTiempo.getSerieId());
 				editarSerieTiempoForm.setNombre(serieTiempo.getNombre());
 				editarSerieTiempoForm.setIdentificador(serieTiempo.getIdentificador());
@@ -60,7 +63,7 @@ public class EditarSerieTiempoAction extends VgcAction
 			else
 			{
 				strategosSeriesTiempoService.unlockObject(request.getSession().getId(), new Long(serieId));
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
 			}
@@ -69,12 +72,12 @@ public class EditarSerieTiempoAction extends VgcAction
 			editarSerieTiempoForm.clear();
 
 		strategosSeriesTiempoService.close();
-		
+
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
-    
+
 		return mapping.findForward(forward);
 	}
 }

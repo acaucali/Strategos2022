@@ -63,11 +63,13 @@ public class GestionarCeldasForm extends VisorListaForm
     this.nombreVista = nombreVista;
   }
 
-  public String getSeleccionados() {
+  @Override
+public String getSeleccionados() {
     return this.seleccionados;
   }
 
-  public void setSeleccionados(String seleccionados) {
+  @Override
+public void setSeleccionados(String seleccionados) {
     this.seleccionados = seleccionados;
   }
 

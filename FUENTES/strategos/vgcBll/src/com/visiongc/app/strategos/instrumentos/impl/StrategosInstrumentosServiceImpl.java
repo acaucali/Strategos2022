@@ -259,7 +259,7 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 		return resultado;
 	}
 
-	public int saveInstrumentos(Instrumentos instrumento, Usuario usuario, Boolean actualizarIndicador) {
+	public int saveInstrumentos(Instrumentos instrumento, Usuario usuario, Long organizacionId, Boolean actualizarIndicador) {
 
 		boolean transActiva = false;
 		int resultado = 10000;
@@ -284,11 +284,11 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 						instrumento.getInstrumentoPeso().setInstrumentoId(instrumento.getInstrumentoId());
 					}
 										
-					resultado = saveClaseIndicadores(instrumento, usuario);
+					resultado = saveClaseIndicadores(instrumento, usuario, organizacionId);
 
 					if (resultado == 10000) {
 						ConfiguracionInstrumento configuracionInstrumento = getConfiguracionInstrumento();											
-						resultado = saveIndicadorAutomatico(instrumento,TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionInstrumento, usuario);																											
+						resultado = saveIndicadorAutomatico(instrumento,TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionInstrumento, usuario, organizacionId);																											
 					}					
 					if (resultado == 10000) {
 						resultado = persistenceSession.insert(instrumento, usuario);
@@ -360,11 +360,11 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 								strategosIndicadoresService.close();
 							}
 						}else {
-							resultado = saveClaseIndicadores(instrumento, usuario);
+							resultado = saveClaseIndicadores(instrumento, usuario, organizacionId);
 
 							if (resultado == 10000) {										
 								ConfiguracionInstrumento configuracionInstrumento = getConfiguracionInstrumento();
-								resultado = saveIndicadorAutomatico(instrumento,TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionInstrumento, usuario);																											
+								resultado = saveIndicadorAutomatico(instrumento,TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionInstrumento, usuario, organizacionId);																											
 							}					
 							if (resultado == 10000) {
 								resultado = persistenceSession.insert(instrumento, usuario);
@@ -576,18 +576,18 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 		return persistenceSession.updatePesos(instrumentoIniciativa, ususario);
 	}
 
-	private ClaseIndicadores saveClaseIndicadorAnio(Usuario usuario) {
+	private ClaseIndicadores saveClaseIndicadorAnio(Usuario usuario, Long organizacionId) {
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance()
 				.openStrategosClasesIndicadoresService(this);		
 		
 		ClaseIndicadores clase = new ClaseIndicadores();		
 		String anio = new SimpleDateFormat("yyyy").format(new Date());
-		ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaizInstrumento(19L, TipoClaseIndicadores.getTipoClasePlanificacionSeguimiento(),messageResources.getResource("instrumento.clase.nombre"), usuario);	
+		ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaizInstrumento(organizacionId, TipoClaseIndicadores.getTipoClasePlanificacionSeguimiento(),messageResources.getResource("instrumento.clase.nombre"), usuario);	
 		
 		clase.setPadreId(claseRoot.getClaseId());
 		clase.setNombre(anio);
 		clase.setHijos(null);
-		clase.setOrganizacionId(19L);		
+		clase.setOrganizacionId(organizacionId);		
 		clase.setTipo(TipoClaseIndicadores.getTipoClasePlanificacionSeguimiento());
 		clase.setVisible(new Boolean(true));
 		
@@ -595,7 +595,7 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 		
 		if(resultado == 10000) {
 			ConfiguracionInstrumento configuracionInstrumento = getConfiguracionInstrumento();
-			resultado = saveIndicadorAnioAutomatico(clase, TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionInstrumento, usuario);
+			resultado = saveIndicadorAnioAutomatico(clase, TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionInstrumento, usuario, organizacionId);
 		}
 			
 		strategosClasesIndicadoresService.close();
@@ -603,33 +603,33 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 		return clase;
 	}
 
-	private int saveClaseIndicadores(Instrumentos instrumento, Usuario usuario) {
+	private int saveClaseIndicadores(Instrumentos instrumento, Usuario usuario, Long organizacionId) {
 
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance()
 				.openStrategosClasesIndicadoresService(this);
 		
 		String anio = new SimpleDateFormat("yyyy").format(new Date());
-		ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaizInstrumento(19L, TipoClaseIndicadores.getTipoClasePlanificacionSeguimiento(),messageResources.getResource("instrumento.clase.nombre"), usuario);
+		ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaizInstrumento(organizacionId, TipoClaseIndicadores.getTipoClasePlanificacionSeguimiento(),messageResources.getResource("instrumento.clase.nombre"), usuario);
 		ClaseIndicadores clase = new ClaseIndicadores();		
 		ClaseIndicadores padre  =  new ClaseIndicadores();
 		
 		Map<String, Object> filtrosAnioInd = new HashMap();
 
-		filtrosAnioInd.put("organizacionId", 19L);
+		filtrosAnioInd.put("organizacionId", organizacionId);
 		filtrosAnioInd.put("nombre", anio);
 		filtrosAnioInd.put("padreId", claseRoot.getClaseId());
 		List<ClaseIndicadores> AnioInd = strategosClasesIndicadoresService.getClases(filtrosAnioInd);			
 		if (AnioInd.size() > 0) {
 			padre = (ClaseIndicadores) AnioInd.get(0);
 		}else {
-			padre = saveClaseIndicadorAnio(usuario);
+			padre = saveClaseIndicadorAnio(usuario, organizacionId);
 		}
 		
 		
 		clase.setPadreId(padre.getClaseId());		
 		clase.setNombre(instrumento.getNombreCorto());	
 		clase.setHijos(null);
-		clase.setOrganizacionId(19L);		
+		clase.setOrganizacionId(organizacionId);		
 		clase.setTipo(TipoClaseIndicadores.getTipoClasePlanificacionSeguimiento());
 		clase.setVisible(new Boolean(true));
 		
@@ -706,14 +706,14 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 		return configuracionInstrumento;
 	}
 
-	private int saveIndicadorAnioAutomatico(ClaseIndicadores clase, Byte tipo, ConfiguracionInstrumento configuracionInstrumento, Usuario usuario) {
+	private int saveIndicadorAnioAutomatico(ClaseIndicadores clase, Byte tipo, ConfiguracionInstrumento configuracionInstrumento, Usuario usuario, Long organizacionId) {
 		int resultado = 10000;
 		
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
 				.openStrategosIndicadoresService(this);
 		Indicador indicador = new Indicador();
 		indicador.setClaseId(clase.getClaseId());
-		indicador.setOrganizacionId(19L);
+		indicador.setOrganizacionId(organizacionId);
 		String nombre = "";
 		nombre = configuracionInstrumento.getInstrumentoIndicadorAvanceNombre() + " - Instrumentos Cooperacion " ;
 		nombre = nombre + clase.getNombre();
@@ -768,7 +768,7 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 	}
 	
 	private int saveIndicadorAutomatico(Instrumentos instrumento, Byte tipo,
-			ConfiguracionInstrumento configuracionInstrumento, Usuario usuario) {
+			ConfiguracionInstrumento configuracionInstrumento, Usuario usuario, Long organizacionId) {
 				
 		int resultado = 10000;
 
@@ -776,7 +776,7 @@ public class StrategosInstrumentosServiceImpl extends StrategosServiceImpl imple
 				.openStrategosIndicadoresService(this);
 		Indicador indicador = new Indicador();
 		indicador.setClaseId(instrumento.getClaseId());
-		indicador.setOrganizacionId(19L);
+		indicador.setOrganizacionId(organizacionId);
 		String nombre = "";					
 		nombre = configuracionInstrumento.getInstrumentoIndicadorAvanceNombre() + " - ";		
 		nombre = nombre + instrumento.getNombreCorto();

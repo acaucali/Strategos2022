@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
@@ -25,34 +25,36 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class SeleccionarReporteAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
-		
-	    if (request.getParameter("funcion") != null) 
+
+	    if (request.getParameter("funcion") != null)
 	    {
 	    	String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("eliminar")) 
+	    	if (funcion.equals("eliminar"))
 	    	{
 	    		Long id = Long.parseLong(request.getParameter("Id"));
-	    		
+
 	    		Eliminar(id, request);
-	    		
+
 	    		return mapping.findForward("ajaxResponse");
 	    	}
-	    	
-	    	if (funcion.equals("read")) 
+
+	    	if (funcion.equals("read"))
 	    	{
 	    		Long id = Long.parseLong(request.getParameter("Id"));
-	    		
+
 	    		Read(id, request);
-	    		
+
 	    		return mapping.findForward("ajaxResponse");
 	    	}
 
@@ -60,11 +62,11 @@ public class SeleccionarReporteAction extends VgcAction
 	    	{
 	    		SeleccionarReporteForm seleccionarReporteForm = new SeleccionarReporteForm();
 	    		seleccionarReporteForm.clear();
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
 	    }
-		
+
 		boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
 	    String ts = request.getParameter("ts");
 
@@ -72,29 +74,29 @@ public class SeleccionarReporteAction extends VgcAction
 			return getForwardBack(request, 1, true);
 
 		SeleccionarReporteForm seleccionarReporteForm = (SeleccionarReporteForm)form;
-		
-		if (request.getParameter("nombreForma") != null) 
+
+		if (request.getParameter("nombreForma") != null)
 			seleccionarReporteForm.setNombreForma(request.getParameter("nombreForma"));
-		if (request.getParameter("nombreCampoOculto") != null) 
+		if (request.getParameter("nombreCampoOculto") != null)
 			seleccionarReporteForm.setNombreCampoOculto(request.getParameter("nombreCampoOculto"));
-		if (request.getParameter("funcionCierre") != null) 
+		if (request.getParameter("funcionCierre") != null)
 			seleccionarReporteForm.setFuncionCierre(request.getParameter("funcionCierre"));
-		
+
 	    if (!((ts == null) || (ts.equals(""))))
 	    	forward = "finalizarForm";
 
-	    if (forward.equals("finalizarForm")) 
+	    if (forward.equals("finalizarForm"))
 	    	return getForwardBack(request, 1, true);
-	    
+
 	    return getForwardBack(request, 1, true);
 	}
-	
+
 	private int Eliminar(Long id, HttpServletRequest request)
 	{
 		int result = 10000;
-		
+
 		ActionMessages messages = getMessages(request);
-		
+
 	    StrategosReportesService strategosReportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
 
 	    strategosReportesService.unlockObject(request.getSession().getId(), id);
@@ -102,7 +104,7 @@ public class SeleccionarReporteAction extends VgcAction
 	    boolean bloqueado = !strategosReportesService.lockForDelete(request.getSession().getId(), id);
 
 	    Reporte reporte = (Reporte)strategosReportesService.load(Reporte.class, new Long(id));
-		
+
 	    if (reporte != null)
 	    {
 	    	if (bloqueado)
@@ -120,7 +122,7 @@ public class SeleccionarReporteAction extends VgcAction
 	    			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", reporte.getNombre()));
 	    	}
 	    }
-	    else 
+	    else
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 	    strategosReportesService.unlockObject(request.getSession().getId(), id);
@@ -129,28 +131,28 @@ public class SeleccionarReporteAction extends VgcAction
 
 	    saveMessages(request, messages);
 
-		return result; 
+		return result;
 	}
-	
+
 	private int Read(Long id, HttpServletRequest request)
 	{
 		int result = 10000;
-		
+
 		ActionMessages messages = getMessages(request);
-		
+
 	    StrategosReportesService strategosReportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
 
 	    Reporte reporte = (Reporte)strategosReportesService.load(Reporte.class, new Long(id));
-		
+
 	    if (reporte != null)
 	    	request.setAttribute("ajaxResponse", reporte.getNombre());
-	    else 
+	    else
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 	    strategosReportesService.close();
 
 	    saveMessages(request, messages);
 
-		return result; 
+		return result;
 	}
 }

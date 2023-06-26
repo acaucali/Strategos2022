@@ -1,9 +1,11 @@
 package com.visiongc.app.strategos.web.struts.taglib;
 
+import javax.servlet.jsp.JspException;
+
+import org.apache.struts.taglib.TagUtils;
+
 import com.visiongc.app.strategos.planificacionseguimiento.model.util.AlertaIniciativaProducto;
 import com.visiongc.commons.struts.tag.VgcBaseTag;
-import javax.servlet.jsp.JspException;
-import org.apache.struts.taglib.TagUtils;
 
 public class ImagenAlertaIniciativaTag extends VgcBaseTag
 {
@@ -14,43 +16,44 @@ public class ImagenAlertaIniciativaTag extends VgcBaseTag
 
 	protected String scope = null;
 
-	public String getName() 
+	public String getName()
 	{
 		return this.name;
 	}
 
-	public void setName(String name) 
+	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	public String getScope() 
+	public String getScope()
 	{
 		return this.scope;
 	}
 
-	public void setScope(String scope) 
+	public void setScope(String scope)
 	{
 		this.scope = scope;
 	}
 
-	public String getProperty() 
+	public String getProperty()
 	{
 		return this.property;
 	}
 
-	public void setProperty(String property) 
+	public void setProperty(String property)
 	{
 		this.property = property;
 	}
 
+	@Override
 	public int doStartTag() throws JspException
 	{
 		String nombreImagen = "alertaBlanca.gif";
-		
+
 		Object value = TagUtils.getInstance().lookup(this.pageContext, this.name, this.property, this.scope);
 
-		if (value != null) 
+		if (value != null)
 		{
 			Byte valorAlerta = Byte.valueOf(value.toString());
 
@@ -62,10 +65,10 @@ public class ImagenAlertaIniciativaTag extends VgcBaseTag
 				nombreImagen = "alertaVerde.gif";
 			else if (valorAlerta.equals(AlertaIniciativaProducto.getAlertaNoDefinible()))
 				nombreImagen = "alertaBlanca.gif";
-			else if (valorAlerta.equals(AlertaIniciativaProducto.getAlertaEnEsperaComienzo())) 
+			else if (valorAlerta.equals(AlertaIniciativaProducto.getAlertaEnEsperaComienzo()))
 				nombreImagen = "alertaBlanca.gif";
 		}
-    
+
 		String resultado = "<img style=\"cursor: pointer\" src=\"" + getUrlAplicacion() + "/paginas/strategos/indicadores/imagenes/" + nombreImagen + "\" border=\"0\" width=\"10\" height=\"10\" title=\"" + getMessageResource(null, null, "boton.alerta.alt") + "\">";
 
 		TagUtils.getInstance().write(this.pageContext, resultado);
@@ -73,7 +76,8 @@ public class ImagenAlertaIniciativaTag extends VgcBaseTag
 		return 0;
 	}
 
-	public void release() 
+	@Override
+	public void release()
 	{
 		super.release();
 		this.name = null;

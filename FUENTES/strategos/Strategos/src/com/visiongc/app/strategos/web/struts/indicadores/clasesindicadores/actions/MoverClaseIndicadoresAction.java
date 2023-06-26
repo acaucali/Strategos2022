@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.clasesindicadores.actions;
 
@@ -24,10 +24,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class MoverClaseIndicadoresAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -57,7 +59,7 @@ public class MoverClaseIndicadoresAction extends VgcAction
 				}
 			}
 		}
-		
+
 		strategosClasesIndicadoresService.close();
 
 	    saveMessages(request, messages);
@@ -65,7 +67,7 @@ public class MoverClaseIndicadoresAction extends VgcAction
 	    request.setAttribute("ajaxResponse", status.toString());
 		return mapping.findForward("ajaxResponse");
 	}
-	
+
 	private boolean claseSeleccionEsHijo(Long claseSeleccionId, Long claseId, StrategosClasesIndicadoresService strategosClasesIndicadoresService)
 	{
 		ClaseIndicadores clase = (ClaseIndicadores)strategosClasesIndicadoresService.load(ClaseIndicadores.class, new Long(claseSeleccionId));

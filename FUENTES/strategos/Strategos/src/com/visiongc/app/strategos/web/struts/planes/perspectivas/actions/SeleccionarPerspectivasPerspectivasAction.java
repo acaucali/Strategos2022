@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
@@ -12,26 +24,17 @@ import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.TreeviewWeb;
 import com.visiongc.framework.arboles.ArbolesService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.util.PermisologiaUsuario;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class SeleccionarPerspectivasPerspectivasAction extends VgcAction
 {
 	public static final String ACTION_KEY = "SeleccionarPerspectivasPerspectivasAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -45,33 +48,33 @@ public final class SeleccionarPerspectivasPerspectivasAction extends VgcAction
 		boolean mostrarTodas = getPermisologiaUsuario(request).tienePermiso("PERSPECTIVA_VIEWALL");
 
 		String llamadaDesde = request.getParameter("llamadaDesde");
-		if (llamadaDesde != null) 
+		if (llamadaDesde != null)
 		{
 			if (llamadaDesde.equals("Organizaciones"))
 				seleccionarPerspectivasForm.setPanelSeleccionado("panelOrganizaciones");
 			else if (llamadaDesde.equals("Planes"))
 				seleccionarPerspectivasForm.setPanelSeleccionado("panelPlanes");
-			else if (llamadaDesde.equals("Perspectivas")) 
+			else if (llamadaDesde.equals("Perspectivas"))
 				seleccionarPerspectivasForm.setPanelSeleccionado("panelPerspectivas");
 		}
 
 		ArbolesService arbolesService = FrameworkServiceFactory.getInstance().openArbolesService();
 		ArbolBean arbolBean = (ArbolBean)request.getSession().getAttribute("seleccionarPerspectivasArbolPerspectivasBean");
 
-		if ((arbolBean == null) || (!seleccionarPerspectivasForm.getIniciado().booleanValue()) || (seleccionarPerspectivasForm.isCambioPlan())) 
+		if ((arbolBean == null) || (!seleccionarPerspectivasForm.getIniciado().booleanValue()) || (seleccionarPerspectivasForm.isCambioPlan()))
 		{
 			arbolBean = new ArbolBean();
 			arbolBean.clear();
 			request.getSession().setAttribute("seleccionarPerspectivasArbolPerspectivasBean", arbolBean);
 		}
 
-		if ((seleccionarPerspectivasForm.getPlanSeleccionadoId() != null) && (seleccionarPerspectivasForm.getPlanSeleccionadoId().byteValue() != 0)) 
+		if ((seleccionarPerspectivasForm.getPlanSeleccionadoId() != null) && (seleccionarPerspectivasForm.getPlanSeleccionadoId().byteValue() != 0))
 		{
 			StrategosPlanesService planesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 			seleccionarPerspectivasForm.setNombrePlan(((Plan)planesService.load(Plan.class, seleccionarPerspectivasForm.getPlanSeleccionadoId())).getNombre());
 			planesService.close();
-		} 
-		else 
+		}
+		else
 		{
 			seleccionarPerspectivasForm.setNombrePlan(null);
 			seleccionarPerspectivasForm.setPerspectivaSeleccionadaId(null);
@@ -80,7 +83,7 @@ public final class SeleccionarPerspectivasPerspectivasAction extends VgcAction
 			arbolBean.clear();
 			request.getSession().setAttribute("seleccionarPerspectivasArbolPerspectivasBean", arbolBean);
 			arbolesService.close();
-			
+
 			return mapping.findForward(forward);
 		}
 
@@ -90,53 +93,53 @@ public final class SeleccionarPerspectivasPerspectivasAction extends VgcAction
 		{
 			Perspectiva perspectivaRoot = new Perspectiva();
 			Perspectiva perspectiva = null;
-			if ((seleccionarPerspectivasForm.getPerspectivaSeleccionadaId() != null) && (!seleccionarPerspectivasForm.getIniciado().booleanValue())) 
+			if ((seleccionarPerspectivasForm.getPerspectivaSeleccionadaId() != null) && (!seleccionarPerspectivasForm.getIniciado().booleanValue()))
 			{
 				perspectiva = (Perspectiva)arbolesService.load(Perspectiva.class, seleccionarPerspectivasForm.getPerspectivaSeleccionadaId());
-				if (perspectiva != null) 
+				if (perspectiva != null)
 				{
 					List nodos = arbolesService.getRutaCompleta(perspectiva);
-					for (Iterator iter = nodos.iterator(); iter.hasNext(); ) 
+					for (Iterator iter = nodos.iterator(); iter.hasNext(); )
 					{
 						Perspectiva pers = (Perspectiva)iter.next();
 						TreeviewWeb.publishArbolAbrirNodo(arbolBean, pers.getPerspectivaId().toString());
 					}
-          
+
 					perspectivaRoot = new Perspectiva();
 					perspectivaRoot.setPerspectivaId(((Perspectiva)nodos.get(0)).getPerspectivaId());
 					perspectivaRoot.setPadreId(((Perspectiva)nodos.get(0)).getPadreId());
 					perspectivaRoot.setNombre(((Perspectiva)nodos.get(0)).getNombre());
-				} 
-				else 
+				}
+				else
 				{
 					Object[] arregloIdentificadores = new Object[2];
 					arregloIdentificadores[0] = "planId";
 					arregloIdentificadores[1] = seleccionarPerspectivasForm.getPlanSeleccionadoId();
 					perspectivaRoot = (Perspectiva)arbolesService.getNodoArbolRaiz(perspectivaRoot, arregloIdentificadores);
-					if (perspectivaRoot == null) 
+					if (perspectivaRoot == null)
 					{
 						StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 						perspectivaRoot = strategosPerspectivasService.crearPerspectivaRaiz(seleccionarPerspectivasForm.getPlanSeleccionadoId(), getUsuarioConectado(request));
 						strategosPerspectivasService.close();
 					}
-          
+
 					TreeviewWeb.publishArbol(arbolBean, null, perspectivaRoot.getPerspectivaId().toString(), null, null, true);
 					perspectiva = perspectivaRoot;
 				}
-			} 
-			else 
+			}
+			else
 			{
 				Object[] arregloIdentificadores = new Object[2];
 				arregloIdentificadores[0] = "planId";
 				arregloIdentificadores[1] = seleccionarPerspectivasForm.getPlanSeleccionadoId();
 				perspectivaRoot = (Perspectiva)arbolesService.getNodoArbolRaiz(perspectivaRoot, arregloIdentificadores);
-				if (perspectivaRoot == null) 
+				if (perspectivaRoot == null)
 				{
 					StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 					perspectivaRoot = strategosPerspectivasService.crearPerspectivaRaiz(seleccionarPerspectivasForm.getPlanSeleccionadoId(), getUsuarioConectado(request));
 					strategosPerspectivasService.close();
 				}
-        
+
 				TreeviewWeb.publishArbol(arbolBean, null, perspectivaRoot.getPerspectivaId().toString(), null, null, true);
 				perspectiva = perspectivaRoot;
 			}
@@ -156,36 +159,36 @@ public final class SeleccionarPerspectivasPerspectivasAction extends VgcAction
 			String cerrarPerspectivaId = request.getParameter("cerrarPerspectivaId");
 			Perspectiva perspectivaSeleccionada = null;
 
-			if (request.getAttribute("SeleccionarPerspectivasPerspectivasAction.reloadId") != null) 
+			if (request.getAttribute("SeleccionarPerspectivasPerspectivasAction.reloadId") != null)
 				perspectivaSeleccionada = (Perspectiva)arbolesService.load(Perspectiva.class, (Long)request.getAttribute("SeleccionarPerspectivasPerspectivasAction.reloadId"));
-			else if ((seleccionarPerspectivaId != null) && (!seleccionarPerspectivaId.equals(""))) 
+			else if ((seleccionarPerspectivaId != null) && (!seleccionarPerspectivaId.equals("")))
 				perspectivaSeleccionada = (Perspectiva)arbolesService.load(Perspectiva.class, new Long(seleccionarPerspectivaId));
-			else if ((abrirPerspectivaId != null) && (!abrirPerspectivaId.equals(""))) 
+			else if ((abrirPerspectivaId != null) && (!abrirPerspectivaId.equals("")))
 			{
 				TreeviewWeb.publishArbolAbrirNodo(arbolBean, abrirPerspectivaId);
 				perspectivaSeleccionada = (Perspectiva)arbolesService.load(Perspectiva.class, new Long(abrirPerspectivaId));
-			} 
-			else if ((cerrarPerspectivaId != null) && (!cerrarPerspectivaId.equals(""))) 
+			}
+			else if ((cerrarPerspectivaId != null) && (!cerrarPerspectivaId.equals("")))
 			{
 				TreeviewWeb.publishArbolCerrarNodo(arbolBean, cerrarPerspectivaId);
 				perspectivaSeleccionada = (Perspectiva)arbolesService.load(Perspectiva.class, new Long(cerrarPerspectivaId));
-			} 
-			else 
+			}
+			else
 				perspectivaSeleccionada = (Perspectiva)arbolesService.load(Perspectiva.class, new Long(arbolBean.getSeleccionadoId()));
 
 			Long reloadId;
-			if (perspectivaSeleccionada == null) 
+			if (perspectivaSeleccionada == null)
 			{
 				perspectivaSeleccionada = (Perspectiva)arbolBean.getNodoRaiz();
 				reloadId = perspectivaSeleccionada.getPerspectivaId();
 				TreeviewWeb.publishArbol(arbolBean, perspectivaSeleccionada.getPerspectivaId().toString(), true);
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
-			} 
-			else 
+			}
+			else
 			{
 				reloadId = perspectivaSeleccionada.getPerspectivaId();
-				if (cerrarPerspectivaId == null) 
+				if (cerrarPerspectivaId == null)
 					TreeviewWeb.publishArbolAbrirNodo(arbolBean, reloadId.toString());
 			}
 
@@ -202,7 +205,7 @@ public final class SeleccionarPerspectivasPerspectivasAction extends VgcAction
 		seleccionarPerspectivasForm.setIniciado(new Boolean(true));
 
 		saveMessages(request, messages);
-		
+
 		return mapping.findForward(forward);
 	}
 }

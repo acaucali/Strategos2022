@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.actions;
 
@@ -33,10 +33,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class EditarPortafolioAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -46,16 +48,16 @@ public class EditarPortafolioAction extends VgcAction
 		EditarPortafolioForm editarPortafolioForm = (EditarPortafolioForm)form;
 		if (editarPortafolioForm != null && editarPortafolioForm.getStatus() != null && editarPortafolioForm.getStatus().byteValue() == StatusUtil.getStatusAlertaNotDefinida().byteValue())
 			return mapping.findForward(forward);
-		
+
 		editarPortafolioForm.clear();
-		
+
 		ActionMessages messages = getMessages(request);
 
 		Long id = (request.getParameter("id") != null && request.getParameter("id") != "" ? Long.parseLong(request.getParameter("id")) : null);
-		
+
 		boolean verForm = getPermisologiaUsuario(request).tienePermiso("PORTAFOLIO_VIEW");
 		boolean editarForm = getPermisologiaUsuario(request).tienePermiso("PORTAFOLIO_EDIT");
-		
+
 		StrategosPortafoliosService strategosPortafoliosService = StrategosServiceFactory.getInstance().openStrategosPortafoliosService();
 
 		if (id != null && id != 0)
@@ -71,7 +73,7 @@ public class EditarPortafolioAction extends VgcAction
 				editarPortafolioForm.setEstatusId(portafolio.getEstatusId());
 				editarPortafolioForm.setEstatus(portafolio.getEstatus());
 				editarPortafolioForm.setOrganizacion(portafolio.getOrganizacion());
-				
+
 				Map<String, String> filtros = new HashMap<String, String>();
 				StrategosPaginasService strategosPaginasService = StrategosServiceFactory.getInstance().openStrategosPaginasService();
 			    filtros = new HashMap<String, String>();
@@ -88,7 +90,7 @@ public class EditarPortafolioAction extends VgcAction
 				}
 				strategosPaginasService.close();
 			}
-			else 
+			else
 			{
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
@@ -104,7 +106,7 @@ public class EditarPortafolioAction extends VgcAction
 		}
 		else if (!verForm && !editarForm)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
-    
+
 		saveMessages(request, messages);
 
 		return mapping.findForward(forward);

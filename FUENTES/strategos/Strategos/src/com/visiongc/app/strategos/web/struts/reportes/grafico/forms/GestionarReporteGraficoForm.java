@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.forms;
 
@@ -12,7 +12,7 @@ import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 public class GestionarReporteGraficoForm  extends SelectorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private String nombreVistaSeleccionada;
 	private int paginaSeleccionadaVistas;
 	private String atributoOrdenVistas;
@@ -25,57 +25,57 @@ public class GestionarReporteGraficoForm  extends SelectorListaForm
 		return this.nombreVistaSeleccionada;
 	}
 
-	public void setNombreVistaSeleccionada(String nombreVistaSeleccionada) 
+	public void setNombreVistaSeleccionada(String nombreVistaSeleccionada)
 	{
 	    this.nombreVistaSeleccionada = nombreVistaSeleccionada;
 	}
 
-	public int getPaginaSeleccionadaVistas() 
+	public int getPaginaSeleccionadaVistas()
 	{
 	    return this.paginaSeleccionadaVistas;
 	}
 
-	public void setPaginaSeleccionadaVistas(int paginaSeleccionadaVistas) 
+	public void setPaginaSeleccionadaVistas(int paginaSeleccionadaVistas)
 	{
 	    this.paginaSeleccionadaVistas = paginaSeleccionadaVistas;
 	}
 
-	public String getAtributoOrdenVistas() 
+	public String getAtributoOrdenVistas()
 	{
 	    return this.atributoOrdenVistas;
 	}
 
-	public void setAtributoOrdenVistas(String atributoOrdenVistas) 
+	public void setAtributoOrdenVistas(String atributoOrdenVistas)
 	{
 	    this.atributoOrdenVistas = atributoOrdenVistas;
 	}
 
-	public String getTipoOrdenVistas() 
+	public String getTipoOrdenVistas()
 	{
 	    return this.tipoOrdenVistas;
 	}
 
-	public void setTipoOrdenVistas(String tipoOrdenVistas) 
+	public void setTipoOrdenVistas(String tipoOrdenVistas)
 	{
 	    this.tipoOrdenVistas = tipoOrdenVistas;
 	}
 
-	public String getBloqueadosVistas() 
+	public String getBloqueadosVistas()
 	{
 	    return this.bloqueadosVistas;
 	}
 
-	public void setBloqueadosVistas(String bloqueadosVistas) 
+	public void setBloqueadosVistas(String bloqueadosVistas)
 	{
 	    this.bloqueadosVistas = bloqueadosVistas;
 	}
 
-	public String getSeleccionadosVistas() 
+	public String getSeleccionadosVistas()
 	{
 	    return this.seleccionadosVistas;
 	}
 
-	public void setSeleccionadosVistas(String seleccionadosVistas) 
+	public void setSeleccionadosVistas(String seleccionadosVistas)
 	{
 	    this.seleccionadosVistas = seleccionadosVistas;
 	}

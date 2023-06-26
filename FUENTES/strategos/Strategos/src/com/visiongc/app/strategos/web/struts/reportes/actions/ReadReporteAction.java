@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
@@ -21,16 +21,18 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class ReadReporteAction extends VgcAction
 {
-	  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+	  @Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	  {
 	  }
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	  @Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	  {
 		  super.execute(mapping, form, request, response);
 
 		  String forward = mapping.getParameter();
-		  
+
 		  ReporteForm reporteForm = (ReporteForm)form;
 		  reporteForm.setFrecuencia((byte) 3);
 		  reporteForm.setFrecuencias(Frecuencia.getFrecuencias());

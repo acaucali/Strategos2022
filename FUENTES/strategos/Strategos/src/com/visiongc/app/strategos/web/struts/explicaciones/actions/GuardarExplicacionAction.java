@@ -1,14 +1,26 @@
 package com.visiongc.app.strategos.web.struts.explicaciones.actions;
 
+import java.util.Date;
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
-import com.visiongc.app.strategos.explicaciones.model.Explicacion.ObjetivoKey;
 import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.MemoExplicacionPK;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
+import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
 import com.visiongc.app.strategos.web.struts.explicaciones.forms.EditarExplicacionForm;
@@ -19,40 +31,26 @@ import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.util.WebUtil;
 import com.visiongc.framework.model.Usuario;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.upload.FormFile;
-
 public class GuardarExplicacionAction
   extends VgcAction
 {
   private static final String ACTION_KEY = "GuardarExplicacionAction";
-  
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     EditarExplicacionForm editarExplicacionForm = (EditarExplicacionForm)form;
-    
+
     ActionMessages messages = getMessages(request);
-    
+
     boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
     String ts = request.getParameter("ts");
     String ultimoTs = (String)request.getSession().getAttribute("GuardarExplicacionAction.ultimoTs");
@@ -65,9 +63,9 @@ public class GuardarExplicacionAction
     if (cancelar)
     {
       strategosExplicacionesService.unlockObject(request.getSession().getId(), editarExplicacionForm.getExplicacionId());
-      
+
       strategosExplicacionesService.close();
-      
+
       return getForwardBack(request, 1, true);
     }
     Explicacion explicacion = new Explicacion();
@@ -79,6 +77,11 @@ public class GuardarExplicacionAction
     }
     else
     {
+    
+    System.out.print("\n\nObjeto Key : " + editarExplicacionForm.getObjetoKey());
+    System.out.print("\n\nObjeto Id : " + editarExplicacionForm.getObjetoId());
+    System.out.print("\n\nTipo : " + editarExplicacionForm.getTipo());
+    	
       nuevo = true;
       explicacion = new Explicacion();
       explicacion.setExplicacionId(new Long(0L));
@@ -114,6 +117,11 @@ public class GuardarExplicacionAction
         explicacion.setObjetoKey(Explicacion.ObjetivoKey.getKeyInstrumento());
         explicacion.setObjetoId(((Instrumentos)request.getSession().getAttribute("instrumento")).getInstrumentoId());
       }
+      if(((String)request.getSession().getAttribute("objetoKey")).equals("Actividad"))
+      {
+    	explicacion.setObjetoKey(Explicacion.ObjetivoKey.getKeyActividad());
+    	explicacion.setObjetoId(((PryActividad)request.getSession().getAttribute("pryActividad")).getActividadId());
+      }
     }
     explicacion.setTitulo(editarExplicacionForm.getTitulo());
     explicacion.setPublico(WebUtil.getValorInputCheck(request, "publico"));
@@ -124,11 +132,11 @@ public class GuardarExplicacionAction
     if (editarExplicacionForm.getFechaReal() != null) {
       explicacion.setFechaReal(FechaUtil.convertirStringToDate(editarExplicacionForm.getFechaReal(), VgcResourceManager.getResourceApp("formato.fecha.corta")));
     }
-   
+
     explicacion.getAdjuntosExplicacion().clear();
     explicacion.getAdjuntosExplicacion().addAll(editarExplicacionForm.getAdjuntosExplicacion());
-    
-    
+
+
     explicacion.getMemosExplicacion().clear();
     if (editarExplicacionForm.getMemoDescripcion() != null)
     {
@@ -220,9 +228,9 @@ public class GuardarExplicacionAction
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
     }
     strategosExplicacionesService.close();
-    
+
     saveMessages(request, messages);
-    
+
     request.getSession().setAttribute("GuardarExplicacionAction.ultimoTs", ts);
     if (forward.equals("exito")) {
       return getForwardBack(request, 1, true);

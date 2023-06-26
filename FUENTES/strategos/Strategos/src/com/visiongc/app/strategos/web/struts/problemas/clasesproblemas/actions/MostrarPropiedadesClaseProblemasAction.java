@@ -1,5 +1,13 @@
 package com.visiongc.app.strategos.web.struts.problemas.clasesproblemas.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.problemas.StrategosClasesProblemasService;
 import com.visiongc.app.strategos.problemas.StrategosProblemasService;
@@ -9,25 +17,21 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 
 public class MostrarPropiedadesClaseProblemasAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
-		
+
 		EditarClaseProblemasForm editarClaseProblemasForm = (EditarClaseProblemasForm)form;
 
 		ActionMessages messages = getMessages(request);
@@ -42,7 +46,7 @@ public class MostrarPropiedadesClaseProblemasAction extends VgcAction
 		if (cancelar)
 		{
 			strategosClasesProblemasService.unlockObject(request.getSession().getId(), editarClaseProblemasForm.getClaseId());
-			
+
 			strategosClasesProblemasService.close();
 
 			return getForwardBack(request, 1, true);
@@ -52,13 +56,13 @@ public class MostrarPropiedadesClaseProblemasAction extends VgcAction
 
 		if (claseProblemas != null)
 		{
-			if (claseProblemas.getCreadoId() != null) 
+			if (claseProblemas.getCreadoId() != null)
 			{
 				Usuario nombreUsuarioCreado = (Usuario)strategosClasesProblemasService.load(Usuario.class, claseProblemas.getCreadoId());
 				editarClaseProblemasForm.setNombreUsuarioCreado(nombreUsuarioCreado.getFullName());
 			}
 
-			if (claseProblemas.getModificadoId() != null) 
+			if (claseProblemas.getModificadoId() != null)
 			{
 				Usuario nombreUsuarioModificado = (Usuario)strategosClasesProblemasService.load(Usuario.class, claseProblemas.getModificadoId());
 				editarClaseProblemasForm.setNombreUsuarioModificado(nombreUsuarioModificado.getFullName());
@@ -66,17 +70,17 @@ public class MostrarPropiedadesClaseProblemasAction extends VgcAction
 
 			if (claseProblemas.getHijos() != null)
 				editarClaseProblemasForm.setNumeroHijos(new Integer(claseProblemas.getHijos().size()));
-			else 
+			else
 				editarClaseProblemasForm.setNumeroHijos(null);
 
 			if (claseProblemas.getCreado() != null)
 				editarClaseProblemasForm.setFechaCreado(VgcFormatter.formatearFecha(claseProblemas.getCreado(), "formato.fecha.larga"));
-			else 
+			else
 				editarClaseProblemasForm.setFechaCreado(null);
 
 			if (claseProblemas.getModificado() != null)
 				editarClaseProblemasForm.setFechaModificado(VgcFormatter.formatearFecha(claseProblemas.getModificado(), "formato.fecha.larga"));
-			else 
+			else
 				editarClaseProblemasForm.setFechaModificado(null);
 
 			editarClaseProblemasForm.setNombre(claseProblemas.getNombre());

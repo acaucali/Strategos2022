@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.configuracion.actions;
 
@@ -7,7 +7,6 @@ import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
@@ -23,7 +22,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
-
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -43,11 +41,9 @@ import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
 import com.visiongc.app.strategos.responsables.StrategosResponsablesService;
 import com.visiongc.app.strategos.responsables.model.util.ConfiguracionResponsable;
 import com.visiongc.app.strategos.web.struts.configuracion.forms.EditarConfiguracionSistemaForm;
-
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Configuracion;
@@ -59,13 +55,15 @@ import com.visiongc.framework.model.Usuario;
  * @author Kerwin
  *
  */
-public class EditarConfiguracionSistemaAction extends VgcAction 
+public class EditarConfiguracionSistemaAction extends VgcAction
 {
-	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) 
+	@Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	@Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
@@ -75,10 +73,10 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("salvar")) 
+	    	if (funcion.equals("salvar"))
 	    	{
 	    		String pantalla = request.getParameter("Pantalla");
-	    		
+
 	    		ActionMessages messages = this.getMessages(request);
 	    		int respuesta = VgcReturnCode.DB_OK;
 	    		if (pantalla == null)
@@ -89,12 +87,12 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		    		if (respuesta == VgcReturnCode.DB_OK)
 		    			respuesta = setConfiguracionResponsable(editarConfiguracionSistemaForm, request);
 		    		if (respuesta == VgcReturnCode.DB_OK)
-		    			respuesta = setConfiguracionNegativo(editarConfiguracionSistemaForm, request);		
+		    			respuesta = setConfiguracionNegativo(editarConfiguracionSistemaForm, request);
 		    		if (respuesta == VgcReturnCode.DB_OK)
 		    			respuesta = setConfiguracionCorreoIniciativa(editarConfiguracionSistemaForm, request);
 		    		if (respuesta == VgcReturnCode.DB_OK)
 		    			respuesta = setConfiguracionIndicador(editarConfiguracionSistemaForm, request);
-		    		
+
 		    		if (respuesta == VgcReturnCode.DB_OK)
 		    		{
 		    			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_SAVE);
@@ -105,7 +103,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		    			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_SAVE_ERROR);
 		    			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.modificar.no.ok"));
 		    		}
-				    saveMessages(request, messages);		
+				    saveMessages(request, messages);
 	    		}
 	    		else if (pantalla.equals("Email"))
 	    		{
@@ -132,20 +130,20 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			getConfiguracionCorreoIniciativa(editarConfiguracionSistemaForm);
 		if (respuesta == VgcReturnCode.DB_OK)
 			getConfiguracionIndicador(editarConfiguracionSistemaForm);
-		
+
 		return mapping.findForward(forward);
 	}
-	
+
 	private int setConfiguracionIniciativa(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, HttpServletRequest request)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
 		MessageResources mensajes = getResources(request);
-		
+
 		try
 		{
 			Configuracion configuracion = new Configuracion();
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -171,7 +169,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode(TipoFuncionIndicador.getTipoFuncionSeguimiento().toString());
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			elemento = document.createElement("nombre");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorAvanceNombre() != null ? editarConfiguracionSistemaForm.getIniciativaIndicadorAvanceNombre() : mensajes.getMessage("jsp.configuracion.sistema.iniciativas.indicador.avance.nombre"));
 			elemento.appendChild(text);
@@ -181,21 +179,21 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode((editarConfiguracionSistemaForm.getIniciativaIndicadorAvanceMostrar() != null && !editarConfiguracionSistemaForm.getIniciativaIndicadorAvanceMostrar()) ? "0" : "1");
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			elemento = document.createElement("anteponer");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorAvanceAnteponer() ? "1" : "0");
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
 
 			// Indicador de Presupuesto
-			indicadorElement = document.createElement("indicador"); 
+			indicadorElement = document.createElement("indicador");
 			indicadores.appendChild(indicadorElement);
 
 			elemento = document.createElement("tipo");
 			text = document.createTextNode(TipoFuncionIndicador.getTipoFuncionPresupuesto().toString());
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			elemento = document.createElement("nombre");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorPresupuestoNombre() != null ? editarConfiguracionSistemaForm.getIniciativaIndicadorPresupuestoNombre() : mensajes.getMessage("jsp.configuracion.sistema.iniciativas.indicador.presupuesto.nombre"));
 			elemento.appendChild(text);
@@ -207,14 +205,14 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			indicadorElement.appendChild(elemento);
 
 			// Indicador de Eficacia
-			indicadorElement = document.createElement("indicador"); 
+			indicadorElement = document.createElement("indicador");
 			indicadores.appendChild(indicadorElement);
 
 			elemento = document.createElement("tipo");
 			text = document.createTextNode(TipoFuncionIndicador.getTipoFuncionEficacia().toString());
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			elemento = document.createElement("nombre");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorEficaciaNombre() != null ? editarConfiguracionSistemaForm.getIniciativaIndicadorEficaciaNombre() : mensajes.getMessage("jsp.configuracion.sistema.iniciativas.indicador.eficacia.nombre"));
 			elemento.appendChild(text);
@@ -224,16 +222,16 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorEficaciaMostrar() ? "1" : "0");
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			// Indicador de Eficiencia
-			indicadorElement = document.createElement("indicador"); 
+			indicadorElement = document.createElement("indicador");
 			indicadores.appendChild(indicadorElement);
 
 			elemento = document.createElement("tipo");
 			text = document.createTextNode(TipoFuncionIndicador.getTipoFuncionEficiencia().toString());
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			elemento = document.createElement("nombre");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorEficienciaNombre() != null ? editarConfiguracionSistemaForm.getIniciativaIndicadorEficienciaNombre() : mensajes.getMessage("jsp.configuracion.sistema.iniciativas.indicador.eficiencia.nombre"));
 			elemento.appendChild(text);
@@ -243,27 +241,27 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorEficienciaMostrar() ? "1" : "0");
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
-			
+
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 
-    		configuracion = new Configuracion(); 
+    		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Iniciativas");
 			configuracion.setValor(writer.toString().trim());
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
 
@@ -275,7 +273,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		{
 			Configuracion configuracion = new Configuracion();
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -299,49 +297,49 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode((editarConfiguracionSistemaForm.getPlanObjetivoLogroAnualMostrar() != null && !editarConfiguracionSistemaForm.getPlanObjetivoLogroAnualMostrar()) ? "0" : "1");
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			elemento = document.createElement("logroParcial"); //creamos un nuevo elemento
 			text = document.createTextNode((editarConfiguracionSistemaForm.getPlanObjetivoLogroParcialMostrar() != null && !editarConfiguracionSistemaForm.getPlanObjetivoLogroParcialMostrar()) ? "0" : "1");
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 
-    		configuracion = new Configuracion(); 
+    		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Planes");
 			configuracion.setValor(writer.toString().trim());
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	public int getConfiguracionIniciativa(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		try
 		{
 			StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-			ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa(); 
+			ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
 			strategosIniciativasService.close();
-	
+
 			if (configuracionIniciativa != null)
 			{
 				editarConfiguracionSistemaForm.setIniciativaNombre(configuracionIniciativa.getIniciativaNombre());
-				
+
 				editarConfiguracionSistemaForm.setIniciativaIndicadorAvanceNombre(configuracionIniciativa.getIniciativaIndicadorAvanceNombre());
 				editarConfiguracionSistemaForm.setIniciativaIndicadorAvanceMostrar(configuracionIniciativa.getIniciativaIndicadorAvanceMostrar());
 				editarConfiguracionSistemaForm.setIniciativaIndicadorAvanceAnteponer(configuracionIniciativa.getIniciativaIndicadorAvanceAnteponer());
@@ -356,24 +354,24 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				editarConfiguracionSistemaForm.setIniciativaIndicadorEficienciaMostrar(configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar());
 			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	public int getConfiguracionPlan(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		try
 		{
 			StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
-			ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan(); 
+			ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
 			strategosPlanesService.close();
-	
+
 			if (configuracionPlan != null)
 			{
 				editarConfiguracionSistemaForm.setPlanObjetivoAlertaAnualMostrar(configuracionPlan.getPlanObjetivoAlertaAnualMostrar());
@@ -382,26 +380,26 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				editarConfiguracionSistemaForm.setPlanObjetivoLogroParcialMostrar(configuracionPlan.getPlanObjetivoLogroParcialMostrar());
 			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	public int getConfiguracionResponsable(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, Usuario usuario)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		try
 		{
 			StrategosResponsablesService strategosResponsablesService = StrategosServiceFactory.getInstance().openStrategosResponsablesService();
-			ConfiguracionResponsable configuracionResponsable = strategosResponsablesService.getConfiguracionResponsable(); 
+			ConfiguracionResponsable configuracionResponsable = strategosResponsablesService.getConfiguracionResponsable();
 			if (configuracionResponsable != null)
 				configuracionResponsable.setTipoCorreoDefaultSent(strategosResponsablesService.getTipoCorreoPorDefectoSent(usuario.getUsuarioId()));
 			strategosResponsablesService.close();
-	
+
 			if (configuracionResponsable != null)
 			{
 				editarConfiguracionSistemaForm.setEnviarResponsableFijarMeta(configuracionResponsable.getEnviarResponsableFijarMeta());
@@ -412,14 +410,14 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				editarConfiguracionSistemaForm.setTipoCorreoPorDefecto(configuracionResponsable.getTipoCorreoDefaultSent());
 			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	private int setConfiguracionResponsable(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, HttpServletRequest request)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
@@ -428,7 +426,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		{
 			Configuracion configuracion = new Configuracion();
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -462,30 +460,30 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode((editarConfiguracionSistemaForm.getEnviarResponsableCargarEjecutadoInv() != null && !editarConfiguracionSistemaForm.getEnviarResponsableCargarEjecutadoInv()) ? "0" : "1");
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 
-    		configuracion = new Configuracion(); 
+    		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Responsable");
 			configuracion.setValor(writer.toString().trim());
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	private int setConfiguracionIndicador(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, HttpServletRequest request)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
@@ -494,7 +492,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		{
 			Configuracion configuracion = new Configuracion();
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -510,49 +508,49 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			raiz.appendChild(elemento);
 
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 
-    		configuracion = new Configuracion(); 
+    		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Indicadores");
 			configuracion.setValor(writer.toString().trim());
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	public int getConfiguracionIndicador(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		try
 		{
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-			ConfiguracionIndicador configuracionIndicador = strategosIndicadoresService.getConfiguracionIndicador(); 
+			ConfiguracionIndicador configuracionIndicador = strategosIndicadoresService.getConfiguracionIndicador();
 			strategosIndicadoresService.close();
-	
+
 			if (configuracionIndicador != null)
 				editarConfiguracionSistemaForm.setIndicadorNivel(configuracionIndicador.getIndicadorNivel());
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 	private int setCorreoDefecto(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, HttpServletRequest request)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
@@ -560,7 +558,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		try
 		{
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -576,7 +574,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			raiz.appendChild(elemento);
 
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
@@ -595,29 +593,29 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
 
-	
-		
-	
+
+
+
+
 	public int getConfiguracionNegativo(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		try
 		{
 			StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
 			ConfiguracionNegativo configuracionNegativo = strategosMedicionesService.getConfiguracionNegativo();
-			
+
 			if(configuracionNegativo != null) {
-				
+
 				editarConfiguracionSistemaForm.setTexto(configuracionNegativo.getTexto());
 				editarConfiguracionSistemaForm.setTitulo(configuracionNegativo.getTitulo());
 				editarConfiguracionSistemaForm.setEnviarResponsableCargarEjecutadoInv(configuracionNegativo.getEnviarResponsableCargarEjecutado());
@@ -626,24 +624,24 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				editarConfiguracionSistemaForm.setEnviarResponsableLograrMetaInv(configuracionNegativo.getEnviarResponsableLograrMeta());
 				editarConfiguracionSistemaForm.setEnviarResponsableNegativoInv(configuracionNegativo.getEnviarResponsableNegativo());
 				editarConfiguracionSistemaForm.setEnviarResponsableSeguimientoInv(configuracionNegativo.getEnviarResponsableSeguimiento());
-				
+
 			}
-			
-			
+
+
 			strategosMedicionesService.close();
-			
-			
+
+
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
-	
-	
+
+
+
 	private int setConfiguracionNegativo(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, HttpServletRequest request)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
@@ -652,7 +650,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		{
 			Configuracion configuracion = new Configuracion();
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -686,69 +684,69 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode((editarConfiguracionSistemaForm.getEnviarResponsableCargarEjecutadoInv() != null && !editarConfiguracionSistemaForm.getEnviarResponsableCargarEjecutadoInv()) ? "0" : "1");
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			elemento = document.createElement("validarNegativo"); //creamos un nuevo elemento
 			text = document.createTextNode((editarConfiguracionSistemaForm.getEnviarResponsableNegativoInv() != null && !editarConfiguracionSistemaForm.getEnviarResponsableNegativoInv()) ? "0" : "1");
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
-			
+
+
 			elemento = document.createElement("titulo"); //creamos un nuevo elemento
 			if(editarConfiguracionSistemaForm.getTitulo() != null) {
 				text = document.createTextNode(editarConfiguracionSistemaForm.getTitulo());
 			}else {
 				text = document.createTextNode("");
-			}		
+			}
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
-			
+
+
 			elemento = document.createElement("texto"); //creamos un nuevo elemento
-			
+
 			if(editarConfiguracionSistemaForm.getTexto() != null){
 				text = document.createTextNode(editarConfiguracionSistemaForm.getTexto());
 			}else {
 				text = document.createTextNode("");
 			}
-			
+
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 
-    		configuracion = new Configuracion(); 
+    		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Negativo");
 			configuracion.setValor(writer.toString().trim());
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
-	
+
+
 	public int getConfiguracionCorreoIniciativa(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		try
 		{
 			StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 			CorreoIniciativa correoIniciativa = strategosIniciativasService.getCorreoIniciativa();
-			
+
 			if(correoIniciativa != null) {
-				
+
 				editarConfiguracionSistemaForm.setTexto1(correoIniciativa.getTexto());
 				editarConfiguracionSistemaForm.setTitulo1(correoIniciativa.getTitulo());
 				editarConfiguracionSistemaForm.setCorreo1(correoIniciativa.getCorreo());
@@ -759,23 +757,23 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				editarConfiguracionSistemaForm.setEnviarResponsableFijarMetaInv1(correoIniciativa.getEnviarResponsableFijarMeta());
 				editarConfiguracionSistemaForm.setEnviarResponsableLograrMetaInv1(correoIniciativa.getEnviarResponsableLograrMeta());
 				editarConfiguracionSistemaForm.setEnviarResponsableSeguimientoInv1(correoIniciativa.getEnviarResponsableSeguimiento());
-				
+
 			}
-			
-			
+
+
 			strategosIniciativasService.close();
-			
-			
+
+
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
-	
+
+
 	private int setConfiguracionCorreoIniciativa(EditarConfiguracionSistemaForm editarConfiguracionSistemaForm, HttpServletRequest request)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
@@ -784,7 +782,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		{
 			Configuracion configuracion = new Configuracion();
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-		
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			DOMImplementation implementation = builder.getDOMImplementation();
@@ -818,30 +816,30 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode((editarConfiguracionSistemaForm.getEnviarResponsableCargarEjecutadoInv1() != null && !editarConfiguracionSistemaForm.getEnviarResponsableCargarEjecutadoInv1()) ? "0" : "1");
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
-			
+
+
 			elemento = document.createElement("titulo"); //creamos un nuevo elemento
 			if(editarConfiguracionSistemaForm.getTitulo1() != null) {
 				text = document.createTextNode(editarConfiguracionSistemaForm.getTitulo1());
 			}else {
 				text = document.createTextNode("");
-			}		
+			}
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			elemento = document.createElement("dia"); //creamos un nuevo elemento
-			
+
 			if(editarConfiguracionSistemaForm.getDia1() != null){
 				text = document.createTextNode(editarConfiguracionSistemaForm.getDia1().toString());
 			}else {
 				text = document.createTextNode("");
-			}			
+			}
 			elemento.appendChild(text);
-			raiz.appendChild(elemento);		
-			
-			
+			raiz.appendChild(elemento);
+
+
 			elemento = document.createElement("texto"); //creamos un nuevo elemento
-			
+
 			if(editarConfiguracionSistemaForm.getTexto1() != null){
 				text = document.createTextNode(editarConfiguracionSistemaForm.getTexto1());
 			}else {
@@ -849,39 +847,39 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			}
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			elemento = document.createElement("hora"); //creamos un nuevo elemento
-			
+
 			if(editarConfiguracionSistemaForm.getHora1() != null){
 				text = document.createTextNode(editarConfiguracionSistemaForm.getHora1());
 			}else {
 				text = document.createTextNode("");
 			}
-			
+
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
-			
+
 			Source source = new DOMSource(document);
-			
+
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 
-    		configuracion = new Configuracion(); 
+    		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Correo.Iniciativa");
 			configuracion.setValor(writer.toString().trim());
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_READY_ERROR);
 		}
-		
+
 		return respuesta;
 	}
-	
+
 }

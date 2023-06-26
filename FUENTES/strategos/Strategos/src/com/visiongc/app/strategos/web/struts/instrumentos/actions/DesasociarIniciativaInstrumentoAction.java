@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
@@ -14,9 +14,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
-import com.visiongc.app.strategos.portafolios.StrategosPortafoliosService;
 import com.visiongc.app.strategos.web.struts.instrumentos.forms.GestionarInstrumentosForm;
-import com.visiongc.app.strategos.web.struts.portafolios.forms.GestionarPortafoliosForm;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
@@ -27,10 +25,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class DesasociarIniciativaInstrumentoAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);

@@ -106,7 +106,8 @@ public class EditarForoForm extends EditarObjetoForm
     this.nombreOrganizacion = nombreOrganizacion;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.foroId = new Long(0L);
     this.padreId = null;
     this.objetoKey = null;

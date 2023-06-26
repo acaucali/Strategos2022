@@ -1,5 +1,14 @@
 package com.visiongc.app.strategos.web.struts.causas.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.causas.StrategosCausasService;
 import com.visiongc.app.strategos.causas.model.Causa;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
@@ -9,26 +18,19 @@ import com.visiongc.commons.web.TreeviewWeb;
 import com.visiongc.framework.arboles.ArbolesService;
 import com.visiongc.framework.arboles.NodoArbol;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.util.PermisologiaUsuario;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class GestionarCausasAction extends VgcAction
 {
   public static final String ACTION_KEY = "GestionarCausasAction";
 
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
     navBar.agregarUrl(TreeviewWeb.getUrlTreeview(url), nombre);
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);

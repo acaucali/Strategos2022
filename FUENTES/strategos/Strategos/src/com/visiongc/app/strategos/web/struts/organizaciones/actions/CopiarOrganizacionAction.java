@@ -1,5 +1,21 @@
 package com.visiongc.app.strategos.web.struts.organizaciones.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -21,35 +37,21 @@ import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.ConfiguracionUsuarioPK;
-import com.visiongc.framework.model.Usuario;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class CopiarOrganizacionAction
   extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
     String ts = request.getParameter("ts");
     if (cancelar) {
@@ -59,21 +61,21 @@ public class CopiarOrganizacionAction
       forward = "finalizarCopiarOrganizacion";
     }
     EditarOrganizacionForm editarOrganizacionForm = (EditarOrganizacionForm)form;
-    
+
     ActionMessages messages = getMessages(request);
-    
+
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     if (!strategosIndicadoresService.checkLicencia(request))
     {
       strategosIndicadoresService.close();
-      
+
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.limite.exedido"));
       saveMessages(request, messages);
-      
+
       return getForwardBack(request, 1, false);
     }
     strategosIndicadoresService.close();
-    
+
     String showPresentacion = request.getParameter("showPresentacion") != null ? request.getParameter("showPresentacion").toString() : "0";
     FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
     ConfiguracionUsuario presentacion = new ConfiguracionUsuario();
@@ -85,7 +87,7 @@ public class CopiarOrganizacionAction
     presentacion.setData(showPresentacion);
     frameworkService.saveConfiguracionUsuario(presentacion, getUsuarioConectado(request));
     frameworkService.close();
-    
+
     int respuesta = 10000;
     StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
     respuesta = CopiarOrganizacion(editarOrganizacionForm, strategosOrganizacionesService, request);
@@ -94,7 +96,7 @@ public class CopiarOrganizacionAction
       strategosOrganizacionesService.unlockObject(request.getSession().getId(), editarOrganizacionForm.getOrganizacionId());
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.copia.ok"));
       forward = "finalizarCopiarOrganizacion";
-      
+
       request.setAttribute("GestionarOrganizacionesAction.reloadId", editarOrganizacionForm.getPadreId());
     }
     else if (respuesta == 10003)
@@ -102,26 +104,26 @@ public class CopiarOrganizacionAction
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
     }
     strategosOrganizacionesService.close();
-    
+
     saveMessages(request, messages);
-    
+
     request.getSession().setAttribute("GuardarOrganizacionAction.ultimoTs", ts);
     if (forward.equals("finalizarCopiarOrganizacion")) {
       return getForwardBack(request, 1, true);
     }
     return getForwardBack(request, 1, true);
   }
-  
+
   private int CopiarOrganizacion(EditarOrganizacionForm editarOrganizacionForm, StrategosOrganizacionesService strategosOrganizacionesService, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     OrganizacionStrategos organizacionStrategos = new OrganizacionStrategos();
     OrganizacionStrategos organizacionCopiaStrategos = new OrganizacionStrategos();
-    
+
     organizacionStrategos = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, editarOrganizacionForm.getOrganizacionId());
     OrganizacionStrategos organizacionStrategosPadre = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, editarOrganizacionForm.getPadreId());
-    
+
     organizacionCopiaStrategos = new OrganizacionStrategos();
     organizacionCopiaStrategos.setOrganizacionId(new Long(0L));
     organizacionCopiaStrategos.setPadreId(organizacionStrategosPadre.getOrganizacionId());
@@ -142,7 +144,7 @@ public class CopiarOrganizacionAction
     for (Iterator<MemoOrganizacion> i = organizacionStrategos.getMemos().iterator(); i.hasNext();)
     {
       MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
-      MemoOrganizacion oMemo = (MemoOrganizacion)i.next();
+      MemoOrganizacion oMemo = i.next();
       Integer tipoMemo = oMemo.getPk().getTipo();
       if (tipoMemo.equals(new Integer(0))) {
         memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionCopiaStrategos.getOrganizacionId(), new Integer(0)));
@@ -183,18 +185,18 @@ public class CopiarOrganizacionAction
     }
     return respuesta;
   }
-  
+
   private int CopiarClase(OrganizacionStrategos organizacionOrigen, OrganizacionStrategos organizacionDestino, HttpServletRequest request, boolean copiarIndicadores, boolean copiarMediciones, boolean copiarInsumos)
   {
     int respuesta = 10000;
-    
+
     StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
     ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaiz(organizacionOrigen.getOrganizacionId(), TipoClaseIndicadores.getTipoClaseIndicadores(), getUsuarioConectado(request));
     List<ObjetosCopia> clasesCopiadas = new ArrayList();
-    
+
     ClaseIndicadores claseCopia = new ClaseIndicadores();
     claseCopia.setPadreId(null);
-    
+
     claseCopia.setClaseId(new Long(0L));
     claseCopia.setNombre(claseRoot.getNombre());
     claseCopia.setOrganizacionId(organizacionDestino.getOrganizacionId());
@@ -202,19 +204,19 @@ public class CopiarOrganizacionAction
     claseCopia.setEnlaceParcial(claseRoot.getEnlaceParcial());
     claseCopia.setVisible(claseRoot.getVisible());
     claseCopia.setTipo(TipoClaseIndicadores.getTipoClaseIndicadores());
-    
+
     respuesta = strategosClasesIndicadoresService.saveClaseIndicadores(claseCopia, getUsuarioConectado(request));
     if (respuesta == 10003)
     {
       Map<String, Object> filtros = new HashMap();
-      
+
       filtros.put("organizacionId", claseCopia.getOrganizacionId().toString());
       filtros.put("nombre", claseCopia.getNombre());
       filtros.put("padreId", claseCopia.getPadreId());
       List<ClaseIndicadores> clases = strategosClasesIndicadoresService.getClases(filtros);
       if (clases.size() > 0)
       {
-        claseCopia = (ClaseIndicadores)clases.get(0);
+        claseCopia = clases.get(0);
         respuesta = 10000;
       }
     }
@@ -226,21 +228,21 @@ public class CopiarOrganizacionAction
       respuesta = new CopiarIndicadorAction().CopiarIndicadores(clasesCopiadas, copiarMediciones, copiarInsumos, request);
     }
     strategosClasesIndicadoresService.close();
-    
+
     return respuesta;
   }
-  
+
   public int CopiarOrganizacionHijas(OrganizacionStrategos organizacionOrigen, OrganizacionStrategos organizacionDestino, StrategosOrganizacionesService strategosOrganizacionesService, boolean copiarIndicadores, boolean copiarMediciones, boolean copiarPlanes, boolean copiarInsumos, boolean copiarIniciativas, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     List<?> organizacionesHijas = strategosOrganizacionesService.getOrganizacionHijas(organizacionOrigen.getOrganizacionId(), true);
     if ((organizacionesHijas != null) && (organizacionesHijas.size() > 0)) {
       for (Iterator<?> iter = organizacionesHijas.iterator(); iter.hasNext();)
       {
         OrganizacionStrategos orgOrig = (OrganizacionStrategos)iter.next();
         OrganizacionStrategos orgCopia = new OrganizacionStrategos();
-        
+
         orgCopia.setOrganizacionId(new Long(0L));
         orgCopia.setPadreId(organizacionDestino.getOrganizacionId());
         orgCopia.setMemos(new HashSet());
@@ -260,7 +262,7 @@ public class CopiarOrganizacionAction
         for (Iterator<MemoOrganizacion> i = orgOrig.getMemos().iterator(); i.hasNext();)
         {
           MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
-          MemoOrganizacion oMemo = (MemoOrganizacion)i.next();
+          MemoOrganizacion oMemo = i.next();
           Integer tipoMemo = oMemo.getPk().getTipo();
           if (tipoMemo.equals(new Integer(0))) {
             memoOrganizacion.setPk(new MemoOrganizacionPK(orgCopia.getOrganizacionId(), new Integer(0)));
@@ -306,13 +308,13 @@ public class CopiarOrganizacionAction
     }
     return respuesta;
   }
-  
+
   public int CopiarPlanes(OrganizacionStrategos organizacionOrigen, OrganizacionStrategos organizacionDestino, HttpServletRequest request)
   {
     int respuesta = new CopiarPlanAction().Copiar(organizacionOrigen.getOrganizacionId(), organizacionDestino.getOrganizacionId(), request);
     return respuesta;
   }
-  
+
   public int CopiarIniciativas(OrganizacionStrategos organizacionOrigen, OrganizacionStrategos organizacionDestino, HttpServletRequest request)
   {
     int respuesta = new CopiarIniciativaAction().Copiar(organizacionOrigen.getOrganizacionId(), organizacionDestino.getOrganizacionId(), request);

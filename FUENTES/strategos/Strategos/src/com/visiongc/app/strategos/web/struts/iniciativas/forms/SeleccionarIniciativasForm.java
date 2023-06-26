@@ -5,7 +5,7 @@ import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 public class SeleccionarIniciativasForm extends SelectorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	public static final String SEPARADOR_INICIATIVAS = "!;!";
 	public static final String SEPARADOR_RUTA = "!#!";
 	public static final String CODIGO_INICIATIVA_ELIMINADA = "!ELIMINADO!";
@@ -32,187 +32,189 @@ public class SeleccionarIniciativasForm extends SelectorListaForm
 		return this.planSeleccionadoId;
 	}
 
-	public void setPlanSeleccionadoId(Long planSeleccionadoId) 
+	public void setPlanSeleccionadoId(Long planSeleccionadoId)
 	{
 		this.planSeleccionadoId = planSeleccionadoId;
 	}
 
-	public String getNombrePlan() 
+	public String getNombrePlan()
 	{
 		return this.nombrePlan;
 	}
 
-	public void setNombrePlan(String nombrePlan) 
+	public void setNombrePlan(String nombrePlan)
 	{
 		this.nombrePlan = nombrePlan;
 	}
 
-	public Boolean getPermitirCambiarOrganizacion() 
+	public Boolean getPermitirCambiarOrganizacion()
 	{
 		return this.permitirCambiarOrganizacion;
 	}
 
-	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion) 
+	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion)
 	{
 		this.permitirCambiarOrganizacion = permitirCambiarOrganizacion;
 	}
 
-	public Boolean getPermitirCambiarPlan() 
+	public Boolean getPermitirCambiarPlan()
 	{
 		return this.permitirCambiarPlan;
 	}
 
-	public void setPermitirCambiarPlan(Boolean permitirCambiarPlan) 
+	public void setPermitirCambiarPlan(Boolean permitirCambiarPlan)
 	{
 		this.permitirCambiarPlan = permitirCambiarPlan;
 	}
 
-	public boolean isCambioOrganizacion() 
+	public boolean isCambioOrganizacion()
 	{
 		return this.cambioOrganizacion;
 	}
 
-	public void setCambioOrganizacion(boolean cambioOrganizacion) 
+	public void setCambioOrganizacion(boolean cambioOrganizacion)
 	{
 		this.cambioOrganizacion = cambioOrganizacion;
 	}
 
-	public String getFuncionCierre() 
+	@Override
+	public String getFuncionCierre()
 	{
 		return this.funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	@Override
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
 
-	public String getNombreCampoRutasCompletas() 
+	public String getNombreCampoRutasCompletas()
 	{
 		return this.nombreCampoRutasCompletas;
 	}
 
-	public void setNombreCampoRutasCompletas(String nombreCampoRutasCompletas) 
+	public void setNombreCampoRutasCompletas(String nombreCampoRutasCompletas)
 	{
 		this.nombreCampoRutasCompletas = nombreCampoRutasCompletas;
 	}
 
-	public Byte getFrecuenciaSeleccionada() 
+	public Byte getFrecuenciaSeleccionada()
 	{
 		return this.frecuenciaSeleccionada;
 	}
 
-	public void setFrecuenciaSeleccionada(Byte frecuenciaSeleccionada) 
+	public void setFrecuenciaSeleccionada(Byte frecuenciaSeleccionada)
 	{
 		this.frecuenciaSeleccionada = frecuenciaSeleccionada;
 	}
 
-	public String getPanelSeleccionado() 
+	public String getPanelSeleccionado()
 	{
 		return this.panelSeleccionado;
 	}
 
-	public void setPanelSeleccionado(String panelSeleccionado) 
+	public void setPanelSeleccionado(String panelSeleccionado)
 	{
 		this.panelSeleccionado = panelSeleccionado;
 	}
 
-	public String getAtributoOrdenPlanes() 
+	public String getAtributoOrdenPlanes()
 	{
 		return this.atributoOrdenPlanes;
 	}
 
-	public void setAtributoOrdenPlanes(String atributoOrdenPlanes) 
+	public void setAtributoOrdenPlanes(String atributoOrdenPlanes)
 	{
 		this.atributoOrdenPlanes = atributoOrdenPlanes;
 	}
 
-	public String getTipoOrdenPlanes() 
+	public String getTipoOrdenPlanes()
 	{
 		return this.tipoOrdenPlanes;
 	}
 
-	public void setTipoOrdenPlanes(String tipoOrdenPlanes) 
+	public void setTipoOrdenPlanes(String tipoOrdenPlanes)
 	{
 		this.tipoOrdenPlanes = tipoOrdenPlanes;
 	}
 
-	public Long getOrganizacionSeleccionadaId() 
+	public Long getOrganizacionSeleccionadaId()
 	{
 		return this.organizacionSeleccionadaId;
 	}
 
-	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId) 
+	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId)
 	{
 		this.organizacionSeleccionadaId = organizacionSeleccionadaId;
 	}
 
-	public String getRutaCompletaOrganizacion() 
+	public String getRutaCompletaOrganizacion()
 	{
 		return this.rutaCompletaOrganizacion;
 	}
 
-	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
 	{
 		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
 	}
 
-	public String getNombreCampoPlanId() 
+	public String getNombreCampoPlanId()
 	{
 		return this.nombreCampoPlanId;
 	}
 
-	public void setNombreCampoPlanId(String nombreCampoPlanId) 
+	public void setNombreCampoPlanId(String nombreCampoPlanId)
 	{
 		this.nombreCampoPlanId = nombreCampoPlanId;
 	}
 
-	public Boolean getIniciado() 
+	public Boolean getIniciado()
 	{
 		return this.iniciado;
 	}
 
-	public void setIniciado(Boolean iniciado) 
+	public void setIniciado(Boolean iniciado)
 	{
 		this.iniciado = iniciado;
 	}
 
-	public String getSeparadorIniciativas() 
+	public String getSeparadorIniciativas()
 	{
 		return SEPARADOR_INICIATIVAS;
 	}
 
-	public String getSeparadorRuta() 
+	public String getSeparadorRuta()
 	{
 		return "!#!";
 	}
 
-	public String getCodigoIniciativaEliminada() 
+	public String getCodigoIniciativaEliminada()
 	{
 		return "!ELIMINADO!";
 	}
 
-	public String getExcluirIds() 
+	public String getExcluirIds()
 	{
 		return this.excluirIds;
 	}
 
-	public void setExcluirIds(String excluirIds) 
+	public void setExcluirIds(String excluirIds)
 	{
 		this.excluirIds = excluirIds;
 	}
-	
-  	public Boolean getSeleccionMultiple() 
+
+  	public Boolean getSeleccionMultiple()
   	{
   		return this.seleccionMultiple;
   	}
-  	
-  	public void setSeleccionMultiple(Boolean seleccionMultiple) 
+
+  	public void setSeleccionMultiple(Boolean seleccionMultiple)
   	{
   		this.seleccionMultiple = seleccionMultiple;
   	}
-	
-	public void clear() 
+
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);

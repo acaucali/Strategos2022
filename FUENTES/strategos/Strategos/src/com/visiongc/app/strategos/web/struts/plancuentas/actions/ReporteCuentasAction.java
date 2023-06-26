@@ -1,29 +1,34 @@
 package com.visiongc.app.strategos.web.struts.plancuentas.actions;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.Font;
-import com.visiongc.app.strategos.plancuentas.model.Cuenta;
-import com.visiongc.commons.report.TablaBasicaPDF;
-import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
-import com.visiongc.framework.arboles.ArbolesService;
-import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
-import com.visiongc.framework.impl.FrameworkServiceFactory;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.MessageResources;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.Font;
+import com.visiongc.app.strategos.plancuentas.model.Cuenta;
+import com.visiongc.commons.report.Tabla;
+import com.visiongc.commons.report.TablaBasicaPDF;
+import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
+import com.visiongc.framework.arboles.ArbolesService;
+import com.visiongc.framework.impl.FrameworkServiceFactory;
+
 public class ReporteCuentasAction extends VgcReporteBasicoAction
 {
-  protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
+  @Override
+protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
     throws Exception
   {
     return mensajes.getMessage("action.reporteplancuentas.titulo");
   }
 
-  protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
+  @Override
+protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
     throws Exception
   {
     Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
@@ -45,7 +50,7 @@ public class ReporteCuentasAction extends VgcReporteBasicoAction
     nodosArbolService.close();
 
     tabla.setFormatoFont(font.style());
-    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
     tabla.agregarCelda(mensajes.getMessage("action.reporteplancuentas.nombre"));
 

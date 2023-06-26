@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.actions;
 
@@ -15,10 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.presentaciones.StrategosVistasService;
 import com.visiongc.app.strategos.reportes.StrategosReportesGraficoService;
-import com.visiongc.app.strategos.reportes.StrategosReportesService;
-import com.visiongc.app.strategos.vistasdatos.StrategosVistasDatosService;
 import com.visiongc.app.strategos.web.struts.reportes.grafico.forms.GestionarReporteGraficoForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
@@ -33,11 +30,13 @@ public class GestionarReporteGraficoAction extends VgcAction
 {
 	public static final String ACTION_KEY = "GestionarReporteGraficoAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrlSinParametros(url, nombre, new Integer(2));
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    super.execute(mapping, form, request, response);
@@ -48,37 +47,37 @@ public class GestionarReporteGraficoAction extends VgcAction
 
 	    GestionarReporteGraficoForm gestionarReporteGraficoForm = (GestionarReporteGraficoForm)form;
 	    ActionMessages messages = getMessages(request);
-	    
+
 	    request.getSession().setAttribute("alerta", new com.visiongc.framework.web.struts.alertas.actions.GestionarAlertasAction().getAlerta(getUsuarioConectado(request)));
 
-	   
+
 	    String atributoOrden = gestionarReporteGraficoForm.getAtributoOrdenVistas();
 	    String tipoOrden = gestionarReporteGraficoForm.getTipoOrdenVistas();
 	    int pagina = gestionarReporteGraficoForm.getPaginaSeleccionadaVistas();
 
 	    gestionarReporteGraficoForm.setVerForma(getPermisologiaUsuario(request).tienePermiso("VISTA_DATOS_VIEW"));
 	    gestionarReporteGraficoForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("VISTA_DATOS_EDIT"));
-	    
-	    if ((atributoOrden == null) || (atributoOrden.equals(""))) 
+
+	    if ((atributoOrden == null) || (atributoOrden.equals("")))
 	    {
 	    	atributoOrden = "nombre";
 	    	gestionarReporteGraficoForm.setAtributoOrdenVistas(atributoOrden);
 	    }
-	    if ((tipoOrden == null) || (tipoOrden.equals(""))) 
+	    if ((tipoOrden == null) || (tipoOrden.equals("")))
 	    {
 	    	tipoOrden = "ASC";
 	    	gestionarReporteGraficoForm.setTipoOrdenVistas(tipoOrden);
 	    }
 
-	    if (pagina < 1) 
+	    if (pagina < 1)
 	    	pagina = 1;
 
 	    Map<String, Object> filtros = new HashMap<String, Object>();
- 
+
 	    StrategosReportesGraficoService strategosReportesGraficoService = StrategosServiceFactory.getInstance().openStrategosReportesGraficoService();
-	    
+
 	    Usuario usuario = getUsuarioConectado(request);
-	    
+
 	    PaginaLista paginaVistas = strategosReportesGraficoService.getReportes(pagina, 30, atributoOrden, tipoOrden, true, filtros, usuario.getUsuarioId());
 	    strategosReportesGraficoService.close();
 

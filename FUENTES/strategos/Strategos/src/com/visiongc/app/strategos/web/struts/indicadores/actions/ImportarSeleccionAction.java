@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
@@ -31,11 +31,13 @@ import com.visiongc.framework.model.Usuario;
  */
 public class ImportarSeleccionAction extends VgcAction
 {
-	  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+	  @Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	  {
 	  }
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	  @Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	  {
 		  super.execute(mapping, form, request, response);
 
@@ -43,35 +45,35 @@ public class ImportarSeleccionAction extends VgcAction
 
 		  ImportarSeleccionForm importarSeleccionForm = (ImportarSeleccionForm)form;
 
-		  if (importarSeleccionForm.getAtributoOrden() == null) 
+		  if (importarSeleccionForm.getAtributoOrden() == null)
 			  importarSeleccionForm.setAtributoOrden("nombre");
-		    
-		  if (importarSeleccionForm.getTipoOrden() == null) 
+
+		  if (importarSeleccionForm.getTipoOrden() == null)
 			  importarSeleccionForm.setTipoOrden("ASC");
 
 		  Map<String, Object> filtros = new HashMap<String, Object>();
 		  filtros.put("usuarioId", ((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId().toString());
-		  
+
 		  ImportacionService importarService = FrameworkServiceFactory.getInstance().openImportacionService();
 		  PaginaLista paginaRegistros = importarService.getImportaciones(0, 0, importarSeleccionForm.getAtributoOrden(), importarSeleccionForm.getTipoOrden(), true, filtros);
 		  importarService.close();
-		  
+
 		  request.setAttribute("paginaRegistros", paginaRegistros);
 
-		  if (paginaRegistros.getLista() != null && paginaRegistros.getLista().size() > 0) 
+		  if (paginaRegistros.getLista() != null && paginaRegistros.getLista().size() > 0)
 		  {
 			  Importacion importacion = (Importacion)paginaRegistros.getLista().get(0);
 		      importarSeleccionForm.setSeleccionados(importacion.getId().toString());
 		      importarSeleccionForm.setValoresSeleccionados(importacion.getNombre());
-		  } 
-		  else 
+		  }
+		  else
 			  importarSeleccionForm.setSeleccionados(null);
 
 		  StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
 		  OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, new Long((String)request.getSession().getAttribute("organizacionId")));
 		  importarSeleccionForm.setRutaCompletaOrganizacion(organizacionStrategos.getNombre());
 		  strategosOrganizacionesService.close();
-		  
+
 		  return mapping.findForward(forward);
 	}
 }

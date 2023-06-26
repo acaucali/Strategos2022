@@ -1,7 +1,5 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.forms;
 
-import com.visiongc.app.strategos.model.util.Frecuencia;
-import com.visiongc.app.strategos.planes.model.util.TipoCalculoPerspectiva;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
 public class TrasladarMetasForm extends EditarObjetoForm
@@ -12,7 +10,7 @@ public class TrasladarMetasForm extends EditarObjetoForm
 	  private Integer ano;
 	  private Integer anoFinal;
 
-	    
+
 	  public Long getPerspectivaId() {
 		return perspectivaId;
 	  }
@@ -44,13 +42,14 @@ public class TrasladarMetasForm extends EditarObjetoForm
       public void setAnoFinal(Integer anoFinal) {
 		this.anoFinal = anoFinal;
       }
-      
-      public void clear() 
+
+      @Override
+	public void clear()
 	  {
 		    this.perspectivaId = new Long(0L);
 		    this.planId = null;
 		    this.anoFinal = null;
 		    this.ano = null;
-		   
+
 	  }
 }

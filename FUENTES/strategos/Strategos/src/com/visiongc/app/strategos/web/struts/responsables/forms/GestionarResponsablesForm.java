@@ -1,7 +1,8 @@
 package com.visiongc.app.strategos.web.struts.responsables.forms;
 
-import com.visiongc.framework.web.struts.forms.VisorListaForm;
 import java.util.Set;
+
+import com.visiongc.framework.web.struts.forms.VisorListaForm;
 
 public class GestionarResponsablesForm extends VisorListaForm
 {

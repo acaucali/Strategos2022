@@ -1,5 +1,8 @@
 package com.visiongc.app.strategos.web.struts.indicadores.forms;
 
+import java.util.Date;
+import java.util.List;
+
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
 import com.visiongc.app.strategos.indicadores.model.util.Caracteristica;
 import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
@@ -16,13 +19,11 @@ import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.util.StatusUtil;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Date;
-import java.util.List;
 
 public class EditarIndicadorForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	public static final String SEPARADOR_CATEGORIAS = "!;!";
 	public static final String SEPARADOR_ORDEN = "-";
 	public static final String SEPARADOR_INDICADORES = "!;!";
@@ -146,7 +147,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
 	private String codigoEnlaceFormula;
 	private String enlaceParcialFormula;
 	private Boolean esIndicadorIniciativa;
-	
+
 	// Visualizar
 	private String naturalezaNombre;
 	private Integer numeroUsosComoIndicadorInsumo;
@@ -157,7 +158,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
 	private String tipoNombre;
 	private String claseNombre;
 	private String categoriaNombre;
-	
+
 	// Variables para copiar organizacion
 	private Boolean copiarArbol;
 	private Boolean copiarMediciones;
@@ -167,111 +168,111 @@ public class EditarIndicadorForm extends EditarObjetoForm
 	private Byte tipoSumaMedicion;
 	private OrganizacionStrategos organizacion;
 	private Boolean copiarInsumos;
-	
+
 	// Variables para mover indicadores
 	private List<Long> indicadores;
 
-	public String getCategoriaNombre() 
+	public String getCategoriaNombre()
 	{
 		return this.categoriaNombre;
 	}
 
-	public void setCategoriaNombre(String categoriaNombre) 
+	public void setCategoriaNombre(String categoriaNombre)
 	{
 		this.categoriaNombre = categoriaNombre;
 	}
 
-	public String getNaturalezaNombre() 
+	public String getNaturalezaNombre()
 	{
 		return this.naturalezaNombre;
 	}
 
-	public void setNaturalezaNombre(String naturalezaNombre) 
+	public void setNaturalezaNombre(String naturalezaNombre)
 	{
 		this.naturalezaNombre = naturalezaNombre;
 	}
-	
-	public String getClaseNombre() 
+
+	public String getClaseNombre()
 	{
 		return this.claseNombre;
 	}
 
-	public void setClaseNombre(String claseNombre) 
+	public void setClaseNombre(String claseNombre)
 	{
 		this.claseNombre = claseNombre;
 	}
-	
-	public String getTipoNombre() 
+
+	public String getTipoNombre()
 	{
 		return this.tipoNombre;
 	}
 
-	public void setTipoNombre(String tipoNombre) 
+	public void setTipoNombre(String tipoNombre)
 	{
 		this.tipoNombre = tipoNombre;
 	}
 
-	public String getTipoCorteNombre() 
+	public String getTipoCorteNombre()
 	{
 		return this.tipoCorteNombre;
 	}
 
-	public void setTipoCorteNombre(String tipoCorteNombre) 
+	public void setTipoCorteNombre(String tipoCorteNombre)
 	{
 		this.tipoCorteNombre = tipoCorteNombre;
 	}
 
-	public String getCaracteristicaNombre() 
+	public String getCaracteristicaNombre()
 	{
 		return this.caracteristicaNombre;
 	}
 
-	public void setCaracteristicaNombre(String caracteristicaNombre) 
+	public void setCaracteristicaNombre(String caracteristicaNombre)
 	{
 		this.caracteristicaNombre = caracteristicaNombre;
 	}
 
-	public String getUnidadNombre() 
+	public String getUnidadNombre()
 	{
 		return this.unidadNombre;
 	}
 
-	public void setUnidadNombre(String unidadNombre) 
+	public void setUnidadNombre(String unidadNombre)
 	{
 		this.unidadNombre = unidadNombre;
 	}
-	
-	public String getFrecuenciaNombre() 
+
+	public String getFrecuenciaNombre()
 	{
 		return this.frecuenciaNombre;
 	}
 
-	public void setFrecuenciaNombre(String frecuenciaNombre) 
+	public void setFrecuenciaNombre(String frecuenciaNombre)
 	{
 		this.frecuenciaNombre = frecuenciaNombre;
 	}
 
-	public Integer getNumeroUsosComoIndicadorInsumo() 
+	public Integer getNumeroUsosComoIndicadorInsumo()
 	{
 		return this.numeroUsosComoIndicadorInsumo;
 	}
 
-	public void setNumeroUsosComoIndicadorInsumo(Integer numeroUsosComoIndicadorInsumo) 
+	public void setNumeroUsosComoIndicadorInsumo(Integer numeroUsosComoIndicadorInsumo)
 	{
 		this.numeroUsosComoIndicadorInsumo = numeroUsosComoIndicadorInsumo;
 	}
-	
+
 	public String getNombreIndicadorSingular()
 	{
 		return this.nombreIndicadorSingular;
 	}
 
-	public void setNombreIndicadorSingular(String nombreIndicadorSingular) 
+	public void setNombreIndicadorSingular(String nombreIndicadorSingular)
 	{
 		this.nombreIndicadorSingular = nombreIndicadorSingular;
 	}
 
-	public List<?> getPathInsumosFormula() 
+	public List<?> getPathInsumosFormula()
 	{
 		return this.pathInsumosFormula;
 	}
@@ -481,36 +482,36 @@ public class EditarIndicadorForm extends EditarObjetoForm
     this.claseIndicadores = claseIndicadores;
   }
 
-  	public String getCodigoEnlace() 
+  	public String getCodigoEnlace()
   	{
   		return this.codigoEnlace;
   	}
 
-  	public void setCodigoEnlace(String codigoEnlace) 
+  	public void setCodigoEnlace(String codigoEnlace)
   	{
   		this.codigoEnlace = codigoEnlace;
   	}
 
-  	public String getCodigoEnlaceFormula() 
+  	public String getCodigoEnlaceFormula()
   	{
   		return this.codigoEnlaceFormula;
   	}
 
-  	public void setCodigoEnlaceFormula(String codigoEnlaceFormula) 
+  	public void setCodigoEnlaceFormula(String codigoEnlaceFormula)
   	{
   		this.codigoEnlaceFormula = codigoEnlaceFormula;
   	}
-  	
-    public String getEnlaceParcialFormula() 
+
+    public String getEnlaceParcialFormula()
     {
         return this.enlaceParcialFormula;
 	}
 
-    public void setEnlaceParcialFormula(String enlaceParcialFormula) 
+    public void setEnlaceParcialFormula(String enlaceParcialFormula)
     {
         this.enlaceParcialFormula = enlaceParcialFormula;
     }
-  	
+
   public Byte getPrioridad() {
     return this.prioridad;
   }
@@ -697,7 +698,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
   public void setResponsableCargarEjecutado(String responsableCargarEjecutado) {
     this.responsableCargarEjecutado = responsableCargarEjecutado;
   }
-  
+
   public Long getResponsableNotificacionId() {
 	return responsableNotificacionId;
   }
@@ -810,22 +811,22 @@ public class EditarIndicadorForm extends EditarObjetoForm
     this.numeroDecimales = numeroDecimales;
   }
 
-  public Byte getTipoSumaMedicion() 
+  public Byte getTipoSumaMedicion()
   {
 	  return this.tipoSumaMedicion;
   }
 
-  public void setTipoSumaMedicion(Byte tipoSumaMedicion) 
+  public void setTipoSumaMedicion(Byte tipoSumaMedicion)
   {
 	  this.tipoSumaMedicion = tipoSumaMedicion;
   }
-  
-  public Byte getTipoCargaMedicion() 
+
+  public Byte getTipoCargaMedicion()
   {
 	  return this.tipoCargaMedicion;
   }
 
-  public void setTipoCargaMedicion(Byte tipoCargaMedicion) 
+  public void setTipoCargaMedicion(Byte tipoCargaMedicion)
   {
 	  this.tipoCargaMedicion = tipoCargaMedicion;
   }
@@ -986,21 +987,21 @@ public class EditarIndicadorForm extends EditarObjetoForm
     return TipoCorte.getTipoCorteTransversal();
   }
 
-  public Byte getTipoMedicionEnPeriodo() 
+  public Byte getTipoMedicionEnPeriodo()
   {
 	  return TipoMedicion.getTipoMedicionEnPeriodo();
   }
-  
+
   public Byte getTipoMedicionAlPeriodo() {
     return TipoMedicion.getTipoMedicionAlPeriodo();
   }
-  
-  public Byte getTipoSumaSumarMediciones() 
+
+  public Byte getTipoSumaSumarMediciones()
   {
 	  return TipoSuma.getTipoSumaSumarMediciones();
   }
 
-  public Byte getTipoSumaUltimoPeriodo() 
+  public Byte getTipoSumaUltimoPeriodo()
   {
 	  return TipoSuma.getTipoSumaUltimoPeriodo();
   }
@@ -1125,16 +1126,16 @@ public class EditarIndicadorForm extends EditarObjetoForm
     return "";
   }
 
-  	public void setFuncion(String funcion) 
+  	public void setFuncion(String funcion)
   	{
   	}
 
-  	public String getSeparadorIndicadores() 
+  	public String getSeparadorIndicadores()
   	{
   		return SEPARADOR_INDICADORES;
   	}
 
-  	public String getSeparadorSeries() 
+  	public String getSeparadorSeries()
   	{
   		return SEPARADOR_SERIES;
   	}
@@ -1474,9 +1475,9 @@ public class EditarIndicadorForm extends EditarObjetoForm
     this.mesCierreOrganizacion = mesCierreOrganizacion;
   }
 
-  public Boolean getCopiarArbol() 
+  public Boolean getCopiarArbol()
   {
-    if (this.copiarArbol == null) 
+    if (this.copiarArbol == null)
     {
       this.copiarArbol = new Boolean(false);
     }
@@ -1484,27 +1485,27 @@ public class EditarIndicadorForm extends EditarObjetoForm
     return this.copiarArbol;
   }
 
-  public void setCopiarArbol(Boolean copiarArbol) 
+  public void setCopiarArbol(Boolean copiarArbol)
   {
     this.copiarArbol = copiarArbol;
   }
 
-  	public Boolean getCopiarMediciones() 
+  	public Boolean getCopiarMediciones()
   	{
-  		if (this.copiarMediciones == null) 
+  		if (this.copiarMediciones == null)
   			this.copiarMediciones = new Boolean(false);
 
   		return this.copiarMediciones;
   	}
 
-  public void setCopiarMediciones(Boolean copiarMediciones) 
+  public void setCopiarMediciones(Boolean copiarMediciones)
   {
     this.copiarMediciones = copiarMediciones;
   }
 
-  public Boolean getCopiarPlantillasGraficos() 
+  public Boolean getCopiarPlantillasGraficos()
   {
-    if (this.copiarPlantillasGraficos == null) 
+    if (this.copiarPlantillasGraficos == null)
     {
       this.copiarPlantillasGraficos = new Boolean(false);
     }
@@ -1512,14 +1513,14 @@ public class EditarIndicadorForm extends EditarObjetoForm
     return this.copiarPlantillasGraficos;
   }
 
-  public void setCopiarPlantillasGraficos(Boolean copiarPlantillasGraficos) 
+  public void setCopiarPlantillasGraficos(Boolean copiarPlantillasGraficos)
   {
     this.copiarPlantillasGraficos = copiarPlantillasGraficos;
   }
 
-  public Boolean getCopiarPlantillasReportes() 
+  public Boolean getCopiarPlantillasReportes()
   {
-    if (this.copiarPlantillasReportes == null) 
+    if (this.copiarPlantillasReportes == null)
     {
       this.copiarPlantillasReportes = new Boolean(false);
     }
@@ -1527,78 +1528,79 @@ public class EditarIndicadorForm extends EditarObjetoForm
     return this.copiarPlantillasReportes;
   }
 
-  public void setCopiarPlantillasReportes(Boolean copiarPlantillasReportes) 
+  public void setCopiarPlantillasReportes(Boolean copiarPlantillasReportes)
   {
     this.copiarPlantillasReportes = copiarPlantillasReportes;
   }
 
-  public String getNuevoNombre() 
+  public String getNuevoNombre()
   {
     return this.nuevoNombre;
   }
 
-  public void setNuevoNombre(String nuevoNombre) 
+  public void setNuevoNombre(String nuevoNombre)
   {
     this.nuevoNombre = nuevoNombre;
   }
-  
-  	public OrganizacionStrategos getOrganizacion() 
+
+  	public OrganizacionStrategos getOrganizacion()
   	{
   		return this.organizacion;
   	}
 
-	public void setOrganizacion(OrganizacionStrategos organizacion) 
+	public void setOrganizacion(OrganizacionStrategos organizacion)
 	{
 		this.organizacion = organizacion;
 	}
- 
-	public Boolean getAsignarInventario() 
+
+	public Boolean getAsignarInventario()
 	{
 		return this.asignarInventario;
 	}
 
-	public void setAsignarInventario(Boolean asignarInventario) 
+	public void setAsignarInventario(Boolean asignarInventario)
 	{
 		this.asignarInventario = asignarInventario;
 	}
 
-	public Boolean getCopiarInsumos() 
+	public Boolean getCopiarInsumos()
 	{
-  		if (this.copiarInsumos == null) 
+  		if (this.copiarInsumos == null)
   			this.copiarInsumos = new Boolean(false);
 		return this.copiarInsumos;
 	}
 
-	public void setCopiarInsumos(Boolean copiarInsumos) 
+	public void setCopiarInsumos(Boolean copiarInsumos)
 	{
 		this.copiarInsumos = copiarInsumos;
 	}
 
-	public List<Long> getIndicadores() 
+	public List<Long> getIndicadores()
 	{
 		return this.indicadores;
 	}
 
-	public void setIndicadores(List<Long> indicadores) 
+	public void setIndicadores(List<Long> indicadores)
 	{
 		this.indicadores = indicadores;
 	}
-	
-	public Boolean getEsIndicadorIniciativa() 
+
+	public Boolean getEsIndicadorIniciativa()
 	{
 		return this.esIndicadorIniciativa;
 	}
 
-	public void setEsIndicadorIniciativa(Boolean esIndicadorIniciativa) 
+	public void setEsIndicadorIniciativa(Boolean esIndicadorIniciativa)
 	{
 		this.esIndicadorIniciativa = esIndicadorIniciativa;
 	}
-	
+
+	@Override
 	public void clear()
 	{
 		clear(false);
 	}
-	
+
 	public void clear(Boolean mantenerVariables)
 	{
 		this.nombreIndicadorSingular = null;
@@ -1623,7 +1625,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
 		this.setStatus(StatusUtil.getStatusSuccess());
 		if (this.tipoCargaMedicion == null)
 			this.tipoCargaMedicion = TipoMedicion.getTipoMedicionEnPeriodo();
-		
+
 		if (!mantenerVariables)
 		{
 			this.naturaleza = Naturaleza.getNaturalezaSimple();
@@ -1638,10 +1640,10 @@ public class EditarIndicadorForm extends EditarObjetoForm
 			this.soloLectura = new Boolean(false);
 			this.caracteristica = Caracteristica.getCaracteristicaRetoAumento();
 			this.tipoGuiaResultado = TipoIndicador.getTipoIndicadorResultado();
-			
+
 			String listaSeries = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries();
 			this.seriesIndicador = listaSeries;
-			
+
 			this.responsableNotificacionId = new Long(0L);
 			this.responsableFijarMetaId = new Long(0L);
 			this.responsableLograrMetaId = new Long(0L);
@@ -1662,7 +1664,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
 			this.alertaMetaZonaAmarilla = null;
 			this.alertaTipoZonaAmarilla = TipoAlerta.getTipoAlertaPorcentaje();
 			this.alertaTipoZonaVerde = TipoAlerta.getTipoAlertaPorcentaje();
-	    
+
 			byte valorVariable = 0;
 			this.alertaValorVariableZonaVerde = new Byte(valorVariable);
 			this.alertaValorVariableZonaAmarilla = new Byte(valorVariable);
@@ -1712,7 +1714,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
 			this.bloquearIndicadorIniciativa = new Boolean(false);
 			this.desdeIniciativasPlanes = new Boolean(false);
 			this.asignarInventario = new Boolean(false);
-	    
+
 			this.copiarArbol = new Boolean(false);
 			this.copiarMediciones = new Boolean(false);
 			this.copiarPlantillasGraficos = new Boolean(false);

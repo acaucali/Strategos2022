@@ -1,5 +1,19 @@
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadorAsignarInventarioService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -26,25 +40,15 @@ import com.visiongc.commons.util.StringUtil;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.util.WebUtil;
 import com.visiongc.framework.model.Usuario;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarIndicadorAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -54,8 +58,8 @@ public class GuardarIndicadorAction extends VgcAction
 		EditarIndicadorForm editarIndicadorForm = (EditarIndicadorForm)form;
 
 		ActionMessages messages = getMessages(request);
-		
-	
+
+
 
 		Long organizacionId = new Long((String)request.getSession().getAttribute("organizacionId"));
 		boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
@@ -65,16 +69,16 @@ public class GuardarIndicadorAction extends VgcAction
 
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(ts)))
 			cancelar = true;
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 		StrategosIndicadorAsignarInventarioService strategosIndicadoresInventarioService = StrategosServiceFactory.getInstance().openStrategosIndicadorAsignarInventarioService();
-		
+
 		if (cancelar)
 		{
 			strategosIndicadoresService.unlockObject(request.getSession().getId(), editarIndicadorForm.getIndicadorId());
-			
+
 			destruirPoolLocksUsoEdicion(request, strategosIndicadoresService);
 
 			request.getSession().removeAttribute("editarIndicadorForm");
@@ -99,13 +103,13 @@ public class GuardarIndicadorAction extends VgcAction
 			if (!strategosIndicadoresService.checkLicencia(request))
 			{
 				strategosIndicadoresService.close();
-				
+
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("action.guardarregistro.limite.exedido"));
 				this.saveMessages(request, messages);
-				
+
 				return this.getForwardBack(request, 1, false);
 			}
-			
+
 			indicador = new Indicador();
 			indicador.setIndicadorId(new Long(0L));
 			Long claseId = editarIndicadorForm.getClaseIndicadores().getClaseId();
@@ -133,19 +137,19 @@ public class GuardarIndicadorAction extends VgcAction
 
 		setRelaciones(indicador, editarIndicadorForm);
 
-		if ((editarIndicadorForm.getPlanId() != null) && (editarIndicadorForm.getPlanId().longValue() != 0L) && (editarIndicadorForm.getPerspectivaId() != null) && (editarIndicadorForm.getPerspectivaId().longValue() != 0L)) 
+		if ((editarIndicadorForm.getPlanId() != null) && (editarIndicadorForm.getPlanId().longValue() != 0L) && (editarIndicadorForm.getPerspectivaId() != null) && (editarIndicadorForm.getPerspectivaId().longValue() != 0L))
 		{
 			indicador.setPlanId(editarIndicadorForm.getPlanId());
 			indicador.setPerspectivaId(editarIndicadorForm.getPerspectivaId());
 		}
-		
+
 		if(indicador.getAsignarInventario() != null && indicador.getAsignarInventario() == true && indicador.getNaturaleza().equals(Naturaleza.getNaturalezaFormula())){
 			asignarInventario(indicador,strategosIndicadoresService, strategosIndicadoresInventarioService, usuario);
 		}
-		
+
 		respuesta = strategosIndicadoresService.saveIndicador(indicador, usuario);
 
-		if (respuesta == 10000) 
+		if (respuesta == 10000)
 		{
 			strategosIndicadoresService.unlockObject(request.getSession().getId(), editarIndicadorForm.getIndicadorId());
 
@@ -154,7 +158,7 @@ public class GuardarIndicadorAction extends VgcAction
 			destruirPoolLocksUsoEdicion(request, strategosIndicadoresService);
 
 			forward = "exito";
-			
+
 			if (request.getSession().getAttribute("GuardarIndicador") == null)
 				request.getSession().setAttribute("GuardarIndicador", "true");
 
@@ -183,12 +187,12 @@ public class GuardarIndicadorAction extends VgcAction
 
 		request.getSession().setAttribute("GuardarIndicadorAction.ultimoTs", ts);
 
-		if (forward.equals("exito")) 
+		if (forward.equals("exito"))
 		{
 			request.getSession().removeAttribute("editarIndicadorForm");
 			return getForwardBack(request, 1, true);
 		}
-    
+
 		return mapping.findForward(forward);
 	}
 
@@ -204,12 +208,12 @@ public class GuardarIndicadorAction extends VgcAction
   			editarIndicadorForm.setUnidadId(0L);
   		if ((editarIndicadorForm.getUnidadId() != null) && (editarIndicadorForm.getUnidadId().longValue() > 0L))
   			indicador.setUnidadId(editarIndicadorForm.getUnidadId());
-  		else 
+  		else
   			indicador.setUnidadId(null);
 
   		if (editarIndicadorForm.getPrioridad() != null)
   			indicador.setPrioridad(editarIndicadorForm.getPrioridad());
-  		else 
+  		else
   			indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());
 
   		indicador.setMostrarEnArbol(WebUtil.getValorInputCheck(request, "mostrarEnArbol"));
@@ -217,12 +221,12 @@ public class GuardarIndicadorAction extends VgcAction
 
   		if ((editarIndicadorForm.getDescripcion() != null) && (!editarIndicadorForm.getDescripcion().equals("")))
   			indicador.setDescripcion(editarIndicadorForm.getDescripcion());
-  		else 
+  		else
   			indicador.setDescripcion(null);
 
   		if ((editarIndicadorForm.getComportamiento() != null) && (!editarIndicadorForm.getComportamiento().equals("")))
   			indicador.setComportamiento(editarIndicadorForm.getComportamiento());
-  		else 
+  		else
   			indicador.setComportamiento(null);
 
   		if ((editarIndicadorForm.getFuente() != null) && (!editarIndicadorForm.getFuente().equals("")))
@@ -238,13 +242,13 @@ public class GuardarIndicadorAction extends VgcAction
 
   	private void setAsociar(Indicador indicador, EditarIndicadorForm editarIndicadorForm, HttpServletRequest request)
   	{
-  		if ((request.getParameter("indicadorAsociadoTipo") == null) || (request.getParameter("indicadorAsociadoTipo").equals(""))) 
+  		if ((request.getParameter("indicadorAsociadoTipo") == null) || (request.getParameter("indicadorAsociadoTipo").equals("")))
   		{
   			indicador.setIndicadorAsociadoTipo(null);
   			indicador.setIndicadorAsociadoId(null);
   			indicador.setIndicadorAsociadoRevision(null);
-  		} 
-  		else 
+  		}
+  		else
   		{
   			indicador.setIndicadorAsociadoTipo(editarIndicadorForm.getIndicadorAsociadoTipo());
   			indicador.setIndicadorAsociadoId(editarIndicadorForm.getIndicadorAsociadoId());
@@ -257,31 +261,31 @@ public class GuardarIndicadorAction extends VgcAction
 
   	private void setResponsables(Indicador indicador, EditarIndicadorForm editarIndicadorForm)
   	{
-  		
+
   		if (editarIndicadorForm.getResponsableNotificacionId().equals(new Long(0L)))
   			indicador.setResponsableNotificacionId(null);
-  		else 
+  		else
   			indicador.setResponsableNotificacionId(editarIndicadorForm.getResponsableNotificacionId());
-  		
-  		
+
+
   		if (editarIndicadorForm.getResponsableFijarMetaId().equals(new Long(0L)))
   			indicador.setResponsableFijarMetaId(null);
-  		else 
+  		else
   			indicador.setResponsableFijarMetaId(editarIndicadorForm.getResponsableFijarMetaId());
 
   		if (editarIndicadorForm.getResponsableLograrMetaId().equals(new Long(0L)))
   			indicador.setResponsableLograrMetaId(null);
-  		else 
+  		else
   			indicador.setResponsableLograrMetaId(editarIndicadorForm.getResponsableLograrMetaId());
 
   		if (editarIndicadorForm.getResponsableSeguimientoId().equals(new Long(0L)))
   			indicador.setResponsableSeguimientoId(null);
-  		else 
+  		else
   			indicador.setResponsableSeguimientoId(editarIndicadorForm.getResponsableSeguimientoId());
 
   		if (editarIndicadorForm.getResponsableCargarMetaId().equals(new Long(0L)))
   			indicador.setResponsableCargarMetaId(null);
-  		else 
+  		else
   			indicador.setResponsableCargarMetaId(editarIndicadorForm.getResponsableCargarMetaId());
 
   		if (editarIndicadorForm.getResponsableCargarEjecutadoId().equals(new Long(0L)))
@@ -300,47 +304,47 @@ public class GuardarIndicadorAction extends VgcAction
 
   		if (editarIndicadorForm.getTipoGuiaResultado().byteValue() == TipoIndicador.getTipoIndicadorResultado().byteValue())
   			indicador.setGuia(new Boolean(false));
-  		else 
+  		else
   			indicador.setGuia(new Boolean(true));
 
   		indicador.setValorInicialCero(editarIndicadorForm.getValorInicialCero());
 
   		if ((request.getParameter("parametroSuperiorValorFijo") != null) && (!request.getParameter("parametroSuperiorValorFijo").equals("")))
   			indicador.setParametroSuperiorValorFijo(editarIndicadorForm.getParametroSuperiorValorFijo());
-  		else 
+  		else
   			indicador.setParametroSuperiorValorFijo(null);
 
   		if ((request.getParameter("parametroSuperiorIndicadorId") != null) && (!request.getParameter("parametroSuperiorIndicadorId").equals("")))
   			indicador.setParametroSuperiorIndicadorId(editarIndicadorForm.getParametroSuperiorIndicadorId());
-  		else 
+  		else
   			indicador.setParametroSuperiorIndicadorId(null);
 
   		if ((request.getParameter("parametroInferiorValorFijo") != null) && (!request.getParameter("parametroInferiorValorFijo").equals("")))
   			indicador.setParametroInferiorValorFijo(editarIndicadorForm.getParametroInferiorValorFijo());
-  		else 
+  		else
   			indicador.setParametroInferiorValorFijo(null);
 
   		if ((request.getParameter("parametroInferiorIndicadorId") != null) && (!request.getParameter("parametroInferiorIndicadorId").equals("")))
   			indicador.setParametroInferiorIndicadorId(editarIndicadorForm.getParametroInferiorIndicadorId());
-  		else 
+  		else
   			indicador.setParametroInferiorIndicadorId(null);
 
-  		if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaRetoAumento().byteValue()) 
+  		if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaRetoAumento().byteValue())
   		{
   			indicador.setParametroSuperiorValorFijo(null);
   			indicador.setParametroSuperiorIndicadorId(null);
-  		} 
-  		else if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaRetoDisminucion().byteValue()) 
+  		}
+  		else if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaRetoDisminucion().byteValue())
   		{
   			indicador.setParametroInferiorValorFijo(null);
   			indicador.setParametroInferiorIndicadorId(null);
-  		} 
-  		else if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaCondicionValorMaximo().byteValue()) 
+  		}
+  		else if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaCondicionValorMaximo().byteValue())
   		{
   			indicador.setParametroInferiorValorFijo(null);
   			indicador.setParametroInferiorIndicadorId(null);
-  		} 
-  		else if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaCondicionValorMinimo().byteValue()) 
+  		}
+  		else if (indicador.getCaracteristica().byteValue() == Caracteristica.getCaracteristicaCondicionValorMinimo().byteValue())
   		{
   			indicador.setParametroSuperiorValorFijo(null);
   			indicador.setParametroSuperiorIndicadorId(null);
@@ -357,37 +361,37 @@ public class GuardarIndicadorAction extends VgcAction
 
   		if ((request.getParameter("alertaMetaZonaVerde") != null) && (!request.getParameter("alertaMetaZonaVerde").equals("")))
   			indicador.setAlertaMetaZonaVerde(editarIndicadorForm.getAlertaMetaZonaVerde());
-  		else 
+  		else
   			indicador.setAlertaMetaZonaVerde(null);
 
   		if ((request.getParameter("alertaMetaZonaAmarilla") != null) && (!request.getParameter("alertaMetaZonaAmarilla").equals("")))
   			indicador.setAlertaMetaZonaAmarilla(editarIndicadorForm.getAlertaMetaZonaAmarilla());
-  		else 
+  		else
   			indicador.setAlertaMetaZonaAmarilla(null);
 
   		Long alertaIndicadorIdZonaVerde = editarIndicadorForm.getAlertaIndicadorIdZonaVerde();
-  		if (valorZonaVerde.equals(editarIndicadorForm.getTipoAlertaZonaValorAbsolutoIndicador())) 
+  		if (valorZonaVerde.equals(editarIndicadorForm.getTipoAlertaZonaValorAbsolutoIndicador()))
   		{
   			if ((alertaIndicadorIdZonaVerde != null) && (alertaIndicadorIdZonaVerde.longValue() != 0L))
   				indicador.setAlertaIndicadorIdZonaVerde(alertaIndicadorIdZonaVerde);
-  			else 
+  			else
   				indicador.setAlertaIndicadorIdZonaVerde(null);
   		}
 
   		Long alertaIndicadorIdZonaAmarilla = editarIndicadorForm.getAlertaIndicadorIdZonaAmarilla();
 
-  		if (valorZonaAmarilla.equals(editarIndicadorForm.getTipoAlertaZonaValorAbsolutoIndicador())) 
+  		if (valorZonaAmarilla.equals(editarIndicadorForm.getTipoAlertaZonaValorAbsolutoIndicador()))
   		{
   			if ((alertaIndicadorIdZonaAmarilla != null) && (alertaIndicadorIdZonaAmarilla.longValue() != 0L))
   				indicador.setAlertaIndicadorIdZonaAmarilla(alertaIndicadorIdZonaAmarilla);
-  			else 
+  			else
   				indicador.setAlertaIndicadorIdZonaAmarilla(null);
   		}
 
   		Byte valorVariableAmarillo = editarIndicadorForm.getAlertaValorVariableZonaAmarilla();
   		if (valorVariableAmarillo.equals(new Byte("1")))
   			indicador.setAlertaValorVariableZonaAmarilla(new Boolean(true));
-  		else 
+  		else
   			indicador.setAlertaValorVariableZonaAmarilla(new Boolean(false));
 
 		Byte valorVariableVerde = editarIndicadorForm.getAlertaValorVariableZonaVerde();
@@ -407,10 +411,8 @@ public class GuardarIndicadorAction extends VgcAction
   		{
   			String[] series = StringUtil.split(editarIndicadorForm.getSeriesIndicador(), editarIndicadorForm.getSeparadorSeries());
 
-  			for (int i = 0; i < series.length; i++) 
-  			{
-  				String serie = series[i];
-  				if ((serie != null) && (!serie.equals(""))) 
+  			for (String serie : series) {
+  				if ((serie != null) && (!serie.equals("")))
   				{
   					SerieIndicador serieIndicador = new SerieIndicador();
   					serieIndicador.setIndicador(indicador);
@@ -418,12 +420,12 @@ public class GuardarIndicadorAction extends VgcAction
   					serieIndicador.getPk().setSerieId(new Long(serie));
   					serieIndicador.getPk().setIndicadorId(indicador.getIndicadorId());
   					serieIndicador.setFormulas(new HashSet<Object>());
-  					if (serieIndicador.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue()) 
+  					if (serieIndicador.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
   					{
   						serieIndicador.setNaturaleza(editarIndicadorForm.getNaturaleza());
   						serieReal = serieIndicador;
-  					} 
-  					else 
+  					}
+  					else
   						serieIndicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
 
   					indicador.getSeriesIndicador().add(serieIndicador);
@@ -434,7 +436,7 @@ public class GuardarIndicadorAction extends VgcAction
   		return serieReal;
   	}
 
-  	private void setRelaciones(Indicador indicador, EditarIndicadorForm editarIndicadorForm) 
+  	private void setRelaciones(Indicador indicador, EditarIndicadorForm editarIndicadorForm)
   	{
   		indicador.setUrl(editarIndicadorForm.getUrl());
   	}
@@ -464,9 +466,9 @@ public class GuardarIndicadorAction extends VgcAction
 
   	private void setDefinicionSimple(Indicador indicador, EditarIndicadorForm editarIndicadorForm)
   	{
-  		if ((editarIndicadorForm.getCodigoEnlace() != null) && (!editarIndicadorForm.getCodigoEnlace().equals(""))) 
+  		if ((editarIndicadorForm.getCodigoEnlace() != null) && (!editarIndicadorForm.getCodigoEnlace().equals("")))
   			indicador.setCodigoEnlace(editarIndicadorForm.getCodigoEnlace());
-  		
+
   		if ((editarIndicadorForm.getEnlaceParcial() != null) && (!editarIndicadorForm.getEnlaceParcial().equals("")))
   			indicador.setEnlaceParcial(editarIndicadorForm.getEnlaceParcial());
   	}
@@ -474,11 +476,11 @@ public class GuardarIndicadorAction extends VgcAction
   	private void setDefinicionCualitativo(Indicador indicador, EditarIndicadorForm editarIndicadorForm)
   	{
   		String[] categorias = editarIndicadorForm.getEscalaCualitativa().split(editarIndicadorForm.getSeparadorCategorias());
-  		String[] valoresCategoria = (String[])null;
+  		String[] valoresCategoria = null;
 
   		for (int i = 0; i < categorias.length; i++)
   		{
-  			if (categorias[i].length() > 0) 
+  			if (categorias[i].length() > 0)
   			{
   				valoresCategoria = categorias[i].split("\\]\\[");
   				CategoriaIndicador categoriaIndicador = new CategoriaIndicador();
@@ -493,27 +495,26 @@ public class GuardarIndicadorAction extends VgcAction
 
   	private void setDefinicionFormula(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal, HttpServletRequest request)
   	{
-		if ((editarIndicadorForm.getCodigoEnlaceFormula() != null) && (!editarIndicadorForm.getCodigoEnlaceFormula().equals(""))) 
+		if ((editarIndicadorForm.getCodigoEnlaceFormula() != null) && (!editarIndicadorForm.getCodigoEnlaceFormula().equals("")))
   			indicador.setCodigoEnlace(editarIndicadorForm.getCodigoEnlaceFormula());
-  		
+
   		if ((editarIndicadorForm.getEnlaceParcialFormula() != null) && (!editarIndicadorForm.getEnlaceParcialFormula().equals("")))
   			indicador.setEnlaceParcial(editarIndicadorForm.getEnlaceParcialFormula());
 		indicador.setAsignarInventario(WebUtil.getValorInputCheck(request, "asignarInventario"));
-    
+
   		Formula formulaIndicador = new Formula();
   		formulaIndicador.setInsumos(new HashSet<Object>());
 
   		formulaIndicador.setExpresion(IndicadorValidator.reemplazarCorrelativosFormula(editarIndicadorForm.getFormula(), editarIndicadorForm.getInsumosFormula()));
 
-  		if ((editarIndicadorForm.getInsumosFormula() != null) && (!editarIndicadorForm.getInsumosFormula().equals(""))) 
+  		if ((editarIndicadorForm.getInsumosFormula() != null) && (!editarIndicadorForm.getInsumosFormula().equals("")))
   		{
   			String[] insumos = editarIndicadorForm.getInsumosFormula().split(editarIndicadorForm.getSeparadorIndicadores());
-  			String[] strInsumo = (String[])null;
-  			for (int i = 0; i < insumos.length; i++) 
-  			{
-  				if (insumos[i].length() > 0) 
+  			String[] strInsumo = null;
+  			for (String element : insumos) {
+  				if (element.length() > 0)
   				{
-  					strInsumo = insumos[i].split("\\]\\[");
+  					strInsumo = element.split("\\]\\[");
   					InsumoFormula insumoFormula = new InsumoFormula();
   					insumoFormula.setPk(new InsumoFormulaPK());
   					insumoFormula.getPk().setPadreId(editarIndicadorForm.getIndicadorId());
@@ -524,18 +525,18 @@ public class GuardarIndicadorAction extends VgcAction
   				}
   			}
   		}
-	  
+
   		serieReal.getFormulas().add(formulaIndicador);
   	}
 
-  	private void setDefinicionSumatoria(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal) 
+  	private void setDefinicionSumatoria(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal)
   	{
   		Formula formulaIndicador = new Formula();
   		formulaIndicador.setInsumos(new HashSet<Object>());
 
   		formulaIndicador.setExpresion("");
 
-  		if ((editarIndicadorForm.getIndicadorSumatoriaId() != null) && (!editarIndicadorForm.getIndicadorSumatoriaId().equals(""))) 
+  		if ((editarIndicadorForm.getIndicadorSumatoriaId() != null) && (!editarIndicadorForm.getIndicadorSumatoriaId().equals("")))
   		{
   			String[] valoresInsumo = editarIndicadorForm.getIndicadorSumatoriaId().split("\\]\\[");
   			InsumoFormula insumoFormula = new InsumoFormula();
@@ -546,18 +547,18 @@ public class GuardarIndicadorAction extends VgcAction
   			insumoFormula.getPk().setInsumoSerieId(new Long(valoresInsumo[1].substring("serieId:".length(), valoresInsumo[1].length() - 1)));
   			formulaIndicador.getInsumos().add(insumoFormula);
   		}
-  		
+
   		serieReal.getFormulas().add(formulaIndicador);
   	}
 
-  	private void setDefinicionPromedio(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal) 
+  	private void setDefinicionPromedio(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal)
   	{
   		Formula formulaIndicador = new Formula();
   		formulaIndicador.setInsumos(new HashSet<Object>());
 
   		formulaIndicador.setExpresion("");
 
-  		if ((editarIndicadorForm.getIndicadorPromedioId() != null) && (!editarIndicadorForm.getIndicadorPromedioId().equals(""))) 
+  		if ((editarIndicadorForm.getIndicadorPromedioId() != null) && (!editarIndicadorForm.getIndicadorPromedioId().equals("")))
   		{
   			String[] valoresInsumo = editarIndicadorForm.getIndicadorPromedioId().split("\\]\\[");
   			InsumoFormula insumoFormula = new InsumoFormula();
@@ -568,43 +569,43 @@ public class GuardarIndicadorAction extends VgcAction
   			insumoFormula.getPk().setInsumoSerieId(new Long(valoresInsumo[1].substring("serieId:".length(), valoresInsumo[1].length() - 1)));
   			formulaIndicador.getInsumos().add(insumoFormula);
   		}
-    
+
   		serieReal.getFormulas().add(formulaIndicador);
   	}
 
-  	private void setDefinicionIndice(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal) 
+  	private void setDefinicionIndice(Indicador indicador, EditarIndicadorForm editarIndicadorForm, SerieIndicador serieReal)
   	{
   		Formula formulaIndicador = new Formula();
   		formulaIndicador.setInsumos(new HashSet<Object>());
 
   		formulaIndicador.setExpresion(editarIndicadorForm.getIndicadorIndiceTipoVariacion() + "\\" + editarIndicadorForm.getIndicadorIndiceTipoComparacion());
 
-  		if ((editarIndicadorForm.getIndicadorIndiceId() != null) && (!editarIndicadorForm.getIndicadorIndiceId().equals(""))) 
+  		if ((editarIndicadorForm.getIndicadorIndiceId() != null) && (!editarIndicadorForm.getIndicadorIndiceId().equals("")))
   		{
   			String[] valoresInsumo = editarIndicadorForm.getIndicadorIndiceId().split("\\]\\[");
-  			
+
   			InsumoFormula insumoFormula = new InsumoFormula();
   			insumoFormula.setPk(new InsumoFormulaPK());
   			insumoFormula.getPk().setPadreId(editarIndicadorForm.getIndicadorId());
   			insumoFormula.getPk().setSerieId(new Long("0"));
   			insumoFormula.getPk().setIndicadorId(new Long(valoresInsumo[0].substring("[indicadorId:".length())));
   			insumoFormula.getPk().setInsumoSerieId(new Long(valoresInsumo[1].substring("serieId:".length(), valoresInsumo[1].length() - 1)));
-  			
+
   			formulaIndicador.getInsumos().add(insumoFormula);
   		}
-    
+
   		serieReal.getFormulas().add(formulaIndicador);
   	}
-  	
+
   	public void asignarInventario(Indicador indicador, StrategosIndicadoresService strategosIndicadoresService, StrategosIndicadorAsignarInventarioService strategosIndicadoresInventarioService, Usuario usuario){
-  		
+
   		List<InsumoFormula> insumos = strategosIndicadoresService.getInsumosFormula(indicador.getIndicadorId(), SerieTiempo.getSerieRealId());
-  		
-  		for (Iterator iter = insumos.iterator(); iter.hasNext(); ) 
+
+  		for (Iterator iter = insumos.iterator(); iter.hasNext(); )
 		{
   			InsumoFormula insumo = (InsumoFormula)iter.next();
   			IndicadorAsignarInventario indicadorInsumo = strategosIndicadoresInventarioService.getIndicadorInventario(indicador.getIndicadorId(), insumo.getPk().getIndicadorId());
-  			
+
   			if(indicadorInsumo == null){
   			  IndicadorAsignarInventario indicadorInventario = new IndicadorAsignarInventario();
   		      indicadorInventario.setIndicadorId(indicador.getIndicadorId());

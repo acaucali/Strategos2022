@@ -1,31 +1,35 @@
 package com.visiongc.app.strategos.web.struts.unidadesmedida.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.MessageResources;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
 import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.MessageResources;
 
 public class ReporteUnidadesMedidaAction extends VgcReporteBasicoAction
 {
-  protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
+  @Override
+protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
     throws Exception
   {
     return mensajes.getMessage("action.reporteunidadesmedida.titulo");
   }
 
-  protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
+  @Override
+protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
     throws Exception
   {
     String atributoOrden = request.getParameter("atributoOrden");
@@ -48,7 +52,7 @@ public class ReporteUnidadesMedidaAction extends VgcReporteBasicoAction
     List unidadesMedida = strategosUnidadesService.getUnidadesMedida(0, 0, atributoOrden, tipoOrden, false, null).getLista();
 
     tabla.setFormatoFont(font.style());
-    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
     tabla.agregarCelda(mensajes.getMessage("action.reporteunidadesmedida.nombre"));
     tabla.agregarCelda(mensajes.getMessage("action.reporteunidadesmedida.monetaria"));
@@ -61,7 +65,7 @@ public class ReporteUnidadesMedidaAction extends VgcReporteBasicoAction
         tabla.setDefaultAlineacionHorizontal();
         tabla.agregarCelda(unidad.getNombre());
 
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         if ((unidad.getTipo() != null) && (unidad.getTipo().booleanValue()))
           tabla.agregarCelda(mensajes.getMessage("comunes.si"));
         else if ((unidad.getTipo() != null) && (!unidad.getTipo().equals("true"))) {

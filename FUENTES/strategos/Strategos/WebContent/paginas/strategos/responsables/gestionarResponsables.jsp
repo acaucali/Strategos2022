@@ -24,7 +24,8 @@
 		<script type="text/javascript">	
 		
 			function nuevo() {				
-				abrirVentanaModal('<html:rewrite action="/responsables/crearResponsable"/>', "ResponsableAdd", 750, 530);
+				//abrirVentanaModal('<html:rewrite action="/responsables/crearResponsable"/>', "ResponsableAdd", 750, 530);
+				window.location.href = '<html:rewrite action="/responsables/crearResponsable" />' ;
 			}
 	
 			function modificar() {
@@ -33,7 +34,8 @@
 					return;
 				}			
 				var responsableId = document.gestionarResponsablesForm.seleccionados.value;			
-				abrirVentanaModal('<html:rewrite action="/responsables/modificarResponsable"/>?responsableId=' + responsableId, "ResponsableEdit", 750, 530);
+				//abrirVentanaModal('<html:rewrite action="/responsables/modificarResponsable"/>?responsableId=' + responsableId, "ResponsableEdit", 750, 530);
+				window.location.href = '<html:rewrite action="/responsables/modificarResponsable"/>?responsableId=' + responsableId ;
 			}
 	        
 	        function asociar() {

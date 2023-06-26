@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.estatus.actions;
 
@@ -26,10 +26,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class EditarIniciativaEstatusAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -39,16 +41,16 @@ public class EditarIniciativaEstatusAction extends VgcAction
 		EditarIniciativaEstatusForm editarIniciativaEstatusForm = (EditarIniciativaEstatusForm)form;
 		if (editarIniciativaEstatusForm != null && editarIniciativaEstatusForm.getStatus() != null && editarIniciativaEstatusForm.getStatus().byteValue() == StatusUtil.getStatusAlertaNotDefinida().byteValue())
 			return mapping.findForward(forward);
-		
+
 		editarIniciativaEstatusForm.clear();
-		
+
 		ActionMessages messages = getMessages(request);
 
 		String id = request.getParameter("id");
-		
+
 		boolean verForm = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_ESTATUS_VIEW");
 		boolean editarForm = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_ESTATUS_EDIT");
-		
+
 		StrategosIniciativaEstatusService strategosIniciativaEstatusService = StrategosServiceFactory.getInstance().openStrategosIniciativaEstatusService();
 
 		if ((id != null) && (!id.equals("")) && (!id.equals("0")))
@@ -65,7 +67,7 @@ public class EditarIniciativaEstatusAction extends VgcAction
 				editarIniciativaEstatusForm.setBloquearMedicion(iniciativaEstatus.getBloquearMedicion());
 				editarIniciativaEstatusForm.setBloquearIndicadores(iniciativaEstatus.getBloquearIndicadores());
 			}
-			else 
+			else
 			{
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
@@ -81,7 +83,7 @@ public class EditarIniciativaEstatusAction extends VgcAction
 		}
 		else if (!verForm && !editarForm)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
-    
+
 		saveMessages(request, messages);
 
 		return mapping.findForward(forward);

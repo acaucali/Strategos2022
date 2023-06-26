@@ -1,5 +1,13 @@
 package com.visiongc.app.strategos.web.struts.explicaciones.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion.ObjetivoKey;
@@ -16,22 +24,15 @@ import com.visiongc.app.strategos.web.struts.explicaciones.forms.EditarExplicaci
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.model.Usuario;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 
 public class MostrarPropiedadesExplicacionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -46,8 +47,8 @@ public class MostrarPropiedadesExplicacionAction extends VgcAction
 
 		boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
 		OrganizacionStrategos organizacion = (OrganizacionStrategos)request.getSession().getAttribute("organizacion");
-		
-		if ((explicacionId == null) || (explicacionId.equals(""))) 
+
+		if ((explicacionId == null) || (explicacionId.equals("")))
 			cancelar = true;
 
 		StrategosExplicacionesService strategosExplicacionesService = StrategosServiceFactory.getInstance().openStrategosExplicacionesService();
@@ -75,8 +76,8 @@ public class MostrarPropiedadesExplicacionAction extends VgcAction
 			editarExplicacionForm.setNombreTipoObjetoKey(TipoObjetoExplicacion.getTipoExplicacion(explicacion.getObjetoKey().byteValue()));
 			editarExplicacionForm.setNombreOrganizacion(organizacion.getNombre());
 			editarExplicacionForm.setTipo(explicacion.getTipo());
-			
-			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Indicador")) 
+
+			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Indicador"))
 			{
 				editarExplicacionForm.setNombreObjetoKey(((Indicador)request.getSession().getAttribute("indicador")).getNombre());
 
@@ -89,15 +90,15 @@ public class MostrarPropiedadesExplicacionAction extends VgcAction
 			{
 				StrategosCeldasService strategosCeldasService = StrategosServiceFactory.getInstance().openStrategosCeldasService();
 				Celda celda = (Celda)strategosCeldasService.load(Celda.class, ((Celda)request.getSession().getAttribute("celda")).getCeldaId());
-				
+
 				String nombreObjetoKey = "";
 
-				if (celda.getIndicadoresCelda() != null) 
+				if (celda.getIndicadoresCelda() != null)
 				{
 					if ((celda.getIndicadoresCelda().size() == 0) || (celda.getIndicadoresCelda().size() > 1)) {
 						nombreObjetoKey = celda.getTitulo();
-					} 
-					else if (celda.getIndicadoresCelda().size() == 1) 
+					}
+					else if (celda.getIndicadoresCelda().size() == 1)
 					{
 						IndicadorCelda indicadorCelda = (IndicadorCelda)celda.getIndicadoresCelda().toArray()[0];
 						StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -105,14 +106,14 @@ public class MostrarPropiedadesExplicacionAction extends VgcAction
 						nombreObjetoKey = indicador.getNombre();
 					}
 				}
-				else 
+				else
 					nombreObjetoKey = celda.getTitulo();
 
 				editarExplicacionForm.setNombreObjetoKey(nombreObjetoKey);
 				editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyCelda());
 				editarExplicacionForm.setObjetoId(((Celda)request.getSession().getAttribute("celda")).getCeldaId());
 			}
-			
+
 			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Organizacion"))
 			{
 				editarExplicacionForm.setNombreObjetoKey(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());

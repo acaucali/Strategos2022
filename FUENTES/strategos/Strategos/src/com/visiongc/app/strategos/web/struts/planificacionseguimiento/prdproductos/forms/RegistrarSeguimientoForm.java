@@ -1,11 +1,12 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproductos.forms;
 
+import java.util.Calendar;
+
 import com.visiongc.app.strategos.planificacionseguimiento.model.util.AlertaIniciativaProducto;
 import com.visiongc.app.strategos.planificacionseguimiento.model.util.AlertaProducto;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Calendar;
 
 public class RegistrarSeguimientoForm extends EditarObjetoForm
 {
@@ -244,7 +245,8 @@ public class RegistrarSeguimientoForm extends EditarObjetoForm
     return "#";
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     Calendar ahora = Calendar.getInstance();
 
     this.pasoActual = new Byte((byte) 1);

@@ -1,5 +1,7 @@
 package com.visiongc.app.strategos.web.struts.organizaciones.forms;
 
+import java.net.URI;
+
 import com.visiongc.framework.web.struts.forms.VisorArbolForm;
 
 public class GestionarOrganizacionesForm extends VisorArbolForm
@@ -13,89 +15,98 @@ public class GestionarOrganizacionesForm extends VisorArbolForm
 	private String lineamientosEstrategicos;
 	private Long graficoSeleccionadoId;
 	private String respuesta;
+	private URI descripcionUrl;
 
 	public Boolean getMostrarMisionVision()
 	{
 		return this.mostrarMisionVision;
 	}
 
-	public void setMostrarMisionVision(Boolean mostrarMisionVision) 
+	public void setMostrarMisionVision(Boolean mostrarMisionVision)
 	{
 		this.mostrarMisionVision = mostrarMisionVision;
 	}
 
-	public String getVision() 
+	public String getVision()
 	{
 		return this.vision;
 	}
 
-	public void setVision(String vision) 
+	public void setVision(String vision)
 	{
 		this.vision = vision;
 	}
 
-	public String getMision() 
+	public String getMision()
 	{
 		return this.mision;
 	}
 
-	public void setMision(String mision) 
+	public void setMision(String mision)
 	{
 		this.mision = mision;
 	}
 
-	public String getAlerta() 
+	public String getAlerta()
 	{
 		return this.alerta;
 	}
 
-	public void setAlerta(String alerta) 
+	public void setAlerta(String alerta)
 	{
 		this.alerta = alerta;
 	}
-	
-	public String getDescripcion() 
+
+	public String getDescripcion()
 	{
 		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) 
+	public void setDescripcion(String descripcion)
 	{
 		this.descripcion = descripcion;
 	}
-	
-	public String getLineamientosEstrategicos() 
+
+	public String getLineamientosEstrategicos()
 	{
 		return this.lineamientosEstrategicos;
 	}
 
-	public void setLineamientosEstrategicos(String lineamientosEstrategicos) 
+	public void setLineamientosEstrategicos(String lineamientosEstrategicos)
 	{
 		this.lineamientosEstrategicos = lineamientosEstrategicos;
 	}
-  
+
 	public Long getGraficoSeleccionadoId()
 	{
 		return this.graficoSeleccionadoId;
 	}
 
-	public void setGraficoSeleccionadoId(Long graficoSeleccionadoId) 
+	public void setGraficoSeleccionadoId(Long graficoSeleccionadoId)
 	{
 		this.graficoSeleccionadoId = graficoSeleccionadoId;
 	}
-  
-	public String getRespuesta() 
+
+	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
-	public void clear() 
+
+	public void clear()
 	{
 		this.mostrarMisionVision = new Boolean(false);
+	}
+
+	public URI getDescripcionUrl() {
+		return descripcionUrl;
+	}
+
+	public void setDescripcionUrl(URI descripcionUrl) {
+		this.descripcionUrl = descripcionUrl;
 	}
 }

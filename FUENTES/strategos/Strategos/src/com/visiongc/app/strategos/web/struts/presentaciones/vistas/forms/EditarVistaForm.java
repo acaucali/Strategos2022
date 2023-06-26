@@ -1,13 +1,14 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.vistas.forms;
 
-import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 import java.util.Calendar;
 import java.util.List;
+
+import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
 public class EditarVistaForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long vistaId;
 	private Long organizacionId;
 	private String nombre;
@@ -22,7 +23,7 @@ public class EditarVistaForm extends EditarObjetoForm
 	private List anos;
 	public static final String SEPARADOR_PERIODOS = "/";
 	private Boolean visible;
-	
+
 	Calendar fechaActual = Calendar.getInstance();
 	int anoActual = this.fechaActual.get(1);
 
@@ -31,112 +32,112 @@ public class EditarVistaForm extends EditarObjetoForm
 		return this.vistaId;
 	}
 
-	public void setVistaId(Long vistaId) 
+	public void setVistaId(Long vistaId)
 	{
 		this.vistaId = vistaId;
 	}
 
-	public Long getOrganizacionId() 
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() 
+	public String getDescripcion()
 	{
 		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) 
+	public void setDescripcion(String descripcion)
 	{
 		this.descripcion = descripcion;
 	}
 
-	public String getFechaInicio() 
+	public String getFechaInicio()
 	{
 		return this.fechaInicio;
 	}
 
-	public void setFechaInicio(String fechaInicio) 
+	public void setFechaInicio(String fechaInicio)
 	{
 		this.fechaInicio = fechaInicio;
 	}
 
-	public String getFechaFin() 
+	public String getFechaFin()
 	{
 		return this.fechaFin;
 	}
 
-	public void setFechaFin(String fechaFin) 
+	public void setFechaFin(String fechaFin)
 	{
 		this.fechaFin = fechaFin;
 	}
 
-	public Boolean getVisible() 
+	public Boolean getVisible()
 	{
 		return this.visible;
 	}
 
-	public void setVisible(Boolean visible) 
+	public void setVisible(Boolean visible)
 	{
 		this.visible = visible;
 	}
 
-	public Integer getAnoInicio() 
+	public Integer getAnoInicio()
 	{
 		return this.anoInicio;
 	}
 
-	public void setAnoInicio(Integer anoInicio) 
+	public void setAnoInicio(Integer anoInicio)
 	{
 		this.anoInicio = anoInicio;
 	}
 
-	public Integer getAnoFinal() 
+	public Integer getAnoFinal()
 	{
 		return this.anoFinal;
 	}
 
-	public void setAnoFinal(Integer anoFinal) 
+	public void setAnoFinal(Integer anoFinal)
 	{
 		this.anoFinal = anoFinal;
 	}
 
-	public Byte getMesInicio() 
+	public Byte getMesInicio()
 	{
 		return this.mesInicio;
 	}
 
-	public void setMesInicio(Byte mesInicio) 
+	public void setMesInicio(Byte mesInicio)
 	{
 		this.mesInicio = mesInicio;
 	}
 
-	public Byte getMesFinal() 
+	public Byte getMesFinal()
 	{
 		return this.mesFinal;
 	}
 
-	public void setMesFinal(Byte mesFinal) 
+	public void setMesFinal(Byte mesFinal)
 	{
 		this.mesFinal = mesFinal;
 	}
 
-	public static String getSeparadorPeriodos() 
+	public static String getSeparadorPeriodos()
 	{
 		return "/";
 	}
@@ -146,21 +147,22 @@ public class EditarVistaForm extends EditarObjetoForm
 		return this.meses;
 	}
 
-	public void setMeses(List meses) 
+	public void setMeses(List meses)
 	{
 		this.meses = meses;
 	}
 
-	public List getAnos() 
+	public List getAnos()
 	{
 		return this.anos;
 	}
 
-	public void setAnos(List anos) 
+	public void setAnos(List anos)
 	{
 		this.anos = anos;
 	}
 
+	@Override
 	public void clear()
 	{
 		this.vistaId = new Long(0L);

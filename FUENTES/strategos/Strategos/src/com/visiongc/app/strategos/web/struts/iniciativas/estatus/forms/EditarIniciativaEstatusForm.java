@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms;
 
@@ -12,7 +12,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarIniciativaEstatusForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long id;
 	private String nombre;
 	private Double porcentajeInicial;
@@ -20,78 +20,79 @@ public class EditarIniciativaEstatusForm extends EditarObjetoForm
 	private Boolean sistema;
 	private Boolean bloquearMedicion;
 	private Boolean bloquearIndicadores;
-	
+
 	public Long getId()
 	{
 		return this.id;
 	}
-	
-	public void setId(Long id) 
+
+	public void setId(Long id)
 	{
 		this.id = id;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
 
-	public Double getPorcentajeInicial() 
+	public Double getPorcentajeInicial()
 	{
 		return this.porcentajeInicial;
 	}
 
-	public void setPorcentajeInicial(Double porcentajeInicial) 
+	public void setPorcentajeInicial(Double porcentajeInicial)
 	{
 		this.porcentajeInicial = porcentajeInicial;
 	}
 
-	public Double getPorcentajeFinal() 
+	public Double getPorcentajeFinal()
 	{
 		return this.porcentajeFinal;
 	}
 
-	public void setPorcentajeFinal(Double porcentajeFinal) 
+	public void setPorcentajeFinal(Double porcentajeFinal)
 	{
 		this.porcentajeFinal = porcentajeFinal;
 	}
 
-	public Boolean getSistema() 
+	public Boolean getSistema()
 	{
 		return this.sistema;
 	}
 
-	public void setSistema(Boolean sistema) 
+	public void setSistema(Boolean sistema)
 	{
 		this.sistema = sistema;
 	}
 
-	public Boolean getBloquearMedicion() 
+	public Boolean getBloquearMedicion()
 	{
 		return this.bloquearMedicion;
 	}
 
-	public void setBloquearMedicion(Boolean bloquearMedicion) 
+	public void setBloquearMedicion(Boolean bloquearMedicion)
 	{
 		this.bloquearMedicion = bloquearMedicion;
 	}
 
-	public Boolean getBloquearIndicadores() 
+	public Boolean getBloquearIndicadores()
 	{
 		return this.bloquearIndicadores;
 	}
 
-	public void setBloquearIndicadores(Boolean bloquearIndicadores) 
+	public void setBloquearIndicadores(Boolean bloquearIndicadores)
 	{
 		this.bloquearIndicadores = bloquearIndicadores;
 	}
-	
-  	public void clear()
+
+  	@Override
+	public void clear()
 	{
   		this.id = new Long(0L);
 		this.nombre = null;

@@ -1,15 +1,16 @@
 package com.visiongc.app.strategos.web.struts.explicaciones.forms;
 
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
+
 public class EditarExplicacionForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long explicacionId;
 	private String fecha;
 	private Long creadoId;
@@ -42,7 +43,8 @@ public class EditarExplicacionForm extends EditarObjetoForm
 	private Boolean onlyView;
 	private Boolean publico;
 	private Boolean addPublico;
-  
+	private Boolean creador;
+
 	public Long getExplicacionId()
 	{
 		return this.explicacionId;
@@ -249,37 +251,37 @@ public class EditarExplicacionForm extends EditarObjetoForm
     return this.tipo;
   }
 
-  public void setTipo(Integer tipo) 
+  public void setTipo(Integer tipo)
   {
     this.tipo = tipo;
   }
-  
-	public String getFechaCompromiso() 
+
+	public String getFechaCompromiso()
 	{
 		return this.fechaCompromiso;
 	}
 
-	public void setFechaCompromiso(String fechaCompromiso) 
+	public void setFechaCompromiso(String fechaCompromiso)
 	{
 		this.fechaCompromiso = fechaCompromiso;
 	}
-	
-	public String getFechaReal() 
+
+	public String getFechaReal()
 	{
 		return this.fechaReal;
 	}
 
-	public void setFechaReal(String fechaReal) 
+	public void setFechaReal(String fechaReal)
 	{
 		this.fechaReal = fechaReal;
 	}
-	
+
 	public String getLogro1()
 	{
 		return this.logro1;
 	}
 
-	public void setLogro1(String logro1) 
+	public void setLogro1(String logro1)
 	{
 		if ((logro1 == null) || (logro1.trim().equals("")))
 			this.logro1 = null;
@@ -292,7 +294,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		return this.logro2;
 	}
 
-	public void setLogro2(String logro2) 
+	public void setLogro2(String logro2)
 	{
 		if ((logro2 == null) || (logro2.trim().equals("")))
 			this.logro2 = null;
@@ -305,7 +307,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		return this.logro3;
 	}
 
-	public void setLogro3(String logro3) 
+	public void setLogro3(String logro3)
 	{
 		if ((logro3 == null) || (logro3.trim().equals("")))
 			this.logro3 = null;
@@ -318,7 +320,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		return this.logro4;
 	}
 
-	public void setLogro4(String logro4) 
+	public void setLogro4(String logro4)
 	{
 		if ((logro4 == null) || (logro4.trim().equals("")))
 			this.logro4 = null;
@@ -331,7 +333,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		return this.onlyView;
 	}
 
-	public void setOnlyView(Boolean onlyView) 
+	public void setOnlyView(Boolean onlyView)
 	{
     	this.onlyView = onlyView;
 	}
@@ -341,7 +343,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		return this.publico;
 	}
 
-	public void setPublico(Boolean publico) 
+	public void setPublico(Boolean publico)
 	{
     	this.publico = publico;
 	}
@@ -351,12 +353,13 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		return this.addPublico;
 	}
 
-	public void setAddPublico(Boolean addPublico) 
+	public void setAddPublico(Boolean addPublico)
 	{
     	this.addPublico = addPublico;
 	}
-	
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		this.explicacionId = new Long(0L);
 		this.fecha = null;
@@ -383,7 +386,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		this.tipo = null;
 		this.fechaCompromiso = null;
     	Date ahora = new Date();
-		this.fechaReal = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");;
+		this.fechaReal = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");
 		this.logro1 = null;
 		this.logro2 = null;
 		this.logro3 = null;
@@ -391,6 +394,15 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		this.onlyView = null;
 		this.publico = null;
 		this.addPublico = null;
+		this.creador = null;
 		setBloqueado(new Boolean(false));
+	}
+
+	public Boolean getCreador() {
+		return creador;
+	}
+
+	public void setCreador(Boolean creador) {
+		this.creador = creador;
 	}
 }

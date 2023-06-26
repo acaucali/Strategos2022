@@ -1,8 +1,6 @@
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,21 +26,10 @@ import org.apache.struts.util.MessageResources;
 
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
-import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.indicadores.model.Medicion;
-import com.visiongc.app.strategos.indicadores.model.util.AlertaIndicador;
-import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
-import com.visiongc.app.strategos.planes.model.IniciativaPerspectiva;
-import com.visiongc.app.strategos.planes.model.Perspectiva;
-import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.HistoricoType;
@@ -51,10 +38,12 @@ import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 public class ReporteIniciativaDatosBasicosXls extends VgcAction {
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -191,7 +180,7 @@ public class ReporteIniciativaDatosBasicosXls extends VgcAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					HSSFRow dataRow1 = sheet.createRow(x + 1);
 					dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());
@@ -342,7 +331,7 @@ public class ReporteIniciativaDatosBasicosXls extends VgcAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					HSSFRow dataRow1 = sheet.createRow(x + 1);
 
@@ -370,7 +359,7 @@ public class ReporteIniciativaDatosBasicosXls extends VgcAction {
 
 			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
@@ -393,7 +382,7 @@ public class ReporteIniciativaDatosBasicosXls extends VgcAction {
 
 					if (iniciativasSub.size() > 0) {
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
+							Iniciativa iniciativa = iter1.next();
 
 							HSSFRow dataRow1 = sheet.createRow(x + 1);
 							dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());

@@ -1,11 +1,10 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,24 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DownloadAction;
 import org.apache.struts.util.MessageResources;
 
-import com.lowagie.text.Element;
 import com.lowagie.text.Paragraph;
-import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
-import com.visiongc.app.strategos.explicaciones.model.Explicacion;
-import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
-import com.visiongc.app.strategos.explicaciones.model.Explicacion.ObjetivoKey;
-import com.visiongc.app.strategos.explicaciones.model.util.TipoMemoExplicacion;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -62,7 +53,6 @@ import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
 import com.visiongc.app.strategos.planes.model.util.TipoIndicadorEstado;
 import com.visiongc.app.strategos.planes.model.util.TipoMeta;
-import com.visiongc.app.strategos.planes.model.util.TipoPerspectiva;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
@@ -70,33 +60,32 @@ import com.visiongc.app.strategos.planificacionseguimiento.model.PryProyecto;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.servicio.Servicio;
 import com.visiongc.app.strategos.servicio.Servicio.EjecutarTipo;
-import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.vistasdatos.StrategosVistasDatosService;
 import com.visiongc.app.strategos.vistasdatos.model.util.TipoVariable;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
-import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 import com.visiongc.framework.web.struts.forms.NavegadorForm;
-import com.visiongc.commons.util.HistoricoType;
 
 /**
  * Documentacion:
- * 
+ *
  * Clase para Crear el reportes consolidado en Excel.
- * 
+ *
  * @author andres
  *
  */
-public class PlanEjecucionReporteXlsAction extends DownloadAction 
+public class PlanEjecucionReporteXlsAction extends DownloadAction
 {
-	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	@Override
+	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		MessageResources mensajes = getResources(request);
 		ReporteForm reporte = new ReporteForm();
 		reporte.clear();
-		
+
 		/*Parametros para el reporte*/
 		String source = request.getParameter("source");
 		reporte.setPlanId(request.getParameter("planId") != null && !request.getParameter("planId").toString().equals("") ? Long.parseLong(request.getParameter("planId")) : null);
@@ -132,12 +121,12 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
     	reporte.setVisualizarActividadAlerta((request.getParameter("visualizarActividadAlerta") != null ? (request.getParameter("visualizarActividadAlerta").equals("1") ? true : false) : false));
 
     	return EjecucionPlan(reporte, request, mensajes, source);
-    	
-    	
-	}
-	
 
-	
+
+	}
+
+
+
 	private StreamInfo EjecucionPlan(ReporteForm reporte, HttpServletRequest request, MessageResources mensajes, String source) throws Exception
 	{
 		/*
@@ -146,14 +135,14 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
     	else if (source.equals("Iniciativa") || source.equals("IniciativaGeneral") || source.equals("IniciativaPlan"))
     		return EjecucionIniciativa(reporte, request, mensajes, source);
     	*/
-		
+
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 	    StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 	    StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-	    
+
 	    Plan plan = (Plan)strategosPerspectivasService.load(Plan.class, reporte.getPlanId());
 	    reporte.setPlantillaPlanes((PlantillaPlanes)strategosPerspectivasService.load(PlantillaPlanes.class, new Long(plan.getMetodologiaId())));
-		
+
 	    Perspectiva perspectiva = null;
 	    if (reporte.getAlcance().byteValue() == reporte.getAlcanceObjetivo().byteValue())
 	    	perspectiva = (Perspectiva) strategosPerspectivasService.load(Perspectiva.class, reporte.getObjetoSeleccionadoId());
@@ -161,32 +150,32 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    	perspectiva = strategosPerspectivasService.getPerspectivaRaiz(reporte.getPlanId());
 
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
-		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan(); 
+		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
 		strategosPlanesService.close();
 		perspectiva.setConfiguracionPlan(configuracionPlan);
-		
+
 		HSSFWorkbook objWB = new HSSFWorkbook();
 
 		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
+		// el tipo de dato que contendrï¿½ la celda
 		HSSFCell celda = null;
 
 		// Creo la hoja
 		HSSFSheet hoja1 = objWB.createSheet("Consolidado Plan");
 
-		// Proceso la información y genero el xls.
+		// Proceso la informaciï¿½n y genero el xls.
 		int numeroFila = 1;
 		int numeroCelda = 1;
 		HSSFRow fila = hoja1.createRow(numeroFila++);
 
 		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
+		// el tipo de dato que contendrï¿½ la celda
 		celda = fila.createCell(numeroCelda);
-		celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+		celda.setCellType(Cell.CELL_TYPE_STRING);
 		celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.titulo"));
 
 		// Subtitulo
-		String subTitulo = mensajes.getMessage("jsp.reportes.plan.meta.organizacion") + " : " + ((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre(); 
+		String subTitulo = mensajes.getMessage("jsp.reportes.plan.meta.organizacion") + " : " + ((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre();
 		if (subTitulo != null)
 		{
 			numeroCelda = 1;
@@ -194,11 +183,11 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue(subTitulo);
 		}
-		
-		
+
+
 		String texto = null;
 		Integer nivel = 0;
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
@@ -211,20 +200,20 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue("");
 
-		
+
 			texto = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.rango") + " : " + PeriodoUtil.getMesNombre(Byte.parseByte(reporte.getMesInicial())) + "/" + PeriodoUtil.getMesNombre(Byte.parseByte(reporte.getMesFinal())) + " -- " + (reporte.getAnoInicial().equals(reporte.getAnoFinal()) ? reporte.getAnoInicial() : (reporte.getAnoInicial() + "/" + reporte.getAnoFinal()));
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue(texto);
 		}
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
-		
+
+
 		if (perspectiva.getPadreId() == null || perspectiva.getPadreId() == 0L)
 			texto = mensajes.getMessage("jsp.reportes.plan.ejecucion.plantilla.plan") + " : " + perspectiva.getNombreCompleto();
 		else
@@ -234,21 +223,21 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			nivel = buscarNivelPerspectiva(0, perspectivaRaiz.getPerspectivaId(), perspectiva.getPerspectivaId(), strategosPerspectivasService);
 			texto = getNombrePerspectiva(reporte, (nivel != null ? nivel : 1)) + " : " + perspectiva.getNombreCompleto();
 		}
-	   
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue(texto);
-		
-		// información reporte
-		
+
+		// informaciï¿½n reporte
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-				
+
 		Map<String, Object> filtros = new HashMap<String, Object>();
-		 
+
 	    filtros.put("padreId", perspectiva.getPerspectivaId());
 	    String[] orden = new String[1];
 	    String[] tipoOrden = new String[1];
@@ -262,13 +251,13 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			else
 				nivel++;
 
-			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) 
+			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();)
 			{
-				Perspectiva perspectivaHija = (Perspectiva)iter.next();
+				Perspectiva perspectivaHija = iter.next();
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
-				
-		        // nombre de la perspectiva primer nivel 
-				
+
+		        // nombre de la perspectiva primer nivel
+
     		    if (reporte.getVisualizarObjetivoAlerta())
     		    {
         		    int numeroColumnas = 1;
@@ -286,15 +275,15 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				    		columnas[f][0] = "2";
 				    	columnas[f][1] = "";
 				    }
-    			    
-    
+
+
 					Byte alerta = null;
-					
+
 					if (configuracionPlan.getPlanObjetivoAlertaAnualMostrar())
 					{
-						
+
 						alerta = perspectivaHija.getAlertaAnual();
-						if (alerta == null) 
+						if (alerta == null)
 							texto ="";
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 				    		texto ="Alerta Roja";
@@ -306,9 +295,9 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 
 					if (configuracionPlan.getPlanObjetivoAlertaParcialMostrar())
 					{
-					
+
 						alerta = perspectivaHija.getAlertaParcial();
-						if (alerta == null) 
+						if (alerta == null)
 							texto ="";
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 				    		texto ="Alerta Roja";
@@ -317,13 +306,13 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 				    		texto ="Alerta Amarilla";
 					}
-					   
+
 					texto +="  "+ getNombrePerspectiva(reporte, (nivel + 1)) + " : " + perspectivaHija.getNombreCompleto();
     				numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue(texto);
-					
+
     		    }
     		    else
     		    {
@@ -332,34 +321,34 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue(texto);
-    		    	
-    			
+
+
     		    }
-    		    
+
     		    numeroCelda = 1;
     			fila = hoja1.createRow(numeroFila++);
     			celda = fila.createCell(numeroCelda);
     			celda.setCellValue("");
-    			
-				
+
+
 				buildReporte((nivel + 1), fila, celda, hoja1, numeroCelda, numeroFila, reporte, source, perspectivaHija, configuracionPlan, strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes, request);
-				
+
 				numeroFila = hoja1.getLastRowNum()+1;
 			}
 		}
 		else{
-			
+
 			dibujarInformacionPerspectiva(nivel, fila, celda, hoja1, numeroCelda, numeroFila, reporte, source, perspectiva, strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes, request);
 			numeroFila = hoja1.getLastRowNum()+1;
 		}
-		
-		// finalización reporte 
-		
+
+		// finalizaciï¿½n reporte
+
 		strategosPerspectivasService.close();
 		strategosIndicadoresService.close();
 		strategosMedicionesService.close();
-		
-		// Volcamos la información a un archivo.
+
+		// Volcamos la informaciï¿½n a un archivo.
 		String strNombreArchivo = "exportar.xls";
 		File objFile = new File(strNombreArchivo);
 
@@ -369,7 +358,7 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 
 		return new FileStreamInfo("application/vnd.ms-excel", new File(strNombreArchivo));
 	}
-	
+
 	private void buildReporte(int nivel, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila,  ReporteForm reporte, String source, Perspectiva perspectiva, ConfiguracionPlan configuracionPlan, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, StrategosPerspectivasService strategosPerspectivasService, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
@@ -383,16 +372,16 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    orden[0] = "nombre";
 	    tipoOrden[0] = "asc";
 		List<Perspectiva> perspectivas = strategosPerspectivasService.getPerspectivas(orden, tipoOrden, filtros);
-		
+
 		if (perspectivas.size() > 0)
 		{
-			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) 
+			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();)
 			{
-				Perspectiva perspectivaHija = (Perspectiva)iter.next();
+				Perspectiva perspectivaHija = iter.next();
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
-				
-		        // nombre de la perspectiva primer nivel 
-				
+
+		        // nombre de la perspectiva primer nivel
+
     		    if (reporte.getVisualizarObjetivoAlerta())
     		    {
         		    int numeroColumnas = 1;
@@ -410,15 +399,15 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				    		columnas[f][0] = "2";
 				    	columnas[f][1] = "";
 				    }
-    			    
-    		    
+
+
 					Byte alerta = null;
-					
+
 					if (configuracionPlan.getPlanObjetivoAlertaAnualMostrar())
 					{
 						alerta = perspectivaHija.getAlertaAnual();
-						
-						if (alerta == null) 
+
+						if (alerta == null)
 							texto ="";
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 				    		texto ="Alerta Roja";
@@ -426,14 +415,14 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				    		texto ="Alerta Verde";
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 				    		texto ="Alerta Amarilla";
-						
+
 					}
 
 					if (configuracionPlan.getPlanObjetivoAlertaParcialMostrar())
 					{
 						alerta = perspectivaHija.getAlertaParcial();
-					
-						if (alerta == null) 
+
+						if (alerta == null)
 							texto ="";
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 				    		texto ="Alerta Roja";
@@ -441,16 +430,16 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				    		texto ="Alerta Verde";
 				    	else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 				    		texto ="Alerta Amarilla";
-						
+
 					}
-						
+
 					texto +=" "+ getNombrePerspectiva(reporte, (nivel + 1)) + " : " + perspectivaHija.getNombreCompleto();
-    				
+
 					numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue(texto);
-    				
+
     				numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
@@ -463,14 +452,14 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue(texto);
-    				
-    				
+
+
     				numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue("");
     		    }
-				
+
 				buildReporte((nivel + 1), fila, celda, hoja1, numeroCelda, numeroFila, reporte, source, perspectivaHija, configuracionPlan, strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes, request);
 				numeroFila = hoja1.getLastRowNum()+1;
 			}
@@ -480,14 +469,14 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			numeroFila = hoja1.getLastRowNum()+1;
 		}
 	}
-	
-	
+
+
 	private void dibujarInformacionPerspectiva(int nivel , HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, ReporteForm reporte, String source, Perspectiva perspectiva, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, StrategosPerspectivasService strategosPerspectivasService, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
 		String texto =null;
     	List<PerspectivaEstado> estadosParciales = null;
-    	List<PerspectivaEstado> estadosAnuales = null;	    
+    	List<PerspectivaEstado> estadosAnuales = null;
 
     	Indicador indicador = null;
     	if (perspectiva.getNlParIndicadorId() != null)
@@ -496,10 +485,10 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 
 	    	LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(((Integer)(Integer.parseInt(reporte.getAnoInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getAnoFinal()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesFinal()))).intValue(), indicador.getFrecuencia().byteValue());
 	    	int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
-	    	int periodoFin = periodoInicio; 
+	    	int periodoFin = periodoInicio;
 	    	if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
 	    		periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
-	
+
 	    	estadosParciales = strategosPerspectivasService.getPerspectivaEstados(perspectiva.getPerspectivaId(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), Integer.parseInt(reporte.getAnoInicial()), Integer.parseInt(reporte.getAnoFinal()), periodoInicio, periodoFin);
 			estadosAnuales = strategosPerspectivasService.getPerspectivaEstados(perspectiva.getPerspectivaId(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual(), Integer.parseInt(reporte.getAnoInicial()), Integer.parseInt(reporte.getAnoFinal()), periodoInicio, periodoFin);
     	}
@@ -508,27 +497,27 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    	estadosParciales = new ArrayList<PerspectivaEstado>();
 			estadosAnuales = new ArrayList<PerspectivaEstado>();
     	}
-		
+
 		// Crea tabla con estados y alertas
 		if(estadosParciales.size() == 0 && estadosAnuales.size() == 0)
 		{
-		    
+
 			texto = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noestados", getNombrePerspectiva(reporte, (nivel)));
-			
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue(texto);
-			
+
 		}
-		else 
+		else
 		{
 			if (reporte.getVisualizarObjetivo()){
 				crearTablaPerspectiva(reporte, fila, celda, hoja1, numeroCelda, numeroFila, perspectiva, indicador, estadosParciales, estadosAnuales, mensajes, strategosMedicionesService, strategosIndicadoresService, request);
 				numeroFila = hoja1.getLastRowNum()+1;
 			}
 		}
-		
+
 		if (reporte.getVisualizarIndicadores()){
 			dibujarInformacionIndicador(nivel, reporte, fila, celda, hoja1, numeroCelda, numeroFila, perspectiva, strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes, request);
 			numeroFila = hoja1.getLastRowNum()+1;
@@ -537,29 +526,29 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			dibujarInformacionIniciativa(nivel, reporte, fila, celda, hoja1, numeroCelda, numeroFila, source, perspectiva, strategosMedicionesService, strategosIndicadoresService, mensajes, request);
 			numeroFila = hoja1.getLastRowNum()+1;
 		}
-		
+
 	}
-	
-	
+
+
 	public String getNombrePerspectiva(ReporteForm reporte, int nivel)
 	{
-		
+
 		String nombre = "";
-		
+
 		Set<?> elementosPlantillaPlanes = reporte.getPlantillaPlanes().getElementos();
-		if (elementosPlantillaPlanes != null) 
+		if (elementosPlantillaPlanes != null)
 		{
-			for (Iterator<?> iterElemento = elementosPlantillaPlanes.iterator(); iterElemento.hasNext(); ) 
+			for (Iterator<?> iterElemento = elementosPlantillaPlanes.iterator(); iterElemento.hasNext(); )
 			{
 				ElementoPlantillaPlanes elemento = (ElementoPlantillaPlanes)iterElemento.next();
-				if (elemento.getOrden().intValue() == nivel) 
+				if (elemento.getOrden().intValue() == nivel)
 				{
 					nombre = elemento.getNombre();
 					break;
 				}
 			}
 		}
-		
+
 		return nombre;
 	}
 
@@ -576,9 +565,9 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		    orden[0] = "nombre";
 		    tipoOrden[0] = "asc";
 			List<Perspectiva> perspectivas = strategosPerspectivasService.getPerspectivas(orden, tipoOrden, filtros);
-			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) 
+			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();)
 			{
-				Perspectiva perspectivaHija = (Perspectiva)iter.next();
+				Perspectiva perspectivaHija = iter.next();
 				if (perspectivaHija.getPerspectivaId().longValue() == perspectivaId.longValue())
 				{
 					nivelInterno = nivel;
@@ -594,65 +583,65 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		}
 		else
 			nivelInterno = nivel;
-		
+
 		return nivelInterno;
 	}
-	
-	
-	
+
+
+
 	private void crearTablaPerspectiva(ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, Perspectiva perspectiva, Indicador indicador, List<PerspectivaEstado> estadosParciales, List<PerspectivaEstado> estadosAnuales, MessageResources mensajes, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
 		StrategosVistasDatosService strategosVistasDatosService = StrategosServiceFactory.getInstance().openStrategosVistasDatosService();
-		
+
 		String texto = null;
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo"));
-	      
+
 		numeroCelda++;
 		for (Iterator<PerspectivaEstado> iter = estadosParciales.iterator(); iter.hasNext();)
 		{
-			
-			PerspectivaEstado estadoParcial = (PerspectivaEstado)iter.next();
+
+			PerspectivaEstado estadoParcial = iter.next();
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(PeriodoUtil.convertirPeriodoToTexto(estadoParcial.getPk().getPeriodo(), perspectiva.getFrecuencia(), estadoParcial.getPk().getAno()));
 		}
 
 		boolean tablaIniciada = false;
-		
+
 		StringBuilder string;
-		
-		
-		
+
+
+
 	    if (reporte.getVisualizarObjetivoEstadoParcial())
 	    {
-						
+
 	    	numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoparcial"));
-			
+
 			for (Iterator<PerspectivaEstado> iter = estadosParciales.iterator(); iter.hasNext();)
 			{
-				PerspectivaEstado estadoParcial = (PerspectivaEstado)iter.next();
+				PerspectivaEstado estadoParcial = iter.next();
 				Double valor = estadoParcial.getEstado();
 				if (valor != null && valor > 100D)
 					valor = 100D;
-					
+
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue((estadoParcial.getEstado() != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-			
-			
+
+
 	    }
 
 	    if (reporte.getVisualizarObjetivoEstadoAnual())
@@ -661,10 +650,10 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoanual"));
-			
+
 			for (Iterator<PerspectivaEstado> iter = estadosAnuales.iterator(); iter.hasNext();)
 			{
-				PerspectivaEstado estadoParcial = (PerspectivaEstado)iter.next();
+				PerspectivaEstado estadoParcial = iter.next();
 
 				Double valor = estadoParcial.getEstado();
 				if (valor != null && valor > 100D)
@@ -681,17 +670,17 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.alerta.parcial"));
-		
-			
+
+
 			for (int i = 0; i < (estadosParciales.size()); i++)
 			{
-				PerspectivaEstado medicion = (PerspectivaEstado)estadosParciales.get(i);
+				PerspectivaEstado medicion = estadosParciales.get(i);
 				String alerta = strategosVistasDatosService.getValorDimensiones(TipoVariable.getTipoVariableAlerta().toString(), medicion.getPk().getPeriodo() + "_" + medicion.getPk().getAno(), medicion.getPk().getPeriodo() + "_" + medicion.getPk().getAno(), indicador.getIndicadorId().toString(), reporte.getPlanId().toString(), null, false);
-				
+
 				celda = fila.createCell(numeroCelda++);
-				
-				
-				if (alerta == null) 
+
+
+				if (alerta == null)
 					celda.setCellValue("");
 	    		else if (alerta.equals("0"))
 	    			celda.setCellValue("Alerta Roja");
@@ -704,16 +693,16 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			}
 
 	    }
-		
+
 		strategosVistasDatosService.close();
-	
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
 	}
-	
-	
+
+
 	private void dibujarInformacionIndicador(int nivel, ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, Perspectiva perspectiva, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, StrategosPerspectivasService strategosPerspectivasService, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
@@ -721,25 +710,25 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService(strategosMetasService);
 		Map<String, Object> filtros = new HashMap<String, Object>();
 		String texto = null;
-		
+
 		filtros = new HashMap<String, Object>();
 		filtros.put("perspectivaId", perspectiva.getPerspectivaId().toString());
 		List<Indicador> indicadores = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, true).getLista();
-		
+
 		if (indicadores.size() > 0)
 		{
 			for (Iterator<Indicador> iter = indicadores.iterator(); iter.hasNext();)
 			{
-				Indicador indicador = (Indicador)iter.next();
-				
+				Indicador indicador = iter.next();
+
 		    	LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(((Integer)(Integer.parseInt(reporte.getAnoInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getAnoFinal()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesFinal()))).intValue(), indicador.getFrecuencia().byteValue());
 		    	int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
-		    	int periodoFin = periodoInicio; 
+		    	int periodoFin = periodoInicio;
 		    	if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
 		    		periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
-				
-				// Nombre del INDICADOR 
-			
+
+				// Nombre del INDICADOR
+
     		    if (reporte.getVisualizarIndicadoresAlerta())
     		    {
         		    int numeroColumnas = 1;
@@ -754,9 +743,9 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				    }
 
 				    Byte alerta = strategosPlanesService.getAlertaIndicadorPorPlan(indicador.getIndicadorId(), reporte.getPlanId());
-					
-										
-					if (alerta == null) 
+
+
+					if (alerta == null)
 		    		{
 						texto ="";
 		    		}
@@ -775,12 +764,12 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 
 					// Nombre
 					texto +=" "+ reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : " + indicador.getNombre();
-					
+
 					numeroCelda = 1;
 					fila = hoja1.createRow(numeroFila++);
 					celda = fila.createCell(numeroCelda);
 					celda.setCellValue(texto);
-					
+
 					numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
@@ -789,28 +778,28 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
     		    else
     		    {
     		    	texto = reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : " + indicador.getNombre();
-    		    	
+
     		    	numeroCelda = 1;
 					fila = hoja1.createRow(numeroFila++);
 					celda = fila.createCell(numeroCelda);
 					celda.setCellValue(texto);
-					
+
 					numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue("");
-        			
+
     		    }
 
     			boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue());
-				List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(), acumular, acumular);
+				List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(), acumular, acumular);
 				List<Medicion> medicionesMetas = new ArrayList<Medicion>();
 				if (reporte.getVisualizarIndicadoresMeta() || reporte.getVisualizarIndicadoresAlerta())
 				{
 					List<Meta> metas = strategosMetasService.getMetasParciales(indicador.getIndicadorId(), reporte.getPlanId(), indicador.getFrecuencia(), indicador.getOrganizacion().getMesCierre(), indicador.getCorte(), indicador.getTipoCargaMedicion(), TipoMeta.getTipoMetaParcial(), Integer.parseInt(reporte.getAnoInicial()), Integer.parseInt(reporte.getAnoFinal()), periodoInicio, periodoFin);
 					for (Iterator<Meta> iterMeta = metas.iterator(); iterMeta.hasNext();)
 					{
-						Meta meta = (Meta)iterMeta.next();
+						Meta meta = iterMeta.next();
 						medicionesMetas.add(new Medicion(new MedicionPK(indicador.getIndicadorId(), meta.getMetaId().getAno(), new Integer(meta.getMetaId().getPeriodo()), meta.getMetaId().getSerieId()), (meta.getValor() != null ? new Double(meta.getValor()) : null)));
 					}
 				}
@@ -820,106 +809,106 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 					estadosParciales = strategosPlanesService.getIndicadorEstados(indicador.getIndicadorId(), reporte.getPlanId(), indicador.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
 				if (reporte.getVisualizarIndicadoresEstadoAnual())
 					estadosAnuales = strategosPlanesService.getIndicadorEstados(indicador.getIndicadorId(), reporte.getPlanId(), indicador.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
-				
+
 				// Crear tabla del Indicador
 				if (mediciones.size() != 0)
 				{
-					
+
 					crearTablaIndicador(indicador, reporte, fila, celda, hoja1, numeroCelda, numeroFila, mediciones, medicionesMetas, estadosParciales, estadosAnuales, reporte.getVisualizarIndicadoresEjecutado(), reporte.getVisualizarIndicadoresMeta(), reporte.getVisualizarIndicadoresEstadoParcial(), reporte.getVisualizarIndicadoresEstadoParcialSuavisado(), reporte.getVisualizarIndicadoresEstadoAnual(), reporte.getVisualizarIndicadoresEstadoAnualSuavisado(), reporte.getVisualizarIndicadoresAlerta(), mensajes, strategosMedicionesService, strategosIndicadoresService, request);
 					numeroFila = hoja1.getLastRowNum()+1;
 				}
 				else
 				{
-	    		 
+
 	    			texto = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.indicadores.nomediciones", reporte.getPlantillaPlanes().getNombreIndicadorSingular().toLowerCase());
 
     		    	numeroCelda = 1;
 					fila = hoja1.createRow(numeroFila++);
 					celda = fila.createCell(numeroCelda);
 					celda.setCellValue(texto);
-					
+
 					numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue("");
 				}
-			}	
+			}
 		}
 		else
 		{
-		   
+
 			texto = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noindicadores", reporte.getPlantillaPlanes().getNombreIndicadorPlural().toLowerCase(), getNombrePerspectiva(reporte, (nivel)).toLowerCase());
-			
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue(texto);
-			
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue("");
 		}
-		
+
 		strategosPlanesService.close();
 		strategosMetasService.close();
 	}
-	
-	
+
+
 	private void crearTablaIndicador(Indicador indicador, ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, List<Medicion> mediciones, List<Medicion> medicionesMeta, List<IndicadorEstado> estadosParciales, List<IndicadorEstado> estadosAnuales, Boolean showEjecutado, Boolean showMeta, Boolean showEstadoParcial, Boolean showEstadoParcialSuavisado, Boolean showEstadoAnual, Boolean showEstadoAnualSuavisado, Boolean showAlerta, MessageResources mensajes, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
 		boolean tablaIniciada = false;
-		
+
 		StrategosVistasDatosService strategosVistasDatosService = StrategosServiceFactory.getInstance().openStrategosVistasDatosService();
 
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
-		
-	   
+
+
 	    StringBuilder string;
-	  	    
+
 	    celda = fila.createCell(numeroCelda);
 		celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo"));
-		
+
 		numeroCelda++;
 		for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();)
 		{
-			
-			Medicion medicion = (Medicion)iter.next();
-		   
+
+			Medicion medicion = iter.next();
+
 		    celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(PeriodoUtil.convertirPeriodoToTexto(medicion.getMedicionId().getPeriodo(), indicador.getFrecuencia(), medicion.getMedicionId().getAno()));
-		    
+
     	}
 
-		
-	
+
+
 	    if (showEjecutado)
 	    {
 	    	numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 	    	tablaIniciada = false;
-			
+
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.ejecutado"));
-		
-	    	
+
+
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();)
 			{
-				Medicion medicion = (Medicion)iter.next();
-			
+				Medicion medicion = iter.next();
+
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue((medicion.getValor() != null ? VgcFormatter.formatearNumero(medicion.getValor()) : ""));
 			}
 
-			
+
 	    }
 
 	    if (showMeta)
@@ -927,30 +916,30 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    	numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 	    	tablaIniciada = false;
-			
+
 	    	celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.meta"));
-		
+
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();)
 			{
-				Medicion medicion = (Medicion)iter.next();
+				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<Medicion> iterMeta = medicionesMeta.iterator(); iterMeta.hasNext();)
 				{
-					Medicion meta = (Medicion)iterMeta.next();
+					Medicion meta = iterMeta.next();
 					if (medicion.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue() && medicion.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo().intValue())
 					{
 						valor = meta.getValor();
 						break;
 					}
 				}
-				
+
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 
 			}
 
-			
+
 	    }
 
 	    if (showEstadoParcial)
@@ -958,23 +947,23 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    	numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 	    	tablaIniciada = false;
-			
+
 	    	string = new StringBuilder();
 	    	if (!showEstadoParcialSuavisado)
 	    		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoparcial"));
 	    	else
 	    		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoparcial.suavisado"));
-			
+
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(string.toString());
-			
+
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();)
 			{
-				Medicion medicion = (Medicion)iter.next();
+				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<IndicadorEstado> iterEstado = estadosParciales.iterator(); iterEstado.hasNext();)
 				{
-					IndicadorEstado estado = (IndicadorEstado)iterEstado.next();
+					IndicadorEstado estado = iterEstado.next();
 					if (medicion.getMedicionId().getAno().intValue() == estado.getPk().getAno().intValue() && medicion.getMedicionId().getPeriodo().intValue() == estado.getPk().getPeriodo().intValue())
 					{
 						valor = estado.getEstado();
@@ -983,13 +972,13 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				}
 				if (showEstadoParcialSuavisado && valor != null && valor > 100D)
 					valor = 100D;
-				
+
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
-				
+
 			}
 
-			
+
 	    }
 
 	    if (showEstadoAnual)
@@ -997,24 +986,24 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    	numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 	    	tablaIniciada = false;
-			
+
 	    	string = new StringBuilder();
 	    	if (!showEstadoAnualSuavisado)
 	    		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoanual"));
 	    	else
 	    		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoanual.suavisado"));
-			
-			
+
+
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(string.toString());
 
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();)
 			{
-				Medicion medicion = (Medicion)iter.next();
+				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<IndicadorEstado> iterEstado = estadosAnuales.iterator(); iterEstado.hasNext();)
 				{
-					IndicadorEstado estado = (IndicadorEstado)iterEstado.next();
+					IndicadorEstado estado = iterEstado.next();
 					if (medicion.getMedicionId().getAno().intValue() == estado.getPk().getAno().intValue() && medicion.getMedicionId().getPeriodo().intValue() == estado.getPk().getPeriodo().intValue())
 					{
 						valor = estado.getEstado();
@@ -1023,32 +1012,32 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				}
 				if (showEstadoAnualSuavisado && valor != null && valor > 100D)
 					valor = 100D;
-				
+
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
-				
+
 			}
 
-			
+
 	    }
-	    
+
 	    if (showAlerta)
 	    {
 	    	numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 	    	tablaIniciada = false;
-			
+
 			celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.alerta"));
-	
+
 
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();)
 			{
-				Medicion medicion = (Medicion)iter.next();
+				Medicion medicion = iter.next();
 				Medicion valorMeta = null;
 				for (Iterator<Medicion> iterMeta = medicionesMeta.iterator(); iterMeta.hasNext();)
 				{
-					Medicion meta = (Medicion)iterMeta.next();
+					Medicion meta = iterMeta.next();
 					if (medicion.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue() && medicion.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo().intValue())
 					{
 						valorMeta = meta;
@@ -1063,8 +1052,8 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 					zonaAmarilla = strategosIndicadoresService.zonaAmarilla(indicador, medicion.getMedicionId().getAno(), medicion.getMedicionId().getPeriodo(), valorMeta.getValor(), zonaVerde, strategosMedicionesService);
 
 					Byte alerta = new Servicio().calcularAlertaXPeriodos(EjecutarTipo.getEjecucionAlertaXPeriodos(), indicador.getCaracteristica(), zonaVerde, zonaAmarilla, medicion.getValor(), valorMeta.getValor(), null, null);
-					
-					if (alerta == null){ 
+
+					if (alerta == null){
 						celda = fila.createCell(numeroCelda++);
 						celda.setCellValue("");
 					}
@@ -1087,29 +1076,29 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				}
 			}
 
-			
+
 	    }
 
 		strategosVistasDatosService.close();
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-	
+
 	}
-	
-	
-	
+
+
+
 	private void dibujarInformacionIniciativa(int nivel, ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, String source, Perspectiva perspectiva, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
 		StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance().openStrategosMetasService();
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-		
+
 		Map<String, Object> filtros = new HashMap<String, Object>();
 		Paragraph texto;
-		
+
 
 		filtros = new HashMap<String, Object>();
 		if (source.equals("Plan"))
@@ -1153,7 +1142,7 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				plantilla.setNombreIndicadorSingular(mensajes.getMessage("jsp.modulo.indicador.titulo.singular"));
 				reporte.setPlantillaPlanes(plantilla);
 			}
-		    
+
 		    if (reporte.getAlcance().byteValue() == reporte.getAlcanceObjetivo().byteValue())
 		    	filtros.put("iniciativaId", reporte.getObjetoSeleccionadoId());
 		    else if (plan != null)
@@ -1167,52 +1156,52 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			if (reporte.getFiltro().getNombre() != null)
 				filtros.put("nombre", reporte.getFiltro().getNombre());
 		}
-		
+
 		List<Iniciativa> iniciativas = strategosIniciativasService.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
-		
+
 		if (iniciativas.size() > 0)
 		{
 			for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();)
 			{
-				Iniciativa iniciativa = (Iniciativa)iter.next();
+				Iniciativa iniciativa = iter.next();
 				Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
-				
+
 		    	LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(((Integer)(Integer.parseInt(reporte.getAnoInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getAnoFinal()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesFinal()))).intValue(), indicador.getFrecuencia().byteValue());
 		    	int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
-		    	int periodoFin = periodoInicio; 
+		    	int periodoFin = periodoInicio;
 		    	if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
 		    		periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
-				
-				// Nombre del INDICADOR 
-    		   
-    		    
+
+				// Nombre del INDICADOR
+
+
     			numeroCelda = 1;
     			fila = hoja1.createRow(numeroFila++);
     			celda = fila.createCell(numeroCelda);
     			celda.setCellValue(reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : " + iniciativa.getNombre());
-    			
+
     			numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				celda = fila.createCell(numeroCelda);
 				celda.setCellValue("");
-    			
+
 				List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
 				List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
 
 				// Dibujar Informacion de la Iniciativa
     			crearTablaIniciativa(reporte, fila, celda, hoja1, numeroCelda, numeroFila, iniciativa, indicador, medicionesProgramado, medicionesEjecutado, mensajes, request);
     			numeroFila = hoja1.getLastRowNum()+1;
-    			
+
     			numeroCelda = 1;
     			fila = hoja1.createRow(numeroFila++);
     			celda = fila.createCell(numeroCelda);
     			celda.setCellValue(reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : " + indicador.getNombre());
-    		
+
     			numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				celda = fila.createCell(numeroCelda);
 				celda.setCellValue("");
-    			
+
 				// Crear tabla del Indicador
 				if (medicionesEjecutado.size() != 0){
 					crearTablaIndicador(indicador, reporte, fila, celda, hoja1, numeroCelda, numeroFila, medicionesEjecutado, medicionesProgramado, new ArrayList<IndicadorEstado>(), new ArrayList<IndicadorEstado>(), reporte.getVisualizarIniciativasEjecutado(), reporte.getVisualizarIniciativasMeta(), false, false, false, false, reporte.getVisualizarIniciativasAlerta(), mensajes, strategosMedicionesService, strategosIndicadoresService, request);
@@ -1224,22 +1213,22 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    			fila = hoja1.createRow(numeroFila++);
 	    			celda = fila.createCell(numeroCelda);
 	    			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.iniciativas.nomediciones", reporte.getPlantillaPlanes().getNombreIniciativaSingular().toLowerCase()));
-	    	
+
 	    			numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue("");
 				}
-				
+
 				if (reporte.getVisualizarActividad()){
 					dibujarInformacionActividad(reporte, fila, celda, hoja1, numeroCelda, numeroFila, iniciativa, strategosMedicionesService, strategosIndicadoresService, mensajes, request);
 					numeroFila = hoja1.getLastRowNum()+1;
 				}
-			}	
+			}
 		}
 		else
 		{
-			
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
@@ -1250,12 +1239,12 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue("");
 		}
-		
+
 		strategosMetasService.close();
 		strategosIniciativasService.close();
 	}
-	
-	
+
+
 	private void crearTablaIniciativa(ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, Iniciativa iniciativa, Indicador indicador, List<Medicion> medicionesProgramado, List<Medicion> medicionesEjecutado, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
@@ -1266,9 +1255,9 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 			proyecto = (PryProyecto) strategosPryProyectosService.load(PryProyecto.class, iniciativa.getProyectoId());
 			strategosPryProyectosService.close();
 		}
-		
+
 		String encabezado = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.unidad") + ",";
-		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio") + ",";	
+		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio") + ",";
 		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.culminacion") + ",";
 		if (reporte.getVisualizarIniciativasEjecutado())
 			encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.avance") + ",";
@@ -1277,7 +1266,7 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		if (reporte.getVisualizarIniciativasAlerta())
 			encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.alerta") + ",";
 		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.responsable");
-		
+
 		String[] titulo = encabezado.split(",");
 		boolean tablaIniciada = false;
 
@@ -1285,33 +1274,32 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
-		
-		
+
+
 	    StringBuilder string;
 
-	    for (int f = 0; f < titulo.length; f++)
-	    {
+	    for (String element : titulo) {
 	    	celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(titulo[f]);
-    		
+			celda.setCellValue(element);
+
 	    }
-	   	
-	    
-		
+
+
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
-		
+
 	    Double programado = 0D;
-	    Double porcentajeEsperado = 0D;
+	    double porcentajeEsperado = 0D;
 	    for (Iterator<Medicion> iterEjecutado = medicionesEjecutado.iterator(); iterEjecutado.hasNext();)
 	    {
-	    	Medicion ejecutado = (Medicion)iterEjecutado.next();
+	    	Medicion ejecutado = iterEjecutado.next();
 			for (Iterator<Medicion> iterMeta = medicionesProgramado.iterator(); iterMeta.hasNext();)
 			{
-				Medicion meta = (Medicion)iterMeta.next();
+				Medicion meta = iterMeta.next();
 				if (ejecutado.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue() &&
 						ejecutado.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo().intValue())
 				{
@@ -1334,25 +1322,25 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(string.toString());
 
-		
+
 		celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(proyecto != null && proyecto.getComienzoPlan() != null ? (VgcFormatter.formatearFecha(proyecto.getComienzoPlan(),"formato.fecha.corta")): "");
-		
+
 		celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(proyecto != null && proyecto.getFinPlan() != null ? (VgcFormatter.formatearFecha(proyecto.getFinPlan(), "formato.fecha.corta")): "");
-		
+
 	    if (reporte.getVisualizarIniciativasEjecutado())
 	    	celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-	 
+
 	    if (reporte.getVisualizarIniciativasMeta())
 	    	celda = fila.createCell(numeroCelda++);
 			celda.setCellValue(VgcFormatter.formatearNumero(programado));
 
 	    if (reporte.getVisualizarIniciativasAlerta())
 	    {
-	  
-			if (iniciativa.getAlerta() == null){ 
+
+			if (iniciativa.getAlerta() == null){
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue("");
 			}
@@ -1369,7 +1357,7 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				celda.setCellValue("Alerta Amarilla");
 			}
 	    }
-	    	  
+
 	    celda = fila.createCell(numeroCelda++);
 		celda.setCellValue((iniciativa.getResponsableSeguimiento() !=null ? iniciativa.getResponsableSeguimiento().getNombre() : ""));
 
@@ -1378,64 +1366,64 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
 	}
-	
+
 
 	private void dibujarInformacionActividad(ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, Iniciativa iniciativa, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
 		numeroFila = hoja1.getLastRowNum()+1;
 		StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance().openStrategosMetasService();
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
-		
+
 		Map<String, Object> filtros = new HashMap<String, Object>();
 		Paragraph texto;
-		
+
 
 		filtros = new HashMap<String, Object>();
 		filtros.put("proyectoId", iniciativa.getProyectoId());
-		List<PryActividad> actividades = strategosPryActividadesService.getActividades(0, 0, "fila", "ASC", true, filtros).getLista(); 
-		
+		List<PryActividad> actividades = strategosPryActividadesService.getActividades(0, 0, "fila", "ASC", true, filtros).getLista();
+
 		if (actividades.size() > 0)
 		{
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();)
 			{
-				PryActividad actividad = (PryActividad)iter.next();
+				PryActividad actividad = iter.next();
 				Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, actividad.getIndicadorId());
-				
+
 		    	LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(((Integer)(Integer.parseInt(reporte.getAnoInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getAnoFinal()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesInicial()))).intValue(), ((Integer)(Integer.parseInt(reporte.getMesFinal()))).intValue(), indicador.getFrecuencia().byteValue());
 		    	int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
-		    	int periodoFin = periodoInicio; 
+		    	int periodoFin = periodoInicio;
 		    	if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
 		    		periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
-				
+
 		    	numeroCelda = 1;
     			fila = hoja1.createRow(numeroFila++);
     			celda = fila.createCell(numeroCelda);
     			celda.setCellValue(reporte.getPlantillaPlanes().getNombreActividadSingular() + " : " + actividad.getNombre());
-    		
-    			numeroCelda = 1;
-				fila = hoja1.createRow(numeroFila++);
-				celda = fila.createCell(numeroCelda);
-				celda.setCellValue("");
-    			
-				List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
-				List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
-				
-				// Dibujar Informacion de la Iniciativa
-    			crearTablaActividad(reporte, fila, celda, hoja1, numeroCelda, numeroFila, actividad, indicador, mensajes, request);
-    			numeroFila = hoja1.getLastRowNum()+1;
-    			
-    			numeroCelda = 1;
-    			fila = hoja1.createRow(numeroFila++);
-    			celda = fila.createCell(numeroCelda);
-    			celda.setCellValue(reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : " + indicador.getNombre());
-    		
+
     			numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				celda = fila.createCell(numeroCelda);
 				celda.setCellValue("");
 
-				// Nombre del INDICADOR 
-    			
+				List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
+				List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
+
+				// Dibujar Informacion de la Iniciativa
+    			crearTablaActividad(reporte, fila, celda, hoja1, numeroCelda, numeroFila, actividad, indicador, mensajes, request);
+    			numeroFila = hoja1.getLastRowNum()+1;
+
+    			numeroCelda = 1;
+    			fila = hoja1.createRow(numeroFila++);
+    			celda = fila.createCell(numeroCelda);
+    			celda.setCellValue(reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : " + indicador.getNombre());
+
+    			numeroCelda = 1;
+				fila = hoja1.createRow(numeroFila++);
+				celda = fila.createCell(numeroCelda);
+				celda.setCellValue("");
+
+				// Nombre del INDICADOR
+
 				// Crear tabla del Indicador
 				if (medicionesEjecutado.size() != 0){
 					crearTablaIndicador(indicador, reporte, fila, celda, hoja1, numeroCelda, numeroFila, medicionesEjecutado, medicionesProgramado, new ArrayList<IndicadorEstado>(), new ArrayList<IndicadorEstado>(), reporte.getVisualizarActividadEjecutado(), reporte.getVisualizarActividadMeta(), false, false, false, false, reporte.getVisualizarActividadAlerta(), mensajes, strategosMedicionesService, strategosIndicadoresService, request);
@@ -1443,44 +1431,44 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 				}
 				else
 				{
-					
+
 					numeroCelda = 1;
 	    			fila = hoja1.createRow(numeroFila++);
 	    			celda = fila.createCell(numeroCelda);
 	    			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.actividades.nomediciones", reporte.getPlantillaPlanes().getNombreActividadSingular().toLowerCase()));
-	    		
+
 	    			numeroCelda = 1;
     				fila = hoja1.createRow(numeroFila++);
     				celda = fila.createCell(numeroCelda);
     				celda.setCellValue("");
 				}
-			}	
+			}
 		}
 		else
 		{
-			
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noactividades", reporte.getPlantillaPlanes().getNombreActividadPlural().toLowerCase(), reporte.getPlantillaPlanes().getNombreIniciativaSingular().toLowerCase()));
-	
+
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue("");
 		}
-		
+
 		strategosMetasService.close();
 		strategosPryActividadesService.close();
 	}
-	
+
 
 	private void crearTablaActividad(ReporteForm reporte, HSSFRow fila, HSSFCell celda, HSSFSheet hoja1, int numeroCelda, int numeroFila, PryActividad actividad, Indicador indicador, MessageResources mensajes, HttpServletRequest request) throws Exception
 	{
-		
+
 		numeroFila = hoja1.getLastRowNum()+1;
 		String encabezado = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.unidad") + ",";
-		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio") + ",";	
+		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio") + ",";
 		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.culminacion") + ",";
 		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.peso") + ",";
 		encabezado = encabezado + mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.duracion") + ",";
@@ -1498,23 +1486,22 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
-		
-		
+
+
 		StringBuilder string;
-	    for (int f = 0; f < titulo.length; f++)
-	    {
+	    for (String element : titulo) {
 	    	celda = fila.createCell(numeroCelda++);
-			celda.setCellValue(titulo[f]);
-    		
+			celda.setCellValue(element);
+
 	    }
-	    
-	    
+
+
 	    numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
-	    
+
 		tablaIniciada = false;
 
 		string = new StringBuilder();
@@ -1522,36 +1509,36 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 	    	string.append(indicador.getUnidad().getNombre());
 	    else
 	    	string.append("");
-		
-		
+
+
 		celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(string.toString());
-		
+
 	    celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(VgcFormatter.formatearFecha(actividad.getComienzoPlan(),"formato.fecha.corta"));
-	    
+
 	    celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(VgcFormatter.formatearFecha(actividad.getFinPlan(), "formato.fecha.corta"));
 
 		celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(VgcFormatter.formatearNumero(actividad.getPeso()));
-		
+
 	    celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(VgcFormatter.formatearNumero(actividad.getDuracionPlan()));
-    	
-    	
-    	
+
+
+
 	    if (reporte.getVisualizarActividadAlerta())
 	    {
-	    	
-			if (actividad.getAlerta() == null){ 
+
+			if (actividad.getAlerta() == null){
 				celda = fila.createCell(numeroCelda++);
-				celda.setCellValue("");    	
+				celda.setCellValue("");
 			}
 			else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()){
 				celda = fila.createCell(numeroCelda++);
 				celda.setCellValue("Alerta Roja");
-	        	
+
 			}
 	        else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue()){
 	        	celda = fila.createCell(numeroCelda++);
@@ -1565,19 +1552,19 @@ public class PlanEjecucionReporteXlsAction extends DownloadAction
 
 	    celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(actividad.getPorcentajeEjecutado() != null ? actividad.getPorcentajeEjecutadoFormateado() : "");
-    	
+
     	celda = fila.createCell(numeroCelda++);
 		celda.setCellValue(actividad.getPorcentajeEsperado() != null ? actividad.getPorcentajeEsperadoFormateado() : "");
-    
+
     	celda = fila.createCell(numeroCelda++);
 		celda.setCellValue((actividad.getResponsableSeguimiento() !=null ? actividad.getResponsableSeguimiento().getNombre() : ""));
-	    
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-	  
+
 	}
-	
-	
+
+
 }

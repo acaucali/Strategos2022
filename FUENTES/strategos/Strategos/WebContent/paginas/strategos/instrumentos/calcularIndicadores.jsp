@@ -45,6 +45,9 @@
 		{
 			
 			var xml = '?funcion=calcular';	
+			xml = xml + '&anio=' + document.editarInstrumentosForm.ano.value
+			xml = xml + '&desde=' + document.editarInstrumentosForm.mesInicial.value
+			xml = xml + '&hasta=' + document.editarInstrumentosForm.mesFinal.value
 			activarBloqueoEspera();
 			document.editarInstrumentosForm.action = '<html:rewrite action="/instrumentos/calcularIndicadoresEjecucion"/>'+xml;
 			document.editarInstrumentosForm.submit();

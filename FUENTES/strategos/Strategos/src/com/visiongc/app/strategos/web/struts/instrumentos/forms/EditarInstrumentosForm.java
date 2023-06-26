@@ -1,20 +1,15 @@
 package com.visiongc.app.strategos.web.struts.instrumentos.forms;
 
-import java.util.Date;
 import java.util.List;
 
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
 import com.visiongc.app.strategos.instrumentos.model.Cooperante;
 import com.visiongc.app.strategos.instrumentos.model.TipoConvenio;
-import com.visiongc.commons.util.CondicionType;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.framework.web.struts.forms.VisorListaForm;
 
 public class EditarInstrumentosForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long instrumentoId;
 	private String nombreCorto;
 	private String nombreInstrumento;
@@ -44,7 +39,7 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 	private TipoConvenio tipoConvenio;
 	private List<TipoConvenio> convenios;
 	private List<Cooperante> cooperantes;
-	
+
 	private String fechaFinal;
 	private String respuesta;
 	private Integer ano;
@@ -136,7 +131,7 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 	public void setInstrumentoMarco(String instrumentoMarco) {
 		this.instrumentoMarco = instrumentoMarco;
 	}
-			
+
 	public String getFechaInicio() {
 		return fechaInicio;
 	}
@@ -264,7 +259,7 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 	public void setTipoConvenio(TipoConvenio tipoConvenio) {
 		this.tipoConvenio = tipoConvenio;
 	}
-	
+
 	public List<TipoConvenio> getConvenios() {
 		return convenios;
 	}
@@ -280,7 +275,7 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 	public void setCooperantes(List<Cooperante> cooperantes) {
 		this.cooperantes = cooperantes;
 	}
-		
+
 	public String getFechaFinal() {
 		return fechaFinal;
 	}
@@ -289,10 +284,12 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 		this.fechaFinal = fechaFinal;
 	}
 
+	@Override
 	public String getRespuesta() {
 		return respuesta;
 	}
 
+	@Override
 	public void setRespuesta(String respuesta) {
 		this.respuesta = respuesta;
 	}
@@ -369,8 +366,9 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 		this.altoForma = altoForma;
 	}
 
+	@Override
 	public void clear() {
-		
+
 		this.instrumentoId = new Long(0L);
 		this.nombreCorto = null;
 		this.nombreInstrumento = null;
@@ -392,8 +390,8 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 		this.responsableCgi = null;
 		this.observaciones = null;
 		this.cooperante = null;
-		this.tipoConvenio = null;				
+		this.tipoConvenio = null;
 	}
 
-	
+
 }

@@ -1,5 +1,22 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -37,47 +54,34 @@ import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.StringUtil;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarActividadAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 	    String forward = mapping.getParameter();
-	
+
 	    EditarActividadForm editarActividadForm = (EditarActividadForm)form;
-	    
+
 	    ActionMessages messages = getMessages(request);
-	
+
 	    StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
-	
+
     	StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService(strategosPryActividadesService);
     	Iniciativa iniciativa = (Iniciativa)strategosIniciativasService.load(Iniciativa.class, editarActividadForm.getIniciativaId());
-	    
+
 	    boolean nuevo = false;
 	    PryActividad pryActividad = new PryActividad();
 	    int respuesta = 10000;
-	
+
 	    if ((editarActividadForm.getActividadId() != null) && (!editarActividadForm.getActividadId().equals(Long.valueOf("0"))))
 	    	pryActividad = (PryActividad)strategosPryActividadesService.load(PryActividad.class, editarActividadForm.getActividadId());
 	    else
@@ -86,41 +90,41 @@ public class GuardarActividadAction extends VgcAction
 	    	pryActividad = new PryActividad();
 	    	pryActividad.setActividadId(new Long(0L));
 	    	pryActividad.setPryInformacionActividad(new PryInformacionActividad());
-	
+
 	    	int filaNuevaActividad = 1;
 	    	int nivelNuevaActividad = 1;
 	    	Long padreId = null;
-	
-	    	if ((editarActividadForm.getSeleccionados() != null) && (editarActividadForm.getSeleccionados().longValue() != 0L)) 
+
+	    	if ((editarActividadForm.getSeleccionados() != null) && (editarActividadForm.getSeleccionados().longValue() != 0L))
 	    	{
 	    		filaNuevaActividad = ((Integer)strategosPryActividadesService.getValoresLimiteAlcanceHijosActividad(editarActividadForm.getSeleccionados().longValue(), new Boolean(false), (Usuario)request.getSession().getAttribute("usuario")).get(0)).intValue();
 	    		PryActividad actividadBase = (PryActividad)strategosPryActividadesService.load(PryActividad.class, editarActividadForm.getSeleccionados());
 	    		nivelNuevaActividad = actividadBase.getNivel().intValue();
 	    		if (actividadBase.getPadre() != null)
 	    			padreId = actividadBase.getPadre().getActividadId();
-	    		else 
+	    		else
 	    			padreId = null;
 	    	}
 	    	else
 	    		filaNuevaActividad = strategosPryActividadesService.getMaximaFila(editarActividadForm.getProyectoId().longValue(), (Usuario)request.getSession().getAttribute("usuario"));
-	    	
+
 	    	filaNuevaActividad++;
-	
+
 	    	pryActividad.setPadreId(padreId);
 	    	pryActividad.setFila(new Integer(filaNuevaActividad));
 	    	pryActividad.setNivel(new Integer(nivelNuevaActividad));
 	    	pryActividad.setProyectoId(editarActividadForm.getProyectoId());
 	    }
-	    
+
     	PryActividad pryActividadPadre = null;
     	if (pryActividad.getPadreId() != null)
     		pryActividadPadre = (PryActividad)strategosPryActividadesService.load(PryActividad.class, new Long(pryActividad.getPadreId()));
-	
+
     	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar calFechaDesde = Calendar.getInstance();
 		calFechaDesde.setTime(simpleDateFormat.parse(editarActividadForm.getComienzoPlan()));
 		calFechaDesde = PeriodoUtil.inicioDelDia(calFechaDesde);
-		
+
 		Calendar calFechaHasta = Calendar.getInstance();
 		calFechaHasta.setTime(simpleDateFormat.parse(editarActividadForm.getFinPlan()));
 		calFechaHasta = PeriodoUtil.finDelDia(calFechaHasta);
@@ -128,101 +132,101 @@ public class GuardarActividadAction extends VgcAction
 	    pryActividad.setUnidadId(editarActividadForm.getUnidadId());
 	    pryActividad.setNaturaleza(editarActividadForm.getNaturaleza());
 	    pryActividad.setTipoMedicion(editarActividadForm.getTipoMedicion());
-	
+
 	    if (editarActividadForm.getNombre() != null)
 	    	pryActividad.setNombre(editarActividadForm.getNombre());
-	    else 
+	    else
 	    	pryActividad.setNombre(null);
-	
+
 	    if ((editarActividadForm.getDescripcion() != null) && (!editarActividadForm.getDescripcion().equals("")))
 	    	pryActividad.setDescripcion(editarActividadForm.getDescripcion());
-	    else 
+	    else
 	    	pryActividad.setDescripcion(null);
-	
+
 	    if (editarActividadForm.getComienzoPlan() != null)
 	    {
 	    	if ((pryActividad.getHijos() == null) || (pryActividad.getHijos().size() == 0))
 	    		pryActividad.setComienzoPlan(calFechaDesde.getTime());
 	    }
-	    else 
+	    else
 	    	pryActividad.setComienzoPlan(null);
-	
+
 	    if (editarActividadForm.getFinPlan() != null)
 	    {
 	    	if ((pryActividad.getHijos() == null) || (pryActividad.getHijos().size() == 0))
 	    		pryActividad.setFinPlan(calFechaHasta.getTime());
 	    }
-	    else 
+	    else
 	    	pryActividad.setFinPlan(null);
-	
-	    if (editarActividadForm.getDuracionPlan() != null) 
+
+	    if (editarActividadForm.getDuracionPlan() != null)
 	    {
 	    	if ((pryActividad.getHijos() == null) || (pryActividad.getHijos().size() == 0))
 	    		pryActividad.setDuracionPlan(new Double(editarActividadForm.getDuracionPlan().doubleValue()));
 	    }
-	    else 
+	    else
 	    	pryActividad.setDuracionPlan(null);
-	
+
 	    if (editarActividadForm.getUnidadId().equals(new Long(0L)))
 	    	pryActividad.setUnidadId(null);
-	    else 
+	    else
 	    	pryActividad.setUnidadId(editarActividadForm.getUnidadId());
-	
+
 	    if (editarActividadForm.getResponsableFijarMetaId().equals(new Long(0L)))
 	    	pryActividad.setResponsableFijarMetaId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableFijarMetaId(editarActividadForm.getResponsableFijarMetaId());
-	
+
 	    if (editarActividadForm.getResponsableLograrMetaId().equals(new Long(0L)))
 	    	pryActividad.setResponsableLograrMetaId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableLograrMetaId(editarActividadForm.getResponsableLograrMetaId());
-	
+
 	    if (editarActividadForm.getResponsableSeguimientoId().equals(new Long(0L)))
 	    	pryActividad.setResponsableSeguimientoId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableSeguimientoId(editarActividadForm.getResponsableSeguimientoId());
-	
+
 	    if (editarActividadForm.getResponsableCargarMetaId().equals(new Long(0L)))
 	    	pryActividad.setResponsableCargarMetaId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableCargarMetaId(editarActividadForm.getResponsableCargarMetaId());
-	
+
 	    if (editarActividadForm.getResponsableCargarEjecutadoId().equals(new Long(0L)))
 	    	pryActividad.setResponsableCargarEjecutadoId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableCargarEjecutadoId(editarActividadForm.getResponsableCargarEjecutadoId());
-	
+
 	    if (editarActividadForm.getUnidadId().equals(new Long(0L)))
 	    	pryActividad.setUnidadId(null);
-	    else 
+	    else
 	    	pryActividad.setUnidadId(editarActividadForm.getUnidadId());
-	
+
 	    if ((editarActividadForm.getProductoEsperado() != null) && (!editarActividadForm.getProductoEsperado().equals("")))
 	    	pryActividad.getPryInformacionActividad().setProductoEsperado(editarActividadForm.getProductoEsperado());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setProductoEsperado(null);
-	
+
 	    if ((editarActividadForm.getRecursosHumanos() != null) && (!editarActividadForm.getRecursosHumanos().equals("")))
 	    	pryActividad.getPryInformacionActividad().setRecursosHumanos(editarActividadForm.getRecursosHumanos());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setRecursosHumanos(null);
-	
+
 	    if ((editarActividadForm.getRecursosMateriales() != null) && (!editarActividadForm.getRecursosMateriales().equals("")))
 	    	pryActividad.getPryInformacionActividad().setRecursosMateriales(editarActividadForm.getRecursosMateriales());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setRecursosMateriales(null);
-	
+
 	    if (editarActividadForm.getPorcentajeVerde() != null && (editarActividadForm.getHayValorPorcentajeVerde() != null && editarActividadForm.getHayValorPorcentajeVerde()))
 	    	pryActividad.getPryInformacionActividad().setPorcentajeVerde(editarActividadForm.getPorcentajeVerde());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setPorcentajeVerde(null);
-	
+
 	    if (editarActividadForm.getPorcentajeAmarillo() != null && (editarActividadForm.getHayValorPorcentajeAmarillo() != null && editarActividadForm.getHayValorPorcentajeAmarillo()))
 	    	pryActividad.getPryInformacionActividad().setPorcentajeAmarillo(editarActividadForm.getPorcentajeAmarillo());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setPorcentajeAmarillo(null);
-	    
+
 	    if (editarActividadForm.getEliminarMediciones())
 	    {
 	    	pryActividad.setFechaUltimaMedicion(null);
@@ -233,7 +237,7 @@ public class GuardarActividadAction extends VgcAction
 	    	pryActividad.setComienzoReal(null);
 	    	pryActividad.setFinReal(null);
 	    }
-	    
+
 	    StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 	    Indicador indicador = new Indicador();
 	    if (pryActividad.getIndicadorId() != null)
@@ -255,20 +259,20 @@ public class GuardarActividadAction extends VgcAction
 	        claseActvidad.setNombre(pryActividad.getNombre());
 	        claseActvidad.setOrganizacionId(editarActividadForm.getOrganizacionId());
 	        claseActvidad.setTipo(TipoClaseIndicadores.TIPO_CLASE_PLANIFICACION_SEGUIMIENTO);
-	        
+
 	        StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
 	        respuesta = strategosClasesIndicadoresService.saveClaseIndicadores(claseActvidad, getUsuarioConectado(request));
 	        strategosClasesIndicadoresService.close();
-	        
+
 	        indicador.setClaseId(claseActvidad.getClaseId());
 	        indicador.setOrganizacionId(editarActividadForm.getOrganizacionId());
-	        
+
 	        indicador.setEscalaCualitativa(new ArrayList<Object>());
 	        indicador.setSeriesIndicador(new HashSet<Object>());
 	    }
 
 	    indicador.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionSeguimiento());
-	    indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());        
+	    indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());
 	    indicador.setCorte(TipoCorte.getTipoCorteLongitudinal());
 	    indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
 	    indicador.setGuia(new Boolean(false));
@@ -281,22 +285,22 @@ public class GuardarActividadAction extends VgcAction
 	    indicador.setTipoCargaMedicion(editarActividadForm.getTipoMedicion());
 	    indicador.setCodigoEnlace(editarActividadForm.getCodigoEnlace());
 	    indicador.setEnlaceParcial(editarActividadForm.getEnlaceParcial());
-	    
+
 	    if ((editarActividadForm.getUnidadId() != null) && (editarActividadForm.getUnidadId().longValue() > 0L))
 	    	indicador.setUnidadId(editarActividadForm.getUnidadId());
-	    else 
+	    else
 	    	indicador.setUnidadId(null);
 	    if (editarActividadForm.getPorcentajeVerde() != null && editarActividadForm.getHayValorPorcentajeVerde())
 	    	indicador.setAlertaMetaZonaVerde(editarActividadForm.getPorcentajeVerde());
 	    else
 	    {
-			Double alerta = null;  
+			Double alerta = null;
 	    	if (pryActividadPadre != null)
 	    	{
 	    		if (pryActividadPadre.getPryInformacionActividad().getPorcentajeVerde() != null)
 	    			alerta = (pryActividadPadre.getPryInformacionActividad().getPorcentajeVerde());
 	    	}
-		  
+
 	    	if (alerta == null)
 	    	{
       		  	if (iniciativa.getAlertaZonaVerde() != null)
@@ -304,7 +308,7 @@ public class GuardarActividadAction extends VgcAction
 	    	}
 	    	indicador.setAlertaMetaZonaVerde(alerta);
 	    }
-	    
+
 	    if (editarActividadForm.getPorcentajeAmarillo() != null && editarActividadForm.getHayValorPorcentajeAmarillo())
 	    	indicador.setAlertaMetaZonaAmarilla(editarActividadForm.getPorcentajeAmarillo());
 	    else
@@ -315,7 +319,7 @@ public class GuardarActividadAction extends VgcAction
 	    		if (pryActividadPadre.getPryInformacionActividad().getPorcentajeVerde() != null && pryActividadPadre.getPryInformacionActividad().getPorcentajeAmarillo() != null)
 	    			alerta = (pryActividadPadre.getPryInformacionActividad().getPorcentajeAmarillo());
 	    	}
-	    	
+
 	    	if (alerta == null)
 	    	{
 	    		if (iniciativa.getAlertaZonaVerde() != null && iniciativa.getAlertaZonaAmarilla() != null)
@@ -323,25 +327,25 @@ public class GuardarActividadAction extends VgcAction
 	    	}
 	    	indicador.setAlertaMetaZonaAmarilla(alerta);
 	    }
-	        
+
 	    SerieIndicador serieReal = setSeriesTiempo(indicador, editarActividadForm);
 		if (pryActividad.getNaturaleza().equals(Naturaleza.getNaturalezaFormula()))
 			setDefinicionFormula(indicador, editarActividadForm, serieReal);
-	    
+
 		if (respuesta == VgcReturnCode.DB_OK)
 			respuesta = strategosIndicadoresService.saveIndicador(indicador, getUsuarioConectado(request));
-	    
-	    if (respuesta == VgcReturnCode.DB_OK) 
+
+	    if (respuesta == VgcReturnCode.DB_OK)
 	    {
 	    	pryActividad.setIndicadorId(new Long(indicador.getIndicadorId()));
 	    	pryActividad.setClaseId(new Long(indicador.getClaseId()));
 	    }
-	
+
 	    if (respuesta == VgcReturnCode.DB_OK)
 	    	respuesta = strategosPryActividadesService.saveActividad(pryActividad, getUsuarioConectado(request), true);
-	    
-	    // Setear la actividad padre a carga de medicion en el periodo si todas son del mismo tipo 
-	    // o al periodo si todas son del mismo tipo, 
+
+	    // Setear la actividad padre a carga de medicion en el periodo si todas son del mismo tipo
+	    // o al periodo si todas son del mismo tipo,
 	    // y si no son del mismo tipo se setea en el periodo
 	    boolean actualizarMedicion = false;
 	    if (respuesta == VgcReturnCode.DB_OK && pryActividadPadre != null && pryActividadPadre.getTipoMedicion().byteValue() != pryActividad.getTipoMedicion().byteValue())
@@ -350,7 +354,7 @@ public class GuardarActividadAction extends VgcAction
     		if (respuesta == VgcReturnCode.DB_OK)
     			actualizarMedicion = true;
 	    }
-	    
+
 	    if (respuesta == VgcReturnCode.DB_OK)
 	    {
     		respuesta = setTipoMedicionIniciativa(pryActividad.getActividadId(), iniciativa, getUsuarioConectado(request));
@@ -360,54 +364,54 @@ public class GuardarActividadAction extends VgcAction
 
     	if (respuesta == VgcReturnCode.DB_OK && !editarActividadForm.getEliminarMediciones() && actualizarMedicion)
     		respuesta = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction().CalcularPadre(pryActividad, iniciativa.getIniciativaId(), request);
-	    
+
 		if (respuesta == VgcReturnCode.DB_OK && editarActividadForm.getEliminarMediciones())
 		{
 			StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService(strategosIndicadoresService);
 
 			respuesta = strategosMedicionesService.deleteMediciones(indicador.getIndicadorId());
 			strategosMedicionesService.close();
-			try 
+			try
 			{
 				respuesta = strategosIndicadoresService.actualizarDatosIndicador(indicador.getIndicadorId(), null, null, null);
-			} 
-			catch (Throwable e) 
+			}
+			catch (Throwable e)
 			{
 				respuesta = VgcReturnCode.DB_PK_AK_VIOLATED;
 			}
-			
+
 			if (respuesta == VgcReturnCode.DB_OK)
 				respuesta = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction().CalcularPadre(pryActividad, iniciativa.getIniciativaId(), request);
 		}
 	    strategosIndicadoresService.close();
-	    
+
 	    if (respuesta == VgcReturnCode.DB_OK)
 	    	respuesta = new com.visiongc.app.strategos.web.struts.iniciativas.actions.GuardarIniciativaAction().actualizarActividades(false, iniciativa, getUsuarioConectado(request), strategosIniciativasService);
     	strategosIniciativasService.close();
-    	
+
 		if (respuesta == VgcReturnCode.DB_OK) //Calcular Fechas Padres
 			respuesta = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction().CalcularFechasPadres(pryActividad.getPadreId(), iniciativa.getProyectoId(), getUsuarioConectado(request));
-		
-	    if (respuesta == VgcReturnCode.DB_OK) 
+
+	    if (respuesta == VgcReturnCode.DB_OK)
 	    {
 	    	strategosPryActividadesService.unlockObject(request.getSession().getId(), editarActividadForm.getActividadId());
 	    	forward = "modificarActividad";
-	
+
 	      if (nuevo)
 	      {
 	    	  messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.nuevo.ok"));
 	    	  forward = "crearActividad";
 	      }
-	      else 
+	      else
 	    	  messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.modificar.ok"));
 	    }
 	    else if (respuesta == VgcReturnCode.DB_PK_AK_VIOLATED)
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
-	
+
 	    strategosPryActividadesService.close();
-	
+
 	    saveMessages(request, messages);
-	    
+
 	    if (respuesta == VgcReturnCode.DB_OK)
 	    {
 	    	editarActividadForm.setStatus(StatusUtil.getStatusSuccess());
@@ -419,25 +423,24 @@ public class GuardarActividadAction extends VgcAction
 	    }
 	    else
 	    	editarActividadForm.setStatus(StatusUtil.getStatusInvalido());
-	
+
 	    return mapping.findForward(forward);
 	}
-	  
+
 	private void setDefinicionFormula(Indicador indicador, EditarActividadForm editarActividadForm, SerieIndicador serieReal)
 	{
 	    Formula formulaIndicador = new Formula();
 	    formulaIndicador.setInsumos(new HashSet<Object>());
 	    formulaIndicador.setExpresion(IndicadorValidator.reemplazarCorrelativosFormula(editarActividadForm.getFormula(), editarActividadForm.getInsumosFormula()));
-	
-	    if ((editarActividadForm.getInsumosFormula() != null) && (!editarActividadForm.getInsumosFormula().equals(""))) 
+
+	    if ((editarActividadForm.getInsumosFormula() != null) && (!editarActividadForm.getInsumosFormula().equals("")))
 	    {
 	    	String[] insumos = editarActividadForm.getInsumosFormula().split(editarActividadForm.getSeparadorIndicadores());
-	    	String[] strInsumo = (String[])null;
-	    	for (int i = 0; i < insumos.length; i++) 
-	    	{
-	    		if (insumos[i].length() > 0) 
+	    	String[] strInsumo = null;
+	    	for (String element : insumos) {
+	    		if (element.length() > 0)
 	    		{
-	    			strInsumo = insumos[i].split("\\]\\[");
+	    			strInsumo = element.split("\\]\\[");
 	    			InsumoFormula insumoFormula = new InsumoFormula();
 	    			insumoFormula.setPk(new InsumoFormulaPK());
 	    			insumoFormula.getPk().setPadreId(editarActividadForm.getIndicadorId());
@@ -448,10 +451,10 @@ public class GuardarActividadAction extends VgcAction
 	    		}
 	    	}
 	    }
-	    
+
 	    serieReal.getFormulas().add(formulaIndicador);
 	}
-  
+
 	private SerieIndicador setSeriesTiempo(Indicador indicador, EditarActividadForm editarActividadForm)
 	{
 		SerieIndicador serieReal = null;
@@ -461,11 +464,9 @@ public class GuardarActividadAction extends VgcAction
 		if ((seriesIndicador != null) && (!seriesIndicador.equals("")))
 		{
 			String[] series = StringUtil.split(editarActividadForm.getSeriesIndicador(), editarActividadForm.getSeparadorSeries());
-			
-			for (int i = 0; i < series.length; i++) 
-			{
-				String serie = series[i];
-				if ((serie != null) && (!serie.equals(""))) 
+
+			for (String serie : series) {
+				if ((serie != null) && (!serie.equals("")))
 				{
 					SerieIndicador serieIndicador = new SerieIndicador();
 					serieIndicador.setIndicador(indicador);
@@ -473,22 +474,22 @@ public class GuardarActividadAction extends VgcAction
 					serieIndicador.getPk().setSerieId(new Long(serie));
 					serieIndicador.getPk().setIndicadorId(indicador.getIndicadorId());
 					serieIndicador.setFormulas(new HashSet<Object>());
-					if (serieIndicador.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue()) 
+					if (serieIndicador.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
 					{
 						serieIndicador.setNaturaleza(editarActividadForm.getNaturaleza());
 						serieReal = serieIndicador;
-					} 
-					else 
+					}
+					else
 						serieIndicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
-					
+
 					indicador.getSeriesIndicador().add(serieIndicador);
 				}
 			}
-			
+
 			StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService();
 	    	UnidadMedida unidad = strategosUnidadesService.getUnidadMedidaPorcentaje();
 	    	strategosUnidadesService.close();
-			
+
 			if (unidad != null && editarActividadForm.getUnidadId().longValue() != unidad.getUnidadId().longValue())
 			{
 				boolean haySeriePorcentaje = false;
@@ -501,7 +502,7 @@ public class GuardarActividadAction extends VgcAction
 						break;
 					}
 				}
-				
+
 				if (!haySeriePorcentaje)
 				{
 					SerieIndicador serieIndicador = new SerieIndicador();
@@ -511,7 +512,7 @@ public class GuardarActividadAction extends VgcAction
 					serieIndicador.getPk().setIndicadorId(indicador.getIndicadorId());
 					serieIndicador.setFormulas(new HashSet<Object>());
 					serieIndicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
-					
+
 					indicador.getSeriesIndicador().add(serieIndicador);
 
 					serieIndicador = new SerieIndicador();
@@ -521,7 +522,7 @@ public class GuardarActividadAction extends VgcAction
 					serieIndicador.getPk().setIndicadorId(indicador.getIndicadorId());
 					serieIndicador.setFormulas(new HashSet<Object>());
 					serieIndicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
-					
+
 					indicador.getSeriesIndicador().add(serieIndicador);
 				}
 			}
@@ -529,28 +530,28 @@ public class GuardarActividadAction extends VgcAction
 
 		return serieReal;
 	}
-	
+
 	private int setTipoMedicionPadre(Long actividadPadreId, Byte tipoMedicion, Usuario usuario)
 	{
 		int respuesta = VgcReturnCode.S_OK;
-		
+
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
     	PryActividad actividadPadre = (PryActividad)strategosPryActividadesService.load(PryActividad.class, new Long(actividadPadreId));
-		
+
 		Map<String, Object> filtros = new HashMap<String, Object>();
-		  
+
 		filtros.put("proyectoId", actividadPadre.getProyectoId().toString());
 		filtros.put("padreId", actividadPadre.getActividadId());
-		
+
 		String atributoOrden = "fila";
 		String tipoOrden = "ASC";
 		int pagina = 1;
 		PaginaLista paginaActividades = strategosPryActividadesService.getActividades(pagina, 30, atributoOrden, tipoOrden, true, filtros);
 		boolean tipoMedicionDiferente = false;
-		
+
 		if (paginaActividades.getLista().size() > 0)
 		{
-			for (Iterator<PryActividad> iter = paginaActividades.getLista().iterator(); iter.hasNext(); ) 
+			for (Iterator<PryActividad> iter = paginaActividades.getLista().iterator(); iter.hasNext(); )
 			{
 				PryActividad actividad = iter.next();
 				if (actividad.getTipoMedicion().byteValue() != tipoMedicion.byteValue())
@@ -560,13 +561,13 @@ public class GuardarActividadAction extends VgcAction
 				}
 			}
 		}
-		
+
 		if (tipoMedicionDiferente)
 			actividadPadre.setTipoMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
 		else
 			actividadPadre.setTipoMedicion(tipoMedicion);
     	respuesta = strategosPryActividadesService.saveActividad(actividadPadre, usuario, false);
-    	
+
     	if (respuesta == VgcReturnCode.DB_OK)
     	{
         	StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -575,7 +576,7 @@ public class GuardarActividadAction extends VgcAction
 			respuesta = strategosIndicadoresService.saveIndicador(indicador, usuario);
         	strategosIndicadoresService.close();
     	}
-    	
+
     	if (respuesta == VgcReturnCode.DB_OK)
     	{
         	PryActividad pryActividadPadre = null;
@@ -586,10 +587,10 @@ public class GuardarActividadAction extends VgcAction
         	}
     	}
     	strategosPryActividadesService.close();
-    	
+
 		return respuesta;
 	}
-	
+
 	private int setTipoMedicionIniciativa(Long actividadId, Iniciativa iniciativa, Usuario usuario)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
@@ -597,19 +598,19 @@ public class GuardarActividadAction extends VgcAction
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 		PryActividad actividad = (PryActividad)strategosPryActividadesService.load(PryActividad.class, new Long(actividadId));
 		Map<String, Object> filtros = new HashMap<String, Object>();
-		
+
 		String atributoOrden = "fila";
 		String tipoOrden = "ASC";
 		int pagina = 1;
 		filtros.put("proyectoId", actividad.getProyectoId());
 		filtros.put("padreId", null);
-		
+
 		PaginaLista paginaActividades = strategosPryActividadesService.getActividades(pagina, 30, atributoOrden, tipoOrden, true, filtros);
 		boolean tipoMedicionDiferente = false;
-		
+
 		if (paginaActividades.getLista().size() > 0)
 		{
-			for (Iterator<PryActividad> iter = paginaActividades.getLista().iterator(); iter.hasNext(); ) 
+			for (Iterator<PryActividad> iter = paginaActividades.getLista().iterator(); iter.hasNext(); )
 			{
 				PryActividad act = iter.next();
 				if (act.getTipoMedicion().byteValue() != actividad.getTipoMedicion().byteValue())
@@ -619,7 +620,7 @@ public class GuardarActividadAction extends VgcAction
 				}
 			}
 		}
-		
+
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
 		Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento())));
@@ -628,14 +629,14 @@ public class GuardarActividadAction extends VgcAction
     		boolean updateIndicador = true;
     		if (tipoMedicionDiferente && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue())
     			updateIndicador = false;
-    			
+
 			if (tipoMedicionDiferente)
     			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
     		else
     			indicador.setTipoCargaMedicion(actividad.getTipoMedicion());
 
 			respuesta = strategosIndicadoresService.saveIndicador(indicador, usuario);
-			
+
 			if (updateIndicador && respuesta == VgcReturnCode.DB_OK)
 			{
 				StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
@@ -644,9 +645,9 @@ public class GuardarActividadAction extends VgcAction
 				if (respuesta == VgcReturnCode.DB_OK)
 					respuesta = strategosMedicionesService.deleteMediciones(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionEficiencia()));
 				strategosMedicionesService.close();
-				
+
 				StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-				
+
 				ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
 				if (respuesta == VgcReturnCode.DB_OK)
 					respuesta = strategosIniciativasService.updateIndicadorAutomatico(iniciativa, TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
@@ -657,7 +658,7 @@ public class GuardarActividadAction extends VgcAction
 		}
 		strategosIndicadoresService.close();
 		strategosPryActividadesService.close();
-		
+
 		return respuesta;
 	}
 }

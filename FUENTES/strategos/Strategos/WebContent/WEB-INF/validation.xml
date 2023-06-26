@@ -128,7 +128,38 @@
 		<!-- ****************************************************** -->
 		<!-- ***** Fin: Categorias de Medición  ******************* -->
 		<!-- ****************************************************** -->
-
+		
+		<!-- ******************************************************* -->
+		<!-- **************** Inicio: Cargos  ********************** -->
+		<!-- ******************************************************* -->
+	
+		<!-- Forma que Edita una Categoría de Medición -->
+		<form name="editarCargosForm">
+			<field property="nombre" depends="required,maxlength">
+				<arg key="jsp.editarcargos.ficha.nombre" position="0" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>50</var-value>
+				</var>
+			</field>
+		</form>
+		
+		<!-- Action que guarda una Categoría de Medición -->
+		<form name="/cargos/guardarCargo">
+			<field property="nombre" depends="required,maxlength">
+				<arg key="jsp.editarcargos.ficha.nombre" position="0" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>50</var-value>
+				</var>
+			</field>
+		</form>
+		
+		<!-- ****************************************************** -->
+		<!-- ***** Fin: Cargos  ******************* -->
+		<!-- ****************************************************** -->
 		
 		<!-- ******************************************************* -->
 		<!-- ***** Inicio: Tipos de Proyecto  ********************** -->

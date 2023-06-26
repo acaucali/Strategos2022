@@ -64,6 +64,7 @@
 		<mapping resource="com/visiongc/app/strategos/categoriasmedicion/model/CategoriaMedicion.hbm.xml" />
 		<mapping resource="com/visiongc/app/strategos/estadosacciones/model/EstadoAcciones.hbm.xml" />
 		<mapping resource="com/visiongc/app/strategos/causas/model/Causa.hbm.xml" />
+		<mapping resource="com/visiongc/app/strategos/cargos/model/Cargos.hbm.xml" />
 
 		<!-- Responsables -->
 		<mapping resource="com/visiongc/app/strategos/responsables/model/Responsable.hbm.xml" />

@@ -42,10 +42,12 @@ import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		/** Se ejecuta el servicio del Action padre (obligatorio!!!) */
@@ -150,7 +152,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					Date fechaUltimaMedicion;
 					Integer periodo = obtenerFecha(iniciativa.getFrecuencia());
@@ -202,7 +204,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 
 				// Actividades
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 					StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance()
 							.openStrategosMetasService();
 					StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory
@@ -215,7 +217,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 					List<PryActividad> actividades = strategosPryActividadesService
 							.getActividades(0, 0, "fila", "ASC", true, filtros).getLista();
 					if (actividades.size() > 0) {
-						HSSFRow dataRow2 = sheet.createRow(x = x + 3);											
+						HSSFRow dataRow2 = sheet.createRow(x = x + 3);
 						dataRow2.createCell(0).setCellValue(
 								mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.actividades"));
 						dataRow2.createCell(1)
@@ -233,7 +235,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 						dataRow2.createCell(7).setCellValue(
 								mensajes.getMessage("action.reporte.estatus.iniciativa.mediciones.atrasadas"));
 						for (Iterator<PryActividad> iter1 = actividades.iterator(); iter1.hasNext();) {
-							PryActividad actividad = (PryActividad) iter1.next();
+							PryActividad actividad = iter1.next();
 
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 									actividad.getIndicadorId());
@@ -336,7 +338,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 		Integer periodoFinal = 0;
 
 		Integer dia = new Date().getDay();
-		Integer mes = new Date().getMonth() + 1;
+		int mes = new Date().getMonth() + 1;
 
 		// Diaria - 0
 		if (frecuencia == 0)
@@ -348,7 +350,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 		// Quincenal - 2
 		else if (frecuencia == 2) {
 			if (mes > 1) {
-				Integer semana = (mes - 1) * 2;
+				int semana = (mes - 1) * 2;
 				if (dia > 15) {
 					semana += 2;
 				} else if (dia <= 15) {

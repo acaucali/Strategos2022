@@ -1,9 +1,10 @@
 package com.visiongc.app.strategos.web.struts.problemas.forms;
 
+import java.util.Date;
+
 import com.visiongc.app.strategos.responsables.model.Responsable;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Date;
 
 public class EditarProblemaForm extends EditarObjetoForm
 {
@@ -174,19 +175,23 @@ public class EditarProblemaForm extends EditarObjetoForm
     this.nombre = nombre;
   }
 
-  public String getCreado() {
+  @Override
+public String getCreado() {
     return this.creado;
   }
 
-  public void setCreado(String creado) {
+  @Override
+public void setCreado(String creado) {
     this.creado = creado;
   }
 
-  public String getModificado() {
+  @Override
+public String getModificado() {
     return this.modificado;
   }
 
-  public void setModificado(String modificado) {
+  @Override
+public void setModificado(String modificado) {
     this.modificado = modificado;
   }
 
@@ -342,7 +347,8 @@ public class EditarProblemaForm extends EditarObjetoForm
     this.nombreClase = nombreClase;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.problemaId = new Long(0L);
     this.organizacionId = new Long(0L);
     this.claseId = new Long(0L);

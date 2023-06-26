@@ -1,9 +1,10 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.forms;
 
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.framework.web.struts.forms.VisorListaForm;
 import java.util.Date;
 import java.util.List;
+
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.framework.web.struts.forms.VisorListaForm;
 
 public class MostrarGestionIniciativaForm extends VisorListaForm
 {

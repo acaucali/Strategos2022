@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.util;
 
@@ -7,9 +7,9 @@ package com.visiongc.app.strategos.web.struts.util;
  * @author Kerwin
  *
  */
-public class Columna 
+public class Columna
 {
-	private String nombre; 
+	private String nombre;
 	private String orden;
 	private String mostrar;
 	private String tamano;
@@ -22,7 +22,7 @@ public class Columna
 		this.mostrar = mostrar;
 		this.tamano = tamano;
 	}
-	
+
 	public Columna()
 	{
 		this.nombre = null;
@@ -30,44 +30,44 @@ public class Columna
 		this.mostrar = null;
 		this.tamano = null;
 	}
-	
-    public String getNombre() 
+
+    public String getNombre()
     {
         return this.nombre;
     }
 
-    public void setNombre(String nombre) 
+    public void setNombre(String nombre)
     {
         this.nombre = nombre;
     }
 
-    public String getOrden() 
+    public String getOrden()
     {
         return this.orden;
     }
 
-    public void setOrden(String orden) 
+    public void setOrden(String orden)
     {
         this.orden = orden;
-    }	
+    }
 
-    public String getTamano() 
+    public String getTamano()
     {
         return this.tamano;
     }
 
-    public void setTamano(String tamano) 
+    public void setTamano(String tamano)
     {
         this.tamano = tamano;
-    }	
+    }
 
-    public String getMostrar() 
+    public String getMostrar()
     {
         return this.mostrar;
     }
 
-    public void setMostrar(String mostrar) 
+    public void setMostrar(String mostrar)
     {
         this.mostrar = mostrar;
-    }	
+    }
 }

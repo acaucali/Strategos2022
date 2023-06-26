@@ -1,30 +1,33 @@
 package com.visiongc.app.strategos.web.struts.problemas.clasesproblemas.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.problemas.StrategosClasesProblemasService;
-import com.visiongc.app.strategos.problemas.model.ClaseProblemas;
-import com.visiongc.app.strategos.web.struts.problemas.clasesproblemas.forms.EditarClaseProblemasForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.problemas.StrategosClasesProblemasService;
+import com.visiongc.app.strategos.problemas.model.ClaseProblemas;
+import com.visiongc.app.strategos.web.struts.problemas.clasesproblemas.forms.EditarClaseProblemasForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class CopiarClaseProblemaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		EditarClaseProblemasForm editarClaseProblemasForm = (EditarClaseProblemasForm)form;
@@ -53,7 +56,7 @@ public class CopiarClaseProblemaAction extends VgcAction
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.bloqueado"));
 
 					ClaseProblemas padre = (ClaseProblemas)strategosClasesProblemasService.load(ClaseProblemas.class, claseProblemas.getPadreId());
-					
+
 					editarClaseProblemasForm.setClaseId(new Long(0L));
 					editarClaseProblemasForm.setPadreId(claseProblemas.getPadreId());
 					editarClaseProblemasForm.setNombrePadre(padre.getNombre());
@@ -65,15 +68,15 @@ public class CopiarClaseProblemaAction extends VgcAction
 				else
 				{
 					strategosClasesProblemasService.unlockObject(request.getSession().getId(), new Long(claseId));
-					
+
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.copiarclaseproblema.validacion.nocopiar"));
 					forward = "noencontrado";
 				}
-			}	
+			}
 			else
 			{
 				strategosClasesProblemasService.unlockObject(request.getSession().getId(), new Long(claseId));
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
 			}
@@ -82,8 +85,8 @@ public class CopiarClaseProblemaAction extends VgcAction
 		strategosClasesProblemasService.close();
 
 		saveMessages(request, messages);
-		
-		if (forward.equals("noencontrado")) 
+
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
 
 		return mapping.findForward(forward);

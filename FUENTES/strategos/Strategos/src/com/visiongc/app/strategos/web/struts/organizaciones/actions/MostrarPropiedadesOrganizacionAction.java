@@ -1,32 +1,33 @@
 package com.visiongc.app.strategos.web.struts.organizaciones.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
-import com.visiongc.app.strategos.organizaciones.model.MemoOrganizacion;
-import com.visiongc.app.strategos.organizaciones.model.MemoOrganizacionPK;
-import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.web.struts.organizaciones.forms.EditarOrganizacionForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.model.Usuario;
 import java.util.Iterator;
-import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
+import com.visiongc.app.strategos.organizaciones.model.MemoOrganizacion;
+import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.app.strategos.web.struts.organizaciones.forms.EditarOrganizacionForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.commons.web.NavigationBar;
+
 public class MostrarPropiedadesOrganizacionAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -70,22 +71,22 @@ public class MostrarPropiedadesOrganizacionAction extends VgcAction
         }
       }
       editarOrganizacionForm.setObservaciones(observaciones);
-      if (organizacionStrategos.getCreado() != null) 
+      if (organizacionStrategos.getCreado() != null)
       {
         editarOrganizacionForm.setCreado(VgcFormatter.formatearFecha(organizacionStrategos.getCreado(), "formato.fecha.larga"));
         if (organizacionStrategos.getUsuarioCreado() != null)
         	editarOrganizacionForm.setNombreUsuarioCreado(organizacionStrategos.getUsuarioCreado().getFullName());
-      } 
-      else 
+      }
+      else
         editarOrganizacionForm.setCreado(null);
-      
-      if (organizacionStrategos.getModificado() != null) 
+
+      if (organizacionStrategos.getModificado() != null)
       {
         editarOrganizacionForm.setModificado(VgcFormatter.formatearFecha(organizacionStrategos.getModificado(), "formato.fecha.larga"));
         if (organizacionStrategos.getUsuarioModificado() != null)
         	editarOrganizacionForm.setNombreUsuarioModificado(organizacionStrategos.getUsuarioModificado().getFullName());
-      } 
-      else 
+      }
+      else
         editarOrganizacionForm.setModificado(null);
 
       editarOrganizacionForm.setCreadoId(organizacionStrategos.getCreadoId());

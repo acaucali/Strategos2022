@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.problemas.actions;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.MessageResources;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -7,30 +18,22 @@ import com.visiongc.app.strategos.estadosacciones.model.EstadoAcciones;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.problemas.StrategosProblemasService;
 import com.visiongc.app.strategos.problemas.model.Problema;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
-import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.MessageResources;
 
 public class ReporteProblemasAction extends VgcReporteBasicoAction
 {
-  protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
+  @Override
+protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
     throws Exception
   {
     return mensajes.getMessage("action.reporteproblemas.titulo");
   }
 
-  protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
+  @Override
+protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
     throws Exception
   {
     String atributoOrden = request.getParameter("atributoOrden");
@@ -52,13 +55,13 @@ public class ReporteProblemasAction extends VgcReporteBasicoAction
     tabla.crearTabla(columnas);
 
     Map filtros = new HashMap();
-    Long claseProblemasId = new Long((String)request.getSession().getAttribute("claseProblemasId"));
-    filtros.put("claseId", claseProblemasId.toString());
+    long claseProblemasId = Long.parseLong((String)request.getSession().getAttribute("claseProblemasId"));
+    filtros.put("claseId", Long.toString(claseProblemasId));
 
     List problemas = strategosProblemasService.getProblemas(0, 0, atributoOrden, tipoOrden, false, filtros).getLista();
 
     tabla.setFormatoFont(font.style());
-    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
     tabla.agregarCelda(mensajes.getMessage("action.reporteproblemas.nombre"));
     tabla.agregarCelda(mensajes.getMessage("action.reporteproblemas.fecha"));
@@ -73,7 +76,7 @@ public class ReporteProblemasAction extends VgcReporteBasicoAction
         tabla.setDefaultAlineacionHorizontal();
         tabla.agregarCelda(problema.getNombre());
 
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         tabla.agregarCelda(VgcFormatter.formatearFecha(problema.getFecha(), "formato.fecha.corta"));
 
         tabla.setDefaultAlineacionHorizontal();

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.mediciones.actions;
 
@@ -18,6 +18,9 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DownloadAction;
@@ -43,9 +46,10 @@ import com.visiongc.framework.model.Usuario;
  * @author Kerwin
  *
  */
-public class ImprimirMedicionesXLSAction extends DownloadAction 
+public class ImprimirMedicionesXLSAction extends DownloadAction
 {
-	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	@Override
+	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 
@@ -55,7 +59,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 		ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(usuario.getUsuarioId(), "Strategos.Forma.Configuracion.Columnas", "visorLista.Medicion");
 		if (configuracionUsuario == null)
 		{
-			configuracionUsuario = new ConfiguracionUsuario(); 
+			configuracionUsuario = new ConfiguracionUsuario();
 			ConfiguracionUsuarioPK pk = new ConfiguracionUsuarioPK();
 			pk.setConfiguracionBase("Strategos.Forma.Configuracion.Columnas");
 			pk.setObjeto("visorLista.Medicion");
@@ -66,9 +70,9 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 		}
 		frameworkService.close();
 		editarMedicionesForm.setColumnas(configuracionUsuario.getData());
-		
+
 		List<SerieIndicador> seriesIndicadores = new com.visiongc.app.strategos.web.struts.mediciones.actions.ImprimirMedicionesPDFAction().cargarDatos(editarMedicionesForm, request);
-		
+
 		return construirReporte(seriesIndicadores, editarMedicionesForm, request);
 	}
 
@@ -77,25 +81,25 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 		MessageResources mensajes = getResources(request);
 		HSSFWorkbook objWB = null;
 
-		// Proceso la información y genero el xls
+		// Proceso la informaciï¿½n y genero el xls
 		objWB = new HSSFWorkbook();
 
 		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
+		// el tipo de dato que contendrï¿½ la celda
 		HSSFCell celda = null;
 
 		// Creo la hoja
 		HSSFSheet hoja1 = objWB.createSheet("Medicion");
 
-		// Proceso la información y genero el xls.
+		// Proceso la informaciï¿½n y genero el xls.
 		int numeroFila = 1;
 		int numeroCelda = 1;
 		HSSFRow fila = hoja1.createRow(numeroFila++);
 
 		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
+		// el tipo de dato que contendrï¿½ la celda
 		celda = fila.createCell(numeroCelda);
-		celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+		celda.setCellType(Cell.CELL_TYPE_STRING);
 
 		// Finalmente, establecemos el valor
 		celda.setCellValue(mensajes.getMessage("jsp.editarmediciones.ficha.organizacion") + ": " + request.getSession().getAttribute("organizacionNombre").toString());
@@ -109,24 +113,24 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_INICIATIVA);
 		else
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_ACTIVIDAD);
-	    
+
 		String subTitulo = null;
 		if (source.byteValue() == TipoSource.SOURCE_CLASE)
 		{
-			if (request.getQueryString().indexOf("claseId=") > -1) 
+			if (request.getQueryString().indexOf("claseId=") > -1)
 				editarMedicionesForm.setClaseId(new Long(request.getParameter("claseId")));
-			
+
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 			ClaseIndicadores clase = (ClaseIndicadores)strategosIndicadoresService.load(ClaseIndicadores.class, editarMedicionesForm.getClaseId());
 			strategosIndicadoresService.close();
-			
-			if (clase != null) 
+
+			if (clase != null)
 			{
 				editarMedicionesForm.setClase(clase.getNombre());
-				subTitulo = mensajes.getMessage("jsp.editarmediciones.ficha.clase") + ": " + editarMedicionesForm.getClase(); 
+				subTitulo = mensajes.getMessage("jsp.editarmediciones.ficha.clase") + ": " + editarMedicionesForm.getClase();
 			}
 		}
-				
+
 		if (subTitulo != null)
 		{
 			numeroCelda = 1;
@@ -134,12 +138,12 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue(subTitulo);
 		}
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
@@ -147,7 +151,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 
 		int numeroColumnas = 0;
 		SerieIndicador serie = seriesIndicadores.get(0);
-		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); ) 
+		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); )
 		{
 			Columna columna = (Columna)iter.next();
 			if (!columna.getNombre().equals("Periodos") && columna.getMostrar().equals("true"))
@@ -158,7 +162,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 
 	    int i = 0;
 	    String[] columnasTitulo = new String[numeroColumnas];
-		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); ) 
+		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); )
 		{
 			Columna columna = (Columna)iter.next();
 			Integer tamanoColumna = null;
@@ -184,7 +188,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 	    		}
 			}
 		}
-	    
+
 		if (seriesIndicadores.size() > 0)
 		{
 			numeroCelda = 1;
@@ -194,20 +198,16 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 				celda = fila.createCell(k+numeroCelda);
 				celda.setCellStyle(getEstiloEncabezado(objWB));
 
-				celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+				celda.setCellType(Cell.CELL_TYPE_STRING);
 				celda.setCellValue(columnasTitulo[k]);
 			}
-			
+
 	        Long indicadorId = 0L;
-			for (int f = 0; f < seriesIndicadores.size(); f++)
-			{
-				SerieIndicador serieIndicador = (SerieIndicador)seriesIndicadores.get(f);
+			for (SerieIndicador serieIndicador : seriesIndicadores) {
 				numeroCelda = 1;
 				int nc = 0;
 				fila = hoja1.createRow(numeroFila++);
-				for (int k = 0; k < editarMedicionesForm.getColumnas().size(); k++)
-				{
-					Columna columna = (Columna)editarMedicionesForm.getColumnas().get(k);
+				for (Columna columna : editarMedicionesForm.getColumnas()) {
 					if (!columna.getNombre().equals("Periodos") && columna.getMostrar().equals("true"))
 					{
 						if (indicadorId.longValue() != serieIndicador.getIndicador().getIndicadorId().longValue())
@@ -216,7 +216,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 							{
 								celda = fila.createCell(nc+numeroCelda);
 								celda.setCellStyle(getEstiloCuerpo(objWB));
-								celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+								celda.setCellType(Cell.CELL_TYPE_STRING);
 								celda.setCellValue(serieIndicador.getIndicador().getNombre());
 								nc++;
 							}
@@ -224,7 +224,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 							{
 								celda = fila.createCell(nc+numeroCelda);
 								celda.setCellStyle(getEstiloCuerpo(objWB));
-								celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+								celda.setCellType(Cell.CELL_TYPE_STRING);
 								celda.setCellValue(serieIndicador.getIndicador().getUnidad() != null ? serieIndicador.getIndicador().getUnidad().getNombre() : "");
 								nc++;
 							}
@@ -232,7 +232,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 							{
 								celda = fila.createCell(nc+numeroCelda);
 								celda.setCellStyle(getEstiloCuerpo(objWB));
-								celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+								celda.setCellType(Cell.CELL_TYPE_STRING);
 								celda.setCellValue(serieIndicador.getSerieTiempo().getNombre());
 								nc++;
 							}
@@ -241,7 +241,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 						{
 							celda = fila.createCell(nc+numeroCelda);
 							celda.setCellStyle(getEstiloCuerpo(objWB));
-							celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+							celda.setCellType(Cell.CELL_TYPE_STRING);
 							celda.setCellValue(serieIndicador.getSerieTiempo().getNombre());
 							nc++;
 						}
@@ -249,7 +249,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 						{
 							celda = fila.createCell(nc+numeroCelda);
 							celda.setCellStyle(getEstiloCuerpo(objWB));
-							celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+							celda.setCellType(Cell.CELL_TYPE_STRING);
 							celda.setCellValue("");
 							nc++;
 						}
@@ -263,16 +263,16 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 
 			    			celda = fila.createCell(nc+numeroCelda);
 							celda.setCellStyle(getEstiloCuerpo(objWB));
-							celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+							celda.setCellType(Cell.CELL_TYPE_STRING);
 							celda.setCellValue(medicion.getValorString() != null ? medicion.getValorString() : "");
 							nc++;
 			    		}
 					}
 				}
 			}
-		}		
-		
-		// Volcamos la información a un archivo.
+		}
+
+		// Volcamos la informaciï¿½n a un archivo.
 		String strNombreArchivo = "exportar.xls";
 		File objFile = new File(strNombreArchivo);
 
@@ -282,7 +282,7 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 
 		return new FileStreamInfo("application/vnd.ms-excel", new File(strNombreArchivo));
 	}
-	
+
 	private HSSFCellStyle getEstiloEncabezado(HSSFWorkbook objWB)
 	{
 		// Aunque no es necesario podemos establecer estilos a las celdas.
@@ -290,33 +290,33 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 		HSSFFont fuente = objWB.createFont();
 		fuente.setFontHeightInPoints((short) 11);
 		fuente.setFontName(HSSFFont.FONT_ARIAL);
-		fuente.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		fuente.setBoldweight(Font.BOLDWEIGHT_BOLD);
 
-		// Luego creamos el objeto que se encargará de aplicar el estilo a la
+		// Luego creamos el objeto que se encargarï¿½ de aplicar el estilo a la
 		// celda
 		HSSFCellStyle estiloCelda = objWB.createCellStyle();
 		estiloCelda.setWrapText(true);
-		estiloCelda.setAlignment(HSSFCellStyle.ALIGN_JUSTIFY);
-		estiloCelda.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		estiloCelda.setAlignment(CellStyle.ALIGN_JUSTIFY);
+		estiloCelda.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		estiloCelda.setFont(fuente);
 
-		// También, podemos establecer bordes...
-		estiloCelda.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+		// Tambiï¿½n, podemos establecer bordes...
+		estiloCelda.setBorderBottom(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setBottomBorderColor((short) 8);
-		estiloCelda.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderLeft(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setLeftBorderColor((short) 8);
-		estiloCelda.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderRight(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setRightBorderColor((short) 8);
-		estiloCelda.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderTop(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setTopBorderColor((short) 8);
 
 		// Establecemos el tipo de sombreado de nuestra celda
 		estiloCelda.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-		estiloCelda.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		
-		return estiloCelda; 
+		estiloCelda.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+		return estiloCelda;
 	}
-	
+
 	private HSSFCellStyle getEstiloCuerpo(HSSFWorkbook objWB)
 	{
 		// Aunque no es necesario podemos establecer estilos a las celdas.
@@ -324,30 +324,30 @@ public class ImprimirMedicionesXLSAction extends DownloadAction
 		HSSFFont fuente = objWB.createFont();
 		fuente.setFontHeightInPoints((short) 11);
 		fuente.setFontName(HSSFFont.FONT_ARIAL);
-		fuente.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+		fuente.setBoldweight(Font.BOLDWEIGHT_NORMAL);
 
-		// Luego creamos el objeto que se encargará de aplicar el estilo a la
+		// Luego creamos el objeto que se encargarï¿½ de aplicar el estilo a la
 		// celda
 		HSSFCellStyle estiloCelda = objWB.createCellStyle();
 		estiloCelda.setWrapText(true);
-		estiloCelda.setAlignment(HSSFCellStyle.ALIGN_JUSTIFY);
-		estiloCelda.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		estiloCelda.setAlignment(CellStyle.ALIGN_JUSTIFY);
+		estiloCelda.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		estiloCelda.setFont(fuente);
 
-		// También, podemos establecer bordes...
-		estiloCelda.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+		// Tambiï¿½n, podemos establecer bordes...
+		estiloCelda.setBorderBottom(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setBottomBorderColor((short) 8);
-		estiloCelda.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderLeft(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setLeftBorderColor((short) 8);
-		estiloCelda.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderRight(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setRightBorderColor((short) 8);
-		estiloCelda.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderTop(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setTopBorderColor((short) 8);
 
 		// Establecemos el tipo de sombreado de nuestra celda
 		estiloCelda.setFillForegroundColor(HSSFColor.WHITE.index);
-		estiloCelda.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		
-		return estiloCelda; 
+		estiloCelda.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+		return estiloCelda;
 	}
 }

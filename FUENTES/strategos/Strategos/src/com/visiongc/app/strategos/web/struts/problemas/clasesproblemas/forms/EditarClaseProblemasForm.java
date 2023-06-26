@@ -5,7 +5,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarClaseProblemasForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long claseId;
 	private Long organizacionId;
 	private Long padreId;
@@ -26,127 +26,127 @@ public class EditarClaseProblemasForm extends EditarObjetoForm
 		return this.claseId;
 	}
 
-	public void setClaseId(Long claseId) 
+	public void setClaseId(Long claseId)
 	{
 		this.claseId = claseId;
 	}
 
-	public Long getOrganizacionId() 
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
 
-	public Long getPadreId() 
+	public Long getPadreId()
 	{
 		return this.padreId;
 	}
 
-	public void setPadreId(Long padreId) 
+	public void setPadreId(Long padreId)
 	{
 		this.padreId = padreId;
-	}	
+	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
 
-	public String getDescripcion() 
+	public String getDescripcion()
 	{
 		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) 
+	public void setDescripcion(String descripcion)
 	{
 		this.descripcion = descripcion;
 	}
 
-	public String getFechaCreado() 
+	public String getFechaCreado()
 	{
 		return this.fechaCreado;
 	}
 
-	public void setFechaCreado(String fechaCreado) 
+	public void setFechaCreado(String fechaCreado)
 	{
 		this.fechaCreado = fechaCreado;
 	}
 
-	public String getFechaModificado() 
+	public String getFechaModificado()
 	{
 		return this.fechaModificado;
 	}
 
-	public void setFechaModificado(String fechaModificado) 
+	public void setFechaModificado(String fechaModificado)
 	{
 		this.fechaModificado = fechaModificado;
 	}
 
-	public String getNombreUsuarioCreado() 
+	public String getNombreUsuarioCreado()
 	{
 			return this.nombreUsuarioCreado;
 	}
 
-	public void setNombreUsuarioCreado(String nombreUsuarioCreado) 
+	public void setNombreUsuarioCreado(String nombreUsuarioCreado)
 	{
 		this.nombreUsuarioCreado = nombreUsuarioCreado;
 	}
 
-	public String getNombreUsuarioModificado() 
+	public String getNombreUsuarioModificado()
 	{
 		return this.nombreUsuarioModificado;
 	}
 
-	public void setNombreUsuarioModificado(String nombreUsuarioModificado) 
+	public void setNombreUsuarioModificado(String nombreUsuarioModificado)
 	{
 		this.nombreUsuarioModificado = nombreUsuarioModificado;
 	}
 
-	public Long getNumeroProblemas() 
+	public Long getNumeroProblemas()
 	{
 		return this.numeroProblemas;
 	}
 
-	public void setNumeroProblemas(Long numeroProblemas) 
+	public void setNumeroProblemas(Long numeroProblemas)
 	{
 		this.numeroProblemas = numeroProblemas;
 	}
 
-	public Integer getNumeroHijos() 
+	public Integer getNumeroHijos()
 	{
 		return this.numeroHijos;
 	}
 
-	public void setNumeroHijos(Integer numeroHijos) 
+	public void setNumeroHijos(Integer numeroHijos)
 	{
 		this.numeroHijos = numeroHijos;
 	}
 
-	public String getNombrePadre() 
+	public String getNombrePadre()
 	{
 		return this.nombrePadre;
 	}
 
-	public void setNombrePadre(String nombrePadre) 
+	public void setNombrePadre(String nombrePadre)
 	{
 		this.nombrePadre = nombrePadre;
 	}
 
-	public Boolean getCopiarProblemas() 
+	public Boolean getCopiarProblemas()
 	{
 		return this.copiarProblemas;
 	}
 
-	public void setCopiarProblemas(Boolean copiarProblemas) 
+	public void setCopiarProblemas(Boolean copiarProblemas)
 	{
 		this.copiarProblemas = copiarProblemas;
 	}
@@ -156,12 +156,13 @@ public class EditarClaseProblemasForm extends EditarObjetoForm
 		return this.tipo;
 	}
 
-	public void setTipo(Integer tipo) 
+	public void setTipo(Integer tipo)
 	{
 		this.tipo = tipo;
 	}
-  
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		this.claseId = new Long(0L);
 		this.padreId = null;
@@ -176,7 +177,7 @@ public class EditarClaseProblemasForm extends EditarObjetoForm
 		this.numeroHijos = null;
 		this.nombrePadre = null;
 		this.copiarProblemas = new Boolean(false);
-    
+
 		setBloqueado(new Boolean(false));
 	}
 }

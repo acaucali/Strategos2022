@@ -5,13 +5,15 @@ import com.visiongc.framework.web.configuracion.VgcConfiguracionesBaseWeb;
 
 public class StrategosWebConfiguracionesBase extends VgcConfiguracionesBaseWeb
 {
+	@Override
 	public XmlNodo getConfiguracionBase(String nombreObjeto)
 	{
 		XmlNodo configuracion = null;
 		return configuracion;
 	}
 
-	public Object getObjetoConfiguracionBase(String nombreObjeto) 
+	@Override
+	public Object getObjetoConfiguracionBase(String nombreObjeto)
 	{
 		return null;
 	}

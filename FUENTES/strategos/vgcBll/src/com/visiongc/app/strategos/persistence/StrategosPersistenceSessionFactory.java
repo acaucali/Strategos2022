@@ -1,5 +1,6 @@
 package com.visiongc.app.strategos.persistence;
 
+import com.visiongc.app.strategos.cargos.persistence.StrategosCargosPersistenceSession;
 import com.visiongc.app.strategos.categoriasmedicion.persistence.StrategosCategoriasPersistenceSession;
 import com.visiongc.app.strategos.causas.persistence.StrategosCausasPersistenceSession;
 import com.visiongc.app.strategos.estadosacciones.persistence.StrategosEstadosPersistenceSession;
@@ -53,6 +54,10 @@ public abstract interface StrategosPersistenceSessionFactory
   public abstract StrategosCategoriasPersistenceSession openCategoriasPersistenceSession();
   
   public abstract StrategosCategoriasPersistenceSession openCategoriasPersistenceSession(StrategosPersistenceSession paramStrategosPersistenceSession);
+  
+  public abstract StrategosCargosPersistenceSession openCargosPersistenceSession();
+  
+  public abstract StrategosCargosPersistenceSession openCargosPersistenceSession(StrategosPersistenceSession paramStrategosPersistenceSession);
   
   public abstract StrategosResponsablesPersistenceSession openResponsablesPersistenceSession();
   

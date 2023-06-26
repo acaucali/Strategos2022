@@ -1,18 +1,17 @@
 package com.visiongc.app.strategos.web.struts.taglib;
 
+import java.util.Calendar;
+
+import javax.servlet.jsp.JspException;
+
+import org.apache.struts.taglib.TagUtils;
+
 import com.visiongc.app.strategos.indicadores.model.Medicion;
-import com.visiongc.app.strategos.indicadores.model.MedicionPK;
 import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.commons.struts.tag.VgcBaseTag;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.util.VgcMessageResources;
 import com.visiongc.commons.util.VgcResourceManager;
-import java.util.Calendar;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import org.apache.struts.taglib.TagUtils;
 
 public class NombrePeriodoMedicionTag extends VgcBaseTag
 {
@@ -49,7 +48,8 @@ public class NombrePeriodoMedicionTag extends VgcBaseTag
     this.frecuencia = frecuencia;
   }
 
-  public int doStartTag() throws JspException
+  @Override
+public int doStartTag() throws JspException
   {
     if ((this.scope == null) || (this.scope.equals(""))) {
       this.medicion = ((Medicion)this.pageContext.getAttribute(this.name));
@@ -78,7 +78,8 @@ public class NombrePeriodoMedicionTag extends VgcBaseTag
     return 0;
   }
 
-  public int doEndTag() throws JspException
+  @Override
+public int doEndTag() throws JspException
   {
     String resultado = "";
 
@@ -148,7 +149,8 @@ public class NombrePeriodoMedicionTag extends VgcBaseTag
     return 6;
   }
 
-  public void release() {
+  @Override
+public void release() {
     super.release();
     this.name = null;
     this.scope = null;

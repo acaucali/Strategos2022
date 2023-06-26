@@ -25,10 +25,14 @@
 				false
 			</logic:empty>
 		</bean:define>
-		<script type="text/javascript" src="<html:rewrite page='/paginas/comunes/jQuery/js/jquery-1.7.1.min.js'/>"></script>
-		<script type="text/javascript" src="<html:rewrite page='/paginas/comunes/jQuery/export/tableExport.js'/>"></script>
-		<script type="text/javascript" src="<html:rewrite page='/paginas/comunes/jQuery/export/jquery.base64.js'/>"></script>
-		<script type="text/javascript" src="<html:rewrite page='/paginas/comunes/jQuery/export/png/html2canvas.js'/>"></script>
+		<script type="text/javascript"
+			src="<html:rewrite page='/paginas/comunes/jQuery/js/jquery-1.7.1.min.js'/>"></script>
+		<script type="text/javascript"
+			src="<html:rewrite page='/paginas/comunes/jQuery/export/tableExport.js'/>"></script>
+		<script type="text/javascript"
+			src="<html:rewrite page='/paginas/comunes/jQuery/export/jquery.base64.js'/>"></script>
+		<script type="text/javascript"
+			src="<html:rewrite page='/paginas/comunes/jQuery/export/png/html2canvas.js'/>"></script>
 
 		<script type="text/javascript">
 
@@ -46,7 +50,7 @@
 			}
 			
 			function validarEdicion()
-			{
+			{				
 				_formaEditada = true;
 			}
 			
@@ -504,17 +508,31 @@
 				</logic:notEmpty>
 					
 				return indicadores;
+				
+				
 			}
+			
+			
+			
 		</script>
 
-		<bean:define id="naturalezaFormula" name="editarMedicionesForm" property="naturalezaFormula" toScope="page"></bean:define>
-		<bean:define id="naturalezaSumatoria" name="editarMedicionesForm" property="naturalezaSumatoria" toScope="page"></bean:define>
-		<bean:define id="naturalezaPromedio" name="editarMedicionesForm" property="naturalezaPromedio" toScope="page"></bean:define>
-		<bean:define id="naturalezaIndice" name="editarMedicionesForm" property="naturalezaIndice" toScope="page"></bean:define>
-		<bean:define id="naturalezaCualitativoOrdinal" name="editarMedicionesForm" property="naturalezaCualitativoOrdinal" toScope="page"></bean:define>
-		<bean:define id="naturalezaCualitativoNominal" name="editarMedicionesForm" property="naturalezaCualitativoNominal" toScope="page"></bean:define>
+		<bean:define id="naturalezaFormula" name="editarMedicionesForm"
+			property="naturalezaFormula" toScope="page"></bean:define>
+		<bean:define id="naturalezaSumatoria" name="editarMedicionesForm"
+			property="naturalezaSumatoria" toScope="page"></bean:define>
+		<bean:define id="naturalezaPromedio" name="editarMedicionesForm"
+			property="naturalezaPromedio" toScope="page"></bean:define>
+		<bean:define id="naturalezaIndice" name="editarMedicionesForm"
+			property="naturalezaIndice" toScope="page"></bean:define>
+		<bean:define id="naturalezaCualitativoOrdinal"
+			name="editarMedicionesForm" property="naturalezaCualitativoOrdinal"
+			toScope="page"></bean:define>
+		<bean:define id="naturalezaCualitativoNominal"
+			name="editarMedicionesForm" property="naturalezaCualitativoNominal"
+			toScope="page"></bean:define>
 
-		<html:form action="mediciones/guardarMediciones" styleClass="formaHtml">
+		<html:form action="mediciones/guardarMediciones"
+			styleClass="formaHtml">
 			<html:hidden property="iniciativaId" />
 			<html:hidden property="organizacionId" />
 			<html:hidden property="indicadoresSeries" />
@@ -528,9 +546,13 @@
 			<html:hidden property="anoHasta" />
 			<html:hidden property="periodoDesde" />
 			<html:hidden property="periodoHasta" />
+			<html:hidden property="bloqueado" />
 			<html:hidden property="tipoCargaDesdePlanificacion" />
-			
-			<vgcinterfaz:contenedorForma width="100%" height="100%" mostrarBarraSuperior="true" bodyAlign="left" marginTop="15px">
+			<html:hidden property="serieBloqueada" />
+			<html:hidden property="programado" />
+
+			<vgcinterfaz:contenedorForma width="100%" height="100%"
+				mostrarBarraSuperior="true" bodyAlign="left" marginTop="15px">
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
 					<vgcutil:message key="jsp.editarmediciones.titulo" />
@@ -544,72 +566,80 @@
 				<vgcinterfaz:contenedorFormaBarraGenerica height="20px">
 					<table width="100%" cellpadding="3" cellspacing="0">
 						<tr class="barraFiltrosForma">
-							<td width="20px">
-								<b><bean:message key="jsp.editarmediciones.ficha.organizacion" /></b>
-							</td>
-							<td>
-								<bean:write name="editarMedicionesForm" property="organizacion" />&nbsp;
-							</td>
+							<td width="20px"><b><bean:message
+										key="jsp.editarmediciones.ficha.organizacion" /></b></td>
+							<td><bean:write name="editarMedicionesForm"
+									property="organizacion" />&nbsp;</td>
 						</tr>
-						<logic:equal name="editarMedicionesForm" property="sourceScreen" value="0">
+						<logic:equal name="editarMedicionesForm" property="sourceScreen"
+							value="0">
 							<tr class="barraFiltrosForma">
-								<td width="20px">
-									<b><bean:message key="jsp.editarmediciones.ficha.clase" /></b>
-								</td>
-								<td>
-									<bean:write name="editarMedicionesForm" property="clase" />&nbsp;
-								</td>
+								<td width="20px"><b><bean:message
+											key="jsp.editarmediciones.ficha.clase" /></b></td>
+								<td><bean:write name="editarMedicionesForm"
+										property="clase" />&nbsp;</td>
 							</tr>
 						</logic:equal>
-						<logic:equal name="editarMedicionesForm" property="sourceScreen" value="1">
+						<logic:equal name="editarMedicionesForm" property="sourceScreen"
+							value="1">
 							<tr class="barraFiltrosForma">
-								<td width="20px">
-									<b><bean:write name="editarMedicionesForm" property="nombreObjetoPerspectiva" /></b>
-								</td>
-								<td>
-									<bean:write name="editarMedicionesForm" property="perspectivaNombre" />&nbsp;
-								</td>
+								<td width="20px"><b><bean:write
+											name="editarMedicionesForm"
+											property="nombreObjetoPerspectiva" /></b></td>
+								<td><bean:write name="editarMedicionesForm"
+										property="perspectivaNombre" />&nbsp;</td>
 							</tr>
 						</logic:equal>
-						<logic:equal name="editarMedicionesForm" property="sourceScreen" value="3">
+						<logic:equal name="editarMedicionesForm" property="sourceScreen"
+							value="3">
 							<%-- Actividades --%>
 							<tr class="barraFiltrosForma">
-								<td width="20px">
-									<b><vgcutil:message key="jsp.configuraredicionmediciones.ficha.iniciativa" /></b>
-								</td>
-								<td>
-									<bean:write name="editarMedicionesForm" property="iniciativa" />&nbsp;
-								</td>
+								<td width="20px"><b><vgcutil:message
+											key="jsp.configuraredicionmediciones.ficha.iniciativa" /></b></td>
+								<td><bean:write name="editarMedicionesForm"
+										property="iniciativa" />&nbsp;</td>
 							</tr>
 						</logic:equal>
 					</table>
 
 					<vgcinterfaz:barraHerramientas nombre="barraMediciones">
-						<logic:notEqual name="editarMedicionesForm" property="bloqueado" value="true">
-							<vgcinterfaz:barraHerramientasBoton permisoId="INDICADOR_MEDICION_CARGAR" nombreImagen="guardar" pathImagenes="/componentes/barraHerramientas/" nombre="guardar" onclick="javascript:guardar();">
+						<logic:notEqual name="editarMedicionesForm" property="bloqueado"
+							value="true">
+							<vgcinterfaz:barraHerramientasBoton
+								permisoId="INDICADOR_MEDICION_CARGAR" nombreImagen="guardar"
+								pathImagenes="/componentes/barraHerramientas/" nombre="guardar"
+								onclick="javascript:guardar();">
 								<vgcinterfaz:barraHerramientasBotonTitulo>
 									<vgcutil:message key="boton.guardar" />
 								</vgcinterfaz:barraHerramientasBotonTitulo>
 							</vgcinterfaz:barraHerramientasBoton>
 							<vgcinterfaz:barraHerramientasSeparador />
 						</logic:notEqual>
-						<vgcinterfaz:barraHerramientasBoton nombreImagen="tool" pathImagenes="/componentes/barraHerramientas/" nombre="tool" onclick="javascript:configurarVisorEdicion();">
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="tool"
+							pathImagenes="/componentes/barraHerramientas/" nombre="tool"
+							onclick="javascript:configurarVisorEdicion();">
 							<vgcinterfaz:barraHerramientasBotonTitulo>
 								<vgcutil:message key="boton.tool.edicion" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
 						<vgcinterfaz:barraHerramientasSeparador />
-						<vgcinterfaz:barraHerramientasBoton nombreImagen="imprimir" pathImagenes="/componentes/barraHerramientas/" nombre="imprimir" onclick="javascript:imprimir();">
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="imprimir"
+							pathImagenes="/componentes/barraHerramientas/" nombre="imprimir"
+							onclick="javascript:imprimir();">
 							<vgcinterfaz:barraHerramientasBotonTitulo>
 								<vgcutil:message key="boton.imprimir" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
-						<vgcinterfaz:barraHerramientasBoton nombreImagen="exportar" pathImagenes="/componentes/barraHerramientas/" nombre="exportar" onclick="javascript:exportarToXls();">
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="exportar"
+							pathImagenes="/componentes/barraHerramientas/" nombre="exportar"
+							onclick="javascript:exportarToXls();">
 							<vgcinterfaz:barraHerramientasBotonTitulo>
 								<vgcutil:message key="boton.exportar.excel" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
-						<vgcinterfaz:barraHerramientasBoton nombreImagen="html" pathImagenes="/componentes/barraHerramientas/" nombre="html" onclick="javascript:imprimir('HTML');">
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="html"
+							pathImagenes="/componentes/barraHerramientas/" nombre="html"
+							onclick="javascript:imprimir('HTML');">
 							<vgcinterfaz:barraHerramientasBotonTitulo>
 								<vgcutil:message key="boton.exportar.html" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
@@ -618,380 +648,463 @@
 					</vgcinterfaz:barraHerramientas>
 				</vgcinterfaz:contenedorFormaBarraGenerica>
 
-				<bean:define id="tamanoTabla" scope="page"><bean:write name="editarMedicionesForm" property="anchoMatriz"/></bean:define>
-				<table id="tblDatos" style="border-spacing:1px; border-collapse: separate; padding: 3px; width: <%= tamanoTabla.toString() %>; table-layout: fixed;">
+				<bean:define id="tamanoTabla" scope="page">
+					<bean:write name="editarMedicionesForm" property="anchoMatriz" />
+				</bean:define>
+				<table id="tblDatos"
+					style="border-spacing:1px; border-collapse: separate; padding: 3px; width: <%=tamanoTabla.toString()%>; table-layout: fixed;">
 					<bean:define id="indicadorId" scope="page">0</bean:define>
 					<bean:define id="agregarEncabezado" scope="page">true</bean:define>
 					<bean:define id="agregarPeriodos" scope="page">true</bean:define>
 					<logic:notEmpty name="seriesIndicadores" scope="request">
-						<logic:iterate name="seriesIndicadores" id="serieIndicador" scope="request">
-								<bean:define id="indicador" name="serieIndicador" property="indicador" toScope="page"></bean:define>
-								<bean:define id="indicadorCompuesto" value="false" toScope="page"></bean:define>
-								<bean:define id="indicadorCualitativo" value="false" toScope="page"></bean:define>
-							
-								<logic:equal scope="page" name="indicador" property="naturaleza" value="<%= naturalezaFormula.toString() %>">
-									<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
-								</logic:equal>
-								<logic:equal scope="page" name="indicador" property="naturaleza" value="<%= naturalezaSumatoria.toString() %>">
-									<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
-								</logic:equal>
-								<logic:equal scope="page" name="indicador" property="naturaleza" value="<%= naturalezaPromedio.toString() %>">
-									<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
-								</logic:equal>
-								<logic:equal scope="page" name="indicador" property="naturaleza" value="<%= naturalezaIndice.toString() %>">
-									<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
-								</logic:equal>
-								<logic:equal scope="page" name="indicador" property="naturaleza" value="<%= naturalezaCualitativoOrdinal.toString() %>">
-									<bean:define id="indicadorCualitativo" value="true" toScope="page"></bean:define>
-								</logic:equal>
-								<logic:equal scope="page" name="indicador" property="naturaleza" value="<%= naturalezaCualitativoNominal.toString() %>">
-									<bean:define id="indicadorCualitativo" value="true" toScope="page"></bean:define>
-								</logic:equal>
-		
-								<bean:define id="numeroDecimales" name="indicador" property="numeroDecimales" type="java.lang.Byte" />
-								
-								<!-- Encabezado -->
-								<bean:define id="tamanoPeriodos" scope="page">150</bean:define>
-								<logic:equal name="agregarEncabezado" value="true">
-									<tr class="encabezadoListView" height="20px">
-										<logic:iterate name="editarMedicionesForm" property="columnas" id="columna">
-											<logic:notEqual name="columna" property="orden" value="4">
-												<logic:equal name="columna" property="mostrar" value="true">
-													<bean:define id="tamano" name="columna" property="tamano" type="java.lang.String"></bean:define>
-													<bean:define id="nombre" name="columna" property="nombre" type="java.lang.String"></bean:define>
-													<td style="text-align: center; width:<%= tamano.toString() %>px; overflow: hidden;"><%= nombre %></td>
-												</logic:equal>
-											</logic:notEqual>
-											<logic:equal name="columna" property="orden" value="4">
-												<logic:notEqual name="columna" property="mostrar" value="true">
-													<bean:define id="agregarPeriodos" scope="page">false</bean:define>
-												</logic:notEqual>
-												<logic:equal name="columna" property="mostrar" value="true">
-													<bean:define id="tamanoPeriodos" name="columna" property="tamano" type="java.lang.String"></bean:define>
-												</logic:equal>
-											</logic:equal>
-										</logic:iterate>
-										
-										<logic:equal name="editarMedicionesForm" property="sourceScreen" value="3">
-											<logic:equal name="editarMedicionesForm" property="tipoCargaDesdePlanificacion" value="0">
-												<td style="text-align: center; width: 100px; overflow: hidden;"><vgcutil:message key="jsp.gestionaractividades.columna.fecha.real.inicio" /></td>
-												<td style="text-align: center; width: 100px; overflow: hidden;"><vgcutil:message key="jsp.gestionaractividades.columna.fecha.real.culminacion" /></td>
-											</logic:equal>
-										</logic:equal>
-										
-										<logic:equal name="agregarPeriodos" value="true">
-											<bean:define id="frecuencia" type="java.lang.Byte" name="editarMedicionesForm" property="frecuencia"></bean:define>
-											<logic:iterate name="serieIndicador" property="mediciones" id="medicion">
-												<td style="text-align: center; width: <%= tamanoPeriodos.toString() %>px; overflow: hidden;">
-													<vgcst:nombrePeriodoMedicion name="medicion" frecuencia="<%= ((Byte) frecuencia).toString() %>" />
-												</td>
-											</logic:iterate>
-										</logic:equal>
-									</tr>
-									<bean:define id="agregarEncabezado" scope="page">false</bean:define>
-								</logic:equal>
-		
-								<!-- Cuerpo -->	
-								<tr class="mouseFueraCuerpoListView" height="20px">
-									<logic:iterate name="editarMedicionesForm" property="columnas" id="columna">
-										<bean:define id="tamano" name="columna" property="tamano" type="java.lang.String"></bean:define>
-										<logic:equal name="indicador" property="indicadorId" value="<%= indicadorId %>">
-											<!-- Nombre del Indicador -->
+						<logic:iterate name="seriesIndicadores" id="serieIndicador"
+							scope="request">
+							<bean:define id="indicador" name="serieIndicador"
+								property="indicador" toScope="page"></bean:define>
+							<bean:define id="indicadorCompuesto" value="false" toScope="page"></bean:define>
+							<bean:define id="indicadorCualitativo" value="false"
+								toScope="page"></bean:define>
+
+							<logic:equal scope="page" name="indicador" property="naturaleza"
+								value="<%=naturalezaFormula.toString()%>">
+								<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
+							</logic:equal>
+							<logic:equal scope="page" name="indicador" property="naturaleza"
+								value="<%=naturalezaSumatoria.toString()%>">
+								<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
+							</logic:equal>
+							<logic:equal scope="page" name="indicador" property="naturaleza"
+								value="<%=naturalezaPromedio.toString()%>">
+								<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
+							</logic:equal>
+							<logic:equal scope="page" name="indicador" property="naturaleza"
+								value="<%=naturalezaIndice.toString()%>">
+								<bean:define id="indicadorCompuesto" value="true" toScope="page"></bean:define>
+							</logic:equal>
+							<logic:equal scope="page" name="indicador" property="naturaleza"
+								value="<%=naturalezaCualitativoOrdinal.toString()%>">
+								<bean:define id="indicadorCualitativo" value="true"
+									toScope="page"></bean:define>
+							</logic:equal>
+							<logic:equal scope="page" name="indicador" property="naturaleza"
+								value="<%=naturalezaCualitativoNominal.toString()%>">
+								<bean:define id="indicadorCualitativo" value="true"
+									toScope="page"></bean:define>
+							</logic:equal>
+
+							<bean:define id="numeroDecimales" name="indicador"
+								property="numeroDecimales" type="java.lang.Byte" />
+
+							<!-- Encabezado -->
+							<bean:define id="tamanoPeriodos" scope="page">150</bean:define>
+							<logic:equal name="agregarEncabezado" value="true">
+								<tr class="encabezadoListView" height="20px">
+									<logic:iterate name="editarMedicionesForm" property="columnas"
+										id="columna">
+										<logic:notEqual name="columna" property="orden" value="4">
 											<logic:equal name="columna" property="mostrar" value="true">
-												<logic:equal name="columna" property="orden" value="1">
-													<logic:notEqual name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<td style="vertical-align: top; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMediciones">&nbsp;</td>
-													</logic:notEqual>
-											
-													<logic:equal name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<td style="vertical-align: top; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMedicionesProgramado">&nbsp;</td>
-													</logic:equal>
-													
-												</logic:equal>
-												<logic:equal name="columna" property="orden" value="2">
-													<logic:notEqual name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<td style="vertical-align: top; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMediciones">&nbsp;</td>
-													</logic:notEqual>
-											
-													<logic:equal name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<td style="vertical-align: top; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMedicionesProgramado">&nbsp;</td>
-													</logic:equal>
-													
-												</logic:equal>
-											</logic:equal>
-										</logic:equal>
-										<logic:notEqual name="indicador" property="indicadorId" value="<%= indicadorId %>">
-											<logic:equal name="columna" property="mostrar" value="true">
-												<logic:equal name="columna" property="orden" value="1">
-												
-													<logic:notEqual name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<!-- Nombre del Indicador -->
-														<td style="vertical-align: top; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMediciones"><bean:write name="indicador" property="nombre" />&nbsp;&nbsp;
-															<logic:equal name="indicador" property="estaBloqueado" value="true">
-																(<bean:message key="jsp.editarmediciones.ficha.indicador.bloqueado" />)
-															</logic:equal>
-															<logic:equal name="editarMedicionesForm" property="sourceScreen" value="3">
-																<input type="hidden" 
-																	name="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />" 
-																	id="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />"
-																	value="<bean:write name="indicador" property="isPocentaje" />">
-																<input type="hidden" 
-																	name="indTipoCarga_<bean:write name="indicador" property="indicadorId" />" 
-																	id="indTipoCarga_<bean:write name="indicador" property="indicadorId" />"
-																	value="<bean:write name="indicador" property="tipoCargaMedicion" />">
-															</logic:equal>
-														</td>
-													</logic:notEqual>
-											
-													<logic:equal name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<!-- Nombre del Indicador -->
-														<td style="vertical-align: top; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMedicionesProgramado"><bean:write name="indicador" property="nombre" />&nbsp;&nbsp;
-															<logic:equal name="indicador" property="estaBloqueado" value="true">
-																(<bean:message key="jsp.editarmediciones.ficha.indicador.bloqueado" />)
-															</logic:equal>
-															<logic:equal name="editarMedicionesForm" property="sourceScreen" value="3">
-																<input type="hidden" 
-																	name="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />" 
-																	id="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />"
-																	value="<bean:write name="indicador" property="isPocentaje" />">
-																<input type="hidden" 
-																	name="indTipoCarga_<bean:write name="indicador" property="indicadorId" />" 
-																	id="indTipoCarga_<bean:write name="indicador" property="indicadorId" />"
-																	value="<bean:write name="indicador" property="tipoCargaMedicion" />">
-															</logic:equal>
-														</td>
-													</logic:equal>
-												
-												
-													
-												</logic:equal>
-												<logic:equal name="columna" property="orden" value="2">
-												
-													<logic:notEqual name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<!-- Unidad del Indicador -->
-														<td style="vertical-align: top; text-align: center; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMediciones">
-															<logic:notEmpty name="indicador" property="unidad">
-																<bean:write name="indicador" property="unidad.nombre" />
-															</logic:notEmpty>&nbsp;
-														</td>
-													</logic:notEqual>
-											
-													<logic:equal name="serieIndicador" property="serieTiempo.serieId" value="1">
-														<!-- Unidad del Indicador -->
-														<td style="vertical-align: top; text-align: center; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMedicionesProgramado">
-															<logic:notEmpty name="indicador" property="unidad">
-																<bean:write name="indicador" property="unidad.nombre" />
-															</logic:notEmpty>&nbsp;
-														</td>
-													</logic:equal>
-												
-													
-												</logic:equal>
+												<bean:define id="tamano" name="columna" property="tamano"
+													type="java.lang.String"></bean:define>
+												<bean:define id="nombre" name="columna" property="nombre"
+													type="java.lang.String"></bean:define>
+												<td
+													style="text-align: center; width:<%=tamano.toString()%>px; overflow: hidden;"><%=nombre%></td>
 											</logic:equal>
 										</logic:notEqual>
-										<logic:equal name="columna" property="orden" value="3">
+										<logic:equal name="columna" property="orden" value="4">
+											<logic:notEqual name="columna" property="mostrar"
+												value="true">
+												<bean:define id="agregarPeriodos" scope="page">false</bean:define>
+											</logic:notEqual>
 											<logic:equal name="columna" property="mostrar" value="true">
-												<!-- Nombre de la Serie -->
-												
-												<logic:notEqual name="serieIndicador" property="serieTiempo.serieId" value="1">
-													<td style="vertical-align: top; text-align: center; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMediciones">
-														<bean:write name="serieIndicador" property="serieTiempo.nombre" />
-													</td>
-												</logic:notEqual>
-										
-												<logic:equal name="serieIndicador" property="serieTiempo.serieId" value="1">
-													<td style="vertical-align: top; text-align: center; width:<%= tamano.toString() %>px; overflow: hidden;" class="celdaMedicionesProgramado">
-														<bean:write name="serieIndicador" property="serieTiempo.nombre" />
-													</td>
-												</logic:equal>
-												
+												<bean:define id="tamanoPeriodos" name="columna"
+													property="tamano" type="java.lang.String"></bean:define>
 											</logic:equal>
 										</logic:equal>
-										
-										
-										
 									</logic:iterate>
-									
-									<logic:notEqual name="indicador" property="indicadorId" value="<%= indicadorId %>">
-										<logic:equal name="editarMedicionesForm" property="sourceScreen" value="3">
-											<logic:equal name="editarMedicionesForm" property="tipoCargaDesdePlanificacion" value="0">
-												
-												<logic:notEqual name="serieIndicador" property="serieTiempo.serieId" value="1">
-													<td id="tdFechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />" style="vertical-align: top; width:100px; text-align: center; overflow: hidden;" class="celdaMediciones">
-														<logic:notEqual name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="cuadroTexto" 
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9"
-																name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaInicial" />">
-															<span style="padding:2px">
-																<img 
-																	style="cursor: pointer" 
-																	onclick="seleccionarFecha('fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />');" 
-																	src="<html:rewrite page='/componentes/calendario/calendario.gif'/>" 
-																	border="0" 
-																	width="10" 
-																	height="10"
-																	title="<vgcutil:message key="boton.calendario.alt" />">
-															</span>
-														</logic:notEqual>
-														<logic:equal name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="medicionProtegida"
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9" readonly
-																name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaInicial" />">
-														</logic:equal>
-													</td>
-													<td id="tdFechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />" style="vertical-align: top; text-align: center; width:100px; overflow: hidden;" class="celdaMediciones">
-														<logic:notEqual name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="cuadroTexto" 
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9"
-																name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaFinal" />">
-															<span style="padding:2px">
-																<img 
-																	style="cursor: pointer" 
-																	onclick="seleccionarFecha('fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />');" 
-																	src="<html:rewrite page='/componentes/calendario/calendario.gif'/>" 
-																	border="0" 
-																	width="10" 
-																	height="10"
-																	title="<vgcutil:message key="boton.calendario.alt" />">
-															</span>
-														</logic:notEqual>
-														<logic:equal name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="medicionProtegida" 
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9" readonly
-																name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaFinal" />">
-														</logic:equal>
-													</td>
-												</logic:notEqual>
-										
-												<logic:equal name="serieIndicador" property="serieTiempo.serieId" value="1">
-													<td id="tdFechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />" style="vertical-align: top; width:100px; text-align: center; overflow: hidden;" class="celdaMedicionesProgramado">
-														<logic:notEqual name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="cuadroTexto" 
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9"
-																name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaInicial" />">
-															<span style="padding:2px">
-																<img 
-																	style="cursor: pointer" 
-																	onclick="seleccionarFecha('fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />');" 
-																	src="<html:rewrite page='/componentes/calendario/calendario.gif'/>" 
-																	border="0" 
-																	width="10" 
-																	height="10"
-																	title="<vgcutil:message key="boton.calendario.alt" />">
-															</span>
-														</logic:notEqual>
-														<logic:equal name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="medicionProtegida"
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9" readonly
-																name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaInicial" />">
-														</logic:equal>
-													</td>
-													<td id="tdFechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />" style="vertical-align: top; text-align: center; width:100px; overflow: hidden;" class="celdaMedicionesProgramado">
-														<logic:notEqual name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="cuadroTexto" 
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9"
-																name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaFinal" />">
-															<span style="padding:2px">
-																<img 
-																	style="cursor: pointer" 
-																	onclick="seleccionarFecha('fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />');" 
-																	src="<html:rewrite page='/componentes/calendario/calendario.gif'/>" 
-																	border="0" 
-																	width="10" 
-																	height="10"
-																	title="<vgcutil:message key="boton.calendario.alt" />">
-															</span>
-														</logic:notEqual>
-														<logic:equal name="editarMedicionesForm" property="bloqueado" value="true">
-															<input type="text" 
-																class="medicionProtegida" 
-																style="text-align: right; width:80px; overflow: hidden;"
-																size="9" readonly
-																name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />" 
-																id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
-																value="<bean:write name="indicador" property="fechaFinal" />">
-														</logic:equal>
-													</td>
-												</logic:equal>
-												
-											</logic:equal>
+
+									<logic:equal name="editarMedicionesForm"
+										property="sourceScreen" value="3">
+										<logic:equal name="editarMedicionesForm"
+											property="tipoCargaDesdePlanificacion" value="0">
+											<td
+												style="text-align: center; width: 100px; overflow: hidden;"><vgcutil:message
+													key="jsp.gestionaractividades.columna.fecha.real.inicio" /></td>
+											<td
+												style="text-align: center; width: 100px; overflow: hidden;"><vgcutil:message
+													key="jsp.gestionaractividades.columna.fecha.real.culminacion" /></td>
 										</logic:equal>
-									</logic:notEqual>
-									<logic:equal name="indicador" property="indicadorId" value="<%= indicadorId %>">
-										<logic:equal name="editarMedicionesForm" property="sourceScreen" value="3">
-											<logic:equal name="editarMedicionesForm" property="tipoCargaDesdePlanificacion" value="0">
-												<td style="vertical-align: top; width:100px; text-align: center; overflow: hidden;" class="celdaMediciones">&nbsp;</td>
-												<td style="vertical-align: top; width:100px; text-align: center; overflow: hidden;" class="celdaMediciones">&nbsp;</td>
+									</logic:equal>
+
+									<logic:equal name="agregarPeriodos" value="true">
+										<bean:define id="frecuencia" type="java.lang.Byte"
+											name="editarMedicionesForm" property="frecuencia"></bean:define>
+										<logic:iterate name="serieIndicador" property="mediciones"
+											id="medicion">
+											<td
+												style="text-align: center; width: <%=tamanoPeriodos.toString()%>px; overflow: hidden;">
+												<vgcst:nombrePeriodoMedicion name="medicion"
+													frecuencia="<%=((Byte) frecuencia).toString()%>" />
+											</td>
+										</logic:iterate>
+									</logic:equal>
+								</tr>
+								<bean:define id="agregarEncabezado" scope="page">false</bean:define>
+							</logic:equal>
+
+							<!-- Cuerpo -->
+							<tr class="mouseFueraCuerpoListView" height="20px">
+								<logic:iterate name="editarMedicionesForm" property="columnas"
+									id="columna">
+									<bean:define id="tamano" name="columna" property="tamano"
+										type="java.lang.String"></bean:define>
+									<logic:equal name="indicador" property="indicadorId"
+										value="<%=indicadorId%>">
+										<!-- Nombre del Indicador -->
+										<logic:equal name="columna" property="mostrar" value="true">
+											<logic:equal name="columna" property="orden" value="1">
+												<logic:notEqual name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<td
+														style="vertical-align: top; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMediciones">&nbsp;</td>
+												</logic:notEqual>
+
+												<logic:equal name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<td
+														style="vertical-align: top; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMedicionesProgramado">&nbsp;</td>
+												</logic:equal>
+
+											</logic:equal>
+											<logic:equal name="columna" property="orden" value="2">
+												<logic:notEqual name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<td
+														style="vertical-align: top; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMediciones">&nbsp;</td>
+												</logic:notEqual>
+
+												<logic:equal name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<td
+														style="vertical-align: top; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMedicionesProgramado">&nbsp;</td>
+												</logic:equal>
+
 											</logic:equal>
 										</logic:equal>
 									</logic:equal>
-									
-									<bean:define id="indicadorId">
-										<bean:write name="indicador" property="indicadorId" />
-									</bean:define>
-									
-									<!-- agregar periodos -->
-										<logic:equal name="agregarPeriodos" value="true">
-											<logic:iterate name="serieIndicador" property="mediciones" id="medicion">
-												<bean:define id="medicionSoloLectura" scope="page" value=""></bean:define>
-												<bean:define id="claseEstiloCelda" scope="page" value="cuadroTexto"></bean:define>
-												<logic:equal name="indicador" property="estaBloqueado" value="true">
-													<bean:define id="medicionSoloLectura" scope="page" value="this.blur();"></bean:define>
-													<bean:define id="claseEstiloCelda" scope="page" value="medicionProtegida"></bean:define>
+									<logic:notEqual name="indicador" property="indicadorId"
+										value="<%=indicadorId%>">
+										<logic:equal name="columna" property="mostrar" value="true">
+											<logic:equal name="columna" property="orden" value="1">
+
+												<logic:notEqual name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<!-- Nombre del Indicador -->
+													<td
+														style="vertical-align: top; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMediciones"><bean:write name="indicador"
+															property="nombre" />&nbsp;&nbsp; <logic:equal
+															name="indicador" property="estaBloqueado" value="true">
+																(<bean:message
+																key="jsp.editarmediciones.ficha.indicador.bloqueado" />)
+															</logic:equal> <logic:equal name="editarMedicionesForm"
+															property="sourceScreen" value="3">
+															<input type="hidden"
+																name="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />"
+																id="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />"
+																value="<bean:write name="indicador" property="isPocentaje" />">
+															<input type="hidden"
+																name="indTipoCarga_<bean:write name="indicador" property="indicadorId" />"
+																id="indTipoCarga_<bean:write name="indicador" property="indicadorId" />"
+																value="<bean:write name="indicador" property="tipoCargaMedicion" />">
+														</logic:equal></td>
+												</logic:notEqual>
+
+												<logic:equal name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<!-- Nombre del Indicador -->
+													<td
+														style="vertical-align: top; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMedicionesProgramado"><bean:write
+															name="indicador" property="nombre" />&nbsp;&nbsp; <logic:equal
+															name="indicador" property="estaBloqueado" value="true">
+																(<bean:message
+																key="jsp.editarmediciones.ficha.indicador.bloqueado" />)
+															</logic:equal> <logic:equal name="editarMedicionesForm"
+															property="sourceScreen" value="3">
+															<input type="hidden"
+																name="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />"
+																id="indIsPocentaje_<bean:write name="indicador" property="indicadorId" />"
+																value="<bean:write name="indicador" property="isPocentaje" />">
+															<input type="hidden"
+																name="indTipoCarga_<bean:write name="indicador" property="indicadorId" />"
+																id="indTipoCarga_<bean:write name="indicador" property="indicadorId" />"
+																value="<bean:write name="indicador" property="tipoCargaMedicion" />">
+														</logic:equal></td>
 												</logic:equal>
-												<logic:equal name="medicion" property="protegido" value="true">
-													<bean:define id="medicionSoloLectura" scope="page" value="this.blur();"></bean:define>
-													<bean:define id="claseEstiloCelda" scope="page" value="medicionProtegida"></bean:define>
+
+
+
+											</logic:equal>
+											<logic:equal name="columna" property="orden" value="2">
+
+												<logic:notEqual name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<!-- Unidad del Indicador -->
+													<td
+														style="vertical-align: top; text-align: center; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMediciones"><logic:notEmpty
+															name="indicador" property="unidad">
+															<bean:write name="indicador" property="unidad.nombre" />
+														</logic:notEmpty>&nbsp;</td>
+												</logic:notEqual>
+
+												<logic:equal name="serieIndicador"
+													property="serieTiempo.serieId" value="1">
+													<!-- Unidad del Indicador -->
+													<td
+														style="vertical-align: top; text-align: center; width:<%=tamano.toString()%>px; overflow: hidden;"
+														class="celdaMedicionesProgramado"><logic:notEmpty
+															name="indicador" property="unidad">
+															<bean:write name="indicador" property="unidad.nombre" />
+														</logic:notEmpty>&nbsp;</td>
 												</logic:equal>
-												<logic:equal name="indicadorCompuesto" scope="page" value="true">
-													<logic:equal name="medicion" property="medicionId.serieId" value="0">
-														<bean:define id="medicionSoloLectura" scope="page" value="this.blur();"></bean:define>
-														<bean:define id="claseEstiloCelda" scope="page" value="medicionProtegida"></bean:define>
-													</logic:equal>
-												</logic:equal>
-												<td id="tdFilaMedicion_<bean:write name="medicion" 
+
+
+											</logic:equal>
+										</logic:equal>
+									</logic:notEqual>
+									<logic:equal name="columna" property="orden" value="3">
+										<logic:equal name="columna" property="mostrar" value="true">
+											<!-- Nombre de la Serie -->
+
+											<logic:notEqual name="serieIndicador"
+												property="serieTiempo.serieId" value="1">
+												<td
+													style="vertical-align: top; text-align: center; width:<%=tamano.toString()%>px; overflow: hidden;"
+													class="celdaMediciones"><bean:write
+														name="serieIndicador" property="serieTiempo.nombre" /></td>
+											</logic:notEqual>
+
+											<logic:equal name="serieIndicador"
+												property="serieTiempo.serieId" value="1">
+												<td
+													style="vertical-align: top; text-align: center; width:<%=tamano.toString()%>px; overflow: hidden;"
+													class="celdaMedicionesProgramado"><bean:write
+														name="serieIndicador" property="serieTiempo.nombre" /></td>
+											</logic:equal>
+
+										</logic:equal>
+									</logic:equal>
+
+
+
+								</logic:iterate>
+
+								<logic:notEqual name="indicador" property="indicadorId"
+									value="<%=indicadorId%>">
+									<logic:equal name="editarMedicionesForm"
+										property="sourceScreen" value="3">
+										<logic:equal name="editarMedicionesForm"
+											property="tipoCargaDesdePlanificacion" value="0">
+
+											<logic:notEqual name="serieIndicador"
+												property="serieTiempo.serieId" value="1">
+												<td
+													id="tdFechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+													style="vertical-align: top; width: 100px; text-align: center; overflow: hidden;"
+													class="celdaMediciones"><logic:notEqual
+														name="editarMedicionesForm" property="bloqueado"
+														value="true">
+														<input type="text" class="cuadroTexto"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9"
+															name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaInicial" />">
+														<span style="padding: 2px"> <img
+															style="cursor: pointer"
+															onclick="seleccionarFecha('fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />');"
+															src="<html:rewrite page='/componentes/calendario/calendario.gif'/>"
+															border="0" width="10" height="10"
+															title="<vgcutil:message key="boton.calendario.alt" />">
+														</span>
+													</logic:notEqual> <logic:equal name="editarMedicionesForm"
+														property="bloqueado" value="true">
+														<input type="text" class="medicionProtegida"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9" readonly
+															name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaInicial" />">
+													</logic:equal></td>
+												<td
+													id="tdFechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+													style="vertical-align: top; text-align: center; width: 100px; overflow: hidden;"
+													class="celdaMediciones"><logic:notEqual
+														name="editarMedicionesForm" property="bloqueado"
+														value="true">
+														<input type="text" class="cuadroTexto"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9"
+															name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaFinal" />">
+														<span style="padding: 2px"> <img
+															style="cursor: pointer"
+															onclick="seleccionarFecha('fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />');"
+															src="<html:rewrite page='/componentes/calendario/calendario.gif'/>"
+															border="0" width="10" height="10"
+															title="<vgcutil:message key="boton.calendario.alt" />">
+														</span>
+													</logic:notEqual> <logic:equal name="editarMedicionesForm"
+														property="bloqueado" value="true">
+														<input type="text" class="medicionProtegida"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9" readonly
+															name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaFinal" />">
+													</logic:equal></td>
+											</logic:notEqual>
+
+											<logic:equal name="serieIndicador"
+												property="serieTiempo.serieId" value="1">
+												<td
+													id="tdFechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+													style="vertical-align: top; width: 100px; text-align: center; overflow: hidden;"
+													class="celdaMedicionesProgramado"><logic:notEqual
+														name="editarMedicionesForm" property="bloqueado"
+														value="true">
+														<input type="text" class="cuadroTexto"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9"
+															name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaInicial" />">
+														<span style="padding: 2px"> <img
+															style="cursor: pointer"
+															onclick="seleccionarFecha('fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />');"
+															src="<html:rewrite page='/componentes/calendario/calendario.gif'/>"
+															border="0" width="10" height="10"
+															title="<vgcutil:message key="boton.calendario.alt" />">
+														</span>
+													</logic:notEqual> <logic:equal name="editarMedicionesForm"
+														property="bloqueado" value="true">
+														<input type="text" class="medicionProtegida"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9" readonly
+															name="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealInicioIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaInicial" />">
+													</logic:equal></td>
+												<td
+													id="tdFechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+													style="vertical-align: top; text-align: center; width: 100px; overflow: hidden;"
+													class="celdaMedicionesProgramado"><logic:notEqual
+														name="editarMedicionesForm" property="bloqueado"
+														value="true">
+														<input type="text" class="cuadroTexto"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9"
+															name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaFinal" />">
+														<span style="padding: 2px"> <img
+															style="cursor: pointer"
+															onclick="seleccionarFecha('fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />');"
+															src="<html:rewrite page='/componentes/calendario/calendario.gif'/>"
+															border="0" width="10" height="10"
+															title="<vgcutil:message key="boton.calendario.alt" />">
+														</span>
+													</logic:notEqual> <logic:equal name="editarMedicionesForm"
+														property="bloqueado" value="true">
+														<input type="text" class="medicionProtegida"
+															style="text-align: right; width: 80px; overflow: hidden;"
+															size="9" readonly
+															name="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															id="fechaRealFinIndId_<bean:write name="indicador" property="indicadorId" />"
+															value="<bean:write name="indicador" property="fechaFinal" />">
+													</logic:equal></td>
+											</logic:equal>
+
+										</logic:equal>
+									</logic:equal>
+								</logic:notEqual>
+								<logic:equal name="indicador" property="indicadorId"
+									value="<%=indicadorId%>">
+									<logic:equal name="editarMedicionesForm"
+										property="sourceScreen" value="3">
+										<logic:equal name="editarMedicionesForm"
+											property="tipoCargaDesdePlanificacion" value="0">
+											<td
+												style="vertical-align: top; width: 100px; text-align: center; overflow: hidden;"
+												class="celdaMediciones">&nbsp;</td>
+											<td
+												style="vertical-align: top; width: 100px; text-align: center; overflow: hidden;"
+												class="celdaMediciones">&nbsp;</td>
+										</logic:equal>
+									</logic:equal>
+								</logic:equal>
+
+								<bean:define id="indicadorId">
+									<bean:write name="indicador" property="indicadorId" />
+								</bean:define>
+
+								<!-- agregar periodos -->
+								<logic:equal name="agregarPeriodos" value="true">
+									<logic:iterate name="serieIndicador" property="mediciones"
+										id="medicion">
+										<bean:define id="medicionSoloLectura" scope="page" value=""></bean:define>
+										<bean:define id="claseEstiloCelda" scope="page"
+											value="cuadroTexto"></bean:define>
+										<logic:equal name="indicador" property="estaBloqueado"
+											value="true">
+											<bean:define id="medicionSoloLectura" scope="page"
+												value="this.blur();"></bean:define>
+											<bean:define id="claseEstiloCelda" scope="page"
+												value="medicionProtegida"></bean:define>
+										</logic:equal>
+										<logic:equal name="medicion" property="protegido" value="true">
+											<bean:define id="medicionSoloLectura" scope="page"
+												value="this.blur();"></bean:define>
+											<bean:define id="claseEstiloCelda" scope="page"
+												value="medicionProtegida"></bean:define>
+										</logic:equal>
+										<logic:equal name="indicadorCompuesto" scope="page"
+											value="true">
+											<logic:equal name="medicion" property="medicionId.serieId"
+												value="0">
+												<bean:define id="medicionSoloLectura" scope="page"
+													value="this.blur();"></bean:define>
+												<bean:define id="claseEstiloCelda" scope="page"
+													value="medicionProtegida"></bean:define>
+											</logic:equal>
+										</logic:equal>
+										<td
+											id="tdFilaMedicion_<bean:write name="medicion" 
 																		property="medicionId.indicadorId" />_<bean:write name="medicion" 
 																		property="medicionId.serieId" />_<bean:write name="medicion" 
 																		property="medicionId.periodo" />_<bean:write name="medicion" 
-																		property="medicionId.ano" />" class="celdaMediciones" style="vertical-align: top; width:<%= tamanoPeriodos.toString() %>px; text-align: center; overflow: hidden;">
-													<logic:notEqual scope="page" name="indicadorCualitativo" value="true">
-														<input 
-															type="text" 
-															onfocus="<bean:write name="medicionSoloLectura" scope="page"/>" 
-															onkeypress="validarEntradaNumeroEventoOnKeyPress(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);" 
-															onkeyup="validarEntradaNumeroEventoOnKeyUp(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);" 
+																		property="medicionId.ano" />"
+											class="celdaMediciones"
+											style="vertical-align: top; width:<%=tamanoPeriodos.toString()%>px; text-align: center; overflow: hidden;">
+											<logic:notEqual scope="page" name="indicadorCualitativo"
+												value="true">
+												<logic:equal name="serieIndicador"
+													property="serieTiempo.serieId" value="0">
+													<input type="text" 
+															onfocus="<bean:write name="medicionSoloLectura" scope="page"/>"
+															onkeypress="validarEntradaNumeroEventoOnKeyPress(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);"
+															onkeyup="validarEntradaNumeroEventoOnKeyUp(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);"
 															onblur="validarEntradaNumeroEventoOnBlur(this, event, <bean:write name="indicador" property="numeroDecimales" />, true);"
-															onchange="validarEdicion();" 
-															class="<bean:write name="claseEstiloCelda" scope="page"/>" 
-															style="text-align: right; width:100%;"
+															onchange="validarEdicion();"
+															class="<bean:write name="claseEstiloCelda" scope="page"/>"
+															style="text-align: right; width: 100%;"
 															name="valorIndId<bean:write 
 																				name="medicion" 
 																				property="medicionId.indicadorId" />serId<bean:write 
@@ -1000,7 +1113,7 @@
 																				name="medicion" 
 																				property="medicionId.periodo" />ano<bean:write 
 																				name="medicion" 
-																				property="medicionId.ano" />" 
+																				property="medicionId.ano" />"
 															id="valorIndId<bean:write 
 																				name="medicion" 
 																				property="medicionId.indicadorId" />serId<bean:write 
@@ -1009,11 +1122,21 @@
 																				name="medicion" 
 																				property="medicionId.periodo" />ano<bean:write 
 																				name="medicion" 
-																				property="medicionId.ano" />" 
+																				property="medicionId.ano" />"
 															value="<bean:write name="medicion" property="valorString" />">
-														<input 
-															type="hidden" 
-															name="anteriorvalorIndId<bean:write 
+												</logic:equal>
+												<logic:notEqual name="serieIndicador"
+													property="serieTiempo.serieId" value="0">
+													<logic:equal name="editarMedicionesForm" property="programado" value="false">
+														<input type="text" disabled
+															onfocus="<bean:write name="medicionSoloLectura" scope="page"/>"
+															onkeypress="validarEntradaNumeroEventoOnKeyPress(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);"
+															onkeyup="validarEntradaNumeroEventoOnKeyUp(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);"
+															onblur="validarEntradaNumeroEventoOnBlur(this, event, <bean:write name="indicador" property="numeroDecimales" />, true);"
+															onchange="validarEdicion();"
+															class="<bean:write name="claseEstiloCelda" scope="page"/>"
+															style="text-align: right; width: 100%;"
+															name="valorIndId<bean:write 
 																				name="medicion" 
 																				property="medicionId.indicadorId" />serId<bean:write 
 																				name="medicion" 
@@ -1022,7 +1145,7 @@
 																				property="medicionId.periodo" />ano<bean:write 
 																				name="medicion" 
 																				property="medicionId.ano" />"
-															id="anteriorvalorIndId<bean:write 
+															id="valorIndId<bean:write 
 																				name="medicion" 
 																				property="medicionId.indicadorId" />serId<bean:write 
 																				name="medicion" 
@@ -1030,53 +1153,116 @@
 																				name="medicion" 
 																				property="medicionId.periodo" />ano<bean:write 
 																				name="medicion" 
-																				property="medicionId.ano" />" 
+																				property="medicionId.ano" />"
 															value="<bean:write name="medicion" property="valorString" />">
-													</logic:notEqual>
-													<logic:equal scope="page" name="indicadorCualitativo" value="true"  >
-														<bean:define id="medicionCategoriaId" toScope="page" value=""></bean:define>
-														<logic:notEmpty name="medicion" property="valor">
-															<bean:define id="medicionCategoriaId" toScope="page">
-																<bean:write name="medicion" property="valor" format="###0" />
-															</bean:define>
-														</logic:notEmpty>
-														<select size="1" style="width: 130px;" onfocus="<bean:write name="medicionSoloLectura" scope="page"/>" 
-															name="valorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
+													</logic:equal>
+													<logic:equal name="editarMedicionesForm" property="programado" value="true">
+													<input type="text" 
+															onfocus="<bean:write name="medicionSoloLectura" scope="page"/>"
+															onkeypress="validarEntradaNumeroEventoOnKeyPress(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);"
+															onkeyup="validarEntradaNumeroEventoOnKeyUp(this, event, <bean:write name="indicador" property="numeroDecimales"/>, true);"
+															onblur="validarEntradaNumeroEventoOnBlur(this, event, <bean:write name="indicador" property="numeroDecimales" />, true);"
+															onchange="validarEdicion();"
+															class="<bean:write name="claseEstiloCelda" scope="page"/>"
+															style="text-align: right; width: 100%;"
+															name="valorIndId<bean:write 
+																				name="medicion" 
+																				property="medicionId.indicadorId" />serId<bean:write 
+																				name="medicion" 
+																				property="medicionId.serieId" />periodo<bean:write 
+																				name="medicion" 
+																				property="medicionId.periodo" />ano<bean:write 
+																				name="medicion" 
+																				property="medicionId.ano" />"
+															id="valorIndId<bean:write 
+																				name="medicion" 
+																				property="medicionId.indicadorId" />serId<bean:write 
+																				name="medicion" 
+																				property="medicionId.serieId" />periodo<bean:write 
+																				name="medicion" 
+																				property="medicionId.periodo" />ano<bean:write 
+																				name="medicion" 
+																				property="medicionId.ano" />"
+															value="<bean:write name="medicion" property="valorString" />">
+													</logic:equal>
+												</logic:notEqual>
+
+												<input type="hidden"
+													name="anteriorvalorIndId<bean:write 
+																				name="medicion" 
+																				property="medicionId.indicadorId" />serId<bean:write 
+																				name="medicion" 
+																				property="medicionId.serieId" />periodo<bean:write 
+																				name="medicion" 
+																				property="medicionId.periodo" />ano<bean:write 
+																				name="medicion" 
+																				property="medicionId.ano" />"
+													id="anteriorvalorIndId<bean:write 
+																				name="medicion" 
+																				property="medicionId.indicadorId" />serId<bean:write 
+																				name="medicion" 
+																				property="medicionId.serieId" />periodo<bean:write 
+																				name="medicion" 
+																				property="medicionId.periodo" />ano<bean:write 
+																				name="medicion" 
+																				property="medicionId.ano" />"
+													value="<bean:write name="medicion" property="valorString" />">
+
+											</logic:notEqual> <logic:equal scope="page" name="indicadorCualitativo"
+												value="true">
+												<bean:define id="medicionCategoriaId" toScope="page"
+													value=""></bean:define>
+												<logic:notEmpty name="medicion" property="valor">
+													<bean:define id="medicionCategoriaId" toScope="page">
+														<bean:write name="medicion" property="valor" format="###0" />
+													</bean:define>
+												</logic:notEmpty>
+												<select size="1" style="width: 130px;"
+													onfocus="<bean:write name="medicionSoloLectura" scope="page"/>"
+													name="valorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
 																  			serId<bean:write name="medicion" property="medicionId.serieId" />
 																  			periodo<bean:write name="medicion" property="medicionId.periodo" />
 																  			ano<bean:write name="medicion" property="medicionId.ano" />"
-															id="valorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
+													id="valorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
 																  			serId<bean:write name="medicion" property="medicionId.serieId" />
 																  			periodo<bean:write name="medicion" property="medicionId.periodo" />
-																  			ano<bean:write name="medicion" property="medicionId.ano" />" 
-															value="<bean:write name="medicion" property="valor" format="###0" />" 
-															class="cuadroTexto">
-															<option value=""></option>
-															<logic:iterate scope="page" name="indicador" property="escalaCualitativa" id="categoriaIndicador">
-																<bean:define id="categoria" toScope="page" name="categoriaIndicador" property="categoriaMedicion" scope="page"></bean:define>
-																<bean:define id="categoriaSeleccionada" toScope="page" value=""></bean:define>
-																<logic:equal name="categoria" property="categoriaId" value="<%= medicionCategoriaId %>">
-																	<bean:define id="categoriaSeleccionada" toScope="page" value="selected"></bean:define>
-																</logic:equal>
-																<option <bean:write name="categoriaSeleccionada" scope="page" /> value="<bean:write name="categoria" property="categoriaId"/>"><bean:write name="categoria" property="nombre" /></option>
-															</logic:iterate>
-														</select>
-														<input 
-															type="hidden" 
-															name="anteriorvalorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
+																  			ano<bean:write name="medicion" property="medicionId.ano" />"
+													value="<bean:write name="medicion" property="valor" format="###0" />"
+													class="cuadroTexto">
+													<option value=""></option>
+													<logic:iterate scope="page" name="indicador"
+														property="escalaCualitativa" id="categoriaIndicador">
+														<bean:define id="categoria" toScope="page"
+															name="categoriaIndicador" property="categoriaMedicion"
+															scope="page"></bean:define>
+														<bean:define id="categoriaSeleccionada" toScope="page"
+															value=""></bean:define>
+														<logic:equal name="categoria" property="categoriaId"
+															value="<%=medicionCategoriaId%>">
+															<bean:define id="categoriaSeleccionada" toScope="page"
+																value="selected"></bean:define>
+														</logic:equal>
+														<option
+															<bean:write name="categoriaSeleccionada" scope="page" />
+															value="<bean:write name="categoria" property="categoriaId"/>"><bean:write
+																name="categoria" property="nombre" /></option>
+													</logic:iterate>
+												</select>
+												<input type="hidden"
+													name="anteriorvalorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
 																  			serId<bean:write name="medicion" property="medicionId.serieId" />
 																  			periodo<bean:write name="medicion" property="medicionId.periodo" />
-																  			ano<bean:write name="medicion" property="medicionId.ano" />" 
-															id="anteriorvalorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
+																  			ano<bean:write name="medicion" property="medicionId.ano" />"
+													id="anteriorvalorIndId<bean:write name="medicion" property="medicionId.indicadorId" />
 																  			serId<bean:write name="medicion" property="medicionId.serieId" />
 																  			periodo<bean:write name="medicion" property="medicionId.periodo" />
-																  			ano<bean:write name="medicion" property="medicionId.ano" />" 
-															value="<bean:write name="medicion" property="valor" format="###0" />">
-													</logic:equal>
-												</td>
-											</logic:iterate>
-										</logic:equal>
-								</tr>
+																  			ano<bean:write name="medicion" property="medicionId.ano" />"
+													value="<bean:write name="medicion" property="valor" format="###0" />">
+											</logic:equal>
+										</td>
+									</logic:iterate>
+								</logic:equal>
+							</tr>
 						</logic:iterate>
 					</logic:notEmpty>
 				</table>

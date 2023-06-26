@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.forms;
 
@@ -16,45 +16,45 @@ public class SeleccionarReporteForm extends SelectorListaForm
 	private Long organizacionId;
 	private String rutaCompletaOrganizacion;
 	private String reporteNombre;
-	  
-	public String getRutaCompletaOrganizacion() 
+
+	public String getRutaCompletaOrganizacion()
 	{
 		return this.rutaCompletaOrganizacion;
 	}
 
-	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
 	{
 		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
 	}
 
-	public String getReporteNombre() 
+	public String getReporteNombre()
 	{
 		return this.reporteNombre;
 	}
 
-	public void setReporteNombre(String reporteNombre) 
+	public void setReporteNombre(String reporteNombre)
 	{
 		this.reporteNombre = reporteNombre;
 	}
-	  
-	public Long getOrganizacionId() 
+
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
 
-	public void clear() 
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);
 		setNombreCampoOculto(null);
 		setSeleccionados(null);
 		setValoresSeleccionados(null);
-		  
+
 		this.rutaCompletaOrganizacion = null;
 		this.organizacionId = 0L;
 	}

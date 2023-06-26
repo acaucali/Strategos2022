@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.forms;
 
@@ -11,7 +11,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
  * @author Kerwin
  *
  */
-public class GestionarConveniosForm  extends VisorListaForm 
+public class GestionarConveniosForm  extends VisorListaForm
 {
 	static final long serialVersionUID = 0;
 
@@ -24,87 +24,87 @@ public class GestionarConveniosForm  extends VisorListaForm
 	private String altoPorDefecto;
 	private Long organizacionId;
 
-	public String getRespuesta() 
+	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
-  	public String getSeleccionadoId() 
+
+  	public String getSeleccionadoId()
   	{
   		return this.seleccionadoId;
   	}
 
-  	public void setSeleccionadoId(String seleccionadoId) 
+  	public void setSeleccionadoId(String seleccionadoId)
   	{
   		this.seleccionadoId = seleccionadoId;
   	}
 
-  	public String getSeleccionadoNombre() 
+  	public String getSeleccionadoNombre()
   	{
   		return this.seleccionadoNombre;
   	}
 
-  	public void setSeleccionadoNombre(String seleccionadoNombre) 
+  	public void setSeleccionadoNombre(String seleccionadoNombre)
   	{
   		this.seleccionadoNombre = seleccionadoNombre;
   	}
 
-  	public Long getPortafolioId() 
+  	public Long getPortafolioId()
   	{
   		return this.portafolioId;
   	}
 
-  	public void setPortafolioId(Long portafolioId) 
+  	public void setPortafolioId(Long portafolioId)
   	{
   		this.portafolioId = portafolioId;
   	}
 
-  	public Long getIniciativaId() 
+  	public Long getIniciativaId()
   	{
   		return this.iniciativaId;
   	}
 
-  	public void setIniciativaId(Long iniciativaId) 
+  	public void setIniciativaId(Long iniciativaId)
   	{
   		this.iniciativaId = iniciativaId;
   	}
-  	
-	public String getAnchoPorDefecto() 
+
+	public String getAnchoPorDefecto()
 	{
 		return this.anchoPorDefecto;
 	}
 
-	public void setAnchoPorDefecto(String anchoPorDefecto) 
+	public void setAnchoPorDefecto(String anchoPorDefecto)
 	{
 		this.anchoPorDefecto = anchoPorDefecto;
 	}
-	
-	public String getAltoPorDefecto() 
+
+	public String getAltoPorDefecto()
 	{
 		return this.altoPorDefecto;
 	}
 
-	public void setAltoPorDefecto(String altoPorDefecto) 
+	public void setAltoPorDefecto(String altoPorDefecto)
 	{
 		this.altoPorDefecto = altoPorDefecto;
 	}
-	
-  	public Long getOrganizacionId() 
+
+  	public Long getOrganizacionId()
   	{
   		return this.organizacionId;
   	}
 
-  	public void setOrganizacionId(Long organizacionId) 
+  	public void setOrganizacionId(Long organizacionId)
   	{
   		this.organizacionId = organizacionId;
   	}
-  	
- 	public void clear() 
+
+ 	public void clear()
 	{
 		this.respuesta = "";
 		this.seleccionadoId = null;
@@ -114,7 +114,7 @@ public class GestionarConveniosForm  extends VisorListaForm
 		this.anchoPorDefecto = null;
 		this.altoPorDefecto = null;
 		this.organizacionId = null;
-		
+
 		FiltroForm filtro = new FiltroForm();
 		filtro.setCondicion(CondicionType.getFiltroCondicionActivo());
 		filtro.setNombre(null);

@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproductos.actions;
 
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPrdProductosService;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimiento;
@@ -10,26 +21,18 @@ import com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproduct
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarRegistroSeguimientoAction extends VgcAction
 {
   private static final String ACTION_KEY = "GuardarregistroSeguimientoAction";
 
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -46,7 +49,7 @@ public class GuardarRegistroSeguimientoAction extends VgcAction
 
     if ((ts == null) || (ts.equals("")))
       cancelar = true;
-    else if ((ultimoTs != null) && 
+    else if ((ultimoTs != null) &&
       (ultimoTs.equals(ts))) {
       cancelar = true;
     }
@@ -112,7 +115,7 @@ public class GuardarRegistroSeguimientoAction extends VgcAction
   {
     String[] seguimientosProductos = registrarSeguimientoForm.getSeguimientosProductos().split("#");
 
-    for (int i = 0; i < seguimientosProductos.length; i++) {
+    for (String element : seguimientosProductos) {
       PrdSeguimientoProducto seguimientoProducto = new PrdSeguimientoProducto();
       PrdSeguimientoProductoPK seguimientoProductoPK = new PrdSeguimientoProductoPK();
 
@@ -120,7 +123,7 @@ public class GuardarRegistroSeguimientoAction extends VgcAction
       seguimientoProductoPK.setAno(registrarSeguimientoForm.getAno());
       seguimientoProductoPK.setPeriodo(registrarSeguimientoForm.getPeriodo());
 
-      String strSegProducto = seguimientosProductos[i];
+      String strSegProducto = element;
       int index = strSegProducto.indexOf("alerta");
       seguimientoProductoPK.setProductoId(new Long(strSegProducto.substring("productoId".length(), index)));
 

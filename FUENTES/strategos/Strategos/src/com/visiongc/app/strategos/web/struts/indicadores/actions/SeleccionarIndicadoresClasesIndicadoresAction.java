@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
@@ -13,24 +25,17 @@ import com.visiongc.framework.arboles.ArbolesService;
 import com.visiongc.framework.arboles.NodoArbol;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Usuario;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcAction
 {
 	public static final String ACTION_KEY = "SeleccionarIndicadoresClasesIndicadoresAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -67,32 +72,32 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 		else
 			visible = request.getParameter("claseVisible") != null ? Boolean.parseBoolean(request.getParameter("claseVisible")) : true;
 		request.getSession().setAttribute("claseVisible", visible.toString());
-		
+
 		ArbolesService arbolesService = FrameworkServiceFactory.getInstance().openArbolesService();
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
 		ArbolBean arbolClasesBean = (ArbolBean)request.getSession().getAttribute("seleccionarIndicadoresArbolClasesBean");
 
-		if ((arbolClasesBean == null) || (!seleccionarIndicadoresForm.getIniciado().booleanValue())) 
+		if ((arbolClasesBean == null) || (!seleccionarIndicadoresForm.getIniciado().booleanValue()))
 		{
 			arbolClasesBean = new ArbolBean();
 			arbolClasesBean.clear();
 			request.getSession().setAttribute("seleccionarIndicadoresArbolClasesBean", arbolClasesBean);
 		}
 
-		if (arbolClasesBean.getNodoSeleccionado() == null) 
+		if (arbolClasesBean.getNodoSeleccionado() == null)
 		{
 			if (seleccionarIndicadoresForm.getClaseSeleccionadaId() != null)
 				construirArbolSeleccionado(seleccionarIndicadoresForm.getOrganizacionSeleccionadaId(), seleccionarIndicadoresForm.getClaseSeleccionadaId(), getUsuarioConectado(request), arbolClasesBean, strategosClasesIndicadoresService, arbolesService, visible);
-			else 
+			else
 				setNodoRoot(seleccionarIndicadoresForm.getOrganizacionSeleccionadaId(), getUsuarioConectado(request), arbolClasesBean, strategosClasesIndicadoresService, visible);
 			seleccionarIndicadoresForm.setClaseSeleccionadaId(new Long(arbolClasesBean.getSeleccionadoId()));
 			setRutaCompletaClaseIndicadores(seleccionarIndicadoresForm, arbolClasesBean.getNodoSeleccionado());
 
-			if (!seleccionarIndicadoresForm.getPermitirCambiarClase().booleanValue()) 
+			if (!seleccionarIndicadoresForm.getPermitirCambiarClase().booleanValue())
 			{
 				arbolesService.close();
 				strategosClasesIndicadoresService.close();
-				
+
 				return mapping.findForward(forward);
 			}
 		}
@@ -101,30 +106,30 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 			String seleccionarClaseId = request.getParameter("seleccionarClaseId");
 			String abrirClaseId = request.getParameter("abrirClaseId");
 			String cerrarClaseId = request.getParameter("cerrarClaseId");
-			
+
 			NodoArbol nodoSeleccionado = null;
 
-			if (request.getAttribute("SeleccionarIndicadoresClasesIndicadoresAction.reloadId") != null) 
+			if (request.getAttribute("SeleccionarIndicadoresClasesIndicadoresAction.reloadId") != null)
 			{
-				nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get((String)request.getAttribute("SeleccionarIndicadoresClasesIndicadoresAction.reloadId"));
+				nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get(request.getAttribute("SeleccionarIndicadoresClasesIndicadoresAction.reloadId"));
 				TreeviewWeb.publishArbolAbrirNodo(arbolClasesBean, abrirClaseId);
-			} 
-			else if ((seleccionarClaseId != null) && (!seleccionarClaseId.equals(""))) 
+			}
+			else if ((seleccionarClaseId != null) && (!seleccionarClaseId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get(seleccionarClaseId);
 				TreeviewWeb.publishArbolAbrirNodo(arbolClasesBean, abrirClaseId);
-			} 
-			else if ((abrirClaseId != null) && (!abrirClaseId.equals(""))) 
+			}
+			else if ((abrirClaseId != null) && (!abrirClaseId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get(abrirClaseId);
 				TreeviewWeb.publishArbolAbrirNodo(arbolClasesBean, abrirClaseId);
-			} 
-			else if ((cerrarClaseId != null) && (!cerrarClaseId.equals(""))) 
+			}
+			else if ((cerrarClaseId != null) && (!cerrarClaseId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get(cerrarClaseId);
 				TreeviewWeb.publishArbolCerrarNodo(arbolClasesBean, cerrarClaseId);
-			} 
-			else 
+			}
+			else
 			{
 				nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get(arbolClasesBean.getSeleccionadoId());
 				TreeviewWeb.publishArbolAbrirNodo(arbolClasesBean, abrirClaseId);
@@ -148,36 +153,36 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 
 	/**
 	 * Documentacion
-	 *  
+	 *
 	 * Funcion para fijar la ruta completa de las clases.
 	 * @author Kerwin Arias
-	 * @param seleccionarIndicadoresForm = Forma seleccion de indicadores 
+	 * @param seleccionarIndicadoresForm = Forma seleccion de indicadores
 	 * @param clase = Nodo de la clase a fijar la ruta completa
-	 */	
+	 */
 	private void setRutaCompletaClaseIndicadores(SeleccionarIndicadoresForm seleccionarIndicadoresForm, NodoArbol clase)
 	{
 		NodoArbol nodo = clase;
 		String rutaCompleta = nodo.getNodoArbolNombre();
-		while (nodo.getNodoArbolPadre() != null) 
+		while (nodo.getNodoArbolPadre() != null)
 		{
 			nodo = nodo.getNodoArbolPadre();
 			rutaCompleta = nodo.getNodoArbolNombre() + " / " + rutaCompleta;
-		}	
+		}
 		seleccionarIndicadoresForm.setRutaCompletaClaseIndicadores(rutaCompleta);
 	}
 
-	private void construirArbolSeleccionado(Long organizacionId, Long claseId, Usuario usuario, ArbolBean arbolClasesBean, StrategosClasesIndicadoresService strategosClasesIndicadoresService, ArbolesService arbolesService, Boolean visible) throws Exception 
+	private void construirArbolSeleccionado(Long organizacionId, Long claseId, Usuario usuario, ArbolBean arbolClasesBean, StrategosClasesIndicadoresService strategosClasesIndicadoresService, ArbolesService arbolesService, Boolean visible) throws Exception
 	{
 		ClaseIndicadores claseIndicadores = (ClaseIndicadores)arbolesService.load(ClaseIndicadores.class, claseId);
-		if (claseIndicadores != null) 
+		if (claseIndicadores != null)
 		{
 			setNodoRoot(claseIndicadores.getOrganizacionId(), usuario, arbolClasesBean, strategosClasesIndicadoresService, visible);
 			List<NodoArbol> nodos = arbolesService.getRutaCompleta(claseIndicadores);
 			NodoArbol nodoSeleccionado = arbolClasesBean.getNodoSeleccionado();
-			for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext(); ) 
+			for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext(); )
 			{
-				NodoArbol nodo = (NodoArbol)iter.next();
-				if (nodo.getNodoArbolPadreId() != null) 
+				NodoArbol nodo = iter.next();
+				if (nodo.getNodoArbolPadreId() != null)
 				{
 					TreeviewWeb.publishArbolAbrirNodo(arbolClasesBean, nodo.getNodoArbolId());
 					nodoSeleccionado = (NodoArbol)arbolClasesBean.getNodos().get(nodo.getNodoArbolId());
@@ -185,7 +190,7 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 						refrescarClase(arbolClasesBean, nodoSeleccionado, strategosClasesIndicadoresService, visible);
 				}
 			}
-			
+
 			if (nodoSeleccionado == null)
 				nodoSeleccionado = arbolClasesBean.getNodoSeleccionado();
 			arbolClasesBean.setNodoSeleccionado(nodoSeleccionado);
@@ -193,11 +198,11 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 		}
 	}
 
-	private boolean refrescarArbol(Long organizacionId, Usuario usuario, ArbolBean arbolClasesBean, NodoArbol nodoSeleccionado, StrategosClasesIndicadoresService strategosClasesIndicadoresService, Boolean visible) throws Exception 
+	private boolean refrescarArbol(Long organizacionId, Usuario usuario, ArbolBean arbolClasesBean, NodoArbol nodoSeleccionado, StrategosClasesIndicadoresService strategosClasesIndicadoresService, Boolean visible) throws Exception
 	{
 		boolean eliminado = strategosClasesIndicadoresService.load(nodoSeleccionado.getClass(), new Long(nodoSeleccionado.getNodoArbolId())) == null;
-		
-		if (eliminado) 
+
+		if (eliminado)
 		{
 			setNodoRoot(organizacionId, usuario, arbolClasesBean, strategosClasesIndicadoresService, visible);
 			return false;
@@ -215,10 +220,10 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 		List nodosHijos = strategosClasesIndicadoresService.getClasesHijas(new Long(clase.getNodoArbolId()), visible);
 		if (clase.getNodoArbolHijosCargados())
 		{
-			for (Iterator<NodoArbol> iter = nodosHijos.iterator(); iter.hasNext(); ) 
+			for (Iterator<NodoArbol> iter = nodosHijos.iterator(); iter.hasNext(); )
 			{
-				NodoArbol nodoHijo = (NodoArbol)iter.next();
-				if (arbolClasesBean.getNodos().get(nodoHijo.getNodoArbolId()) == null) 
+				NodoArbol nodoHijo = iter.next();
+				if (arbolClasesBean.getNodos().get(nodoHijo.getNodoArbolId()) == null)
 				{
 					clase.getNodoArbolHijos().add(nodoHijo);
 					arbolClasesBean.getNodos().put(nodoHijo.getNodoArbolId(), nodoHijo);
@@ -226,29 +231,29 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 			}
 
 			int index = 0;
-			while (index < clase.getNodoArbolHijos().size()) 
+			while (index < clase.getNodoArbolHijos().size())
 			{
-				NodoArbol claseHija = (NodoArbol)((List<NodoArbol>)clase.getNodoArbolHijos()).get(index);
-				if (nodosHijos.contains(claseHija)) 
+				NodoArbol claseHija = ((List<NodoArbol>)clase.getNodoArbolHijos()).get(index);
+				if (nodosHijos.contains(claseHija))
 				{
 					if (claseHija != null)
 						refrescarClase(arbolClasesBean, claseHija, strategosClasesIndicadoresService, visible);
 					index++;
-				} 
-				else 
+				}
+				else
 					((List<NodoArbol>)clase.getNodoArbolHijos()).remove(index);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			clase.setNodoArbolHijos(nodosHijos);
 			clase.setNodoArbolHijosCargados(true);
-			for (Iterator iter = clase.getNodoArbolHijos().iterator(); iter.hasNext(); ) 
+			for (Iterator iter = clase.getNodoArbolHijos().iterator(); iter.hasNext(); )
 			{
 				NodoArbol claseHija = (NodoArbol)iter.next();
 				claseHija.setNodoArbolPadre(clase);
 				arbolClasesBean.getNodos().put(claseHija.getNodoArbolId(), claseHija);
-			}	
+			}
 		}
 	}
 
@@ -256,12 +261,12 @@ public final class SeleccionarIndicadoresClasesIndicadoresAction extends VgcActi
 	{
 		ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaiz(organizacionId, TipoClaseIndicadores.getTipoClaseIndicadores(), usuario);
 		arbolClasesBean.getNodos().put(claseRoot.getNodoArbolId(), claseRoot);
-		
+
 		claseRoot.setNodoArbolHijos(strategosClasesIndicadoresService.getClasesHijas(claseRoot.getClaseId(), visible));
 		claseRoot.setNodoArbolHijosCargados(true);
-		for (Iterator<NodoArbol> iter = claseRoot.getNodoArbolHijos().iterator(); iter.hasNext(); ) 
+		for (Iterator<NodoArbol> iter = claseRoot.getNodoArbolHijos().iterator(); iter.hasNext(); )
 		{
-			NodoArbol clase = (NodoArbol)iter.next();
+			NodoArbol clase = iter.next();
 			if (clase != null)
 			{
 				arbolClasesBean.getNodos().put(clase.getNodoArbolId(), clase);

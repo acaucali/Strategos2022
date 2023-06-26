@@ -219,6 +219,10 @@
     	abrirVentanaModal('<html:rewrite action="/instrumentos/reporteProyectosAsociados" />?' + url, "reporteProyectosAsociados", 490, 450);		
 	}
 	
+	function reporteDetalladoProyectos(){
+		abrirVentanaModal('<html:rewrite action="/instrumentos/reporteDetalladoProyectosAsociados" />' , "reporteDetalladoProyectosAsociados", 490, 360);		
+	}
+	
 	function asignarPesos(){
 		
 		if ((document.gestionarInstrumentosForm.seleccionados.value == null) || (document.gestionarInstrumentosForm.seleccionados.value == "")) 
@@ -314,11 +318,13 @@
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 				
+				<%-- Menú: Evaluacion --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuEvaluacionIniciativas" key="menu.evaluacion">						
 						<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteInstrumentosEjecucion();" permisoId="INSTRUMENTOS" />
 						<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteInstrumentosEjecucionDetalle();" permisoId="INSTRUMENTOS" />
 						<vgcinterfaz:botonMenu key="jsp.reporte.instrumentos.proyectos.asociados" onclick="reporteProyectosAsociados();" permisoId="INSTRUMENTOS" />
+					 	<!-- <vgcinterfaz:botonMenu key="jsp.reporte.instrumentos.detallado.proyectos.asociados" onclick="reporteDetalladoProyectos();" permisoId="INSTRUMENTOS" />  -->
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 
@@ -422,7 +428,7 @@
 						<vgcutil:message key="jsp.pagina.instrumentos.cooperante" />
 					</vgcinterfaz:columnaVisorLista>	
 							
-					<vgcinterfaz:columnaVisorLista nombre="fecha" width="150px" >
+					<vgcinterfaz:columnaVisorLista nombre="fecha" width="340px" >
 						<vgcutil:message key="jsp.pagina.instrumentos.fecha" />
 					</vgcinterfaz:columnaVisorLista>	
 					
@@ -447,7 +453,7 @@
 					</vgcinterfaz:columnaVisorLista>
 					
 					<vgcinterfaz:columnaVisorLista nombre="responsablepgn" width="250px" >
-						<vgcutil:message key="jsp.pagina.instrumentos.responsable.pgn" />
+						<vgcutil:message key="jsp.pagina.instrumentos.responsable" />
 					</vgcinterfaz:columnaVisorLista>
 					
 					<vgcinterfaz:filasVisorLista nombreObjeto="instrumentos">

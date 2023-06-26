@@ -1,27 +1,30 @@
 package com.visiongc.app.strategos.web.struts.planes.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.Plan;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.planes.StrategosPlanesService;
+import com.visiongc.app.strategos.planes.model.Plan;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EliminarPlanAction extends VgcAction
 {
 	private static final String ACTION_KEY = "EliminarPlanAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -38,7 +41,7 @@ public class EliminarPlanAction extends VgcAction
 			cancelar = true;
 		else if ((planId == null) || (planId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(planId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(planId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
@@ -55,12 +58,12 @@ public class EliminarPlanAction extends VgcAction
 			else
 			{
 				int respuesta = strategosPlanesService.deletePlan(plan, getUsuarioConectado(request), true);
-				
+
 				strategosPlanesService.unlockObject(request.getSession().getId(), planId);
 
 				if (respuesta == 10004)
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", plan.getNombre()));
-				else 
+				else
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", plan.getNombre()));
 			}
 		}
@@ -72,7 +75,7 @@ public class EliminarPlanAction extends VgcAction
 		saveMessages(request, messages);
 
 		request.getSession().setAttribute("EliminarPlanAction.ultimoTs", planId + "&" + ts);
-		
+
 		return getForwardBack(request, 1, true);
 	}
 }

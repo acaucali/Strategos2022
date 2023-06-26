@@ -1,10 +1,11 @@
 package com.visiongc.app.strategos.web.struts.planes.util;
 
-import com.visiongc.commons.util.VgcMessageResources;
-import com.visiongc.commons.util.VgcResourceManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.visiongc.commons.util.VgcMessageResources;
+import com.visiongc.commons.util.VgcResourceManager;
 
 public class TipoVistaPlan
   implements Serializable

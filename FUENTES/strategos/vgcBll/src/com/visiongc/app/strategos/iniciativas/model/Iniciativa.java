@@ -93,6 +93,8 @@ public class Iniciativa
   private String objetivoGeneral;
   private String objetivoEspecificos;
   
+  private Long cargoId;
+  
   //estos son campos temporales, no tienen mapeo de base de datos
   private String fechaesperado;
   private int dias;
@@ -945,6 +947,8 @@ public Long getIndicadorId(Byte tipo)
     iniciativaCopia.setObjetivoGeneral(iniciativa.getObjetivoGeneral());
     iniciativaCopia.setObjetivoEspecificos(iniciativa.getObjetivoEspecificos());
     
+    iniciativaCopia.setCargoId(iniciativa.getCargoId());
+    
     if (iniciativa.getMemoIniciativa() != null)
     {
       if (iniciativa.getMemoIniciativa().getDescripcion() != null) {
@@ -1001,5 +1005,13 @@ public Long getIndicadorId(Byte tipo)
   public String toString()
   {
     return new ToStringBuilder(this).append("iniciativaId", getIniciativaId()).toString();
-  }  
+  }
+
+public Long getCargoId() {
+	return cargoId;
+}
+
+public void setCargoId(Long cargoId) {
+	this.cargoId = cargoId;
+}  
 }

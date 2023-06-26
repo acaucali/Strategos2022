@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.forms;
 
@@ -21,13 +21,13 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 	private Boolean logErrores = false;
 	private String respuesta;
 	private Byte status = 0;
-	  
+
 	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 	    this.organizacionId = organizacionId;
 	}
@@ -37,7 +37,7 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 	    return this.claseConsolidacionId;
 	}
 
-	public void setClaseConsolidacionId(Long claseConsolidacionId) 
+	public void setClaseConsolidacionId(Long claseConsolidacionId)
 	{
 	    this.claseConsolidacionId = claseConsolidacionId;
 	}
@@ -46,38 +46,38 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 	{
 	    return this.claseConsolidacionNombre;
 	}
-	  
-	public void setClaseConsolidacionNombre(String claseConsolidacionNombre) 
+
+	public void setClaseConsolidacionNombre(String claseConsolidacionNombre)
 	{
 	    this.claseConsolidacionNombre = claseConsolidacionNombre;
 	}
-	  
-	public String getInsumosClases() 
+
+	public String getInsumosClases()
 	{
 		return this.insumosClases;
 	}
 
-	public void setInsumosClases(String insumosClases) 
+	public void setInsumosClases(String insumosClases)
 	{
 		this.insumosClases = insumosClases;
 	}
-	  
+
 	public Boolean getLogIndicadores()
 	{
 		return this.logIndicadores;
 	}
 
-	public void setLogIndicadores(Boolean logIndicadores) 
+	public void setLogIndicadores(Boolean logIndicadores)
 	{
 		this.logIndicadores = logIndicadores;
 	}
-		
+
 	public Boolean getLogErrores()
 	{
 		return this.logErrores;
 	}
 
-	public void setLogErrores(Boolean logErrores) 
+	public void setLogErrores(Boolean logErrores)
 	{
 		this.logErrores = logErrores;
 	}
@@ -87,7 +87,7 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
@@ -97,22 +97,22 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 		return this.status;
 	}
 
-	public void setStatus(Byte status) 
+	public void setStatus(Byte status)
 	{
 		this.status = ConsolidarStatus.getConsolidarStatus(status);
 	}
-	
-	public String getSeparadorClases() 
+
+	public String getSeparadorClases()
 	{
 		return new com.visiongc.app.strategos.web.struts.indicadores.clasesindicadores.forms.SeleccionarMultiplesClasesForm().getSeparadorClases();
 	}
 
-	public String getSeparadorCampos() 
+	public String getSeparadorCampos()
 	{
 		return new com.visiongc.app.strategos.web.struts.indicadores.clasesindicadores.forms.SeleccionarMultiplesClasesForm().getSeparadorCampos();
 	}
-	  
-	public void clear() 
+
+	public void clear()
 	{
 		this.organizacionId = new Long(0L);
 		this.claseConsolidacionId = new Long(0L);
@@ -122,14 +122,14 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 		this.logIndicadores = false;
 		this.respuesta = null;
 	}
-	  
+
 	public static class ConsolidarStatus
 	{
 		private static final byte CONSOLIDARSTATUS_LOAD = 0;
 		private static final byte CONSOLIDARSTATUS_SUCCESS = 1;
 		private static final byte CONSOLIDARSTATUS_NOSUCCESS = 2;
 		private static final byte CONSOLIDARSTATUS_REPORTE = 3;
-			
+
 		private static Byte getConsolidarStatus(Byte status)
 		{
 			if (status == CONSOLIDARSTATUS_LOAD)
@@ -143,23 +143,23 @@ public class IndicadorConsolidadoForm extends ValidatorActionForm
 			else
 				return null;
 		}
-			
-		public static Byte getConsolidarStatusLoad() 
+
+		public static Byte getConsolidarStatusLoad()
 		{
 			return new Byte(CONSOLIDARSTATUS_LOAD);
 		}
 
-		public static Byte getConsolidarStatusSuccess() 
+		public static Byte getConsolidarStatusSuccess()
 		{
 			return new Byte(CONSOLIDARSTATUS_SUCCESS);
 		}
-			
-		public static Byte getConsolidarStatusNoSuccess() 
+
+		public static Byte getConsolidarStatusNoSuccess()
 		{
 			return new Byte(CONSOLIDARSTATUS_NOSUCCESS);
 		}
 
-		public static Byte getConsolidarStatusReporte() 
+		public static Byte getConsolidarStatusReporte()
 		{
 			return new Byte(CONSOLIDARSTATUS_REPORTE);
 		}

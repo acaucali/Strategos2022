@@ -70,7 +70,9 @@
 		
 			function cancelar() 
 			{
-				window.close();
+				
+				window.document.configurarVistaDatosForm.action = '<html:rewrite action="/vistasdatos/gestionarVistaDatos" />?defaultLoader=true';
+				window.document.configurarVistaDatosForm.submit();
 			}
 			
 			function validar()

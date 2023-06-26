@@ -32,14 +32,31 @@
 
 			function guardar() 
 			{
-				if (validar(document.editarConfiguracionVisorListaForm)) 
-					window.document.editarConfiguracionVisorListaForm.submit();
+				if (validar(document.editarConfiguracionVisorListaForm)) {
+					tituloSeleccionado = document.editarConfiguracionVisorListaForm.tituloVisorLista.value				
+					console.log(tituloSeleccionado);
+					if(tituloSeleccionado  === 'undefined'){
+						window.document.editarConfiguracionVisorListaForm.action = '<html:rewrite action="/framework/configuracion/guardarConfiguracionVisorLista"/>?instrumento=true';
+						window.document.editarConfiguracionVisorListaForm.submit();
+					}else{
+						window.document.editarConfiguracionVisorListaForm.action = '<html:rewrite action="/framework/configuracion/guardarConfiguracionVisorLista"/>';
+						window.document.editarConfiguracionVisorListaForm.submit();
+					}
+				}
 			}
 
 			function cancelar() 
-			{			
-				window.document.editarConfiguracionVisorListaForm.action = '<html:rewrite action="/framework/configuracion/cancelarGuardarConfiguracionVisorLista"/>';
-				window.document.editarConfiguracionVisorListaForm.submit();
+			{		
+				
+				tituloSeleccionado = document.editarConfiguracionVisorListaForm.tituloVisorLista.value				
+				console.log(tituloSeleccionado);
+				if(tituloSeleccionado  === 'undefined'){
+					window.document.editarConfiguracionVisorListaForm.action = '<html:rewrite action="/framework/configuracion/cancelarGuardarConfiguracionVisorLista"/>?instrumento=true';
+					window.document.editarConfiguracionVisorListaForm.submit();
+				}else{
+					window.document.editarConfiguracionVisorListaForm.action = '<html:rewrite action="/framework/configuracion/cancelarGuardarConfiguracionVisorLista"/>';
+					window.document.editarConfiguracionVisorListaForm.submit();
+				}
 			}
 
 			function ejecutarPorDefecto(e) 
@@ -109,6 +126,7 @@
 
 			<html:hidden property="nombreConfiguracionBase" />
 			<html:hidden property="nombreVisorLista" />
+			<html:hidden property="tituloVisorLista" />
 
 			<vgcinterfaz:contenedorForma width="510px" bodyAlign="center" height="510px">
 

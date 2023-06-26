@@ -1,5 +1,15 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.celdas.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.presentaciones.StrategosCeldasService;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
@@ -9,23 +19,16 @@ import com.visiongc.app.strategos.web.struts.presentaciones.celdas.forms.Gestion
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class GestionarCeldasAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -46,7 +49,7 @@ public class GestionarCeldasAction extends VgcAction
 		Pagina paginaSeleccionada = (Pagina)request.getSession().getAttribute("pagina");
 		String paginaId = paginaSeleccionada.getPaginaId().toString();
 
-		if (paginaSeleccionada.getPaginaId() != null) 
+		if (paginaSeleccionada.getPaginaId() != null)
 		{
 			gestionarCeldasForm.setNumeroPagina(paginaSeleccionada.getNumero());
 			gestionarCeldasForm.setFilasPagina(paginaSeleccionada.getFilas());
@@ -57,22 +60,22 @@ public class GestionarCeldasAction extends VgcAction
 
 		Map filtros = new HashMap();
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "celdaId";
 			gestionarCeldasForm.setAtributoOrden(atributoOrden);
 		}
 
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarCeldasForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
-		if ((paginaId == null) && (paginaId.equals(""))) 
+		if ((paginaId == null) && (paginaId.equals("")))
 			paginaId = "0";
 
 		filtros.put("paginaId", paginaId);
@@ -83,53 +86,53 @@ public class GestionarCeldasAction extends VgcAction
 		int indiceCelda = 0;
 		int totalCeldas = 0;
 		boolean interrumpirCiclo = false;
-		if ((paginaCeldas != null) && (paginaCeldas.getLista() != null) && (paginaCeldas.getLista().size() > 0)) 
+		if ((paginaCeldas != null) && (paginaCeldas.getLista() != null) && (paginaCeldas.getLista().size() > 0))
 		{
 			totalCeldas = paginaCeldas.getLista().size();
 			interrumpirCiclo = totalCeldas == 0;
-		} 
-		else 
+		}
+		else
 		{
 			seleccionados = null;
 			gestionarCeldasForm.setSeleccionados(seleccionados);
 		}
 
-		while (!interrumpirCiclo) 
+		while (!interrumpirCiclo)
 		{
-			if ((seleccionados == null) || (seleccionados.equals(""))) 
+			if ((seleccionados == null) || (seleccionados.equals("")))
 			{
 				Long celdaId = null;
 				if ((paginaCeldas != null) && (paginaCeldas.getLista() != null) && (paginaCeldas.getLista().size() > indiceCelda))
 				{
 					celdaId = ((Celda)paginaCeldas.getLista().get(indiceCelda)).getCeldaId();
-					
-					if (celdaId != null) 
+
+					if (celdaId != null)
 					{
 						seleccionados = celdaId.toString();
 						gestionarCeldasForm.setSeleccionados(seleccionados);
 						indiceCelda++;
-					} 
-					else 
+					}
+					else
 						interrumpirCiclo = true;
 				}
 			}
 
-			if ((seleccionados != null) && (!seleccionados.equals(""))) 
+			if ((seleccionados != null) && (!seleccionados.equals("")))
 			{
 				celdaSeleccionada = (Celda)strategosCeldasService.load(Celda.class, new Long(gestionarCeldasForm.getSeleccionados()));
 
-				if ((celdaSeleccionada != null) && ((paginaId == null) || (celdaSeleccionada.getPagina().getPaginaId().longValue() != new Long(paginaId).longValue()))) 
+				if ((celdaSeleccionada != null) && ((paginaId == null) || (celdaSeleccionada.getPagina().getPaginaId().longValue() != new Long(paginaId).longValue())))
 					celdaSeleccionada = null;
 
-				if (celdaSeleccionada == null) 
+				if (celdaSeleccionada == null)
 					seleccionados = null;
 					gestionarCeldasForm.setSeleccionados(seleccionados);
 			}
 
-			if (!interrumpirCiclo) 
+			if (!interrumpirCiclo)
 				interrumpirCiclo = seleccionados != null;
 
-			if (!interrumpirCiclo) 
+			if (!interrumpirCiclo)
 				interrumpirCiclo = indiceCelda >= totalCeldas;
 		}
 

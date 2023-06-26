@@ -1,12 +1,6 @@
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
-import java.awt.Color;
-import java.io.ByteArrayInputStream;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Wrapper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,36 +9,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
-import oracle.jdbc.pool.OracleDataSource;
-
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.MessageResources;
-import org.apache.taglibs.standard.lang.jpath.adapter.Convert;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.impl.SessionImpl;
-import org.hibernate.jmx.HibernateService;
-import org.w3c.dom.NodeList;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
@@ -52,39 +29,20 @@ import com.visiongc.app.strategos.indicadores.model.util.AlertaIndicador;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.iniciativas.persistence.hibernate.StrategosIniciativasHibernateSession;
-import com.visiongc.app.strategos.model.util.LapsoTiempo;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.planes.StrategosMetasService;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
-import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.IndicadorEstado;
 import com.visiongc.app.strategos.planes.model.IniciativaPerspectiva;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
-import com.visiongc.app.strategos.planes.model.Plan;
-import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
-import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
-import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PryProyecto;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
-import com.visiongc.commons.impl.VgcAbstractService;
-import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.util.WebUtil;
-import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.framework.web.struts.forms.NavegadorForm;
-import com.visiongc.framework.web.struts.forms.servicio.GestionarServiciosForm;
 
 public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 	private static Session sesion;
@@ -94,10 +52,12 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 	private int inicioTamanoPagina = 57;
 	private int maxLineasAntesTabla = 4;
 
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
 		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response,
 			Document documento) throws Exception {
 		MessageResources mensajes = getResources(request);
@@ -198,7 +158,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance()
 							.openStrategosMedicionesService();
@@ -297,7 +257,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance()
 							.openStrategosMedicionesService();
@@ -345,7 +305,6 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 							dibujarTabla2(iniciativa, actividades, messageResources, request, documento,
 									medicionesEjecutadas, medicionesProgramadas);
-
 							documento.add(lineaEnBlanco(fuente));
 							documento.add(lineaEnBlanco(fuente));
 						}
@@ -361,7 +320,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
 
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
@@ -384,7 +343,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 					if (iniciativasSub.size() > 0) {
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
+							Iniciativa iniciativa = iter1.next();
 
 							StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory
 									.getInstance().openStrategosMedicionesService();
@@ -467,7 +426,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 				for (Iterator<OrganizacionStrategos> iter = organizaciones.iterator(); iter.hasNext();) {
 
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
@@ -490,7 +449,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 					if (iniciativas.size() > 0) {
 						for (Iterator<Iniciativa> iter1 = iniciativas.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
+							Iniciativa iniciativa = iter1.next();
 
 							StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory
 									.getInstance().openStrategosMedicionesService();
@@ -553,8 +512,6 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 			}
 
 		}
-
-		documento.newPage();
 		organizacionservice.close();
 		iniciativaservice.close();
 
@@ -602,7 +559,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		int[] columnas = new int[7];
 
-		if (solaOrg == true) {
+		if (solaOrg) {
 
 			columnas = new int[6];
 
@@ -615,7 +572,8 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 			tabla.setAmplitudTabla(100);
 			tabla.crearTabla(columnas);
-
+			tabla.setColorFondo(21, 60, 120);
+			tabla.setColorLetra(255, 255, 255);
 			tabla.setAlineacionHorizontal(1);
 
 			tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre"));
@@ -630,7 +588,8 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 					.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada"));
 
 			tabla.setDefaultAlineacionHorizontal();
-
+			tabla.setColorFondo(255, 255, 255);
+			tabla.setColorLetra(0, 0, 0);
 		} else {
 			columnas[0] = 21;
 			columnas[1] = 30;
@@ -642,7 +601,8 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 			tabla.setAmplitudTabla(100);
 			tabla.crearTabla(columnas);
-
+			tabla.setColorFondo(21, 60, 120);
+			tabla.setColorLetra(255, 255, 255);
 			tabla.setAlineacionHorizontal(1);
 
 			tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.entidad"));
@@ -658,6 +618,9 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 					.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada"));
 
 			tabla.setDefaultAlineacionHorizontal();
+			
+			tabla.setColorFondo(255, 255, 255);
+			tabla.setColorLetra(0, 0, 0);
 		}
 
 		if (todas) {
@@ -678,7 +641,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 			tabla.agregarCelda(ruta);
 		} else {
-			if (solaOrg == false) {
+			if (!solaOrg) {
 				tabla.agregarCelda(iniciativa.getOrganizacion().getNombre());
 			}
 
@@ -748,9 +711,9 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-
+		tabla.setColorFondo(21, 60, 120);
+		tabla.setColorLetra(255, 255, 255);
 		tabla.setAlineacionHorizontal(1);
-
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias"));
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus"));
 		tabla.agregarCelda(messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto"));
@@ -759,7 +722,8 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr"));
 
 		tabla.setDefaultAlineacionHorizontal();
-
+		tabla.setColorLetra(0, 0, 0);
+		tabla.setColorFondo(255, 255, 255);
 		Date fechaAh = new Date();
 		Date fechaAc = new Date();
 
@@ -853,7 +817,7 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 	public Boolean tieneEstatus(Iniciativa iniciativa, List<Medicion> medicionesEjecutadas,
 			List<Medicion> medicionesProgramadas, int estatus) {
 
-		Boolean tiene = false;
+		boolean tiene = false;
 		// estatus
 		if (medicionesProgramadas.size() == 0 && estatus == 0) {
 			// EstatusIniciar

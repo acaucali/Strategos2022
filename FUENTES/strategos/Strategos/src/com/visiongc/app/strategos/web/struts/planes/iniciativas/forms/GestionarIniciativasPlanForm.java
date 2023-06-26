@@ -9,7 +9,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
 public class GestionarIniciativasPlanForm extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 
 	private String nombreIniciativaSingular;
 	private String nombreIniciativaPlural;
@@ -18,9 +18,9 @@ public class GestionarIniciativasPlanForm extends VisorListaForm
   	private Long estatus;
   	private List<TipoProyecto> tipos;
   	private Long tipo;
-  	
-  	
-  	
+
+
+
 	public List<TipoProyecto> getTipos() {
 		return tipos;
 	}
@@ -42,47 +42,47 @@ public class GestionarIniciativasPlanForm extends VisorListaForm
 		return this.nombreIniciativaSingular;
 	}
 
-	public void setNombreIniciativaSingular(String nombreIniciativaSingular) 
+	public void setNombreIniciativaSingular(String nombreIniciativaSingular)
 	{
 		this.nombreIniciativaSingular = nombreIniciativaSingular;
 	}
 
-	public String getNombreIniciativaPlural() 
+	public String getNombreIniciativaPlural()
 	{
 		return this.nombreIniciativaPlural;
 	}
 
-	public void setNombreIniciativaPlural(String nombreIniciativaPlural) 
+	public void setNombreIniciativaPlural(String nombreIniciativaPlural)
 	{
 		this.nombreIniciativaPlural = nombreIniciativaPlural;
 	}
-	
-	public String getRespuesta() 
+
+	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
-	public List<IniciativaEstatus> getTiposEstatus() 
+
+	public List<IniciativaEstatus> getTiposEstatus()
 	{
 		return this.tiposEstatus;
 	}
 
-	public void setTiposEstatus(List<IniciativaEstatus> tiposEstatus) 
+	public void setTiposEstatus(List<IniciativaEstatus> tiposEstatus)
 	{
 		this.tiposEstatus = tiposEstatus;
 	}
-  	
-  	public Long getEstatus() 
+
+  	public Long getEstatus()
   	{
   		return this.estatus;
   	}
 
-  	public void setEstatus(Long estatus) 
+  	public void setEstatus(Long estatus)
   	{
   		this.estatus = estatus;
   	}

@@ -5,7 +5,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
 public class GestionarProblemasForm extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private String filtroNombre;
 	private Integer tipo;
 
@@ -14,17 +14,17 @@ public class GestionarProblemasForm extends VisorListaForm
 		return this.filtroNombre;
 	}
 
-	public void setFiltroNombre(String filtroNombre) 
+	public void setFiltroNombre(String filtroNombre)
 	{
 		this.filtroNombre = filtroNombre;
 	}
-	
+
 	public Integer getTipo()
 	{
 		return this.tipo;
 	}
 
-	public void setTipo(Integer tipo) 
+	public void setTipo(Integer tipo)
 	{
 		this.tipo = tipo;
 	}

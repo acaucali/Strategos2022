@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.actions;
 
@@ -63,28 +63,28 @@ public class DuppontActionGrafico extends VgcAction
 {
 	private List<Insumos> _insumos = null;
 	private List<IndicadorNodo> _indicadores = null;
-	
+
 	private class Insumos
 	{
 		private Long padreId;
 		private Integer nivel;
-		
+
 		public Long getPadreId()
 		{
 			return this.padreId;
 		}
 
-		public void setPadreId(Long padreId) 
+		public void setPadreId(Long padreId)
 		{
 			this.padreId = padreId;
 		}
-		
+
 		public Integer getNivel()
 		{
 			return this.nivel;
 		}
 
-		public void setNivel(Integer nivel) 
+		public void setNivel(Integer nivel)
 		{
 			this.nivel = nivel;
 		}
@@ -94,39 +94,41 @@ public class DuppontActionGrafico extends VgcAction
 	{
 		private Long id;
 		private Boolean desplegado;
-		
+
 		public IndicadorNodo()
 		{
 			this.id = null;
 			this.desplegado = false;
 		}
-		
+
 		public Long getId()
 		{
 			return this.id;
 		}
 
-		public void setId(Long id) 
+		public void setId(Long id)
 		{
 			this.id = id;
 		}
-		
+
 		public Boolean getDesplegado()
 		{
 			return this.desplegado;
 		}
 
-		public void setDesplegado(Boolean desplegado) 
+		public void setDesplegado(Boolean desplegado)
 		{
 			this.desplegado = desplegado;
 		}
 	}
-	
+
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -135,48 +137,47 @@ public class DuppontActionGrafico extends VgcAction
 		String format = "##0.00";
 		_insumos = new ArrayList<Insumos>();
 		_indicadores = new ArrayList<IndicadorNodo>();
-		
+
 		String indicadorId = request.getParameter("indicadorId");
 		Long planId = ((request.getParameter("planId") != null && request.getParameter("planId") != "") ? Long.parseLong(request.getParameter("planId")) : 0L);
 		Integer nivel = (request.getParameter("nivel") != null ? Integer.parseInt(request.getParameter("nivel")) : null);
 		Byte source = (request.getParameter("source") != null ? Byte.parseByte(request.getParameter("source")) : SourceType.getSourceGestionar());
 		String[] indicadores = (request.getParameter("indicadores") != null && !request.getParameter("indicadores").equals("")) ? request.getParameter("indicadores").split("-") : null;
-		
+
 		if (indicadores != null)
 		{
-			for (int i = 0; i < indicadores.length; i++)
-			{
+			for (String indicadore : indicadores) {
 				IndicadorNodo ind = new IndicadorNodo();
-				String[] obj = indicadores[i].split(",");
+				String[] obj = indicadore.split(",");
 				ind.setId(Long.parseLong(obj[0]));
 				ind.setDesplegado(Boolean.parseBoolean(obj[1]));
 				_indicadores.add(ind);
-			}			
+			}
 		}
 
 		DuppontForm duppontForm = (DuppontForm)form;
-		
+
 		duppontForm.setSource(source);
 		Duppont duppont = null;
-		if ((indicadorId == null) && (duppontForm != null) && (duppontForm.getIndicador() != null)) 
+		if ((indicadorId == null) && (duppontForm != null) && (duppontForm.getIndicador() != null))
 			indicadorId = duppontForm.getIndicador().getIndicadorId().toString();
 
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 		StrategosGraficosService graficosService = StrategosServiceFactory.getInstance().openStrategosGraficosService();
 		Usuario usuario = getUsuarioConectado(request);
 		duppont = (Duppont)graficosService.load(Duppont.class, new DuppontPK(usuario.getUsuarioId(), new Long(indicadorId)));
-		
+
 		Indicador indicador = (Indicador)strategosPlanesService.load(Indicador.class, new Long(indicadorId));
 
 		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("salvar")) 
+	    	if (funcion.equals("salvar"))
 	    	{
 				int respuesta = VgcReturnCode.DB_OK;
 				if (duppont != null)
 					respuesta = graficosService.deleteDuppont(duppont, usuario);
-	    		
+
 				if (respuesta == VgcReturnCode.DB_OK)
 				{
 		    		duppont = new Duppont();
@@ -186,7 +187,7 @@ public class DuppontActionGrafico extends VgcAction
 		    		duppont.setConfiguracion(duppontForm.getXml());
 		    		respuesta = graficosService.saveDuppont(duppont, usuario);
 				}
-	    		
+
 	    		if (respuesta == VgcReturnCode.DB_OK)
 	    		{
 	    			ActionMessages messages = getMessages(request);
@@ -195,30 +196,30 @@ public class DuppontActionGrafico extends VgcAction
 	    		}
 	    	}
 		}
-		
+
 		if ((duppontForm != null) && (duppontForm.getIndicador() == null) && duppont != null)
 		{
 			duppontForm.setXml(duppont.getConfiguracion());
 			if (nivel == null && duppontForm.getNumerodeNiveles() != null)
-				nivel = duppontForm.getNumerodeNiveles(); 
+				nivel = duppontForm.getNumerodeNiveles();
 		}
 		else if (duppont == null)
 		{
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-			ConfiguracionIndicador configuracionIndicador = strategosIndicadoresService.getConfiguracionIndicador(); 
+			ConfiguracionIndicador configuracionIndicador = strategosIndicadoresService.getConfiguracionIndicador();
 			strategosIndicadoresService.close();
-	
+
 			if (nivel == null && configuracionIndicador != null)
 				nivel = configuracionIndicador.getIndicadorNivel();
 		}
 		graficosService.close();
-		
+
 		duppontForm.setPlanId(planId);
 
-		StrategosSeriesTiempoService strategosSeriesTiempoService = StrategosServiceFactory.getInstance().openStrategosSeriesTiempoService();		
-		List<SerieTiempo> seriesTiempo = strategosSeriesTiempoService.getSeriesTiempo(0, 0, "serieId", null, false, null).getLista();		
+		StrategosSeriesTiempoService strategosSeriesTiempoService = StrategosServiceFactory.getInstance().openStrategosSeriesTiempoService();
+		List<SerieTiempo> seriesTiempo = strategosSeriesTiempoService.getSeriesTiempo(0, 0, "serieId", null, false, null).getLista();
 		strategosSeriesTiempoService.close();
-		
+
 		StringBuffer sb = new StringBuffer();
 		if (indicador != null)
 		{
@@ -234,13 +235,13 @@ public class DuppontActionGrafico extends VgcAction
 				Calendar now = Calendar.getInstance();
 				duppontForm.setAnoInicial((new Integer(now.get(1))).toString());
 				duppontForm.setAnoFinal((new Integer(now.get(1))).toString());
-				
+
 				duppontForm.setPeriodoInicial(new Integer(1));
 				if ((new Integer(duppontForm.getAnoInicial()).intValue() % 4 == 0) && (duppontForm.getFrecuencia().byteValue() == Frecuencia.getFrecuenciaDiaria().byteValue()))
 					numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(duppontForm.getFrecuencia().byteValue(), new Integer(duppontForm.getAnoInicial()).intValue());
 				else if ((new Integer(duppontForm.getAnoFinal()).intValue() % 4 == 0) && (duppontForm.getFrecuencia().byteValue() == Frecuencia.getFrecuenciaDiaria().byteValue()))
 					numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia().byteValue(), new Integer(duppontForm.getAnoFinal()).intValue());
-				else 
+				else
 					numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia().byteValue(), new Integer(duppontForm.getAnoInicial()).intValue());
 				duppontForm.setPeriodoFinal(new Integer(numeroMaximoPeriodos));
 			}
@@ -250,37 +251,36 @@ public class DuppontActionGrafico extends VgcAction
 					numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(duppontForm.getFrecuencia().byteValue(), new Integer(duppontForm.getAnoInicial()).intValue());
 				else if ((new Integer(duppontForm.getAnoFinal()).intValue() % 4 == 0) && (duppontForm.getFrecuencia().byteValue() == Frecuencia.getFrecuenciaDiaria().byteValue()))
 					numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia().byteValue(), new Integer(duppontForm.getAnoFinal()).intValue());
-				else 
+				else
 					numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia().byteValue(), new Integer(duppontForm.getAnoInicial()).intValue());
 			}
-			
+
 			List<AnoPeriodo> listaAnosPeriodos = AnoPeriodo.getListaAnosPeriodos(new Integer(duppontForm.getAnoInicial()).intValue(), new Integer(duppontForm.getAnoFinal()).intValue(), duppontForm.getPeriodoInicial(), duppontForm.getPeriodoFinal(), numeroMaximoPeriodos);
 			StringBuffer sbEjeX = new StringBuffer();
 			boolean firsOne = true;
-			for (int index = 0; index < listaAnosPeriodos.size(); index++)
-			{
-				AnoPeriodo periodo = (AnoPeriodo)listaAnosPeriodos.get(index);
+			for (AnoPeriodo element : listaAnosPeriodos) {
+				AnoPeriodo periodo = element;
 				if (!firsOne)
 					sbEjeX.append(",");
 				sbEjeX.append(periodo.getAno() + "/" + periodo.getPeriodo());
 				firsOne = false;
 			}
-			
+
 			StringBuffer sbSerieName = new StringBuffer();
 		    Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();
 		    firsOne = true;
-		    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); ) 
+		    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); )
 		    {
-		    	SerieIndicador serie = (SerieIndicador)i.next();
+		    	SerieIndicador serie = i.next();
 
 				if (!firsOne)
 					sbSerieName.append(duppontForm.getSeparadorSeries());
 
-		        for (Iterator<SerieTiempo> ky = seriesTiempo.iterator(); ky.hasNext(); ) 
+		        for (Iterator<SerieTiempo> ky = seriesTiempo.iterator(); ky.hasNext(); )
 		        {
-		            SerieTiempo serieTiempo = (SerieTiempo)ky.next();
-	
-		            if (serieTiempo.getSerieId().equals(serie.getPk().getSerieId())) 
+		            SerieTiempo serieTiempo = ky.next();
+
+		            if (serieTiempo.getSerieId().equals(serie.getPk().getSerieId()))
 		            {
 				    	sbSerieName.append(serieTiempo.getNombre());
 		            	break;
@@ -293,22 +293,22 @@ public class DuppontActionGrafico extends VgcAction
 				sbSerieName.append(duppontForm.getSeparadorSeries());
 				sbSerieName.append(SerieTiempo.getSerieMeta().getNombre());
 			}
-			
+
 			StringBuffer sbSerieData = new StringBuffer();
 			StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
 			StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance().openStrategosMetasService();
 			boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue());
 			boolean firsOneSerie = true;
-		    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); ) 
+		    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); )
 		    {
-		    	SerieIndicador serie = (SerieIndicador)i.next();
-		    	List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(indicador.getIndicadorId(), serie.getPk().getSerieId(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), duppontForm.getPeriodoInicial(), duppontForm.getPeriodoFinal(), duppontForm.getFrecuencia(), duppontForm.getFrecuencia(), acumular, false);
+		    	SerieIndicador serie = i.next();
+		    	List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(indicador.getIndicadorId(), serie.getPk().getSerieId(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), duppontForm.getPeriodoInicial(), duppontForm.getPeriodoFinal(), duppontForm.getFrecuencia(), duppontForm.getFrecuencia(), acumular, false);
 				if (!firsOneSerie)
 					sbSerieData.append(duppontForm.getSeparadorSeries());
 		    	firsOne = true;
-				for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext(); ) 
+				for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext(); )
 				{
-					Medicion medicion = (Medicion)iter.next();
+					Medicion medicion = iter.next();
 					if (!firsOne)
 						sbSerieData.append(",");
 					if (medicion.getValor() != null)
@@ -317,20 +317,20 @@ public class DuppontActionGrafico extends VgcAction
 						sbSerieData.append("null");
 					firsOne = false;
 				}
-				
+
 				firsOneSerie = false;
 		    }
 		    if (!firsOneSerie && planId != null && planId != 0L)
 		    {
 		    	sbSerieData.append(duppontForm.getSeparadorSeries());
-		    	List<MetaAnualParciales> metas = (List<MetaAnualParciales>) strategosMetasService.getMetasAnualesParciales(indicador.getIndicadorId(), planId, duppontForm.getFrecuencia(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), false);
+		    	List<MetaAnualParciales> metas = strategosMetasService.getMetasAnualesParciales(indicador.getIndicadorId(), planId, duppontForm.getFrecuencia(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), false);
 		    	firsOne = true;
 		    	for (Iterator<MetaAnualParciales> iter = metas.iterator(); iter.hasNext(); )
 				{
-					MetaAnualParciales metaAnualParciales = (MetaAnualParciales)iter.next();
+					MetaAnualParciales metaAnualParciales = iter.next();
 					for (Iterator<Meta> iterMeta = metaAnualParciales.getMetasParciales().iterator(); iterMeta.hasNext(); )
 					{
-						Meta meta = (Meta)iterMeta.next();
+						Meta meta = iterMeta.next();
 
 						if (!firsOne)
 							sbSerieData.append(",");
@@ -342,7 +342,7 @@ public class DuppontActionGrafico extends VgcAction
 					}
 				}
 		    }
-		    	
+
 			sb.append("{");
 			sb.append("\"name\": \"" + indicador.getNombre() + "\",");
 			sb.append("\"value\": \"10\",");
@@ -363,22 +363,22 @@ public class DuppontActionGrafico extends VgcAction
 			sb.append("\"ejeX\": \"" + sbEjeX.toString() + "\",");
 			sb.append("\"serieName\": \"" + sbSerieName.toString() + "\",");
 			sb.append("\"serieData\": \"" + sbSerieData.toString() + "\",");
-			
+
 			Byte alerta = null;
 			if (planId != null && planId != 0L)
 				alerta = strategosPlanesService.getAlertaIndicadorPorPlan(indicador.getIndicadorId(), planId);
 			if (alerta == null)
 				alerta = indicador.getAlerta();
-			
+
 			String color = "white";
-			String icon = ""; 
+			String icon = "";
 			if (alerta != null)
 			{
 				if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
 					color = "#69fd82";
 	            else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 	            	color = "#f1ff10";
-	            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) 
+	            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 	            	color = "#f44020";
 	            else if (alerta.byteValue() == AlertaIndicador.getAlertaInalterada().byteValue())
 	            	icon = "alertaInalterada.gif";
@@ -387,7 +387,7 @@ public class DuppontActionGrafico extends VgcAction
 			sb.append("\"organizacion\": \"" + indicador.getOrganizacion().getNombre() + "\",");
 			sb.append("\"clase\": \"" + indicador.getClase().getNombre() + "\",");
 			sb.append("\"icon\": \"" + icon + "\",");
-			
+
 	  		Formula formulaIndicador = getChildren(indicador);
 	  		if (formulaIndicador != null && formulaIndicador.getInsumos().size() > 0)
 	  		{
@@ -395,7 +395,7 @@ public class DuppontActionGrafico extends VgcAction
 	  			insumo.setPadreId(indicador.getIndicadorId());
 	  			insumo.setNivel(1);
 	  			_insumos.add(insumo);
-	  			
+
 	  			sb.append("\"hadChildren\": \"true\",");
 	  			if (nivel == null || (nivel != null && (getNivel(indicador.getIndicadorId()) + 1) <= nivel))
 	  			{
@@ -411,7 +411,7 @@ public class DuppontActionGrafico extends VgcAction
 	  						color = "#64926C";
 	  		            else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 	  		            	color = "#b2ba23";
-	  		            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) 
+	  		            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 	  		            	color = "#B22C2C";
 	  				}
 	  				sb.append("\"level\": \"" + color + "\",");
@@ -433,11 +433,11 @@ public class DuppontActionGrafico extends VgcAction
 				List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieReal().getSerieId(), ano, ano, periodoMaximoIndicador, periodoMaximoIndicador);
 				if (mediciones.size() > 0)
 				{
-					medicion = (Medicion)mediciones.iterator().next();
+					medicion = mediciones.iterator().next();
 					indicador.setUltimaMedicionAnoAnterior(medicion.getValor());
 				}
-			}	
-			
+			}
+
 			Plan plan = null;
 			if (planId != null && planId != 0L)
 			{
@@ -445,20 +445,20 @@ public class DuppontActionGrafico extends VgcAction
 				if (plan != null)
 				{
 					sb.append("\"plan\": \"" + plan.getNombre() + "\",");
-					
+
 					List<?> estados = strategosPlanesService.getIndicadorEstados(indicador.getIndicadorId(), planId, indicador.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionPeriodo(), indicador.getFechaUltimaMedicionPeriodo());
-					if (estados.size() > 0) 
+					if (estados.size() > 0)
 					{
 						IndicadorEstado indEstado = (IndicadorEstado)estados.get(0);
 						indicador.setEstadoParcial(indEstado.getEstado());
 					}
 					estados = strategosPlanesService.getIndicadorEstados(indicador.getIndicadorId(), planId, indicador.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionPeriodo(), indicador.getFechaUltimaMedicionPeriodo());
-					if (estados.size() > 0) 
+					if (estados.size() > 0)
 					{
 						IndicadorEstado indEstado = (IndicadorEstado)estados.get(0);
 						indicador.setEstadoAnual(indEstado.getEstado());
 					}
-					
+
 					sb.append("\"pa\": \"" + indicador.getEstadoAnualFormateado() + "\",");
 					sb.append("\"pp\": \"" + indicador.getEstadoParcialFormateado() + "\",");
 				}
@@ -475,86 +475,86 @@ public class DuppontActionGrafico extends VgcAction
 				sb.append("\"pa\": \"" + indicador.getPorcentajeCumplimientoFormateado(indicador.getUltimaMedicionAnoAnterior(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial()) + "\",");
 				sb.append("\"pp\": \"" + indicador.getPorcentajeCumplimientoFormateado(indicador.getUltimaMedicionAnoAnterior(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual()) + "\",");
 			}
-			
+
 			sb.append("\"insumo\": \"\",");
 			sb.append("\"parent\": \"null\"");
-			
+
 			if (indicador.getNaturaleza().equals(Naturaleza.getNaturalezaFormula()))
-				sb.append(", \"children\": [" + setDefinicionFomula(duppontForm, indicador, planId, sbEjeX, seriesTiempo, format, nivel, strategosPlanesService, strategosMedicionesService, strategosMetasService) + "]");		
-			
-			nivel = (nivel != null ? (((getNivelMaximo() + 1) < nivel) ? (getNivelMaximo() + 1) : nivel) : null);  
+				sb.append(", \"children\": [" + setDefinicionFomula(duppontForm, indicador, planId, sbEjeX, seriesTiempo, format, nivel, strategosPlanesService, strategosMedicionesService, strategosMetasService) + "]");
+
+			nivel = (nivel != null ? (((getNivelMaximo() + 1) < nivel) ? (getNivelMaximo() + 1) : nivel) : null);
 			duppontForm.setNumerodeNiveles(nivel != null ? nivel : getNivelMaximo() + 1);
 			sb.append("}");
 			duppontForm.setArbol(sb.toString());
-			
+
 			strategosMedicionesService.close();
 			strategosMetasService.close();
 		}
 
 		strategosPlanesService.close();
-		
+
 		return mapping.findForward(forward);
 	}
-	
+
 	private Formula getChildren(Indicador indicador)
 	{
 	    Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();
 
 	    SerieIndicador serieIndicador = null;
-	    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); ) 
+	    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); )
 	    {
-	    	SerieIndicador serie = (SerieIndicador)i.next();
+	    	SerieIndicador serie = i.next();
 
-	    	if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue()) 
+	    	if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
 	    		serieIndicador = serie;
 	    }
 
   		Formula formulaIndicador = null;
-  		if (serieIndicador.getFormulas().size() > 0) 
+  		if (serieIndicador.getFormulas().size() > 0)
   			formulaIndicador = (Formula)serieIndicador.getFormulas().toArray()[0];
 
   		return formulaIndicador;
 	}
-	
+
 	private String setDefinicionFomula(DuppontForm duppontForm, Indicador indicador, Long planId, StringBuffer sbEjeX, List<SerieTiempo> seriesTiempo, String format, Integer nivel, StrategosPlanesService strategosPlanesService, StrategosMedicionesService strategosMedicionesService, StrategosMetasService strategosMetasService)
 	{
 		StringBuffer sb = null;
-		
+
 		Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();
   		Formula formulaIndicador = getChildren(indicador);
 
   		if (formulaIndicador != null)
   		{
   			if (nivel == null || (nivel != null && (getNivel(indicador.getIndicadorId()) + 1) <= nivel) || ((getDesplegado(indicador.getIndicadorId()))))
-  			{	
-	  			for (Iterator<?> k = formulaIndicador.getInsumos().iterator(); k.hasNext(); ) 
+  			{
+	  			for (Iterator<?> k = formulaIndicador.getInsumos().iterator(); k.hasNext(); )
 	  			{
 	  				InsumoFormula insumo = (InsumoFormula)k.next();
 	  				Indicador indicadorInsumo = (Indicador) strategosPlanesService.load(Indicador.class, insumo.getPk().getIndicadorId());
-	  				
+
 	  				if (indicadorInsumo != null && indicadorInsumo.getMostrarEnArbol())
 	  				{
 	  					StringBuffer sbSerieName = new StringBuffer();
 	  				    seriesIndicador = indicadorInsumo.getSeriesIndicador();
 	  				    boolean firsOne = true;
-	
+
 	  					IndicadorPlan indicadorPlan = null;
 	  					Long planActivoId = null;
 	  					if (planId != null && planId != 0L)
 	  						indicadorPlan = strategosPlanesService.getFirstAlertaIndicadorPorPlan(indicadorInsumo.getIndicadorId());
-	  				    
-	  				    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); ) 
+
+	  				    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); )
 	  				    {
-	  				    	SerieIndicador serie = (SerieIndicador)i.next();
-	
+	  				    	SerieIndicador serie = i.next();
+
 	  						if (!firsOne)
 	  							sbSerieName.append(duppontForm.getSeparadorSeries());
-	
-	  				        for (Iterator<SerieTiempo> ky = seriesTiempo.iterator(); ky.hasNext(); ) 
+
+	  				        for (Iterator<SerieTiempo> ky = seriesTiempo.iterator(); ky.hasNext(); )
 	  				        {
-	  				            SerieTiempo serieTiempo = (SerieTiempo)ky.next();
-	  			
-	  				            if (serieTiempo.getSerieId().equals(serie.getPk().getSerieId())) 
+	  				            SerieTiempo serieTiempo = ky.next();
+
+	  				            if (serieTiempo.getSerieId().equals(serie.getPk().getSerieId()))
 	  				            {
 	  						    	sbSerieName.append(serieTiempo.getNombre());
 	  				            	break;
@@ -565,38 +565,38 @@ public class DuppontActionGrafico extends VgcAction
 				    	List<MetaAnualParciales> metas = null;
 	  					if (!firsOne && planId != null && planId != 0L)
 	  					{
-	  				    	metas = (List<MetaAnualParciales>) strategosMetasService.getMetasAnualesParciales(indicadorInsumo.getIndicadorId(), planId, duppontForm.getFrecuencia(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), false);
+	  				    	metas = strategosMetasService.getMetasAnualesParciales(indicadorInsumo.getIndicadorId(), planId, duppontForm.getFrecuencia(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), false);
 	  				    	if (metas != null && metas.size() > 0 && metas.get(0).getMetasParciales().size() > 0 && ((Meta)metas.get(0).getMetasParciales().get(0)).getValor() == null)
 	  				    		metas = null;
 	  				    	else
 	  				    		planActivoId = planId;
 	  				    	if (metas == null && indicadorPlan != null)
-	  				    		metas = (List<MetaAnualParciales>) strategosMetasService.getMetasAnualesParciales(indicadorInsumo.getIndicadorId(), indicadorPlan.getPk().getPlanId(), duppontForm.getFrecuencia(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), false);
+	  				    		metas = strategosMetasService.getMetasAnualesParciales(indicadorInsumo.getIndicadorId(), indicadorPlan.getPk().getPlanId(), duppontForm.getFrecuencia(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), false);
 	  				    	if (metas != null && metas.size() > 0 && metas.get(0).getMetasParciales().size() > 0 && ((Meta)metas.get(0).getMetasParciales().get(0)).getValor() == null)
 	  				    		metas = null;
 	  				    	else if (indicadorPlan != null)
 	  				    		planActivoId = indicadorPlan.getPk().getPlanId();
-	
+
 	  				    	if (metas != null && metas.size() > 0)
 	  				    	{
 	  	  						sbSerieName.append(duppontForm.getSeparadorSeries());
 	  	  						sbSerieName.append(SerieTiempo.getSerieMeta().getNombre());
 	  				    	}
 	  					}
-	  					
+
 	  					StringBuffer sbSerieData = new StringBuffer();
 	  					boolean acumular = (indicadorInsumo.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicadorInsumo.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue());
 	  					boolean firsOneSerie = true;
-	  				    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); ) 
+	  				    for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); )
 	  				    {
-	  				    	SerieIndicador serie = (SerieIndicador)i.next();
-	  				    	List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(indicadorInsumo.getIndicadorId(), serie.getPk().getSerieId(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), duppontForm.getPeriodoInicial(), duppontForm.getPeriodoFinal(), duppontForm.getFrecuencia(), duppontForm.getFrecuencia(), acumular, false);
+	  				    	SerieIndicador serie = i.next();
+	  				    	List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(indicadorInsumo.getIndicadorId(), serie.getPk().getSerieId(), new Integer(duppontForm.getAnoInicial()), new Integer(duppontForm.getAnoFinal()), duppontForm.getPeriodoInicial(), duppontForm.getPeriodoFinal(), duppontForm.getFrecuencia(), duppontForm.getFrecuencia(), acumular, false);
 	  						if (!firsOneSerie)
 	  							sbSerieData.append(duppontForm.getSeparadorSeries());
 	  				    	firsOne = true;
-	  						for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext(); ) 
+	  						for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext(); )
 	  						{
-	  							Medicion medicion = (Medicion)iter.next();
+	  							Medicion medicion = iter.next();
 		  							if (!firsOne)
 	  	  								sbSerieData.append(",");
 	  							if (medicion.getValor() != null)
@@ -605,21 +605,21 @@ public class DuppontActionGrafico extends VgcAction
 	  								sbSerieData.append("null");
 	  							firsOne = false;
 	  						}
-	  						
+
 	  						firsOneSerie = false;
 	  				    }
-	
+
 	  				    if (!firsOneSerie && planId != null && planId != 0L && metas != null && metas.size() > 0)
 	  				    {
 	  				    	sbSerieData.append(duppontForm.getSeparadorSeries());
 	  				    	firsOne = true;
 	  				    	for (Iterator<MetaAnualParciales> iter = metas.iterator(); iter.hasNext(); )
 	  						{
-	  							MetaAnualParciales metaAnualParciales = (MetaAnualParciales)iter.next();
+	  							MetaAnualParciales metaAnualParciales = iter.next();
 	  							for (Iterator<Meta> iterMeta = metaAnualParciales.getMetasParciales().iterator(); iterMeta.hasNext(); )
 	  							{
-	  								Meta meta = (Meta)iterMeta.next();
-	
+	  								Meta meta = iterMeta.next();
+
 	  								if (!firsOne)
 	  									sbSerieData.append(",");
 	  								if (meta.getValor() != null)
@@ -630,12 +630,12 @@ public class DuppontActionGrafico extends VgcAction
 	  							}
 	  						}
 	  				    }
-	  				    
+
 	  					if (sb == null)
 	  						sb = new StringBuffer();
 	  					else
 	  						sb.append(",");
-	  					
+
 	  					sb.append("{");
 	  					sb.append("\"name\": \"" + indicadorInsumo.getNombre() + "\",");
 	  					sb.append("\"value\": \"10\",");
@@ -656,7 +656,7 @@ public class DuppontActionGrafico extends VgcAction
 	  					sb.append("\"ejeX\": \"" + sbEjeX.toString() + "\",");
 	  					sb.append("\"serieName\": \"" + sbSerieName.toString() + "\",");
 	  					sb.append("\"serieData\": \"" + sbSerieData.toString() + "\",");
-	  					
+
 	  					Byte alerta = null;
 	  					if (planActivoId != null && planActivoId != 0L)
 	  					{
@@ -667,7 +667,7 @@ public class DuppontActionGrafico extends VgcAction
 	  					}
 	  					if (alerta == null)
 	  						alerta = indicadorInsumo.getAlerta();
-	  					
+
 	  					String color = "white";
 	  					String icon = "";
 	  					if (alerta != null)
@@ -676,7 +676,7 @@ public class DuppontActionGrafico extends VgcAction
 	  							color = "#69fd82";
 	  			            else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 	  			            	color = "#f1ff10";
-	  			            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) 
+	  			            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 	  			            	color = "#f44020";
 	  			            else if (alerta.byteValue() == AlertaIndicador.getAlertaInalterada().byteValue())
 	  			            	icon = "alertaInalterada.gif";
@@ -696,7 +696,7 @@ public class DuppontActionGrafico extends VgcAction
 		  			  			insumoPadre.setNivel((getNivel(indicador.getIndicadorId()) + 1));
 		  			  			_insumos.add(insumoPadre);
 	  			  			}
-	  			  			
+
 	  			  			sb.append("\"hadChildren\": \"true\",");
 	  			  			if (nivel == null || (nivel != null && (getNivel(indicadorInsumo.getIndicadorId()) + 1) <= nivel) || (getDesplegado(indicadorInsumo.getIndicadorId())))
 	  			  			{
@@ -712,7 +712,7 @@ public class DuppontActionGrafico extends VgcAction
 	  			  						color = "#64926C";
 	  			  		            else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
 	  			  		            	color = "#b2ba23";
-	  			  		            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) 
+	  			  		            else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
 	  			  		            	color = "#B22C2C";
 	  			  				}
 	  			  				sb.append("\"level\": \"" + color + "\",");
@@ -734,11 +734,11 @@ public class DuppontActionGrafico extends VgcAction
 	  						List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicadorInsumo.getIndicadorId(), SerieTiempo.getSerieReal().getSerieId(), ano, ano, periodoMaximoIndicador, periodoMaximoIndicador);
 	  						if (mediciones.size() > 0)
 	  						{
-	  							medicion = (Medicion)mediciones.iterator().next();
+	  							medicion = mediciones.iterator().next();
 	  							indicador.setUltimaMedicionAnoAnterior(medicion.getValor());
 	  						}
-	  					}	
-	  				    
+	  					}
+
 	  					Plan plan = null;
 	  					if (planActivoId != null && planActivoId != 0L)
 	  					{
@@ -746,20 +746,20 @@ public class DuppontActionGrafico extends VgcAction
 	  						if (plan != null)
 	  						{
 	  							sb.append("\"plan\": \"" + plan.getNombre() + "\",");
-	
+
 								List<?> estados = strategosPlanesService.getIndicadorEstados(indicadorInsumo.getIndicadorId(), planActivoId, indicadorInsumo.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), indicadorInsumo.getFechaUltimaMedicionAno(), indicadorInsumo.getFechaUltimaMedicionAno(), indicadorInsumo.getFechaUltimaMedicionPeriodo(), indicadorInsumo.getFechaUltimaMedicionPeriodo());
-								if (estados.size() > 0) 
+								if (estados.size() > 0)
 								{
 									IndicadorEstado indEstado = (IndicadorEstado)estados.get(0);
 									indicadorInsumo.setEstadoParcial(indEstado.getEstado());
 								}
 								estados = strategosPlanesService.getIndicadorEstados(indicadorInsumo.getIndicadorId(), planActivoId, indicadorInsumo.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual(), indicadorInsumo.getFechaUltimaMedicionAno(), indicadorInsumo.getFechaUltimaMedicionAno(), indicadorInsumo.getFechaUltimaMedicionPeriodo(), indicadorInsumo.getFechaUltimaMedicionPeriodo());
-								if (estados.size() > 0) 
+								if (estados.size() > 0)
 								{
 									IndicadorEstado indEstado = (IndicadorEstado)estados.get(0);
 									indicadorInsumo.setEstadoAnual(indEstado.getEstado());
 								}
-								
+
 								sb.append("\"pa\": \"" + indicadorInsumo.getEstadoAnualFormateado() + "\",");
 								sb.append("\"pp\": \"" + indicadorInsumo.getEstadoParcialFormateado() + "\",");
 							}
@@ -776,13 +776,13 @@ public class DuppontActionGrafico extends VgcAction
 							sb.append("\"pa\": \"" + indicadorInsumo.getPorcentajeCumplimientoFormateado(indicadorInsumo.getUltimaMedicionAnoAnterior(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial()) + "\",");
 							sb.append("\"pp\": \"" + indicadorInsumo.getPorcentajeCumplimientoFormateado(indicadorInsumo.getUltimaMedicionAnoAnterior(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual()) + "\",");
 						}
-	  					
+
 	  					sb.append("\"insumo\": \"" + insumo.getSerieTiempo().getNombre() + "\",");
 	  					sb.append("\"parent\": \"" + indicador.getNombre() + "\"");
-	  					
+
 	  					if (indicadorInsumo.getNaturaleza().equals(Naturaleza.getNaturalezaFormula()))
-	  						sb.append(", \"children\": [" + setDefinicionFomula(duppontForm, indicadorInsumo, planId, sbEjeX, seriesTiempo, format, nivel, strategosPlanesService, strategosMedicionesService, strategosMetasService) + "]");		
-	
+	  						sb.append(", \"children\": [" + setDefinicionFomula(duppontForm, indicadorInsumo, planId, sbEjeX, seriesTiempo, format, nivel, strategosPlanesService, strategosMedicionesService, strategosMetasService) + "]");
+
 	  					sb.append("}");
 	  				}
 	  			}
@@ -794,62 +794,62 @@ public class DuppontActionGrafico extends VgcAction
   		else
   			return "";
 	}
-	
+
 	private boolean existe(Long id)
 	{
 		boolean existe = false;
-		
+
 		for (Iterator<Insumos> iter = _insumos.iterator(); iter.hasNext(); )
 		{
-			Insumos insumo = (Insumos)iter.next();
+			Insumos insumo = iter.next();
 			if (id.longValue() == insumo.getPadreId().longValue())
 				existe = true;
 		}
-		
+
 		return existe;
 	}
 
 	private Integer getNivel(Long padreId)
 	{
 		Integer nivel = null;
-		
+
 		for (Iterator<Insumos> iter = _insumos.iterator(); iter.hasNext(); )
 		{
-			Insumos insumo = (Insumos)iter.next();
+			Insumos insumo = iter.next();
 			if (padreId.longValue() == insumo.getPadreId().longValue())
 				nivel = insumo.getNivel();
 		}
-		
+
 		return nivel;
 	}
-	
+
 	private Integer getNivelMaximo()
 	{
 		Integer nivel = 0;
-		
+
 		for (Iterator<Insumos> iter = _insumos.iterator(); iter.hasNext(); )
 		{
-			Insumos insumo = (Insumos)iter.next();
+			Insumos insumo = iter.next();
 			if (nivel < insumo.getNivel())
 				nivel = insumo.getNivel();
 		}
-		
+
 		return nivel;
 	}
-	
+
 	private Boolean getDesplegado(Long indicadorId)
 	{
 		Boolean desplegado = false;
 		for (Iterator<IndicadorNodo> iter = _indicadores.iterator(); iter.hasNext(); )
 		{
-			IndicadorNodo ind = (IndicadorNodo)iter.next();
+			IndicadorNodo ind = iter.next();
 			if (ind.getId().longValue() == indicadorId.longValue())
 			{
 				desplegado = ind.getDesplegado();
 				break;
 			}
 		}
-		
+
 		return desplegado;
 	}
 }

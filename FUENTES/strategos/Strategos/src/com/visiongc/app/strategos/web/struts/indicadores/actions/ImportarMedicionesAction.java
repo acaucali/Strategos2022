@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
@@ -31,7 +31,6 @@ import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.Importacion.ImportacionType;
 import com.visiongc.framework.util.FrameworkConnection;
-import com.visiongc.framework.web.struts.actions.LogonAction;
 
 /**
  * @author Kerwin
@@ -39,10 +38,12 @@ import com.visiongc.framework.web.struts.actions.LogonAction;
  */
 public class ImportarMedicionesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -59,9 +60,9 @@ public class ImportarMedicionesAction extends VgcAction
 		ConfiguracionUsuario presentacion = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Wizar.Importar.ShowPresentacion", "ShowPresentacion");
 		if (presentacion != null && presentacion.getData() != null)
 			importarMedicionesForm.setShowPresentacion(presentacion.getData().equals("1") ? true : false);
-		
+
 		frameworkService.close();
-		
+
 		if (configuracion == null)
 		{
 			importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusNoConfigurado());
@@ -71,14 +72,14 @@ public class ImportarMedicionesAction extends VgcAction
 		else
 		{
 			//XML
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-	        DocumentBuilder db = dbf.newDocumentBuilder(); 
-	        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8"))); 
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+	        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8")));
 	        doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName("properties");
 			Element eElement = (Element) nList.item(0);
 			/** Se obtiene el FormBean haciendo el casting respectivo */
-			String url = VgcAbstractService.getTagValue("url", eElement);;
+			String url = VgcAbstractService.getTagValue("url", eElement);
 			String driver = VgcAbstractService.getTagValue("driver", eElement);
 			String user = VgcAbstractService.getTagValue("user", eElement);
 			String password = VgcAbstractService.getTagValue("password", eElement);
@@ -92,7 +93,7 @@ public class ImportarMedicionesAction extends VgcAction
 			else
 				importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusSuccess());
 		}
-		
+
 		importarMedicionesForm.setTipoFuente(ImportacionType.getImportacionTypePlano());
 		importarMedicionesForm.setTipoMedicion((byte) 0);
 		importarMedicionesForm.setTipoImportacion(TipoMedicionImportar.getImportarEjecutadoReales());

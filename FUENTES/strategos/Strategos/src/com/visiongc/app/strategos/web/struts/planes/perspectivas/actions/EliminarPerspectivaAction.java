@@ -1,24 +1,28 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
-import com.visiongc.app.strategos.planes.model.Perspectiva;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
+import com.visiongc.app.strategos.planes.model.Perspectiva;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EliminarPerspectivaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -35,7 +39,7 @@ public class EliminarPerspectivaAction extends VgcAction
 			cancelar = true;
 		else if ((perspectivaId == null) || (perspectivaId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(perspectivaId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(perspectivaId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
@@ -49,11 +53,11 @@ public class EliminarPerspectivaAction extends VgcAction
 
 		Perspectiva perspectiva = (Perspectiva)strategosPerspectivasService.load(Perspectiva.class, new Long(perspectivaId));
 
-		if (perspectiva != null) 
+		if (perspectiva != null)
 		{
-			if ((perspectiva.getHijos() == null) || ((perspectiva.getHijos() != null) && (perspectiva.getHijos().size() == 0))) 
+			if ((perspectiva.getHijos() == null) || ((perspectiva.getHijos() != null) && (perspectiva.getHijos().size() == 0)))
 			{
-				if (perspectiva.getPadre() != null) 
+				if (perspectiva.getPadre() != null)
 				{
 					if (bloqueado)
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.bloqueado", perspectiva.getNombre()));
@@ -81,7 +85,7 @@ public class EliminarPerspectivaAction extends VgcAction
 				strategosPerspectivasService.unlockObject(request.getSession().getId(), perspectivaId);
 			}
 		}
-		else 
+		else
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 		strategosPerspectivasService.close();

@@ -1,9 +1,22 @@
 package com.visiongc.app.strategos.web.struts.planes.indicadores.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.model.IndicadorPerspectiva;
 import com.visiongc.app.strategos.planes.model.IndicadorPerspectivaPK;
@@ -15,34 +28,25 @@ import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 
 public class AsignarPesosIndicadoresPlanAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
 
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("cancelar")) 
+			if (funcion.equals("cancelar"))
 			{
 				request.setAttribute("ajaxResponse", "");
 				return mapping.findForward("ajaxResponse");
@@ -60,42 +64,42 @@ public class AsignarPesosIndicadoresPlanAction extends VgcAction
 		if (perspectiva != null)
 			perspectiva.getHijos().size();
 
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("guardar")) 
+			if (funcion.equals("guardar"))
 			{
 				request.setAttribute("cerrarAsignarPesosIndicadoresPlan", "true");
 				guardarPesosIndicadoresPlan(perspectiva, strategosIndicadoresService, asignarPesosIndicadoresPlanForm, request);
 			}
 		}
-		else if (request.getParameter("funcionCierre") == null) 
+		else if (request.getParameter("funcionCierre") == null)
 			asignarPesosIndicadoresPlanForm.setFuncionCierre(null);
-		
+
 		asignarPesosIndicadoresPlanForm.setOrganizacionNombre(perspectiva.getPlan().getOrganizacion().getNombre());
 		asignarPesosIndicadoresPlanForm.setPlanNombre(perspectiva.getPlan().getNombre());
 		asignarPesosIndicadoresPlanForm.setPerspectivaNombre(perspectiva.getNombre());
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
-		if ((request.getParameter("perspectivaId") != null) && (!request.getParameter("perspectivaId").equals(""))) 
+		if ((request.getParameter("perspectivaId") != null) && (!request.getParameter("perspectivaId").equals("")))
 			filtros.put("perspectivaId", asignarPesosIndicadoresPlanForm.getPerspectivaId());
 
 		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("guardar")) 
+			if (funcion.equals("guardar"))
 				filtros.put("perspectivaId", asignarPesosIndicadoresPlanForm.getPerspectivaId());
 		}
-		
+
 		/*
 		if (perspectiva.getTipoCalculo().equals(TipoCalculoPerspectiva.getTipoCalculoPerspectivaAutomatico()))
 			filtros.put("tipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());
-		else 
+		else
 			filtros.put("excluirTipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());
 		*/
-		
-		//filtros.put("tipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());		
+
+		//filtros.put("tipoFuncion", TipoFuncionIndicador.getTipoFuncionPerspectiva());
 
 
 		List<String> orderBy = new ArrayList<String>();
@@ -108,20 +112,17 @@ public class AsignarPesosIndicadoresPlanAction extends VgcAction
 		if (perspectiva.getTipoCalculo().equals(TipoCalculoPerspectiva.getTipoCalculoPerspectivaAutomatico()))
 		{
 			String logroParcial = VgcResourceManager.getMessageResources("Strategos").getResource("indicador.logroparcial");
-			
+
 			Map<Long, Long> ids = new HashMap<Long, Long>();
-			for (Iterator<?> iter = perspectiva.getHijos().iterator(); iter.hasNext(); ) 
+			for (Iterator<?> iter = perspectiva.getHijos().iterator(); iter.hasNext(); )
 			{
 				Perspectiva perspectivaHija = (Perspectiva)iter.next();
 				ids.put(perspectivaHija.getNlParIndicadorId(), perspectivaHija.getNlParIndicadorId());
 			}
 
 			List<Indicador> indicadoresTemp = new ArrayList<Indicador>();
-			for (Iterator<Indicador> iter = indicadores.iterator(); iter.hasNext(); ) 
-			{
-				Indicador indicador = iter.next();
-
-				if (ids.containsKey(indicador.getIndicadorId())) 
+			for (Indicador indicador : indicadores) {
+				if (ids.containsKey(indicador.getIndicadorId()))
 				{
 					Indicador indicadorNuevo = new Indicador();
 					int index = indicador.getNombre().indexOf("... (" + logroParcial + ")");
@@ -133,14 +134,12 @@ public class AsignarPesosIndicadoresPlanAction extends VgcAction
 			indicadores = indicadoresTemp;
 		}
 
-		for (Iterator<Indicador> iter = indicadores.iterator(); iter.hasNext(); ) 
-		{
-			Indicador indicador = iter.next();
+		for (Indicador indicador : indicadores) {
 			IndicadorPerspectivaPK indicadorPerspectivaPk = new IndicadorPerspectivaPK();
 			indicadorPerspectivaPk.setIndicadorId(indicador.getIndicadorId());
 			indicadorPerspectivaPk.setPerspectivaId(asignarPesosIndicadoresPlanForm.getPerspectivaId());
 			IndicadorPerspectiva indicadorPerspectiva = (IndicadorPerspectiva)strategosIndicadoresService.load(IndicadorPerspectiva.class, indicadorPerspectivaPk);
-			if (indicadorPerspectiva != null) 
+			if (indicadorPerspectiva != null)
 				indicador.setPeso(indicadorPerspectiva.getPeso());
 		}
 
@@ -164,32 +163,32 @@ public class AsignarPesosIndicadoresPlanAction extends VgcAction
 	private void guardarPesosIndicadoresPlan(Perspectiva perspectiva, StrategosIndicadoresService strategosIndicadoresService, AsignarPesosIndicadoresPlanForm asignarPesosIndicadoresPlanForm, HttpServletRequest request) throws Exception
 	{
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService(strategosIndicadoresService);
-		
+
 		Map<?, ?> nombresParametros = request.getParameterMap();
 		List<IndicadorPerspectiva> indicadoresPerspectiva = new ArrayList<IndicadorPerspectiva>();
-		for (Iterator<?> iter = nombresParametros.keySet().iterator(); iter.hasNext(); ) 
+		for (Iterator<?> iter = nombresParametros.keySet().iterator(); iter.hasNext(); )
 		{
 			String nombre = (String)iter.next();
 			int index = nombre.indexOf("pesoIndicador");
-			if (index > -1) 
+			if (index > -1)
 			{
 				IndicadorPerspectiva indicadorPerspectiva = new IndicadorPerspectiva();
 				indicadorPerspectiva.setPk(new IndicadorPerspectivaPK());
 				indicadorPerspectiva.getPk().setIndicadorId(new Long(nombre.substring("pesoIndicador".length())));
 				indicadorPerspectiva.getPk().setPerspectivaId(asignarPesosIndicadoresPlanForm.getPerspectivaId());
-				if (indicadorPerspectiva.getPk().getPerspectivaId() == null) 
+				if (indicadorPerspectiva.getPk().getPerspectivaId() == null)
 					indicadorPerspectiva.getPk().setPerspectivaId(asignarPesosIndicadoresPlanForm.getObjetivoId());
 
-				if ((request.getParameter(nombre) != null) && (!request.getParameter(nombre).equals(""))) 
+				if ((request.getParameter(nombre) != null) && (!request.getParameter(nombre).equals("")))
 					indicadorPerspectiva.setPeso(new Double(VgcFormatter.parsearNumeroFormateado(request.getParameter(nombre))));
 
 				indicadoresPerspectiva.add(indicadorPerspectiva);
-				if (perspectiva.getTipoCalculo().equals(TipoCalculoPerspectiva.getTipoCalculoPerspectivaAutomatico())) 
+				if (perspectiva.getTipoCalculo().equals(TipoCalculoPerspectiva.getTipoCalculoPerspectivaAutomatico()))
 				{
-					for (Iterator<?> iterHija = perspectiva.getHijos().iterator(); iterHija.hasNext(); ) 
+					for (Iterator<?> iterHija = perspectiva.getHijos().iterator(); iterHija.hasNext(); )
 					{
 						Perspectiva perspectivaHija = (Perspectiva)iterHija.next();
-						if (indicadorPerspectiva.getPk().getIndicadorId().equals(perspectivaHija.getNlParIndicadorId())) 
+						if (indicadorPerspectiva.getPk().getIndicadorId().equals(perspectivaHija.getNlParIndicadorId()))
 						{
 							IndicadorPerspectiva indicadorPerspectivaAnual = new IndicadorPerspectiva();
 							indicadorPerspectivaAnual.setPk(new IndicadorPerspectivaPK());

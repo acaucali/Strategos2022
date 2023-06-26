@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.planes.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.web.struts.planes.forms.SeleccionarPlanesForm;
 import com.visiongc.commons.struts.action.VgcAction;
@@ -8,24 +20,17 @@ import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.TreeviewWeb;
 import com.visiongc.framework.arboles.ArbolesService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 {
 	public static final String ACTION_KEY = "SeleccionarPlanesOrganizacionesAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -52,13 +57,13 @@ public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 		{
 			OrganizacionStrategos organizacionRoot = new OrganizacionStrategos();
 			OrganizacionStrategos organizacion = null;
-			if ((seleccionarPlanesForm.getOrganizacionSeleccionadaId() != null) && (!seleccionarPlanesForm.getIniciado().booleanValue())) 
+			if ((seleccionarPlanesForm.getOrganizacionSeleccionadaId() != null) && (!seleccionarPlanesForm.getIniciado().booleanValue()))
 			{
 				organizacion = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, seleccionarPlanesForm.getOrganizacionSeleccionadaId());
-				if (organizacion != null) 
+				if (organizacion != null)
 				{
 					List<?> nodos = arbolesService.getRutaCompleta(organizacion);
-					for (Iterator<?> iter = nodos.iterator(); iter.hasNext(); ) 
+					for (Iterator<?> iter = nodos.iterator(); iter.hasNext(); )
 					{
 						OrganizacionStrategos org = (OrganizacionStrategos)iter.next();
 						TreeviewWeb.publishArbolAbrirNodo(arbolBean, org.getOrganizacionId().toString());
@@ -67,15 +72,15 @@ public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 					organizacionRoot.setOrganizacionId(((OrganizacionStrategos)nodos.get(0)).getOrganizacionId());
 					organizacionRoot.setPadreId(((OrganizacionStrategos)nodos.get(0)).getPadreId());
 					organizacionRoot.setNombre(((OrganizacionStrategos)nodos.get(0)).getNombre());
-				} 
-				else 
+				}
+				else
 				{
 					organizacionRoot = (OrganizacionStrategos)arbolesService.getNodoArbolRaiz(organizacionRoot);
 					TreeviewWeb.publishArbol(arbolBean, null, organizacionRoot.getOrganizacionId().toString(), null, null, true);
 					organizacion = organizacionRoot;
 				}
-			} 
-			else 
+			}
+			else
 			{
 				organizacionRoot = (OrganizacionStrategos)arbolesService.getNodoArbolRaiz(organizacionRoot);
 				TreeviewWeb.publishArbol(arbolBean, null, organizacionRoot.getOrganizacionId().toString(), null, null, true);
@@ -84,8 +89,8 @@ public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 
 			seleccionarPlanesForm.setOrganizacionSeleccionadaId(organizacion.getOrganizacionId());
 			setRutaCompletaOrganizacion(seleccionarPlanesForm, organizacion, arbolesService);
-			
-			if (!seleccionarPlanesForm.getPermitirCambiarOrganizacion().booleanValue()) 
+
+			if (!seleccionarPlanesForm.getPermitirCambiarOrganizacion().booleanValue())
 			{
 				arbolesService.close();
 				return mapping.findForward(forward);
@@ -104,36 +109,36 @@ public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 			String cerrarOrganizacionId = request.getParameter("cerrarOrganizacionId");
 			OrganizacionStrategos organizacionSeleccionada = null;
 
-			if (request.getAttribute("SeleccionarPlanesOrganizacionesAction.reloadId") != null) 
+			if (request.getAttribute("SeleccionarPlanesOrganizacionesAction.reloadId") != null)
 				organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, (Long)request.getAttribute("SeleccionarPlanesOrganizacionesAction.reloadId"));
-			else if ((seleccionarOrganizacionId != null) && (!seleccionarOrganizacionId.equals(""))) 
+			else if ((seleccionarOrganizacionId != null) && (!seleccionarOrganizacionId.equals("")))
 				organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(seleccionarOrganizacionId));
-			else if ((abrirOrganizacionId != null) && (!abrirOrganizacionId.equals(""))) 
+			else if ((abrirOrganizacionId != null) && (!abrirOrganizacionId.equals("")))
 			{
 				TreeviewWeb.publishArbolAbrirNodo(arbolBean, abrirOrganizacionId);
 				organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(abrirOrganizacionId));
-			} 
-			else if ((cerrarOrganizacionId != null) && (!cerrarOrganizacionId.equals(""))) 
+			}
+			else if ((cerrarOrganizacionId != null) && (!cerrarOrganizacionId.equals("")))
 			{
 				TreeviewWeb.publishArbolCerrarNodo(arbolBean, cerrarOrganizacionId);
 				organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(cerrarOrganizacionId));
-			} 
-			else 
+			}
+			else
 				organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(arbolBean.getSeleccionadoId()));
-      
+
 			Long reloadId;
-			if (organizacionSeleccionada == null) 
+			if (organizacionSeleccionada == null)
 			{
 				organizacionSeleccionada = (OrganizacionStrategos)arbolBean.getNodoRaiz();
 				reloadId = organizacionSeleccionada.getOrganizacionId();
 				TreeviewWeb.publishArbol(arbolBean, organizacionSeleccionada.getOrganizacionId().toString(), true);
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
-			} 
-			else 
+			}
+			else
 			{
 				reloadId = organizacionSeleccionada.getOrganizacionId();
-				if (cerrarOrganizacionId == null) 
+				if (cerrarOrganizacionId == null)
 					TreeviewWeb.publishArbolAbrirNodo(arbolBean, reloadId.toString());
 			}
 
@@ -146,7 +151,7 @@ public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 
 		if (!seleccionarPlanesForm.getOrganizacionSeleccionadaId().toString().equals(arbolBean.getSeleccionadoId()))
 			seleccionarPlanesForm.setCambioOrganizacion(true);
-		else 
+		else
 			seleccionarPlanesForm.setCambioOrganizacion(false);
 
 		seleccionarPlanesForm.setOrganizacionSeleccionadaId(new Long(arbolBean.getSeleccionadoId()));
@@ -162,7 +167,7 @@ public final class SeleccionarPlanesOrganizacionesAction extends VgcAction
 	{
 		OrganizacionStrategos org = organizacion;
 		String rutaCompleta = org.getNombre();
-		while (org.getPadreId() != null) 
+		while (org.getPadreId() != null)
 		{
 			org = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(org.getPadreId()));
 			rutaCompleta = org.getNombre() + " / " + rutaCompleta;

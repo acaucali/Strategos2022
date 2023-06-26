@@ -326,6 +326,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 
 	public int insert(Object objeto, Usuario usuario) 
 	{			
+		System.out.print("\n\n" + objeto);
 		try 
 		{
 			if (objeto instanceof Collection) 
@@ -1062,6 +1063,8 @@ public class VgcHibernateSession implements VgcPersistenceSession
 		
 		return resultado;
 	}
+	
+	
 
 	/**
 	 * 
@@ -1072,10 +1075,9 @@ public class VgcHibernateSession implements VgcPersistenceSession
 	public int saveBlob(String tableName, String fieldName, byte[] data, String[] keyNames, Object[] idValues) throws Exception 
 	{
 		int res = VgcReturnCode.DB_OK;
-
+		
 		Connection con = this.session.connection();
 		con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-
 		String sql = "UPDATE ";
 
 		if ((tableName != null) && (!tableName.equals(""))) {
@@ -1129,7 +1131,7 @@ public class VgcHibernateSession implements VgcPersistenceSession
 
 			pstmt.close();
 		}
-
+		
 		return res;
 	}
 

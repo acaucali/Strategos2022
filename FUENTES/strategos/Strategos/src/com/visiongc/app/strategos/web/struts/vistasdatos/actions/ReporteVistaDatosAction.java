@@ -1,12 +1,10 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,26 +15,15 @@ import org.apache.struts.util.MessageResources;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
-import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoCalculoEstadoIniciativa;
-import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.planificacionseguimiento.StrategosPrdProductosService;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimiento;
-import com.visiongc.app.strategos.planificacionseguimiento.model.util.AlertaIniciativaProducto;
 import com.visiongc.app.strategos.reportes.StrategosReportesService;
 import com.visiongc.app.strategos.reportes.model.Reporte;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.web.util.WebUtil;
-import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.message.MessageService;
-import com.visiongc.framework.model.Message;
 import com.visiongc.framework.model.Usuario;
 
 /**
@@ -45,11 +32,13 @@ import com.visiongc.framework.model.Usuario;
  */
 public class ReporteVistaDatosAction extends VgcReporteBasicoAction
 {
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		return mensajes.getMessage("jsp.reporte.vistadatos.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 		documento.setPageSize(PageSize.LETTER.rotate());
@@ -57,16 +46,16 @@ public class ReporteVistaDatosAction extends VgcReporteBasicoAction
 	    String organizacionId = (String)request.getSession().getAttribute("organizacionId");
 	    String atributoOrden = request.getParameter("atributoOrden");
 	    String tipoOrden = request.getParameter("tipoOrden");
-	    if ((atributoOrden == null) || (atributoOrden.equals(""))) 
+	    if ((atributoOrden == null) || (atributoOrden.equals("")))
 	    	atributoOrden = "nombre";
-	    if ((tipoOrden == null) || (tipoOrden.equals(""))) 
+	    if ((tipoOrden == null) || (tipoOrden.equals("")))
 	    	tipoOrden = "ASC";
 
 	    MessageResources mensajes = getResources(request);
 
 	    Map<String, Object> filtros = new HashMap<String, Object>();
 
-	    if ((organizacionId != null) && (!organizacionId.equals(""))) 
+	    if ((organizacionId != null) && (!organizacionId.equals("")))
 	    	filtros.put("organizacionId", organizacionId);
 
 	    StrategosReportesService strategosReportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
@@ -94,34 +83,34 @@ public class ReporteVistaDatosAction extends VgcReporteBasicoAction
 
 	    font.setSize(8.0F);
 	    tabla.setFormatoFont(font.style());
-	    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+	    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
 	    tabla.agregarCelda(mensajes.getMessage("jsp.gestionarvistasdatos.columna.nombre"));
 	    tabla.agregarCelda(mensajes.getMessage("jsp.gestionarvistasdatos.columna.public"));
 	    tabla.agregarCelda(mensajes.getMessage("jsp.gestionarvistasdatos.columna.descripcion"));
 
 	    tabla.setDefaultAlineacionHorizontal();
-	    
-	    if (paginaVistas.getLista().size() > 0) 
+
+	    if (paginaVistas.getLista().size() > 0)
 	    {
 	    	font.setSize(8.0F);
 	    	fontBold.setSize(8.0F);
-	    	fontBold.setStyle(font.BOLD);
-	    	for (Iterator<Reporte> iter = paginaVistas.getLista().iterator(); iter.hasNext(); ) 
+	    	fontBold.setStyle(Font.BOLD);
+	    	for (Iterator<Reporte> iter = paginaVistas.getLista().iterator(); iter.hasNext(); )
 	    	{
-	    		Reporte reporte = (Reporte)iter.next();
+	    		Reporte reporte = iter.next();
     			tabla.setFormatoFont(font.style());
 	    		tabla.setDefaultAlineacionHorizontal();
-	    		tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+	    		tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
 	        	tabla.agregarCelda(reporte.getNombre());
 
-	        	tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+	        	tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 	        	if (reporte.getPublico())
 	        		tabla.agregarCelda(mensajes.getMessage("comunes.si"));
 	        	else
 	        		tabla.agregarCelda(mensajes.getMessage("comunes.no"));
 
-	        	tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+	        	tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
 	        	tabla.agregarCelda(reporte.getDescripcion());
 	    	}
 

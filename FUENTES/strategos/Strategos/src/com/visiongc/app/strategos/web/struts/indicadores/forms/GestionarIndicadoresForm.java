@@ -10,7 +10,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
 public class GestionarIndicadoresForm extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private String filtroNombre;
 	private Long reporteSeleccionadoId;
 	private Long graficoSeleccionadoId;
@@ -26,7 +26,7 @@ public class GestionarIndicadoresForm extends VisorListaForm
 		return this.filtroNombre;
 	}
 
-	public void setFiltroNombre(String filtroNombre) 
+	public void setFiltroNombre(String filtroNombre)
 	{
 		this.filtroNombre = filtroNombre;
 	}
@@ -36,82 +36,82 @@ public class GestionarIndicadoresForm extends VisorListaForm
 		return this.reporteSeleccionadoId;
 	}
 
-	public void setReporteSeleccionadoId(Long reporteSeleccionadoId) 
+	public void setReporteSeleccionadoId(Long reporteSeleccionadoId)
 	{
 		this.reporteSeleccionadoId = reporteSeleccionadoId;
 	}
-  
+
 	public Long getGraficoSeleccionadoId()
 	{
 		return this.graficoSeleccionadoId;
 	}
 
-	public void setGraficoSeleccionadoId(Long graficoSeleccionadoId) 
+	public void setGraficoSeleccionadoId(Long graficoSeleccionadoId)
 	{
 		this.graficoSeleccionadoId = graficoSeleccionadoId;
 	}
-  
-	public Byte getNaturalezaFormula() 
+
+	public Byte getNaturalezaFormula()
 	{
 		return Naturaleza.getNaturalezaFormula();
 	}
 
-	public Byte getNaturalezaCualitativoOrdinal() 
+	public Byte getNaturalezaCualitativoOrdinal()
 	{
 		return Naturaleza.getNaturalezaCualitativoOrdinal();
 	}
 
-	public Byte getNaturalezaCualitativoNominal() 
+	public Byte getNaturalezaCualitativoNominal()
 	{
 		return Naturaleza.getNaturalezaCualitativoNominal();
 	}
 
-	public String getRespuesta() 
+	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
-	public Boolean getReporteComiteEjecutivo() 
+
+	public Boolean getReporteComiteEjecutivo()
 	{
 		return this.reporteComiteEjecutivo;
 	}
-	
-	public void setReporteComiteEjecutivo(Boolean reporteComiteEjecutivo) 
+
+	public void setReporteComiteEjecutivo(Boolean reporteComiteEjecutivo)
 	{
 		this.reporteComiteEjecutivo = reporteComiteEjecutivo;
 	}
 
-	public Boolean getReporte() 
+	public Boolean getReporte()
 	{
 		return this.reporte;
 	}
-	
-	public void setReporte(Boolean reporte) 
+
+	public void setReporte(Boolean reporte)
 	{
 		this.reporte = reporte;
 	}
 
-	public Boolean getHayTransacciones() 
+	public Boolean getHayTransacciones()
 	{
 		return this.hayTransacciones;
 	}
-	
-	public void setHayTransacciones(Boolean hayTransacciones) 
+
+	public void setHayTransacciones(Boolean hayTransacciones)
 	{
 		this.hayTransacciones = hayTransacciones;
 	}
-	
+
 	public List<Transaccion> getTransacciones()
 	{
 		return this.transacciones;
 	}
 
-	public void setTransacciones(List<Transaccion> transacciones) 
+	public void setTransacciones(List<Transaccion> transacciones)
 	{
 		this.transacciones = transacciones;
 	}
@@ -121,7 +121,7 @@ public class GestionarIndicadoresForm extends VisorListaForm
 		return this.claseId;
 	}
 
-	public void setClaseId(Long claseId) 
+	public void setClaseId(Long claseId)
 	{
 		this.claseId = claseId;
 	}

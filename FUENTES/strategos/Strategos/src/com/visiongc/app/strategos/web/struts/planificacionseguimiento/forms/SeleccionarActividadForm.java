@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms;
 
@@ -12,7 +12,7 @@ import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 public class SeleccionarActividadForm extends SelectorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	public static final String SEPARADOR_ACTIVIDADES = "!;!";
 	public static final String SEPARADOR_RUTA = "!#!";
 	public static final String CODIGO_ACTIVIDAD_ELIMINADA = "!ELIMINADO!";
@@ -44,7 +44,7 @@ public class SeleccionarActividadForm extends SelectorListaForm
 		return this.planSeleccionadoId;
 	}
 
-	public void setPlanSeleccionadoId(Long planSeleccionadoId) 
+	public void setPlanSeleccionadoId(Long planSeleccionadoId)
 	{
 		this.planSeleccionadoId = planSeleccionadoId;
 	}
@@ -54,227 +54,229 @@ public class SeleccionarActividadForm extends SelectorListaForm
 		return this.iniciativaSeleccionadaId;
 	}
 
-	public void setIniciativaSeleccionadaId(Long iniciativaSeleccionadaId) 
+	public void setIniciativaSeleccionadaId(Long iniciativaSeleccionadaId)
 	{
 		this.iniciativaSeleccionadaId = iniciativaSeleccionadaId;
 	}
-	
-	public String getNombreOrganizacion() 
+
+	public String getNombreOrganizacion()
 	{
 		return this.nombreOrganizacion;
 	}
 
-	public void setNombreOrganizacion(String nombreOrganizacion) 
+	public void setNombreOrganizacion(String nombreOrganizacion)
 	{
 		this.nombreOrganizacion = nombreOrganizacion;
 	}
 
-	public String getNombrePlan() 
+	public String getNombrePlan()
 	{
 		return this.nombrePlan;
 	}
 
-	public void setNombrePlan(String nombrePlan) 
+	public void setNombrePlan(String nombrePlan)
 	{
 		this.nombrePlan = nombrePlan;
 	}
 
-	public String getNombreIniciativa() 
+	public String getNombreIniciativa()
 	{
 		return this.nombreIniciativa;
 	}
 
-	public void setNombreIniciativa(String nombreIniciativa) 
+	public void setNombreIniciativa(String nombreIniciativa)
 	{
 		this.nombreIniciativa = nombreIniciativa;
 	}
-	
-	public Boolean getPermitirCambiarOrganizacion() 
+
+	public Boolean getPermitirCambiarOrganizacion()
 	{
 		return this.permitirCambiarOrganizacion;
 	}
 
-	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion) 
+	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion)
 	{
 		this.permitirCambiarOrganizacion = permitirCambiarOrganizacion;
 	}
 
-	public Boolean getPermitirCambiarPlan() 
+	public Boolean getPermitirCambiarPlan()
 	{
 		return this.permitirCambiarPlan;
 	}
 
-	public void setPermitirCambiarPlan(Boolean permitirCambiarPlan) 
+	public void setPermitirCambiarPlan(Boolean permitirCambiarPlan)
 	{
 		this.permitirCambiarPlan = permitirCambiarPlan;
 	}
 
-	public Boolean getPermitirCambiarIniciativa() 
+	public Boolean getPermitirCambiarIniciativa()
 	{
 		return this.permitirCambiarIniciativa;
 	}
 
-	public void setPermitirCambiarIniciativa(Boolean permitirCambiarIniciativa) 
+	public void setPermitirCambiarIniciativa(Boolean permitirCambiarIniciativa)
 	{
 		this.permitirCambiarIniciativa = permitirCambiarIniciativa;
 	}
-	
-	public Boolean isCambioOrganizacion() 
+
+	public Boolean isCambioOrganizacion()
 	{
 		return this.cambioOrganizacion;
 	}
 
-	public void setCambioOrganizacion(Boolean cambioOrganizacion) 
+	public void setCambioOrganizacion(Boolean cambioOrganizacion)
 	{
 		this.cambioOrganizacion = cambioOrganizacion;
 	}
 
-	public Boolean getCambioPlan() 
+	public Boolean getCambioPlan()
 	{
 		return this.cambioPlan;
 	}
 
-	public void setCambioPlan(Boolean cambioPlan) 
+	public void setCambioPlan(Boolean cambioPlan)
 	{
 		this.cambioPlan = cambioPlan;
 	}
 
-	public Boolean getCambioIniciativa() 
+	public Boolean getCambioIniciativa()
 	{
 		return this.cambioIniciativa;
 	}
 
-	public void setCambioIniciativa(Boolean cambioIniciativa) 
+	public void setCambioIniciativa(Boolean cambioIniciativa)
 	{
 		this.cambioIniciativa = cambioIniciativa;
 	}
-	
-	public String getFuncionCierre() 
+
+	@Override
+	public String getFuncionCierre()
 	{
 		return this.funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	@Override
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
 
-	public String getNombreCampoRutasCompletas() 
+	public String getNombreCampoRutasCompletas()
 	{
 		return this.nombreCampoRutasCompletas;
 	}
 
-	public void setNombreCampoRutasCompletas(String nombreCampoRutasCompletas) 
+	public void setNombreCampoRutasCompletas(String nombreCampoRutasCompletas)
 	{
 		this.nombreCampoRutasCompletas = nombreCampoRutasCompletas;
 	}
 
-	public Byte getFrecuenciaSeleccionada() 
+	public Byte getFrecuenciaSeleccionada()
 	{
 		return this.frecuenciaSeleccionada;
 	}
 
-	public void setFrecuenciaSeleccionada(Byte frecuenciaSeleccionada) 
+	public void setFrecuenciaSeleccionada(Byte frecuenciaSeleccionada)
 	{
 		this.frecuenciaSeleccionada = frecuenciaSeleccionada;
 	}
 
-	public String getPanelSeleccionado() 
+	public String getPanelSeleccionado()
 	{
 		return this.panelSeleccionado;
 	}
 
-	public void setPanelSeleccionado(String panelSeleccionado) 
+	public void setPanelSeleccionado(String panelSeleccionado)
 	{
 		this.panelSeleccionado = panelSeleccionado;
 	}
 
-	public String getAtributoOrdenPlanes() 
+	public String getAtributoOrdenPlanes()
 	{
 		return this.atributoOrdenPlanes;
 	}
 
-	public void setAtributoOrdenPlanes(String atributoOrdenPlanes) 
+	public void setAtributoOrdenPlanes(String atributoOrdenPlanes)
 	{
 		this.atributoOrdenPlanes = atributoOrdenPlanes;
 	}
 
-	public String getTipoOrdenPlanes() 
+	public String getTipoOrdenPlanes()
 	{
 		return this.tipoOrdenPlanes;
 	}
 
-	public void setTipoOrdenPlanes(String tipoOrdenPlanes) 
+	public void setTipoOrdenPlanes(String tipoOrdenPlanes)
 	{
 		this.tipoOrdenPlanes = tipoOrdenPlanes;
 	}
 
-	public Long getOrganizacionSeleccionadaId() 
+	public Long getOrganizacionSeleccionadaId()
 	{
 		return this.organizacionSeleccionadaId;
 	}
 
-	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId) 
+	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId)
 	{
 		this.organizacionSeleccionadaId = organizacionSeleccionadaId;
 	}
 
-	public String getRutaCompletaOrganizacion() 
+	public String getRutaCompletaOrganizacion()
 	{
 		return this.rutaCompletaOrganizacion;
 	}
 
-	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
 	{
 		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
 	}
 
-	public String getNombreCampoPlanId() 
+	public String getNombreCampoPlanId()
 	{
 		return this.nombreCampoPlanId;
 	}
 
-	public void setNombreCampoPlanId(String nombreCampoPlanId) 
+	public void setNombreCampoPlanId(String nombreCampoPlanId)
 	{
 		this.nombreCampoPlanId = nombreCampoPlanId;
 	}
 
-	public Boolean getIniciado() 
+	public Boolean getIniciado()
 	{
 		return this.iniciado;
 	}
 
-	public void setIniciado(Boolean iniciado) 
+	public void setIniciado(Boolean iniciado)
 	{
 		this.iniciado = iniciado;
 	}
 
-	public String getSeparadorActividades() 
+	public String getSeparadorActividades()
 	{
 		return "!;!";
 	}
 
-	public String getSeparadorRuta() 
+	public String getSeparadorRuta()
 	{
 		return "!#!";
 	}
 
-	public String getCodigoActividadEliminada() 
+	public String getCodigoActividadEliminada()
 	{
 		return "!ELIMINADO!";
 	}
 
-	public String getExcluirIds() 
+	public String getExcluirIds()
 	{
 		return this.excluirIds;
 	}
 
-	public void setExcluirIds(String excluirIds) 
+	public void setExcluirIds(String excluirIds)
 	{
 		this.excluirIds = excluirIds;
 	}
-	
-	public void clear() 
+
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);

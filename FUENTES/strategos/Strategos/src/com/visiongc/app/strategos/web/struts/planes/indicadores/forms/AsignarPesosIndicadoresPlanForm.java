@@ -61,7 +61,8 @@ public class AsignarPesosIndicadoresPlanForm extends EditarObjetoForm
     this.funcionCierre = funcionCierre;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.objetivoId = null;
     this.perspectivaId = null;
     this.organizacionNombre = null;

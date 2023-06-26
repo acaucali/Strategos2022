@@ -1,8 +1,9 @@
 package com.visiongc.app.strategos.web.struts.plancuentas.forms;
 
+import java.util.List;
+
 import com.visiongc.app.strategos.plancuentas.model.GrupoMascaraCodigoPlanCuentas;
 import com.visiongc.framework.web.struts.forms.VisorArbolForm;
-import java.util.List;
 
 public class GestionarCuentasForm extends VisorArbolForm
 {

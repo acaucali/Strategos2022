@@ -3,7 +3,21 @@
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
-import com.lowagie.text.Chunk;
+import java.awt.Color;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.MessageResources;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -14,14 +28,10 @@ import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
-import com.visiongc.app.strategos.indicadores.model.MedicionPK;
 import com.visiongc.app.strategos.indicadores.model.util.AlertaIndicador;
-import com.visiongc.app.strategos.indicadores.model.util.TipoCorte;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
-import com.visiongc.app.strategos.indicadores.model.util.TipoMedicion;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
 import com.visiongc.app.strategos.model.util.LapsoTiempo;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
@@ -30,14 +40,12 @@ import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.ElementoPlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.IndicadorEstado;
-import com.visiongc.app.strategos.planes.model.Meta;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.planes.model.PerspectivaEstado;
 import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
 import com.visiongc.app.strategos.planes.model.util.TipoIndicadorEstado;
-import com.visiongc.app.strategos.planes.model.util.TipoMeta;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
@@ -49,27 +57,15 @@ import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.vistasdatos.StrategosVistasDatosService;
 import com.visiongc.app.strategos.vistasdatos.model.util.TipoVariable;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.util.WebUtil;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 import com.visiongc.framework.web.struts.forms.NavegadorForm;
-import java.awt.Color;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.MessageResources;
 
 /**
  * @author Andres Martinez 23-05-2022
@@ -81,6 +77,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 	private int inicioTamanoPagina = 57;
 	private int maxLineasAntesTabla = 4;
 
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
 		String source = request.getParameter("source");
 		if (source.equals("Plan"))
@@ -89,6 +86,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.detallado.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response,
 			Document documento) throws Exception {
 
@@ -317,7 +315,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				nivel++;
 
 			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) {
-				Perspectiva perspectivaHija = (Perspectiva) iter.next();
+				Perspectiva perspectivaHija = iter.next();
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
 
 				// nombre de la perspectiva primer nivel
@@ -416,7 +414,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		Font fontTitulos = new Font(getConfiguracionPagina(request).getCodigoFuente());
 		fontTitulos.setSize(14);
 		fontTitulos.setStyle(Font.BOLD);
-		Integer nivel = 0;
+		int nivel = 0;
 		inicioTamanoPagina = lineasxPagina(fuente);
 		tamanoPagina = inicioTamanoPagina;
 
@@ -520,7 +518,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						crearTablaTitulo(tabla, mensajes, 1);
 
 						for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter.next();
+							Iniciativa iniciativa = iter.next();
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -663,7 +661,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						crearTablaTitulo(tabla, mensajes, 1);
 
 						for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter.next();
+							Iniciativa iniciativa = iter.next();
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -694,7 +692,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						documento.add(lineaEnBlanco(fuente));
 
 						for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter2.next();
+							Iniciativa iniciativa = iter2.next();
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -789,7 +787,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 					if (organizaciones.size() > 0) {
 						for (Iterator<OrganizacionStrategos> iter = organizaciones.iterator(); iter.hasNext();) {
 
-							OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+							OrganizacionStrategos organizacion = iter.next();
 							if (organizacion != null) {
 								// Nombre de la Organizacion, plan y periodo del reporte
 								Paragraph textoOrg = new Paragraph("Organización: " + organizacion.getNombre(),
@@ -854,7 +852,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 								crearTablaTitulo(tabla, mensajes, 1);
 
 								for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
-									Iniciativa iniciativa = (Iniciativa) iter2.next();
+									Iniciativa iniciativa = iter2.next();
 									Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 											iniciativa
 													.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
@@ -885,7 +883,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 								}
 								documento.add(tabla.getTabla());
 								for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
-									Iniciativa iniciativa = (Iniciativa) iter2.next();
+									Iniciativa iniciativa = iter2.next();
 									Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 											iniciativa
 													.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
@@ -999,23 +997,21 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		tabla.setAlineacionHorizontal(1);
 
 		if (actividades.size() > 0) {
+			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+				PryActividad actividad = iter.next();
 				Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 						actividad.getIndicadorId());
 
 				// Dibujar Informacion de la Iniciativa
 				crearTablaActividad(reporte, actividad, indicador, font, mensajes, documento, request, tabla);
-
-				// TODO
 			}
-			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 			documento.add(tabla.getTabla());
-			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
-			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+			
+			
 
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+				PryActividad actividad = iter.next();
 				Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 						actividad.getIndicadorId());
 
@@ -1037,7 +1033,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
 						new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
 						periodoFin);
-
+				documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 				texto = new Paragraph(
 						reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : " + iniciativa.getNombre(),
 						fontTitulos);
@@ -1051,7 +1047,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				texto.setAlignment(Element.ALIGN_LEFT);
 				texto.setIndentationLeft(16);
 				documento.add(texto);
-				// TODO
 
 				// Crear tabla del Indicador
 				if (medicionesEjecutado.size() != 0)
@@ -1110,11 +1105,11 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		}
 
 		Double programado = 0D;
-		Double porcentajeEsperado = 0D;
+		double porcentajeEsperado = 0D;
 		for (Iterator<Medicion> iterEjecutado = medicionesEjecutado.iterator(); iterEjecutado.hasNext();) {
-			Medicion ejecutado = (Medicion) iterEjecutado.next();
+			Medicion ejecutado = iterEjecutado.next();
 			for (Iterator<Medicion> iterMeta = medicionesProgramado.iterator(); iterMeta.hasNext();) {
-				Medicion meta = (Medicion) iterMeta.next();
+				Medicion meta = iterMeta.next();
 				if (ejecutado.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue()
 						&& ejecutado.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo()
 								.intValue()) {
@@ -1190,8 +1185,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				actividad.getPorcentajeEjecutado() != null ? actividad.getPorcentajeEjecutadoFormateado() : "");
 		tabla.agregarCelda(
 				actividad.getPorcentajeEsperado() != null ? actividad.getPorcentajeEsperadoFormateado() : "");
-		tabla.agregarCelda(actividad.getResponsableSeguimiento() != null ? actividad.getResponsableSeguimiento() : "");
-
+		if(actividad.getResponsableSeguimiento() != null)
+			tabla.agregarCelda(actividad.getResponsableSeguimiento().getNombre());
+		else
+			tabla.agregarCelda("");
 	}
 
 	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources mensajes, Integer tipo) throws Exception {
@@ -1209,7 +1206,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.setAmplitudTabla(100);
 			tabla.crearTabla(columnas);
 
-			tabla.setColorFondo(128, 128, 128);
+			tabla.setColorFondo(21, 60, 120);
 			tabla.setColorLetra(255, 255, 255);
 			tabla.setTamanoFont(12);
 			tabla.setFormatoFont(Font.BOLD);
@@ -1243,7 +1240,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 			tabla.setAmplitudTabla(100);
 			tabla.crearTabla(columnas);
-			tabla.setColorFondo(128, 128, 128);
+			tabla.setColorFondo(21, 60, 120);
 			tabla.setColorLetra(255, 255, 255);
 			tabla.setTamanoFont(12);
 			tabla.setFormatoFont(Font.BOLD);
@@ -1287,12 +1284,16 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		String[][] columnas = new String[mediciones.size() + 1][2];
 		StringBuilder string;
+		
+		string = new StringBuilder();
+		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo"));
+		string.append("\n");
 		int contador = 0;
 		columnas[contador][0] = "8";
-		columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo");
+		columnas[contador][1] = string.toString();
 		for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
 			contador++;
-			Medicion medicion = (Medicion) iter.next();
+			Medicion medicion = iter.next();
 			columnas[contador][0] = "8";
 
 			if (contador == (mediciones.size())) {
@@ -1310,28 +1311,20 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		if (showEjecutado) {
 			tablaIniciada = false;
-
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.ejecutado"));
 			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
-
+			
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
-				Medicion medicion = (Medicion) iter.next();
+				Medicion medicion = iter.next();
 				tabla.agregarCelda(
 						(medicion.getValor() != null ? VgcFormatter.formatearNumero(medicion.getValor()) : ""));
 			}
-
-			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
+			documento.add(tabla.getTabla());
+			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+			tablaIniciada = true;
 		}
 
 		if (showMeta) {
@@ -1344,10 +1337,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda(string.toString());
 
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
-				Medicion medicion = (Medicion) iter.next();
+				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<Medicion> iterMeta = medicionesMeta.iterator(); iterMeta.hasNext();) {
-					Medicion meta = (Medicion) iterMeta.next();
+					Medicion meta = iterMeta.next();
 					if (medicion.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue()
 							&& medicion.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo()
 									.intValue()) {
@@ -1357,16 +1350,9 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				}
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-
-			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
+			documento.add(tabla.getTabla());			
+			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+			tablaIniciada = true;			
 		}
 
 		if (showEstadoParcial) {
@@ -1383,10 +1369,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda(string.toString());
 
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
-				Medicion medicion = (Medicion) iter.next();
+				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<IndicadorEstado> iterEstado = estadosParciales.iterator(); iterEstado.hasNext();) {
-					IndicadorEstado estado = (IndicadorEstado) iterEstado.next();
+					IndicadorEstado estado = iterEstado.next();
 					if (medicion.getMedicionId().getAno().intValue() == estado.getPk().getAno().intValue() && medicion
 							.getMedicionId().getPeriodo().intValue() == estado.getPk().getPeriodo().intValue()) {
 						valor = estado.getEstado();
@@ -1398,16 +1384,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-
-			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
+			documento.add(tabla.getTabla());			
+			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+			tablaIniciada = true;
+			
 		}
 
 		if (showEstadoAnual) {
@@ -1423,10 +1403,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda(string.toString());
 
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
-				Medicion medicion = (Medicion) iter.next();
+				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<IndicadorEstado> iterEstado = estadosAnuales.iterator(); iterEstado.hasNext();) {
-					IndicadorEstado estado = (IndicadorEstado) iterEstado.next();
+					IndicadorEstado estado = iterEstado.next();
 					if (medicion.getMedicionId().getAno().intValue() == estado.getPk().getAno().intValue() && medicion
 							.getMedicionId().getPeriodo().intValue() == estado.getPk().getPeriodo().intValue()) {
 						valor = estado.getEstado();
@@ -1437,16 +1417,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 					valor = 100D;
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-
-			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
+			documento.add(tabla.getTabla());
+			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+			tablaIniciada = true;
+			
 		}
 
 		if (showAlerta) {
@@ -1459,10 +1433,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda(string.toString());
 
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
-				Medicion medicion = (Medicion) iter.next();
+				Medicion medicion = iter.next();
 				Medicion valorMeta = null;
 				for (Iterator<Medicion> iterMeta = medicionesMeta.iterator(); iterMeta.hasNext();) {
-					Medicion meta = (Medicion) iterMeta.next();
+					Medicion meta = iterMeta.next();
 					if (medicion.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue()
 							&& medicion.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo()
 									.intValue()) {
@@ -1500,16 +1474,10 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				} else
 					tabla.agregarCelda("");
 			}
-
-			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
+			documento.add(tabla.getTabla());
+			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+			tablaIniciada = true;
+			
 		}
 
 		strategosVistasDatosService.close();
@@ -1536,11 +1504,11 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			anchoBorde = 0;
 			anchoBordeCelda = 0;
 			bold = false;
-			alineacionHorizontal = TablaBasicaPDF.H_ALINEACION_LEFT;
-			alineacionVertical = TablaBasicaPDF.V_ALINEACION_TOP;
+			alineacionHorizontal = Tabla.H_ALINEACION_LEFT;
+			alineacionVertical = Tabla.V_ALINEACION_TOP;
 		} else {
 			colorLetra = new Color(255, 255, 255);
-			colorFondo = new Color(128, 128, 128);
+			colorFondo = new Color(21, 60, 120);
 		}
 
 		if (tablaHeader != null && newTable)
@@ -1557,8 +1525,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		}
 
 		if (!isInformativo) {
-			tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
-			tabla.setAlineacionVertical(TablaBasicaPDF.V_ALINEACION_MIDDLE);
+			tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
+			tabla.setAlineacionVertical(Tabla.V_ALINEACION_MIDDLE);
 			tabla.setFont(Font.NORMAL);
 			tabla.setFormatoFont(Font.NORMAL);
 			tabla.setColorLetra(0, 0, 0);
@@ -1611,7 +1579,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tipoOrden[0] = "asc";
 			List<Perspectiva> perspectivas = strategosPerspectivasService.getPerspectivas(orden, tipoOrden, filtros);
 			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) {
-				Perspectiva perspectivaHija = (Perspectiva) iter.next();
+				Perspectiva perspectivaHija = iter.next();
 				if (perspectivaHija.getPerspectivaId().longValue() == perspectivaId.longValue()) {
 					nivelInterno = nivel;
 					break;
@@ -1720,7 +1688,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-		tabla.setColorFondo(128, 128, 128);
+		tabla.setColorFondo(21, 60, 120);
 		tabla.setColorLetra(255, 255, 255);
 		tabla.setTamanoFont(12);
 		tabla.setFormatoFont(Font.BOLD);
@@ -1763,7 +1731,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		if (perspectivas.size() > 0) {
 			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) {
-				Perspectiva perspectivaHija = (Perspectiva) iter.next();
+				Perspectiva perspectivaHija = iter.next();
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
 
 				// nombre de la perspectiva primer nivel
@@ -1975,7 +1943,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		for (Iterator<PerspectivaEstado> iter = estadosParciales.iterator(); iter.hasNext();) {
 			contador++;
-			PerspectivaEstado estadoParcial = (PerspectivaEstado) iter.next();
+			PerspectivaEstado estadoParcial = iter.next();
 			columnas[contador][0] = "8";
 			columnas[contador][1] = PeriodoUtil.convertirPeriodoToTexto(estadoParcial.getPk().getPeriodo(),
 					perspectiva.getFrecuencia(), estadoParcial.getPk().getAno());
@@ -1993,7 +1961,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 			tabla.agregarCelda(string.toString());
 			for (Iterator<PerspectivaEstado> iter = estadosParciales.iterator(); iter.hasNext();) {
-				PerspectivaEstado estadoParcial = (PerspectivaEstado) iter.next();
+				PerspectivaEstado estadoParcial = iter.next();
 				Double valor = estadoParcial.getEstado();
 				if (valor != null && valor > 100D)
 					valor = 100D;
@@ -2022,7 +1990,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda(string.toString());
 
 			for (Iterator<PerspectivaEstado> iter = estadosAnuales.iterator(); iter.hasNext();) {
-				PerspectivaEstado estadoParcial = (PerspectivaEstado) iter.next();
+				PerspectivaEstado estadoParcial = iter.next();
 
 				Double valor = estadoParcial.getEstado();
 				if (valor != null && valor > 100D)
@@ -2030,7 +1998,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				tabla.agregarCelda((estadoParcial.getEstado() != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
 
-			lineas = getNumeroLinea((lineas + 3), inicioLineas);
+			lineas = getNumeroLinea((lineas + 1), inicioLineas);
 			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
 				lineas = inicioLineas;
 				documento.add(tabla.getTabla());
@@ -2050,7 +2018,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda(string.toString());
 
 			for (int i = 0; i < (estadosParciales.size()); i++) {
-				PerspectivaEstado medicion = (PerspectivaEstado) estadosParciales.get(i);
+				PerspectivaEstado medicion = estadosParciales.get(i);
 				String alerta = strategosVistasDatosService.getValorDimensiones(
 						TipoVariable.getTipoVariableAlerta().toString(),
 						medicion.getPk().getPeriodo() + "_" + medicion.getPk().getAno(),

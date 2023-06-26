@@ -191,6 +191,8 @@
 			
 			function cancelar() 
 			{
+				//window.document.editarActividadForm.action = '<html:rewrite action="/planificacionseguimiento/actividades/cancelarGuardarActividad"/>'
+				//window.document.editarActividadForm.submit();			
 				this.close();
 			}
 			

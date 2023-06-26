@@ -25,7 +25,8 @@
 			var _altoPrefijoListo = false;
 		
 			function nuevoCooperante(){				
-				abrirVentanaModal('<html:rewrite action="/instrumentos/crearCooperante" />',"CooperanteAdd", 530, 380);				
+				window.location.href= '<html:rewrite action="/instrumentos/crearCooperante" />'
+				//abrirVentanaModal('<html:rewrite action="/instrumentos/crearCooperante" />',"CooperanteAdd", 530, 380);				
 			}
 			
 			function modificarCooperante(cooperanteId) 

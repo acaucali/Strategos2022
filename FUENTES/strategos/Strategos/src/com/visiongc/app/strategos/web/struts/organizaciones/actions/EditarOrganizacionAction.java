@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.organizaciones.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
@@ -13,26 +25,18 @@ import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public final class EditarOrganizacionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		EditarOrganizacionForm editarOrganizacionForm = (EditarOrganizacionForm)form;
@@ -40,7 +44,7 @@ public final class EditarOrganizacionAction extends VgcAction
 		ActionMessages messages = getMessages(request);
 
 		String organizacionId = request.getParameter("organizacionId");
-		
+
 		boolean verForm = getPermisologiaUsuario(request).tienePermiso("ORGANIZACION_VIEWALL");
 		boolean editarForm = getPermisologiaUsuario(request).tienePermiso("ORGANIZACION_EDIT");
 
@@ -58,10 +62,10 @@ public final class EditarOrganizacionAction extends VgcAction
     		if (!strategosIndicadoresService.checkLicencia(request))
     		{
     			strategosIndicadoresService.close();
-    			
+
     			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("action.guardarregistro.limite.exedido"));
     			this.saveMessages(request, messages);
-    			
+
     			return this.getForwardBack(request, 1, false);
     		}
     		strategosIndicadoresService.close();
@@ -77,7 +81,7 @@ public final class EditarOrganizacionAction extends VgcAction
 				rootId = BuscarRootId(strategosOrganizacionesService, organizacionStrategos.getPadreId());
 			else
 				rootId = organizacionStrategos.getOrganizacionId();
-			
+
 			editarOrganizacionForm.setRootId(rootId);
 
 			if (organizacionStrategos != null)
@@ -93,7 +97,7 @@ public final class EditarOrganizacionAction extends VgcAction
 
 				OrganizacionStrategos padre = organizacionStrategos.getPadre();
 				Long padreId = null;
-				if (padre != null) 
+				if (padre != null)
 				{
 					padreId = padre.getOrganizacionId();
 					OrganizacionStrategos organizacionStrategosPadre = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, new Long(padreId));
@@ -116,8 +120,8 @@ public final class EditarOrganizacionAction extends VgcAction
 				editarOrganizacionForm.setPorcentajeZonaAmarillaIniciativas(organizacionStrategos.getPorcentajeZonaAmarillaIniciativas());
 				editarOrganizacionForm.setMesCierre(organizacionStrategos.getMesCierre());
 				editarOrganizacionForm.setVisible(organizacionStrategos.getVisible());
-				
-				for (Iterator<?> i = organizacionStrategos.getMemos().iterator(); i.hasNext(); ) 
+
+				for (Iterator<?> i = organizacionStrategos.getMemos().iterator(); i.hasNext(); )
 				{
 					MemoOrganizacion oMemo = (MemoOrganizacion)i.next();
 					Integer tipoMemo = oMemo.getPk().getTipo();
@@ -139,7 +143,7 @@ public final class EditarOrganizacionAction extends VgcAction
 						editarOrganizacionForm.setFactoresClave(oMemo.getDescripcion());
 					else if (tipoMemo.equals(new Integer(8)))
 						editarOrganizacionForm.setPoliticas(oMemo.getDescripcion());
-					else if (tipoMemo.equals(new Integer(9))) 
+					else if (tipoMemo.equals(new Integer(9)))
 						editarOrganizacionForm.setValores(oMemo.getDescripcion());
 				}
 			}
@@ -159,20 +163,20 @@ public final class EditarOrganizacionAction extends VgcAction
 			editarOrganizacionForm.setOrganizacionId(new Long(0L));
 			editarOrganizacionForm.setPadreId(padre.getOrganizacionId());
 		}
-		
+
 		List<?> meses = PeriodoUtil.getListaMeses();
 		request.setAttribute("meses", meses);
-		
+
 		strategosOrganizacionesService.close();
 
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
 
 		return mapping.findForward(forward);
 	}
-	
+
 	private Long BuscarRootId(StrategosOrganizacionesService strategosOrganizacionesService, Long organizacionId)
 	{
 		Long rootId = 0L;
@@ -181,7 +185,7 @@ public final class EditarOrganizacionAction extends VgcAction
 			rootId = BuscarRootId(strategosOrganizacionesService, organizacionStrategos.getPadreId());
 		else
 			rootId = organizacionStrategos.getOrganizacionId();
-		
+
 		return rootId;
 	}
 }

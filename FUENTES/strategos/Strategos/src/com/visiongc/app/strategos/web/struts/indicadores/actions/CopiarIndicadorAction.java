@@ -1,5 +1,22 @@
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -21,46 +38,31 @@ import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.seriestiempo.StrategosSeriesTiempoService;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import com.visiongc.app.strategos.web.struts.indicadores.validators.IndicadorValidator;
 import com.visiongc.app.strategos.web.struts.util.ObjetosCopia;
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.ConfiguracionUsuarioPK;
 import com.visiongc.framework.model.Usuario;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class CopiarIndicadorAction
   extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
     String ts = request.getParameter("ts");
     if (cancelar) {
@@ -70,9 +72,9 @@ public class CopiarIndicadorAction
       forward = "finalizarCopiarIndicador";
     }
     ActionMessages messages = getMessages(request);
-    
+
     EditarIndicadorForm editarIndicadorForm = (EditarIndicadorForm)form;
-    
+
     String showPresentacion = request.getParameter("showPresentacion") != null ? request.getParameter("showPresentacion").toString() : "0";
     FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
     ConfiguracionUsuario presentacion = new ConfiguracionUsuario();
@@ -84,12 +86,12 @@ public class CopiarIndicadorAction
     presentacion.setData(showPresentacion);
     frameworkService.saveConfiguracionUsuario(presentacion, getUsuarioConectado(request));
     frameworkService.close();
-    
+
     int respuesta = 10000;
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     List<ObjetosCopia> clasesCopiadas = new ArrayList();
     clasesCopiadas.add(new ObjetosCopia(editarIndicadorForm.getClaseId(), editarIndicadorForm.getClaseId(), editarIndicadorForm.getOrganizacionId()));
-    
+
     respuesta = SalvarIndicador(editarIndicadorForm, clasesCopiadas, strategosIndicadoresService, request);
     if (respuesta == 10000)
     {
@@ -103,20 +105,20 @@ public class CopiarIndicadorAction
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
     }
     strategosIndicadoresService.close();
-    
+
     saveMessages(request, messages);
-    
+
     request.getSession().setAttribute("GuardarIndicadorAction.ultimoTs", ts);
     if (forward.equals("finalizarCopiarIndicador")) {
       return getForwardBack(request, 1, true);
     }
     return getForwardBack(request, 1, true);
   }
-  
+
   public int CopiarIndicador(Plan planOrigen, Plan planDestino, List<ObjetosCopia> clasesCopiadas, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     Indicador indicadorFuente = new Indicador();
     Map<String, Object> filtros = new HashMap();
@@ -127,7 +129,7 @@ public class CopiarIndicadorAction
     if (planOrigen.getIndTotalImputacionId() != null)
     {
       indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, planOrigen.getIndTotalImputacionId());
-      
+
       filtros.put("organizacionId", planDestino.getOrganizacionId());
       filtros.put("nombre", indicadorFuente.getNombre());
       filtros.put("claseId", planDestino.getClaseIdIndicadoresTotales());
@@ -145,17 +147,17 @@ public class CopiarIndicadorAction
       else
       {
         indicadorCopia = new Indicador();
-        
+
         indicadorCopia.setIndicadorId(new Long(0L));
         indicadorCopia.setClaseId(planDestino.getClaseIdIndicadoresTotales());
         indicadorCopia.setOrganizacionId(planDestino.getOrganizacionId());
         indicadorCopia.setNombre(indicadorFuente.getNombre());
         indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-        
+
         indicadorCopia.setEscalaCualitativa(new ArrayList());
         indicadorCopia.setSeriesIndicador(new HashSet());
         indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-        
+
         setDatosBasicos(indicadorCopia, indicadorFuente, request);
         setAsociar(indicadorCopia, indicadorFuente, request);
         setResponsables(indicadorCopia, indicadorFuente);
@@ -164,18 +166,18 @@ public class CopiarIndicadorAction
         SerieIndicador serieReal = setSeriesTiempo(indicadorCopia, indicadorFuente);
         respuesta = setDefinicion(indicadorCopia, indicadorFuente, clasesCopiadas, serieReal, false, false, indicadoresCopia, indicadoresFuentes, strategosIndicadoresService, request);
         setRelaciones(indicadorCopia, indicadorFuente);
-        
+
         respuesta = strategosIndicadoresService.saveIndicador(indicadorCopia, (Usuario)request.getSession().getAttribute("usuario"));
         if (respuesta == 10003)
         {
           filtros = new HashMap();
-          
+
           filtros.put("claseId", indicadorCopia.getClaseId());
           filtros.put("nombre", indicadorCopia.getNombre());
           List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
           if (inds.size() > 0)
           {
-            indicadorCopia = (Indicador)inds.get(0);
+            indicadorCopia = inds.get(0);
             respuesta = 10000;
           }
         }
@@ -188,7 +190,7 @@ public class CopiarIndicadorAction
     {
       indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, planOrigen.getIndTotalIniciativaId());
       filtros = new HashMap();
-      
+
       filtros.put("organizacionId", planDestino.getOrganizacionId());
       filtros.put("nombre", indicadorFuente.getNombre());
       filtros.put("claseId", planDestino.getClaseIdIndicadoresTotales());
@@ -206,17 +208,17 @@ public class CopiarIndicadorAction
       else
       {
         indicadorCopia = new Indicador();
-        
+
         indicadorCopia.setIndicadorId(new Long(0L));
         indicadorCopia.setClaseId(planDestino.getClaseIdIndicadoresTotales());
         indicadorCopia.setOrganizacionId(planDestino.getOrganizacionId());
         indicadorCopia.setNombre(indicadorFuente.getNombre());
         indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-        
+
         indicadorCopia.setEscalaCualitativa(new ArrayList());
         indicadorCopia.setSeriesIndicador(new HashSet());
         indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-        
+
         setDatosBasicos(indicadorCopia, indicadorFuente, request);
         setAsociar(indicadorCopia, indicadorFuente, request);
         setResponsables(indicadorCopia, indicadorFuente);
@@ -225,18 +227,18 @@ public class CopiarIndicadorAction
         SerieIndicador serieReal = setSeriesTiempo(indicadorCopia, indicadorFuente);
         setDefinicion(indicadorCopia, indicadorFuente, clasesCopiadas, serieReal, false, false, indicadoresCopia, indicadoresFuentes, strategosIndicadoresService, request);
         setRelaciones(indicadorCopia, indicadorFuente);
-        
+
         respuesta = strategosIndicadoresService.saveIndicador(indicadorCopia, (Usuario)request.getSession().getAttribute("usuario"));
         if (respuesta == 10003)
         {
           filtros = new HashMap();
-          
+
           filtros.put("claseId", indicadorCopia.getClaseId());
           filtros.put("nombre", indicadorCopia.getNombre());
           List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
           if (inds.size() > 0)
           {
-            indicadorCopia = (Indicador)inds.get(0);
+            indicadorCopia = inds.get(0);
             respuesta = 10000;
           }
         }
@@ -249,7 +251,7 @@ public class CopiarIndicadorAction
     {
       indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, planOrigen.getNlAnoIndicadorId());
       filtros = new HashMap();
-      
+
       filtros.put("organizacionId", planDestino.getOrganizacionId());
       filtros.put("nombre", indicadorFuente.getNombre());
       filtros.put("claseId", planDestino.getClaseId());
@@ -267,17 +269,17 @@ public class CopiarIndicadorAction
       else
       {
         indicadorCopia = new Indicador();
-        
+
         indicadorCopia.setIndicadorId(new Long(0L));
         indicadorCopia.setClaseId(planDestino.getClaseId());
         indicadorCopia.setOrganizacionId(planDestino.getOrganizacionId());
         indicadorCopia.setNombre(indicadorFuente.getNombre());
         indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-        
+
         indicadorCopia.setEscalaCualitativa(new ArrayList());
         indicadorCopia.setSeriesIndicador(new HashSet());
         indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-        
+
         setDatosBasicos(indicadorCopia, indicadorFuente, request);
         setAsociar(indicadorCopia, indicadorFuente, request);
         setResponsables(indicadorCopia, indicadorFuente);
@@ -286,7 +288,7 @@ public class CopiarIndicadorAction
         SerieIndicador serieReal = setSeriesTiempo(indicadorCopia, indicadorFuente);
         setDefinicion(indicadorCopia, indicadorFuente, clasesCopiadas, serieReal, false, false, indicadoresCopia, indicadoresFuentes, strategosIndicadoresService, request);
         setRelaciones(indicadorCopia, indicadorFuente);
-        
+
         respuesta = strategosIndicadoresService.saveIndicador(indicadorCopia, (Usuario)request.getSession().getAttribute("usuario"));
         if (respuesta == 10000) {
           planDestino.setNlAnoIndicadorId(indicadorCopia.getIndicadorId());
@@ -297,7 +299,7 @@ public class CopiarIndicadorAction
     {
       indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, planOrigen.getNlParIndicadorId());
       filtros = new HashMap();
-      
+
       filtros.put("organizacionId", planDestino.getOrganizacionId());
       filtros.put("nombre", indicadorFuente.getNombre());
       filtros.put("claseId", planDestino.getClaseId());
@@ -315,17 +317,17 @@ public class CopiarIndicadorAction
       else
       {
         indicadorCopia = new Indicador();
-        
+
         indicadorCopia.setIndicadorId(new Long(0L));
         indicadorCopia.setClaseId(planDestino.getClaseId());
         indicadorCopia.setOrganizacionId(planDestino.getOrganizacionId());
         indicadorCopia.setNombre(indicadorFuente.getNombre());
         indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-        
+
         indicadorCopia.setEscalaCualitativa(new ArrayList());
         indicadorCopia.setSeriesIndicador(new HashSet());
         indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-        
+
         setDatosBasicos(indicadorCopia, indicadorFuente, request);
         setAsociar(indicadorCopia, indicadorFuente, request);
         setResponsables(indicadorCopia, indicadorFuente);
@@ -334,18 +336,18 @@ public class CopiarIndicadorAction
         SerieIndicador serieReal = setSeriesTiempo(indicadorCopia, indicadorFuente);
         setDefinicion(indicadorCopia, indicadorFuente, clasesCopiadas, serieReal, false, false, indicadoresCopia, indicadoresFuentes, strategosIndicadoresService, request);
         setRelaciones(indicadorCopia, indicadorFuente);
-        
+
         respuesta = strategosIndicadoresService.saveIndicador(indicadorCopia, (Usuario)request.getSession().getAttribute("usuario"));
         if (respuesta == 10003)
         {
           filtros = new HashMap();
-          
+
           filtros.put("claseId", indicadorCopia.getClaseId());
           filtros.put("nombre", indicadorCopia.getNombre());
           List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
           if (inds.size() > 0)
           {
-            indicadorCopia = (Indicador)inds.get(0);
+            indicadorCopia = inds.get(0);
             respuesta = 10000;
           }
         }
@@ -355,14 +357,14 @@ public class CopiarIndicadorAction
       }
     }
     strategosIndicadoresService.close();
-    
+
     return respuesta;
   }
-  
+
   public int CopiarIndicador(Long organizacionIdDestino, Perspectiva perspectivaOrigen, Perspectiva perspectivaDestino, List<ObjetosCopia> clasesCopiadas, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     Map<String, Object> filtros = new HashMap();
     Indicador indicadorFuente = new Indicador();
@@ -373,7 +375,7 @@ public class CopiarIndicadorAction
     if ((perspectivaOrigen.getNlAnoIndicadorId() != null) && (perspectivaDestino.getClaseId() != null))
     {
       indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, perspectivaOrigen.getNlAnoIndicadorId());
-      
+
       filtros.put("organizacionId", organizacionIdDestino.toString());
       filtros.put("nombre", indicadorFuente.getNombre());
       filtros.put("claseId", perspectivaDestino.getClaseId().toString());
@@ -396,11 +398,11 @@ public class CopiarIndicadorAction
         indicadorCopia.setOrganizacionId(organizacionIdDestino);
         indicadorCopia.setNombre(indicadorFuente.getNombre());
         indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-        
+
         indicadorCopia.setEscalaCualitativa(new ArrayList());
         indicadorCopia.setSeriesIndicador(new HashSet());
         indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-        
+
         setDatosBasicos(indicadorCopia, indicadorFuente, request);
         setAsociar(indicadorCopia, indicadorFuente, request);
         setResponsables(indicadorCopia, indicadorFuente);
@@ -409,18 +411,18 @@ public class CopiarIndicadorAction
         SerieIndicador serieReal = setSeriesTiempo(indicadorCopia, indicadorFuente);
         setDefinicion(indicadorCopia, indicadorFuente, clasesCopiadas, serieReal, false, false, indicadoresCopia, indicadoresFuentes, strategosIndicadoresService, request);
         setRelaciones(indicadorCopia, indicadorFuente);
-        
+
         respuesta = strategosIndicadoresService.saveIndicador(indicadorCopia, (Usuario)request.getSession().getAttribute("usuario"));
         if (respuesta == 10003)
         {
           filtros = new HashMap();
-          
+
           filtros.put("claseId", indicadorCopia.getClaseId());
           filtros.put("nombre", indicadorCopia.getNombre());
           List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
           if (inds.size() > 0)
           {
-            indicadorCopia = (Indicador)inds.get(0);
+            indicadorCopia = inds.get(0);
             respuesta = 10000;
           }
         }
@@ -432,9 +434,9 @@ public class CopiarIndicadorAction
     if ((respuesta == 10000) && (perspectivaOrigen.getNlParIndicadorId() != null) && (perspectivaDestino.getClaseId() != null))
     {
       indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, perspectivaOrigen.getNlParIndicadorId());
-      
+
       filtros = new HashMap();
-      
+
       filtros.put("organizacionId", organizacionIdDestino.toString());
       filtros.put("nombre", indicadorFuente.getNombre());
       filtros.put("claseId", perspectivaDestino.getClaseId().toString());
@@ -452,17 +454,17 @@ public class CopiarIndicadorAction
       else
       {
         indicadorCopia = new Indicador();
-        
+
         indicadorCopia.setIndicadorId(new Long(0L));
         indicadorCopia.setClaseId(perspectivaDestino.getClaseId());
         indicadorCopia.setOrganizacionId(organizacionIdDestino);
         indicadorCopia.setNombre(indicadorFuente.getNombre());
         indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-        
+
         indicadorCopia.setEscalaCualitativa(new ArrayList());
         indicadorCopia.setSeriesIndicador(new HashSet());
         indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-        
+
         setDatosBasicos(indicadorCopia, indicadorFuente, request);
         setAsociar(indicadorCopia, indicadorFuente, request);
         setResponsables(indicadorCopia, indicadorFuente);
@@ -471,18 +473,18 @@ public class CopiarIndicadorAction
         SerieIndicador serieReal = setSeriesTiempo(indicadorCopia, indicadorFuente);
         setDefinicion(indicadorCopia, indicadorFuente, clasesCopiadas, serieReal, false, false, indicadoresCopia, indicadoresFuentes, strategosIndicadoresService, request);
         setRelaciones(indicadorCopia, indicadorFuente);
-        
+
         respuesta = strategosIndicadoresService.saveIndicador(indicadorCopia, (Usuario)request.getSession().getAttribute("usuario"));
         if (respuesta == 10003)
         {
           filtros = new HashMap();
-          
+
           filtros.put("claseId", indicadorCopia.getClaseId());
           filtros.put("nombre", indicadorCopia.getNombre());
           List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
           if (inds.size() > 0)
           {
-            indicadorCopia = (Indicador)inds.get(0);
+            indicadorCopia = inds.get(0);
             respuesta = 10000;
           }
         }
@@ -492,10 +494,10 @@ public class CopiarIndicadorAction
       }
     }
     strategosIndicadoresService.close();
-    
+
     return respuesta;
   }
-  
+
   public int SalvarIndicador(EditarIndicadorForm editarIndicadorForm, List<ObjetosCopia> clasesCopiadas, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request)
   {
     int respuesta = 10000;
@@ -511,11 +513,11 @@ public class CopiarIndicadorAction
       indicadorCopia.setOrganizacionId(indicadorFuente.getOrganizacionId());
       indicadorCopia.setNombre(editarIndicadorForm.getNuevoNombre());
       indicadorCopia.setNombreCorto(editarIndicadorForm.getNuevoNombre());
-      
+
       indicadorCopia.setEscalaCualitativa(new ArrayList());
       indicadorCopia.setSeriesIndicador(new HashSet());
       indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-      
+
       setDatosBasicos(indicadorCopia, indicadorFuente, request);
       setAsociar(indicadorCopia, indicadorFuente, request);
       setResponsables(indicadorCopia, indicadorFuente);
@@ -534,20 +536,20 @@ public class CopiarIndicadorAction
     if (respuesta == 10003)
     {
       Map<String, Object> filtros = new HashMap();
-      
+
       filtros.put("claseId", indicadorCopia.getClaseId());
       filtros.put("nombre", indicadorCopia.getNombre());
       List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
       if (inds.size() > 0)
       {
-        indicadorCopia = (Indicador)inds.get(0);
+        indicadorCopia = inds.get(0);
         respuesta = 10000;
       }
     }
     if ((respuesta == 10000) && (editarIndicadorForm.getCopiarMediciones().booleanValue()))
     {
       CopiarMediciones(indicadorCopia, indicadorFuente, strategosIndicadoresService, request);
-      
+
       indicadoresCopia.add(indicadorCopia);
       StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
       List<Object> indicadores = new ArrayList();
@@ -557,40 +559,40 @@ public class CopiarIndicadorAction
     }
     return respuesta;
   }
-  
+
   public int CopiarIndicadores(List<ObjetosCopia> clasesCopiadas, boolean copiarMediciones, boolean copiarInsumos, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     List<Indicador> indicadoresCopia = new ArrayList();
     List<Indicador> indicadoresFuentes = new ArrayList();
     Map<String, Object> filtros = new HashMap();
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     for (Iterator<ObjetosCopia> iterClase = clasesCopiadas.iterator(); iterClase.hasNext();)
     {
-      ObjetosCopia claseCopiada = (ObjetosCopia)iterClase.next();
+      ObjetosCopia claseCopiada = iterClase.next();
       filtros.put("claseId", claseCopiada.getObjetoOriginalId());
-      
+
       List<?> indicadores = strategosIndicadoresService.getIndicadores(0, 0, "naturaleza", "desc", true, filtros, null, null, Boolean.valueOf(false)).getLista();
       for (Iterator<?> iter = indicadores.iterator(); iter.hasNext();)
       {
         Indicador indicadorFuente = (Indicador)iter.next();
-        
+
         boolean existeInidicador= buscarIndicadorOriginal(indicadoresFuentes,indicadorFuente);
         if (!existeInidicador)
         {
           Indicador indicadorCopia = new Indicador();
-          
+
           indicadorCopia.setIndicadorId(new Long(0L));
           indicadorCopia.setClaseId(claseCopiada.getObjetoCopiaId());
           indicadorCopia.setOrganizacionId(claseCopiada.getOrganizacionDestinoId());
           indicadorCopia.setNombre(indicadorFuente.getNombre());
           indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-          
+
           indicadorCopia.setEscalaCualitativa(new ArrayList());
           indicadorCopia.setSeriesIndicador(new HashSet());
           indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-          
+
           setDatosBasicos(indicadorCopia, indicadorFuente, request);
           setAsociar(indicadorCopia, indicadorFuente, request);
           setResponsables(indicadorCopia, indicadorFuente);
@@ -611,13 +613,13 @@ public class CopiarIndicadorAction
           if (respuesta == 10003)
           {
             filtros = new HashMap();
-            
+
             filtros.put("claseId", indicadorCopia.getClaseId());
             filtros.put("nombre", indicadorCopia.getNombre());
             List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
             if (inds.size() > 0)
             {
-              indicadorCopia = (Indicador)inds.get(0);
+              indicadorCopia = inds.get(0);
               respuesta = 10000;
             }
           }
@@ -645,24 +647,24 @@ public class CopiarIndicadorAction
       strategosMedicionesService.close();
     }
     strategosIndicadoresService.close();
-    
+
     return respuesta;
   }
-  
+
   private boolean buscarIndicadorOriginal(List<Indicador> indicadoresFuentes, Indicador indicadorFuente){
 	  for(Indicador i:indicadoresFuentes) if (i.getIndicadorId()== indicadorFuente.getIndicadorId()) return true; return false;
   }
-  
+
   public Indicador CopiarIndicador(Indicador indicadorFuente, Long clasePadreDestinoId, List<ObjetosCopia> clasesCopiadas, boolean copiarMediciones, boolean copiarInsumos, List<Indicador> indicadoresCopia, List<Indicador> indicadoresFuentes, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     Indicador indicadorCopia = new Indicador();
     Long organizacionId = null;
     Long claseDestinoId = clasePadreDestinoId;
     for (Iterator<ObjetosCopia> iterClase = clasesCopiadas.iterator(); iterClase.hasNext();)
     {
-      ObjetosCopia claseCopiada = (ObjetosCopia)iterClase.next();
+      ObjetosCopia claseCopiada = iterClase.next();
       if (indicadorFuente.getClaseId().longValue() == claseCopiada.getObjetoOriginalId().longValue())
       {
         claseDestinoId = claseCopiada.getObjetoCopiaId();
@@ -684,11 +686,11 @@ public class CopiarIndicadorAction
     indicadorCopia.setOrganizacionId(organizacionId);
     indicadorCopia.setNombre(indicadorFuente.getNombre());
     indicadorCopia.setNombreCorto(indicadorFuente.getNombreCorto());
-    
+
     indicadorCopia.setEscalaCualitativa(new ArrayList());
     indicadorCopia.setSeriesIndicador(new HashSet());
     indicadorCopia.setTipoFuncion(TipoFuncionIndicador.getTipoFuncionNormal());
-    
+
     setDatosBasicos(indicadorCopia, indicadorFuente, request);
     setAsociar(indicadorCopia, indicadorFuente, request);
     setResponsables(indicadorCopia, indicadorFuente);
@@ -706,13 +708,13 @@ public class CopiarIndicadorAction
     if (respuesta == 10003)
     {
       Map<String, Object> filtros = new HashMap();
-      
+
       filtros.put("claseId", indicadorCopia.getClaseId());
       filtros.put("nombre", indicadorCopia.getNombre());
       List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false)).getLista();
       if (inds.size() > 0)
       {
-        indicadorCopia = (Indicador)inds.get(0);
+        indicadorCopia = inds.get(0);
         respuesta = 10000;
       }
     }
@@ -730,7 +732,7 @@ public class CopiarIndicadorAction
     }
     return indicadorCopia;
   }
-  
+
   private void setDatosBasicos(Indicador indicadorCopia, Indicador indicadorFuente, HttpServletRequest request)
   {
     indicadorCopia.setNaturaleza(indicadorFuente.getNaturaleza());
@@ -765,14 +767,14 @@ public class CopiarIndicadorAction
       indicadorCopia.setFuente(null);
     }
   }
-  
+
   private void setAsociar(Indicador indicadorCopia, Indicador indicadorFuente, HttpServletRequest request)
   {
     indicadorCopia.setIndicadorAsociadoTipo(indicadorFuente.getIndicadorAsociadoTipo());
     indicadorCopia.setIndicadorAsociadoId(indicadorFuente.getIndicadorAsociadoId());
     indicadorCopia.setIndicadorAsociadoRevision(indicadorFuente.getIndicadorAsociadoRevision());
   }
-  
+
   private void setResponsables(Indicador indicadorCopia, Indicador indicadorFuente)
   {
     indicadorCopia.setResponsableFijarMetaId(indicadorFuente.getResponsableFijarMetaId());
@@ -781,7 +783,7 @@ public class CopiarIndicadorAction
     indicadorCopia.setResponsableCargarMetaId(indicadorFuente.getResponsableCargarMetaId());
     indicadorCopia.setResponsableCargarEjecutadoId(indicadorFuente.getResponsableCargarEjecutadoId());
   }
-  
+
   private void setParametros(Indicador indicadorCopia, Indicador indicadorFuente, HttpServletRequest request)
   {
     indicadorCopia.setCaracteristica(indicadorFuente.getCaracteristica());
@@ -794,7 +796,7 @@ public class CopiarIndicadorAction
     indicadorCopia.setParametroInferiorValorFijo(indicadorFuente.getParametroInferiorValorFijo());
     indicadorCopia.setParametroInferiorIndicadorId(indicadorFuente.getParametroInferiorIndicadorId());
   }
-  
+
   private void setAlertas(Indicador indicadorCopia, Indicador indicadorFuente, HttpServletRequest request)
   {
     indicadorCopia.setAlertaTipoZonaAmarilla(indicadorFuente.getAlertaTipoZonaAmarilla());
@@ -806,7 +808,7 @@ public class CopiarIndicadorAction
     indicadorCopia.setAlertaValorVariableZonaAmarilla(indicadorFuente.getAlertaValorVariableZonaAmarilla());
     indicadorCopia.setAlertaValorVariableZonaVerde(indicadorFuente.getAlertaValorVariableZonaVerde());
   }
-  
+
   private SerieIndicador setSeriesTiempo(Indicador indicadorCopia, Indicador indicadorFuente)
   {
     SerieIndicador serieReal = null;
@@ -814,7 +816,7 @@ public class CopiarIndicadorAction
     indicadorCopia.getSeriesIndicador().clear();
     for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();)
     {
-      SerieIndicador serie = (SerieIndicador)i.next();
+      SerieIndicador serie = i.next();
       SerieIndicador serieIndicador = new SerieIndicador();
       serieIndicador.setIndicador(indicadorCopia);
       serieIndicador.setPk(new SerieIndicadorPK());
@@ -834,14 +836,14 @@ public class CopiarIndicadorAction
     }
     return serieReal;
   }
-  
+
   private void setRelaciones(Indicador indicadorCopia, Indicador indicadorFuente)
   {
     indicadorCopia.setUrl(indicadorFuente.getUrl());
   }
-  
-  
-  
+
+
+
   private int setDefinicion(Indicador indicadorCopia, Indicador indicadorFuente, List<ObjetosCopia> clasesCopiadas, SerieIndicador serieReal, boolean copiarMediciones, boolean copiarInsumos, List<Indicador> indicadoresCopia, List<Indicador> indicadoresFuentes, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request)
   {
     int respuesta = 10000;
@@ -864,7 +866,7 @@ public class CopiarIndicadorAction
     }
     return respuesta;
   }
-  
+
   private void setDefinicionSimple(Indicador indicadorCopia, Indicador indicadorFuente)
   {
     if ((indicadorFuente.getCodigoEnlace() != null) && (!indicadorFuente.getCodigoEnlace().equals(""))) {
@@ -874,14 +876,14 @@ public class CopiarIndicadorAction
       indicadorCopia.setEnlaceParcial(indicadorFuente.getEnlaceParcial());
     }
   }
-  
+
   private void setDefinicionCualitativo(Indicador indicadorCopia, Indicador indicadorFuente)
   {
     int order = 0;
     for (Iterator<CategoriaIndicador> k = indicadorFuente.getEscalaCualitativa().iterator(); k.hasNext();)
     {
       order++;
-      CategoriaIndicador categoria = (CategoriaIndicador)k.next();
+      CategoriaIndicador categoria = k.next();
       CategoriaIndicador categoriaIndicador = new CategoriaIndicador();
       categoriaIndicador.setOrden(Integer.valueOf(order));
       categoriaIndicador.setPk(new CategoriaIndicadorPK());
@@ -890,19 +892,19 @@ public class CopiarIndicadorAction
       indicadorCopia.getEscalaCualitativa().add(categoriaIndicador);
     }
   }
-  
+
   private int setDefinicionFormula(Indicador indicadorCopia, Indicador indicadorFuente, List<ObjetosCopia> clasesCopiadas, SerieIndicador serieReal, boolean copiarMediciones, boolean copiarInsumos, List<Indicador> indicadoresCopia, List<Indicador> indicadoresFuentes, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request)
   {
     int respuesta = 10000;
-    
+
     SerieIndicador serieCopiaReal = null;
     Set<SerieIndicador> seriesIndicador = indicadorCopia.getSeriesIndicador();
-    
+
     StrategosSeriesTiempoService strategosSeriesTiempoService = StrategosServiceFactory.getInstance().openStrategosSeriesTiempoService(strategosIndicadoresService);
     List<?> seriesTiempo = strategosSeriesTiempoService.getSeriesTiempo(0, 0, "serieId", null, false, null).getLista();
     for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();)
     {
-      SerieIndicador serie = (SerieIndicador)i.next();
+      SerieIndicador serie = i.next();
       if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
       {
         serieCopiaReal = new SerieIndicador(serie.getPk(), serie.getNaturaleza(), serie.getFechaBloqueo(), serie.getSerieTiempo(), serie.getIndicador(), serie.getFormulas(), serie.getMediciones(), serie.getIndicadoresCeldas(), serie.getNombre());
@@ -932,7 +934,7 @@ public class CopiarIndicadorAction
           Map<Object, Object> filtros = new HashMap();
           filtros.put("claseId", indicadorCopia.getClaseId());
           filtros.put("nombre", indicadorInsumoOrinal.getNombre());
-          
+
           List<?> indicadores = strategosIndicadoresService.getIndicadores(0, 0, null, null, true, filtros, null, null, Boolean.valueOf(false)).getLista();
           if (indicadores.size() > 0)
           {
@@ -974,16 +976,16 @@ public class CopiarIndicadorAction
     formulaIndicador = new Formula();
     formulaIndicador.setInsumos(new HashSet());
     serieCopiaReal.getFormulas().clear();
-    
+
     formulaIndicador.setExpresion(IndicadorValidator.reemplazarCorrelativosFormula(editarIndicadorForm.getFormula(), editarIndicadorForm.getInsumosFormula()));
     if ((editarIndicadorForm.getInsumosFormula() != null) && (!editarIndicadorForm.getInsumosFormula().equals("")))
     {
       String[] insumos = editarIndicadorForm.getInsumosFormula().split(editarIndicadorForm.getSeparadorIndicadores());
-      String[] strInsumo = (String[])null;
-      for (int i = 0; i < insumos.length; i++) {
-        if (insumos[i].length() > 0)
+      String[] strInsumo = null;
+      for (String element : insumos) {
+        if (element.length() > 0)
         {
-          strInsumo = insumos[i].split("\\]\\[");
+          strInsumo = element.split("\\]\\[");
           InsumoFormula insumoFormula = new InsumoFormula();
           insumoFormula.setPk(new InsumoFormulaPK());
           insumoFormula.getPk().setPadreId(indicadorCopia.getIndicadorId());
@@ -995,17 +997,17 @@ public class CopiarIndicadorAction
       }
     }
     serieCopiaReal.getFormulas().add(formulaIndicador);
-    
+
     return respuesta;
   }
-  
+
   private void setDefinicionSumatoria(Indicador indicadorCopia, Indicador indicadorFuente, SerieIndicador serieReal, StrategosIndicadoresService strategosIndicadoresService)
   {
     SerieIndicador serieCopiaReal = null;
     Set<SerieIndicador> seriesIndicador = indicadorCopia.getSeriesIndicador();
     for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();)
     {
-      SerieIndicador serie = (SerieIndicador)i.next();
+      SerieIndicador serie = i.next();
       if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
       {
         serieCopiaReal = new SerieIndicador(serie.getPk(), serie.getNaturaleza(), serie.getFechaBloqueo(), serie.getSerieTiempo(), serie.getIndicador(), serie.getFormulas(), serie.getMediciones(), serie.getIndicadoresCeldas(), serie.getNombre());
@@ -1022,7 +1024,7 @@ public class CopiarIndicadorAction
       {
         InsumoFormula insumo = (InsumoFormula)k.next();
         Indicador indicadorInsumo = (Indicador)strategosIndicadoresService.load(Indicador.class, insumo.getPk().getIndicadorId());
-        
+
         editarIndicadorForm.setIndicadorSumatoriaId("[indicadorId:" + indicadorInsumo.getIndicadorId().toString() + "][serieId:" + insumo.getPk().getSerieId().toString() + "]");
         editarIndicadorForm.setIndicadorSumatoria(indicadorInsumo.getNombre());
         editarIndicadorForm.setIndicadorSumatoriaFrecuenciaId(indicadorInsumo.getFrecuencia());
@@ -1035,12 +1037,12 @@ public class CopiarIndicadorAction
     formulaIndicador = new Formula();
     formulaIndicador.setInsumos(new HashSet());
     serieCopiaReal.getFormulas().clear();
-    
+
     formulaIndicador.setExpresion("");
     if ((editarIndicadorForm.getIndicadorSumatoriaId() != null) && (!editarIndicadorForm.getIndicadorSumatoriaId().equals("")))
     {
       String[] valoresInsumo = editarIndicadorForm.getIndicadorSumatoriaId().split("\\]\\[");
-      
+
       InsumoFormula insumoFormula = new InsumoFormula();
       insumoFormula.setPk(new InsumoFormulaPK());
       insumoFormula.getPk().setPadreId(indicadorCopia.getIndicadorId());
@@ -1051,14 +1053,14 @@ public class CopiarIndicadorAction
     }
     serieCopiaReal.getFormulas().add(formulaIndicador);
   }
-  
+
   private void setDefinicionPromedio(Indicador indicadorCopia, Indicador indicadorFuente, SerieIndicador serieReal, StrategosIndicadoresService strategosIndicadoresService)
   {
     SerieIndicador serieCopiaReal = null;
     Set<SerieIndicador> seriesIndicador = indicadorCopia.getSeriesIndicador();
     for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();)
     {
-      SerieIndicador serie = (SerieIndicador)i.next();
+      SerieIndicador serie = i.next();
       if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
       {
         serieCopiaReal = serie;
@@ -1075,7 +1077,7 @@ public class CopiarIndicadorAction
       {
         InsumoFormula insumo = (InsumoFormula)k.next();
         Indicador indicadorInsumo = (Indicador)strategosIndicadoresService.load(Indicador.class, insumo.getPk().getIndicadorId());
-        
+
         editarIndicadorForm.setIndicadorPromedioId("[indicadorId:" + indicadorInsumo.getIndicadorId().toString() + "][serieId:" + insumo.getPk().getSerieId().toString() + "]");
         editarIndicadorForm.setIndicadorPromedio(indicadorInsumo.getNombre());
         editarIndicadorForm.setIndicadorPromedioFrecuenciaId(indicadorInsumo.getFrecuencia());
@@ -1101,14 +1103,14 @@ public class CopiarIndicadorAction
     }
     serieCopiaReal.getFormulas().add(formulaIndicador);
   }
-  
+
   private void setDefinicionIndice(Indicador indicadorCopia, Indicador indicadorFuente, SerieIndicador serieReal, StrategosIndicadoresService strategosIndicadoresService)
   {
     SerieIndicador serieCopiaReal = null;
     Set<SerieIndicador> seriesIndicador = indicadorCopia.getSeriesIndicador();
     for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();)
     {
-      SerieIndicador serie = (SerieIndicador)i.next();
+      SerieIndicador serie = i.next();
       if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue())
       {
         serieCopiaReal = serie;
@@ -1130,7 +1132,7 @@ public class CopiarIndicadorAction
       {
         InsumoFormula insumo = (InsumoFormula)k.next();
         Indicador indicadorInsumo = (Indicador)strategosIndicadoresService.load(Indicador.class, insumo.getPk().getIndicadorId());
-        
+
         editarIndicadorForm.setIndicadorIndiceId("[indicadorId:" + indicadorInsumo.getIndicadorId().toString() + "][serieId:" + insumo.getPk().getSerieId().toString() + "]");
         editarIndicadorForm.setIndicadorIndice(indicadorInsumo.getNombre());
         editarIndicadorForm.setIndicadorIndiceFrecuenciaId(indicadorInsumo.getFrecuencia());
@@ -1142,7 +1144,7 @@ public class CopiarIndicadorAction
     }
     formulaIndicador = new Formula();
     formulaIndicador.setInsumos(new HashSet());
-    
+
     formulaIndicador.setExpresion(editarIndicadorForm.getIndicadorIndiceTipoVariacion() + "\\" + editarIndicadorForm.getIndicadorIndiceTipoComparacion());
     if ((editarIndicadorForm.getIndicadorIndiceId() != null) && (!editarIndicadorForm.getIndicadorIndiceId().equals("")))
     {
@@ -1157,7 +1159,7 @@ public class CopiarIndicadorAction
     }
     serieCopiaReal.getFormulas().add(formulaIndicador);
   }
-  
+
   private int CopiarMediciones(Indicador indicadorCopia, Indicador indicadorFuente, StrategosIndicadoresService strategosIndicadoresService, HttpServletRequest request)
   {
     int respuesta = 10000;
@@ -1166,13 +1168,13 @@ public class CopiarIndicadorAction
     StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
     for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();)
     {
-      SerieIndicador serie = (SerieIndicador)i.next();
+      SerieIndicador serie = i.next();
       List<?> medicionesFuente = strategosMedicionesService.getMedicionesPeriodo(indicadorFuente.getIndicadorId(), serie.getPk().getSerieId(), null, null, null, null);
       List<Medicion> medicionesCopia = new ArrayList();
       for (Iterator<?> iter = medicionesFuente.iterator(); iter.hasNext();)
       {
         Medicion med = (Medicion)iter.next();
-        
+
         medicion = new Medicion();
         MedicionPK medicionPk = new MedicionPK();
         medicionPk.setIndicadorId(indicadorCopia.getIndicadorId());
@@ -1182,7 +1184,7 @@ public class CopiarIndicadorAction
         medicion.setMedicionId(medicionPk);
         medicion.setProtegido(med.getProtegido());
         medicion.setValor(med.getValor());
-        
+
         medicionesCopia.add(medicion);
       }
       respuesta = strategosMedicionesService.copiarMediciones(medicionesCopia, getUsuarioConectado(request));

@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.MessageResources;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -8,26 +19,19 @@ import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.MessageResources;
 
 public class ReporteIndicadoresAction extends VgcReporteBasicoAction
 {
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		return mensajes.getMessage("action.reporteindicadores.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 		String atributoOrden = request.getParameter("atributoOrden");
@@ -43,7 +47,7 @@ public class ReporteIndicadoresAction extends VgcReporteBasicoAction
 
 		Map filtros = new HashMap();
 
-		if ((organizacionId != null) && (!organizacionId.equals(""))) 
+		if ((organizacionId != null) && (!organizacionId.equals("")))
 		{
 			filtros.put("organizacionId", organizacionId);
 
@@ -56,7 +60,7 @@ public class ReporteIndicadoresAction extends VgcReporteBasicoAction
 			documento.add(texto);
 		}
 
-		if ((claseId != null) && (!claseId.equals(""))) 
+		if ((claseId != null) && (!claseId.equals("")))
 		{
 			filtros.put("claseId", claseId);
 
@@ -78,42 +82,42 @@ public class ReporteIndicadoresAction extends VgcReporteBasicoAction
 		tabla.crearTabla(columnas);
 
 		List indicadores = strategosIndicadoresService.getIndicadores(0, 0, atributoOrden, tipoOrden, false, filtros, null, null, false).getLista();
-		
+
 		tabla.setFormatoFont(font.style());
-		tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
-		
+		tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
+
 		tabla.agregarCelda("Nombre");
 		tabla.agregarCelda("Frecuencia");
 		tabla.agregarCelda("Naturaleza");
 
 		tabla.setDefaultAlineacionHorizontal();
-		if (indicadores.size() > 0) 
+		if (indicadores.size() > 0)
 		{
-			for (Iterator iter = indicadores.iterator(); iter.hasNext(); ) 
+			for (Iterator iter = indicadores.iterator(); iter.hasNext(); )
 			{
 				Indicador indicador = (Indicador)iter.next();
 
 				tabla.setDefaultAlineacionHorizontal();
 				tabla.agregarCelda(indicador.getNombre());
-				
-				tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+
+				tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 				tabla.agregarCelda(indicador.getFrecuenciaNombre());
-				
-				tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+
+				tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 				tabla.agregarCelda(indicador.getNaturalezaNombre());
 			}
 
 			documento.add(tabla.getTabla());
-			
+
 			font.setSize(10.0F);
-			Paragraph texto = new Paragraph("Número de Indicadores: " + Integer.toString(indicadores.size()), font);
+			Paragraph texto = new Paragraph("Nï¿½mero de Indicadores: " + Integer.toString(indicadores.size()), font);
 			texto.setAlignment(0);
 			documento.add(texto);
 		}
 		else
 		{
 			font.setSize(10.0F);
-			Paragraph texto = new Paragraph("No hay indicadores con las características solicitadas", font);
+			Paragraph texto = new Paragraph("No hay indicadores con las caracterï¿½sticas solicitadas", font);
 			texto.setAlignment(0);
 			texto.setSpacingBefore(72.0F);
 			documento.add(texto);

@@ -19,7 +19,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
@@ -40,82 +39,82 @@ import com.visiongc.framework.arboles.ComparatorNodoArbol;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.Organizacion;
-import com.visiongc.framework.web.struts.actions.LogonAction;
 
 public class ReporteComiteEjecutivoAction extends VgcAction {
 
 	@Override
-	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) 
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    super.execute(mapping, form, request, response);
-	    
-	    String forward = mapping.getParameter();  
-	    
+
+	    String forward = mapping.getParameter();
+
 	    ActionMessages messages = getMessages(request);
-	    
+
 	    boolean cancelar = (request.getParameter("cancelar") != null ? Boolean.parseBoolean(request.getParameter("cancelar")) : false);
 		if (cancelar)
 			return getForwardBack(request, 1, true);
-		
+
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		Configuracion configuracion = new Configuracion();
-		
+
 		//Buscar en tabla configuracion
 		ReporteComiteEjecutivoForm reporteComiteEjecutivoForm = (ReporteComiteEjecutivoForm) form;
 		configuracion = frameworkService.getConfiguracion("Strategos.Reportes.ComiteEjecutivo.Parametros");
-		
+
 		if (configuracion != null)
 		{
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-	        DocumentBuilder db = dbf.newDocumentBuilder(); 
-	        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8"))); 
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+	        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8")));
 	        doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName("Parametros");
 			Element eElement = (Element) nList.item(0);
-					
+
 			reporteComiteEjecutivoForm.setFecha(VgcAbstractService.getTagValue("fecha", eElement));
 			reporteComiteEjecutivoForm.setVista(Integer.parseInt(VgcAbstractService.getTagValue("vista", eElement)));
 			reporteComiteEjecutivoForm.setOrganizaciones(VgcAbstractService.getTagValue("organizaciones", eElement));
 			reporteComiteEjecutivoForm.setClases(VgcAbstractService.getTagValue("clases", eElement));
 			reporteComiteEjecutivoForm.setIndicadores(VgcAbstractService.getTagValue("indicadores", eElement));
 		}
-		
+
 	    publishArbolOrganizaciones(request, frameworkService);
 	    publishArbolClases(request);
 	    publishListaGrupos(request);
 		frameworkService.close();
 
 		this.saveMessages(request, messages);
-	    
+
 	    return mapping.findForward(forward);
 	}
-	
-	private void publishArbolClases(HttpServletRequest request)  
+
+	private void publishArbolClases(HttpServletRequest request)
 	{
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
 		Long organizacionId = new Long(53033);
-		 
+
 		 ClaseIndicadores claseRoot = strategosClasesIndicadoresService.getClaseRaiz(organizacionId, TipoClaseIndicadores.getTipoClaseIndicadores(), null);
-		 		 		  
+
 		request.getSession().setAttribute("parametrosReporteComiteEjecutivoClases", claseRoot); //por ahora
-		try 
+		try
 		{
 			TreeviewWeb.publishTree("parametrosReporteComiteEjecutivoArbolClases", claseRoot.getClaseId().toString(), "session", request, true);
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		
+
 		abrirArbolClases(claseRoot.getHijos(), "parametrosReporteComiteEjecutivoArbolClases", "session", request);
 		strategosClasesIndicadoresService.close();
 	}
-	
-	private void publishListaGrupos(HttpServletRequest request) 
+
+	private void publishListaGrupos(HttpServletRequest request)
 	{
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 		Map<String, Object> filtros = new HashMap<String, Object>();
@@ -126,7 +125,7 @@ public class ReporteComiteEjecutivoAction extends VgcAction {
 		filtros.put("organizacionId", organizacionId);
 		filtros.put("claseId", claseId);
 		filtros.put("frecuencia", Frecuencia.getFrecuenciaDiaria());
-		
+
 		PaginaLista paginaGrupos = new PaginaLista();
 
 		paginaGrupos.setNroPagina(1);
@@ -136,10 +135,10 @@ public class ReporteComiteEjecutivoAction extends VgcAction {
 
 		strategosIndicadoresService.close();
 	}
-	
-	private void publishArbolOrganizaciones(HttpServletRequest request, FrameworkService frameworkService) 
+
+	private void publishArbolOrganizaciones(HttpServletRequest request, FrameworkService frameworkService)
 	{
-		try 
+		try
 		{
 			/**
 			 * Carga de objetos iniciales de la ficha del usuario Se obtiene el
@@ -150,71 +149,71 @@ public class ReporteComiteEjecutivoAction extends VgcAction {
 
 			List organizaciones = frameworkService.getOrganizacionesRoot(true);
 
-			if (organizaciones.size() > 1) 
+			if (organizaciones.size() > 1)
 			{
 				organizacionRoot = new Organizacion();
 				Set hijos = new TreeSet(new ComparatorNodoArbol("nombre"));
 
-				for (Iterator i = organizaciones.iterator(); i.hasNext();) 
+				for (Iterator i = organizaciones.iterator(); i.hasNext();)
 					hijos.add(i.next());
 				organizacionRoot.setOrganizacionId(new Long(0));
 				organizacionRoot.setNombre(this.getResources(request).getMessage("action.framework.editarusuario.orgrootdummy"));
 				organizacionRoot.setPadreId(null);
 				organizacionRoot.setHijos(hijos);
-			} 
-			else 
+			}
+			else
 				organizacionRoot = (Organizacion) organizaciones.get(0);
 
 			request.getSession().setAttribute("parametrosReporteComiteEjecutivoOrganizacionRoot", organizacionRoot);
 
 			/** Se publica el arbol de organizaciones */
-			TreeviewWeb.publishTree("parametrosReporteComiteEjecutivoArbolOrganizaciones", organizacionRoot.getOrganizacionId().toString(), "session", request, true);			
+			TreeviewWeb.publishTree("parametrosReporteComiteEjecutivoArbolOrganizaciones", organizacionRoot.getOrganizacionId().toString(), "session", request, true);
 
 			abrirArbolOrganizaciones(organizacionRoot.getHijos(), "parametrosReporteComiteEjecutivoArbolOrganizaciones", "session", request);
 
-		} 
-		catch (Throwable t) 
+		}
+		catch (Throwable t)
 		{
 			throw new ChainedRuntimeException(t.getMessage(), t);
 		}
 	}
 
-	private void abrirArbolClases(Set conj, String nameObject, String scope, HttpServletRequest request) 
+	private void abrirArbolClases(Set conj, String nameObject, String scope, HttpServletRequest request)
 	{
-		try 
+		try
 		{
-			for (Iterator i = conj.iterator(); i.hasNext();) 
+			for (Iterator i = conj.iterator(); i.hasNext();)
 			{
 				ClaseIndicadores hijo = (ClaseIndicadores) i.next();
 
-				if (hijo.getHijos().size() > 0) 
+				if (hijo.getHijos().size() > 0)
 				{
 					TreeviewWeb.publishTree(nameObject, hijo.getClaseId().toString(), scope, request);
 					abrirArbolClases(hijo.getHijos(), nameObject, scope, request);
 				}
 			}
-		} 
-		catch (Throwable t) 
+		}
+		catch (Throwable t)
 		{
 			throw new ChainedRuntimeException(t.getMessage(), t);
 		}
 	}
-	
-	private void abrirArbolOrganizaciones(Set conj, String nameObject, String scope, HttpServletRequest request) 
+
+	private void abrirArbolOrganizaciones(Set conj, String nameObject, String scope, HttpServletRequest request)
 	{
 		try {
-			for (Iterator i = conj.iterator(); i.hasNext();) 
+			for (Iterator i = conj.iterator(); i.hasNext();)
 			{
 				Organizacion hijo = (Organizacion) i.next();
 
-				if (hijo.getHijos().size() > 0) 
+				if (hijo.getHijos().size() > 0)
 				{
 					TreeviewWeb.publishTree(nameObject, hijo.getOrganizacionId().toString(), scope, request);
 					abrirArbolOrganizaciones(hijo.getHijos(), nameObject, scope, request);
 				}
 			}
-		} 
-		catch (Throwable t) 
+		}
+		catch (Throwable t)
 		{
 			throw new ChainedRuntimeException(t.getMessage(), t);
 		}

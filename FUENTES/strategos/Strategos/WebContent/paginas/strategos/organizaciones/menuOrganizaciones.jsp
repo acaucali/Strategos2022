@@ -51,6 +51,10 @@
 		window.location.href='<html:rewrite action="/problemas/acciones/gestionarAccionesPendientes" />?tipo=' + tipo;
 	}
 	
+	function gestionarCargos(){
+		window.location.href='<html:rewrite action="/cargos/gestionarCargos" />?defaultLoader=true';		
+	}
+	
 	function calcular() 
 	{
 		var url = '?organizacionId=<bean:write name="organizacion" property="organizacionId"/>';
@@ -238,6 +242,7 @@
 			<vgcinterfaz:botonMenu key="<%= menuItemIniciativa %>" onclick="gestionarIniciativas();" permisoId="INICIATIVA" agregarSeparador="true" />
 			<vgcinterfaz:botonMenu key="menu.ver.unidadesmedida" onclick="gestionarUnidadesMedida();" permisoId="UNIDAD" />
 			<vgcinterfaz:botonMenu key="menu.ver.categoriasmedicion" onclick="gestionarCategoriasMedicion();" permisoId="CATEGORIA" />
+			<vgcinterfaz:botonMenu key="menu.ver.cargos" onclick="gestionarCargos();" permisoId="CARGOS" />
 			<vgcinterfaz:botonMenu key="menu.ver.responsables" onclick="gestionarResponsables();" permisoId="RESPONSABLE" aplicaOrganizacion="true" />
 			<vgcinterfaz:botonMenu key="menu.ver.causas" onclick="gestionarCausas();" permisoId="CAUSA" />
 			<vgcinterfaz:botonMenu key="menu.ver.estadosacciones" onclick="gestionarEstadosAcciones();" permisoId="ESTATUS" />
@@ -246,6 +251,7 @@
 			<vgcinterfaz:botonMenu key="menu.ver.tipo.proyecto" onclick="gestionarTiposProyecto();" permisoId="TIPOS" />
 			<vgcinterfaz:botonMenu key="menu.ver.plancuentas" onclick="gestionarCuentas();" permisoId="IMPUTACION" agregarSeparador="true" />
 			<vgcinterfaz:botonMenu key="menu.ver.alertas" onclick="gestionarAlertas();" permisoId="ALERTA" agregarSeparador="true" />
+			<vgcinterfaz:botonMenu key="menu.ver.cargos" onclick="gestionarCargos();" permisoId="CARGO" agregarSeparador="true" />
 			<logic:equal scope="session" name="cliente" value="PGN">
 				<vgcinterfaz:botonMenu key="menu.ver.codigo.enlace" onclick="gestionarCodigosEnlaces();" permisoId="CODIGO_ENLACE" agregarSeparador="true" />
 			</logic:equal>

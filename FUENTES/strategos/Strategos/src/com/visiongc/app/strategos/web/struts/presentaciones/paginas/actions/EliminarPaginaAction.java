@@ -1,28 +1,31 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.paginas.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.presentaciones.StrategosPaginasService;
-import com.visiongc.app.strategos.presentaciones.model.Pagina;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.presentaciones.StrategosPaginasService;
+import com.visiongc.app.strategos.presentaciones.model.Pagina;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EliminarPaginaAction extends VgcAction
 {
   private static final String ACTION_KEY = "EliminarPaginaAction";
 
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -40,7 +43,7 @@ public class EliminarPaginaAction extends VgcAction
       cancelar = true;
     else if ((paginaId == null) || (paginaId.equals("")))
       cancelar = true;
-    else if ((ultimoTs != null) && 
+    else if ((ultimoTs != null) &&
       (ultimoTs.equals(paginaId + "&" + ts))) {
       cancelar = true;
     }
@@ -50,7 +53,7 @@ public class EliminarPaginaAction extends VgcAction
       return getForwardBack(request, 1, true);
     }
 
-    StrategosPaginasService strategosPaginasService = 
+    StrategosPaginasService strategosPaginasService =
       StrategosServiceFactory.getInstance().openStrategosPaginasService();
 
     strategosPaginasService.unlockObject(request.getSession().getId(), paginaId);
@@ -58,21 +61,21 @@ public class EliminarPaginaAction extends VgcAction
     bloqueado = !strategosPaginasService.lockForDelete(request.getSession()
       .getId(), paginaId);
 
-    Pagina pagina = (Pagina)strategosPaginasService.load(Pagina.class, 
+    Pagina pagina = (Pagina)strategosPaginasService.load(Pagina.class,
       new Long(paginaId));
 
     if (pagina != null)
     {
       if (bloqueado)
       {
-        messages.add("org.apache.struts.action.GLOBAL_MESSAGE", 
+        messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
           new ActionMessage("action.eliminarregistro.bloqueado", pagina
           .getDescripcion()));
       }
       else
       {
         pagina.setPaginaId(Long.valueOf(paginaId));
-        int res = strategosPaginasService.deletePagina(pagina, 
+        int res = strategosPaginasService.deletePagina(pagina,
           getUsuarioConectado(request));
 
         strategosPaginasService.unlockObject(request.getSession()
@@ -80,16 +83,16 @@ public class EliminarPaginaAction extends VgcAction
 
         if (res == 10004)
         {
-          messages.add("org.apache.struts.action.GLOBAL_MESSAGE", 
+          messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
             new ActionMessage(
             "action.eliminarregistro.relacion", pagina
             .getDescripcion()));
         }
         else
         {
-          messages.add("org.apache.struts.action.GLOBAL_MESSAGE", 
+          messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
             new ActionMessage(
-            "action.eliminarregistro.eliminacionok", 
+            "action.eliminarregistro.eliminacionok",
             pagina.getDescripcion()));
         }
 
@@ -98,7 +101,7 @@ public class EliminarPaginaAction extends VgcAction
     }
     else
     {
-      messages.add("org.apache.struts.action.GLOBAL_MESSAGE", 
+      messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
         new ActionMessage("action.eliminarregistro.noencontrado"));
     }
 
@@ -106,7 +109,7 @@ public class EliminarPaginaAction extends VgcAction
 
     saveMessages(request, messages);
 
-    request.getSession().setAttribute("EliminarPaginaAction.ultimoTs", 
+    request.getSession().setAttribute("EliminarPaginaAction.ultimoTs",
       paginaId + "&" + ts);
 
     return getForwardBack(request, 1, true);

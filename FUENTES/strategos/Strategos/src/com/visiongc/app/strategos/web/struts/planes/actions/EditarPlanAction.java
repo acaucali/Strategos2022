@@ -1,5 +1,14 @@
 package com.visiongc.app.strategos.web.struts.planes.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
@@ -10,30 +19,25 @@ import com.visiongc.app.strategos.web.struts.planes.forms.EditarPlanForm;
 import com.visiongc.app.strategos.web.struts.planes.forms.GestionarPlanesForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class EditarPlanAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
 
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("getMetodologiaPlanImpacta")) 
+			if (funcion.equals("getMetodologiaPlanImpacta"))
 			{
 				getMetodologiaPlanImpacta(request);
 				return mapping.findForward("ajaxResponse");
@@ -68,7 +72,7 @@ public class EditarPlanAction extends VgcAction
 				editarPlanForm.setPlanId(plan.getPlanId());
 				editarPlanForm.setOrganizacionId(plan.getOrganizacionId());
 				editarPlanForm.setPlanImpactaId(plan.getPlanImpactaId());
-				if (plan.getPlanImpactaId() != null) 
+				if (plan.getPlanImpactaId() != null)
 					editarPlanForm.setPlanImpactaNombre(plan.getPlanImpacta().getOrganizacion().getNombre() + " / " + plan.getPlanImpacta().getNombre());
 
 				editarPlanForm.setNombre(plan.getNombre());
@@ -87,15 +91,15 @@ public class EditarPlanAction extends VgcAction
 				Perspectiva perspectiva = strategosPerspectivasService.getPerspectivaRaiz(plan.getPlanId());
 				if ((perspectiva != null) && (perspectiva.getHijos().size() > 0))
 					editarPlanForm.setTienePerspectivas(new Boolean(true));
-				else 
+				else
 					editarPlanForm.setTienePerspectivas(new Boolean(false));
-				
+
 				strategosPerspectivasService.close();
 			}
 			else
 			{
 				strategosPlanesService.unlockObject(request.getSession().getId(), new Long(planId));
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
 			}
@@ -106,10 +110,10 @@ public class EditarPlanAction extends VgcAction
 			if (!strategosIndicadoresService.checkLicencia(request))
 			{
 				strategosIndicadoresService.close();
-				
+
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("action.guardarregistro.limite.exedido"));
 				this.saveMessages(request, messages);
-				
+
 				return this.getForwardBack(request, 1, false);
 			}
 			strategosIndicadoresService.close();
@@ -118,7 +122,7 @@ public class EditarPlanAction extends VgcAction
 			GestionarPlanesForm gestionarPlanesForm = (GestionarPlanesForm)request.getSession().getAttribute("gestionarPlanesForm");
 			editarPlanForm.setTipo(gestionarPlanesForm.getTipoPlanes());
 		}
-		
+
 		strategosPlanesService.close();
 
 		if (!bloqueado && verForm && !editarForm)
@@ -131,9 +135,9 @@ public class EditarPlanAction extends VgcAction
 
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
-    
+
 		return mapping.findForward(forward);
 	}
 
@@ -141,11 +145,11 @@ public class EditarPlanAction extends VgcAction
 	{
 		String planImpactaId = request.getParameter("planImpactaId");
 		String valores = "";
-		
+
 		StrategosPlanesService planesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 
 		Plan plan = (Plan)planesService.load(Plan.class, new Long(planImpactaId));
-		if (plan != null) 
+		if (plan != null)
 			valores = plan.getMetodologiaId().toString() + "!;!" + plan.getMetodologia().getNombre();
 
 		planesService.close();

@@ -1,5 +1,12 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
@@ -9,29 +16,25 @@ import com.visiongc.app.strategos.web.struts.planes.perspectivas.forms.EditarPer
 import com.visiongc.app.strategos.web.struts.planes.perspectivas.forms.SeleccionarPerspectivasForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public final class SeleccionarPerspectivasAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
 
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("getRutaCompletaPerspectivaSeleccionada")) 
+			if (funcion.equals("getRutaCompletaPerspectivaSeleccionada"))
 			{
 				getRutaCompletaPerspectivaSeleccionada(request);
 				return mapping.findForward("ajaxResponse");
@@ -57,39 +60,39 @@ public final class SeleccionarPerspectivasAction extends VgcAction
 		String permitirCambiarPlan = request.getParameter("permitirCambiarPlan");
 		String planId = request.getParameter("planId");
 
-		if ((permitirCambiarOrganizacion != null) && (permitirCambiarOrganizacion.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarOrganizacion != null) && (permitirCambiarOrganizacion.equalsIgnoreCase("true")))
 			seleccionarPerspectivasForm.setPermitirCambiarOrganizacion(new Boolean(true));
-		if ((permitirCambiarPlan != null) && (permitirCambiarPlan.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarPlan != null) && (permitirCambiarPlan.equalsIgnoreCase("true")))
 			seleccionarPerspectivasForm.setPermitirCambiarPlan(new Boolean(true));
-		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0"))) 
+		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0")))
 		{
 			StrategosPlanesService planesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 			Plan plan = (Plan)planesService.load(Plan.class, new Long(planId));
-			if (plan != null) 
+			if (plan != null)
 			{
 				seleccionarPerspectivasForm.setPlanSeleccionadoId(plan.getPlanId());
 				seleccionarPerspectivasForm.setOrganizacionSeleccionadaId(plan.getOrganizacionId());
 			}
-			
+
 			planesService.close();
 		}
-    
-		if (seleccionarPerspectivasForm.getPlanSeleccionadoId() == null) 
+
+		if (seleccionarPerspectivasForm.getPlanSeleccionadoId() == null)
 		{
 			if ((organizacionId != null) && (!organizacionId.equals("")) && (!organizacionId.equals("0")))
 				seleccionarPerspectivasForm.setOrganizacionSeleccionadaId(new Long(organizacionId));
-			else 
+			else
 				seleccionarPerspectivasForm.setOrganizacionSeleccionadaId(new Long((String)request.getSession().getAttribute("organizacionId")));
 		}
-    
-		if (seleccionarPerspectivasForm.getFuncionCierre() != null) 
+
+		if (seleccionarPerspectivasForm.getFuncionCierre() != null)
 		{
-			if (!seleccionarPerspectivasForm.getFuncionCierre().equals("")) 
+			if (!seleccionarPerspectivasForm.getFuncionCierre().equals(""))
 			{
 				if (seleccionarPerspectivasForm.getFuncionCierre().indexOf(";") < 0)
 					seleccionarPerspectivasForm.setFuncionCierre(seleccionarPerspectivasForm.getFuncionCierre() + ";");
 			}
-			else 
+			else
 				seleccionarPerspectivasForm.setFuncionCierre(null);
 		}
 
@@ -103,9 +106,9 @@ public final class SeleccionarPerspectivasAction extends VgcAction
 
 		StrategosPerspectivasService perspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 		Perspectiva perspectiva = (Perspectiva)perspectivasService.load(Perspectiva.class, new Long(seleccionadoId));
-		if (perspectiva != null) 
+		if (perspectiva != null)
 			rutaCompletaPerspectivaSeleccionada = perspectivasService.getRutaCompletaPerspectivaSinPorcentajes(perspectiva, new EditarPerspectivaForm().getSeparadorRuta());
-		else 
+		else
 			rutaCompletaPerspectivaSeleccionada = "!ELIMINADO!";
 
 		perspectivasService.close();

@@ -1,9 +1,10 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.celdas.forms;
 
+import java.util.List;
+
 import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.presentaciones.model.util.TipoCelda;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.List;
 
 public class EditarCeldaForm extends EditarObjetoForm
 {
@@ -295,7 +296,8 @@ public class EditarCeldaForm extends EditarObjetoForm
     this.tiposCelda = tiposCelda;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.celdaId = new Long(0L);
     this.paginaId = new Long(0L);
     this.tipo = null;

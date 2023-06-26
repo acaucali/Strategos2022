@@ -19,10 +19,12 @@ import org.apache.struts.action.ActionMapping;
 
 public class EliminarAdjuntoExplicacionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -38,40 +40,12 @@ public class EliminarAdjuntoExplicacionAction extends VgcAction
 		
 		String indiceAdjunto = ((String[])editarExplicacionForm.getMultipartRequestHandler().getTextElements().get("indiceAdjunto"))[0];
 		adjunto = (AdjuntoExplicacion)editarExplicacionForm.getAdjuntosExplicacion().get(Integer.parseInt(indiceAdjunto));
-		String ruta=adjunto.getRuta();
-		int index=ruta.indexOf("/");
-		String rutaFinal=ruta.substring(0, index);
-		File folder = new File(rutaFinal);
-		deleteFolder(folder);
+		
+		adjunto.setArchivo(null);
+
 		editarExplicacionForm.getAdjuntosExplicacion().remove(Integer.parseInt(indiceAdjunto));
 		editarExplicacionForm.setNumeroAdjuntos(new Long(editarExplicacionForm.getAdjuntosExplicacion().size()));
 		
 		return mapping.findForward(forward);
 	}
-	
-	private void deleteFolder(File fileDel) {
-        if(fileDel.isDirectory()){            
-            
-            if(fileDel.list().length == 0)
-                fileDel.delete();
-            else{
-                
-               for (String temp : fileDel.list()) {
-                   File fileDelete = new File(fileDel, temp);
-                   //recursive delete
-                   deleteFolder(fileDelete);
-               }
-
-               //check the directory again, if empty then delete it
-               if(fileDel.list().length==0)
-                   fileDel.delete();
-               
-            }
-
-        }else{
-            
-            //if file, then delete it
-            fileDel.delete();            
-        }
-    }
 }

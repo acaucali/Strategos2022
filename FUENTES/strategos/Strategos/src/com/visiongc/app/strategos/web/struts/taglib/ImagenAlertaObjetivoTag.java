@@ -1,9 +1,11 @@
 package com.visiongc.app.strategos.web.struts.taglib;
 
+import javax.servlet.jsp.JspException;
+
+import org.apache.struts.taglib.TagUtils;
+
 import com.visiongc.app.strategos.planes.model.util.AlertaObjetivo;
 import com.visiongc.commons.struts.tag.VgcBaseTag;
-import javax.servlet.jsp.JspException;
-import org.apache.struts.taglib.TagUtils;
 
 public class ImagenAlertaObjetivoTag extends VgcBaseTag
 {
@@ -38,7 +40,8 @@ public class ImagenAlertaObjetivoTag extends VgcBaseTag
     this.property = property;
   }
 
-  public int doStartTag() throws JspException
+  @Override
+public int doStartTag() throws JspException
   {
     String nombreImagen = "alertaBlanca.gif";
 
@@ -67,7 +70,8 @@ public class ImagenAlertaObjetivoTag extends VgcBaseTag
     return 0;
   }
 
-  public void release() {
+  @Override
+public void release() {
     super.release();
     this.name = null;
     this.property = null;

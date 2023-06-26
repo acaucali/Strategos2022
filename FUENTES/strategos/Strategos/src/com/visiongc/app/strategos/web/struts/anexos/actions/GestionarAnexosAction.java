@@ -1,5 +1,12 @@
 package com.visiongc.app.strategos.web.struts.anexos.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
@@ -10,25 +17,19 @@ import com.visiongc.app.strategos.presentaciones.StrategosCeldasService;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
 import com.visiongc.app.strategos.presentaciones.model.IndicadorCelda;
 import com.visiongc.app.strategos.web.struts.anexos.forms.GestionarAnexosForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 public class GestionarAnexosAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
     navBar.agregarUrl(url, nombre);
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -40,7 +41,7 @@ public class GestionarAnexosAction extends VgcAction
     String objetoKey = request.getParameter("objetoKey");
     Long objetoId = new Long(request.getParameter("objetoId"));
 
-    Boolean cancelar = new Boolean(false);
+    boolean cancelar = false;
 
     if ((objetoId == null) || (objetoId == new Long(0L))) {
       cancelar = new Boolean(true);
@@ -50,7 +51,7 @@ public class GestionarAnexosAction extends VgcAction
       cancelar = new Boolean(true);
     }
 
-    if (cancelar.booleanValue()) {
+    if (cancelar) {
       return getForwardBack(request, 1, true);
     }
 

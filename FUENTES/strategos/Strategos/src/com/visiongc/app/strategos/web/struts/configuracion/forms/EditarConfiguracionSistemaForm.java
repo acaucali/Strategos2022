@@ -1,11 +1,8 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.configuracion.forms;
 
-import java.sql.Time;
-
-import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm.PeriodoStatus;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
@@ -13,13 +10,13 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
  * @author Kerwin
  *
  */
-public class EditarConfiguracionSistemaForm extends EditarObjetoForm 
+public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0;
-	
+
 	// Indicador
 	private Integer indicadorNivel;
-	
+
 	// Iniciativa
 	private String iniciativaNombre;
 	private String iniciativaIndicadorAvanceNombre;
@@ -31,13 +28,13 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	private String iniciativaIndicadorEficienciaNombre;
 	private Boolean iniciativaIndicadorEficienciaMostrar;
 	private Boolean iniciativaIndicadorAvanceAnteponer;
-	
+
 	// Plan
 	private Boolean planObjetivoAlertaAnualMostrar;
 	private Boolean planObjetivoAlertaParcialMostrar;
 	private Boolean planObjetivoLogroAnualMostrar;
 	private Boolean planObjetivoLogroParcialMostrar;
-	
+
 	// Responsable
   	private Boolean enviarResponsableFijarMeta;
   	private Boolean enviarResponsableLograrMeta;
@@ -45,15 +42,15 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
   	private Boolean enviarResponsableCargarMeta;
   	private Boolean enviarResponsableCargarEjecutado;
  	private Boolean enviarResponsableNegativo;
-  	
+
   	// Correo
   	private Byte tipoCorreoPorDefecto;
-  	
-  	
+
+
   	// inventario
   	private Integer dia;
   	private String titulo;
-  	private String texto; 
+  	private String texto;
   	private String hora;
   	private String correo;
   	private Boolean enviarResponsableFijarMetaInv;
@@ -62,11 +59,11 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
   	private Boolean enviarResponsableCargarMetaInv;
   	private Boolean enviarResponsableCargarEjecutadoInv;
   	private Boolean enviarResponsableNegativoInv;
-  	
+
   	// iniciativa - correo
   	private String dia1;
   	private String titulo1;
-  	private String texto1; 
+  	private String texto1;
   	private String hora1;
   	private String correo1;
   	private Boolean enviarResponsableFijarMetaInv1;
@@ -75,228 +72,228 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
   	private Boolean enviarResponsableCargarMetaInv1;
   	private Boolean enviarResponsableCargarEjecutadoInv1;
   	private Boolean enviarResponsableNegativoInv1;
-  	
-  	
-	public Integer getIndicadorNivel() 
+
+
+	public Integer getIndicadorNivel()
 	{
 		return this.indicadorNivel;
 	}
 
-	public void setIndicadorNivel(Integer indicadorNivel) 
+	public void setIndicadorNivel(Integer indicadorNivel)
 	{
 		this.indicadorNivel = indicadorNivel;
 	}
 
-	public String getIniciativaNombre() 
+	public String getIniciativaNombre()
 	{
 		return this.iniciativaNombre;
 	}
 
-	public void setIniciativaNombre(String iniciativaNombre) 
+	public void setIniciativaNombre(String iniciativaNombre)
 	{
 		this.iniciativaNombre = iniciativaNombre;
 	}
 
-	public String getIniciativaIndicadorAvanceNombre() 
+	public String getIniciativaIndicadorAvanceNombre()
 	{
 		return this.iniciativaIndicadorAvanceNombre;
 	}
 
-	public void setIniciativaIndicadorAvanceNombre(String iniciativaIndicadorAvanceNombre) 
+	public void setIniciativaIndicadorAvanceNombre(String iniciativaIndicadorAvanceNombre)
 	{
 		this.iniciativaIndicadorAvanceNombre = iniciativaIndicadorAvanceNombre;
 	}
 
-	public Boolean getIniciativaIndicadorAvanceMostrar() 
+	public Boolean getIniciativaIndicadorAvanceMostrar()
 	{
 		return this.iniciativaIndicadorAvanceMostrar;
 	}
 
-	public void setIniciativaIndicadorAvanceMostrar(Boolean iniciativaIndicadorAvanceMostrar) 
+	public void setIniciativaIndicadorAvanceMostrar(Boolean iniciativaIndicadorAvanceMostrar)
 	{
 		this.iniciativaIndicadorAvanceMostrar = iniciativaIndicadorAvanceMostrar;
 	}
 
-	public String getIniciativaIndicadorPresupuestoNombre() 
+	public String getIniciativaIndicadorPresupuestoNombre()
 	{
 		return this.iniciativaIndicadorPresupuestoNombre;
 	}
 
-	public void setIniciativaIndicadorPresupuestoNombre(String iniciativaIndicadorPresupuestoNombre) 
+	public void setIniciativaIndicadorPresupuestoNombre(String iniciativaIndicadorPresupuestoNombre)
 	{
 		this.iniciativaIndicadorPresupuestoNombre = iniciativaIndicadorPresupuestoNombre;
 	}
-	
-	public Boolean getIniciativaIndicadorPresupuestoMostrar() 
+
+	public Boolean getIniciativaIndicadorPresupuestoMostrar()
 	{
 		return this.iniciativaIndicadorPresupuestoMostrar;
 	}
 
-	public void setIniciativaIndicadorPresupuestoMostrar(Boolean iniciativaIndicadorPresupuestoMostrar) 
+	public void setIniciativaIndicadorPresupuestoMostrar(Boolean iniciativaIndicadorPresupuestoMostrar)
 	{
 		this.iniciativaIndicadorPresupuestoMostrar = iniciativaIndicadorPresupuestoMostrar;
 	}
 
-	public String getIniciativaIndicadorEficaciaNombre() 
+	public String getIniciativaIndicadorEficaciaNombre()
 	{
 		return this.iniciativaIndicadorEficaciaNombre;
 	}
-	
-	public void setIniciativaIndicadorEficaciaNombre(String iniciativaIndicadorEficaciaNombre) 
+
+	public void setIniciativaIndicadorEficaciaNombre(String iniciativaIndicadorEficaciaNombre)
 	{
 		this.iniciativaIndicadorEficaciaNombre = iniciativaIndicadorEficaciaNombre;
 	}
 
-	public Boolean getIniciativaIndicadorEficaciaMostrar() 
+	public Boolean getIniciativaIndicadorEficaciaMostrar()
 	{
 		return this.iniciativaIndicadorEficaciaMostrar;
 	}
 
-	public void setIniciativaIndicadorEficaciaMostrar(Boolean iniciativaIndicadorEficaciaMostrar) 
+	public void setIniciativaIndicadorEficaciaMostrar(Boolean iniciativaIndicadorEficaciaMostrar)
 	{
 		this.iniciativaIndicadorEficaciaMostrar = iniciativaIndicadorEficaciaMostrar;
 	}
-	
-	public String getIniciativaIndicadorEficienciaNombre() 
+
+	public String getIniciativaIndicadorEficienciaNombre()
 	{
 		return this.iniciativaIndicadorEficienciaNombre;
 	}
 
-	public void setIniciativaIndicadorEficienciaNombre(String iniciativaIndicadorEficienciaNombre) 
+	public void setIniciativaIndicadorEficienciaNombre(String iniciativaIndicadorEficienciaNombre)
 	{
 		this.iniciativaIndicadorEficienciaNombre = iniciativaIndicadorEficienciaNombre;
 	}
 
-	public Boolean getIniciativaIndicadorEficienciaMostrar() 
+	public Boolean getIniciativaIndicadorEficienciaMostrar()
 	{
 		return this.iniciativaIndicadorEficienciaMostrar;
 	}
 
-	public void setIniciativaIndicadorEficienciaMostrar(Boolean iniciativaIndicadorEficienciaMostrar) 
+	public void setIniciativaIndicadorEficienciaMostrar(Boolean iniciativaIndicadorEficienciaMostrar)
 	{
 		this.iniciativaIndicadorEficienciaMostrar = iniciativaIndicadorEficienciaMostrar;
 	}
 
-	public Boolean getIniciativaIndicadorAvanceAnteponer() 
+	public Boolean getIniciativaIndicadorAvanceAnteponer()
 	{
 		return this.iniciativaIndicadorAvanceAnteponer;
 	}
 
-	public void setIniciativaIndicadorAvanceAnteponer(Boolean iniciativaIndicadorAvanceAnteponer) 
+	public void setIniciativaIndicadorAvanceAnteponer(Boolean iniciativaIndicadorAvanceAnteponer)
 	{
 		this.iniciativaIndicadorAvanceAnteponer = iniciativaIndicadorAvanceAnteponer;
 	}
 
-	public Boolean getPlanObjetivoLogroAnualMostrar() 
+	public Boolean getPlanObjetivoLogroAnualMostrar()
 	{
 		return this.planObjetivoLogroAnualMostrar;
 	}
 
-	public void setPlanObjetivoLogroAnualMostrar(Boolean planObjetivoLogroAnualMostrar) 
+	public void setPlanObjetivoLogroAnualMostrar(Boolean planObjetivoLogroAnualMostrar)
 	{
 		this.planObjetivoLogroAnualMostrar = planObjetivoLogroAnualMostrar;
 	}
 
-	public Boolean getPlanObjetivoLogroParcialMostrar() 
+	public Boolean getPlanObjetivoLogroParcialMostrar()
 	{
 		return this.planObjetivoLogroParcialMostrar;
 	}
 
-	public void setPlanObjetivoLogroParcialMostrar(Boolean planObjetivoLogroParcialMostrar) 
+	public void setPlanObjetivoLogroParcialMostrar(Boolean planObjetivoLogroParcialMostrar)
 	{
 		this.planObjetivoLogroParcialMostrar = planObjetivoLogroParcialMostrar;
 	}
 
-	public Boolean getPlanObjetivoAlertaAnualMostrar() 
+	public Boolean getPlanObjetivoAlertaAnualMostrar()
 	{
 		return this.planObjetivoAlertaAnualMostrar;
 	}
 
-	public void setPlanObjetivoAlertaAnualMostrar(Boolean planObjetivoAlertaAnualMostrar) 
+	public void setPlanObjetivoAlertaAnualMostrar(Boolean planObjetivoAlertaAnualMostrar)
 	{
 		this.planObjetivoAlertaAnualMostrar = planObjetivoAlertaAnualMostrar;
 	}
 
-	public Boolean getPlanObjetivoAlertaParcialMostrar() 
+	public Boolean getPlanObjetivoAlertaParcialMostrar()
 	{
 		return this.planObjetivoAlertaParcialMostrar;
 	}
 
-	public void setPlanObjetivoAlertaParcialMostrar(Boolean planObjetivoAlertaParcialMostrar) 
+	public void setPlanObjetivoAlertaParcialMostrar(Boolean planObjetivoAlertaParcialMostrar)
 	{
 		this.planObjetivoAlertaParcialMostrar = planObjetivoAlertaParcialMostrar;
 	}
-	
-	public Boolean getEnviarResponsableFijarMeta() 
+
+	public Boolean getEnviarResponsableFijarMeta()
 	{
 		return this.enviarResponsableFijarMeta;
 	}
 
-	public void setEnviarResponsableFijarMeta(Boolean enviarResponsableFijarMeta) 
+	public void setEnviarResponsableFijarMeta(Boolean enviarResponsableFijarMeta)
 	{
 		this.enviarResponsableFijarMeta = enviarResponsableFijarMeta;
 	}
 
-	public Boolean getEnviarResponsableLograrMeta() 
+	public Boolean getEnviarResponsableLograrMeta()
 	{
 		return this.enviarResponsableLograrMeta;
 	}
 
-	public void setEnviarResponsableLograrMeta(Boolean enviarResponsableLograrMeta) 
+	public void setEnviarResponsableLograrMeta(Boolean enviarResponsableLograrMeta)
 	{
 		this.enviarResponsableLograrMeta = enviarResponsableLograrMeta;
 	}
 
-	public Boolean getEnviarResponsableSeguimiento() 
+	public Boolean getEnviarResponsableSeguimiento()
 	{
 		return this.enviarResponsableSeguimiento;
 	}
 
-	public void setEnviarResponsableSeguimiento(Boolean enviarResponsableSeguimiento) 
+	public void setEnviarResponsableSeguimiento(Boolean enviarResponsableSeguimiento)
 	{
 		this.enviarResponsableSeguimiento = enviarResponsableSeguimiento;
 	}
 
-	public Boolean getEnviarResponsableCargarMeta() 
+	public Boolean getEnviarResponsableCargarMeta()
 	{
 		return this.enviarResponsableCargarMeta;
 	}
 
-	public void setEnviarResponsableCargarMeta(Boolean enviarResponsableCargarMeta) 
+	public void setEnviarResponsableCargarMeta(Boolean enviarResponsableCargarMeta)
 	{
 		this.enviarResponsableCargarMeta = enviarResponsableCargarMeta;
 	}
 
-	public Boolean getEnviarResponsableCargarEjecutado() 
+	public Boolean getEnviarResponsableCargarEjecutado()
 	{
 		return this.enviarResponsableCargarEjecutado;
 	}
 
-	public void setEnviarResponsableCargarEjecutado(Boolean enviarResponsableCargarEjecutado) 
+	public void setEnviarResponsableCargarEjecutado(Boolean enviarResponsableCargarEjecutado)
 	{
 		this.enviarResponsableCargarEjecutado = enviarResponsableCargarEjecutado;
 	}
 
-	public Byte getTipoCorreoPorDefecto() 
+	public Byte getTipoCorreoPorDefecto()
 	{
 		return this.tipoCorreoPorDefecto;
 	}
 
-	public void setTipoCorreoPorDefecto(Byte tipoCorreoPorDefecto) 
+	public void setTipoCorreoPorDefecto(Byte tipoCorreoPorDefecto)
 	{
 		this.tipoCorreoPorDefecto = tipoCorreoPorDefecto;
 	}
-	
-	public Byte getCorreoLocal() 
+
+	public Byte getCorreoLocal()
 	{
 		return new Byte(TipoCorreo.TIPO_LOCAL);
 	}
 
-	public Byte getCorreoGMail() 
+	public Byte getCorreoGMail()
 	{
 		return new Byte(TipoCorreo.TIPO_GMAIL);
 	}
-		
+
 	public String getTitulo() {
 		return titulo;
 	}
@@ -312,7 +309,7 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
-		
+
 	public Integer getDia() {
 		return dia;
 	}
@@ -376,7 +373,7 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	public void setEnviarResponsableCargarEjecutadoInv(Boolean enviarResponsableCargarEjecutadoInv) {
 		this.enviarResponsableCargarEjecutadoInv = enviarResponsableCargarEjecutadoInv;
 	}
-	
+
 	public Boolean getEnviarResponsableNegativo() {
 		return enviarResponsableNegativo;
 	}
@@ -392,7 +389,7 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	public void setEnviarResponsableNegativoInv(Boolean enviarResponsableNegativoInv) {
 		this.enviarResponsableNegativoInv = enviarResponsableNegativoInv;
 	}
-	
+
 	public String getDia1() {
 		return dia1;
 	}
@@ -481,7 +478,8 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 		this.enviarResponsableNegativoInv1 = enviarResponsableNegativoInv1;
 	}
 
-	public void clear() 
+	@Override
+	public void clear()
 	{
 		this.setRespuesta(null);
 		this.setStatus(VgcReturnCode.FORM_READY);
@@ -495,45 +493,45 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 		this.iniciativaIndicadorEficienciaNombre = null;
 		this.iniciativaIndicadorEficienciaMostrar = false;
 		this.iniciativaIndicadorAvanceAnteponer = false;
-		
+
 		this.planObjetivoLogroAnualMostrar = true;
 		this.planObjetivoLogroParcialMostrar = true;
 		this.planObjetivoAlertaAnualMostrar = true;
 		this.planObjetivoAlertaParcialMostrar = true;
-		
+
 		this.enviarResponsableCargarEjecutado = true;
 		this.enviarResponsableCargarMeta = true;
 		this.enviarResponsableFijarMeta = true;
 		this.enviarResponsableLograrMeta = true;
 		this.enviarResponsableSeguimiento = true;
 		this.enviarResponsableNegativo = true;
-		
+
 		this.enviarResponsableCargarEjecutadoInv = true;
 		this.enviarResponsableCargarMetaInv = true;
 		this.enviarResponsableFijarMetaInv = true;
 		this.enviarResponsableLograrMetaInv = true;
 		this.enviarResponsableSeguimientoInv = true;
 		this.enviarResponsableNegativoInv = true;
-		
+
 		this.enviarResponsableCargarEjecutadoInv1 = true;
 		this.enviarResponsableCargarMetaInv1 = true;
 		this.enviarResponsableFijarMetaInv1 = true;
 		this.enviarResponsableLograrMetaInv1 = true;
 		this.enviarResponsableSeguimientoInv1 = true;
-		
+
 		this.indicadorNivel = 2;
-		
+
 		this.tipoCorreoPorDefecto = TipoCorreo.TIPO_LOCAL;
-	
-		
-		
+
+
+
 	}
-	
+
 	public static class TipoCorreo
 	{
 		private static final byte TIPO_LOCAL = 1;
 		private static final byte TIPO_GMAIL = 2;
-		
+
 		public static Byte getTipoCorreo(Byte tipoCorreo)
 		{
 			if (tipoCorreo == TIPO_LOCAL)

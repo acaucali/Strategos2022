@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.util;
 
@@ -16,48 +16,49 @@ public class ObjetoReporte extends EditarObjetoForm
 	private String texto;
 	private ObjetoTabla tabla;
 	private String id;
-	
-	public Byte getTipo() 
+
+	public Byte getTipo()
 	{
 		return this.tipo;
 	}
 
-	public void setTipo(Byte tipo) 
+	public void setTipo(Byte tipo)
 	{
 		this.tipo = tipo;
 	}
 
-	public String getTexto() 
+	public String getTexto()
 	{
 		return this.texto;
 	}
 
-	public void setTexto(String texto) 
+	public void setTexto(String texto)
 	{
 		this.texto = texto;
 	}
-	
-	public ObjetoTabla getTabla() 
+
+	public ObjetoTabla getTabla()
 	{
 		return this.tabla;
 	}
 
-	public void setTabla(ObjetoTabla tabla) 
+	public void setTabla(ObjetoTabla tabla)
 	{
 		this.tabla = tabla;
 	}
 
-	public String getId() 
+	public String getId()
 	{
 		return this.id;
 	}
 
-	public void setId(String id) 
+	public void setId(String id)
 	{
 		this.id = id;
 	}
-	
-  	public void clear()
+
+  	@Override
+	public void clear()
   	{
   		this.tipo = null;
   		this.texto = null;

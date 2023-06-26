@@ -1,9 +1,6 @@
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,14 +16,12 @@ import org.apache.struts.util.MessageResources;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
-import com.visiongc.app.strategos.indicadores.model.util.AlertaIndicador;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
@@ -35,8 +30,6 @@ import com.visiongc.app.strategos.model.util.LapsoTiempo;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.planes.StrategosMetasService;
-import com.visiongc.app.strategos.planes.model.IndicadorEstado;
-import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
@@ -60,11 +53,13 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 	private int inicioTamanoPagina = 57;
 	private int maxLineasAntesTabla = 4;
 
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
 		String source = request.getParameter("source");
 		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.mediciones.atrasadas");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response,
 			Document documento) throws Exception {
 		MessageResources mensajes = getResources(request);
@@ -80,7 +75,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		Font fuente = getConfiguracionPagina(request).getFuente();
 
 		/* Parametros para el reporte */
-		String source = request.getParameter("source");				
+		String source = request.getParameter("source");
 		/*
 		 * reporte.setMesInicial(request.getParameter("mesInicial"));
 		 * reporte.setMesFinal(request.getParameter("mesFinal"));
@@ -89,8 +84,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		 */
 		reporte.setMesInicial("1");
 		reporte.setMesFinal("12");
-		reporte.setAnoInicial("2022");
-		reporte.setAnoFinal("2022");
+		reporte.setAnoInicial("2023");
+		reporte.setAnoFinal("2023");
 		reporte.setAlcance(request.getParameter("alcance") != null ? Byte.parseByte(request.getParameter("alcance"))
 				: reporte.getAlcancePlan());
 		reporte.setAno(Integer.parseInt(ano));
@@ -126,7 +121,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		Font fontTitulos = new Font(getConfiguracionPagina(request).getCodigoFuente());
 		fontTitulos.setSize(14);
 		fontTitulos.setStyle(Font.BOLD);
-		Integer nivel = 0;
+		int nivel = 0;
 		inicioTamanoPagina = lineasxPagina(fuente);
 		tamanoPagina = inicioTamanoPagina;
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
@@ -166,10 +161,10 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 					&& request.getParameter("selectHitoricoType") != "")
 							? Byte.parseByte(request.getParameter("selectHitoricoType"))
 							: HistoricoType.getFiltroHistoricoNoMarcado();
-			
+
 			FiltroForm filtro = new FiltroForm();
 			filtro.setHistorico(selectHitoricoType);
-			
+
 			if (filtroNombre.equals(""))
 				filtro.setNombre(null);
 			else
@@ -192,7 +187,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			} else if (reporte.getFiltro().getHistorico() != null
 					&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado()) {
 				filtros.put("historicoDate", "IS NOT NULL");
-			}			
+			}
 			if (reporte.getFiltro().getNombre() != null) {
 				filtros.put("nombre", reporte.getFiltro().getNombre());
 			}
@@ -203,7 +198,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				filtros.put("anio", reporte.getAno());
 			}
 			filtros.put("estatusId", reporte.getEstatus());
-												
+
 			List<Iniciativa> iniciativas = strategosIniciativasService
 					.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
 
@@ -217,7 +212,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				crearTablaTitulo(tabla, mensajes, 1);
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 					Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 							iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -248,7 +243,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				documento.add(lineaEnBlanco(fuente));
 
 				for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter2.next();
+					Iniciativa iniciativa = iter2.next();
 					Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 							iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -294,7 +289,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			}
 
 		}
-		
+
 		//suborganizaciones
 		if (request.getParameter("alcance").equals("4")) {
 			Map<String, Object> filtro = new HashMap<String, Object>();
@@ -330,7 +325,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			} else if (reporte.getFiltro().getHistorico() != null
 					&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado()) {
 				filtros.put("historicoDate", "IS NOT NULL");
-			}			
+			}
 			if (reporte.getFiltro().getNombre() != null) {
 				filtros.put("nombre", reporte.getFiltro().getNombre());
 			}
@@ -341,11 +336,11 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				filtros.put("anio", reporte.getAno());
 			}
 			filtros.put("estatusId", reporte.getEstatus());
-			
+
 
 			List<Iniciativa> iniciativas = strategosIniciativasService
 					.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
-			
+
 			if (iniciativas.size() > 0) {
 
 				// Inicializacion Encabezado Tabla Iniciativas
@@ -356,7 +351,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				crearTablaTitulo(tabla, mensajes, 1);
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 					Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 							iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -387,7 +382,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				documento.add(lineaEnBlanco(fuente));
 
 				for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter2.next();
+					Iniciativa iniciativa = iter2.next();
 					Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 							iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -433,8 +428,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			}
 			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
-				
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+
+					OrganizacionStrategos organizacion = iter.next();
 
 					if (organizacion != null) {
 
@@ -450,7 +445,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 						documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 					}
-					
+
 					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					if (reporte.getFiltro().getHistorico() != null
 							&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoNoMarcado()) {
@@ -458,7 +453,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 					} else if (reporte.getFiltro().getHistorico() != null
 							&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado()) {
 						filtros.put("historicoDate", "IS NOT NULL");
-					}			
+					}
 					if (reporte.getFiltro().getNombre() != null) {
 						filtros.put("nombre", reporte.getFiltro().getNombre());
 					}
@@ -469,15 +464,15 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 						filtros.put("anio", reporte.getAno());
 					}
 					filtros.put("estatusId", reporte.getEstatus());
-					
-					
-					
+
+
+
 					List<Iniciativa> iniciativasSub = strategosIniciativasService
 							.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
-					
-					
+
+
 					if (iniciativasSub.size() > 0) {
-						
+
 						// Inicializacion Encabezado Tabla Iniciativas
 						TablaPDF tabla = null;
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
@@ -485,7 +480,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 						// Se asigna el header de la tabla
 						crearTablaTitulo(tabla, mensajes, 1);
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
+							Iniciativa iniciativa = iter1.next();
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -511,12 +506,12 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 							// Dibujar Informacion de la Iniciativa
 							crearTablaIniciativa(reporte, iniciativa, indicador, medicionesProgramado, medicionesEjecutado,
 									fuente, mensajes, documento, request, tabla);
-							
+
 						}
 						documento.add(tabla.getTabla());
 						documento.add(lineaEnBlanco(fuente));
 						for (Iterator<Iniciativa> iter2 = iniciativasSub.iterator(); iter2.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter2.next();
+							Iniciativa iniciativa = iter2.next();
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -560,8 +555,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 						fuente.setColor(0, 0, 0);
 						documento.add(lineaEnBlanco(fuente));
 					}
-					
-				}				
+
+				}
 			}
 		}
 
@@ -580,7 +575,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		String ultimaMedicion = iniciativa.getFechaUltimaMedicion();
 		String frecuencia = obtenerFrecuencia(iniciativa.getFrecuencia());
 
-		IniciativaEstatus estatusId = iniciativa.getEstatus();		
+		IniciativaEstatus estatusId = iniciativa.getEstatus();
 
 		if (lineas >= tamanoPagina) {
 			lineas = inicioLineas;
@@ -596,13 +591,13 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			strategosPryProyectosService.close();
 		}
 
-		Double programado = 0D;
-		Double porcentajeEsperado = 0D;
+		double programado = 0D;
+		double porcentajeEsperado = 0D;
 
 		for (Iterator<Medicion> iterEjecutado = medicionesEjecutado.iterator(); iterEjecutado.hasNext();) {
-			Medicion ejecutado = (Medicion) iterEjecutado.next();
+			Medicion ejecutado = iterEjecutado.next();
 			for (Iterator<Medicion> iterMeta = medicionesProgramado.iterator(); iterMeta.hasNext();) {
-				Medicion meta = (Medicion) iterMeta.next();
+				Medicion meta = iterMeta.next();
 				if (ejecutado.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue()
 						&& ejecutado.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo()
 								.intValue()) {
@@ -677,7 +672,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 		if (actividades.size() > 0) {
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+				PryActividad actividad = iter.next();
 				Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 						actividad.getIndicadorId());
 
@@ -762,7 +757,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			tabla.setAmplitudTabla(100);
 			tabla.crearTabla(columnas);
 
-			tabla.setColorFondo(128, 128, 128);
+			tabla.setColorFondo(21, 60, 120);
 			tabla.setColorLetra(255, 255, 255);
 			tabla.setTamanoFont(12);
 			tabla.setFormatoFont(Font.BOLD);
@@ -795,7 +790,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 			tabla.setAmplitudTabla(100);
 			tabla.crearTabla(columnas);
-			tabla.setColorFondo(128, 128, 128);
+			tabla.setColorFondo(21, 60, 120);
 			tabla.setColorLetra(255, 255, 255);
 			tabla.setTamanoFont(12);
 			tabla.setFormatoFont(Font.BOLD);
@@ -900,10 +895,10 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		}
 		return nombre;
 	}
-	
+
 	public String obtenerFrecuencia (Byte frecuenciaId) {
 		String frecuencia = "";
-		
+
 		if (frecuenciaId == 0) {
 			frecuencia = "Diaria";
 		}
@@ -934,12 +929,12 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		return frecuencia;
 	}
 
-	
+
 	private Integer obtenerFecha(Byte frecuencia) {
 		Integer periodoFinal = 0;
 
 		Integer dia = new Date().getDay();
-		Integer mes = new Date().getMonth() + 1;
+		int mes = new Date().getMonth() + 1;
 
 		// Diaria - 0
 		if (frecuencia == 0)
@@ -951,7 +946,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		// Quincenal - 2
 		else if (frecuencia == 2) {
 			if (mes > 1) {
-				Integer semana = (mes - 1) * 2;
+				int semana = (mes - 1) * 2;
 				if (dia > 15) {
 					semana += 2;
 				} else if (dia <= 15) {

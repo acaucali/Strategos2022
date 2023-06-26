@@ -1,5 +1,20 @@
 package com.visiongc.app.strategos.web.struts.reportes.grafico.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.MessageResources;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
@@ -26,38 +41,27 @@ import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.ConfiguracionUsuarioPK;
-import com.visiongc.framework.model.Usuario;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.MessageResources;
 
 public final class MostrarReporteGraficoAction
   extends VgcAction
 {
   public static final String ACTION_KEY = "MostrarVistaDatosAction";
-  
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     ActionMessages messages = getMessages(request);
-    
+
     ConfigurarReporteGraficoForm configurarVistaDatosForm = (ConfigurarReporteGraficoForm)form;
-    
+
     Long reporteId = (request.getParameter("reporteId") != null) && (request.getParameter("reporteId") != "") ? new Long(request.getParameter("reporteId")) : null;
     Byte source = (request.getParameter("source") != null) && (request.getParameter("source") != "") ? new Byte(request.getParameter("source")) : null;
     if (source == null)
@@ -83,13 +87,13 @@ public final class MostrarReporteGraficoAction
       configurarVistaDatosForm.setShowTotalFilas(showTotalFilas);
       configurarVistaDatosForm.setShowTotalColumnas(showTotalColumnas);
       configurarVistaDatosForm.setAcumularPeriodos(acumularPeriodos);
-      
+
       configurarVistaDatosForm.setConfiguracion(new GuardarReporteGraficoAction().guardarConfiguracion(configurarVistaDatosForm, request));
     }
     setConfigurarVistaDatosForm(configurarVistaDatosForm, getResources(request));
-    
+
     saveMessages(request, messages);
-    
+
     Boolean showTablaParametro = configurarVistaDatosForm.getShowTablaParametro();
     FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
     ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(getUsuarioConectado(request).getUsuarioId(), "Strategos.Configuracion.Reporte.Editar.Parametros", "Parametros");
@@ -112,44 +116,44 @@ public final class MostrarReporteGraficoAction
       configurarVistaDatosForm.setShowTablaParametro(Boolean.valueOf(true));
     }
     configuracionUsuario.setData(configurarVistaDatosForm.getXml());
-    
+
     frameworkService.saveConfiguracionUsuario(configuracionUsuario, getUsuarioConectado(request));
     frameworkService.close();
-    
+
     PaginaLista paginaColumnas = new PaginaLista();
     paginaColumnas.setLista(configurarVistaDatosForm.getAtributos());
     paginaColumnas.setNroPagina(0);
     paginaColumnas.setTotal(paginaColumnas.getLista().size());
-    
+
     request.setAttribute("paginaColumnas", paginaColumnas);
-    
+
     return mapping.findForward(forward);
   }
-  
+
   public void setConfigurarVistaDatosForm(ConfigurarReporteGraficoForm configurarVistaDatosForm, MessageResources mensajes)
   {
     setSelectores(configurarVistaDatosForm);
-    
+
     setFilas(configurarVistaDatosForm);
-    
+
     setColumnas(configurarVistaDatosForm);
-    
+
     setMatrizDatos(configurarVistaDatosForm, mensajes);
-    
+
     setPeriodos(configurarVistaDatosForm);
-    
+
     configurarVistaDatosForm.setNombreFrecuencia(Frecuencia.getNombre(configurarVistaDatosForm.getFrecuencia().byteValue()));
   }
-  
+
   private void setPeriodos(ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     Map<String, String> dimensiones = new HashMap();
-    
+
     configurarVistaDatosForm.getClass();String[] variables = configurarVistaDatosForm.getColumnasId().split("!@!");
     List<ObjetoValorNombre> objetos = new ArrayList();
     Boolean porColumnas = null;
-    for (int c = 0; c < variables.length; c++) {
-      if (variables[c].equals(TipoDimension.getTipoDimensionTiempo().toString()))
+    for (String variable : variables) {
+      if (variable.equals(TipoDimension.getTipoDimensionTiempo().toString()))
       {
         objetos = configurarVistaDatosForm.getColumnas();
         porColumnas = Boolean.valueOf(true);
@@ -159,8 +163,8 @@ public final class MostrarReporteGraficoAction
     if (porColumnas == null)
     {
       configurarVistaDatosForm.getClass();variables = configurarVistaDatosForm.getFilasId().split("!@!");
-      for (int c = 0; c < variables.length; c++) {
-        if (variables[c].equals(TipoDimension.getTipoDimensionTiempo().toString()))
+      for (String variable : variables) {
+        if (variable.equals(TipoDimension.getTipoDimensionTiempo().toString()))
         {
           objetos = configurarVistaDatosForm.getFilas();
           porColumnas = Boolean.valueOf(true);
@@ -170,12 +174,11 @@ public final class MostrarReporteGraficoAction
     }
     if ((porColumnas != null) && (porColumnas.booleanValue()) && (objetos != null))
     {
-      for (int c = 0; c < objetos.size(); c++)
-      {
-        ObjetoValorNombre columna = (ObjetoValorNombre)objetos.get(c);
+      for (ObjetoValorNombre element : objetos) {
+        ObjetoValorNombre columna = element;
         setMiembroDimension(dimensiones, TipoDimension.getTipoDimensionTiempo(), columna.getValor(), null, null);
-        
-        String tiempoId = (String)dimensiones.get("tiempoId");
+
+        String tiempoId = dimensiones.get("tiempoId");
         if ((tiempoId != null) && (!tiempoId.equals("")) && (tiempoId.indexOf("_") != -1) && (!tiempoId.equals("0_0")))
         {
           String[] arrPeriodoAno = StringUtil.split(tiempoId, "_");
@@ -193,15 +196,15 @@ public final class MostrarReporteGraficoAction
           if (configurarVistaDatosForm.getAnoFinal() == null) {
             configurarVistaDatosForm.setAnoFinal(ano);
           }
-          Integer periodos = new Integer(ano.toString() + (periodo.toString().length() == 2 ? "0" : periodo.toString().length() == 1 ? "00" : "") + periodo.toString());
-          Integer periodoComp = new Integer(configurarVistaDatosForm.getAnoInicial().toString() + (configurarVistaDatosForm.getPeriodoInicial().toString().length() == 2 ? "0" : configurarVistaDatosForm.getPeriodoInicial().toString().length() == 1 ? "00" : "") + configurarVistaDatosForm.getPeriodoInicial().toString());
-          if (periodoComp.intValue() > periodos.intValue())
+          int periodos = Integer.parseInt(ano.toString() + (periodo.toString().length() == 2 ? "0" : periodo.toString().length() == 1 ? "00" : "") + periodo.toString());
+          int periodoComp = Integer.parseInt(configurarVistaDatosForm.getAnoInicial().toString() + (configurarVistaDatosForm.getPeriodoInicial().toString().length() == 2 ? "0" : configurarVistaDatosForm.getPeriodoInicial().toString().length() == 1 ? "00" : "") + configurarVistaDatosForm.getPeriodoInicial().toString());
+          if (periodoComp > periodos)
           {
             configurarVistaDatosForm.setPeriodoInicial(periodo);
             configurarVistaDatosForm.setAnoInicial(ano);
           }
           periodoComp = new Integer(configurarVistaDatosForm.getAnoFinal().toString() + (configurarVistaDatosForm.getPeriodoFinal().toString().length() == 2 ? "0" : configurarVistaDatosForm.getPeriodoFinal().toString().length() == 1 ? "00" : "") + configurarVistaDatosForm.getPeriodoFinal().toString());
-          if (periodoComp.intValue() < periodos.intValue())
+          if (periodoComp < periodos)
           {
             configurarVistaDatosForm.setPeriodoFinal(periodo);
             configurarVistaDatosForm.setAnoFinal(ano);
@@ -214,14 +217,14 @@ public final class MostrarReporteGraficoAction
       dimensiones = new HashMap();
       inicializarListaMiembros(dimensiones);
       setValoresSelectores(dimensiones, configurarVistaDatosForm);
-      
-      String tiempoId = (String)dimensiones.get("tiempoId");
+
+      String tiempoId = dimensiones.get("tiempoId");
       if ((tiempoId != null) && (!tiempoId.equals("")) && (tiempoId.indexOf("_") != -1) && (!tiempoId.equals("0_0")))
       {
         String[] arrPeriodoAno = StringUtil.split(tiempoId, "_");
         Integer ano = new Integer(arrPeriodoAno[1]);
         Integer periodo = new Integer(arrPeriodoAno[0]);
-        
+
         configurarVistaDatosForm.setPeriodoInicial(periodo);
         configurarVistaDatosForm.setAnoInicial(ano);
         configurarVistaDatosForm.setPeriodoFinal(periodo);
@@ -229,33 +232,33 @@ public final class MostrarReporteGraficoAction
       }
     }
   }
-  
+
   private void setSelectores(ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     String dimensionId = "";
     String nombreDimension = "";
     List<ObjetoValorNombre> dimension = new ArrayList();
     int i = 0;
-    
+
     configurarVistaDatosForm.setNombreSelector1("");
     configurarVistaDatosForm.setSelector1Id(new Long(-1L));
     configurarVistaDatosForm.setSelector1(new ArrayList());
-    
+
     configurarVistaDatosForm.setNombreSelector2("");
     configurarVistaDatosForm.setSelector2Id(new Long(-1L));
     configurarVistaDatosForm.setSelector2(new ArrayList());
-    
+
     configurarVistaDatosForm.setNombreSelector3("");
     configurarVistaDatosForm.setSelector3Id(new Long(-1L));
     configurarVistaDatosForm.setSelector3(new ArrayList());
-    
+
     configurarVistaDatosForm.setNombreSelector4("");
     configurarVistaDatosForm.setSelector4Id(new Long(-1L));
     configurarVistaDatosForm.setSelector4(new ArrayList());
     for (i = 1; i <= configurarVistaDatosForm.getSelectores().size(); i++)
     {
-      ObjetoValorNombre selector = (ObjetoValorNombre)configurarVistaDatosForm.getSelectores().get(i - 1);
-      
+      ObjetoValorNombre selector = configurarVistaDatosForm.getSelectores().get(i - 1);
+
       nombreDimension = selector.getNombre();
       dimensionId = selector.getValor();
       dimension = getListaDimension(dimensionId, configurarVistaDatosForm);
@@ -294,7 +297,7 @@ public final class MostrarReporteGraficoAction
       }
     }
   }
-  
+
   private void setFilas(ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     List<ObjetoValorNombre> filas = new ArrayList();
@@ -303,7 +306,7 @@ public final class MostrarReporteGraficoAction
     }
     configurarVistaDatosForm.setFilas(filas);
   }
-  
+
   private void setColumnas(ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     List<ObjetoValorNombre> columnas = new ArrayList();
@@ -312,12 +315,12 @@ public final class MostrarReporteGraficoAction
     }
     configurarVistaDatosForm.setColumnas(columnas);
   }
-  
+
   private List<ObjetoValorNombre> getListaDimension(String dimensiones, ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     List<ObjetoValorNombre> miembrosDimension = null;
     List<ObjetoValorNombre> miembroDimension = null;
-    
+
     configurarVistaDatosForm.getClass();String[] variables = dimensiones.split("!@!");
     Byte dimensionId = new Byte(variables[0]);
     if (dimensionId.equals(TipoDimension.getTipoDimensionVariable())) {
@@ -338,13 +341,12 @@ public final class MostrarReporteGraficoAction
     }
     return miembrosDimension;
   }
-  
+
   private String getPlanId(List<ObjetoValorNombre> matriz, String indicadorId)
   {
     String planId = "";
-    for (int f = 0; f < matriz.size(); f++)
-    {
-      ObjetoValorNombre objeto = (ObjetoValorNombre)matriz.get(f);
+    for (ObjetoValorNombre element : matriz) {
+      ObjetoValorNombre objeto = element;
       if ((objeto.getValor() != null) && (objeto.getValor().equals(indicadorId)) && (objeto.getValorOculto() != null) && (!objeto.getValorOculto().equals("")))
       {
         planId = objeto.getValorOculto();
@@ -353,7 +355,7 @@ public final class MostrarReporteGraficoAction
     }
     return planId;
   }
-  
+
   private void setMatrizDatos(ConfigurarReporteGraficoForm configurarVistaDatosForm, MessageResources mensajes)
   {
     String tiempoId = "";
@@ -365,9 +367,8 @@ public final class MostrarReporteGraficoAction
     boolean hayVariables = false;
     boolean haySerie = false;
     boolean hayIndicador = false;
-    for (int f = 0; f < configurarVistaDatosForm.getAtributos().size(); f++)
-    {
-      TipoAtributo tipoAtributo = (TipoAtributo)configurarVistaDatosForm.getAtributos().get(f);
+    for (TipoAtributo element : configurarVistaDatosForm.getAtributos()) {
+      TipoAtributo tipoAtributo = element;
       if (tipoAtributo.getVisible().booleanValue())
       {
         hayVariables = true;
@@ -379,7 +380,7 @@ public final class MostrarReporteGraficoAction
     if (configurarVistaDatosForm.getShowTotalFilas().booleanValue()) {
       for (int c = 0; c < configurarVistaDatosForm.getFilas().size(); c++)
       {
-        ObjetoValorNombre objeto = (ObjetoValorNombre)configurarVistaDatosForm.getFilas().get(c);
+        ObjetoValorNombre objeto = configurarVistaDatosForm.getFilas().get(c);
         ObjetoValorNombre valor = new ObjetoValorNombre();
         valor.setNombre(objeto.getNombre());
         totalxFilas.add(valor);
@@ -388,7 +389,7 @@ public final class MostrarReporteGraficoAction
     if (configurarVistaDatosForm.getShowTotalColumnas().booleanValue()) {
       for (int c = 0; c < configurarVistaDatosForm.getColumnas().size(); c++)
       {
-        ObjetoValorNombre objeto = (ObjetoValorNombre)configurarVistaDatosForm.getColumnas().get(c);
+        ObjetoValorNombre objeto = configurarVistaDatosForm.getColumnas().get(c);
         ObjetoValorNombre valor = new ObjetoValorNombre();
         valor.setNombre(objeto.getNombre());
         totalxColumnas.add(valor);
@@ -412,22 +413,22 @@ public final class MostrarReporteGraficoAction
     List<List<DatoCelda>> matrizDatos = new ArrayList();
     List<ObjetoValorNombre> filas = configurarVistaDatosForm.getFilas();
     List<ObjetoValorNombre> columnas = configurarVistaDatosForm.getColumnas();
-    
+
     Map<String, String> dimensiones = new HashMap();
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-    
+
     String valorCelda = "";
     DatoCelda datoCelda = new DatoCelda();
-    
+
     StrategosVistasDatosService strategosVistasDatosService = StrategosServiceFactory.getInstance().openStrategosVistasDatosService();
     if ((filas != null) && (filas.size() > 0) && (columnas != null) && (columnas.size() > 0))
     {
       filaDatos = new ArrayList();
-      
+
       configurarVistaDatosForm.getClass();String[] variables = configurarVistaDatosForm.getColumnasId().split("!@!");
       Boolean porColumnas = null;
-      for (int c = 0; c < variables.length; c++) {
-        if (variables[c].equals(TipoDimension.getTipoDimensionIndicador().toString()))
+      for (String variable : variables) {
+        if (variable.equals(TipoDimension.getTipoDimensionIndicador().toString()))
         {
           porColumnas = Boolean.valueOf(true);
           break;
@@ -441,10 +442,10 @@ public final class MostrarReporteGraficoAction
       boolean hayVariablesCombinadas = variables.length > 1;
       if (hayVariables)
       {
-        for (int c = 0; c < variables.length; c++) {
-          if (variables[c].equals(TipoDimension.getTipoDimensionVariable().toString())) {
+        for (String variable : variables) {
+          if (variable.equals(TipoDimension.getTipoDimensionVariable().toString())) {
             haySerie = true;
-          } else if (variables[c].equals(TipoDimension.getTipoDimensionIndicador().toString())) {
+          } else if (variable.equals(TipoDimension.getTipoDimensionIndicador().toString())) {
             hayIndicador = true;
           }
         }
@@ -453,7 +454,7 @@ public final class MostrarReporteGraficoAction
           configurarVistaDatosForm.setShowVariable(Boolean.valueOf(true));
           for (int f = 0; f < configurarVistaDatosForm.getAtributos().size(); f++)
           {
-            TipoAtributo tipoAtributo = (TipoAtributo)configurarVistaDatosForm.getAtributos().get(f);
+            TipoAtributo tipoAtributo = configurarVistaDatosForm.getAtributos().get(f);
             if (tipoAtributo.getVisible().booleanValue()) {
               if (tipoAtributo.getTipoAtributoId().byteValue() == TipoAtributo.getTipoAtributoSerie().byteValue())
               {
@@ -465,7 +466,7 @@ public final class MostrarReporteGraficoAction
                   datoCelda.setAncho(tipoAtributo.getAncho());
                   datoCelda.setEsEncabezado(new Boolean(true));
                   datoCelda.setAlineacion("center");
-                  
+
                   filaDatos.add(datoCelda);
                 }
               }
@@ -477,7 +478,7 @@ public final class MostrarReporteGraficoAction
                 datoCelda.setAncho(tipoAtributo.getAncho());
                 datoCelda.setEsEncabezado(new Boolean(true));
                 datoCelda.setAlineacion("center");
-                
+
                 filaDatos.add(datoCelda);
               }
             }
@@ -486,30 +487,30 @@ public final class MostrarReporteGraficoAction
         else
         {
           valorCelda = configurarVistaDatosForm.getNombreFilas();
-          
+
           datoCelda = new DatoCelda();
           datoCelda.setValor(valorCelda);
           datoCelda.setEsAlerta(new Boolean(false));
           datoCelda.setAlineacion("center");
-          
+
           filaDatos.add(datoCelda);
         }
       }
       else
       {
         valorCelda = configurarVistaDatosForm.getNombreFilas();
-        
+
         datoCelda = new DatoCelda();
         datoCelda.setValor(valorCelda);
         datoCelda.setEsAlerta(new Boolean(false));
         datoCelda.setAlineacion("center");
-        
+
         filaDatos.add(datoCelda);
       }
       List<ObjetoValorNombre> seriesDimension = null;
       if (hayVariablesCombinadas) {
-        for (int c = 0; c < variables.length; c++) {
-          if (variables[c].equals(TipoDimension.getTipoDimensionVariable().toString()))
+        for (String variable : variables) {
+          if (variable.equals(TipoDimension.getTipoDimensionVariable().toString()))
           {
             seriesDimension = configurarVistaDatosForm.getMiembrosVariable();
             break;
@@ -520,15 +521,15 @@ public final class MostrarReporteGraficoAction
       {
         for (int c = 0; c < columnas.size(); c++)
         {
-          ObjetoValorNombre columna = (ObjetoValorNombre)columnas.get(c);
-          
+          ObjetoValorNombre columna = columnas.get(c);
+
           valorCelda = columna.getNombre();
-          
+
           datoCelda = new DatoCelda();
           datoCelda.setValor(valorCelda);
           datoCelda.setEsAlerta(new Boolean(false));
           datoCelda.setAlineacion("center");
-          
+
           filaDatos.add(datoCelda);
         }
       }
@@ -536,37 +537,37 @@ public final class MostrarReporteGraficoAction
       {
         for (int k = 0; k < seriesDimension.size(); k++)
         {
-          ObjetoValorNombre serie = (ObjetoValorNombre)seriesDimension.get(k);
+          ObjetoValorNombre serie = seriesDimension.get(k);
           for (int c = 0; c < columnas.size(); c++)
           {
-            ObjetoValorNombre columna = (ObjetoValorNombre)columnas.get(c);
+            ObjetoValorNombre columna = columnas.get(c);
             setMiembroDimension(dimensiones, new Byte(variables[0]), columna.getValor(), null, null);
-            
-            tiempoDesdeId = (String)dimensiones.get("tiempoDesdeId");
-            tiempoHastaId = (String)dimensiones.get("tiempoHastaId");
+
+            tiempoDesdeId = dimensiones.get("tiempoDesdeId");
+            tiempoHastaId = dimensiones.get("tiempoHastaId");
             if ((tiempoDesdeId != null) && (tiempoDesdeId.equals("")))
             {
               if (configurarVistaDatosForm.getAcumularPeriodos().booleanValue())
               {
                 if (tiempoId.equals("")) {
-                  tiempoId = (String)dimensiones.get("tiempoId");
+                  tiempoId = dimensiones.get("tiempoId");
                 }
               }
               else {
-                tiempoId = (String)dimensiones.get("tiempoId");
+                tiempoId = dimensiones.get("tiempoId");
               }
               tiempoDesdeId = tiempoId;
-              tiempoHastaId = (String)dimensiones.get("tiempoId");
+              tiempoHastaId = dimensiones.get("tiempoId");
             }
-            organizacionId = (String)dimensiones.get("organizacionId");
-            indicadorId = (String)dimensiones.get("indicadorId");
-            
+            organizacionId = dimensiones.get("organizacionId");
+            indicadorId = dimensiones.get("indicadorId");
+
             valorCelda = columna.getNombre() + " - " + serie.getNombre();
             datoCelda = new DatoCelda();
             datoCelda.setValor(valorCelda);
             datoCelda.setEsAlerta(new Boolean(false));
             datoCelda.setAlineacion("center");
-            
+
             filaDatos.add(datoCelda);
           }
         }
@@ -576,28 +577,28 @@ public final class MostrarReporteGraficoAction
         String variableId = "";
         for (int c = 0; c < columnas.size(); c++)
         {
-          ObjetoValorNombre columna = (ObjetoValorNombre)columnas.get(c);
+          ObjetoValorNombre columna = columnas.get(c);
           setMiembroDimension(dimensiones, new Byte(variables[0]), columna.getValor(), null, null);
-          
-          tiempoDesdeId = (String)dimensiones.get("tiempoDesdeId");
-          tiempoHastaId = (String)dimensiones.get("tiempoHastaId");
+
+          tiempoDesdeId = dimensiones.get("tiempoDesdeId");
+          tiempoHastaId = dimensiones.get("tiempoHastaId");
           if (tiempoDesdeId.equals(""))
           {
             if (configurarVistaDatosForm.getAcumularPeriodos().booleanValue())
             {
               if (tiempoId.equals("")) {
-                tiempoId = (String)dimensiones.get("tiempoId");
+                tiempoId = dimensiones.get("tiempoId");
               }
             }
             else {
-              tiempoId = (String)dimensiones.get("tiempoId");
+              tiempoId = dimensiones.get("tiempoId");
             }
             tiempoDesdeId = tiempoId;
-            tiempoHastaId = (String)dimensiones.get("tiempoId");
+            tiempoHastaId = dimensiones.get("tiempoId");
           }
-          organizacionId = (String)dimensiones.get("organizacionId");
-          indicadorId = (String)dimensiones.get("indicadorId");
-          variableId = (String)dimensiones.get("variableId");
+          organizacionId = dimensiones.get("organizacionId");
+          indicadorId = dimensiones.get("indicadorId");
+          variableId = dimensiones.get("variableId");
           SerieTiempo serie = null;
           if (variableId != null) {
             serie = (SerieTiempo)strategosIndicadoresService.load(SerieTiempo.class, new Long(variableId));
@@ -607,12 +608,12 @@ public final class MostrarReporteGraficoAction
           datoCelda.setValor(valorCelda);
           datoCelda.setEsAlerta(new Boolean(false));
           datoCelda.setAlineacion("center");
-          
+
           filaDatos.add(datoCelda);
         }
       }
       matrizDatos.add(filaDatos);
-      
+
       dimensiones = new HashMap();
       inicializarListaMiembros(dimensiones);
       setValoresSelectores(dimensiones, configurarVistaDatosForm);
@@ -629,13 +630,13 @@ public final class MostrarReporteGraficoAction
       {
         for (int f = 0; f < filas.size(); f++)
         {
-          ObjetoValorNombre fila = (ObjetoValorNombre)filas.get(f);
+          ObjetoValorNombre fila = filas.get(f);
           Indicador indicador = null;
           if ((!fila.getValor().equals("TF")) && (!fila.getValor().equals("TC")))
           {
             if (!porColumnas.booleanValue())
             {
-              indicador = (Indicador)indicadoresMatriz.get(f);
+              indicador = indicadoresMatriz.get(f);
               setMiembroDimension(dimensiones, new Byte(variables[0]), fila.getValor(), null, null);
             }
             else
@@ -652,25 +653,24 @@ public final class MostrarReporteGraficoAction
               if (!porColumnas.booleanValue())
               {
                 filaDatos = new ArrayList();
-                for (int c = 0; c < totalxFilas.size(); c++)
-                {
-                  ObjetoValorNombre objeto = (ObjetoValorNombre)totalxFilas.get(c);
+                for (ObjetoValorNombre element : totalxFilas) {
+                  ObjetoValorNombre objeto = element;
                   objeto.setValor(null);
                 }
               }
-              ObjetoValorNombre serie = (ObjetoValorNombre)seriesDimension.get(k);
-              
+              ObjetoValorNombre serie = seriesDimension.get(k);
+
               columnasImpresas = 0;
               for (int c = 0; c < columnas.size(); c++)
               {
-                ObjetoValorNombre columna = (ObjetoValorNombre)columnas.get(c);
+                ObjetoValorNombre columna = columnas.get(c);
                 if ((!columna.getValor().equals("TF")) && (!columna.getValor().equals("TC")))
                 {
                   if (porColumnas.booleanValue())
                   {
                     indicador = null;
                     setMiembroDimension(dimensiones, new Byte(variables[0]), columna.getValor(), null, null);
-                    indicadorId = (String)dimensiones.get("indicadorId");
+                    indicadorId = dimensiones.get("indicadorId");
                     if ((indicadorId == null) || (indicadorId.equals("")) || (indicadorId.equals("0"))) {
                       continue;
                     }
@@ -691,23 +691,23 @@ public final class MostrarReporteGraficoAction
                   {
                     setMiembroDimension(dimensiones, new Byte(configurarVistaDatosForm.getColumnasId().toString()), columna.getValor(), null, null);
                   }
-                  tiempoDesdeId = (String)dimensiones.get("tiempoDesdeId");
-                  tiempoHastaId = (String)dimensiones.get("tiempoHastaId");
+                  tiempoDesdeId = dimensiones.get("tiempoDesdeId");
+                  tiempoHastaId = dimensiones.get("tiempoHastaId");
                   if (tiempoDesdeId.equals(""))
                   {
                     if (configurarVistaDatosForm.getAcumularPeriodos().booleanValue())
                     {
                       if (tiempoId.equals("")) {
-                        tiempoId = (String)dimensiones.get("tiempoId");
+                        tiempoId = dimensiones.get("tiempoId");
                       }
                     }
                     else {
-                      tiempoId = (String)dimensiones.get("tiempoId");
+                      tiempoId = dimensiones.get("tiempoId");
                     }
                     tiempoDesdeId = tiempoId;
-                    tiempoHastaId = (String)dimensiones.get("tiempoId");
+                    tiempoHastaId = dimensiones.get("tiempoId");
                   }
-                  organizacionId = (String)dimensiones.get("organizacionId");
+                  organizacionId = dimensiones.get("organizacionId");
                   if (indicador != null) {
                     planId = getPlanId(filas, indicador.getIndicadorId().toString());
                   }
@@ -749,7 +749,7 @@ public final class MostrarReporteGraficoAction
                               datoCelda.setEsAlerta(new Boolean(false));
                               datoCelda.setEsEncabezado(new Boolean(true));
                               datoCelda.setAlineacion("center");
-                              
+
                               filaDatos.add(datoCelda);
                               columnasImpresas++;
                             }
@@ -877,7 +877,7 @@ public final class MostrarReporteGraficoAction
                               datoCelda.setEsAlerta(new Boolean(false));
                               datoCelda.setEsEncabezado(new Boolean(true));
                               datoCelda.setAlineacion("center");
-                              
+
                               filaDatos.add(datoCelda);
                               columnasImpresas++;
                             }
@@ -887,24 +887,24 @@ public final class MostrarReporteGraficoAction
                       else
                       {
                         valorCelda = fila.getNombre() + " - " + serie.getNombre();
-                        
+
                         datoCelda = new DatoCelda();
                         datoCelda.setValor(valorCelda);
                         datoCelda.setEsAlerta(new Boolean(false));
                         datoCelda.setAlineacion("center");
-                        
+
                         filaDatos.add(datoCelda);
                       }
                     }
                     else if (pintarColumna)
                     {
                       valorCelda = fila.getNombre();
-                      
+
                       datoCelda = new DatoCelda();
                       datoCelda.setValor(valorCelda);
                       datoCelda.setEsAlerta(new Boolean(false));
                       datoCelda.setAlineacion("center");
-                      
+
                       filaDatos.add(datoCelda);
                     }
                     pintarColumna = false;
@@ -917,7 +917,7 @@ public final class MostrarReporteGraficoAction
                     List<Indicador> indicadores = new ArrayList();
                     indicadores = strategosIndicadoresService.getIndicadores(filtros);
                     if (indicadores.size() > 0) {
-                      indicadorId = ((Indicador)indicadores.get(0)).getIndicadorId().toString();
+                      indicadorId = indicadores.get(0).getIndicadorId().toString();
                     } else {
                       indicadorId = "";
                     }
@@ -930,7 +930,7 @@ public final class MostrarReporteGraficoAction
                     List<Indicador> indicadores = new ArrayList();
                     indicadores = strategosIndicadoresService.getIndicadores(filtros);
                     if (indicadores.size() > 0) {
-                      indicadorId = ((Indicador)indicadores.get(0)).getIndicadorId().toString();
+                      indicadorId = indicadores.get(0).getIndicadorId().toString();
                     } else {
                       indicadorId = "";
                     }
@@ -948,7 +948,7 @@ public final class MostrarReporteGraficoAction
                   {
                     if ((configurarVistaDatosForm.getShowTotalColumnas().booleanValue()) && (esDouble(valorCelda) != null) && (c < totalxColumnas.size()))
                     {
-                      ObjetoValorNombre total = (ObjetoValorNombre)totalxColumnas.get(c);
+                      ObjetoValorNombre total = totalxColumnas.get(c);
                       Double valor = Double.valueOf(0.0D);
                       if (esDouble(total.getValor()) != null) {
                         valor = Double.valueOf(esDouble(total.getValor()).doubleValue() + esDouble(valorCelda).doubleValue());
@@ -958,7 +958,7 @@ public final class MostrarReporteGraficoAction
                     }
                     if ((configurarVistaDatosForm.getShowTotalFilas().booleanValue()) && (esDouble(valorCelda) != null) && (f < totalxFilas.size()))
                     {
-                      ObjetoValorNombre total = (ObjetoValorNombre)totalxFilas.get(f);
+                      ObjetoValorNombre total = totalxFilas.get(f);
                       Double valor = Double.valueOf(0.0D);
                       if (esDouble(total.getValor()) != null) {
                         valor = Double.valueOf(esDouble(total.getValor()).doubleValue() + esDouble(valorCelda).doubleValue());
@@ -978,18 +978,18 @@ public final class MostrarReporteGraficoAction
                     datoCelda.setEsAlerta(new Boolean(true));
                   }
                   datoCelda.setAlineacion("center");
-                  
+
                   filaDatos.add(datoCelda);
                 }
                 else
                 {
-                  ObjetoValorNombre objeto = (ObjetoValorNombre)totalxFilas.get(f);
-                  
+                  ObjetoValorNombre objeto = totalxFilas.get(f);
+
                   datoCelda = new DatoCelda();
                   datoCelda.setValor(objeto.getValor() != null ? VgcFormatter.formatearNumero(Double.valueOf(Double.parseDouble(objeto.getValor())), 2) : "");
                   datoCelda.setEsAlerta(new Boolean(false));
                   datoCelda.setAlineacion("center");
-                  
+
                   filaDatos.add(datoCelda);
                 }
               }
@@ -1001,13 +1001,13 @@ public final class MostrarReporteGraficoAction
           else
           {
             filaDatos = new ArrayList();
-            
+
             valorCelda = fila.getNombre();
             datoCelda = new DatoCelda();
             datoCelda.setValor(valorCelda);
             datoCelda.setEsAlerta(new Boolean(false));
             datoCelda.setAlineacion("center");
-            
+
             filaDatos.add(datoCelda);
             if ((!porColumnas.booleanValue()) && (hayVariables) && (columnasImpresas - 1 > 0)) {
               for (int c = 0; c < columnasImpresas - 1; c++)
@@ -1017,19 +1017,19 @@ public final class MostrarReporteGraficoAction
                 datoCelda.setValor(valorCelda);
                 datoCelda.setEsAlerta(new Boolean(false));
                 datoCelda.setAlineacion("center");
-                
+
                 filaDatos.add(datoCelda);
               }
             }
             for (int c = 0; c < totalxColumnas.size(); c++)
             {
-              ObjetoValorNombre objeto = (ObjetoValorNombre)totalxColumnas.get(c);
-              
+              ObjetoValorNombre objeto = totalxColumnas.get(c);
+
               datoCelda = new DatoCelda();
               datoCelda.setValor(objeto.getValor() != null ? VgcFormatter.formatearNumero(Double.valueOf(Double.parseDouble(objeto.getValor())), 2) : "");
               datoCelda.setEsAlerta(new Boolean(false));
               datoCelda.setAlineacion("center");
-              
+
               filaDatos.add(datoCelda);
             }
             if (!porColumnas.booleanValue()) {
@@ -1047,44 +1047,44 @@ public final class MostrarReporteGraficoAction
         Boolean hayDatoVariable = Boolean.valueOf(false);
         for (int f = 0; f < filas.size(); f++)
         {
-          ObjetoValorNombre fila = (ObjetoValorNombre)filas.get(f);
+          ObjetoValorNombre fila = filas.get(f);
           setMiembroDimension(dimensiones, new Byte(configurarVistaDatosForm.getFilasId().toString()), fila.getValor(), null, null);
           Indicador indicador = null;
           if ((!fila.getValor().equals("TF")) && (!fila.getValor().equals("TC")))
           {
             columnasImpresas = 0;
             if ((hayIndicador) && (!porColumnas.booleanValue())) {
-              indicador = (Indicador)indicadoresMatriz.get(f);
+              indicador = indicadoresMatriz.get(f);
             }
             filaDatos = new ArrayList();
             for (int c = 0; c < columnas.size(); c++)
             {
-              ObjetoValorNombre columna = (ObjetoValorNombre)columnas.get(c);
+              ObjetoValorNombre columna = columnas.get(c);
               if ((!columna.getValor().equals("TF")) && (!columna.getValor().equals("TC")))
               {
                 setMiembroDimension(dimensiones, new Byte(configurarVistaDatosForm.getColumnasId().toString()), columna.getValor(), null, null);
-                
-                variableId = (String)dimensiones.get("variableId");
-                tiempoDesdeId = (String)dimensiones.get("tiempoDesdeId");
-                tiempoHastaId = (String)dimensiones.get("tiempoHastaId");
+
+                variableId = dimensiones.get("variableId");
+                tiempoDesdeId = dimensiones.get("tiempoDesdeId");
+                tiempoHastaId = dimensiones.get("tiempoHastaId");
                 if (tiempoDesdeId.equals(""))
                 {
                   if (configurarVistaDatosForm.getAcumularPeriodos().booleanValue())
                   {
                     if (tiempoId.equals("")) {
-                      tiempoId = (String)dimensiones.get("tiempoId");
+                      tiempoId = dimensiones.get("tiempoId");
                     }
                   }
                   else {
-                    tiempoId = (String)dimensiones.get("tiempoId");
+                    tiempoId = dimensiones.get("tiempoId");
                   }
                   tiempoDesdeId = tiempoId;
-                  tiempoHastaId = (String)dimensiones.get("tiempoId");
+                  tiempoHastaId = dimensiones.get("tiempoId");
                 }
-                organizacionId = (String)dimensiones.get("organizacionId");
+                organizacionId = dimensiones.get("organizacionId");
                 if (indicador == null)
                 {
-                  indicadorId = (String)dimensiones.get("indicadorId");
+                  indicadorId = dimensiones.get("indicadorId");
                   if ((indicadorId != null) && (!indicadorId.equals("")) && (!indicadorId.equals("0"))) {
                     indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(indicadorId));
                   }
@@ -1119,7 +1119,7 @@ public final class MostrarReporteGraficoAction
                             datoCelda.setEsAlerta(new Boolean(false));
                             datoCelda.setEsEncabezado(new Boolean(true));
                             datoCelda.setAlineacion("center");
-                            
+
                             filaDatos.add(datoCelda);
                             columnasImpresas++;
                           }
@@ -1210,7 +1210,7 @@ public final class MostrarReporteGraficoAction
                               datoCelda.setEsAlerta(new Boolean(false));
                               datoCelda.setEsEncabezado(new Boolean(true));
                               datoCelda.setAlineacion("center");
-                              
+
                               filaDatos.add(datoCelda);
                               columnasImpresas++;
                             }
@@ -1225,7 +1225,7 @@ public final class MostrarReporteGraficoAction
                       datoCelda.setValor(valorCelda);
                       datoCelda.setEsAlerta(new Boolean(false));
                       datoCelda.setAlineacion("center");
-                      
+
                       filaDatos.add(datoCelda);
                     }
                   }
@@ -1237,7 +1237,7 @@ public final class MostrarReporteGraficoAction
                     List<Indicador> indicadores = new ArrayList();
                     indicadores = strategosIndicadoresService.getIndicadores(filtros);
                     if (indicadores.size() > 0) {
-                      indicadorId = ((Indicador)indicadores.get(0)).getIndicadorId().toString();
+                      indicadorId = indicadores.get(0).getIndicadorId().toString();
                     } else {
                       indicadorId = "";
                     }
@@ -1250,7 +1250,7 @@ public final class MostrarReporteGraficoAction
                     List<Indicador> indicadores = new ArrayList();
                     indicadores = strategosIndicadoresService.getIndicadores(filtros);
                     if (indicadores.size() > 0) {
-                      indicadorId = ((Indicador)indicadores.get(0)).getIndicadorId().toString();
+                      indicadorId = indicadores.get(0).getIndicadorId().toString();
                     } else {
                       indicadorId = "";
                     }
@@ -1268,7 +1268,7 @@ public final class MostrarReporteGraficoAction
                   {
                     if ((configurarVistaDatosForm.getShowTotalColumnas().booleanValue()) && (esDouble(valorCelda) != null) && (c < totalxColumnas.size()))
                     {
-                      ObjetoValorNombre total = (ObjetoValorNombre)totalxColumnas.get(c);
+                      ObjetoValorNombre total = totalxColumnas.get(c);
                       Double valor = Double.valueOf(0.0D);
                       if (esDouble(total.getValor()) != null) {
                         valor = Double.valueOf(esDouble(total.getValor()).doubleValue() + esDouble(valorCelda).doubleValue());
@@ -1278,7 +1278,7 @@ public final class MostrarReporteGraficoAction
                     }
                     if ((configurarVistaDatosForm.getShowTotalFilas().booleanValue()) && (esDouble(valorCelda) != null) && (f < totalxFilas.size()))
                     {
-                      ObjetoValorNombre total = (ObjetoValorNombre)totalxFilas.get(f);
+                      ObjetoValorNombre total = totalxFilas.get(f);
                       Double valor = Double.valueOf(0.0D);
                       if (esDouble(total.getValor()) != null) {
                         valor = Double.valueOf(esDouble(total.getValor()).doubleValue() + esDouble(valorCelda).doubleValue());
@@ -1298,19 +1298,19 @@ public final class MostrarReporteGraficoAction
                     datoCelda.setEsAlerta(new Boolean(true));
                   }
                   datoCelda.setAlineacion("center");
-                  
+
                   filaDatos.add(datoCelda);
                 }
               }
               else
               {
-                ObjetoValorNombre objeto = (ObjetoValorNombre)totalxFilas.get(f);
-                
+                ObjetoValorNombre objeto = totalxFilas.get(f);
+
                 datoCelda = new DatoCelda();
                 datoCelda.setValor(objeto.getValor() != null ? VgcFormatter.formatearNumero(Double.valueOf(Double.parseDouble(objeto.getValor())), 2) : "");
                 datoCelda.setEsAlerta(new Boolean(false));
                 datoCelda.setAlineacion("center");
-                
+
                 filaDatos.add(datoCelda);
               }
             }
@@ -1318,13 +1318,13 @@ public final class MostrarReporteGraficoAction
           else
           {
             filaDatos = new ArrayList();
-            
+
             valorCelda = fila.getNombre();
             datoCelda = new DatoCelda();
             datoCelda.setValor(valorCelda);
             datoCelda.setEsAlerta(new Boolean(false));
             datoCelda.setAlineacion("center");
-            
+
             filaDatos.add(datoCelda);
             if ((!porColumnas.booleanValue()) && (hayVariables) && (columnasImpresas - 1 > 0)) {
               for (int c = 0; c < columnasImpresas - 1; c++)
@@ -1334,19 +1334,19 @@ public final class MostrarReporteGraficoAction
                 datoCelda.setValor(valorCelda);
                 datoCelda.setEsAlerta(new Boolean(false));
                 datoCelda.setAlineacion("center");
-                
+
                 filaDatos.add(datoCelda);
               }
             }
             for (int c = 0; c < totalxColumnas.size(); c++)
             {
-              ObjetoValorNombre objeto = (ObjetoValorNombre)totalxColumnas.get(c);
-              
+              ObjetoValorNombre objeto = totalxColumnas.get(c);
+
               datoCelda = new DatoCelda();
               datoCelda.setValor(objeto.getValor() != null ? VgcFormatter.formatearNumero(Double.valueOf(Double.parseDouble(objeto.getValor())), 2) : "");
               datoCelda.setEsAlerta(new Boolean(false));
               datoCelda.setAlineacion("center");
-              
+
               filaDatos.add(datoCelda);
             }
           }
@@ -1356,14 +1356,13 @@ public final class MostrarReporteGraficoAction
       strategosIndicadoresService.close();
     }
     strategosVistasDatosService.close();
-    
+
     configurarVistaDatosForm.setMatrizDatos(matrizDatos);
-    
+
     Integer anchoTablaDatos = Integer.valueOf(0);
     if ((configurarVistaDatosForm.getAtributos() != null) && (configurarVistaDatosForm.getAtributos().size() > 0)) {
-      for (int f = 0; f < configurarVistaDatosForm.getAtributos().size(); f++)
-      {
-        TipoAtributo tipoAtributo = (TipoAtributo)configurarVistaDatosForm.getAtributos().get(f);
+      for (TipoAtributo element : configurarVistaDatosForm.getAtributos()) {
+        TipoAtributo tipoAtributo = element;
         if (tipoAtributo.getVisible().booleanValue()) {
           if ((tipoAtributo.getTipoAtributoId().byteValue() == TipoAtributo.getTipoAtributoSerie().byteValue()) && (haySerie)) {
             anchoTablaDatos = Integer.valueOf(anchoTablaDatos.intValue() + new Integer(tipoAtributo.getAncho()).intValue());
@@ -1376,10 +1375,10 @@ public final class MostrarReporteGraficoAction
       anchoTablaDatos = Integer.valueOf(150);
     }
     anchoTablaDatos = Integer.valueOf(anchoTablaDatos.intValue() + configurarVistaDatosForm.getColumnas().size() * 150);
-    
+
     configurarVistaDatosForm.setAnchoTablaDatos(anchoTablaDatos);
   }
-  
+
   private void setValoresSelectores(Map<String, String> dimensiones, ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     String selectorId = "";
@@ -1479,7 +1478,7 @@ public final class MostrarReporteGraficoAction
       setMiembroDimension(dimensiones, new Byte(selectorId), valorSelector, valorSelectorTiempoDesde, valorSelectorTiempoHasta);
     }
   }
-  
+
   private void setMiembroDimension(Map<String, String> dimensiones, Byte dimensionId, String miembroId, String tiempoDesdeId, String tiempoHastaId)
   {
     if (dimensionId.equals(TipoDimension.getTipoDimensionVariable()))
@@ -1498,7 +1497,7 @@ public final class MostrarReporteGraficoAction
       {
         dimensiones.remove("tiempoDesdeId");
         dimensiones.put("tiempoDesdeId", tiempoDesdeId);
-        
+
         dimensiones.remove("tiempoHastaId");
         dimensiones.put("tiempoHastaId", tiempoHastaId);
       }
@@ -1524,7 +1523,7 @@ public final class MostrarReporteGraficoAction
       dimensiones.put("indicadorId", miembroId);
     }
   }
-  
+
   private void inicializarListaMiembros(Map<String, String> dimensiones)
   {
     dimensiones.put("variableId", "");
@@ -1536,7 +1535,7 @@ public final class MostrarReporteGraficoAction
     dimensiones.put("planId", "");
     dimensiones.put("indicadorId", "");
   }
-  
+
   private List<Indicador> BuscarIndicadores(ConfigurarReporteGraficoForm configurarVistaDatosForm)
   {
     List<Indicador> indicadores = new ArrayList();
@@ -1545,14 +1544,14 @@ public final class MostrarReporteGraficoAction
     {
       for (int k = 0; k < configurarVistaDatosForm.getMiembrosIndicador().size(); k++)
       {
-        ObjetoValorNombre indicador = (ObjetoValorNombre)configurarVistaDatosForm.getMiembrosIndicador().get(k);
+        ObjetoValorNombre indicador = configurarVistaDatosForm.getMiembrosIndicador().get(k);
         indicadoresMatriz.add(new Long(indicador.getValor()));
       }
       if (indicadoresMatriz.size() > 0)
       {
         Map<String, Object> filtros = new HashMap();
         filtros.put("indicadores", indicadoresMatriz);
-        
+
         List<String> orderBy = new ArrayList();
         for (int k = 1; k < 6; k++) {
           for (Iterator<?> iterador = configurarVistaDatosForm.getAtributos().iterator(); iterador.hasNext();)
@@ -1603,7 +1602,7 @@ public final class MostrarReporteGraficoAction
     }
     return indicadores;
   }
-  
+
   private Double esDouble(String valorString)
   {
     Double valor = null;

@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.reportes.StrategosReportesService;
@@ -12,43 +24,33 @@ import com.visiongc.commons.util.xmldata.XmlControl;
 import com.visiongc.commons.util.xmldata.XmlNodo;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
-import com.visiongc.framework.util.PermisologiaUsuario;
 import com.visiongc.framework.web.struts.alertas.actions.GestionarAlertasAction;
-import com.visiongc.framework.web.struts.taglib.interfaz.util.BarraAreaInfo;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class ConfigurarVistaDatosAction
   extends VgcAction
 {
   public static final String ACTION_KEY = "ConfigurarVistaDatosAction";
-  
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     getBarraAreas(request, "strategos").setBotonSeleccionado("vistasDatos");
-    
+
     String forward = mapping.getParameter();
     ActionMessages messages = getMessages(request);
     request.getSession().setAttribute("alerta", new GestionarAlertasAction().getAlerta(getUsuarioConectado(request)));
-    
+
     ConfigurarVistaDatosForm configurarVistaDatosForm = (ConfigurarVistaDatosForm)form;
     configurarVistaDatosForm.clear();
-    
+
     cargarConfiguracion(configurarVistaDatosForm, request);
-    
+
     boolean verForm = getPermisologiaUsuario(request).tienePermiso("VISTA_DATOS_VIEW");
     boolean editarForm = getPermisologiaUsuario(request).tienePermiso("VISTA_DATOS_EDIT");
     if ((verForm) && (!editarForm))
@@ -61,20 +63,20 @@ public final class ConfigurarVistaDatosAction
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
     }
     saveMessages(request, messages);
-    
+
     return mapping.findForward(forward);
   }
-  
+
   private String getValoresNulosString(String valor)
   {
     return valor == null ? "" : valor;
   }
-  
+
   private Byte getValoresNulosByte(String valor)
   {
     return (valor == null) || (valor.equals("")) ? Frecuencia.getFrecuenciaMensual() : new Byte(valor);
   }
-  
+
   public void cargarConfiguracion(ConfigurarVistaDatosForm configurarVistaDatosForm, HttpServletRequest request)
   {
     XmlNodo nodoVistaDatos = getConfiguracionVistaDatos(configurarVistaDatosForm, request);
@@ -111,7 +113,7 @@ public final class ConfigurarVistaDatosAction
     }
     configurarVistaDatosForm.setFrecuencias(Frecuencia.getFrecuencias());
   }
-  
+
   public List<TipoAtributo> buscarAtributos(ConfigurarVistaDatosForm configurarVistaDatosForm, String xmlAtributos, Usuario usuario)
   {
     List<TipoAtributo> listaAtributos = new ArrayList();
@@ -124,9 +126,8 @@ public final class ConfigurarVistaDatosAction
       {
         atributos = atributos.replace("*sepRow*", "|");
         String[] tipos = atributos.split("\\|");
-        for (int i = 0; i < tipos.length; i++)
-        {
-          String[] campos = tipos[i].split(",");
+        for (String element : tipos) {
+          String[] campos = element.split(",");
           if (campos.length == 6)
           {
             TipoAtributo columna = new TipoAtributo();
@@ -136,7 +137,7 @@ public final class ConfigurarVistaDatosAction
             columna.setVisible(Boolean.valueOf(campos[3].equals("1")));
             columna.setAncho(campos[4]);
             columna.setAgrupar(Boolean.valueOf(campos[5].equals("1")));
-            
+
             listaAtributos.add(columna);
           }
           else
@@ -159,8 +160,8 @@ public final class ConfigurarVistaDatosAction
     {
       String[] selectores = configurarVistaDatosForm.getTextoSelectores().split("\\|");
       boolean haySerie = false;
-      for (int i = 0; i < selectores.length; i++) {
-        if (selectores[i].equals(TipoDimension.getTipoDimensionVariable().toString()))
+      for (String selectore : selectores) {
+        if (selectore.equals(TipoDimension.getTipoDimensionVariable().toString()))
         {
           haySerie = true;
           break;
@@ -169,7 +170,7 @@ public final class ConfigurarVistaDatosAction
       if (haySerie) {
         for (int f = 0; f < listaAtributos.size(); f++)
         {
-          TipoAtributo tipoAtributo = (TipoAtributo)listaAtributos.get(f);
+          TipoAtributo tipoAtributo = listaAtributos.get(f);
           if (tipoAtributo.getTipoAtributoId().byteValue() == TipoAtributo.getTipoAtributoSerie().byteValue())
           {
             listaAtributos.remove(tipoAtributo);
@@ -180,7 +181,7 @@ public final class ConfigurarVistaDatosAction
     }
     return listaAtributos;
   }
-  
+
   private XmlNodo getConfiguracionVistaDatos(ConfigurarVistaDatosForm configurarVistaDatosForm, HttpServletRequest request)
   {
     XmlNodo nodo = null;
@@ -188,7 +189,7 @@ public final class ConfigurarVistaDatosAction
     String configuracion = (request.getParameter("configuracion") != null) && (request.getParameter("configuracion") != "") ? request.getParameter("configuracion") : null;
     String nombre = (request.getParameter("nombre") != null) && (request.getParameter("nombre") != "") ? request.getParameter("nombre") : null;
     Byte corte = (request.getParameter("corte") != null) && (request.getParameter("corte") != "") ? new Byte(request.getParameter("corte")) : null;
-    
+
     StrategosReportesService reportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
     String xmlConfig = "";
     if (reporteId != null)
@@ -207,9 +208,9 @@ public final class ConfigurarVistaDatosAction
           configuracion = reporte.getConfiguracion();
         }
         XmlControl xmlControl = new XmlControl();
-        
+
         nodo = xmlControl.readXml(xmlConfig);
-        
+
         configurarVistaDatosForm.setNombre(nombre);
         configurarVistaDatosForm.setDescripcion(reporte.getDescripcion());
         configurarVistaDatosForm.setPublico(reporte.getPublico());
@@ -221,7 +222,7 @@ public final class ConfigurarVistaDatosAction
         xmlConfig = configuracion;
         XmlControl xmlControl = new XmlControl();
         nodo = xmlControl.readXml(xmlConfig);
-        
+
         configurarVistaDatosForm.setNombre(nombre);
         configurarVistaDatosForm.setConfiguracion(configuracion);
         configurarVistaDatosForm.setCorte(corte);
@@ -232,13 +233,13 @@ public final class ConfigurarVistaDatosAction
       xmlConfig = configuracion;
       XmlControl xmlControl = new XmlControl();
       nodo = xmlControl.readXml(xmlConfig);
-      
+
       configurarVistaDatosForm.setNombre(nombre);
       configurarVistaDatosForm.setConfiguracion(configuracion);
       configurarVistaDatosForm.setCorte(corte);
     }
     reportesService.close();
-    
+
     return nodo;
   }
 }

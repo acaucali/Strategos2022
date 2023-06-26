@@ -25,7 +25,8 @@
 
 			function nuevo() 
 			{				
-				abrirVentanaModal('<html:rewrite action="/unidadesmedida/crearUnidadMedida"/>', "UnidadMedidaAdd", 750, 370);
+				window.location.href = '<html:rewrite action="/unidadesmedida/crearUnidadMedida"/>'
+				// abrirVentanaModal('<html:rewrite action="/unidadesmedida/crearUnidadMedida"/>', "UnidadMedidaAdd", 750, 370);
 			}
 	
 			function modificar() 
@@ -40,7 +41,8 @@
 				if (nombre == "%") 
 					alert('<vgcutil:message key="jsp.gestionarunidadesmedida.eliminarunidadmedida.modificar.porcentaje" />');	
 				else 					
-					abrirVentanaModal('<html:rewrite action="/unidadesmedida/modificarUnidadMedida"/>?unidadId=' + unidadId , "UnidadMedidaEdit", 750, 370);
+					window.location.href = '<html:rewrite action="/unidadesmedida/modificarUnidadMedida"/>?unidadId=' + unidadId
+					//abrirVentanaModal('<html:rewrite action="/unidadesmedida/modificarUnidadMedida"/>?unidadId=' + unidadId , "UnidadMedidaEdit", 750, 370);
 			}
 	
 			function eliminar() {

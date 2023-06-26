@@ -16,92 +16,92 @@ public class SeleccionarClasesIndicadoresForm extends SelectorArbolForm
 	private Long organizacionSeleccionadaId;
 	private Long claseSeleccionadaId;
 
-	public String getRutaCompletaClaseIndicadores() 
+	public String getRutaCompletaClaseIndicadores()
 	{
     	return this.rutaCompletaClaseIndicadores;
 	}
 
-	public void setRutaCompletaClaseIndicadores(String rutaCompletaClaseIndicadores) 
+	public void setRutaCompletaClaseIndicadores(String rutaCompletaClaseIndicadores)
 	{
 		this.rutaCompletaClaseIndicadores = rutaCompletaClaseIndicadores;
 	}
 
-	public String getRutaCompletaOrganizacion() 
+	public String getRutaCompletaOrganizacion()
 	{
 		return this.rutaCompletaOrganizacion;
 	}
 
-	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
 	{
 		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
 	}
-	
-	public Boolean getPermitirCambiarOrganizacion() 
+
+	public Boolean getPermitirCambiarOrganizacion()
 	{
 		return this.permitirCambiarOrganizacion;
 	}
 
-	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion) 
+	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion)
 	{
 		this.permitirCambiarOrganizacion = permitirCambiarOrganizacion;
 	}
 
-	public Boolean getPermitirCambiarClase() 
+	public Boolean getPermitirCambiarClase()
 	{
 		return this.permitirCambiarClase;
 	}
 
-	public void setPermitirCambiarClase(Boolean permitirCambiarClase) 
+	public void setPermitirCambiarClase(Boolean permitirCambiarClase)
 	{
 		this.permitirCambiarClase = permitirCambiarClase;
 	}
-	
-	public String getPanelClases() 
+
+	public String getPanelClases()
 	{
 		return this.panelClases;
 	}
 
-	public void setPanelClases(String panelClases) 
+	public void setPanelClases(String panelClases)
 	{
 		this.panelClases = panelClases;
 	}
-	
-	public String getPanelSeleccionado() 
+
+	public String getPanelSeleccionado()
 	{
 		return this.panelSeleccionado;
 	}
 
-	public void setPanelSeleccionado(String panelSeleccionado) 
+	public void setPanelSeleccionado(String panelSeleccionado)
 	{
 		this.panelSeleccionado = panelSeleccionado;
 	}
-	
+
 	public Long getClaseSeleccionadaId()
 	{
 		return this.claseSeleccionadaId;
 	}
 
-	public void setClaseSeleccionadaId(Long claseSeleccionadaId) 
+	public void setClaseSeleccionadaId(Long claseSeleccionadaId)
 	{
 		this.claseSeleccionadaId = claseSeleccionadaId;
 	}
 
-	public Long getOrganizacionSeleccionadaId() 
+	public Long getOrganizacionSeleccionadaId()
 	{
 	    return this.organizacionSeleccionadaId;
 	}
 
-	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId) 
+	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId)
 	{
 	    this.organizacionSeleccionadaId = organizacionSeleccionadaId;
 	}
-	
-	public Boolean getIniciado() 
+
+	public Boolean getIniciado()
 	{
 		return this.iniciado;
 	}
 
-	public void setIniciado(Boolean iniciado) 
+	public void setIniciado(Boolean iniciado)
 	{
 		this.iniciado = iniciado;
 	}

@@ -5,7 +5,7 @@ import org.apache.struts.validator.ValidatorActionForm;
 public class EditarOrganizacionForm extends ValidatorActionForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private String codigoParcialEnlace;
 	private Long organizacionId;
 	private String organizacionSeleccion;
@@ -46,7 +46,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   	private Boolean soloLectura;
   	private Byte status;
   	private Long rootId;
-  	
+
   	// Variables para copiar organizacion
   	private Boolean copiarIndicadores;
   	private Boolean copiarArbol;
@@ -59,7 +59,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   	private Boolean copiarIniciativas;
   	private String nuevoNombre;
   	private Boolean showPresentacion;
-  
+
   	// Variables para concatenar codigos de enlace
   	private Byte seleccion;
   	private Boolean concatenarCodigos;
@@ -69,87 +69,87 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.organizacionId;
   	}
 
-  	public void setOrganizacionId(Long organizacionId) 
+  	public void setOrganizacionId(Long organizacionId)
   	{
   		this.organizacionId = organizacionId;
   	}
 
-  	public String getNombre() 
+  	public String getNombre()
   	{
   		return this.nombre;
   	}
 
-  	public void setNombre(String nombre) 
+  	public void setNombre(String nombre)
   	{
   		this.nombre = nombre;
   	}
 
-  	public String getPadre() 
+  	public String getPadre()
   	{
   		return this.padre;
   	}
 
-  	public void setPadre(String padre) 
+  	public void setPadre(String padre)
   	{
   		this.padre = padre;
   	}
 
-  	public Long getPadreId() 
+  	public Long getPadreId()
   	{
   		return this.padreId;
   	}
 
-  	public void setPadreId(Long padreId) 
+  	public void setPadreId(Long padreId)
   	{
   		this.padreId = padreId;
   	}
 
-  	public String getCreado() 
+  	public String getCreado()
   	{
   		return this.creado;
-  	}	
+  	}
 
-  	public void setCreado(String creado) 
+  	public void setCreado(String creado)
   	{
   		this.creado = creado;
   	}
 
-  	public String getModificado() 
+  	public String getModificado()
   	{
   		return this.modificado;
   	}
 
-  	public void setModificado(String modificado) 
+  	public void setModificado(String modificado)
   	{
   		this.modificado = modificado;
   	}
 
-  	public Long getModificadoId() 
+  	public Long getModificadoId()
   	{
   		return this.modificadoId;
   	}
 
-  	public void setModificadoId(Long modificadoId) 
+  	public void setModificadoId(Long modificadoId)
   	{
   		this.modificadoId = modificadoId;
   	}
 
-  	public Long getCreadoId() 
+  	public Long getCreadoId()
   	{
   		return this.creadoId;
   	}
 
-  	public void setCreadoId(Long creadoId) 
+  	public void setCreadoId(Long creadoId)
   	{
   		this.creadoId = creadoId;
-  	}	
+  	}
 
-  	public String getDireccion() 
+  	public String getDireccion()
   	{
   		return this.direccion;
   	}
 
-  	public void setDireccion(String direccion) 
+  	public void setDireccion(String direccion)
   	{
   		if ((direccion == null) || (direccion.trim().equals("")))
   			this.direccion = null;
@@ -162,7 +162,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.telefono;
   	}
 
-  	public void setTelefono(String telefono) 
+  	public void setTelefono(String telefono)
   	{
   		if ((telefono == null) || (telefono.trim().equals("")))
   			this.telefono = null;
@@ -175,7 +175,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.fax;
   	}
 
-  	public void setFax(String fax) 
+  	public void setFax(String fax)
   	{
   		if ((fax == null) || (fax.trim().equals("")))
   			this.fax = null;
@@ -188,7 +188,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.enlaceParcial;
   	}
 
-  	public void setEnlaceParcial(String enlaceParcial) 
+  	public void setEnlaceParcial(String enlaceParcial)
   	{
   		if ((enlaceParcial == null) || (enlaceParcial.trim().equals("")))
   			this.enlaceParcial = null;
@@ -201,57 +201,57 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.porcentajeZonaAmarillaMetaIndicadores;
   	}
 
-  	public void setPorcentajeZonaAmarillaMetaIndicadores(Integer porcentajeZonaAmarillaMetaIndicadores) 
+  	public void setPorcentajeZonaAmarillaMetaIndicadores(Integer porcentajeZonaAmarillaMetaIndicadores)
   	{
   		this.porcentajeZonaAmarillaMetaIndicadores = porcentajeZonaAmarillaMetaIndicadores;
   	}
 
-  	public Integer getPorcentajeZonaAmarillaMinMaxIndicadores() 
+  	public Integer getPorcentajeZonaAmarillaMinMaxIndicadores()
   	{
   		return this.porcentajeZonaAmarillaMinMaxIndicadores;
   	}
 
-  	public void setPorcentajeZonaAmarillaMinMaxIndicadores(Integer porcentajeZonaAmarillaMinMaxIndicadores) 
+  	public void setPorcentajeZonaAmarillaMinMaxIndicadores(Integer porcentajeZonaAmarillaMinMaxIndicadores)
   	{
   		this.porcentajeZonaAmarillaMinMaxIndicadores = porcentajeZonaAmarillaMinMaxIndicadores;
   	}
 
-  	public Integer getPorcentajeZonaVerdeMetaIndicadores() 
+  	public Integer getPorcentajeZonaVerdeMetaIndicadores()
   	{
   		return this.porcentajeZonaVerdeMetaIndicadores;
   	}
 
-  	public void setPorcentajeZonaVerdeMetaIndicadores(Integer porcentajeZonaVerdeMetaIndicadores) 
+  	public void setPorcentajeZonaVerdeMetaIndicadores(Integer porcentajeZonaVerdeMetaIndicadores)
   	{
   		this.porcentajeZonaVerdeMetaIndicadores = porcentajeZonaVerdeMetaIndicadores;
   	}
 
-  	public Integer getPorcentajeZonaAmarillaIniciativas() 
+  	public Integer getPorcentajeZonaAmarillaIniciativas()
   	{
   		return this.porcentajeZonaAmarillaIniciativas;
   	}
 
-  	public void setPorcentajeZonaAmarillaIniciativas(Integer porcentajeZonaAmarillaIniciativas) 
+  	public void setPorcentajeZonaAmarillaIniciativas(Integer porcentajeZonaAmarillaIniciativas)
   	{
   		this.porcentajeZonaAmarillaIniciativas = porcentajeZonaAmarillaIniciativas;
   	}
 
-  	public Integer getPorcentajeZonaVerdeIniciativas() 
+  	public Integer getPorcentajeZonaVerdeIniciativas()
   	{
   		return this.porcentajeZonaVerdeIniciativas;
   	}
 
-  	public void setPorcentajeZonaVerdeIniciativas(Integer porcentajeZonaVerdeIniciativas) 
+  	public void setPorcentajeZonaVerdeIniciativas(Integer porcentajeZonaVerdeIniciativas)
   	{
   		this.porcentajeZonaVerdeIniciativas = porcentajeZonaVerdeIniciativas;
   	}
 
-  	public String getDescripcion() 
+  	public String getDescripcion()
   	{
   		return this.descripcion;
   	}
 
-  	public void setDescripcion(String descripcion) 
+  	public void setDescripcion(String descripcion)
   	{
   		if ((descripcion == null) || (descripcion.trim().equals("")))
   			this.descripcion = null;
@@ -264,7 +264,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.observaciones;
   	}
 
-  	public void setObservaciones(String observaciones) 
+  	public void setObservaciones(String observaciones)
   	{
   		if ((observaciones == null) || (observaciones.trim().equals("")))
   			this.observaciones = null;
@@ -277,7 +277,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.personalDirectivo;
   	}
 
-  	public void setPersonalDirectivo(String personalDirectivo) 
+  	public void setPersonalDirectivo(String personalDirectivo)
   	{
   		if ((personalDirectivo == null) || (personalDirectivo.trim().equals("")))
   			this.personalDirectivo = null;
@@ -290,7 +290,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.mision;
   	}
 
-  	public void setMision(String mision) 
+  	public void setMision(String mision)
   	{
   		if ((mision == null) || (mision.trim().equals("")))
   			this.mision = null;
@@ -303,7 +303,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.vision;
   	}
 
-  	public void setVision(String vision) 
+  	public void setVision(String vision)
   	{
   		if ((vision == null) || (vision.trim().equals("")))
   			this.vision = null;
@@ -316,7 +316,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.oportunidadesRetos;
   	}
 
-  	public void setOportunidadesRetos(String oportunidadesRetos) 
+  	public void setOportunidadesRetos(String oportunidadesRetos)
   	{
   		if ((oportunidadesRetos == null) || (oportunidadesRetos.trim().equals("")))
   			this.oportunidadesRetos = null;
@@ -329,7 +329,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.lineamientosEstrategicos;
   	}
 
-  	public void setLineamientosEstrategicos(String lineamientosEstrategicos) 
+  	public void setLineamientosEstrategicos(String lineamientosEstrategicos)
   	{
   		if ((lineamientosEstrategicos == null) || (lineamientosEstrategicos.trim().equals("")))
   			this.lineamientosEstrategicos = null;
@@ -342,7 +342,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.factoresClave;
   	}
 
-  	public void setFactoresClave(String factoresClave) 
+  	public void setFactoresClave(String factoresClave)
   	{
   		if ((factoresClave == null) || (factoresClave.trim().equals("")))
   			this.factoresClave = null;
@@ -355,7 +355,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.politicas;
   	}
 
-  	public void setPoliticas(String politicas) 
+  	public void setPoliticas(String politicas)
   	{
   		if ((politicas == null) || (politicas.trim().equals("")))
   			this.politicas = null;
@@ -368,7 +368,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.valores;
   	}
 
-  	public void setValores(String valores) 
+  	public void setValores(String valores)
   	{
   		if ((valores == null) || (valores.trim().equals("")))
   			this.valores = null;
@@ -381,267 +381,267 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.bloqueado;
   	}
 
-  	public void setBloqueado(Boolean bloqueado) 
+  	public void setBloqueado(Boolean bloqueado)
   	{
   		this.bloqueado = bloqueado;
-  	}	
+  	}
 
-  	public Boolean getEnEdicion() 
+  	public Boolean getEnEdicion()
   	{
   		return this.enEdicion;
   	}
 
-  	public void setEnEdicion(Boolean enEdicion) 
+  	public void setEnEdicion(Boolean enEdicion)
   	{
   		this.enEdicion = enEdicion;
   	}
 
-  	public Byte getMesCierre() 
+  	public Byte getMesCierre()
   	{
   		return this.mesCierre;
   	}
 
-  	public void setMesCierre(Byte mesCierre) 
+  	public void setMesCierre(Byte mesCierre)
   	{
   		this.mesCierre = mesCierre;
   	}
 
-  	public String getRif() 
+  	public String getRif()
   	{
   		return this.rif;
   	}
 
-  	public void setRif(String rif) 
+  	public void setRif(String rif)
   	{
   		this.rif = rif;
   	}
 
-  	public String getCodigoParcialEnlace() 
+  	public String getCodigoParcialEnlace()
   	{
   		return this.codigoParcialEnlace;
   	}
 
-  	public void setCodigoParcialEnlace(String codigoParcialEnlace) 
+  	public void setCodigoParcialEnlace(String codigoParcialEnlace)
   	{
   		this.codigoParcialEnlace = codigoParcialEnlace;
-  	}	
+  	}
 
-  	public Boolean getVisible() 
+  	public Boolean getVisible()
   	{
   		return this.visible;
   	}
 
-  	public void setVisible(Boolean visible) 
+  	public void setVisible(Boolean visible)
   	{
   		this.visible = visible;
   	}
 
-  	public String getNombreUsuarioCreado() 
+  	public String getNombreUsuarioCreado()
   	{
   		return this.nombreUsuarioCreado;
   	}
 
-  	public void setNombreUsuarioCreado(String nombreUsuarioCreado) 
+  	public void setNombreUsuarioCreado(String nombreUsuarioCreado)
   	{
   		this.nombreUsuarioCreado = nombreUsuarioCreado;
   	}
 
-  	public String getNombreUsuarioModificado() 
+  	public String getNombreUsuarioModificado()
   	{
   		return this.nombreUsuarioModificado;
   	}
 
-  	public void setNombreUsuarioModificado(String nombreUsuarioModificado) 
+  	public void setNombreUsuarioModificado(String nombreUsuarioModificado)
   	{
   		this.nombreUsuarioModificado = nombreUsuarioModificado;
   	}
 
-  	public Boolean getSoloLectura() 
+  	public Boolean getSoloLectura()
   	{
-  		if (this.soloLectura == null) 
+  		if (this.soloLectura == null)
   			this.soloLectura = new Boolean(false);
 
   		return this.soloLectura;
   	}
 
-  	public void setSoloLectura(Boolean soloLectura) 
+  	public void setSoloLectura(Boolean soloLectura)
   	{
   		this.soloLectura = soloLectura;
   	}
 
-  	public Boolean getCopiarIndicadores() 
+  	public Boolean getCopiarIndicadores()
   	{
-  		if (this.copiarIndicadores == null) 
+  		if (this.copiarIndicadores == null)
   			this.copiarIndicadores = new Boolean(false);
-  		
+
   		return this.copiarIndicadores;
   	}
 
-  	public void setCopiarIndicadores(Boolean copiarIndicadores) 
+  	public void setCopiarIndicadores(Boolean copiarIndicadores)
   	{
   		this.copiarIndicadores = copiarIndicadores;
   	}
 
-  	public Boolean getCopiarArbol() 
+  	public Boolean getCopiarArbol()
   	{
-  		if (this.copiarArbol == null) 
+  		if (this.copiarArbol == null)
   			this.copiarArbol = new Boolean(false);
 
   		return this.copiarArbol;
   	}
 
-  	public void setCopiarArbol(Boolean copiarArbol) 
+  	public void setCopiarArbol(Boolean copiarArbol)
   	{
   		this.copiarArbol = copiarArbol;
   	}
 
-  	public Boolean getCopiarMediciones() 
+  	public Boolean getCopiarMediciones()
   	{
-  		if (this.copiarMediciones == null) 
+  		if (this.copiarMediciones == null)
   			this.copiarMediciones = new Boolean(false);
 
   		return this.copiarMediciones;
   	}
 
-  	public void setCopiarMediciones(Boolean copiarMediciones) 
+  	public void setCopiarMediciones(Boolean copiarMediciones)
   	{
   		this.copiarMediciones = copiarMediciones;
   	}
 
-  	public Boolean getCopiarInsumos() 
+  	public Boolean getCopiarInsumos()
   	{
-  		if (this.copiarInsumos == null) 
+  		if (this.copiarInsumos == null)
   			this.copiarInsumos = new Boolean(false);
 
   		return this.copiarInsumos;
   	}
 
-  	public void setCopiarInsumos(Boolean copiarInsumos) 
+  	public void setCopiarInsumos(Boolean copiarInsumos)
   	{
   		this.copiarInsumos = copiarInsumos;
   	}
-  	
-  	public Boolean getCopiarPlantillasGraficos() 
+
+  	public Boolean getCopiarPlantillasGraficos()
   	{
-  		if (this.copiarPlantillasGraficos == null) 
+  		if (this.copiarPlantillasGraficos == null)
   			this.copiarPlantillasGraficos = new Boolean(false);
-  		
+
   		return this.copiarPlantillasGraficos;
   	}
 
-  	public void setCopiarPlantillasGraficos(Boolean copiarPlantillasGraficos) 
+  	public void setCopiarPlantillasGraficos(Boolean copiarPlantillasGraficos)
   	{
   		this.copiarPlantillasGraficos = copiarPlantillasGraficos;
   	}
 
-  	public Boolean getCopiarPlantillasReportes() 
+  	public Boolean getCopiarPlantillasReportes()
   	{
-  		if (this.copiarPlantillasReportes == null) 
+  		if (this.copiarPlantillasReportes == null)
   			this.copiarPlantillasReportes = new Boolean(false);
 
   		return this.copiarPlantillasReportes;
   	}
 
-  	public void setCopiarPlantillasReportes(Boolean copiarPlantillasReportes) 
+  	public void setCopiarPlantillasReportes(Boolean copiarPlantillasReportes)
   	{
   		this.copiarPlantillasReportes = copiarPlantillasReportes;
   	}
 
-  	public Boolean getCopiarOrganizacionHija() 
+  	public Boolean getCopiarOrganizacionHija()
   	{
-  		if (this.copiarOrganizacionHija == null) 
+  		if (this.copiarOrganizacionHija == null)
   			this.copiarOrganizacionHija = new Boolean(false);
-  		
+
   		return this.copiarOrganizacionHija;
   	}
 
-  	public void setCopiarOrganizacionHija(Boolean copiarOrganizacionHija) 
+  	public void setCopiarOrganizacionHija(Boolean copiarOrganizacionHija)
   	{
   		this.copiarOrganizacionHija = copiarOrganizacionHija;
   	}
 
-  	public Boolean getCopiarPlanes() 
+  	public Boolean getCopiarPlanes()
   	{
-  		if (this.copiarPlanes == null) 
+  		if (this.copiarPlanes == null)
   			this.copiarPlanes = new Boolean(false);
 
   		return this.copiarPlanes;
   	}
 
-  	public void setCopiarPlanes(Boolean copiarPlanes) 
+  	public void setCopiarPlanes(Boolean copiarPlanes)
   	{
   		this.copiarPlanes = copiarPlanes;
   	}
 
-  	public Boolean getCopiarIniciativas() 
+  	public Boolean getCopiarIniciativas()
   	{
-  		if (this.copiarIniciativas == null) 
+  		if (this.copiarIniciativas == null)
   			this.copiarIniciativas = new Boolean(false);
 
   		return this.copiarIniciativas;
   	}
 
-  	public void setCopiarIniciativas(Boolean copiarIniciativas) 
+  	public void setCopiarIniciativas(Boolean copiarIniciativas)
   	{
   		this.copiarIniciativas = copiarIniciativas;
   	}
-  	
-  	public String getNuevoNombre() 
+
+  	public String getNuevoNombre()
   	{
   		return this.nuevoNombre;
   	}
-  	
-  	public void setNuevoNombre(String nuevoNombre) 
+
+  	public void setNuevoNombre(String nuevoNombre)
   	{
   		this.nuevoNombre = nuevoNombre;
   	}
 
-  	public Byte getSeleccion() 
+  	public Byte getSeleccion()
   	{
   		return this.seleccion;
   	}
-  	
-  	public void setSeleccion(Byte seleccion) 
+
+  	public void setSeleccion(Byte seleccion)
   	{
   		this.seleccion = seleccion;
   	}
-  	
-  	public Boolean getConcatenarCodigos() 
+
+  	public Boolean getConcatenarCodigos()
   	{
   		return this.concatenarCodigos;
   	}
 
-  	public void setConcatenarCodigos(Boolean concatenarCodigos) 
+  	public void setConcatenarCodigos(Boolean concatenarCodigos)
   	{
   		this.concatenarCodigos = concatenarCodigos;
-  	}	
-  
+  	}
+
   	public Long getOrganizacionSeleccionId()
   	{
   		return this.organizacionSeleccionId;
   	}
 
-  	public void setOrganizacionSeleccionId(Long organizacionSeleccionId) 
+  	public void setOrganizacionSeleccionId(Long organizacionSeleccionId)
   	{
   		this.organizacionSeleccionId = organizacionSeleccionId;
   	}
-  
+
   	public String getOrganizacionSeleccion()
   	{
   		return this.organizacionSeleccion;
   	}
 
-  	public void setOrganizacionSeleccion(String organizacionSeleccion) 
+  	public void setOrganizacionSeleccion(String organizacionSeleccion)
   	{
   		this.organizacionSeleccion = organizacionSeleccion;
   	}
-  
+
   	public Byte getStatus()
   	{
   		return this.status;
   	}
 
-  	public void setStatus(Byte status) 
+  	public void setStatus(Byte status)
   	{
   		this.status = status;
   	}
@@ -651,22 +651,22 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   		return this.rootId;
   	}
 
-  	public void setRootId(Long rootId) 
+  	public void setRootId(Long rootId)
   	{
   		this.rootId = rootId;
   	}
-  
-	public Boolean getShowPresentacion() 
+
+	public Boolean getShowPresentacion()
 	{
 		return this.showPresentacion;
 	}
 
-	public void setShowPresentacion(Boolean showPresentacion) 
+	public void setShowPresentacion(Boolean showPresentacion)
 	{
 		this.showPresentacion = showPresentacion;
 	}
-  
-	public void clear() 
+
+	public void clear()
 	{
 		this.porcentajeZonaVerdeMetaIndicadores = null;
 		this.porcentajeZonaAmarillaMetaIndicadores = null;
@@ -700,7 +700,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
     	this.mesCierre = new Byte("12");
     	this.rif = null;
     	this.visible = new Boolean(true);
-    	
+
     	this.copiarIndicadores = new Boolean(false);
     	this.copiarIniciativas = new Boolean(false);
     	this.copiarArbol = new Boolean(false);
@@ -710,7 +710,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
     	this.copiarPlantillasReportes = new Boolean(false);
     	this.copiarOrganizacionHija = new Boolean(false);
     	this.nuevoNombre = "";
-    	
-    	this.concatenarCodigos = new Boolean(false);;
+
+    	this.concatenarCodigos = new Boolean(false);
 	}
 }

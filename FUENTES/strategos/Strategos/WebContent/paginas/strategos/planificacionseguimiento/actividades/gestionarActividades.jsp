@@ -35,6 +35,7 @@
 		<jsp:include page="/paginas/strategos/iniciativas/iniciativasJs.jsp"></jsp:include>
 		
 		<%-- Funciones JavaScript locales de la página Jsp --%>
+		<script type="text/javascript" src="<html:rewrite  page='/paginas/strategos/explicaciones/Explicacion.js'/>"></script>
 		<script type="text/javascript">	
 
 			var actividades = new Array(<bean:write name="paginaActividades" property="total"/>);
@@ -64,6 +65,7 @@
 					parametros = parametros + '&desdeInstrumento=<bean:write name="gestionarActividadesForm" property="desdeInstrumento" />';
 					parametros = parametros + '&funcion=Inicializar';
 				
+					//window.location.href='<html:rewrite action="/planificacionseguimiento/actividades/crearActividad" />' + parametros
 					abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/crearActividad" />' + parametros, "Actividad", 695, 425);
 				}
 				else if (verificarElementoUnicoSeleccionMultiple(document.gestionarActividadesForm.seleccionados))
@@ -75,6 +77,7 @@
 					parametros = parametros + '&desdeInstrumento=<bean:write name="gestionarActividadesForm" property="desdeInstrumento" />';
 					parametros = parametros + '&funcion=Inicializar';
 				
+					//window.location.href = '<html:rewrite action="/planificacionseguimiento/actividades/crearActividad" />' + parametros
 					abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/crearActividad" />' + parametros, "Actividad", 695, 425);
 				}
 			}
@@ -97,7 +100,8 @@
 						</logic:equal>
 						<logic:notEqual name="gestionarActividadesForm" property="editarForma" value="true">
 							<logic:equal name="gestionarActividadesForm" property="verForma" value="true">
-								abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/verActividad" />' + parametros, "Actividad", 695, 425);
+								//window.location.href = '<html:rewrite action="/planificacionseguimiento/actividades/verActividad" />' + parametros
+								 abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/verActividad" />' + parametros, "Actividad", 695, 425);
 							</logic:equal>
 						</logic:notEqual>
 					}
@@ -546,7 +550,17 @@
 		    		div.scrollTop = object.scrollTop;
 	    		}
 		    }
-			
+		    
+		    function gestionarAnexos() 
+			{
+				if (verificarElementoUnicoSeleccionMultiple(document.gestionarActividadesForm.seleccionados))
+				{
+					var explicacion = new Explicacion();
+					explicacion.url = '<html:rewrite action="/explicaciones/gestionarExplicaciones"/>';
+					explicacion.ShowList(true, document.gestionarActividadesForm.seleccionados.value, 'pryActividad', 0);
+				}
+			}
+		    
 		</script>
 
 		<script type="text/javascript" src="<html:rewrite  page='/paginas/strategos/planificacionseguimiento/actividades/actividadesJs/scrollJs.js'/>"></script>
@@ -700,6 +714,7 @@
 									<vgcinterfaz:botonMenu key="menu.mediciones.actividad.mediciones.programado" onclick="editarMediciones(document.gestionarActividadesForm.seleccionados.value, 1);" permisoId="ACTIVIDAD_MEDICION_PROGRAMADO" aplicaOrganizacion="true" />
 									<vgcinterfaz:botonMenu key="menu.mediciones.actividad.mediciones.ejecutado" onclick="editarMediciones(document.gestionarActividadesForm.seleccionados.value, 0);" permisoId="ACTIVIDAD_MEDICION_REAL" aplicaOrganizacion="true" />
 								</vgcinterfaz:menuAnidado>
+								
 								<logic:notEqual name="gestionarActividadesForm" property="bloqueado" value="true">
 									<vgcinterfaz:botonMenu key="menu.mediciones.importar" onclick="importarMediciones();" permisoId="ACTIVIDAD_IMPORTAR" />
 									
@@ -825,12 +840,22 @@
 										<vgcutil:message key="jsp.gestionaractividades.barraherramientas.zoomacercar" />
 									</vgcinterfaz:barraHerramientasBotonTitulo>
 								</vgcinterfaz:barraHerramientasBoton>
+								
 							</logic:equal>
 						</logic:notEqual>
 						<vgcinterfaz:barraHerramientasSeparador />
 						<vgcinterfaz:barraHerramientasBoton permisoId="ACTIVIDAD_EMAIL" nombreImagen="email" pathImagenes="/componentes/barraHerramientas/" nombre="email" onclick="javascript:enviarEmail();">
 							<vgcinterfaz:barraHerramientasBotonTitulo>
 								<vgcutil:message key="menu.edicion.email" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+						<vgcinterfaz:barraHerramientasBoton permisoId="EXPLICACION"
+															nombreImagen="explicaciones"
+															pathImagenes="/paginas/strategos/indicadores/imagenes/barraHerramientas/"
+															nombre="gestionarAnexos" onclick="javascript:gestionarAnexos();">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message
+									key="jsp.gestionarindicadores.barraherramientas.explicaciones" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
 						

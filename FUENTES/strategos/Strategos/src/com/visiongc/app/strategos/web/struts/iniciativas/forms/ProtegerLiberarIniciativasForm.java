@@ -6,16 +6,11 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 
 import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
-import com.visiongc.app.strategos.web.struts.mediciones.forms.ProtegerLiberarMedicionesForm.ProtegerLiberarAccion;
-import com.visiongc.app.strategos.web.struts.mediciones.forms.ProtegerLiberarMedicionesForm.ProtegerLiberarOrigen;
-import com.visiongc.app.strategos.web.struts.mediciones.forms.ProtegerLiberarMedicionesForm.ProtegerLiberarSeleccion;
-import com.visiongc.app.strategos.web.struts.mediciones.forms.ProtegerLiberarMedicionesForm.ProtegerLiberarStatus;
-import com.visiongc.app.strategos.web.struts.mediciones.forms.ProtegerLiberarMedicionesForm.ProtegerLiberarTipo;
 import com.visiongc.commons.util.VgcMessageResources;
 import com.visiongc.commons.util.VgcResourceManager;
 
 public class ProtegerLiberarIniciativasForm extends ActionForm{
-	
+
 	static final long serialVersionUID = 0L;
 	private Byte accion;
 	private Byte tipo;
@@ -35,9 +30,9 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 	private Long tipoId;
 	private TipoProyecto tipoProyecto;
 	private List<TipoProyecto> tipos;
-	
-	
-		
+
+
+
 	public Long getTipoId() {
 		return tipoId;
 	}
@@ -83,99 +78,99 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 		return this.accion;
 	}
 
-	public void setAccion(Byte accion) 
+	public void setAccion(Byte accion)
 	{
 	    this.accion = ProtegerLiberarAccion.getProtegerLiberarAccion(accion);
 	}
 
-	public Byte getTipo() 
+	public Byte getTipo()
 	{
 	    return this.tipo;
 	}
 
-	public void setTipo(Byte tipo) 
+	public void setTipo(Byte tipo)
 	{
 	    this.tipo = ProtegerLiberarTipo.getProtegerLiberarTipo(tipo);
 	}
 
-	public Byte getTipoSeleccion() 
+	public Byte getTipoSeleccion()
 	{
 	    return this.tipoSeleccion;
 	}
 
-	public void setTipoSeleccion(Byte tipoSeleccion) 
+	public void setTipoSeleccion(Byte tipoSeleccion)
 	{
 	    this.tipoSeleccion = ProtegerLiberarSeleccion.getProtegerLiberarSeleccion(tipoSeleccion);
 	}
 
-	public Integer getAno() 
+	public Integer getAno()
 	{
 	    return this.ano;
 	}
 
-	public void setAno(Integer ano) 
+	public void setAno(Integer ano)
 	{
 	    this.ano = ano;
 	}
 
-	public Integer getMesInicial() 
+	public Integer getMesInicial()
 	{
 	    return this.mesInicial;
 	}
 
-	public void setMesInicial(Integer mesInicial) 
+	public void setMesInicial(Integer mesInicial)
 	{
 	    this.mesInicial = mesInicial;
 	}
 
-	public Integer getMesFinal() 
+	public Integer getMesFinal()
 	{
 	    return this.mesFinal;
 	}
 
-	public void setMesFinal(Integer mesFinal) 
+	public void setMesFinal(Integer mesFinal)
 	{
 	    this.mesFinal = mesFinal;
 	}
 
-	public String getFechaFinal() 
+	public String getFechaFinal()
 	{
 	    return this.fechaFinal;
 	}
 
-	public void setFechaFinal(String fechaFinal) 
+	public void setFechaFinal(String fechaFinal)
 	{
 	    this.fechaFinal = fechaFinal;
 	}
 
-	
-	public Long getOrganizacionId() 
+
+	public Long getOrganizacionId()
 	{
 	    return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 	    this.organizacionId = organizacionId;
 	}
 
-	
-	public Long getPlanId() 
+
+	public Long getPlanId()
 	{
 	    return this.planId;
 	}
 
-	public void setPlanId(Long planId) 
+	public void setPlanId(Long planId)
 	{
 	    this.planId = planId;
 	}
-	
+
 	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
@@ -185,17 +180,17 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 		return this.status;
 	}
 
-	public void setStatus(Byte status) 
+	public void setStatus(Byte status)
 	{
 		this.status = ProtegerLiberarStatus.getProtegerLiberarStatus(status);
 	}
-	
+
 	public Byte getOrigen()
 	{
 		return this.origen;
 	}
 
-	public void setOrigen(Byte origen) 
+	public void setOrigen(Byte origen)
 	{
 		this.origen = ProtegerLiberarOrigen.getProtegerLiberarOrigen(origen);
 	}
@@ -205,103 +200,103 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 		return this.altoForma;
 	}
 
-	public void setAltoForma(String altoForma) 
+	public void setAltoForma(String altoForma)
 	{
 		this.altoForma = altoForma;
 	}
-	
-	public Byte getOrigenOrganizaciones() 
+
+	public Byte getOrigenOrganizaciones()
 	{
 		return ProtegerLiberarOrigen.getOrigenOrganizaciones();
 	}
 
-	public Byte getOrigenIndicadores() 
+	public Byte getOrigenIndicadores()
 	{
 		return ProtegerLiberarOrigen.getOrigenIndicadores();
 	}
 
-	public Byte getOrigenPlanes() 
+	public Byte getOrigenPlanes()
 	{
 		return ProtegerLiberarOrigen.getOrigenPlanes();
 	}
 
-	public Byte getOrigenIniciativas() 
+	public Byte getOrigenIniciativas()
 	{
 		return ProtegerLiberarOrigen.getOrigenIniciativas();
 	}
 
-	public Byte getOrigenActividades() 
+	public Byte getOrigenActividades()
 	{
 		return ProtegerLiberarOrigen.getOrigenActividades();
 	}
-	
-	public Byte getSeleccionIndicador() 
+
+	public Byte getSeleccionIndicador()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionIndicador();
 	}
 
-	public Byte getSeleccionIndicadoresSeleccionados() 
+	public Byte getSeleccionIndicadoresSeleccionados()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionIndicadoresSeleccionados();
 	}
-	
-	public Byte getSeleccionClase() 
+
+	public Byte getSeleccionClase()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionClase();
 	}
 
-	public Byte getSeleccionSubClase() 
+	public Byte getSeleccionSubClase()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionSubClase();
 	}
-	
-	public Byte getSeleccionOrganizacion() 
+
+	public Byte getSeleccionOrganizacion()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionOrganizacion();
 	}
 
-	public Byte getSeleccionSubOrganizacion() 
+	public Byte getSeleccionSubOrganizacion()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionSubOrganizacion();
 	}
 
-	public Byte getSeleccionOrganizacionTodas() 
+	public Byte getSeleccionOrganizacionTodas()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionOrganizacionTodas();
 	}
 
-	public Byte getSeleccionPlan() 
+	public Byte getSeleccionPlan()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionPlan();
 	}
 
-	public Byte getSeleccionPerspectiva() 
+	public Byte getSeleccionPerspectiva()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionPerspectiva();
 	}
 
-	public Byte getSeleccionIniciativa() 
+	public Byte getSeleccionIniciativa()
 	{
 		return ProtegerLiberarSeleccion.getSeleccionIniciativa();
 	}
 
-	public Byte getAccionProteger() 
+	public Byte getAccionProteger()
 	{
 		return ProtegerLiberarAccion.getAccionBloquear();
 	}
 
-	public Byte getAccionLiberar() 
+	public Byte getAccionLiberar()
 	{
 		return ProtegerLiberarAccion.getAccionLiberar();
 	}
-	
+
 	public static class ProtegerLiberarAccion
 	{
 		private byte id;
 		private String nombre;
 		private static final byte ACCION_BLOQUEAR = 1;
 		private static final byte ACCION_LIBERAR = 2;
-		
+
 		private static Byte getProtegerLiberarAccion(Byte protegerLiberarAccion)
 		{
 			if (protegerLiberarAccion == ACCION_BLOQUEAR)
@@ -311,65 +306,65 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			else
 				return null;
 		}
-		
-		public static Byte getAccionBloquear() 
+
+		public static Byte getAccionBloquear()
 		{
 			return new Byte(ACCION_BLOQUEAR);
 		}
-		
-		public static Byte getAccionLiberar() 
+
+		public static Byte getAccionLiberar()
 		{
 			return new Byte(ACCION_LIBERAR);
 		}
-		
-		public byte getId() 
+
+		public byte getId()
 		{
 			return id;
 		}
 
-		public void setId(byte id) 
+		public void setId(byte id)
 		{
 			this.id = id;
 		}
 
-		public String getNombre() 
+		public String getNombre()
 		{
 			return nombre;
 		}
 
-		public void setNombre(String nombre) 
+		public void setNombre(String nombre)
 		{
 			this.nombre = nombre;
 		}
-		
-		public static List<ProtegerLiberarAccion> getTiposAcciones() 
+
+		public static List<ProtegerLiberarAccion> getTiposAcciones()
 		{
 			VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
-	
+
 			List<ProtegerLiberarAccion> protegerLiberarAcciones = new ArrayList<ProtegerLiberarAccion>();
-	
+
 			ProtegerLiberarAccion protegerLiberarAccion = new ProtegerLiberarAccion();
 			protegerLiberarAccion.setId(ACCION_BLOQUEAR);
 			protegerLiberarAccion.nombre = messageResources.getResource("protegerliberar.accion.bloquear");
 			protegerLiberarAcciones.add(protegerLiberarAccion);
-	
+
 			protegerLiberarAccion = new ProtegerLiberarAccion();
 			protegerLiberarAccion.setId(ACCION_LIBERAR);
 			protegerLiberarAccion.nombre = messageResources.getResource("protegerliberar.accion.liberar");
 			protegerLiberarAcciones.add(protegerLiberarAccion);
-	
+
 			return protegerLiberarAcciones;
 		}
-		
-		public static String getNombre(byte status) 
+
+		public static String getNombre(byte status)
 		{
 			String nombre = "";
 
 			VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
 
-			if (status == ACCION_BLOQUEAR) 
+			if (status == ACCION_BLOQUEAR)
 				nombre = messageResources.getResource("protegerliberar.accion.bloquear");
-			else if (status == ACCION_LIBERAR) 
+			else if (status == ACCION_LIBERAR)
 				nombre = messageResources.getResource("protegerliberar.accion.liberar");
 
 			return nombre;
@@ -385,7 +380,7 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 		private static final byte ORIGEN_PLANES = 3;
 		private static final byte ORIGEN_INICIATIVAS = 4;
 		private static final byte ORIGEN_ACTIVIDADES = 5;
-		
+
 		private static Byte getProtegerLiberarOrigen(Byte protegerLiberarOrigen)
 		{
 			if (protegerLiberarOrigen == ORIGEN_ORGANIZACIONES)
@@ -401,60 +396,60 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			else
 				return null;
 		}
-		
-		public static Byte getOrigenOrganizaciones() 
+
+		public static Byte getOrigenOrganizaciones()
 		{
 			return new Byte(ORIGEN_ORGANIZACIONES);
 		}
-		
-		public static Byte getOrigenIndicadores() 
+
+		public static Byte getOrigenIndicadores()
 		{
 			return new Byte(ORIGEN_INDICADORES);
 		}
 
-		public static Byte getOrigenPlanes() 
+		public static Byte getOrigenPlanes()
 		{
 			return new Byte(ORIGEN_PLANES);
 		}
-		
-		public static Byte getOrigenIniciativas() 
+
+		public static Byte getOrigenIniciativas()
 		{
 			return new Byte(ORIGEN_INICIATIVAS);
 		}
 
-		public static Byte getOrigenActividades() 
+		public static Byte getOrigenActividades()
 		{
 			return new Byte(ORIGEN_ACTIVIDADES);
 		}
-		
-		public byte getId() 
+
+		public byte getId()
 		{
 			return id;
 		}
 
-		public void setId(byte id) 
+		public void setId(byte id)
 		{
 			this.id = id;
 		}
 
-		public String getNombre() 
+		public String getNombre()
 		{
 			return nombre;
 		}
 
-		public void setNombre(String nombre) 
+		public void setNombre(String nombre)
 		{
 			this.nombre = nombre;
 		}
 	}
-	
+
 	public static class ProtegerLiberarTipo
 	{
 		private byte id;
 		private String nombre;
 		private static final byte TIPO_POR_MEDICION = 1;
 		private static final byte TIPO_POR_FECHA = 2;
-		
+
 		private static Byte getProtegerLiberarTipo(Byte protegerLiberarTipo)
 		{
 			if (protegerLiberarTipo == TIPO_POR_MEDICION)
@@ -464,71 +459,71 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			else
 				return null;
 		}
-		
-		public static Byte getTipoPorMedicion() 
+
+		public static Byte getTipoPorMedicion()
 		{
 			return new Byte(TIPO_POR_MEDICION);
 		}
-		
-		public static Byte getTipoPorFecha() 
+
+		public static Byte getTipoPorFecha()
 		{
 			return new Byte(TIPO_POR_FECHA);
 		}
-		
-		public byte getId() 
+
+		public byte getId()
 		{
 			return id;
 		}
 
-		public void setId(byte id) 
+		public void setId(byte id)
 		{
 			this.id = id;
 		}
 
-		public String getNombre() 
+		public String getNombre()
 		{
 			return nombre;
 		}
 
-		public void setNombre(String nombre) 
+		public void setNombre(String nombre)
 		{
 			this.nombre = nombre;
 		}
-		
-		public static List<ProtegerLiberarTipo> getTiposEstatus() 
+
+		public static List<ProtegerLiberarTipo> getTiposEstatus()
 		{
 			VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
-	
+
 			List<ProtegerLiberarTipo> protegerLiberarTipos = new ArrayList<ProtegerLiberarTipo>();
-	
+
 			ProtegerLiberarTipo protegerLiberarTipo = new ProtegerLiberarTipo();
 			protegerLiberarTipo.setId(TIPO_POR_MEDICION);
 			protegerLiberarTipo.nombre = messageResources.getResource("protegerliberar.tipo.medicion");
 			protegerLiberarTipos.add(protegerLiberarTipo);
-	
+
 			protegerLiberarTipo = new ProtegerLiberarTipo();
 			protegerLiberarTipo.setId(TIPO_POR_FECHA);
 			protegerLiberarTipo.nombre = messageResources.getResource("protegerliberar.tipo.fecha");
 			protegerLiberarTipos.add(protegerLiberarTipo);
-	
+
 			return protegerLiberarTipos;
 		}
-		
-		public static String getNombre(byte status) 
+
+		public static String getNombre(byte status)
 		{
 			String nombre = "";
 
 			VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
 
-			if (status == TIPO_POR_MEDICION) 
+			if (status == TIPO_POR_MEDICION)
 				nombre = messageResources.getResource("protegerliberar.tipo.medicion");
-			else if (status == TIPO_POR_FECHA) 
+			else if (status == TIPO_POR_FECHA)
 				nombre = messageResources.getResource("protegerliberar.tipo.fecha");
 
 			return nombre;
 		}
 	}
-	
+
 	public static class ProtegerLiberarSeleccion
 	{
 		private byte id;
@@ -543,7 +538,7 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 		private static final byte SELECCION_PLAN = 8;
 		private static final byte SELECCION_PERSPECTIVA = 9;
 		private static final byte SELECCION_INICIATIVA = 10;
-		
+
 		private static Byte getProtegerLiberarSeleccion(Byte protegerLiberarSeleccion)
 		{
 			if (protegerLiberarSeleccion == SELECCION_INDICADOR)
@@ -569,88 +564,88 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			else
 				return null;
 		}
-		
-		public static Byte getSeleccionIndicador() 
+
+		public static Byte getSeleccionIndicador()
 		{
 			return new Byte(SELECCION_INDICADOR);
 		}
-		
-		public static Byte getSeleccionIndicadoresSeleccionados() 
+
+		public static Byte getSeleccionIndicadoresSeleccionados()
 		{
 			return new Byte(SELECCION_INDICADORES_SELECCIONADOS);
 		}
 
-		public static Byte getSeleccionClase() 
+		public static Byte getSeleccionClase()
 		{
 			return new Byte(SELECCION_CLASE);
 		}
 
-		public static Byte getSeleccionSubClase() 
+		public static Byte getSeleccionSubClase()
 		{
 			return new Byte(SELECCION_CLASE_SUBCLASES);
 		}
-		
-		public static Byte getSeleccionOrganizacion() 
+
+		public static Byte getSeleccionOrganizacion()
 		{
 			return new Byte(SELECCION_ORGANIZACION);
 		}
 
-		public static Byte getSeleccionSubOrganizacion() 
+		public static Byte getSeleccionSubOrganizacion()
 		{
 			return new Byte(SELECCION_ORGANIZACION_SUBORGANIZACION);
 		}
-		
-		public static Byte getSeleccionOrganizacionTodas() 
+
+		public static Byte getSeleccionOrganizacionTodas()
 		{
 			return new Byte(SELECCION_ORGANIZACION_TODAS);
 		}
-		
-		public static Byte getSeleccionPlan() 
+
+		public static Byte getSeleccionPlan()
 		{
 			return new Byte(SELECCION_PLAN);
 		}
 
-		public static Byte getSeleccionPerspectiva() 
+		public static Byte getSeleccionPerspectiva()
 		{
 			return new Byte(SELECCION_PERSPECTIVA);
 		}
 
-		public static Byte getSeleccionIniciativa() 
+		public static Byte getSeleccionIniciativa()
 		{
 			return new Byte(SELECCION_INICIATIVA);
 		}
 
-		public byte getId() 
+		public byte getId()
 		{
 			return id;
 		}
 
-		public void setId(byte id) 
+		public void setId(byte id)
 		{
 			this.id = id;
 		}
 
-		public String getNombre() 
+		public String getNombre()
 		{
 			return nombre;
 		}
 
-		public void setNombre(String nombre) 
+		public void setNombre(String nombre)
 		{
 			this.nombre = nombre;
 		}
-		
-		public static List<ProtegerLiberarSeleccion> getTiposEstatus() 
+
+		public static List<ProtegerLiberarSeleccion> getTiposEstatus()
 		{
 			VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
-	
+
 			List<ProtegerLiberarSeleccion> protegerLiberarSelecciones = new ArrayList<ProtegerLiberarSeleccion>();
-	
+
 			ProtegerLiberarSeleccion protegerLiberarSeleccion = new ProtegerLiberarSeleccion();
 			protegerLiberarSeleccion.setId(SELECCION_INDICADOR);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.indicador");
 			protegerLiberarSelecciones.add(protegerLiberarSeleccion);
-	
+
 			protegerLiberarSeleccion = new ProtegerLiberarSeleccion();
 			protegerLiberarSeleccion.setId(SELECCION_INDICADORES_SELECCIONADOS);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.indicadoresseleccionados");
@@ -660,7 +655,7 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			protegerLiberarSeleccion.setId(SELECCION_CLASE);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.clase");
 			protegerLiberarSelecciones.add(protegerLiberarSeleccion);
-			
+
 			protegerLiberarSeleccion = new ProtegerLiberarSeleccion();
 			protegerLiberarSeleccion.setId(SELECCION_CLASE_SUBCLASES);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.subclase");
@@ -675,12 +670,12 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			protegerLiberarSeleccion.setId(SELECCION_ORGANIZACION_SUBORGANIZACION);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.suborganizacion");
 			protegerLiberarSelecciones.add(protegerLiberarSeleccion);
-			
+
 			protegerLiberarSeleccion = new ProtegerLiberarSeleccion();
 			protegerLiberarSeleccion.setId(SELECCION_ORGANIZACION_TODAS);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.todasorganizaciones");
 			protegerLiberarSelecciones.add(protegerLiberarSeleccion);
-			
+
 			protegerLiberarSeleccion = new ProtegerLiberarSeleccion();
 			protegerLiberarSeleccion.setId(SELECCION_PLAN);
 			protegerLiberarSeleccion.nombre = messageResources.getResource("protegerliberar.seleccion.plan");
@@ -698,44 +693,44 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 
 			return protegerLiberarSelecciones;
 		}
-		
-		public static String getNombre(byte status) 
+
+		public static String getNombre(byte status)
 		{
 			String nombre = "";
 
 			VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
 
-			if (status == SELECCION_INDICADOR) 
+			if (status == SELECCION_INDICADOR)
 				nombre = messageResources.getResource("protegerliberar.seleccion.indicador");
-			else if (status == SELECCION_INDICADORES_SELECCIONADOS) 
+			else if (status == SELECCION_INDICADORES_SELECCIONADOS)
 				nombre = messageResources.getResource("protegerliberar.seleccion.indicadoresseleccionados");
-			else if (status == SELECCION_CLASE) 
+			else if (status == SELECCION_CLASE)
 				nombre = messageResources.getResource("protegerliberar.seleccion.clase");
-			else if (status == SELECCION_CLASE_SUBCLASES) 
+			else if (status == SELECCION_CLASE_SUBCLASES)
 				nombre = messageResources.getResource("protegerliberar.seleccion.subclase");
-			else if (status == SELECCION_ORGANIZACION) 
+			else if (status == SELECCION_ORGANIZACION)
 				nombre = messageResources.getResource("protegerliberar.seleccion.organizacion");
-			else if (status == SELECCION_ORGANIZACION_SUBORGANIZACION) 
+			else if (status == SELECCION_ORGANIZACION_SUBORGANIZACION)
 				nombre = messageResources.getResource("protegerliberar.seleccion.suborganizacion");
-			else if (status == SELECCION_ORGANIZACION_TODAS) 
+			else if (status == SELECCION_ORGANIZACION_TODAS)
 				nombre = messageResources.getResource("protegerliberar.seleccion.todasorganizaciones");
-			else if (status == SELECCION_PLAN) 
+			else if (status == SELECCION_PLAN)
 				nombre = messageResources.getResource("protegerliberar.seleccion.plan");
-			else if (status == SELECCION_PERSPECTIVA) 
+			else if (status == SELECCION_PERSPECTIVA)
 				nombre = messageResources.getResource("protegerliberar.seleccion.perspectiva");
-			else if (status == SELECCION_INICIATIVA) 
+			else if (status == SELECCION_INICIATIVA)
 				nombre = messageResources.getResource("protegerliberar.seleccion.iniciativa");
 
 			return nombre;
 		}
 	}
-	
+
 	public static class ProtegerLiberarStatus
 	{
 		private static final byte IMPORTARSTATUS_SUCCESS = 0;
 		private static final byte IMPORTARSTATUS_NOSUCCESS = 1;
 		private static final byte IMPORTARSTATUS_NOCONFIGURADO =2;
-		
+
 		private static Byte getProtegerLiberarStatus(Byte status)
 		{
 			if (status == IMPORTARSTATUS_SUCCESS)
@@ -747,22 +742,22 @@ public class ProtegerLiberarIniciativasForm extends ActionForm{
 			else
 				return null;
 		}
-		
-		public static Byte getImportarStatusSuccess() 
+
+		public static Byte getImportarStatusSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_SUCCESS);
 		}
-		
-		public static Byte getImportarStatusNoSuccess() 
+
+		public static Byte getImportarStatusNoSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_NOSUCCESS);
 		}
-		
-		public static Byte getImportarStatusNoConfigurado() 
+
+		public static Byte getImportarStatusNoConfigurado()
 		{
 			return new Byte(IMPORTARSTATUS_NOCONFIGURADO);
 		}
-		
+
 	}
 
 }

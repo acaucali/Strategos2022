@@ -1,5 +1,23 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -36,26 +54,11 @@ import com.visiongc.framework.model.Modulo;
 import com.visiongc.framework.web.controles.SplitControl;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class GestionarIniciativasAction
   extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
     String titulo = null;
     if (url.toLowerCase().indexOf("portafolio") == -1)
@@ -73,33 +76,34 @@ public class GestionarIniciativasAction
       }
     }
   }
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
     if (!forward.equals("gestionarPortafoliosIndicadoresIniciativaAction")) {
     	if(forward.equals("gestionarInstrumentosIndicadoresIniciativasAction")) {
-    		getBarraAreas(request, "strategos").setBotonSeleccionado("instrumentos");	
+    		getBarraAreas(request, "strategos").setBotonSeleccionado("instrumentos");
     	}else {
     		getBarraAreas(request, "strategos").setBotonSeleccionado("iniciativas");
     	}
-    }    
+    }
     else {
       getBarraAreas(request, "strategos").setBotonSeleccionado("portafolios");
     }
-    
+
     GestionarIniciativasForm gestionarIniciativasForm = (GestionarIniciativasForm)form;
     String source = request.getParameter("source") != null ? request.getParameter("source") : null;
-    Boolean actualizarForma = Boolean.valueOf(request.getParameter("actualizarForma") != null ? Boolean.parseBoolean(request.getParameter("actualizarForma")) : false);
-    if (actualizarForma.booleanValue()) {
+    boolean actualizarForma = request.getParameter("actualizarForma") != null ? Boolean.parseBoolean(request.getParameter("actualizarForma")) : false;
+    if (actualizarForma) {
       if (request.getSession().getAttribute("GuardarIndicador") == null) {
         request.getSession().setAttribute("GuardarIndicador", "true");
       }
     }
-    
+
     // portafolio
     Long portafolioId = null;
     GestionarPortafoliosForm gestionarPortafoliosForm = (GestionarPortafoliosForm)request.getSession().getAttribute("gestionarPortafoliosForm");
@@ -112,9 +116,9 @@ public class GestionarIniciativasAction
       }
       gestionarIniciativasForm.setSource("Portafolio");
     }
-    
+
     //instrumentos
-    Boolean instrumentos = false;
+    boolean instrumentos = false;
     Long instrumentoId = null;
     GestionarInstrumentosForm gestionarInstrumentoForm = (GestionarInstrumentosForm)request.getSession().getAttribute("gestionarInstrumentosForm");
     if((gestionarInstrumentoForm != null) && (forward.equals("gestionarInstrumentosIndicadoresIniciativasAction"))) {
@@ -126,26 +130,26 @@ public class GestionarIniciativasAction
     	}
     	gestionarIniciativasForm.setSource("instrumentos");
     }
-    
-    
+
+
     Byte filtroHistorycoType = (gestionarIniciativasForm != null) && (gestionarIniciativasForm.getFiltro() != null) ? gestionarIniciativasForm.getFiltro().getHistorico() : null;
-    
+
     String filtroNombre = "";
-    
+
     if(gestionarIniciativasForm != null && gestionarIniciativasForm.getFiltro() != null && gestionarIniciativasForm.getFiltroNombre() != null){
     	filtroNombre = gestionarIniciativasForm.getFiltroNombre();
     }
-    
-    
+
+
     /* obtener el a�o actual y setear en el filtro */
     Calendar cal= Calendar.getInstance();
     int year= cal.get(Calendar.YEAR);
-    
+
     String filtroAnio = (request.getParameter("filtroAnio") != null) ? request.getParameter("filtroAnio") : "";
-        
-    
+
+
     gestionarIniciativasForm.clear();
-    
+
     String organizacionId = (String)request.getSession().getAttribute("organizacionId");
     Long iniciativaId = null;
     if (request.getParameter("iniciativaId") != null) {
@@ -155,7 +159,7 @@ public class GestionarIniciativasAction
     }else if ((gestionarInstrumentoForm != null) && (gestionarInstrumentoForm.getIniciativaId() != null) && (gestionarIniciativasForm.getSource().equals("instrumentos"))) {
         iniciativaId = gestionarInstrumentoForm.getIniciativaId();
       }
-    
+
     Long planId = (request.getParameter("planId") != null) && (request.getParameter("planId") != "") ? Long.valueOf(Long.parseLong(request.getParameter("planId"))) : null;
     if ((planId == null) && (request.getSession().getAttribute("planActivoId") != null)) {
       planId = Long.valueOf(Long.parseLong((String)request.getSession().getAttribute("planActivoId")));
@@ -169,7 +173,7 @@ public class GestionarIniciativasAction
     Long selectEstatusType = (request.getParameter("selectEstatusType") != null) && (request.getParameter("selectEstatusType") != "") && (!request.getParameter("selectEstatusType").equals("0")) ? Long.valueOf(Long.parseLong(request.getParameter("selectEstatusType"))) : null;
     Long selectTipos = (request.getParameter("selectTipos") != null) && (request.getParameter("selectTipos") != "") && (!request.getParameter("selectTipos").equals("0")) ? Long.valueOf(Long.parseLong(request.getParameter("selectTipos"))) : null;
 
-    
+
     FiltroForm filtro = new FiltroForm();
     filtro.setHistorico(selectHitoricoType);
     if (nombre.equals("")) {
@@ -187,26 +191,26 @@ public class GestionarIniciativasAction
     gestionarIniciativasForm.setTipo(selectTipos);
     gestionarIniciativasForm.setPortafolioId(portafolioId);
     gestionarIniciativasForm.setInstrumentoId(instrumentoId);
-    
+
     // estatus
-    
+
     StrategosIniciativaEstatusService strategosIniciativaEstatusService = StrategosServiceFactory.getInstance().openStrategosIniciativaEstatusService();
     Map<String, String> filtros = new HashMap();
     PaginaLista paginaIniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc", true, filtros);
     strategosIniciativaEstatusService.close();
     gestionarIniciativasForm.setTiposEstatus(paginaIniciativaEstatus.getLista());
-    
+
     // tipos
-    
+
     StrategosTipoProyectoService strategosTiposProyectoService = StrategosServiceFactory.getInstance().openStrategosTipoProyectoService();
     Map<String, String> filtrosTipo = new HashMap();
     PaginaLista paginaTipos = strategosTiposProyectoService.getTiposProyecto(0, 0, "tipoProyectoId", "asc", true, filtrosTipo);
     strategosTiposProyectoService.close();
     gestionarIniciativasForm.setTipos(paginaTipos.getLista());
-    
+
     ActionMessages messages = getMessages(request);
     StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-    
+
     gestionarIniciativasForm.setVerForma(Boolean.valueOf(getPermisologiaUsuario(request).tienePermiso("INICIATIVA_VIEWALL")));
     gestionarIniciativasForm.setEditarForma(Boolean.valueOf(getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EDIT")));
     if (source != null) {
@@ -225,9 +229,9 @@ public class GestionarIniciativasAction
     }
     gestionarIniciativasForm.setOrganizacionId(new Long(organizacionId));
     gestionarIniciativasForm.setIniciativaId(iniciativaId);
-    
+
     filtros = new HashMap();
-    
+
     String atributoOrden = gestionarIniciativasForm.getAtributoOrden();
     String tipoOrden = gestionarIniciativasForm.getTipoOrden();
     int paginaIniciativa = gestionarIniciativasForm.getPagina();
@@ -255,12 +259,12 @@ public class GestionarIniciativasAction
     if ((gestionarIniciativasForm.getIniciativaId() != null) && (gestionarIniciativasForm.getSource() != null) && (gestionarIniciativasForm.getSource().equals("Plan")) && (gestionarIniciativasForm.getPlanId() == null)) {
       filtros.put("iniciativaId", gestionarIniciativasForm.getIniciativaId().toString());
     }
-    
+
     if (gestionarIniciativasForm.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
 		filtros.put("historicoDate", "IS NULL");
 	else
 		filtros.put("historicoDate", "IS NOT NULL");
-    
+
     if (gestionarIniciativasForm.getFiltro().getNombre() != null) {
       filtros.put("nombre", gestionarIniciativasForm.getFiltro().getNombre());
     }
@@ -281,15 +285,15 @@ public class GestionarIniciativasAction
     }
     PaginaLista paginaIniciativas = strategosIniciativasService.getIniciativas(paginaIniciativa, 30, gestionarIniciativasForm.getAtributoOrden(), gestionarIniciativasForm.getTipoOrden(), true, filtros);
     paginaIniciativas.setTamanoSetPaginas(5);
-    
+
     //porcentaje esperado
-    
+
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 	StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-	
-	for (Iterator<Iniciativa> iter = paginaIniciativas.getLista().iterator(); iter.hasNext(); ) 
+
+	for (Iterator<Iniciativa> iter = paginaIniciativas.getLista().iterator(); iter.hasNext(); )
 	{
-		Iniciativa iniciativa = (Iniciativa)iter.next();
+		Iniciativa iniciativa = iter.next();
 		OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativa.getOrganizacionId()));
 		iniciativa.setOrganizacion(organizacion);
 		if (iniciativa.getPorcentajeCompletado() != null)
@@ -298,7 +302,7 @@ public class GestionarIniciativasAction
 			if (indicador != null)
 			{
 				boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue());
-				
+
 				Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(), indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(), indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
 				if (medicionReal != null)
 				{
@@ -306,9 +310,9 @@ public class GestionarIniciativasAction
 
 					List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null, medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
 					Double programado = null;
-					for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext(); ) 
+					for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext(); )
 					{
-	            		Medicion medicion = (Medicion)iter2.next();
+	            		Medicion medicion = iter2.next();
 	            		if (medicion.getValor() != null && programado == null)
 	            			programado = medicion.getValor();
 	            		else if (medicion.getValor() != null && programado != null && acumular)
@@ -316,7 +320,7 @@ public class GestionarIniciativasAction
 	            		else if (medicion.getValor() != null && programado != null && !acumular)
 	            			programado = medicion.getValor();
 					}
-					
+
 					if (programado != null)
 						iniciativa.setPorcentajeEsperado(programado);
 				}
@@ -325,16 +329,16 @@ public class GestionarIniciativasAction
 	}
 	strategosIndicadoresService.close();
 	strategosMedicionesService.close();
-	
-	
-    
-    
+
+
+
+
     ArrayList<Plan> listaPlanes = new ArrayList();
     PaginaLista paginaPlanes = new PaginaLista();
-    
-    
-   
-    
+
+
+
+
     paginaPlanes.setLista(listaPlanes);
     paginaPlanes.setNroPagina(1);
     paginaPlanes.setTamanoPagina(listaPlanes.size());
@@ -351,7 +355,7 @@ public class GestionarIniciativasAction
         iniciativaIdFocus = new Long(configuracionUsuario.getData());
         for (Iterator<Iniciativa> iter = paginaIniciativas.getLista().iterator(); iter.hasNext();)
         {
-          Iniciativa iniciativa = (Iniciativa)iter.next();
+          Iniciativa iniciativa = iter.next();
           if (iniciativa.getIniciativaId().longValue() == iniciativaIdFocus.longValue())
           {
             iniciativaEnLaLista = true;
@@ -394,37 +398,37 @@ public class GestionarIniciativasAction
         frameworkService.saveConfiguracionUsuario(configuracionUsuario, getUsuarioConectado(request));
       }
       frameworkService.close();
-      
+
       Iniciativa iniciativaSeleccionada = (Iniciativa)strategosIniciativasService.load(Iniciativa.class, new Long(gestionarIniciativasForm.getSeleccionadoId()));
       if (iniciativaSeleccionada != null)
       {
         gestionarIniciativasForm.setNombreIniciativaSeleccionada(iniciativaSeleccionada.getNombre());
         gestionarIniciativasForm.setTipoAlerta(iniciativaSeleccionada.getTipoAlerta());
-        
+
         Set<IniciativaPlan> iniciativaPlanes = iniciativaSeleccionada.getIniciativaPlanes();
         StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
         for (Iterator<IniciativaPlan> iter = iniciativaPlanes.iterator(); iter.hasNext();)
         {
-          IniciativaPlan iniciativaPlan = (IniciativaPlan)iter.next();
-          
-          
+          IniciativaPlan iniciativaPlan = iter.next();
+
+
           if (!listaPlanes.contains(iniciativaPlan.getPlan()))
           {
             Plan plan = (Plan)strategosPlanesService.load(Plan.class, iniciativaPlan.getPk().getPlanId());
             OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosPlanesService.load(OrganizacionStrategos.class, plan.getOrganizacionId());
             plan.setOrganizacion(organizacion);
-            
+
             listaPlanes.add(plan);
           }
         }
         strategosPlanesService.close();
         paginaPlanes.setTamanoPagina(listaPlanes.size());
         paginaPlanes.setTotal(listaPlanes.size());
-       
+
         if (!forward.equals("gestionarPortafoliosIndicadoresIniciativaAction")) {
           forward = "mostrarGestionIniciativaAction";
         }else if(forward.equals("gestionarInstrumentosIndicadoresIniciativasAction")) {
-          forward = "gestionarInstrumentosIndicadoresIniciativasAction";	
+          forward = "gestionarInstrumentosIndicadoresIniciativasAction";
         }
       }
       else
@@ -436,36 +440,36 @@ public class GestionarIniciativasAction
         {
           gestionarIniciativasForm.setNombreIniciativaSeleccionada(iniciativaSeleccionada.getNombre());
           gestionarIniciativasForm.setTipoAlerta(iniciativaSeleccionada.getTipoAlerta());
-          
+
           Set<IniciativaPlan> iniciativaPlanes = iniciativaSeleccionada.getIniciativaPlanes();
           StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
           for (Iterator<IniciativaPlan> iter = iniciativaPlanes.iterator(); iter.hasNext();)
           {
-            IniciativaPlan iniciativaPlan = (IniciativaPlan)iter.next();
-            
+            IniciativaPlan iniciativaPlan = iter.next();
+
             if (!listaPlanes.contains(iniciativaPlan.getPlan()))
             {
               Plan plan = (Plan)strategosPlanesService.load(Plan.class, iniciativaPlan.getPk().getPlanId());
               OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosPlanesService.load(OrganizacionStrategos.class, plan.getOrganizacionId());
               plan.setOrganizacion(organizacion);
-              
+
               listaPlanes.add(plan);
             }
           }
           strategosPlanesService.close();
           paginaPlanes.setTamanoPagina(listaPlanes.size());
           paginaPlanes.setTotal(listaPlanes.size());
-          
+
         }
         if (!forward.equals("gestionarPortafoliosIndicadoresIniciativaAction")) {
-          	
+
           if ((gestionarIniciativasForm.getSource() != null) && (gestionarIniciativasForm.getSource().equals("Plan"))) {
             forward = "gestionarIniciativasAction";
           } else {
             forward = "mostrarGestionIniciativaAction";
           }
         }else if (!forward.equals("gestionarInstrumentosIndicadoresIniciativasAction")) {
-          	
+
           if ((gestionarIniciativasForm.getSource() != null) && (gestionarIniciativasForm.getSource().equals("Plan"))) {
             forward = "gestionarIniciativasAction";
           } else {
@@ -482,16 +486,16 @@ public class GestionarIniciativasAction
         forward = "mostrarGestionIniciativaAction";
       }
       if(forward.equals("gestionarInstrumentosIndicadoresIniciativasAction")) {
-    	forward = "gestionarInstrumentosIndicadoresIniciativasAction"; 
+    	forward = "gestionarInstrumentosIndicadoresIniciativasAction";
       }
       gestionarIniciativasForm.setTipoAlerta(TipoCalculoEstadoIniciativa.getTipoCalculoEstadoIniciativaPorActividades());
     }
     request.setAttribute("paginaIniciativas", paginaIniciativas);
     request.setAttribute("gestionarIniciativasPaginaPeriodos", paginaPlanes);
-    
+
     if (listaPlanes.size() > 0)
     {
-      Plan plan = (Plan)listaPlanes.get(0);
+      Plan plan = listaPlanes.get(0);
       request.setAttribute("gestionarIniciativas.seleccionadosIniciativaPeriodos", plan.getPlanId().toString());
       request.setAttribute("gestionarIniciativas.objetivo", obtenerObjetivo(iniciativaId, plan.getPlanId()));
     }
@@ -505,40 +509,40 @@ public class GestionarIniciativasAction
     else {
       gestionarIniciativasForm.setSource("portafolio");
     }
-    
+
     if(instrumentos) {
-    	forward = "gestionarInstrumentosIndicadoresIniciativasAction"; 
+    	forward = "gestionarInstrumentosIndicadoresIniciativasAction";
     }
-    
+
     return mapping.findForward(forward);
   }
-  
+
   public String obtenerObjetivo(Long iniciativaId, Long planId) throws SQLException{
-	  
+
 		String objetivo="";
 		Long id=iniciativaId;
-		
+
 		if(id != null && planId != null){
-		
+
 			StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-			
+
 			Iniciativa ini = (Iniciativa)strategosIniciativasService.load(Iniciativa.class, new Long(id));
-			
-			
+
+
 			if((ini.getIniciativaPerspectivas() != null) && (ini.getIniciativaPerspectivas().size() > 0)){
-				
+
 			  IniciativaPerspectiva iniciativaPerspectiva = (IniciativaPerspectiva)ini.getIniciativaPerspectivas().toArray()[0];
 	          StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 	          Perspectiva perspectiva = (Perspectiva)strategosPerspectivasService.load(Perspectiva.class, iniciativaPerspectiva.getPk().getPerspectivaId());
-	          
+
 	        	  objetivo= perspectiva.getNombre();
-	         
+
 			}
 			strategosIniciativasService.close();
 		}
-		
+
 		return objetivo;
   }
-  
-  
+
+
 }

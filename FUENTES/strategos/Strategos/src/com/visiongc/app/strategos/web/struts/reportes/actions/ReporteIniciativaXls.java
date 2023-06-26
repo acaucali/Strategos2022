@@ -19,13 +19,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
-import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
@@ -37,13 +35,13 @@ import com.visiongc.app.strategos.planes.model.IniciativaPerspectiva;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 public class ReporteIniciativaXls extends VgcAction {
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 
 		/**
@@ -53,6 +51,7 @@ public class ReporteIniciativaXls extends VgcAction {
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -125,7 +124,7 @@ public class ReporteIniciativaXls extends VgcAction {
 					.getLista();
 
 			MessageResources messageResources = getResources(request);
-			
+
 			HSSFWorkbook workbook = new HSSFWorkbook();
 			HSSFSheet sheet = workbook.createSheet();
 			workbook.setSheetName(0, "Hoja excel");
@@ -146,7 +145,7 @@ public class ReporteIniciativaXls extends VgcAction {
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(header);
 
-			HSSFRow dataRow = sheet.createRow(1);			
+			HSSFRow dataRow = sheet.createRow(1);
 			dataRow.createCell(0)
 					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.entidad"));
 			dataRow.createCell(1)
@@ -162,12 +161,12 @@ public class ReporteIniciativaXls extends VgcAction {
 			dataRow.createCell(6)
 					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.objetivo"));
 			dataRow.createCell(7)
-					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.tipo"));				
+					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.tipo"));
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
-					
+					Iniciativa iniciativa = iter.next();
+
 					HSSFRow dataRow1 = sheet.createRow(x + 1);
 					dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());
 					dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
@@ -193,7 +192,7 @@ public class ReporteIniciativaXls extends VgcAction {
 					x = x + 1;
 				}
 			}
-			
+
 			Date date = new Date();
 			SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
 			String archivo = "IniciativasResumido_" + hourdateFormat.format(date) + ".xls";
@@ -278,7 +277,7 @@ public class ReporteIniciativaXls extends VgcAction {
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(header);
 
-			HSSFRow dataRow = sheet.createRow(1);			
+			HSSFRow dataRow = sheet.createRow(1);
 			dataRow.createCell(0)
 					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.entidad"));
 			dataRow.createCell(1)
@@ -294,13 +293,13 @@ public class ReporteIniciativaXls extends VgcAction {
 			dataRow.createCell(6)
 					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.objetivo"));
 			dataRow.createCell(7)
-					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.tipo"));				
+					.setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.tipo"));
 
 			if (iniciativas.size() > 0) {
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
 
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					HSSFRow dataRow1 = sheet.createRow(x + 1);
 					dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());
@@ -330,8 +329,8 @@ public class ReporteIniciativaXls extends VgcAction {
 
 			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
-										
+					OrganizacionStrategos organizacion = iter.next();
+
 					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
 							.byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
@@ -354,8 +353,8 @@ public class ReporteIniciativaXls extends VgcAction {
 
 					if (iniciativaSub.size() > 0) {
 						for (Iterator<Iniciativa> iter1 = iniciativaSub.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
-							
+							Iniciativa iniciativa = iter1.next();
+
 							HSSFRow dataRow1 = sheet.createRow(x + 1);
 							dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());
 							dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
@@ -379,11 +378,11 @@ public class ReporteIniciativaXls extends VgcAction {
 							}
 
 							x = x + 1;
-							System.out.println("Si llega aqui");	
+							System.out.println("Si llega aqui");
 						}
 					}
 				}
-			}				
+			}
 			Date date = new Date();
 			SimpleDateFormat hourdateFormat = new SimpleDateFormat("HHmmss_ddMMyyyy");
 
@@ -468,7 +467,7 @@ public class ReporteIniciativaXls extends VgcAction {
 
 				for (Iterator<OrganizacionStrategos> iter = organizaciones.iterator(); iter.hasNext();) {
 
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
@@ -494,7 +493,7 @@ public class ReporteIniciativaXls extends VgcAction {
 					if (iniciativas.size() > 0) {
 
 						for (Iterator<Iniciativa> iter1 = iniciativas.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
+							Iniciativa iniciativa = iter1.next();
 
 							String ruta = null;
 							HSSFRow dataRow1 = sheet.createRow(x + 1);

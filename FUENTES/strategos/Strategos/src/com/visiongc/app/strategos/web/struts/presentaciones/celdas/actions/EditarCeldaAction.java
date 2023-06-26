@@ -1,5 +1,19 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.celdas.actions;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -8,7 +22,6 @@ import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.presentaciones.StrategosCeldasService;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
 import com.visiongc.app.strategos.presentaciones.model.IndicadorCelda;
-import com.visiongc.app.strategos.presentaciones.model.IndicadorCeldaPK;
 import com.visiongc.app.strategos.presentaciones.model.util.TipoCelda;
 import com.visiongc.app.strategos.seriestiempo.StrategosSeriesTiempoService;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
@@ -18,27 +31,15 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.web.NavigationBar;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class EditarCeldaAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -138,7 +139,7 @@ public class EditarCeldaAction extends VgcAction
     editarCeldaForm.setTiposCelda(tiposCelda);
 
     int anoActual = FechaUtil.getAno(new Date());
-    List anos = PeriodoUtil.getListaNumeros(new Integer(anoActual), new Byte((byte) 5));   
+    List anos = PeriodoUtil.getListaNumeros(new Integer(anoActual), new Byte((byte) 5));
     editarCeldaForm.setGrupoAnos(anos);
 
     List meses = PeriodoUtil.getListaMeses();

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms;
 
@@ -12,7 +12,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
 public class GestionarIniciativaEstatusForm  extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private String filtroNombre;
 	private Boolean ordenPag;
 
@@ -21,17 +21,17 @@ public class GestionarIniciativaEstatusForm  extends VisorListaForm
 		return this.filtroNombre;
 	}
 
-	public void setFiltroNombre(String filtroNombre) 
+	public void setFiltroNombre(String filtroNombre)
 	{
 		this.filtroNombre = filtroNombre;
 	}
 
-	public Boolean getOrdenPag() 
+	public Boolean getOrdenPag()
 	{
 		return this.ordenPag;
 	}
 
-	public void setOrdenPag(Boolean ordenPag) 
+	public void setOrdenPag(Boolean ordenPag)
 	{
 		this.ordenPag = ordenPag;
 	}

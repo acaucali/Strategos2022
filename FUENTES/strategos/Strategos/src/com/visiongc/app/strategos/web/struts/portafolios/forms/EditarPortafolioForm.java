@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.forms;
 
@@ -19,7 +19,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarPortafolioForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long id;
 	private String nombre;
 	private Byte activo;
@@ -34,112 +34,112 @@ public class EditarPortafolioForm extends EditarObjetoForm
 	private Integer alto;
 	private Byte filas;
 	private Byte columnas;
-	
+
 	public Long getId()
 	{
 		return this.id;
 	}
 
-	public void setId(Long id) 
+	public void setId(Long id)
 	{
 		this.id = id;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
-		  
-	public Byte getActivo() 
+
+	public Byte getActivo()
 	{
 		return this.activo;
 	}
 
-	public void setActivo(Byte activo) 
+	public void setActivo(Byte activo)
 	{
 		this.activo = activo;
 	}
 
-	public Double getPorcentajeCompletado() 
+	public Double getPorcentajeCompletado()
 	{
 		return this.porcentajeCompletado;
 	}
 
-	public void setPorcentajeCompletado(Double porcentajeCompletado) 
+	public void setPorcentajeCompletado(Double porcentajeCompletado)
 	{
 		this.porcentajeCompletado = porcentajeCompletado;
 	}
 
-	public Long getEstatusId() 
+	public Long getEstatusId()
 	{
 		return this.estatusId;
-	}	
+	}
 
-	public void setEstatusId(Long estatusId) 
+	public void setEstatusId(Long estatusId)
 	{
 		this.estatusId = estatusId;
 	}
-	
-	public IniciativaEstatus getEstatus() 
+
+	public IniciativaEstatus getEstatus()
 	{
 		return this.estatus;
-	}	
+	}
 
-	public void setEstatus(IniciativaEstatus estatus) 
+	public void setEstatus(IniciativaEstatus estatus)
 	{
 		this.estatus = estatus;
 	}
-	
-	public OrganizacionStrategos getOrganizacion() 
+
+	public OrganizacionStrategos getOrganizacion()
 	{
 		return this.organizacion;
 	}
 
-	public void setOrganizacion(OrganizacionStrategos organizacion) 
+	public void setOrganizacion(OrganizacionStrategos organizacion)
 	{
 		this.organizacion = organizacion;
 	}
-	
-	public Byte getFrecuencia() 
+
+	public Byte getFrecuencia()
 	{
 		return this.frecuencia;
 	}
 
-	public void setFrecuencia(Byte frecuencia) 
+	public void setFrecuencia(Byte frecuencia)
 	{
 		this.frecuencia = frecuencia;
 	}
-	
-	public List<Frecuencia> getFrecuencias() 
+
+	public List<Frecuencia> getFrecuencias()
 	{
 		return this.frecuencias;
 	}
 
-	public void setFrecuencias(List<Frecuencia> frecuencias) 
+	public void setFrecuencias(List<Frecuencia> frecuencias)
 	{
 		this.frecuencias = frecuencias;
 	}
 
-	public Portafolio getPortafolio() 
+	public Portafolio getPortafolio()
 	{
 		return this.portafolio;
 	}
 
-	public void setPortafolio(Portafolio portafolio) 
+	public void setPortafolio(Portafolio portafolio)
 	{
 		this.portafolio = portafolio;
 	}
-	
+
 	public Integer getAncho()
 	{
 		return this.ancho;
 	}
-	
+
 	public void setAncho(Integer ancho)
 	{
 		this.ancho = ancho;
@@ -174,8 +174,9 @@ public class EditarPortafolioForm extends EditarObjetoForm
 	{
 		this.columnas = columnas;
 	}
-	
-  	public void clear()
+
+  	@Override
+	public void clear()
 	{
   		this.id = new Long(0L);
 		this.nombre = null;

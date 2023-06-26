@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
@@ -41,10 +41,12 @@ public final class MostrarReporteAction extends VgcAction
 {
 	public static final String ACTION_KEY = "MostrarReporteAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -54,7 +56,7 @@ public final class MostrarReporteAction extends VgcAction
 		ActionMessages messages = getMessages(request);
 
 		ReporteForm reporteForm = (ReporteForm)form;
-		
+
 		Long reporteId = ((request.getParameter("reporteId") != null && request.getParameter("reporteId") != "") ? new Long(request.getParameter("reporteId")) : null);
 		if (reporteId != null)
 		{
@@ -73,10 +75,10 @@ public final class MostrarReporteAction extends VgcAction
 
 		return mapping.findForward(forward);
 	}
-	
+
 	public void getReporte(ReporteForm reporteForm, Reporte reporte, Long reporteId, HttpServletRequest request) throws ParserConfigurationException, SAXException, IOException
 	{
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 	    {
 	    	String funcion = request.getParameter("funcion");
 	    	if (funcion.equals("refresh"))
@@ -86,9 +88,9 @@ public final class MostrarReporteAction extends VgcAction
 	    		Integer periodoInicial = reporteForm.getPeriodoInicial();
 	    		Integer periodoFinal = reporteForm.getPeriodoFinal();
 	    		Boolean acumular = WebUtil.getValorInputCheck(request, "acumular");
-	    		
+
 	    		new ConfigurarVistaDatosTransversalAction().ReadXmlProperties(reporteForm);
-	    		
+
 	    		reporteForm.setAnoInicial(anoInicial);
 	    		reporteForm.setAnoFinal(anoFinal);
 	    		reporteForm.setPeriodoInicial(periodoInicial);
@@ -101,36 +103,34 @@ public final class MostrarReporteAction extends VgcAction
 	    else
 	    {
 	    	Read(reporteForm, reporte, reporteId);
-	    	
+
 			Boolean acumular = (request.getParameter("acumular") != null ? Boolean.parseBoolean(request.getParameter("acumular")) : false);
 			String anoInicial = request.getParameter("anoInicial") != null ? request.getParameter("anoInicial") : reporteForm.getAnoInicial();
 			String anoFinal = request.getParameter("anoFinal") != null ? request.getParameter("anoFinal") : reporteForm.getAnoFinal();
 			Integer periodoInicial = request.getParameter("periodoInicial") != null ? Integer.parseInt(request.getParameter("periodoInicial")) : reporteForm.getPeriodoInicial();
 			Integer periodoFinal = request.getParameter("periodoFinal") != null ? Integer.parseInt(request.getParameter("periodoFinal")) : reporteForm.getPeriodoFinal();
-			
+
 			reporteForm.setAcumular(acumular);
 			reporteForm.setAnoInicial(anoInicial);
 			reporteForm.setAnoFinal(anoFinal);
 			reporteForm.setPeriodoInicial(periodoInicial);
 			reporteForm.setPeriodoFinal(periodoFinal);
 	    }
-	    
+
 		List<Medicion> mediciones = null;
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-		for (int f = 0; f < reporteForm.getMatrizDatos().size(); f++)
-		{
-			List<DatoCelda> filaDatos = (List<DatoCelda>)reporteForm.getMatrizDatos().get(f);
-			for (int k = 0; k < filaDatos.size(); k++)
-			{
-				DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
+		for (List<DatoCelda> element : reporteForm.getMatrizDatos()) {
+			List<DatoCelda> filaDatos = element;
+			for (DatoCelda element2 : filaDatos) {
+				DatoCelda datoCelda = element2;
 				if (!datoCelda.getEsEncabezado() && datoCelda.getValor() != null)
 				{
-    				mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(new Long(datoCelda.getValor()), SerieTiempo.getSerieRealId(), Integer.parseInt(reporteForm.getAnoInicial()), Integer.parseInt(reporteForm.getAnoFinal()), Integer.parseInt(reporteForm.getPeriodoInicial().toString()), Integer.parseInt(reporteForm.getPeriodoFinal().toString()), reporteForm.getFrecuencia(), reporteForm.getFrecuencia(), true, true);
+    				mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(new Long(datoCelda.getValor()), SerieTiempo.getSerieRealId(), Integer.parseInt(reporteForm.getAnoInicial()), Integer.parseInt(reporteForm.getAnoFinal()), Integer.parseInt(reporteForm.getPeriodoInicial().toString()), Integer.parseInt(reporteForm.getPeriodoFinal().toString()), reporteForm.getFrecuencia(), reporteForm.getFrecuencia(), true, true);
     				Medicion medicion = new Medicion();
     				Double valor = 0D;
-    				for (int indexMedicion = mediciones.size() - 1; indexMedicion >= 0; indexMedicion--) 
+    				for (int indexMedicion = mediciones.size() - 1; indexMedicion >= 0; indexMedicion--)
     				{
-    				  	medicion = (Medicion)mediciones.get(indexMedicion);
+    				  	medicion = mediciones.get(indexMedicion);
     				  	if (medicion.getValor() != null && medicion.getValor().doubleValue() > valor.doubleValue())
     				  		valor = medicion.getValor();
     				}
@@ -140,12 +140,12 @@ public final class MostrarReporteAction extends VgcAction
 		}
 		strategosMedicionesService.close();
 	}
-	
+
 	private void Read(ReporteForm reporteForm, Reporte reporte, Long reporteId) throws ParserConfigurationException, SAXException, IOException
 	{
-		reporteForm.clear(); 
+		reporteForm.clear();
 		reporteForm.setId(reporteId);
-		
+
 		if (reporte != null)
 		{
 			reporteForm.setConfiguracion(reporte.getConfiguracion());
@@ -157,7 +157,7 @@ public final class MostrarReporteAction extends VgcAction
     			numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(reporteForm.getFrecuencia().byteValue(), Integer.parseInt(reporteForm.getAnoInicial()));
     		else if ((Integer.parseInt(reporteForm.getAnoFinal()) % 4 == 0) && (reporteForm.getFrecuencia().byteValue() == Frecuencia.getFrecuenciaDiaria().byteValue()))
     			numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(reporteForm.getFrecuencia().byteValue(), Integer.parseInt(reporteForm.getAnoFinal()));
-    		else 
+    		else
     			numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(reporteForm.getFrecuencia().byteValue(), Integer.parseInt(reporteForm.getAnoInicial()));
     		reporteForm.setNumeroMaximoPeriodos(numeroMaximoPeriodos);
     		reporteForm.setAnchoTablaDatos(new Integer((reporteForm.getColumnas() + 1) * 200));

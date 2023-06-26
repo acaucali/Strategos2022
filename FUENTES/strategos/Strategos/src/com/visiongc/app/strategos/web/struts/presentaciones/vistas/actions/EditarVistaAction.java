@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.vistas.actions;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.presentaciones.StrategosVistasService;
 import com.visiongc.app.strategos.presentaciones.model.Vista;
@@ -8,23 +20,15 @@ import com.visiongc.app.strategos.web.struts.presentaciones.vistas.forms.EditarV
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.Date;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class EditarVistaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -60,25 +64,25 @@ public class EditarVistaAction extends VgcAction
 
 				if (vista.getDescripcion() != null)
 					editarVistaForm.setDescripcion(vista.getDescripcion());
-				else 
+				else
 					editarVistaForm.setDescripcion(null);
 
-				if (vista.getFechaInicio() != null) 
+				if (vista.getFechaInicio() != null)
 				{
 					String[] dato = vista.getFechaInicio().split(EditarVistaForm.getSeparadorPeriodos());
 					editarVistaForm.setMesInicio(Byte.valueOf(dato[0]));
 					editarVistaForm.setAnoInicio(Integer.valueOf(dato[1]));
 				}
-				else 
+				else
 					editarVistaForm.setFechaInicio(null);
 
-				if (vista.getFechaFin() != null) 
+				if (vista.getFechaFin() != null)
 				{
 					String[] dato = vista.getFechaFin().split(EditarVistaForm.getSeparadorPeriodos());
 					editarVistaForm.setMesFinal(Byte.valueOf(dato[0]));
 					editarVistaForm.setAnoFinal(Integer.valueOf(dato[1]));
 				}
-				else 
+				else
 					editarVistaForm.setFechaFin(null);
 
 				editarVistaForm.setVisible(vista.getVisible());
@@ -86,7 +90,7 @@ public class EditarVistaAction extends VgcAction
 			else
 			{
 				strategosVistasService.unlockObject(request.getSession().getId(), new Long(vistaId));
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
 			}
@@ -110,10 +114,10 @@ public class EditarVistaAction extends VgcAction
 		}
 		else if (!bloqueado && !verForm && !editarForm)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
-    
+
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
 
 		return mapping.findForward(forward);

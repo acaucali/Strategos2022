@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.organizaciones.actions;
 
@@ -15,7 +15,6 @@ import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.util.StatusUtil;
-import com.visiongc.app.strategos.web.struts.organizaciones.forms.EditarOrganizacionForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 
@@ -25,10 +24,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class MoverOrganizacionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -58,7 +59,7 @@ public class MoverOrganizacionAction extends VgcAction
 				}
 			}
 		}
-		
+
 	    strategosOrganizacionesService.close();
 
 	    saveMessages(request, messages);
@@ -66,7 +67,7 @@ public class MoverOrganizacionAction extends VgcAction
 	    request.setAttribute("ajaxResponse", status.toString());
 		return mapping.findForward("ajaxResponse");
 	}
-	
+
 	private boolean organizacionSeleccionEsHijo(Long organizacionSeleccionId, Long organizacionId, StrategosOrganizacionesService strategosOrganizacionesService)
 	{
 		OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos)strategosOrganizacionesService.load(OrganizacionStrategos.class, new Long(organizacionSeleccionId));

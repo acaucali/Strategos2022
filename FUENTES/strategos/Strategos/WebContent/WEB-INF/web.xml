@@ -165,6 +165,7 @@
 				/WEB-INF/struts-framework-alertas-config.xml,
 				/WEB-INF/struts-strategosWeb-config.xml,
 				/WEB-INF/struts-strategosWeb-categoriasmedicion-config.xml,
+				/WEB-INF/struts-strategosWeb-cargos-config.xml,
 				/WEB-INF/struts-strategosWeb-causas-config.xml,
 				/WEB-INF/struts-strategosWeb-unidadesmedida-config.xml,
 				/WEB-INF/struts-strategosWeb-estadosacciones-config.xml,

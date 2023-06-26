@@ -108,7 +108,7 @@
 							<!-- Organizacion Seleccionada-->
 							<tr>
 								<td align="left"><vgcutil:message key="jsp.reportes.iniciativa.ejecucion.plantilla.organizacion" /> : </td>
-								<td colspan="3"><b><bean:write name="reporteForm" property="nombreOrganizacion"/></b></td>
+								<td colspan="1"><b><bean:write name="reporteForm" property="nombreOrganizacion"/></b></td>
 								<td></td>
 							</tr>
 							
@@ -200,7 +200,7 @@
 											<bean:define id="tipoProyectoId" toScope="page"><bean:write name='tip' property='tipoProyectoId' /></bean:define>
 											<bean:define id="nombre" toScope="page"><bean:write name='tip' property='nombre' /></bean:define>
 											
-											<option value="<%=tipoProyectoId%>" selected><%=nombre%></option>
+											<option value="<%=tipoProyectoId%>" ><%=nombre%></option>
 											
 										</logic:iterate>
 									</select>

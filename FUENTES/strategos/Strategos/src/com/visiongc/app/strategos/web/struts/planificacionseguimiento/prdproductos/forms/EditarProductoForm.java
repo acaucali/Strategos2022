@@ -1,9 +1,10 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproductos.forms;
 
+import java.util.Date;
+
 import com.visiongc.app.strategos.responsables.model.Responsable;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Date;
 
 public class EditarProductoForm extends EditarObjetoForm
 {
@@ -73,7 +74,8 @@ public class EditarProductoForm extends EditarObjetoForm
     this.responsable = responsable;
   }
 
-  public void clear()
+  @Override
+public void clear()
   {
     this.productoId = new Long(0L);
     this.nombre = null;

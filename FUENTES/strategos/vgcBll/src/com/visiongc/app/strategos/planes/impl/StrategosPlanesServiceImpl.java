@@ -498,7 +498,7 @@ public class StrategosPlanesServiceImpl
       
       indicadorLogroAnual.setUnidadId(unidad.getUnidadId());
       
-      if (plan.getNlAnoIndicadorId() == null)
+     /* if (plan.getNlAnoIndicadorId() == null)
       {
         serie = new SerieIndicador();
         serie.setPk(new SerieIndicadorPK());
@@ -508,7 +508,8 @@ public class StrategosPlanesServiceImpl
         indicadorLogroAnual.setSeriesIndicador(new HashSet());
         indicadorLogroAnual.getSeriesIndicador().clear();
         indicadorLogroAnual.getSeriesIndicador().add(serie);
-      }
+      }*/
+      
       
       resultado = strategosIndicadoresService.saveIndicador(indicadorLogroAnual, usuario);
       if (resultado == 10003)
@@ -573,7 +574,7 @@ public class StrategosPlanesServiceImpl
       indicadorLogroParcial.setNumeroDecimales(new Byte("2"));
       indicadorLogroParcial.setUnidadId(unidad.getUnidadId());
       
-      if (plan.getNlAnoIndicadorId() == null)
+      /*if (plan.getNlAnoIndicadorId() == null)
       {
         serie = new SerieIndicador();
         serie.setPk(new SerieIndicadorPK());
@@ -583,7 +584,7 @@ public class StrategosPlanesServiceImpl
         indicadorLogroParcial.setSeriesIndicador(new HashSet());
         indicadorLogroParcial.getSeriesIndicador().clear();
         indicadorLogroParcial.getSeriesIndicador().add(serie);
-      }
+      }*/
       
       resultado = strategosIndicadoresService.saveIndicador(indicadorLogroParcial, usuario);
       if (resultado == 10003)

@@ -1,40 +1,35 @@
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
-import com.visiongc.app.strategos.categoriasmedicion.StrategosCategoriasService;
-
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
-import com.visiongc.app.strategos.instrumentos.StrategosCooperantesService;
-import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
-import com.visiongc.app.strategos.instrumentos.model.InstrumentoPeso;
-import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
-import com.visiongc.app.strategos.model.util.Frecuencia;
-import com.visiongc.app.strategos.util.PeriodoUtil;
-import com.visiongc.app.strategos.web.struts.categoriasmedicion.forms.EditarCategoriaMedicionForm;
-import com.visiongc.app.strategos.web.struts.instrumentos.forms.EditarInstrumentosForm;
-import com.visiongc.app.strategos.web.struts.tipoproyecto.forms.EditarTiposProyectoForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
+import com.visiongc.app.strategos.instrumentos.model.InstrumentoPeso;
+import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
+import com.visiongc.app.strategos.model.util.Frecuencia;
+import com.visiongc.app.strategos.util.PeriodoUtil;
+import com.visiongc.app.strategos.web.struts.instrumentos.forms.EditarInstrumentosForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class GuardarInstrumentosAction extends VgcAction {
 	private static final String ACTION_KEY = "GuardarTiposProyectoAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
@@ -53,7 +48,7 @@ public class GuardarInstrumentosAction extends VgcAction {
 			cancelar = true;
 		else if ((ultimoTs != null) && (ultimoTs.equals(ts))) {
 			cancelar = true;
-		}		
+		}
 		StrategosInstrumentosService strategosInstrumentosService = StrategosServiceFactory.getInstance()
 				.openStrategosInstrumentosService();
 
@@ -78,13 +73,13 @@ public class GuardarInstrumentosAction extends VgcAction {
 					editarInstrumentosForm.getInstrumentoId());
 			instrumento.setInstrumentoPeso(new InstrumentoPeso());
 			instrumento.getInstrumentoPeso().setInstrumentoId(editarInstrumentosForm.getInstrumentoId());
-			
+
 		} else {
 			nuevo = true;
 			instrumento = new Instrumentos();
-			instrumento.setInstrumentoId(new Long(0L));	
-			instrumento.setInstrumentoPeso(new InstrumentoPeso());	
-			
+			instrumento.setInstrumentoId(new Long(0L));
+			instrumento.setInstrumentoPeso(new InstrumentoPeso());
+
 		}
 
 		instrumento.setAnio(editarInstrumentosForm.getAnio());
@@ -137,7 +132,7 @@ public class GuardarInstrumentosAction extends VgcAction {
 
 			instrumento.setCooperanteId(null);
 		}
-		
+
 		if((editarInstrumentosForm.getAnio() != null) && (!editarInstrumentosForm.getAnio().equals(""))){
 			instrumento.getInstrumentoPeso().setAnio(editarInstrumentosForm.getAnio());
 		}else if(instrumento.getInstrumentoPeso() != null){
@@ -157,7 +152,9 @@ public class GuardarInstrumentosAction extends VgcAction {
 		instrumento.setResponsableCgi(editarInstrumentosForm.getResponsableCgi());
 		instrumento.setFrecuencia(Frecuencia.getFrecuenciaTrimestral());
 
-		respuesta = strategosInstrumentosService.saveInstrumentos(instrumento, getUsuarioConectado(request), true);
+		Long organizacionId = new Long(request.getSession().getAttribute("organizacionId").toString());
+		System.out.print("\n\nOrganizacion Id: " + organizacionId + "\n");
+		respuesta = strategosInstrumentosService.saveInstrumentos(instrumento, getUsuarioConectado(request), organizacionId, true);
 
 		if (respuesta == 10000) {
 			strategosInstrumentosService.unlockObject(request.getSession().getId(),

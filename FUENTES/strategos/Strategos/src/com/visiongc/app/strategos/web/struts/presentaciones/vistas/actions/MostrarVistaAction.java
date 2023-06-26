@@ -1,5 +1,27 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.vistas.actions;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.xml.sax.SAXException;
+
 import com.visiongc.app.strategos.graficos.model.Grafico;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.graficos.util.DatosSerie;
@@ -21,33 +43,15 @@ import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.util.WebUtil;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import org.xml.sax.SAXException;
-
 public class MostrarVistaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -59,7 +63,7 @@ public class MostrarVistaAction extends VgcAction
 
 		messages = getMessages(request);
 
-		if (cancel) 
+		if (cancel)
 			return getForwardBack(request, 2, true);
 
 		String vistaId = request.getParameter("vistaId");
@@ -74,7 +78,7 @@ public class MostrarVistaAction extends VgcAction
 	    filtros.put("vistaId", vistaId.toString());
 	    PaginaLista paginaPaginas = strategosPaginasService.getPaginas(1, 30, "numero", "ASC", true, filtros);
 	    strategosPaginasService.close();
-		
+
 		boolean hayPagina = true;
 		List<Pagina> paginas = paginaPaginas.getLista();
 		if (paginas.size() <=0)
@@ -86,7 +90,7 @@ public class MostrarVistaAction extends VgcAction
 		Integer anchoPagina = new Integer(0);
 		Integer altoPagina = new Integer(0);
 
-		if (hayPagina) 
+		if (hayPagina)
 		{
 			vista.setPaginas(new HashSet<Pagina>());
 			vista.getPaginas().addAll(paginas);
@@ -96,15 +100,15 @@ public class MostrarVistaAction extends VgcAction
 				pagina = (Pagina)paginas.toArray()[0];
 				paginaId = pagina.getPaginaId().toString();
 			}
-			
+
 			List<Celda> listaCeldas = new ArrayList<Celda>();
-			if (paginaId != null) 
+			if (paginaId != null)
 			{
 				if (pagina == null)
 				{
 					for (Iterator<Pagina> i = paginas.iterator(); i.hasNext(); )
 					{
-						Pagina paginaList = (Pagina)i.next();
+						Pagina paginaList = i.next();
 						if (paginaList.getPaginaId().longValue() == new Long(paginaId).longValue())
 						{
 							pagina = paginaList;
@@ -112,14 +116,14 @@ public class MostrarVistaAction extends VgcAction
 						}
 					}
 				}
-				
+
 				anchoCelda = pagina.getAncho();
 				altoCelda = pagina.getAlto();
 
 				anchoPagina = new Integer(pagina.getAncho().intValue() * pagina.getColumnas().intValue());
 				altoPagina = new Integer(pagina.getAlto().intValue() * pagina.getFilas().intValue());
 				listaCeldas = getListaCeldas(pagina.getPaginaId(), request);
-		
+
 				if (listaCeldas.size() == 0)
 				{
 					if (setCeldas(pagina, listaCeldas, request, messages) != 10000)
@@ -135,7 +139,7 @@ public class MostrarVistaAction extends VgcAction
 
 			ShowVistaForm showVistaForm = (ShowVistaForm)form;
 			showVistaForm.clear();
-			
+
 			showVistaForm.setPaginaPreviaId(controlPaginacion[0]);
 			showVistaForm.setPaginaSiguienteId(controlPaginacion[1]);
 			showVistaForm.setAnchoPagina(anchoPagina);
@@ -152,7 +156,7 @@ public class MostrarVistaAction extends VgcAction
 			showVistaForm.setPaginaId(pagina.getPaginaId());
 			showVistaForm.setVistaId(vista != null ? vista.getVistaId() : 0);
 		}
-		else 
+		else
 		{
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.mostrarvista.nopagina"));
 			saveMessages(request, messages);
@@ -160,18 +164,18 @@ public class MostrarVistaAction extends VgcAction
 		}
 
 		saveMessages(request, messages);
-		
+
 		return mapping.findForward(forward);
 	}
-	
+
 	private int setCeldas(Pagina pagina, List<Celda> lista, HttpServletRequest request, ActionMessages messages) throws TransformerFactoryConfigurationError, TransformerException, ParserConfigurationException
 	{
 		StrategosCeldasService strategosCeldasService = StrategosServiceFactory.getInstance().openStrategosCeldasService();
 		Celda celda = new Celda();
 		int respuesta = 10000;
-		for (byte i = 1; i <= pagina.getFilas(); i = (byte)(i + 1)) 
+		for (byte i = 1; i <= pagina.getFilas(); i = (byte)(i + 1))
 		{
-			for (byte j = 1; j <= pagina.getColumnas(); j = (byte)(j + 1)) 
+			for (byte j = 1; j <= pagina.getColumnas(); j = (byte)(j + 1))
 			{
 				celda = new Celda();
 				celda.setCeldaId(new Long(0L));
@@ -180,7 +184,7 @@ public class MostrarVistaAction extends VgcAction
 				celda.setPaginaId(pagina.getPaginaId());
 				celda.setIndicadoresCelda(new HashSet<Object>());
 				celda.setTitulo(null);
-				
+
 				respuesta = strategosCeldasService.saveCelda(celda, getUsuarioConectado(request));
 
 				if (respuesta == 10003)
@@ -189,7 +193,7 @@ public class MostrarVistaAction extends VgcAction
 					saveMessages(request, messages);
 					break;
 				}
-				
+
 				lista.add(celda);
 			}
 
@@ -212,9 +216,9 @@ public class MostrarVistaAction extends VgcAction
 		filtros.put("paginaId", paginaId.toString());
 
 		PaginaLista paginaCeldas = strategosCeldasService.getCeldas(pagina, 30, atributoOrden, tipoOrden, true, filtros, getUsuarioConectado(request));
-		
+
 		strategosCeldasService.close();
-		
+
 		return paginaCeldas.getLista();
 	}
 
@@ -223,13 +227,13 @@ public class MostrarVistaAction extends VgcAction
 		Grafico grafico;
 		GraficoForm graficoForm;
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
-		
+
 		for (Iterator<Celda> i = celdas.iterator(); i.hasNext(); )
 		{
-			Celda celda = (Celda)i.next();
+			Celda celda = i.next();
 			grafico = new Grafico();
-		  
-			if (celda.getConfiguracion() == null || celda.getConfiguracion().equals("")) 
+
+			if (celda.getConfiguracion() == null || celda.getConfiguracion().equals(""))
 			{
 				List<Object> objetos = new ArrayList<Object>();
 				objetos.add((long) 0);
@@ -243,9 +247,9 @@ public class MostrarVistaAction extends VgcAction
 				grafico.setObjetoId(celda.getCeldaId());
 				grafico.setClassName("Celda");
 			}
-		  
+
 			//Boolean leyenda = WebUtil.getValorInputCheck(request, "celda_" + celda.getFila().toString() + "_" + celda.getColumna().toString());
-			graficoForm = new GraficoForm(); 
+			graficoForm = new GraficoForm();
 			graficoForm.setVirtual(true);
 			graficoForm.setMostrarLeyendas(celda.getVerLeyenda() != null ? celda.getVerLeyenda() : false);
 			graficoForm.setMostrarTooltips(false);
@@ -254,7 +258,7 @@ public class MostrarVistaAction extends VgcAction
 
 			new com.visiongc.app.strategos.web.struts.graficos.actions.GraficoAction().GetObjeto(graficoForm, grafico);
 			new com.visiongc.app.strategos.web.struts.graficos.actions.GraficoAction().GetGrafico(graficoForm, request);
-			
+
 			celda.setTipo(graficoForm.getTipo());
 			celda.setEjeX(graficoForm.getEjeX());
 			celda.setSerieName(graficoForm.getSerieName());
@@ -271,12 +275,12 @@ public class MostrarVistaAction extends VgcAction
 			Indicador indicador = null;
 			for (Iterator<DatosSerie> j = graficoForm.getSeries().iterator(); j.hasNext(); )
 			{
-				DatosSerie serie = (DatosSerie)j.next();
+				DatosSerie serie = j.next();
 				if (serie.getIndicador() != null)
 				{
 					if (indicadorId == null)
 						indicadorId = serie.getIndicador().getIndicadorId();
-					
+
 					if (indicadorId.longValue() == serie.getIndicador().getIndicadorId() && (serie.getPlanId() == null || serie.getPlanId() == 0L))
 					{
 						indicador = (Indicador)strategosPlanesService.load(Indicador.class, serie.getIndicador().getIndicadorId());
@@ -289,7 +293,7 @@ public class MostrarVistaAction extends VgcAction
 						hayUnIndicador = false;
 				}
 			}
-			
+
 			celda.setShowDuppont(false);
 			celda.setShowImage(false);
 			if (indicadorId != null)
@@ -298,14 +302,14 @@ public class MostrarVistaAction extends VgcAction
 			{
 				if (indicador == null)
 					indicador = (Indicador)strategosPlanesService.load(Indicador.class, indicadorId);
-				
+
 				if (indicador != null && indicador.getNaturaleza().byteValue() == Naturaleza.getNaturalezaFormula().byteValue())
 				{
 					celda.setShowDuppont(true);
 					celda.setIndicadorId(indicadorId.toString());
 				}
 			}
-			
+
 			if (alerta != null)
 			{
 				celda.setShowAlerta(hayUnIndicador);
@@ -314,18 +318,18 @@ public class MostrarVistaAction extends VgcAction
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaVerde.gif")).toString();
 	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaAmarilla().byteValue())
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaAmarilla.gif")).toString();
-	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaRoja().byteValue()) 
+	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaRoja().byteValue())
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaRoja.gif")).toString();
-				
+
 				celda.setAlerta(imagenAlerta);
 			}
 			else
 				celda.setShowAlerta(false);
 		}
-		
+
 		strategosPlanesService.close();
 	}
-	
+
 	private Long[] obtenerControlPaginacion(List<Pagina> paginas, Pagina pagina)
 	{
 		Long[] controlPaginacion = new Long[2];
@@ -333,10 +337,10 @@ public class MostrarVistaAction extends VgcAction
 		int indicePaginaPrevia = pagina.getNumero().intValue() - 2;
 		int indicePaginaSiguiente = pagina.getNumero().intValue();
 
-		if (indicePaginaPrevia < 0) 
+		if (indicePaginaPrevia < 0)
 			indicePaginaPrevia = mayorIndice;
 
-		if (indicePaginaSiguiente > mayorIndice) 
+		if (indicePaginaSiguiente > mayorIndice)
 			indicePaginaSiguiente = 0;
 
 		controlPaginacion[0] = ((Pagina)paginas.toArray()[indicePaginaPrevia]).getPaginaId();

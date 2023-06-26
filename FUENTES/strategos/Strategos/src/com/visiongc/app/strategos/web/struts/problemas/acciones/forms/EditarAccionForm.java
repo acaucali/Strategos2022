@@ -1,8 +1,9 @@
 package com.visiongc.app.strategos.web.struts.problemas.acciones.forms;
 
+import java.util.Date;
+
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Date;
 
 public class EditarAccionForm extends EditarObjetoForm
 {
@@ -198,7 +199,8 @@ public class EditarAccionForm extends EditarObjetoForm
     this.fechaModificado = fechaModificado;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.accionId = new Long(0L);
     this.padreId = null;
     this.problemaId = null;

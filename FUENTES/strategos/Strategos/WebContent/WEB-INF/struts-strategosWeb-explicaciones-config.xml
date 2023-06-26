@@ -64,6 +64,9 @@
 		<!-- Mapeo del Action: Generar Reporte de Explicaciones en XLS-->
 		<action path="/explicaciones/generarReporteExplicacionesXls" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.ReporteExplicacionesXLSAction"></action>
 
+
+		<!-- Mapeo del Action: Para modificar los adjuntos ya registrados-->
+		<action path="/explicaciones/modificarAdjuntos" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.ModificarAdjuntosAction"></action>
 	</action-mappings>
 
 </struts-config>

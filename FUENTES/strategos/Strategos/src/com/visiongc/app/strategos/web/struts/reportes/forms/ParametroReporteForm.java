@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.forms;
 
@@ -16,7 +16,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class ParametroReporteForm extends EditarObjetoForm
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String anoDesde;
 	private String anoHasta;
 	private Integer periodoDesde;
@@ -26,92 +26,93 @@ public class ParametroReporteForm extends EditarObjetoForm
 	private Byte frecuencia;
 	private Integer limitePeriodo;
 
-	public String getAnoDesde() 
+	public String getAnoDesde()
 	{
 	    return this.anoDesde;
 	}
 
-	public void setAnoDesde(String anoDesde) 
+	public void setAnoDesde(String anoDesde)
 	{
 	    this.anoDesde = anoDesde;
 	}
 
-	public String getAnoHasta() 
+	public String getAnoHasta()
 	{
 	    return this.anoHasta;
 	}
 
-	public void setAnoHasta(String anoHasta) 
+	public void setAnoHasta(String anoHasta)
 	{
 	    this.anoHasta = anoHasta;
 	}
-	
-	public Integer getPeriodoDesde() 
+
+	public Integer getPeriodoDesde()
 	{
 		return this.periodoDesde;
 	}
 
-	public void setPeriodoDesde(Integer periodoDesde) 
+	public void setPeriodoDesde(Integer periodoDesde)
 	{
 		this.periodoDesde = periodoDesde;
 	}
 
-	public Integer getPeriodoHasta() 
+	public Integer getPeriodoHasta()
 	{
 		return this.periodoHasta;
 	}
 
-	public void setPeriodoHasta(Integer periodoHasta) 
+	public void setPeriodoHasta(Integer periodoHasta)
 	{
 		this.periodoHasta = periodoHasta;
 	}
 
-	public String getFechaDesde() 
+	public String getFechaDesde()
 	{
 		return this.fechaDesde;
 	}
 
-	public void setFechaDesde(String fechaDesde) 
+	public void setFechaDesde(String fechaDesde)
 	{
 		this.fechaDesde = fechaDesde;
 	}
 
-	public String getFechaHasta() 
+	public String getFechaHasta()
 	{
 		return this.fechaHasta;
 	}
 
-	public void setFechaHasta(String fechaHasta) 
+	public void setFechaHasta(String fechaHasta)
 	{
 		this.fechaHasta = fechaHasta;
 	}
 
-	public Byte getFrecuencia() 
+	public Byte getFrecuencia()
 	{
 	    return this.frecuencia;
 	}
 
-	public void setFrecuencia(Byte frecuencia) 
+	public void setFrecuencia(Byte frecuencia)
 	{
 	    this.frecuencia = frecuencia;
 	}
 
-	public void setLimitePeriodo(Integer limitePeriodo) 
+	public void setLimitePeriodo(Integer limitePeriodo)
 	{
 		this.limitePeriodo = limitePeriodo;
 	}
 
-	public Integer getLimitePeriodo() 
+	public Integer getLimitePeriodo()
 	{
 		return this.limitePeriodo;
 	}
 
-  	public void clear() 
+  	@Override
+	public void clear()
   	{
   		Calendar fecha = Calendar.getInstance();
   		this.anoDesde = new Integer(fecha.get(1)).toString();
   		this.anoHasta = new Integer(fecha.get(1)).toString();
-  		
+
   		fecha.set(2, 0);
   		fecha.set(5, 1);
   		this.fechaDesde = VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta");

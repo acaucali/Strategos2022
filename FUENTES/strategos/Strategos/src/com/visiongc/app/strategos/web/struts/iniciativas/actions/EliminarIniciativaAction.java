@@ -1,5 +1,14 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
@@ -9,44 +18,38 @@ import com.visiongc.app.strategos.web.struts.instrumentos.forms.GestionarInstrum
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class EliminarIniciativaAction extends VgcAction
 {
 	private static final String ACTION_KEY = "EliminarIniciativaAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		ActionMessages messages = getMessages(request);
-		
+
 		Boolean desdeInstrumento = (request.getParameter("desdeInstrumento") != null && request.getParameter("desdeInstrumento") != "") ? Boolean.valueOf(request.getParameter("desdeInstrumento")) : null;
-		
+
 		String iniciativaId = request.getParameter("iniciativaId");
 		Long instrumentoId = (request.getParameter("instrumentoId") != null && request.getParameter("instrumentoId") != "") ? Long.parseLong(request.getParameter("instrumentoId")) : null;
-		
+
 		String ts = request.getParameter("ts");
 		String ultimoTs = (String)request.getSession().getAttribute("EliminarIniciativaAction.ultimoTs");
 		boolean bloqueado = false;
 		boolean cancelar = false;
-		
+
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
 		else if ((iniciativaId == null) || (iniciativaId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(iniciativaId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(iniciativaId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar) {
@@ -56,19 +59,19 @@ public class EliminarIniciativaAction extends VgcAction
 				return getForwardBack(request, 1, true);
 			}
 		}
-			
-			
+
+
 
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-		
+
 		strategosIniciativasService.unlockObject(request.getSession().getId(), iniciativaId);
 
 		bloqueado = !strategosIniciativasService.lockForDelete(request.getSession().getId(), iniciativaId);
-		
+
 		if(desdeInstrumento != null && desdeInstrumento) {
-			
+
 			if(instrumentoId != null) {
-				
+
 				StrategosInstrumentosService strategosInstrumentosService = StrategosServiceFactory.getInstance().openStrategosInstrumentosService();
 
 			    int respuesta = strategosInstrumentosService.desasociarInstrumento(instrumentoId, new Long(iniciativaId), getUsuarioConectado(request));
@@ -84,12 +87,12 @@ public class EliminarIniciativaAction extends VgcAction
 			    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion"));
 
 			    strategosInstrumentosService.close();
-				
+
 			}
-			
-			
+
+
 		}
-		
+
 
 		Iniciativa iniciativa = (Iniciativa)strategosIniciativasService.load(Iniciativa.class, new Long(iniciativaId));
 
@@ -103,7 +106,7 @@ public class EliminarIniciativaAction extends VgcAction
 			{
 				iniciativa.setIniciativaId(Long.valueOf(iniciativaId));
 				int res = strategosIniciativasService.deleteIniciativa(iniciativa, getUsuarioConectado(request));
-				
+
 				if (res == 10004)
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", iniciativa.getNombre()));
 				else
@@ -115,7 +118,7 @@ public class EliminarIniciativaAction extends VgcAction
 				}
 			}
 		}
-		else 
+		else
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 		strategosIniciativasService.unlockObject(request.getSession().getId(), iniciativaId);
@@ -125,12 +128,12 @@ public class EliminarIniciativaAction extends VgcAction
 		saveMessages(request, messages);
 
 		request.getSession().setAttribute("EliminarIniciativaAction.ultimoTs", iniciativaId + "&" + ts);
-		
+
 		if(desdeInstrumento != null && desdeInstrumento) {
 			return getForwardBack(request, 2, true);
 		}else {
 			return getForwardBack(request, 1, true);
 		}
-		
+
 	}
 }

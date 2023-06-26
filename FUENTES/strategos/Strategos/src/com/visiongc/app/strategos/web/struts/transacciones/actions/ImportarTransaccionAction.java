@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.transacciones.actions;
 
@@ -21,14 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import jxl.Cell;
-import jxl.CellType;
-import jxl.DateCell;
-import jxl.LabelCell;
-import jxl.NumberCell;
-import jxl.Sheet;
-import jxl.Workbook;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -61,13 +53,21 @@ import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Columna;
-import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.Columna.ColumnaTipo;
-import com.visiongc.framework.model.Transaccion;
+import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.Importacion.ImportacionType;
+import com.visiongc.framework.model.Transaccion;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.transaccion.TransaccionService;
 import com.visiongc.framework.util.FrameworkConnection;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.DateCell;
+import jxl.LabelCell;
+import jxl.NumberCell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /**
  * @author Kerwin
@@ -75,16 +75,18 @@ import com.visiongc.framework.util.FrameworkConnection;
  */
 public class ImportarTransaccionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
-		  
+
 		Long transaccionId = (request.getParameter("transaccionId") != null ? Long.parseLong(request.getParameter("transaccionId")) : 0L);
 		TransaccionService transaccionService = FrameworkServiceFactory.getInstance().openTransaccionService();
 		Transaccion transaccion = (Transaccion) transaccionService.load(Transaccion.class, transaccionId);
@@ -92,7 +94,7 @@ public class ImportarTransaccionAction extends VgcAction
 
 		TransaccionForm transaccionForm = (TransaccionForm)form;
 		ActionMessages messages = getMessages(request);
-		
+
 		if (request.getParameter("funcion") != null)
 		{
 			transaccionForm.setTransaccionId(transaccionId);
@@ -101,9 +103,9 @@ public class ImportarTransaccionAction extends VgcAction
 				if (transaccion.getTabla() != null)
 					transaccionForm.setTransaccion(transaccion);
 			}
-	    	
+
 			String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("verificar")) 
+	    	if (funcion.equals("verificar"))
 	    	{
 	    		Verificar(request, transaccionForm);
 	    		if (transaccionForm.getRespuesta().indexOf("false") != -1)
@@ -111,23 +113,23 @@ public class ImportarTransaccionAction extends VgcAction
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.transaccion.medicion.seleccion.seleccionar.verificar.archivo.invalido"));
 				    saveMessages(request, messages);
 	    		}
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
 	    	else if (funcion.equals("importar"))
 	    	{
 	    		Importar(request, transaccionForm);
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
 		}
 
 		transaccionForm.clear();
-		
+
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		Configuracion configuracion = frameworkService.getConfiguracion("Strategos.Servicios.Configuracion");
 		frameworkService.close();
-		
+
 		if (configuracion == null)
 		{
 			transaccionForm.setStatus(ImportarStatus.getImportarStatusNoConfigurado());
@@ -137,14 +139,14 @@ public class ImportarTransaccionAction extends VgcAction
 		else
 		{
 			//XML
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-	        DocumentBuilder db = dbf.newDocumentBuilder(); 
-	        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8"))); 
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+	        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8")));
 	        doc.getDocumentElement().normalize();
 			NodeList nList = doc.getElementsByTagName("properties");
 			Element eElement = (Element) nList.item(0);
 			/** Se obtiene el FormBean haciendo el casting respectivo */
-			String url = VgcAbstractService.getTagValue("url", eElement);;
+			String url = VgcAbstractService.getTagValue("url", eElement);
 			String driver = VgcAbstractService.getTagValue("driver", eElement);
 			String user = VgcAbstractService.getTagValue("user", eElement);
 			String password = VgcAbstractService.getTagValue("password", eElement);
@@ -158,7 +160,7 @@ public class ImportarTransaccionAction extends VgcAction
 			else
 				transaccionForm.setStatus(ImportarStatus.getImportarStatusSuccess());
 		}
-		
+
 		transaccionForm.setTipoFuente(ImportacionType.getImportacionTypeExcel());
 		transaccionForm.setTransaccionId(transaccionId);
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -166,13 +168,13 @@ public class ImportarTransaccionAction extends VgcAction
 		if (transaccion != null)
 		{
 			transaccionForm.setFrecuencia(transaccion.getFrecuencia());
-			
+
 			if (transaccion.getTabla() != null)
 			{
 				transaccionForm.setTransaccion(transaccion);
 				for (Iterator<Columna> i = transaccion.getTabla().getColumnas().iterator(); i.hasNext(); )
 				{
-					Columna columna = (Columna)i.next();
+					Columna columna = i.next();
 					if (columna.getTipo().byteValue() == ColumnaTipo.getTipoDate().byteValue())
 					{
 						transaccionForm.setHayColumnaFecha(true);
@@ -186,7 +188,7 @@ public class ImportarTransaccionAction extends VgcAction
 							}
 						}
 					}
-					
+
 					if (columna.getTipo().byteValue() == ColumnaTipo.getTipoFloat().byteValue())
 					{
 						transaccionForm.setHayColumnaMonto(true);
@@ -204,10 +206,10 @@ public class ImportarTransaccionAction extends VgcAction
 			}
 		}
 		strategosIndicadoresService.close();
-		  
+
 		return mapping.findForward(forward);
 	}
-	
+
 	private void Verificar(HttpServletRequest request, TransaccionForm transaccionForm)
 	{
 	    if (transaccionForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePlano().byteValue())
@@ -221,7 +223,7 @@ public class ImportarTransaccionAction extends VgcAction
 	    		|| transaccionForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeSqlServer().byteValue())
 	    	ObtenerTablasBd(request, transaccionForm);
 	}
-	
+
 	private void VerificarTxt(HttpServletRequest request, TransaccionForm transaccionForm)
 	{
 	    String separador = transaccionForm.getSeparador();
@@ -231,14 +233,14 @@ public class ImportarTransaccionAction extends VgcAction
 
 	    FormFile archivo = (FormFile) transaccionForm.getMultipartRequestHandler().getFileElements().get("fileName");
 	    transaccionForm.setFileForm(archivo);
-	    
+
 	    String res = "";
-	    try 
+	    try
 	    {
 	    	entrada = new BufferedReader(new InputStreamReader(archivo.getInputStream()));
 	    	String linea;
 	    	boolean hayCampo = false;
-	    	while(entrada.ready()) 	    
+	    	while(entrada.ready())
 	    	{
 	    		linea = entrada.readLine();
 	    		indice = 0;
@@ -253,14 +255,14 @@ public class ImportarTransaccionAction extends VgcAction
 						linea = linea.substring(indice + 1, linea.length());
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							if (campo.equalsIgnoreCase(columna.getNombre()))
 							{
 								hayCampo = true;
 								break;
 							}
 						}
-						
+
 						if (hayCampo)
 							res = nombreCampo + (hayCampo ? "true" : "false") + ",";
 					}
@@ -268,29 +270,29 @@ public class ImportarTransaccionAction extends VgcAction
 					{
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							if (campo.equalsIgnoreCase(columna.getNombre()))
 							{
 								hayCampo = true;
 								break;
 							}
 						}
-						
+
 						if (hayCampo)
 							res = res + nombreCampo + "=" + (hayCampo ? "true" : "false") + ",";
 					}
-					
+
 					if (hayCampo)
 						break;
 				}
-				
+
 				if (hayCampo)
 					break;
 	    	}
-	    	
+
 	    	entrada.close();
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -300,19 +302,19 @@ public class ImportarTransaccionAction extends VgcAction
 	    transaccionForm.setRespuesta(res);
 	    transaccionForm.setBdStatusTabla(res);
 	}
-	
+
 	private void VerificarExcel2007(HttpServletRequest request, TransaccionForm transaccionForm)
 	{
 	    String res = "";
 	    String campo;
-	    
+
 	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = (FormFile) transaccionForm.getMultipartRequestHandler().getFileElements().get("fileName");
 	    	transaccionForm.setFileForm(archivo);
 	    	Workbook workbook = Workbook.getWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	Sheet sheet = workbook.getSheet(0);
 	    	Cell celda = null;
@@ -322,57 +324,57 @@ public class ImportarTransaccionAction extends VgcAction
 	    		for ( int j=0, k=sheet.getColumns(); j<k; j++ )
 	    		{
 	    			celda = sheet.getCell(j, i);
-	    			
+
 	    			// Obtenemos el contenido de la celda
 	    			campo = celda.getContents();
 	    			hayCampo = false;
 	    			String nombreCampo = campo;
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						if (campo.equalsIgnoreCase(columna.getNombre()))
 						{
 							hayCampo = true;
 							break;
 						}
 					}
-					
+
 					if (!nombreCampo.equals(""))
 						res = res + nombreCampo + "=" + (hayCampo ? "true" : "false") + ",";
 	    		}
-	    		
+
 	    		if (!res.equals(""))
 	    			break;
 	    	}
-	    	
+
 	    	workbook.close();
 	    }
-	    catch(Exception e) 
+	    catch(Exception e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
-	    }	        
+	    }
 
 	    transaccionForm.setStatus(ImportarStatus.getImportarStatusValidado());
 	    transaccionForm.setRespuesta(res);
 	    transaccionForm.setBdStatusTabla(res);
 	}
-	
+
 	private void VerificarExcel2010(HttpServletRequest request, TransaccionForm transaccionForm)
 	{
 	    String res = "";
 	    String campo;
-	    
+
 	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = (FormFile) transaccionForm.getMultipartRequestHandler().getFileElements().get("fileName");
 	    	transaccionForm.setFileForm(archivo);
 	    	XSSFWorkbook workBook = new XSSFWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	XSSFSheet hssfSheet = workBook.getSheetAt(0);
-	    	
+
 	    	Iterator<Row> rowIterator = hssfSheet.rowIterator();
 	    	boolean hayCampo = false;
 	    	while (rowIterator.hasNext())
@@ -389,14 +391,14 @@ public class ImportarTransaccionAction extends VgcAction
 	    			String nombreCampo = campo;
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						if (campo.equalsIgnoreCase(columna.getNombre()))
 						{
 							hayCampo = true;
 							break;
 						}
 					}
-					
+
 					if (!nombreCampo.equals(""))
 						res = res + nombreCampo + '=' + (hayCampo ? "true" : "false") + ",";
 		    	}
@@ -404,17 +406,17 @@ public class ImportarTransaccionAction extends VgcAction
 					break;
 	    	}
 	    }
-	    catch(Exception e) 
+	    catch(Exception e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
-	    }	        
+	    }
 
 	    transaccionForm.setStatus(ImportarStatus.getImportarStatusValidado());
 	    transaccionForm.setRespuesta(res);
 	    transaccionForm.setBdStatusTabla(res);
 	}
-	
+
 	private void ObtenerTablasBd(HttpServletRequest request, TransaccionForm transaccionForm)
 	{
 		String tablas = null;
@@ -427,7 +429,7 @@ public class ImportarTransaccionAction extends VgcAction
 		Boolean verificarTabla = Boolean.parseBoolean(request.getParameter("verificarTabla"));
 		if (transaccionForm.getBdPassword() == null || transaccionForm.getBdPassword().equals("") || (transaccionForm.getBdPassword() != null && !transaccionForm.getBdPassword().equals(request.getParameter("password"))))
 			transaccionForm.setBdPasswrod(request.getParameter("password"));
-		
+
 		if (transaccionForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePostGreSQL().byteValue())
 		{
 			driver = "org.postgresql.Driver";
@@ -446,10 +448,10 @@ public class ImportarTransaccionAction extends VgcAction
 			url ="jdbc:sqlserver://" + transaccionForm.getBdServidor() + ":" + transaccionForm.getBdPuerto() + ";databaseName=" + transaccionForm.getBdNombre() + ";user=" + transaccionForm.getBdUsuario() + ";password=" + transaccionForm.getBdPassword() + ";";
 			sql = "SELECT name AS TBNAME FROM sysobjects WHERE (type = 'U' OR type = 'V') ORDER BY name";
 		}
-	    
-		Boolean conexionExitosa = false;
+
+		boolean conexionExitosa = false;
 		boolean hayCampo = false;
-	    try 
+	    try
 	    {
 	    	Class.forName(driver);
 	    	cn = DriverManager.getConnection(url, transaccionForm.getBdUsuario(), transaccionForm.getBdPassword());
@@ -457,14 +459,14 @@ public class ImportarTransaccionAction extends VgcAction
 	    	Statement stm = cn.createStatement();
 
 	    	ResultSet rs = stm.executeQuery(sql);
-			
+
 	    	tablas = "";
-			while (rs.next()) 
+			while (rs.next())
 			{
 				if (tablas != null && !tablas.equals(""))
 					tablas = tablas + "|";
 				tablas = tablas + rs.getString("TBNAME");
-			}	    	
+			}
 			rs.close();
 
 			if (verificarTabla)
@@ -477,32 +479,32 @@ public class ImportarTransaccionAction extends VgcAction
 					sql = "SELECT COLUMN_NAME AS columnName FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + transaccionForm.getBdTabla().toUpperCase() + "'";
 
 				rs = stm.executeQuery(sql);
-				
-				while (rs.next()) 
+
+				while (rs.next())
 				{
 					String campo = rs.getString("columnName");
 	    			hayCampo = false;
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						if (campo.equalsIgnoreCase(columna.getNombre()))
 						{
 							hayCampo = true;
 							break;
 						}
 					}
-				}	    	
+				}
 				rs.close();
 			}
-			
+
 			stm.close();
 	    	cn.close();
 	    	cn = null;
 	    }
-    	catch (Exception e2) 
+    	catch (Exception e2)
     	{
     	}
-	    
+
 	    transaccionForm.setStatus(ImportarStatus.getImportarStatusValidado());
 	    if (!conexionExitosa)
 	    {
@@ -529,12 +531,12 @@ public class ImportarTransaccionAction extends VgcAction
 		    transaccionForm.setRespuesta(respuesta);
 	    }
 	}
-	
+
 	private int Importar(HttpServletRequest request, TransaccionForm transaccionForm) throws Exception
 	{
 	    StringBuffer log = new StringBuffer();
 	    int respuesta = 10000;
-	    
+
 	    VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.transaccion.log.titulocalculo") + "\n");
 
@@ -543,7 +545,7 @@ public class ImportarTransaccionAction extends VgcAction
 	    argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
 	    argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.transaccion.log.fechainiciocalculo", argsReemplazo) + "\n\n");
-	    
+
 	    if (transaccionForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePlano().byteValue())
 	    	respuesta = BuscarDatosTxt(request, log, messageResources, transaccionForm);
 	    else if (transaccionForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeExcel().byteValue() && transaccionForm.getExcelTipo().byteValue() == 0)
@@ -562,12 +564,12 @@ public class ImportarTransaccionAction extends VgcAction
 	    log.append("\n\n");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.transaccion.log.fechafin.programada", argsReemplazo) + "\n\n");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.transaccion.log.success.programada") + "\n\n");
-	    
+
 	    request.getSession().setAttribute("verArchivoLog", log);
-	    
+
 	    return respuesta;
 	}
-	
+
 	private int BuscarDatosTxt(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, TransaccionForm transaccionForm) throws Exception
 	{
 	    int indice;
@@ -575,17 +577,17 @@ public class ImportarTransaccionAction extends VgcAction
 	    Integer posicion = 0;
 	    Integer numeroCampos = 0;
 	    int respuesta = 10000;
-		
+
 	    FormFile archivo = transaccionForm.getFileForm();
     	ActionMessages messages = getMessages(request);
-    	
+
 	    BufferedReader entrada;
 	    String res;
-	    try 
+	    try
 	    {
 	    	entrada = new BufferedReader(new InputStreamReader(archivo.getInputStream()));
 	    	String linea;
-	    
+
 	    	while(entrada.ready())
 	    	{
 	    		linea = entrada.readLine();
@@ -601,7 +603,7 @@ public class ImportarTransaccionAction extends VgcAction
 						linea = linea.substring(indice + 1, linea.length());
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							if (campo.equalsIgnoreCase(columna.getNombre()))
 							{
 								numeroCampos++;
@@ -615,7 +617,7 @@ public class ImportarTransaccionAction extends VgcAction
 						posicion++;
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							if (campo.equalsIgnoreCase(columna.getNombre()))
 							{
 								numeroCampos++;
@@ -624,19 +626,19 @@ public class ImportarTransaccionAction extends VgcAction
 							}
 						}
 					}
-					
+
 					if (numeroCampos.intValue() == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 						break;
 				}
 	    	}
-	    	
+
 	    	entrada.close();
-	    	
+
 	    	if (numeroCampos.intValue() == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 	    	{
 	    		List<List<ObjetoClaveValor>> datos = new ArrayList<List<ObjetoClaveValor>>();
 	    		List<ObjetoClaveValor> campos = new ArrayList<ObjetoClaveValor>();
-		    
+
 		    	entrada = new BufferedReader(new InputStreamReader(archivo.getInputStream()));
 		    	while(entrada.ready())
 		    	{
@@ -656,7 +658,7 @@ public class ImportarTransaccionAction extends VgcAction
 
 							for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 							{
-								Columna columna = (Columna)col.next();
+								Columna columna = col.next();
 								if (posicion == columna.getPosicionArchivo() && !columna.getNombre().equalsIgnoreCase(campo))
 								{
 									numeroCampos++;
@@ -670,7 +672,7 @@ public class ImportarTransaccionAction extends VgcAction
 							posicion++;
 							for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 							{
-								Columna columna = (Columna)col.next();
+								Columna columna = col.next();
 								if (posicion == columna.getPosicionArchivo() && !columna.getNombre().equalsIgnoreCase(linea))
 								{
 									numeroCampos++;
@@ -679,18 +681,18 @@ public class ImportarTransaccionAction extends VgcAction
 								}
 							}
 						}
-						
+
 						if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 							break;
 					}
-					
+
 					if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 					{
 						campos = new ArrayList<ObjetoClaveValor>();
-						ObjetoClaveValor c = null; 
+						ObjetoClaveValor c = null;
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							c = new ObjetoClaveValor();
 							c.setClave(columna.getNombre());
 							c.setValor(columna.getValorArchivo());
@@ -699,9 +701,9 @@ public class ImportarTransaccionAction extends VgcAction
 						datos.add(campos);
 					}
 		    	}
-		    	
+
 		    	entrada.close();
-		    	
+
 				if (datos.size() > 0)
 					respuesta = Importar(request, log, messageResources, datos, transaccionForm);
 				else
@@ -712,7 +714,7 @@ public class ImportarTransaccionAction extends VgcAction
 				}
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -725,13 +727,13 @@ public class ImportarTransaccionAction extends VgcAction
 	    	transaccionForm.setStatus(ImportarStatus.getImportarStatusImportado());
 	    	transaccionForm.setRespuesta(res);
 	    }
-	    
+
 	    if (transaccionForm.getRespuesta().equals("Error"))
 	    {
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.transaccion.fin.importar.archivo.error"));
 		    saveMessages(request, messages);
 	    }
-	    
+
 	    return respuesta;
 	}
 
@@ -741,16 +743,16 @@ public class ImportarTransaccionAction extends VgcAction
 	    Integer posicion = 0;
 	    Integer numeroCampos = 0;
 	    int respuesta = 10000;
-		
+
 	    String res = "";
     	ActionMessages messages = getMessages(request);
-    	
-	    try 
+
+	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = transaccionForm.getFileForm();
 	    	Workbook workbook = Workbook.getWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	Sheet sheet = workbook.getSheet(0);
 	    	Cell celda = null;
@@ -760,12 +762,12 @@ public class ImportarTransaccionAction extends VgcAction
 	    		for ( int j=0, k=sheet.getColumns(); j<k; j++ )
 	    		{
 	    			celda = sheet.getCell(j, i);
-	    			
+
 	    			// Obtenemos el contenido de la celda
 	    			campo = celda.getContents();
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						if (campo.equalsIgnoreCase(columna.getNombre()))
 						{
 							numeroCampos++;
@@ -782,7 +784,7 @@ public class ImportarTransaccionAction extends VgcAction
 	    		if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 					break;
 	    	}
-	    	
+
 	    	workbook.close();
 
 	    	if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
@@ -792,7 +794,7 @@ public class ImportarTransaccionAction extends VgcAction
 
 		    	// Lo primero es leer un workbook que representa todo el documento XLS
 		    	workbook = Workbook.getWorkbook(archivo.getInputStream());
-		    	
+
 		    	//Elegimos la primera hoja
 		    	sheet = workbook.getSheet(0);
 		    	celda = null;
@@ -807,7 +809,7 @@ public class ImportarTransaccionAction extends VgcAction
 		    			campo = celda.getContents();
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							if ((j + 1) == columna.getPosicionArchivo() && !columna.getNombre().equalsIgnoreCase(campo))
 							{
 								numeroCampos++;
@@ -815,18 +817,18 @@ public class ImportarTransaccionAction extends VgcAction
 								break;
 							}
 						}
-		    			
+
 						if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 							break;
 					}
-		    	
+
 		    		if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 					{
 						campos = new ArrayList<ObjetoClaveValor>();
-						ObjetoClaveValor c = null; 
+						ObjetoClaveValor c = null;
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							c = new ObjetoClaveValor();
 							c.setClave(columna.getNombre());
 							c.setValor(columna.getValorArchivo());
@@ -835,9 +837,9 @@ public class ImportarTransaccionAction extends VgcAction
 						datos.add(campos);
 					}
 		    	}
-		    	
+
 		    	workbook.close();
-		    	
+
 				if (datos.size() > 0)
 					respuesta = Importar(request, log, messageResources, datos, transaccionForm);
 				else
@@ -848,7 +850,7 @@ public class ImportarTransaccionAction extends VgcAction
 				}
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -861,34 +863,34 @@ public class ImportarTransaccionAction extends VgcAction
 	    	transaccionForm.setStatus(ImportarStatus.getImportarStatusImportado());
 	    	transaccionForm.setRespuesta(res);
 	    }
-	    
+
 	    if (transaccionForm.getRespuesta().equals("Error"))
 	    {
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.transaccion.fin.importar.archivo.error"));
 		    saveMessages(request, messages);
 	    }
-	    
+
 	    return respuesta;
 	}
-	
+
 	private int BuscarDatosExcel2010(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, TransaccionForm transaccionForm) throws Exception
 	{
 	    String campo = "";
 	    int respuesta = 10000;
 	    Integer numeroCampos = 0;
-		
+
 	    String res = "";
     	ActionMessages messages = getMessages(request);
-    	
-	    try 
+
+	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = transaccionForm.getFileForm();
 	    	XSSFWorkbook workBook = new XSSFWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	XSSFSheet hssfSheet = workBook.getSheetAt(0);
-	    	for (Iterator<Row> i = hssfSheet.rowIterator(); i.hasNext(); ) 
+	    	for (Iterator<Row> i = hssfSheet.rowIterator(); i.hasNext(); )
             {
             	XSSFRow hssfRow = (XSSFRow)i.next();
             	numeroCampos = 0;
@@ -898,7 +900,7 @@ public class ImportarTransaccionAction extends VgcAction
             		campo = hssfCell.toString();
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						if (campo.equalsIgnoreCase(columna.getNombre()))
 						{
 							numeroCampos++;
@@ -909,21 +911,21 @@ public class ImportarTransaccionAction extends VgcAction
 
 					if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 						break;
-            		
+
             	}
-            	
+
             	if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 					break;
             }
-	    			
+
 	    	if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 	    	{
 	    		List<List<ObjetoClaveValor>> datos = new ArrayList<List<ObjetoClaveValor>>();
 	    		List<ObjetoClaveValor> campos = new ArrayList<ObjetoClaveValor>();
-		    
+
 		    	// Lo primero es leer un workbook que representa todo el documento XLS
 		    	workBook = new XSSFWorkbook(archivo.getInputStream());
-		    	
+
 		    	//Elegimos la primera hoja
 		    	hssfSheet = workBook.getSheetAt(0);
 		    	for (Iterator<Row> i = hssfSheet.rowIterator(); i.hasNext(); )
@@ -933,10 +935,10 @@ public class ImportarTransaccionAction extends VgcAction
 			    	for (Iterator<org.apache.poi.ss.usermodel.Cell> j = hssfRow.cellIterator(); j.hasNext(); )
 		    		{
 			    		XSSFCell hssfCell = (XSSFCell) j.next();
-			    		
+
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							if (hssfCell.getColumnIndex() == columna.getPosicionArchivo() && !columna.getNombre().equalsIgnoreCase(hssfCell.toString()))
 							{
 								numeroCampos++;
@@ -944,18 +946,18 @@ public class ImportarTransaccionAction extends VgcAction
 								break;
 							}
 						}
-		    			
+
 						if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 							break;
 					}
-		    	
+
 			    	if (numeroCampos == transaccionForm.getTransaccion().getTabla().getColumnas().size())
 					{
 						campos = new ArrayList<ObjetoClaveValor>();
-						ObjetoClaveValor c = null; 
+						ObjetoClaveValor c = null;
 						for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 						{
-							Columna columna = (Columna)col.next();
+							Columna columna = col.next();
 							c = new ObjetoClaveValor();
 							c.setClave(columna.getNombre());
 							c.setValor(columna.getValorArchivo());
@@ -964,7 +966,7 @@ public class ImportarTransaccionAction extends VgcAction
 						datos.add(campos);
 					}
 		    	}
-		    	
+
 				if (datos.size() > 0)
 					respuesta = Importar(request, log, messageResources, datos, transaccionForm);
 				else
@@ -975,7 +977,7 @@ public class ImportarTransaccionAction extends VgcAction
 				}
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -988,16 +990,16 @@ public class ImportarTransaccionAction extends VgcAction
 	    	transaccionForm.setStatus(ImportarStatus.getImportarStatusImportado());
 	    	transaccionForm.setRespuesta(res);
 	    }
-	    
+
 	    if (transaccionForm.getRespuesta().equals("Error"))
 	    {
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.transaccion.fin.importar.archivo.error"));
 		    saveMessages(request, messages);
 	    }
-	    
+
 	    return respuesta;
 	}
-	
+
 	private int BuscarDatosBd(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, TransaccionForm transaccionForm) throws Exception
 	{
 		ActionMessages messages = getMessages(request);
@@ -1007,10 +1009,10 @@ public class ImportarTransaccionAction extends VgcAction
 		String url = null;
 		String sql = null;
 		int respuesta = 10000;
-		
+
 		if (transaccionForm.getBdPassword() == null || transaccionForm.getBdPassword().equals(""))
 			transaccionForm.setBdPasswrod(request.getParameter("password"));
-		
+
 		if (transaccionForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePostGreSQL().byteValue())
 		{
 			driver = "org.postgresql.Driver";
@@ -1026,9 +1028,9 @@ public class ImportarTransaccionAction extends VgcAction
 			driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 			url ="jdbc:sqlserver://" + transaccionForm.getBdServidor() + ":" + transaccionForm.getBdPuerto() + ";databaseName=" + transaccionForm.getBdNombre() + ";user=" + transaccionForm.getBdUsuario() + ";password=" + transaccionForm.getBdPassword() + ";";
 		}
-	    
-		Boolean conexionExitosa = false;
-	    try 
+
+		boolean conexionExitosa = false;
+	    try
 	    {
 	    	Class.forName(driver);
 	    	cn = DriverManager.getConnection(url, transaccionForm.getBdUsuario(), transaccionForm.getBdPassword());
@@ -1036,11 +1038,11 @@ public class ImportarTransaccionAction extends VgcAction
 	    	Statement stm = cn.createStatement();
 
 	    	sql = "SELECT COUNT(*) AS Rec_Count FROM " + transaccionForm.getBdTabla();
-	    	
+
 	    	ResultSet rs = stm.executeQuery(sql);
-			
+
 	    	int filas = 0;
-			while (rs.next()) 
+			while (rs.next())
 				filas = rs.getInt("Rec_Count");
 			rs.close();
 
@@ -1050,33 +1052,33 @@ public class ImportarTransaccionAction extends VgcAction
 			{
 	    		datos = new ArrayList<List<ObjetoClaveValor>>();
 	    		campos = new ArrayList<ObjetoClaveValor>();
-	    	    
+
 		    	sql = "SELECT codigo, ano, periodo, medicion FROM " + transaccionForm.getBdTabla();
-		    	
+
 		    	rs = stm.executeQuery(sql);
 
 		    	filas = 0;
-				while (rs.next()) 
+				while (rs.next())
 				{
 					campos = new ArrayList<ObjetoClaveValor>();
-					ObjetoClaveValor c = null; 
+					ObjetoClaveValor c = null;
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						c = new ObjetoClaveValor();
 						c.setClave(columna.getNombre());
 						c.setValor(rs.getString(columna.getNombre()));
 						campos.add(c);
 					}
 					datos.add(campos);
-				}	    	
+				}
 				rs.close();
 			}
 
 			stm.close();
 	    	cn.close();
 	    	cn = null;
-	    	
+
 	    	if (datos != null)
 	    		respuesta = Importar(request, log, messageResources, datos, transaccionForm);
 	    	else
@@ -1086,7 +1088,7 @@ public class ImportarTransaccionAction extends VgcAction
 			    saveMessages(request, messages);
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 
@@ -1109,50 +1111,50 @@ public class ImportarTransaccionAction extends VgcAction
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.transaccion.fin.importar.archivo.error"));
 		    saveMessages(request, messages);
 	    }
-	    
+
 	    return respuesta;
 	}
 
 	private String getValue(XSSFCell hssfCell)
 	{
 		String value = "";
-		
-		if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_STRING) 
-			value = hssfCell.toString(); 
-		else if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC || hssfCell.getCellType() == XSSFCell.CELL_TYPE_FORMULA) 
-		{ 
+
+		if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING)
+			value = hssfCell.toString();
+		else if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC || hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA)
+		{
 			Double valor = hssfCell.getNumericCellValue();
-			value = valor.toString(); 
+			value = valor.toString();
 		}
-		
+
 		return value;
 	}
-	
+
 	private String getValue(Cell celda)
 	{
 		String value = "";
-		
-		if (celda.getType() == CellType.LABEL) 
-		{ 
-			LabelCell lc = (LabelCell) celda; 
-			value = lc.getString(); 
+
+		if (celda.getType() == CellType.LABEL)
+		{
+			LabelCell lc = (LabelCell) celda;
+			value = lc.getString();
 		}
-		else if (celda.getType() == CellType.NUMBER || celda.getType() == CellType.NUMBER_FORMULA) 
-		{ 
+		else if (celda.getType() == CellType.NUMBER || celda.getType() == CellType.NUMBER_FORMULA)
+		{
 			NumberCell nc = (NumberCell) celda;
 			Double valor = nc.getValue();
-			value = valor.toString(); 
+			value = valor.toString();
 		}
-		else if (celda.getType() == CellType.DATE) 
-		{ 
+		else if (celda.getType() == CellType.DATE)
+		{
 			DateCell dc = (DateCell) celda;
 			Date valor = dc.getDate();
-			value = valor.toString(); 
-		} 		
-		
+			value = valor.toString();
+		}
+
 		return value;
 	}
-	
+
 	private int Importar(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, List<List<ObjetoClaveValor>> datos, TransaccionForm transaccionForm) throws Exception
 	{
     	ActionMessages messages = getMessages(request);
@@ -1172,7 +1174,7 @@ public class ImportarTransaccionAction extends VgcAction
 			{
 				for (Iterator<Columna> col = transaccion.getTabla().getColumnas().iterator(); col.hasNext(); )
 				{
-					Columna columna = (Columna)col.next();
+					Columna columna = col.next();
 					if (columna.getTipo().byteValue() == ColumnaTipo.getTipoFloat().byteValue())
 					{
 						columna.setIndicadorId(transaccionForm.getIndicadorMontoId());
@@ -1189,11 +1191,11 @@ public class ImportarTransaccionAction extends VgcAction
 			if (respuesta == 10000)
 			{
 				ServicioForm servicio = new ServicioForm();
-				
+
 				FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 				Configuracion configuracion = frameworkService.getConfiguracion("Strategos.Servicios.Configuracion");
 				frameworkService.close();
-				
+
 				if (configuracion == null)
 				{
 					transaccionForm.setStatus(ImportarStatus.getImportarStatusNoConfigurado());
@@ -1203,14 +1205,14 @@ public class ImportarTransaccionAction extends VgcAction
 				else
 				{
 					//XML
-					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-			        DocumentBuilder db = dbf.newDocumentBuilder(); 
-			        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8"))); 
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			        DocumentBuilder db = dbf.newDocumentBuilder();
+			        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8")));
 			        doc.getDocumentElement().normalize();
 					NodeList nList = doc.getElementsByTagName("properties");
 					Element eElement = (Element) nList.item(0);
 					/** Se obtiene el FormBean haciendo el casting respectivo */
-					String url = VgcAbstractService.getTagValue("url", eElement);;
+					String url = VgcAbstractService.getTagValue("url", eElement);
 					String driver = VgcAbstractService.getTagValue("driver", eElement);
 					String user = VgcAbstractService.getTagValue("user", eElement);
 					String password = VgcAbstractService.getTagValue("password", eElement);
@@ -1237,7 +1239,7 @@ public class ImportarTransaccionAction extends VgcAction
 						servicio.setProperty("numeroEjecucion", ((Integer)(1)).toString());
 						servicio.setProperty("usuarioId", usuario.getUsuarioId().toString());
 						servicio.setProperty("calcular", ((Boolean)(true)).toString());
-						
+
 						StringBuffer logBefore = log;
 						respuesta = new com.visiongc.servicio.strategos.importar.ImportarManager(servicio.Get(), log, com.visiongc.servicio.web.importar.util.VgcMessageResources.getVgcMessageResources("StrategosWeb")).Ejecutar(datos, transaccion);
 
@@ -1261,7 +1263,7 @@ public class ImportarTransaccionAction extends VgcAction
 				}
 			}
 		}
-		
+
 		return respuesta;
 	}
 }

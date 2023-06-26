@@ -1,5 +1,9 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.forms;
 
+import java.util.Calendar;
+import java.util.List;
+
+import com.visiongc.app.strategos.cargos.model.Cargos;
 import com.visiongc.app.strategos.indicadores.model.util.TipoMedicion;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus.EstatusType;
@@ -9,13 +13,11 @@ import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Calendar;
-import java.util.List;
 
 public class EditarIniciativaForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private final String SEPARADOR = "|+|";
 	private String nombreIniciativaSingular;
 	private Long iniciativaId;
@@ -69,9 +71,9 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private List<TipoProyecto> tipos;
 	private Boolean desdeInstrumento;
 	private Long instrumentoId;
-	
+
 	//Campos nuevos
-	private String responsableProyecto;	
+	private String responsableProyecto;
 	private String cargoResponsable;
 	private String organizacionesInvolucradas;
 	private String objetivoEstrategico;
@@ -87,7 +89,10 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private String objetivoGeneral;
 	private String objetivoEspecificos;
 	
-		
+	private Long cargoId;
+	private List<Cargos> cargos;
+
+
     public Long getInstrumentoId() {
 		return instrumentoId;
 	}
@@ -103,7 +108,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	public void setTipos(List<TipoProyecto> tipos) {
 		this.tipos = tipos;
 	}
-	
+
 	public Long getTipoId() {
 		return tipoId;
 	}
@@ -212,7 +217,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
   public void setNombre(String nombre) {
     this.nombre = nombre;
   }
-  
+
   public String getAnioFormulacion() {
 	    return this.anioFormulacion;
   }
@@ -420,112 +425,112 @@ public class EditarIniciativaForm extends EditarObjetoForm
   public void setNombreObjetoIniciativa(String nombreObjetoIniciativa) {
     this.nombreObjetoIniciativa = nombreObjetoIniciativa;
   }
-  
-  public String getSeriesIndicador() 
+
+  public String getSeriesIndicador()
   {
     return this.seriesIndicador;
   }
 
-  public void setSeriesIndicador(String seriesIndicador) 
+  public void setSeriesIndicador(String seriesIndicador)
   {
     this.seriesIndicador = seriesIndicador;
   }
-  
-  public String getSeparadorSeries() 
+
+  public String getSeparadorSeries()
   {
     return new EditarIndicadorForm().getSeparadorSeries();
   }
-  
-	public Boolean getHayValorPorcentajeAmarillo() 
+
+	public Boolean getHayValorPorcentajeAmarillo()
 	{
 	  return this.hayValorPorcentajeAmarillo;
 	}
 
-	public void setHayValorPorcentajeAmarillo(Boolean hayValorPorcentajeAmarillo) 
+	public void setHayValorPorcentajeAmarillo(Boolean hayValorPorcentajeAmarillo)
 	{
 		this.hayValorPorcentajeAmarillo = hayValorPorcentajeAmarillo;
 	}
 
-	public Boolean getHayValorPorcentajeVerde() 
+	public Boolean getHayValorPorcentajeVerde()
 	{
 	  return this.hayValorPorcentajeVerde;
 	}
 
-	public void setHayValorPorcentajeVerde(Boolean hayValorPorcentajeVerde) 
+	public void setHayValorPorcentajeVerde(Boolean hayValorPorcentajeVerde)
 	{
 		this.hayValorPorcentajeVerde = hayValorPorcentajeVerde;
 	}
 
-  	public String getOrganizacionNombre() 
+  	public String getOrganizacionNombre()
   	{
   		return this.organizacionNombre;
   	}
 
-	public void setOrganizacionNombre(String organizacionNombre) 
+	public void setOrganizacionNombre(String organizacionNombre)
 	{
 		this.organizacionNombre = organizacionNombre;
 	}
-	
-  	public Byte getTipoMedicion() 
+
+  	public Byte getTipoMedicion()
   	{
 	  return this.tipoMedicion;
   	}
 
-  	public void setTipoMedicion(Byte tipoMedicion) 
+  	public void setTipoMedicion(Byte tipoMedicion)
   	{
 	  this.tipoMedicion = tipoMedicion;
   	}
 
-  	public Boolean getEliminarMediciones() 
+  	public Boolean getEliminarMediciones()
   	{
   		return this.eliminarMediciones;
   	}
 
-  	public void setEliminarMediciones(Boolean eliminarMediciones) 
+  	public void setEliminarMediciones(Boolean eliminarMediciones)
   	{
   		this.eliminarMediciones = eliminarMediciones;
   	}
 
-	public Long getEstatusId() 
+	public Long getEstatusId()
 	{
 		return this.estatusId;
-	}	
+	}
 
-	public void setEstatusId(Long estatusId) 
+	public void setEstatusId(Long estatusId)
 	{
 		this.estatusId = estatusId;
 	}
-	
-	public IniciativaEstatus getEstatus() 
+
+	public IniciativaEstatus getEstatus()
 	{
 		return this.estatus;
-	}	
+	}
 
-	public void setEstatus(IniciativaEstatus estatus) 
+	public void setEstatus(IniciativaEstatus estatus)
 	{
 		this.estatus = estatus;
 	}
 
-	public List<IniciativaEstatus> getEstatuses() 
+	public List<IniciativaEstatus> getEstatuses()
 	{
 		return this.estatuses;
-	}	
+	}
 
-	public void setEstatuses(List<IniciativaEstatus> estatuses) 
+	public void setEstatuses(List<IniciativaEstatus> estatuses)
 	{
 		this.estatuses = estatuses;
 	}
-	
-	public Double getPorcentajeCompletado() 
+
+	public Double getPorcentajeCompletado()
 	{
 	    return this.porcentajeCompletado;
 	}
 
-	public void setPorcentajeCompletado(Double porcentajeCompletado) 
+	public void setPorcentajeCompletado(Double porcentajeCompletado)
 	{
 	    this.porcentajeCompletado = porcentajeCompletado;
 	}
-		
+
   	public Boolean getDesdeInstrumento() {
 		return desdeInstrumento;
 	}
@@ -533,7 +538,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	public void setDesdeInstrumento(Boolean desdeInstrumento) {
 		this.desdeInstrumento = desdeInstrumento;
 	}
-	
+
 	public String getResponsableProyecto() {
 		return responsableProyecto;
 	}
@@ -655,6 +660,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	}
 
 
+	@Override
 	public void clear()
 	{
 		Calendar fechaActual = Calendar.getInstance();
@@ -683,7 +689,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		int anoTemp = anoActual - 5;
 		int anoFinal = anoActual + 5;
 		String resultadosEspecificos = "";
-		while (anoTemp < anoFinal) 
+		while (anoTemp < anoFinal)
 		{
 			resultadosEspecificos = resultadosEspecificos + "|+|";
 			anoTemp++;
@@ -701,7 +707,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.tipoProyecto = new TipoProyecto();
 		this.porcentajeCompletado = null;
 		this.desdeInstrumento = false;
-		
+
 		this.responsableProyecto = null;
 		this.cargoResponsable = null;
 		this.organizacionesInvolucradas = null;
@@ -717,7 +723,26 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.alcance = null;
 		this.objetivoGeneral = null;
 		this.objetivoEspecificos = null;
-				
-		this.seriesIndicador = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries() + SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();    
+		
+		this.cargoId = new Long(0L);
+		this.cargos = null;
+
+		this.seriesIndicador = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries() + SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();
+	}
+
+	public Long getCargoId() {
+		return cargoId;
+	}
+
+	public void setCargoId(Long cargoId) {
+		this.cargoId = cargoId;
+	}
+
+	public List<?> getCargos() {
+		return cargos;
+	}
+
+	public void setCargos(List<Cargos> cargos) {
+		this.cargos = cargos;
 	}
 }

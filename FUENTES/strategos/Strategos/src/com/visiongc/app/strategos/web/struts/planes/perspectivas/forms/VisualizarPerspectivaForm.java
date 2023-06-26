@@ -1,15 +1,16 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.forms;
 
+import org.apache.struts.action.ActionForm;
+
 import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
 import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.util.TipoCalculoPerspectiva;
-import org.apache.struts.action.ActionForm;
 
 public class VisualizarPerspectivaForm extends ActionForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long perspectivaId;
 	private Long planId;
 	private Long responsableId;
@@ -61,7 +62,7 @@ public class VisualizarPerspectivaForm extends ActionForm
   		return this.respuesta;
   	}
 
-  	public void setRespuesta(String respuesta) 
+  	public void setRespuesta(String respuesta)
   	{
   		this.respuesta = respuesta;
   	}
@@ -71,7 +72,7 @@ public class VisualizarPerspectivaForm extends ActionForm
   		return this.perspectivaId;
   	}
 
-  	public void setPerspectivaId(Long perspectivaId) 
+  	public void setPerspectivaId(Long perspectivaId)
   	{
   		this.perspectivaId = perspectivaId;
   	}
@@ -376,72 +377,72 @@ public class VisualizarPerspectivaForm extends ActionForm
     return this.evaluacion;
   }
 
-  	public void setEvaluacion(String evaluacion) 
+  	public void setEvaluacion(String evaluacion)
   	{
   		this.evaluacion = evaluacion;
   	}
 
-  	public Integer getNivel() 
+  	public Integer getNivel()
   	{
   		return this.nivel;
   	}
 
-  	public void setNivel(Integer nivel) 
+  	public void setNivel(Integer nivel)
   	{
   		this.nivel = nivel;
-  	}	
+  	}
 
-  	public String getNombreObjetoPerspectiva() 
+  	public String getNombreObjetoPerspectiva()
   	{
   		return this.nombreObjetoPerspectiva;
   	}
 
-  	public void setNombreObjetoPerspectiva(String nombreObjetoPerspectiva) 
+  	public void setNombreObjetoPerspectiva(String nombreObjetoPerspectiva)
   	{
   		this.nombreObjetoPerspectiva = nombreObjetoPerspectiva;
   	}
 
-  	public PlantillaPlanes getPlantillaPlan() 
+  	public PlantillaPlanes getPlantillaPlan()
   	{
   		return this.plantillaPlan;
-  	}	
+  	}
 
-  	public void setPlantillaPlan(PlantillaPlanes plantillaPlan) 
+  	public void setPlantillaPlan(PlantillaPlanes plantillaPlan)
   	{
   		this.plantillaPlan = plantillaPlan;
   	}
 
-  	public Plan getPlan() 
+  	public Plan getPlan()
   	{
   		return this.plan;
   	}
 
-  	public void setPlan(Plan plan) 
+  	public void setPlan(Plan plan)
   	{
   		this.plan = plan;
   	}
 
-  	public Byte getTipoVista() 
+  	public Byte getTipoVista()
   	{
   		return this.tipoVista;
   	}
 
-  	public void setTipoVista(Byte tipoVista) 
+  	public void setTipoVista(Byte tipoVista)
   	{
   		this.tipoVista = tipoVista;
   	}
 
-  	public Boolean getVinculoCausaEfecto() 
+  	public Boolean getVinculoCausaEfecto()
   	{
   		return this.vinculoCausaEfecto;
   	}
 
-  	public void setVinculoCausaEfecto(Boolean vinculoCausaEfecto) 
+  	public void setVinculoCausaEfecto(Boolean vinculoCausaEfecto)
   	{
   		this.vinculoCausaEfecto = vinculoCausaEfecto;
   	}
-  	
-  	public Byte getIndicadorNaturalezaFormula() 
+
+  	public Byte getIndicadorNaturalezaFormula()
   	{
   		return Naturaleza.getNaturalezaFormula();
   	}

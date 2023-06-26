@@ -1,10 +1,11 @@
 package com.visiongc.app.strategos.web.struts;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.visiongc.commons.MapStrutsActionRight;
 import com.visiongc.commons.struts.StrutsActionRight;
 import com.visiongc.commons.util.lang.ChainedRuntimeException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 {
@@ -16,7 +17,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    instance = this;
 	    this.mapa = new HashMap<String, StrutsActionRight>();
 	    StrutsActionRight actionRight = null;
-	    
+
 	    // ---------------------------------------------
 	    // Organizacion
 	    // ---------------------------------------------
@@ -61,31 +62,31 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("organizaciones.moverorganizacion", actionRight);
 	    actionRight = new StrutsActionRight("organizaciones.guardarmoverorganizacion", false, false, "ORGANIZACION_MOVE");
 	    this.mapa.put("organizaciones.guardarmoverorganizacion", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("organizaciones.gestionarindicadores", true, false, "ORGANIZACION");
 	    this.mapa.put("organizaciones.gestionarindicadores", actionRight);
 	    actionRight = new StrutsActionRight("organizaciones.gestionariniciativas", true, false, "ORGANIZACION");
 	    this.mapa.put("organizaciones.gestionariniciativas", actionRight);
-	    
+
 	    // Calcular Iniciativas
 	    actionRight = new StrutsActionRight("iniciativas.configurarcalculoiniciativas", false, false, "ORGANIZACION_CALCULAR_INICIATIVA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("iniciativas.calculariniciativas", false, false, "ORGANIZACION_CALCULAR_INICIATIVA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("configuracion.validarconfiguracionpagina", true, false, "CONFIGURACION_PAGINA");
 	    this.mapa.put("configuracion.validarconfiguracionpagina", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("configuracion.salvarconfiguracionservicio", true, false, "CONFIGURACION_PAGINA");
 	    this.mapa.put("configuracion.salvarconfiguracionservicio", actionRight);
 	    actionRight = new StrutsActionRight("configuracion.configuracionservicio", true, false, "CONFIGURACION_PAGINA");
 	    this.mapa.put("configuracion.configuracionservicio", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("configuracion.salvarcorreoiniciativa", true, false, "CONFIGURACION_PAGINA");
 	    this.mapa.put("configuracion.salvarcorreoiniciativa", actionRight);
-	    
-	    
-	    
+
+
+
 	    actionRight = new StrutsActionRight("unidadesmedida.gestionarunidadesmedida", false, false, "UNIDAD");
 	    this.mapa.put("unidadesmedida.gestionarunidadesmedida", actionRight);
 	    actionRight = new StrutsActionRight("unidadesmedida.crearunidadmedida", false, false, "UNIDAD_ADD");
@@ -102,7 +103,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("unidadesmedida.generarreporteunidadesmedida", actionRight);
 	    actionRight = new StrutsActionRight("unidadesmedida.seleccionarunidadesmedida", true, false, "UNIDAD");
 	    this.mapa.put("unidadesmedida.seleccionarunidadesmedida", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("causas.gestionarcausas", false, false, "CAUSA");
 	    this.mapa.put("causas.gestionarcausas", actionRight);
 	    actionRight = new StrutsActionRight("causas.crearcausa", false, false, "CAUSA_ADD");
@@ -119,7 +120,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("causas.generarreportecausas", actionRight);
 	    actionRight = new StrutsActionRight("causas.seleccionarcausas", true, false, "CAUSA");
 	    this.mapa.put("causas.seleccionarcausas", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("categoriasmedicion.gestionarcategoriasmedicion", false, false, "CATEGORIA");
 	    this.mapa.put("categoriasmedicion.gestionarcategoriasmedicion", actionRight);
 	    actionRight = new StrutsActionRight("categoriasmedicion.crearcategoriamedicion", false, false, "CATEGORIA_ADD");
@@ -136,7 +137,22 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("categoriasmedicion.generarreportecategoriasmedicion", actionRight);
 	    actionRight = new StrutsActionRight("categoriasmedicion.seleccionarcategoriasmedicion", true, false, "CATEGORIA");
 	    this.mapa.put("categoriasmedicion.seleccionarcategoriasmedicion", actionRight);
-	
+	    
+	    actionRight = new StrutsActionRight("cargos.gestionarcargos", false, false, "CARGOS");
+	    this.mapa.put("cargos.gestionarcargos", actionRight);
+	    actionRight = new StrutsActionRight("cargos.crearcargo", false, false, "CARGOS_ADD");
+	    this.mapa.put("cargos.crearcargo", actionRight);
+	    actionRight = new StrutsActionRight("cargos.modificarcargo", false, false, "CARGOS_EDIT");
+	    this.mapa.put("cargos.modificarcargo", actionRight);
+	    actionRight = new StrutsActionRight("cargos.eliminarcargo", false, false, "CARGOS_DELETE");
+	    this.mapa.put("cargos.eliminarcargo", actionRight);
+	    actionRight = new StrutsActionRight("cargos.guardarcargo", false, false, "CARGOS");
+	    this.mapa.put("cargos.guardarcargo", actionRight);
+	    actionRight = new StrutsActionRight("cargos.cancelarguardarcargo", false, false, "CARGOS");
+	    this.mapa.put("cargos.cancelarguardarcargo", actionRight);
+	    actionRight = new StrutsActionRight("cargos.seleccionarcargos", true, false, "CARGOS");
+	    this.mapa.put("cargos.seleccionarcargos", actionRight);
+
 	    actionRight = new StrutsActionRight("estadosacciones.gestionarestadosacciones", false, false, "ESTATUS");
 	    this.mapa.put("estadosacciones.gestionarestadosacciones", actionRight);
 	    actionRight = new StrutsActionRight("estadosacciones.crearestadoacciones", false, false, "ESTATUS_ADD");
@@ -155,7 +171,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("estadosacciones.seleccionarestadosacciones", actionRight);
 	    actionRight = new StrutsActionRight("estadosacciones.generarreporteestadosacciones", true, false, "ESTATUS");
 	    this.mapa.put("estadosacciones.generarreporteestadosacciones", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("responsables.gestionarresponsables", false, true, "RESPONSABLE");
 	    this.mapa.put("responsables.gestionarresponsables", actionRight);
 	    actionRight = new StrutsActionRight("responsables.crearresponsable", false, true, "RESPONSABLE_ADD");
@@ -180,7 +196,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("responsables.seleccionarresponsables", actionRight);
 	    actionRight = new StrutsActionRight("responsables.propiedadesresponsable", false, false, "RESPONSABLE");
 	    this.mapa.put("responsables.propiedadesresponsable", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("plancuentas.gestionarcuentas", false, false, "IMPUTACION");
 	    this.mapa.put("plancuentas.gestionarcuentas", actionRight);
 	    actionRight = new StrutsActionRight("plancuentas.crearcuenta", false, false, "IMPUTACION_ADD");
@@ -203,7 +219,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("plancuentas.generarreportecuentas", actionRight);
 	    actionRight = new StrutsActionRight("plancuentas.seleccionarcuentas", true, false, "IMPUTACION");
 	    this.mapa.put("plancuentas.seleccionarcuentas", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("seriestiempo.gestionarseriestiempo", false, false, "SERIE_TIEMPO");
 	    this.mapa.put("seriestiempo.gestionarseriestiempo", actionRight);
 	    actionRight = new StrutsActionRight("seriestiempo.crearserietiempo", false, false, "SERIE_TIEMPO_ADD");
@@ -220,7 +236,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("seriestiempo.generarreporteseriestiempo", actionRight);
 	    actionRight = new StrutsActionRight("seriestiempo.seleccionarseriestiempo", true, false, "SERIE_TIEMPO");
 	    this.mapa.put("seriestiempo.seleccionarseriestiempo", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("indicadores.clasesindicadores.gestionarclasesindicadores", false, false, "INDICADOR_RAIZ");
 	    this.mapa.put("indicadores.clasesindicadores.gestionarclasesindicadores", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.clasesindicadores.gestionarclasesindicadores", false, false, "CLASE_VISTA");
@@ -231,7 +247,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("indicadores.clasesindicadores.modificarclaseindicadores", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.clasesindicadores.verclaseindicadores", false, false, "CLASE_VIEWALL");
 	    this.mapa.put("indicadores.clasesindicadores.verclaseindicadores", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("indicadores.clasesindicadores.propiedadesclaseindicadores", false, false, "CLASE");
 	    this.mapa.put("indicadores.clasesindicadores.propiedadesclaseindicadores", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.clasesindicadores.guardarclaseindicadores", false, false, "CLASE");
@@ -258,7 +274,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("indicadores.clasesindicadores.moverclase", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.clasesindicadores.guardarmoverclase", false, false, "CLASE_MOVE");
 	    this.mapa.put("indicadores.clasesindicadores.guardarmoverclase", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("indicadores.gestionarindicadores", false, false, "INDICADOR_RAIZ");
 	    this.mapa.put("indicadores.gestionarindicadores", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.crearindicador", false, false, "INDICADOR_ADD");
@@ -314,7 +330,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("indicadores.indicadorconsolidado", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.seleccionarmultiplesclases", false, false, "INDICADOR_CONSOLIDADO");
 	    this.mapa.put("indicadores.seleccionarmultiplesclases", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("indicadores.leerindicadorconsolidado", true, false, "INDICADOR");
 	    this.mapa.put("indicadores.leerindicadorconsolidado", actionRight);
 	    actionRight = new StrutsActionRight("indicadores.cancelarindicadorconsolidado", false, false, "INDICADOR");
@@ -322,53 +338,59 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 
 	    actionRight = new StrutsActionRight("indicadores.enviaremailindicador", false, false, "INDICADOR_EMAIL");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    //instrumentos
-	        
+
 	    actionRight = new StrutsActionRight("instrumentos.calcularindicadores", false, false, "INSTRUMENTOS_CALCULAR");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.calcularindicadoresejecucion", false, false, "INSTRUMENTOS_CALCULAR");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-		
+
 	    actionRight = new StrutsActionRight("instrumentos.gestionarinstrumentosiniciativas", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarinstrumentosiniciativas", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.gestionarinstrumentosindicadoresiniciativas", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarinstrumentosindicadoresiniciativas", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.asociariniciativa", false, false, "INSTRUMENTOS_INICIATIVA_ADD");
 	    this.mapa.put("instrumentos.asociariniciativa", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.desasociariniciativa", false, false, "INSTRUMENTOS_INICIATIVA_DELETE");
 	    this.mapa.put("instrumentos.desasociariniciativa", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.gestionarinstrumentos", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarinstrumentos", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.gestionarcooperantes", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarcooperantes", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.gestionarconvenios", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.gestionarconvenios", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.resumidaejecucion", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.resumidaejecucion", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.reporteinstrumentopdf", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteinstrumentopdf", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.reporteinstrumentoxls", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteinstrumentoxls", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.resumidaejecuciondetalle", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.resumidaejecuciondetalle", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.reporteinstrumentodetallepdf", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteinstrumentodetallepdf", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.reporteinstrumentodetallexls", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteinstrumentodetallexls", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.reporteproyectosasociados", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteproyectosasociados", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.reporteproyectosasociadospdf", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteproyectosasociadospdf", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.reporteproyectosasociadosxls", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.reporteproyectosasociadosxls", actionRight);
-	
-	    
+	    actionRight = new StrutsActionRight("instrumentos.reportedetalladoproyectosasociados", false, false, "INSTRUMENTOS");
+	    this.mapa.put("instrumentos.reportedetalladoproyectosasociados", actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.reportedetalladoproyectosasociadosiniciativas", false, false, "INSTRUMENTOS");
+	    this.mapa.put("instrumentos.reportedetalladoproyectosasociadosiniciativas", actionRight);
+	    actionRight = new StrutsActionRight("instrumentos.reportedetalladoproyectosasociadospdf", false, false, "INSTRUMENTOS");
+	    this.mapa.put("instrumentos.reportedetalladoproyectosasociadospdf", actionRight);
+
+
 	    actionRight = new StrutsActionRight("instrumentos.crearconvenio", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.crearconvenio", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.modificarconvenio", false, false, "INSTRUMENTOS");
@@ -379,10 +401,10 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("instrumentos.cancelarguardarconvenio", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.seleccionarconvenio", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.seleccionarconvenio", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.eliminarconvenio", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.eliminarconvenio", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.crearcooperante", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.crearcooperante", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.modificarcooperante", false, false, "INSTRUMENTOS");
@@ -395,7 +417,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("instrumentos.seleccionarcooperante", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.eliminarcooperante", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.eliminarcooperante", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.crearinstrumento", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.crearinstrumento", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.modificarinstrumento", false, false, "INSTRUMENTOS");
@@ -412,14 +434,14 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("instrumentos.reportebasicopdf", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.seleccionarorganizacion", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.seleccionarorganizacion", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("instrumentos.asignarpesos", false, false, "INSTRUMENTOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.asignarpesosinstrumentos", false, false, "INSTRUMENTOS");
 	    this.mapa.put("instrumentos.asignarpesosinstrumentos", actionRight);
 	    actionRight = new StrutsActionRight("instrumentos.asignarpesosinstrumentosparametros", false, false, "INSTRUMENTOS_ASIGNARPESOS");
 	    this.mapa.put("instrumentos.asignarpesosinstrumentosparametros", actionRight);
-	   	    
+
 	    // mediciones
 	    actionRight = new StrutsActionRight("mediciones.configuraredicionmediciones", false, true, "INDICADOR_MEDICION");
 	    this.mapa.put("mediciones.configuraredicionmediciones", actionRight);
@@ -453,7 +475,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("mediciones.eliminarmedicionparametros", false, true, "INDICADOR_MEDICION");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("calculoindicadores.configurarcalculoindicadores", false, true, "INDICADOR_MEDICION_CALCULAR");
 	    this.mapa.put("calculoindicadores.configurarcalculoindicadores", actionRight);
 	    actionRight = new StrutsActionRight("calculoindicadores.calcularindicadores", false, true, "INDICADOR_MEDICION_CALCULAR");
@@ -464,6 +486,10 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("graficos.dupontindicador", actionRight);
 
 	    // Explicaciones
+	    
+	    actionRight = new StrutsActionRight("explicaciones.modificaradjuntos", false, false, "EXPLICACION");
+	    this.mapa.put("explicaciones.modificaradjuntos", actionRight);
+	    
 	    actionRight = new StrutsActionRight("anexos.gestionaranexos", false, false, "EXPLICACION");
 	    this.mapa.put("anexos.gestionaranexos", actionRight);
 	    actionRight = new StrutsActionRight("explicaciones.gestionarexplicaciones", false, false, "EXPLICACION");
@@ -492,7 +518,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("explicaciones.generarreporteexplicacionesxls", true, false, "EXPLICACION");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("foros.gestionarforos", false, false, "FORO");
 	    this.mapa.put("foros.gestionarforos", actionRight);
 	    actionRight = new StrutsActionRight("foros.crearforo", false, false, "FORO_ADD");
@@ -501,7 +527,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("foros.guardarforo", actionRight);
 	    actionRight = new StrutsActionRight("foros.cancelarguardarforo", true, false, "FORO");
 	    this.mapa.put("foros.cancelarguardarforo", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("presentaciones.vistas.gestionarvistas", false, false, "VISTA");
 	    this.mapa.put("presentaciones.vistas.gestionarvistas", actionRight);
 	    actionRight = new StrutsActionRight("presentaciones.vistas.crearvista", false, false, "VISTA_ADD");
@@ -520,7 +546,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("presentaciones.vistas.mostrarvista", actionRight);
 	    actionRight = new StrutsActionRight("presentaciones.vistas.generarreportevistas", false, false, "VISTA");
 	    this.mapa.put("presentaciones.vistas.generarreportevistas", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("presentaciones.paginas.gestionarpaginas", false, false, "VISTA");
 	    this.mapa.put("presentaciones.paginas.gestionarpaginas", actionRight);
 	    actionRight = new StrutsActionRight("presentaciones.paginas.crearpagina", false, false, "PAGINA_ADD");
@@ -541,7 +567,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("presentaciones.paginas.generarreportepaginas", actionRight);
 	    actionRight = new StrutsActionRight("presentaciones.paginas.cambiarordenpagina", true, false, "PAGINA");
 	    this.mapa.put("presentaciones.paginas.cambiarordenpagina", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("presentaciones.celdas.gestionarceldas", false, false, "CELDA");
 	    this.mapa.put("presentaciones.celdas.gestionarceldas", actionRight);
 	    actionRight = new StrutsActionRight("presentaciones.celdas.crearcelda", false, false, "CELDA_ADD");
@@ -558,7 +584,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("graficos.graficocelda", actionRight);
 	    actionRight = new StrutsActionRight("graficos.guardarconfiguraciongraficocelda", false, false, "CELDA");
 	    this.mapa.put("graficos.guardarconfiguraciongraficocelda", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("problemas.clasesproblemas.gestionarclasesproblemas", false, false, "CLASE_PROBLEMA");
 	    this.mapa.put("problemas.clasesproblemas.gestionarclasesproblemas", actionRight);
 	    actionRight = new StrutsActionRight("problemas.clasesproblemas.crearclaseproblemas", false, false, "CLASE_PROBLEMA_ADD");
@@ -581,7 +607,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("problemas.clasesproblemas.eliminarclaseproblemas", actionRight);
 	    actionRight = new StrutsActionRight("problemas.clasesproblemas.generarreporteclasesproblemas", false, false, "CLASE_PROBLEMA_PRINT");
 	    this.mapa.put("problemas.clasesproblemas.generarreporteclasesproblemas", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("problemas.gestionarproblemas", false, false, "PROBLEMA");
 	    this.mapa.put("problemas.gestionarproblemas", actionRight);
 	    actionRight = new StrutsActionRight("problemas.crearproblema", false, false, "PROBLEMA_ADD");
@@ -606,7 +632,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("problemas.propiedadesproblema", actionRight);
 	    actionRight = new StrutsActionRight("problemas.generarreporteproblemas", false, false, "PROBLEMAS_PRINT");
 	    this.mapa.put("problemas.generarreporteproblemas", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("problemas.acciones.gestionaracciones", false, false, "ACCION");
 	    this.mapa.put("problemas.acciones.gestionaracciones", actionRight);
 	    actionRight = new StrutsActionRight("problemas.acciones.crearaccion", false, false, "ACCION_ADD");
@@ -629,7 +655,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("problemas.acciones.generarreporteacciones", actionRight);
 	    actionRight = new StrutsActionRight("problemas.acciones.gestionaraccionespendientes", true, false, "ACCION");
 	    this.mapa.put("problemas.acciones.gestionaraccionespendientes", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("problemas.seguimientos.gestionarseguimientos", false, false, "ACCION");
 	    this.mapa.put("problemas.seguimientos.gestionarseguimientos", actionRight);
 	    actionRight = new StrutsActionRight("problemas.seguimientos.enviarseguimiento", false, false, "SEGUIMIENTO_ADD");
@@ -695,20 +721,20 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planes.generarreporteplanes", actionRight);
 	    actionRight = new StrutsActionRight("planes.setpanel", false, false, "PLAN");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("planes.perspectivas.visualizarperspectiva", true, false, "PLAN");
 	    this.mapa.put("planes.perspectivas.visualizarperspectiva", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.visualizarperspectiva", true, false, "PLAN");
 	    this.mapa.put("planes.perspectivas.visualizarperspectiva", actionRight);
-	    
-	    
+
+
 	    actionRight = new StrutsActionRight("planes.visualizarestrategico", true, false, "PLAN");
 	    this.mapa.put("planes.visualizarestrategico", actionRight);
 	    actionRight = new StrutsActionRight("planes.visualizaroperativo", true, false, "PLAN");
 	    this.mapa.put("planes.visualizaroperativo", actionRight);
-	    
-	    
-	    
+
+
+
 	    // Metas
 	    actionRight = new StrutsActionRight("planes.metas.configuraredicionmetas", false, false, "INDICADOR_VALOR_META");
 	    this.mapa.put("planes.metas.configuraredicionmetas", actionRight);
@@ -728,14 +754,14 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planes.protegerliberar", actionRight);
 	    actionRight = new StrutsActionRight("planes.protegerliberarsalvar", false, true, "PROTEGER_LIBERAR_META");
 	    this.mapa.put("planes.protegerliberarsalvar", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("planes.perspectivas.trasladarmetas", true, false, "TRASLADAR_META");
 	    this.mapa.put("planes.perspectivas.trasladarmetas", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.trasladarmetassalvar", false, true, "TRASLADAR_META");
 	    this.mapa.put("planes.perspectivas.trasladarmetassalvar", actionRight);
-	    
-	    
-	    
+
+
+
 	    // Valor Inicial
 	    actionRight = new StrutsActionRight("planes.valoresiniciales.configuraredicionvaloresiniciales", false, false, "INDICADOR_VALOR_INICIAL");
 	    this.mapa.put("planes.valoresiniciales.configuraredicionvaloresiniciales", actionRight);
@@ -772,7 +798,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("planes.plantillas.modificarplantillaplanes", false, false, "METODOLOGIA_EDIT");
 	    this.mapa.put("planes.plantillas.modificarplantillaplanes", actionRight);
 	    actionRight = new StrutsActionRight("planes.plantillas.verplantillaplanes", false, false, "METODOLOGIA_VIEW");
-	    this.mapa.put("planes.plantillas.verplantillaplanes", actionRight);   
+	    this.mapa.put("planes.plantillas.verplantillaplanes", actionRight);
 	    actionRight = new StrutsActionRight("planes.plantillas.eliminarplantillaplanes", false, false, "METODOLOGIA_DELETE");
 	    this.mapa.put("planes.plantillas.eliminarplantillaplanes", actionRight);
 	    actionRight = new StrutsActionRight("planes.plantillas.guardarplantillaplanes", false, false, "METODOLOGIA");
@@ -797,6 +823,8 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planes.perspectivas.verperspectiva", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.eliminarperspectiva", false, false, "PLAN_PERSPECTIVA_DELETE");
 	    this.mapa.put("planes.perspectivas.eliminarperspectiva", actionRight);
+	    actionRight = new StrutsActionRight("planes.perspectivas.eliminarelementosmasivos", false, false, "PLAN_PERSPECTIVA_DELETE");
+	    this.mapa.put("planes.perspectivas.eliminarelementosmasivos", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.guardarperspectiva", false, false, "PLAN_PERSPECTIVA");
 	    this.mapa.put("planes.perspectivas.guardarperspectiva", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.cancelarguardarperspectiva", false, false, "PLAN");
@@ -825,7 +853,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("planes.perspectivas.copiarguardarperspectiva", false, false, "PLAN_PERSPECTIVA_COPY");
 	    this.mapa.put("planes.perspectivas.copiarguardarperspectiva", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.copiarcancelarperspectiva", false, false, "PLAN_PERSPECTIVA_COPY");
-	    this.mapa.put("planes.perspectivas.copiarcancelarperspectiva", actionRight);  
+	    this.mapa.put("planes.perspectivas.copiarcancelarperspectiva", actionRight);
 	    actionRight = new StrutsActionRight("planes.indicadores.asignarpesosindicadoresplanperspectiva", false, false, "PLAN_PESO");
 	    this.mapa.put("planes.indicadores.asignarpesosindicadoresplanperspectiva", actionRight);
 	    actionRight = new StrutsActionRight("planes.indicadores.asignarpesosindicadoresplanobjetivo", false, false, "PLAN_PESO");
@@ -834,7 +862,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planes.indicadores.asignarpesosindicadoresplan", actionRight);
 	    actionRight = new StrutsActionRight("planes.perspectivas.enviaremail", true, false, "PLAN_PERSPECTIVA_EMAIL");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    // Plan Indicadores
 	    actionRight = new StrutsActionRight("planes.indicadores.gestionarindicadoresplan", false, false, "PLAN");
 	    this.mapa.put("planes.indicadores.gestionarindicadoresplan", actionRight);
@@ -844,7 +872,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planes.indicadores.desasociarindicadorplan", actionRight);
 	    actionRight = new StrutsActionRight("planes.indicadores.importarprogramado", false, false, "INDICADOR_VALOR_META");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    // =================
 	    // Plan Iniciativas
 	    // =================
@@ -856,7 +884,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planes.iniciativas.desasociariniciativaplan", actionRight);
 	    actionRight = new StrutsActionRight("planes.iniciativas.vinculariniciativaplan", true, false, "INICIATIVA");
 	    this.mapa.put("planes.iniciativas.vinculariniciativaplan", actionRight);
-	    
+
 	    // =================
 	    // Iniciativas
 	    // =================
@@ -902,19 +930,19 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("iniciativas.historicoiniciativa", true, true, "INICIATIVA_HISTORICO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-    	actionRight = new StrutsActionRight("iniciativas.desbloquearculminadosalvar", true, false, "INICIATIVA_CULMINADO");   	  	
-    	this.mapa.put("iniciativas.desbloquearculminadosalvar", actionRight);    
-  
-    	actionRight = new StrutsActionRight("iniciativas.salvarcorreoiniciativas", true, false, "INICIATIVA_CDRREO");   	  	
+    	actionRight = new StrutsActionRight("iniciativas.desbloquearculminadosalvar", true, false, "INICIATIVA_CULMINADO");
+    	this.mapa.put("iniciativas.desbloquearculminadosalvar", actionRight);
+
+    	actionRight = new StrutsActionRight("iniciativas.salvarcorreoiniciativas", true, false, "INICIATIVA_CDRREO");
     	this.mapa.put("iniciativas.salvarcorreoiniciativas", actionRight);
-    	
-    	
+
+
     	actionRight = new StrutsActionRight("iniciativas.protegerliberar", true, false, "PROTEGER_LIBERAR_INICIATIVA");
     	this.mapa.put(actionRight.getActionName(), actionRight);
  	    actionRight = new StrutsActionRight("iniciativas.protegerliberarsalvar", false, true, "PROTEGER_LIBERAR_INICIATIVA");
  	    this.mapa.put("iniciativas.protegerliberarsalvar", actionRight);
-	    
-	    
+
+
 	    // Graficos Iniciativas
 	    actionRight = new StrutsActionRight("iniciativa.grafico.configurar", false, true, "INICIATIVA_EVALUAR_GRAFICO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
@@ -926,7 +954,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("iniciativa.grafico.salvarimagen", false, true, "INICIATIVA_EVALUAR_GRAFICO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    // =================
 	    // Estutus de las Iniciativas
 	    // =================
@@ -942,7 +970,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("iniciativas.estatus.generarreporte", false, true, "INICIATIVA_ESTATUS_PRINT");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    // =================
 	    // Actividades
 	    // =================
@@ -974,7 +1002,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planificacionseguimiento.actividades.asociariniciativa", actionRight);
 	    actionRight = new StrutsActionRight("planificacionseguimiento.actividades.enviaremail", true, false, "ACTIVIDAD_EMAIL");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("planificacionseguimiento.productos.gestionarproductosiniciativa", false, true, "INICIATIVA");
 	    this.mapa.put("planificacionseguimiento.productos.gestionarproductosiniciativa", actionRight);
 	    actionRight = new StrutsActionRight("planificacionseguimiento.productos.gestionarproductosautonomo", false, true, "PRODUCTO");
@@ -1003,7 +1031,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planificacionseguimiento.productos.generarreportedetalladoiniciativaporproductos", actionRight);
 	    // Selector
 	    actionRight = new StrutsActionRight("actividades.selector.seleccionaractividad", true, false, "ACTIVIDAD_ADD");
-	    this.mapa.put("actividades.selector.seleccionaractividad", actionRight);   
+	    this.mapa.put("actividades.selector.seleccionaractividad", actionRight);
 	    actionRight = new StrutsActionRight("actividades.selector.seleccionaractividadorganizaciones", true, false, "ACTIVIDAD_ADD");
 	    this.mapa.put("actividades.selector.seleccionaractividadorganizaciones", actionRight);
 	    actionRight = new StrutsActionRight("actividades.selector.seleccionaractividadplanes", true, false, "ACTIVIDAD_ADD");
@@ -1020,7 +1048,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportes.guardarasistentereporte", actionRight);
 	    actionRight = new StrutsActionRight("reportes.asistentereporte", false, true, "REPORTES_EDIT");
 	    this.mapa.put("reportes.asistentereporte", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("reportes.cancelarlistareporte", false, true, "REPORTES_EDIT");
 	    this.mapa.put("reportes.cancelarlistareporte", actionRight);
 	    actionRight = new StrutsActionRight("reportes.seleccionarreporte", false, true, "REPORTES_EDIT");
@@ -1031,16 +1059,16 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportes.eliminarreporte", actionRight);
 	    actionRight = new StrutsActionRight("reportes.crearformato", true, false, "REPORTES_EDIT");
 	    this.mapa.put("reportes.crearformato", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("reportes.parametrosreporte", false, true, "ORGANIZACION"); //Permiso General
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
-	   
+
+
 	    actionRight = new StrutsActionRight("reportes.indicadores.reportecomiteejecutivo", true, false, "INDICADOR_EVALUAR_REPORTE_COMITE");
 	    this.mapa.put("reportes.indicadores.reportecomiteejecutivo", actionRight);
 	    actionRight = new StrutsActionRight("reportes.indicadores.reportecomiteejecutivopdf", true, false, "INDICADOR_EVALUAR_REPORTE_COMITE");
 	    this.mapa.put("reportes.indicadores.reportecomiteejecutivopdf", actionRight);
-	    
+
 	    // =================
 	    // Vista de Datos
 	    // =================
@@ -1056,8 +1084,8 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("vistasdatos.mostrarvistadatos", actionRight);
 	    actionRight = new StrutsActionRight("vistasdatos.seleccionarvista", false, true, "VISTA_DATOS_REPORTE_VIEW");
 	    this.mapa.put("vistasdatos.seleccionarvista", actionRight);
-	    
-	    
+
+
 	    actionRight = new StrutsActionRight("vistasdatos.imprimir", false, true, "VISTA_DATOS_REPORTE_PRINT");
 	    this.mapa.put("vistasdatos.imprimir", actionRight);
 	    actionRight = new StrutsActionRight("vistasdatos.exportarxls", false, true, "VISTA_DATOS_REPORTE_EXPORT");
@@ -1113,16 +1141,16 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportesgrafico.mostrarreportegrafico", actionRight);
 	    actionRight = new StrutsActionRight("reportesgrafico.seleccionarvistagrafico", false, true, "VISTA_DATOS_REPORTE_VIEW");
 	    this.mapa.put("reportesgrafico.seleccionarvistagrafico", actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("reportesgrafico.graficarreporte", false, true, "VISTA_DATOS");
 	    this.mapa.put("reportesgrafico.graficarreporte", actionRight);
-	    
-	    
+
+
 	    actionRight = new StrutsActionRight("reportesgrafico.imprimirgrafico", false, true, "VISTA_DATOS_REPORTE_PRINT");
 	    this.mapa.put("reportesgrafico.imprimirgrafico", actionRight);
 	    actionRight = new StrutsActionRight("reportesgrafico.exportarxlsgrafico", false, true, "VISTA_DATOS_REPORTE_EXPORT");
 	    this.mapa.put("reportesgrafico.exportarxlsgrafico", actionRight);
-	
+
 	    actionRight = new StrutsActionRight("reportes.mostrarreportegrafico", false, true, "VISTA_DATOS_REPORTE_VIEW");
 	    this.mapa.put("reportes.mostrarreportegrafico", actionRight);
 	    // =================
@@ -1150,7 +1178,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportesgrafico.guardarmostrarreportegrafico", actionRight);
 	    actionRight = new StrutsActionRight("reportesgrafico.gestionarreportegrafico", false, true, "VISTA_DATOS");
 	    this.mapa.put("reportesgrafico.gestionarreportegrafico", actionRight);
-	  
+
 	    actionRight = new StrutsActionRight("reportesgrafico.cancelarasistentegrafico", false, true, "INDICADOR_EVALUAR_GRAFICO");
 	    this.mapa.put("reportesgrafico.cancelarasistentegrafico", actionRight);
 	    actionRight = new StrutsActionRight("reportesgrafico.guardarasistentegrafico", true, false, "INDICADOR_EVALUAR_GRAFICO_ASISTENTE");
@@ -1171,9 +1199,9 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportesgrafico.salvarimagen", actionRight);
 	    actionRight = new StrutsActionRight("reportesgrafico.grafico", true, false, "INDICADOR_EVALUAR_GRAFICO_GRAFICO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
-	    
-	    
+
+
+
 	    // =================
 	    // Portafolio
 	    // =================
@@ -1182,7 +1210,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("portafolios.gestionarportafoliosiniciativas", false, false, "PORTAFOLIO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.gestionarportafoliosindicadoresiniciativa", false, false, "PORTAFOLIO");
-	    this.mapa.put(actionRight.getActionName(), actionRight);    
+	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.crearportafolio", false, false, "PORTAFOLIO_ADD");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.modificarportafolio", false, false, "PORTAFOLIO_EDIT");
@@ -1196,16 +1224,16 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("portafolios.generarreporteportafolios", false, false, "PORTAFOLIO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.asociariniciativa", false, false, "PORTAFOLIO_INICIATIVA_ADD");
-	    this.mapa.put(actionRight.getActionName(), actionRight);    
+	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.desasociariniciativa", false, false, "PORTAFOLIO_INICIATIVA_DELETE");
-	    this.mapa.put(actionRight.getActionName(), actionRight);    
+	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.mostrarvista", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.calcular", false, false, "PORTAFOLIO_CALCULAR");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.asignarpesos", false, false, "PORTAFOLIO_ASIGNARPESOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    // Reportes del Plan
 	    actionRight = new StrutsActionRight("reportes.planes.ejecucion", false, false, "PLAN_REPORTE");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
@@ -1229,7 +1257,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.planes.consolidadoreportexls", false, false, "PLAN_REPORTE");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    // Reportes de la Iniciativa
 	    actionRight = new StrutsActionRight("reportes.iniciativas.ejecucion", false, false, "INICIATIVA_EVALUAR_REPORTE_DETALLADO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
@@ -1241,49 +1269,49 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("reportes.iniciativas.ejecucioniniciativapdf", actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.ejecucioniniciativaxls", false, false, "INICIATIVA_EVALUAR_REPORTE_RESUMIDA");
 	    this.mapa.put("reportes.iniciativas.ejecucioniniciativaxls", actionRight);
-	    
-	    
+
+
 	    actionRight = new StrutsActionRight("reportes.iniciativas.resumidaejecucion", false, false, "INICIATIVA_EVALUAR_REPORTE_RESUMIDA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.reporteiniciativapdf", false, false, "INICIATIVA_EVALUAR_REPORTE_RESUMIDA");
 	    this.mapa.put("reportes.iniciativas.reporteiniciativapdf", actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.reporteiniciativaxls", false, false, "INICIATIVA_EVALUAR_REPORTE_RESUMIDA");
-	    this.mapa.put("reportes.iniciativas.reporteiniciativaxls", actionRight);	    
-	    
-	    
+	    this.mapa.put("reportes.iniciativas.reporteiniciativaxls", actionRight);
+
+
 	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicos", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicospdf", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.datosbasicosxls", false, false, "INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
 	    actionRight = new StrutsActionRight("reportes.iniciativas.medicionesatrasadas", false, false, "INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.medicionesatrasadaspdf", false, false, "INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.iniciativas.medicionesatrasadasxls", false, false, "INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    	  
-	    
+
+
 	    actionRight = new StrutsActionRight("reportes.portafolios.detalle", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.portafolios.detalleejecucionpdf", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put("reportes.portafolios.detalleejecucionpdf", actionRight);
 	    actionRight = new StrutsActionRight("reportes.portafolios.detalleejecucionxls", false, false, "PORTAFOLIO_VISTA");
-	    this.mapa.put("reportes.portafolios.detalleejecucionxls", actionRight);	
+	    this.mapa.put("reportes.portafolios.detalleejecucionxls", actionRight);
 	    actionRight = new StrutsActionRight("reportes.portafolios.resumida", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.portafolios.resumidaejecucionpdf", false, false, "PORTAFOLIO_VISTA");
 	    this.mapa.put("reportes.portafolios.resumidaejecucionpdf", actionRight);
 	    actionRight = new StrutsActionRight("reportes.portafolios.resumidaejecucionxls", false, false, "PORTAFOLIO_VISTA");
-	    this.mapa.put("reportes.portafolios.resumidaejecucionxls", actionRight);	
-	    
+	    this.mapa.put("reportes.portafolios.resumidaejecucionxls", actionRight);
+
 	    actionRight = new StrutsActionRight("reportes.explicaciones.instrumentos.ejecucionpdf", false, false, "EXPLICACIONES_VISTA");
 	    this.mapa.put("reportes.explicaciones.instrumentos.ejecucionpdf", actionRight);
 	    actionRight = new StrutsActionRight("reportes.explicaciones.instrumentos.ejecucionxls", false, false, "EXPLICACIONES_VISTA");
-	    this.mapa.put("reportes.explicaciones.instrumentos.ejecucionxls", actionRight);	
-	    
+	    this.mapa.put("reportes.explicaciones.instrumentos.ejecucionxls", actionRight);
+
 	    // Grafico
 	    actionRight = new StrutsActionRight("graficos.cancelarasistentegrafico", false, true, "INDICADOR_EVALUAR_GRAFICO");
 	    this.mapa.put("graficos.cancelarasistentegrafico", actionRight);
@@ -1305,7 +1333,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("graficos.salvarimagen", actionRight);
 	    actionRight = new StrutsActionRight("graficos.grafico", true, false, "INDICADOR_EVALUAR_GRAFICO_GRAFICO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    
+
     	// Importar
     	actionRight = new StrutsActionRight("indicadores.importar", false, true, "INDICADOR_MEDICION_IMPORTAR");
     	this.mapa.put("indicadores.importar", actionRight);
@@ -1317,14 +1345,14 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
     	this.mapa.put("indicadores.listaimportacion", actionRight);
     	actionRight = new StrutsActionRight("indicadores.eliminarimportacion", true, false, "INDICADOR_MEDICION_IMPORTAR");
     	this.mapa.put("indicadores.eliminarimportacion", actionRight);
-    	
+
     	// Inventario
-    	
+
     	actionRight = new StrutsActionRight("indicadores.transformarinventario", false, true, "INDICADOR_TRANSFORMAR_INVENTARIO");
     	this.mapa.put("indicadores.transformarinventario", actionRight);
     	actionRight = new StrutsActionRight("indicadores.transformarinventariosalvar", true, false, "INDICADOR_TRANSFORMAR_INVENTARIO");
     	this.mapa.put("indicadores.transformarinventariosalvar", actionRight);
-    	
+
     	// Transacciones
     	actionRight = new StrutsActionRight("transacciones.importar", true, false, "INDICADOR_MEDICION_TRANSACCION_IMPORTAR");
     	this.mapa.put(actionRight.getActionName(), actionRight);
@@ -1336,7 +1364,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
     	this.mapa.put(actionRight.getActionName(), actionRight);
     	actionRight = new StrutsActionRight("transacciones.imprimirexceltransaccion", true, false, "INDICADOR_MEDICION_TRANSACCION_REPORTE");
     	this.mapa.put(actionRight.getActionName(), actionRight);
-    	
+
     	// Tipos Proyecto
     	actionRight = new StrutsActionRight("tiposproyecto.gestionartiposproyecto", false, false, "TIPOS");
 	    this.mapa.put("tiposproyecto.gestionartiposproyecto", actionRight);
@@ -1355,14 +1383,14 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("tiposproyecto.seleccionartiposproyecto", true, false, "TIPOS");
 	    this.mapa.put("tiposproyecto.seleccionartiposproyecto", actionRight);
 
-    	
+
     	//Configuracion
 		actionRight = new StrutsActionRight("configuracion.sistema.editar", true, false, "CONFIGURACION_SISTEMA");
 		this.mapa.put(actionRight.getActionName(), actionRight);
 		actionRight = new StrutsActionRight("configuracion.sistema.email", false, false, null);
 		this.mapa.put(actionRight.getActionName(), actionRight);
-		
-		
+
+
 	    // =================
 	    // Codigo de Enlace PGN
 	    // =================
@@ -1384,13 +1412,13 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 
   	public static MapStrutsActionRight getInstance()
   	{
-  		if (instance == null) 
+  		if (instance == null)
   		{
-  			try 
+  			try
   			{
   				new StrategosMapStrutsActionRight();
-  			} 
-  			catch (Exception e) 
+  			}
+  			catch (Exception e)
   			{
   				throw new ChainedRuntimeException("El mapeo de acciones a permisos no est� configurado correctamente.", e);
   			}
@@ -1399,7 +1427,8 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
   		return instance;
   	}
 
-  	public Map<String, StrutsActionRight> getMapa()
+  	@Override
+	public Map<String, StrutsActionRight> getMapa()
   	{
   		return this.mapa;
   	}

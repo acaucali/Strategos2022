@@ -36,6 +36,7 @@
 			
 			function validar(forma) 
 			{
+				
 				if (validateEditarGrupoForm(forma)) 
 				{
 					setPermisosSeleccionados();
@@ -88,12 +89,15 @@
 				total = forma.elements.length;
 			
 				var seleccionados = self.document.editarGrupoForm.permisos.value;
+				
+				console.log('forma  :  ' + forma);
+				console.log('seleccionados  :  ' + seleccionados);
 			
 				for (var indice = 0; indice < total; indice++) 
 				{
 					if (forma.elements[indice].name == 'permiso') 
 					{
-						// Se busca al inicio de la cadena o string de permisos seleccionados
+						//	orma.element busca al inicio de la cadena o string de permisos seleccionados
 						if (seleccionados.indexOf('<bean:write name="editarGrupoForm" property="separador"/>' + forma.elements[indice].value + '<bean:write name="editarGrupoForm" property="separador"/>') > -1) 
 							forma.elements[indice].checked = true;
 						else if (seleccionados.indexOf(forma.elements[indice].value + '<bean:write name="editarGrupoForm" property="separador"/>') == 0) 
@@ -189,6 +193,8 @@
 				var campoControl = self.document.editarGrupoForm.permisoControl;
 				var seleccionado;
 			
+				console.log(campoControl);
+				
 				if (campoControl.checked) 
 					seleccionado = true;
 				else 

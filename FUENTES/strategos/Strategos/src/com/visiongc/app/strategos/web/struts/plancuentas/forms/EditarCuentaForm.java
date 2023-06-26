@@ -43,7 +43,8 @@ public class EditarCuentaForm extends EditarObjetoForm
     this.descripcion = descripcion;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.cuentaId = new Long(0L);
     this.codigo = null;
     this.padreId = null;

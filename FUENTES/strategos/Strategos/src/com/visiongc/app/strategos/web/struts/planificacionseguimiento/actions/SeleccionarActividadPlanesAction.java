@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions;
 
@@ -27,10 +27,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public final class SeleccionarActividadPlanesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -42,16 +44,16 @@ public final class SeleccionarActividadPlanesAction extends VgcAction
 	    if (!seleccionarActividadForm.getPermitirCambiarPlan().booleanValue())
 	    	return mapping.findForward(forward);
 
-	    if (seleccionarActividadForm.getAtributoOrdenPlanes() == null) 
+	    if (seleccionarActividadForm.getAtributoOrdenPlanes() == null)
 	    	seleccionarActividadForm.setAtributoOrdenPlanes("nombre");
-	    if (seleccionarActividadForm.getTipoOrdenPlanes() == null) 
+	    if (seleccionarActividadForm.getTipoOrdenPlanes() == null)
 	    	seleccionarActividadForm.setTipoOrdenPlanes("ASC");
 
 	    StrategosPlanesService planesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 
 	    Map<String, String> filtros = new HashMap<String, String>();
 
-	    if ((seleccionarActividadForm.getOrganizacionSeleccionadaId() != null) && (!seleccionarActividadForm.getOrganizacionSeleccionadaId().equals(""))) 
+	    if ((seleccionarActividadForm.getOrganizacionSeleccionadaId() != null) && (!seleccionarActividadForm.getOrganizacionSeleccionadaId().equals("")))
 	    	filtros.put("organizacionId", seleccionarActividadForm.getOrganizacionSeleccionadaId().toString());
 
 	    PaginaLista paginaPlanes = planesService.getPlanes(0, 0, seleccionarActividadForm.getAtributoOrdenPlanes(), seleccionarActividadForm.getTipoOrdenPlanes(), true, filtros);
@@ -60,16 +62,16 @@ public final class SeleccionarActividadPlanesAction extends VgcAction
 
 	    planesService.close();
 
-	    if (paginaPlanes.getLista().size() > 0) 
+	    if (paginaPlanes.getLista().size() > 0)
 	    {
 	    	seleccionarActividadForm.setCambioPlan(false);
 	    	Long planId = null;
-	    	if ((seleccionarActividadForm.getPlanSeleccionadoId() == null) || (seleccionarActividadForm.getPlanSeleccionadoId().equals(""))) 
+	    	if ((seleccionarActividadForm.getPlanSeleccionadoId() == null) || (seleccionarActividadForm.getPlanSeleccionadoId().equals("")))
 	    	{
 	    		planId = ((Plan)paginaPlanes.getLista().get(0)).getPlanId();
 	    		seleccionarActividadForm.setCambioPlan(true);
 	    	}
-	    	else if (seleccionarActividadForm.isCambioOrganizacion()) 
+	    	else if (seleccionarActividadForm.isCambioOrganizacion())
 	    	{
 	    		planId = ((Plan)paginaPlanes.getLista().get(0)).getPlanId();
 	    		seleccionarActividadForm.setCambioPlan(true);
@@ -78,9 +80,9 @@ public final class SeleccionarActividadPlanesAction extends VgcAction
 	    	if (seleccionarActividadForm.getPlanSeleccionadoId() == null || (planId != null && seleccionarActividadForm.getPlanSeleccionadoId().longValue() != planId.longValue()))
 	    		seleccionarActividadForm.setPlanSeleccionadoId(planId);
 	    }
-	    else 
+	    else
 	    	seleccionarActividadForm.setPlanSeleccionadoId(null);
-	    
+
 	    seleccionarActividadForm.setCambioOrganizacion(false);
 	    seleccionarActividadForm.setCambioIniciativa(false);
 

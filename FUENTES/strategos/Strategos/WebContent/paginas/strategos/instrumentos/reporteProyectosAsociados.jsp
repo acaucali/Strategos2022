@@ -42,7 +42,7 @@
 						url = url + '&tipoconvenio=' +	document.reporteForm.tipoCooperanteId.value;
 										
 					if (document.reporteForm.tipoReporte[0].checked)
-						abrirReporte('<html:rewrite action="//instrumentos/reporteProyectosAsociadosPdf"/>?'+url);
+						abrirReporte('<html:rewrite action="/instrumentos/reporteProyectosAsociadosPdf"/>?'+url);
 	    	 	
 					else if (document.reporteForm.tipoReporte[1].checked)
 						abrirReporte('<html:rewrite action="/instrumentos/reporteProyectosAsociadosXls"/>?'+url);

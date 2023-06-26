@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.forms;
 
@@ -15,7 +15,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
  * @author Kerwin
  *
  */
-public class GestionarInstrumentosForm  extends VisorListaForm 
+public class GestionarInstrumentosForm  extends VisorListaForm
 {
 	static final long serialVersionUID = 0;
 
@@ -34,43 +34,43 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 	private String nombreCorto;
 	private List<TipoConvenio> convenios;
 	private List<Cooperante> cooperantes;
-	
+
 	private String claseId;
-	private String indicadorId;		
+	private String indicadorId;
 	private String source;
 	private Double peso;
 	private String indicadorAnioId;
-	
-	
-	
-	
 
-	public String getRespuesta() 
+
+
+
+
+	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
-  	public String getSeleccionadoId() 
+
+  	public String getSeleccionadoId()
   	{
   		return this.seleccionadoId;
   	}
 
-  	public void setSeleccionadoId(String seleccionadoId) 
+  	public void setSeleccionadoId(String seleccionadoId)
   	{
   		this.seleccionadoId = seleccionadoId;
   	}
 
-  	public String getSeleccionadoNombre() 
+  	public String getSeleccionadoNombre()
   	{
   		return this.seleccionadoNombre;
   	}
 
-  	public void setSeleccionadoNombre(String seleccionadoNombre) 
+  	public void setSeleccionadoNombre(String seleccionadoNombre)
   	{
   		this.seleccionadoNombre = seleccionadoNombre;
   	}
@@ -83,46 +83,46 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 		this.instrumentoId = instrumentoId;
 	}
 
-	public Long getIniciativaId() 
+	public Long getIniciativaId()
   	{
   		return this.iniciativaId;
   	}
 
-  	public void setIniciativaId(Long iniciativaId) 
+  	public void setIniciativaId(Long iniciativaId)
   	{
   		this.iniciativaId = iniciativaId;
   	}
-  	
-	public String getAnchoPorDefecto() 
+
+	public String getAnchoPorDefecto()
 	{
 		return this.anchoPorDefecto;
 	}
 
-	public void setAnchoPorDefecto(String anchoPorDefecto) 
+	public void setAnchoPorDefecto(String anchoPorDefecto)
 	{
 		this.anchoPorDefecto = anchoPorDefecto;
 	}
-	
-	public String getAltoPorDefecto() 
+
+	public String getAltoPorDefecto()
 	{
 		return this.altoPorDefecto;
 	}
 
-	public void setAltoPorDefecto(String altoPorDefecto) 
+	public void setAltoPorDefecto(String altoPorDefecto)
 	{
 		this.altoPorDefecto = altoPorDefecto;
 	}
-	
-  	public Long getOrganizacionId() 
+
+  	public Long getOrganizacionId()
   	{
   		return this.organizacionId;
   	}
 
-  	public void setOrganizacionId(Long organizacionId) 
+  	public void setOrganizacionId(Long organizacionId)
   	{
   		this.organizacionId = organizacionId;
   	}
-  	  	  	
+
  	public Long getTiposConvenioId() {
 		return tiposConvenioId;
 	}
@@ -162,7 +162,7 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 	public void setNombreCorto(String nombreCorto) {
 		this.nombreCorto = nombreCorto;
 	}
-		
+
 	public List<TipoConvenio> getConvenios() {
 		return convenios;
 	}
@@ -179,38 +179,38 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 		this.cooperantes = cooperantes;
 	}
 
-	public String getClaseId() 
+	public String getClaseId()
 	{
 		return this.claseId;
 	}
 
-	public void setClaseId(String claseId) 
+	public void setClaseId(String claseId)
 	{
 		this.claseId = claseId;
 	}
 
-	public String getIndicadorId() 
+	public String getIndicadorId()
 	{
 		return this.indicadorId;
 	}
 
-	public void setIndicadorId(String indicadorId) 
+	public void setIndicadorId(String indicadorId)
 	{
 		this.indicadorId = indicadorId;
 	}
-  			
 
-	
-	public String getSource() 
+
+
+	public String getSource()
 	{
 		return this.source;
 	}
 
-	public void setSource(String source) 
+	public void setSource(String source)
 	{
 		this.source = source;
 	}
-	public void clear() 
+	public void clear()
 	{
 		this.respuesta = "";
 		this.seleccionadoId = null;
@@ -225,12 +225,12 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 		this.anio = null;
 		this.estatus = null;
 		this.nombreCorto = null;
-		
+
 		this.claseId = null;
-		this.indicadorId =  null;		
+		this.indicadorId =  null;
 		this.source = null;
-		
-		
+
+
 		FiltroForm filtro = new FiltroForm();
 		filtro.setCondicion(CondicionType.getFiltroCondicionActivo());
 		filtro.setNombre(null);

@@ -1,12 +1,13 @@
 package com.visiongc.app.strategos.web.struts.reportes.grafico.forms;
 
-import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 import java.util.List;
+
+import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 
 public class SeleccionarVariableGraficoForm extends SelectorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private String filtroNombre;
 	private Byte seleccionMultiple;
 	private List listaVariables;
@@ -16,7 +17,7 @@ public class SeleccionarVariableGraficoForm extends SelectorListaForm
 		return this.seleccionMultiple;
 	}
 
-	public void setSeleccionMultiple(Byte seleccionMultiple) 
+	public void setSeleccionMultiple(Byte seleccionMultiple)
 	{
 		this.seleccionMultiple = seleccionMultiple;
 	}
@@ -26,7 +27,7 @@ public class SeleccionarVariableGraficoForm extends SelectorListaForm
 		return this.filtroNombre;
 	}
 
-	public void setFiltroNombre(String filtroNombre) 
+	public void setFiltroNombre(String filtroNombre)
 	{
 		this.filtroNombre = filtroNombre;
 	}
@@ -36,7 +37,7 @@ public class SeleccionarVariableGraficoForm extends SelectorListaForm
 		return this.listaVariables;
 	}
 
-	public void setListaVariables(List listaVariables) 
+	public void setListaVariables(List listaVariables)
 	{
 		this.listaVariables = listaVariables;
 	}

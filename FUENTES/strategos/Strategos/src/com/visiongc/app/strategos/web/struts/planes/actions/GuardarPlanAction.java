@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.planes.actions;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -17,36 +29,27 @@ import com.visiongc.app.strategos.web.struts.planes.perspectivas.actions.CopiarP
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarPlanAction
   extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     EditarPlanForm editarPlanForm = (EditarPlanForm)form;
-    
+
     ActionMessages messages = getMessages(request);
-    
+
     boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
-    Boolean copiar = Boolean.valueOf((request.getParameter("copiar") != null) && (request.getParameter("copiar") != "") ? Boolean.parseBoolean(request.getParameter("copiar")) : false);
+    boolean copiar = (request.getParameter("copiar") != null) && (request.getParameter("copiar") != "") ? Boolean.parseBoolean(request.getParameter("copiar")) : false;
     String ts = request.getParameter("ts");
     String organizacionId = (String)request.getSession().getAttribute("organizacionId");
     String ultimoTs = (String)request.getSession().getAttribute("GuardarPlanAction.ultimoTs");
@@ -55,7 +58,7 @@ public class GuardarPlanAction
     } else if ((ultimoTs != null) && (ultimoTs.equals(ts))) {
       cancelar = true;
     }
-    if (copiar.booleanValue()) {
+    if (copiar) {
       cancelar = false;
     }
     StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
@@ -67,16 +70,16 @@ public class GuardarPlanAction
     }
     StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
     StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
-    
+
     Plan plan = new Plan();
-    
+
     boolean nuevo = false;
     int respuesta = 10000;
     if ((editarPlanForm.getPlanId() != null) && (!editarPlanForm.getPlanId().equals(Long.valueOf("0"))))
     {
       plan = (Plan)strategosPlanesService.load(Plan.class, editarPlanForm.getPlanId());
     }
-    else if (copiar.booleanValue())
+    else if (copiar)
     {
       nuevo = false;
       plan = new Plan();
@@ -113,7 +116,7 @@ public class GuardarPlanAction
     plan.setRevision(editarPlanForm.getRevision());
     plan.setMetodologiaId(editarPlanForm.getMetodologiaId());
     plan.setClaseId(editarPlanForm.getClaseId());
-    
+
     respuesta = strategosPlanesService.savePlan(plan, getUsuarioConectado(request));
     if (respuesta == 10000)
     {
@@ -124,15 +127,15 @@ public class GuardarPlanAction
         respuesta = strategosPerspectivasService.savePerspectiva(perspectiva, getUsuarioConectado(request));
       }
     }
-    if ((respuesta == 10000) && ((copiar.booleanValue()) || (asociarPlan)))
+    if ((respuesta == 10000) && ((copiar) || (asociarPlan)))
     {
       Plan planOriginal = null;
-      if (copiar.booleanValue()) {
+      if (copiar) {
         planOriginal = (Plan)strategosPlanesService.load(Plan.class, editarPlanForm.getOriginalPlanId());
       } else if (asociarPlan) {
         planOriginal = (Plan)strategosPlanesService.load(Plan.class, editarPlanForm.getPlanImpactaId());
       }
-      if ((copiar.booleanValue()) && (editarPlanForm.getAsociar() != null) && (!editarPlanForm.getAsociar().booleanValue()) && (editarPlanForm.getOrganizacionDestinoId() != null) && (new Long(organizacionId).longValue() != editarPlanForm.getOrganizacionDestinoId().longValue()))
+      if ((copiar) && (editarPlanForm.getAsociar() != null) && (!editarPlanForm.getAsociar().booleanValue()) && (editarPlanForm.getOrganizacionDestinoId() != null) && (new Long(organizacionId).longValue() != editarPlanForm.getOrganizacionDestinoId().longValue()))
       {
         editarPlanForm.setCopiarIndicador(editarPlanForm.getAsociarIndicador());
         editarPlanForm.setAsociarIndicador(Boolean.valueOf(false));
@@ -140,7 +143,7 @@ public class GuardarPlanAction
       editarPlanForm.setCopiarIniciativa(editarPlanForm.getAsociarIniciativa());
       respuesta = CopiarPerpectivaRoot(planOriginal, plan, strategosPerspectivasService, strategosClasesIndicadoresService, request, editarPlanForm.getAsociarIndicador() != null ? editarPlanForm.getAsociarIndicador().booleanValue() : false, editarPlanForm.getAsociarIniciativa() != null ? editarPlanForm.getAsociarIniciativa().booleanValue() : false, asociarPlan, editarPlanForm.getCopiarIndicador() != null ? editarPlanForm.getCopiarIndicador().booleanValue() : false);
     }
-    if (copiar.booleanValue()) {
+    if (copiar) {
       forward = "copiarPlan";
     }
     if (respuesta == 10000)
@@ -152,7 +155,7 @@ public class GuardarPlanAction
         messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.nuevo.ok"));
         forward = "crearPlan";
       }
-      else if (copiar.booleanValue())
+      else if (copiar)
       {
         messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.copiar.ok"));
       }
@@ -168,25 +171,25 @@ public class GuardarPlanAction
     strategosClasesIndicadoresService.close();
     strategosPerspectivasService.close();
     strategosPlanesService.close();
-    
+
     saveMessages(request, messages);
-    
+
     request.getSession().setAttribute("GuardarPlanAction.ultimoTs", ts);
-    
+
     return mapping.findForward(forward);
   }
-  
+
   public int CopiarPerpectivaRoot(Plan planOriginal, Plan planCopia, StrategosPerspectivasService strategosPerspectivasService, StrategosClasesIndicadoresService strategosClasesIndicadoresService, HttpServletRequest request, boolean asociarIndicadores, boolean asociarIniciativas, boolean asociarPerspectivas, boolean copiarIndicadores)
   {
     int respuesta = 10000;
     StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-    
+
     Perspectiva perspectiva = strategosPerspectivasService.getPerspectivaRaiz(planOriginal.getPlanId());
     if (perspectiva != null)
     {
       Perspectiva perspectivaCopia = new Perspectiva();
-      
+
       perspectivaCopia.setPerspectivaId(new Long(0L));
       perspectivaCopia.setPlanId(planCopia.getPlanId());
       perspectivaCopia.setPadreId(perspectiva.getPadreId());
@@ -208,7 +211,7 @@ public class GuardarPlanAction
         relacion.getPk().setRelacionId(perspectiva.getPerspectivaId());
         relacion.setPerspectiva(perspectivaCopia);
         relacion.setRelacion(perspectiva);
-        
+
         perspectivaCopia.getRelacion().add(relacion);
       }
       else if ((perspectiva.getRelacion() != null) && (perspectiva.getRelacion().size() > 0))
@@ -217,15 +220,15 @@ public class GuardarPlanAction
         perspectivaCopia.getRelacion().clear();
         for (Iterator<PerspectivaRelacion> i = perspectiva.getRelacion().iterator(); i.hasNext();)
         {
-          PerspectivaRelacion relacion = (PerspectivaRelacion)i.next();
-          
+          PerspectivaRelacion relacion = i.next();
+
           PerspectivaRelacion relacionCopia = new PerspectivaRelacion();
           relacionCopia.setPk(new PerspectivaRelacionPK());
           relacionCopia.getPk().setPerspectivaId(perspectivaCopia.getPerspectivaId());
           relacionCopia.getPk().setRelacionId(relacion.getPk().getRelacionId());
           relacionCopia.setPerspectiva(perspectivaCopia);
           relacionCopia.setRelacion(relacion.getRelacion());
-          
+
           perspectivaCopia.getRelacion().add(relacionCopia);
         }
       }
@@ -246,7 +249,7 @@ public class GuardarPlanAction
     }
     strategosIndicadoresService.close();
     strategosIniciativasService.close();
-    
+
     return respuesta;
   }
 }

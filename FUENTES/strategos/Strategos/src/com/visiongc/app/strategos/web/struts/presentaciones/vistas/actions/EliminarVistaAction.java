@@ -1,31 +1,34 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.vistas.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.presentaciones.StrategosVistasService;
-import com.visiongc.app.strategos.presentaciones.model.Vista;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.presentaciones.StrategosVistasService;
+import com.visiongc.app.strategos.presentaciones.model.Vista;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EliminarVistaAction extends VgcAction
 {
 	private static final String ACTION_KEY = "EliminarVistaAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		ActionMessages messages = getMessages(request);
 
 		String vistaId = request.getParameter("vistaId");
@@ -33,12 +36,12 @@ public class EliminarVistaAction extends VgcAction
 		String ultimoTs = (String)request.getSession().getAttribute("EliminarVistaAction.ultimoTs");
 		boolean bloqueado = false;
 		boolean cancelar = false;
-		
+
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
 		else if ((vistaId == null) || (vistaId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(vistaId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(vistaId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
@@ -60,9 +63,9 @@ public class EliminarVistaAction extends VgcAction
 			{
 				vista.setVistaId(Long.valueOf(vistaId));
 				int respuesta = strategosVistasService.deleteVista(vista, getUsuarioConectado(request));
-				
+
 				strategosVistasService.unlockObject(request.getSession().getId(), vistaId);
-				
+
 				if (respuesta == 10004)
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", vista.getNombre()));
 				else
@@ -73,7 +76,7 @@ public class EliminarVistaAction extends VgcAction
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 		strategosVistasService.close();
-		
+
 		saveMessages(request, messages);
 
 		request.getSession().setAttribute("EliminarVistaAction.ultimoTs", vistaId + "&" + ts);

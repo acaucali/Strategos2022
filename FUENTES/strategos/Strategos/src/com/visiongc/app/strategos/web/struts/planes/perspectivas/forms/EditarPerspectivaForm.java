@@ -47,6 +47,11 @@ public class EditarPerspectivaForm extends EditarObjetoForm
   private Boolean copiarPlantillasReportes;
   private String nuevoNombre;
   
+  private String perspectivas;
+  public static final String SEPARADOR = ":";
+  public static final String SEPARADOR_PADRE_HIJO = "#hijo#";
+  private String seleccionados[];
+
   public Long getPerspectivaId()
   {
     return this.perspectivaId;
@@ -176,19 +181,23 @@ public class EditarPerspectivaForm extends EditarObjetoForm
     this.ultimaMedicionParcial = ultimaMedicionParcial;
   }
 
-  public String getCreado() {
+  @Override
+public String getCreado() {
     return this.creado;
   }
 
-  public void setCreado(String creado) {
+  @Override
+public void setCreado(String creado) {
     this.creado = creado;
   }
 
-  public String getModificado() {
+  @Override
+public String getModificado() {
     return this.modificado;
   }
 
-  public void setModificado(String modificado) {
+  @Override
+public void setModificado(String modificado) {
     this.modificado = modificado;
   }
 
@@ -304,9 +313,9 @@ public class EditarPerspectivaForm extends EditarObjetoForm
     return TipoCalculoPerspectiva.getTipoCalculoPerspectivaManual();
   }
 
-  public Boolean getCopiarArbol() 
+  public Boolean getCopiarArbol()
   {
-    if (this.copiarArbol == null) 
+    if (this.copiarArbol == null)
     {
       this.copiarArbol = new Boolean(false);
     }
@@ -314,14 +323,14 @@ public class EditarPerspectivaForm extends EditarObjetoForm
     return this.copiarArbol;
   }
 
-  public void setCopiarArbol(Boolean copiarArbol) 
+  public void setCopiarArbol(Boolean copiarArbol)
   {
     this.copiarArbol = copiarArbol;
   }
 
-  public Boolean getCopiarMediciones() 
+  public Boolean getCopiarMediciones()
   {
-    if (this.copiarMediciones == null) 
+    if (this.copiarMediciones == null)
     {
       this.copiarMediciones = new Boolean(false);
     }
@@ -329,14 +338,14 @@ public class EditarPerspectivaForm extends EditarObjetoForm
     return this.copiarMediciones;
   }
 
-  public void setCopiarMediciones(Boolean copiarMediciones) 
+  public void setCopiarMediciones(Boolean copiarMediciones)
   {
     this.copiarMediciones = copiarMediciones;
   }
 
-  public Boolean getCopiarPlantillasGraficos() 
+  public Boolean getCopiarPlantillasGraficos()
   {
-    if (this.copiarPlantillasGraficos == null) 
+    if (this.copiarPlantillasGraficos == null)
     {
       this.copiarPlantillasGraficos = new Boolean(false);
     }
@@ -344,14 +353,14 @@ public class EditarPerspectivaForm extends EditarObjetoForm
     return this.copiarPlantillasGraficos;
   }
 
-  public void setCopiarPlantillasGraficos(Boolean copiarPlantillasGraficos) 
+  public void setCopiarPlantillasGraficos(Boolean copiarPlantillasGraficos)
   {
     this.copiarPlantillasGraficos = copiarPlantillasGraficos;
   }
 
-  public Boolean getCopiarPlantillasReportes() 
+  public Boolean getCopiarPlantillasReportes()
   {
-    if (this.copiarPlantillasReportes == null) 
+    if (this.copiarPlantillasReportes == null)
     {
       this.copiarPlantillasReportes = new Boolean(false);
     }
@@ -359,47 +368,49 @@ public class EditarPerspectivaForm extends EditarObjetoForm
     return this.copiarPlantillasReportes;
   }
 
-  public void setCopiarPlantillasReportes(Boolean copiarPlantillasReportes) 
+  public void setCopiarPlantillasReportes(Boolean copiarPlantillasReportes)
   {
     this.copiarPlantillasReportes = copiarPlantillasReportes;
   }
 
-  public String getNuevoNombre() 
+  public String getNuevoNombre()
   {
     return this.nuevoNombre;
   }
 
-  public void setNuevoNombre(String nuevoNombre) 
+  public void setNuevoNombre(String nuevoNombre)
   {
     this.nuevoNombre = nuevoNombre;
   }
-  
-  	public String getInsumosAsociados() 
+
+  	public String getInsumosAsociados()
   	{
   		return this.insumosAsociados;
   	}
 
-	public void setInsumosAsociados(String insumosAsociados) 
+	public void setInsumosAsociados(String insumosAsociados)
 	{
 	    this.insumosAsociados = insumosAsociados;
 	}
-	
-	public String getSeparadorRuta() 
+
+	public String getSeparadorRuta()
 	{
 		return "!#!";
 	}
-	
-	public String getSeparadorObjetivos() 
+
+	public String getSeparadorObjetivos()
 	{
 		return "!;!";
 	}
-	
-	public String getCodigoEliminado() 
+
+	public String getCodigoEliminado()
 	{
 		return "!ELIMINADO!";
 	}
-  
-	public void clear() 
+	
+
+	@Override
+	public void clear()
 	{
 	    this.perspectivaId = new Long(0L);
 	    this.planId = null;
@@ -431,11 +442,29 @@ public class EditarPerspectivaForm extends EditarObjetoForm
 	    this.elementosAsociados = null;
 	    this.indicadoresAsociados = null;
 	    this.iniciativasAsociadas = null;
-	
+
 	    this.copiarArbol = new Boolean(false);
 	    this.copiarMediciones = new Boolean(false);
 	    this.copiarPlantillasGraficos = new Boolean(false);
 	    this.copiarPlantillasReportes = new Boolean(false);
-	    this.nuevoNombre = "";       
+	    this.nuevoNombre = "";
+	    
+	    this.perspectivas = null;
+	}
+
+	public String getPerspectivas() {
+		return perspectivas;
+	}
+
+	public void setPerspectivas(String perspectivas) {
+		this.perspectivas = perspectivas;
+	}
+
+	public String[] getSeleccionados() {
+		return seleccionados;
+	}
+
+	public void setSeleccionados(String seleccionados[]) {
+		this.seleccionados = seleccionados;
 	}
 }

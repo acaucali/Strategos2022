@@ -1,9 +1,10 @@
 package com.visiongc.app.strategos.web.struts.planes.metas.forms;
 
+import org.apache.struts.validator.ValidatorActionForm;
+
 import com.visiongc.app.strategos.indicadores.model.util.TipoCorte;
 import com.visiongc.app.strategos.indicadores.model.util.TipoMedicion;
 import com.visiongc.app.strategos.planes.model.util.MetaAnualParciales;
-import org.apache.struts.validator.ValidatorActionForm;
 
 public class EditarMetasParcialesForm extends ValidatorActionForm
 {
@@ -154,12 +155,12 @@ public class EditarMetasParcialesForm extends ValidatorActionForm
     this.valorTotalMetasParciales = valorTotalMetasParciales;
   }
 
-	public boolean getBloquear() 
+	public boolean getBloquear()
 	{
 	  return this.bloquear;
 	}
 
-	public void setBloquear(boolean bloquear) 
+	public void setBloquear(boolean bloquear)
 	{
 		this.bloquear = bloquear;
 	}

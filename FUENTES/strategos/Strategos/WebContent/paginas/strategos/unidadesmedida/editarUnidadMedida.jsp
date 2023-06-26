@@ -48,7 +48,6 @@
 			function cancelar() {			
 				window.document.editarUnidadMedidaForm.action = '<html:rewrite action="/unidadesmedida/cancelarGuardarUnidadMedida"/>';
 				window.document.editarUnidadMedidaForm.submit();
-				this.close();
 			}
 
 			function ejecutarPorDefecto(e) {			

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts;
 
@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import nl.captcha.Captcha;
 import nl.captcha.backgrounds.GradiatedBackgroundProducer;
 import nl.captcha.servlet.CaptchaServletUtil;
@@ -30,7 +31,8 @@ public class SimpleCaptchaServlet extends HttpServlet
     {
     }
 
-    public void init(ServletConfig config) throws ServletException
+    @Override
+	public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
         if(getInitParameter("captcha-height") != null)
@@ -39,7 +41,8 @@ public class SimpleCaptchaServlet extends HttpServlet
             _width = Integer.valueOf(getInitParameter("captcha-width")).intValue();
     }
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+    @Override
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         ColoredEdgesWordRenderer wordRenderer = new ColoredEdgesWordRenderer(COLORS, FONTS);
         Captcha captcha = (new nl.captcha.Captcha.Builder(_width, _height)).addText(wordRenderer).gimp().addNoise().addBackground(new GradiatedBackgroundProducer()).build();
@@ -54,7 +57,7 @@ public class SimpleCaptchaServlet extends HttpServlet
     private static final List<Color> COLORS;
     private static final List<Font> FONTS;
 
-    static 
+    static
     {
         COLORS = new ArrayList<Color>(2);
         FONTS = new ArrayList<Font>(3);

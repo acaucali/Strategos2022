@@ -1,7 +1,8 @@
 package com.visiongc.app.strategos.web.struts.foros.forms;
 
-import com.visiongc.framework.web.struts.forms.VisorListaForm;
 import java.util.List;
+
+import com.visiongc.framework.web.struts.forms.VisorListaForm;
 
 public class GestionarForosForm extends VisorListaForm
 {

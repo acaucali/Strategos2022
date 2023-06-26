@@ -1,9 +1,17 @@
 package com.visiongc.app.strategos.web.struts.indicadores.clasesindicadores.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
-import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.web.struts.indicadores.clasesindicadores.forms.EditarClaseIndicadoresForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
@@ -11,21 +19,14 @@ import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class EditarClaseIndicadoresAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -48,7 +49,7 @@ public class EditarClaseIndicadoresAction extends VgcAction
 				editarClaseIndicadoresForm.setShowPresentacion(presentacion.getData().equals("1") ? true : false);
 			frameworkService.close();
     	}
-		
+
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
 
 		boolean verForm = getPermisologiaUsuario(request).tienePermiso("CLASE_VIEWALL");
@@ -65,17 +66,17 @@ public class EditarClaseIndicadoresAction extends VgcAction
 			{
 				if (bloqueado)
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.bloqueado"));
-				
+
 				ClaseIndicadores padre = clase.getPadre();
 				long padreId = 0L;
-				if (padre != null) 
+				if (padre != null)
 				{
 					padreId = padre.getClaseId().longValue();
 					ClaseIndicadores clasePadre = (ClaseIndicadores)strategosClasesIndicadoresService.load(ClaseIndicadores.class, new Long(padreId));
 					if (clasePadre != null)
 					{
 						editarClaseIndicadoresForm.setPadre(clasePadre.getNombre());
-						editarClaseIndicadoresForm.setClaseIdDestino(new Long(padreId));        	  
+						editarClaseIndicadoresForm.setClaseIdDestino(new Long(padreId));
 					}
 				}
 
@@ -86,7 +87,7 @@ public class EditarClaseIndicadoresAction extends VgcAction
 				editarClaseIndicadoresForm.setEnlaceParcial(clase.getEnlaceParcial());
 				editarClaseIndicadoresForm.setVisible(clase.getVisible());
 			}
-			else 
+			else
 			{
 				strategosClasesIndicadoresService.unlockObject(request.getSession().getId(), new Long(claseId));
 
@@ -110,7 +111,7 @@ public class EditarClaseIndicadoresAction extends VgcAction
 		}
 		else if (!bloqueado && !verForm && !editarForm)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
-		
+
 		saveMessages(request, messages);
 
 		if (forward.equals("noencontrado"))

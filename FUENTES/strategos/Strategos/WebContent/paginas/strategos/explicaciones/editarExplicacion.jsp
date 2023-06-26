@@ -199,6 +199,8 @@
 
 			<html:hidden property="explicacionId" />
 			<html:hidden property="tipo" />
+			<html:hidden property="creador" />
+			
 			<input type="hidden" name="indiceAdjunto" />
 
 			<bean:define id="altoForma" value="560px" />
@@ -343,7 +345,7 @@
 					
 							<tr>
 								<td align="right" valign="top"><vgcutil:message key="jsp.editarexplicacion.ficha.adjuntos" /></td>
-								
+						 		
 									<td>
 										<table class="bordeFichaDatos" width="380px" cellpadding="3" cellspacing="0">
 											<tr>
@@ -358,8 +360,19 @@
 												<tr>
 													<td align="center"><img onClick="javascript:descargarAdjunto('<bean:write name="indiceAdjunto" />');" style="cursor: pointer"
 														src="<html:rewrite page='/componentes/visorLista/descargar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.descargar.alt" />"></td>
-													<td align="center"><img onClick="javascript:eliminarAdjunto('<bean:write name="indiceAdjunto" />');" style="cursor: pointer"
+													<logic:equal  name="editarExplicacionForm" property="creador" value="true">
+														<td align="center"><img onClick="javascript:eliminarAdjunto('<bean:write name="indiceAdjunto" />');" style="cursor: pointer"
 														src="<html:rewrite page='/componentes/visorLista/eliminar.gif'/>" border="0" width="10" height="10" title="<vgcutil:message key="boton.eliminar.alt" />"></td>
+													</logic:equal>
+													
+													<logic:notEqual  name="editarExplicacionForm" property="creador" value="true">
+														<td align="center"><img  style="cursor: pointer"
+														src="<html:rewrite page='/componentes/visorLista/eliminar.gif'/>" border="0" width="10" height="10" title="No es el creador del adjunto"></td>
+													</logic:notEqual>
+													
+													
+													
+													
 													<td width="100%"><bean:write name="adjunto" property="titulo"/></td>
 												</tr>
 											</logic:iterate>

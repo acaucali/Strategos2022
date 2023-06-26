@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.estatus.actions;
 
@@ -20,6 +20,7 @@ import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 
@@ -29,11 +30,13 @@ import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
  */
 public class ReporteIniciativaEstatusAction extends VgcReporteBasicoAction
 {
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		return mensajes.getMessage("action.reporte.estatus.iniciativa.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 		String nombre = (request.getParameter("filtroNombre") != null) ? request.getParameter("filtroNombre") : "";
@@ -50,26 +53,26 @@ public class ReporteIniciativaEstatusAction extends VgcReporteBasicoAction
 		columnas[0] = 100;
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-		
+
 		Map<String, String> filtros = new HashMap<String, String>();
 
 		if (nombre != null && !nombre.equals(""))
 			filtros.put("nombre", nombre);
 
-		List<IniciativaEstatus> iniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc", true, filtros).getLista();;
-		
+		List<IniciativaEstatus> iniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc", true, filtros).getLista();
+
 		tabla.setFormatoFont(font.style());
-		tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+		tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
 		tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre"));
 
 		tabla.setDefaultAlineacionHorizontal();
-		if ((iniciativaEstatus != null) && (iniciativaEstatus.size() > 0)) 
+		if ((iniciativaEstatus != null) && (iniciativaEstatus.size() > 0))
 		{
-			for (Iterator<IniciativaEstatus> iter = iniciativaEstatus.iterator(); iter.hasNext(); ) 
+			for (Iterator<IniciativaEstatus> iter = iniciativaEstatus.iterator(); iter.hasNext(); )
 			{
-				IniciativaEstatus iniciativaEstatu = (IniciativaEstatus)iter.next();
-				
+				IniciativaEstatus iniciativaEstatu = iter.next();
+
 				tabla.setDefaultAlineacionHorizontal();
 				tabla.agregarCelda(iniciativaEstatu.getNombre());
 			}

@@ -1,5 +1,18 @@
 package com.visiongc.app.strategos.web.struts.problemas.actions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.causas.model.Causa;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
@@ -12,28 +25,18 @@ import com.visiongc.app.strategos.problemas.model.Problema;
 import com.visiongc.app.strategos.web.struts.problemas.forms.EditarProblemaForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarProblemaAction extends VgcAction
 {
   private static final String ACTION_KEY = "GuardarProblemaAction";
 
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -51,7 +54,7 @@ public class GuardarProblemaAction extends VgcAction
 
     if ((ts == null) || (ts.equals("")))
       cancelar = true;
-    else if ((ultimoTs != null) && 
+    else if ((ultimoTs != null) &&
       (ultimoTs.equals(ts))) {
       cancelar = true;
     }
@@ -125,8 +128,7 @@ public class GuardarProblemaAction extends VgcAction
     String causaIdRoot = editarProblemaForm.getCausaIdRoot();
     if ((editarProblemaForm.getCausas() != null) && (!editarProblemaForm.getCausas().equals(""))) {
       String[] causas = editarProblemaForm.getCausas().split(editarProblemaForm.getSeparador());
-      for (int i = 0; i < causas.length; i++) {
-        String causaId = causas[i];
+      for (String causaId : causas) {
         if ((causaId != null) && (!causaId.equals("")) && (!causaId.equals(causaIdRoot))) {
           Causa causa = new Causa();
           causa.setCausaId(new Long(causaId));

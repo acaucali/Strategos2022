@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.forms;
 
@@ -17,44 +17,44 @@ public class SeleccionarGraficoReporteForm extends SelectorListaForm
 	private String rutaCompletaOrganizacion;
 	private String graficoNombre;
 
-	public String getRutaCompletaOrganizacion() 
+	public String getRutaCompletaOrganizacion()
 	{
 		return this.rutaCompletaOrganizacion;
 	}
 
-	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
 	{
 		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
 	}
 
-	public String getGraficoNombre() 
+	public String getGraficoNombre()
 	{
 		return this.graficoNombre;
 	}
 
-	public void setGraficoNombre(String graficoNombre) 
+	public void setGraficoNombre(String graficoNombre)
 	{
 		this.graficoNombre = graficoNombre;
 	}
-	  
-	public Long getOrganizacionId() 
+
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
-	  
-	public void clear() 
+
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);
 		setNombreCampoOculto(null);
 		setSeleccionados(null);
 		setValoresSeleccionados(null);
-		  
+
 		this.rutaCompletaOrganizacion = null;
 		this.organizacionId = 0L;
 	}

@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.organizaciones.actions;
 
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.MemoOrganizacion;
@@ -8,21 +19,15 @@ import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.web.struts.organizaciones.forms.EditarOrganizacionForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashSet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarOrganizacionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -52,10 +57,10 @@ public class GuardarOrganizacionAction extends VgcAction
 			editarOrganizacionForm.setPorcentajeZonaVerdeIniciativas(null);
 		if (porcentajeZonaAmarillaIniciativas == null || porcentajeZonaAmarillaIniciativas.equals(""))
 			editarOrganizacionForm.setPorcentajeZonaAmarillaIniciativas(null);
-			
+
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(ts)))
 			cancelar = true;
 
 		StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
@@ -88,57 +93,57 @@ public class GuardarOrganizacionAction extends VgcAction
 
 		if (editarOrganizacionForm.getNombre() != null)
 			organizacionStrategos.setNombre(editarOrganizacionForm.getNombre());
-		else 
+		else
 			organizacionStrategos.setNombre(null);
 
 		if ((editarOrganizacionForm.getRif() != null) && (!editarOrganizacionForm.getRif().equals("")))
 			organizacionStrategos.setRif(editarOrganizacionForm.getRif());
-		else 
+		else
 			organizacionStrategos.setRif(null);
 
 		if (editarOrganizacionForm.getTelefono() != null)
 			organizacionStrategos.setTelefono(editarOrganizacionForm.getTelefono());
-		else 
+		else
 			organizacionStrategos.setTelefono(null);
 
 		if (editarOrganizacionForm.getFax() != null)
 			organizacionStrategos.setFax(editarOrganizacionForm.getFax());
-		else 
+		else
 			organizacionStrategos.setFax(null);
 
 		if (editarOrganizacionForm.getDireccion() != null)
 			organizacionStrategos.setDireccion(editarOrganizacionForm.getDireccion());
-		else 
+		else
 			organizacionStrategos.setDireccion(null);
 
 		if (editarOrganizacionForm.getEnlaceParcial() != null)
 			organizacionStrategos.setEnlaceParcial(editarOrganizacionForm.getEnlaceParcial());
-		else 
+		else
 			organizacionStrategos.setEnlaceParcial(null);
 
 		if (editarOrganizacionForm.getPorcentajeZonaAmarillaMinMaxIndicadores() != null)
 			organizacionStrategos.setPorcentajeZonaAmarillaMinMaxIndicadores(editarOrganizacionForm.getPorcentajeZonaAmarillaMinMaxIndicadores());
-		else 
+		else
 			organizacionStrategos.setPorcentajeZonaAmarillaMinMaxIndicadores(null);
 
 		if (editarOrganizacionForm.getPorcentajeZonaVerdeMetaIndicadores() != null)
 			organizacionStrategos.setPorcentajeZonaVerdeMetaIndicadores(editarOrganizacionForm.getPorcentajeZonaVerdeMetaIndicadores());
-		else 
+		else
 			organizacionStrategos.setPorcentajeZonaVerdeMetaIndicadores(null);
 
 		if (editarOrganizacionForm.getPorcentajeZonaAmarillaMetaIndicadores() != null)
 			organizacionStrategos.setPorcentajeZonaAmarillaMetaIndicadores(editarOrganizacionForm.getPorcentajeZonaAmarillaMetaIndicadores());
-		else 
+		else
 			organizacionStrategos.setPorcentajeZonaAmarillaMetaIndicadores(null);
 
 		if (editarOrganizacionForm.getPorcentajeZonaVerdeIniciativas() != null)
 			organizacionStrategos.setPorcentajeZonaVerdeIniciativas(editarOrganizacionForm.getPorcentajeZonaVerdeIniciativas());
-		else 
+		else
 			organizacionStrategos.setPorcentajeZonaVerdeIniciativas(null);
 
 		if (editarOrganizacionForm.getPorcentajeZonaAmarillaIniciativas() != null)
 			organizacionStrategos.setPorcentajeZonaAmarillaIniciativas(editarOrganizacionForm.getPorcentajeZonaAmarillaIniciativas());
-		else 
+		else
 			organizacionStrategos.setPorcentajeZonaAmarillaIniciativas(null);
 
 		organizacionStrategos.setMesCierre(editarOrganizacionForm.getMesCierre());
@@ -146,7 +151,7 @@ public class GuardarOrganizacionAction extends VgcAction
 
 		organizacionStrategos.getMemos().clear();
 
-		if (editarOrganizacionForm.getDescripcion() != null) 
+		if (editarOrganizacionForm.getDescripcion() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(0)));
@@ -154,7 +159,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getObservaciones() != null) 
+		if (editarOrganizacionForm.getObservaciones() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(1)));
@@ -162,7 +167,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getPersonalDirectivo() != null) 
+		if (editarOrganizacionForm.getPersonalDirectivo() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(2)));
@@ -170,7 +175,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getMision() != null) 
+		if (editarOrganizacionForm.getMision() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(3)));
@@ -178,7 +183,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getVision() != null) 
+		if (editarOrganizacionForm.getVision() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(4)));
@@ -186,7 +191,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getOportunidadesRetos() != null) 
+		if (editarOrganizacionForm.getOportunidadesRetos() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(5)));
@@ -194,7 +199,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getLineamientosEstrategicos() != null) 
+		if (editarOrganizacionForm.getLineamientosEstrategicos() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(6)));
@@ -202,7 +207,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getFactoresClave() != null) 
+		if (editarOrganizacionForm.getFactoresClave() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(7)));
@@ -210,7 +215,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getPoliticas() != null) 
+		if (editarOrganizacionForm.getPoliticas() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(8)));
@@ -218,7 +223,7 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.getMemos().add(memoOrganizacion);
 		}
 
-		if (editarOrganizacionForm.getValores() != null) 
+		if (editarOrganizacionForm.getValores() != null)
 		{
 			MemoOrganizacion memoOrganizacion = new MemoOrganizacion();
 			memoOrganizacion.setPk(new MemoOrganizacionPK(organizacionStrategos.getOrganizacionId(), new Integer(9)));
@@ -252,8 +257,8 @@ public class GuardarOrganizacionAction extends VgcAction
 		saveMessages(request, messages);
 
 		request.getSession().setAttribute("GuardarOrganizacionAction.ultimoTs", ts);
-		
-		if (forward.equals("exito")) 
+
+		if (forward.equals("exito"))
 			return getForwardBack(request, 1, true);
 		else if (forward.equals("duplicado"))
 			return getForwardBack(request, 1, true);

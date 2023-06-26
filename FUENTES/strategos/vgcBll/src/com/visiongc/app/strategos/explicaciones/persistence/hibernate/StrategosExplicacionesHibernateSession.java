@@ -7,6 +7,9 @@ import com.visiongc.app.strategos.indicadores.model.IndicadorAsignarInventario;
 import com.visiongc.app.strategos.persistence.hibernate.StrategosHibernateSession;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.util.PaginaLista;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -217,4 +220,12 @@ public class StrategosExplicacionesHibernateSession
 		 
 		return adjunto;
   }
+  
+  public List<AdjuntoExplicacion> getAdjuntos(){
+	  String sql = "from AdjuntoExplicacion adjunto";
+	  Query consulta = session.createQuery(sql);
+		 
+	  return consulta.list();
+  }
 }
+

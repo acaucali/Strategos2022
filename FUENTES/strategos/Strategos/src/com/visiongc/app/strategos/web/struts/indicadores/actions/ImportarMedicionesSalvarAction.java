@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
@@ -14,25 +14,17 @@ import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import jxl.Cell;
-import jxl.CellType;
-import jxl.DateCell;
-import jxl.LabelCell;
-import jxl.NumberCell;
-import jxl.Sheet;
-import jxl.Workbook;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -64,8 +56,15 @@ import com.visiongc.framework.model.Importacion;
 import com.visiongc.framework.model.Importacion.ImportacionType;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.util.FrameworkConnection;
-import com.visiongc.framework.web.struts.actions.LogonAction;
 import com.visiongc.servicio.strategos.servicio.model.Servicio;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.DateCell;
+import jxl.LabelCell;
+import jxl.NumberCell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /**
  * @author Kerwin
@@ -78,14 +77,16 @@ public class ImportarMedicionesSalvarAction extends VgcAction
     private boolean hayPeriodo = false;
     private boolean hayMedicion = false;
 
-    public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+    @Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		/** Se obtiene el FormBean haciendo el casting respectivo */
@@ -94,15 +95,15 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		if (request.getParameter("funcion") != null)
 		{
 	    	String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("verificar")) 
+	    	if (funcion.equals("verificar"))
 	    	{
 	    	    hayCodigo = false;
 	    	    hayAno = false;
 	    	    hayPeriodo = false;
 	    	    hayMedicion = false;
-	    	    
+
 	    		Verificar(request, importarMedicionesForm);
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
 	    	else if (funcion.equals("salvar"))
@@ -112,7 +113,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    			importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusSalvado());
 	    		else
 	    			importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusNoSalvado());
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
 	    	else if (funcion.equals("eliminar"))
@@ -126,11 +127,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    	else if (funcion.equals("read"))
 	    	{
 	    		Long id = Long.parseLong(request.getParameter("Id"));
-	    		
+
 	    		ImportacionService importarService = FrameworkServiceFactory.getInstance().openImportacionService();
 	    	    Importacion importacion = (Importacion)importarService.load(Importacion.class, new Long(id));
 	    	    importarService.close();
-	    	    
+
 	    	    if (importacion != null)
 	    	    	request.setAttribute("ajaxResponse", importacion.getId().toString() + "|" + importacion.getNombre());
 	    	    else
@@ -140,21 +141,21 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    	else if (funcion.equals("readFull"))
 	    	{
 	    		Long id = Long.parseLong(request.getParameter("Id"));
-	    		
+
 	    		ImportacionService importarService = FrameworkServiceFactory.getInstance().openImportacionService();
 	    	    Importacion importacion = (Importacion)importarService.load(Importacion.class, new Long(id));
 	    	    importarService.close();
-	    	    
+
 	    	    importarMedicionesForm.setId(importacion.getId());
 	    	    importarMedicionesForm.setNombre(importacion.getNombre());
 	    	    importarMedicionesForm.setPlanSeleccion(importacion.getNombre());
 	    	    importarMedicionesForm.setTipoFuente(importacion.getTipo());
 	    	    importarMedicionesForm.setXml(importacion.getConfiguracion());
 	    	    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusReadSuccess());
-	    	    
+
 	    	    return mapping.findForward(forward);
 	    	}
-	    	else if (funcion.equals("importar")) 
+	    	else if (funcion.equals("importar"))
 	    	{
 	    		String showPresentacion = request.getParameter("showPresentacion") != null ? request.getParameter("showPresentacion").toString() : "0";
 	    		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
@@ -167,9 +168,9 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				presentacion.setData(showPresentacion);
 				frameworkService.saveConfiguracionUsuario(presentacion, this.getUsuarioConectado(request));
 				frameworkService.close();
-	    		
+
 	    		Importar(request, importarMedicionesForm);
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
 		}
@@ -180,7 +181,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	private void Importar(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
 	    StringBuffer log = new StringBuffer();
-	    
+
 	    VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.log.titulocalculo") + "\n");
 
@@ -189,7 +190,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
 	    argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.log.fechainiciocalculo", argsReemplazo) + "\n\n");
-	    
+
 	    if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePlano().byteValue())
 	    	BuscarDatosTxt(request, log, messageResources, importarMedicionesForm);
 	    else if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeExcel().byteValue() && importarMedicionesForm.getExcelTipo().byteValue() == 0)
@@ -207,11 +208,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	    log.append("\n\n");
 	    log.append(messageResources.getResource("jsp.asistente.importacion.log.fechafin.programada", argsReemplazo) + "\n\n");
-	    
+
 	    request.getSession().setAttribute("verArchivoLog", log);
 	}
-	
-	
+
+
 	private void BuscarDatosTxt(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
 	    int indice;
@@ -222,17 +223,17 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    int posicionMedicion = 0;
 	    int posicion = 0;
 	    int filas = 0;
-		
+
 	    FormFile archivo = importarMedicionesForm.getFileForm();
     	ActionMessages messages = getMessages(request);
-    	
+
 	    BufferedReader entrada;
 	    String res;
-	    try 
+	    try
 	    {
 	    	entrada = new BufferedReader(new InputStreamReader(archivo.getInputStream()));
 	    	String linea;
-	    
+
 	    	while(entrada.ready())
 	    	{
 	    		linea = entrada.readLine();
@@ -248,7 +249,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						campo = linea.substring(0, indice);
 						linea = linea.substring(indice + 1, linea.length());
 						if (posicionCodigo == 0 && campo.equalsIgnoreCase("Codigo"))
-							posicionCodigo = posicion; 
+							posicionCodigo = posicion;
 						else if (posicionAno == 0 && campo.equalsIgnoreCase("Ano"))
 							posicionAno = posicion;
 						else if (posicionPeriodo == 0 && campo.equalsIgnoreCase("Periodo"))
@@ -260,7 +261,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 					{
 						posicion++;
 						if (posicionCodigo == 0 && linea.equalsIgnoreCase("Codigo"))
-							posicionCodigo = posicion; 
+							posicionCodigo = posicion;
 						else if (posicionAno == 0 && linea.equalsIgnoreCase("Ano"))
 							posicionAno = posicion;
 						else if (posicionPeriodo == 0 && linea.equalsIgnoreCase("Periodo"))
@@ -268,18 +269,18 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						else if (posicionMedicion == 0 && linea.equalsIgnoreCase("Medicion"))
 							posicionMedicion = posicion;
 					}
-					
+
 					if (posicionCodigo != 0 && posicionAno != 0 && posicionPeriodo != 0 && posicionMedicion != 0)
 						break;
 				}
 	    	}
-	    	
+
 	    	entrada.close();
-	    	
+
 	    	if (posicionCodigo != 0 && posicionAno != 0 && posicionPeriodo != 0 && posicionMedicion != 0)
 	    	{
 	    		String[][] datos = new String[filas][4];
-		    
+
 		    	entrada = new BufferedReader(new InputStreamReader(archivo.getInputStream()));
 		    	String codigoArchivo = "";
 		    	String anoArchivo = "";
@@ -291,7 +292,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			    	codigoArchivo = "";
 			    	anoArchivo = "";
 			    	periodoArchivo = "";
-			    	medicionArchivo = ""; 
+			    	medicionArchivo = "";
 		    		linea = entrada.readLine();
 					posicion = 0;
 		    		indice = 0;
@@ -304,7 +305,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 							campo = linea.substring(0, indice);
 							linea = linea.substring(indice + 1, linea.length());
 							if (posicion == posicionCodigo)
-								codigoArchivo = campo; 
+								codigoArchivo = campo;
 							else if (posicion == posicionAno)
 								anoArchivo = campo;
 							else if (posicion == posicionPeriodo)
@@ -316,7 +317,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						{
 							posicion++;
 							if (posicion == posicionCodigo)
-								codigoArchivo = linea; 
+								codigoArchivo = linea;
 							else if (posicion == posicionAno)
 								anoArchivo = linea;
 							else if (posicion == posicionPeriodo)
@@ -324,11 +325,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 							else if (posicion == posicionMedicion)
 								medicionArchivo = linea;
 						}
-						
+
 						if (!codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 							break;
 					}
-					
+
 					if (!codigoArchivo.equalsIgnoreCase("Codigo") && !codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 					{
 						datos[filas][0] = codigoArchivo;
@@ -338,9 +339,9 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			    		filas++;
 					}
 		    	}
-		    	
+
 		    	entrada.close();
-		    	
+
 				if (datos.length > 0)
 					Importar(request, log, messageResources, datos, importarMedicionesForm);
 				else
@@ -351,7 +352,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				}
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -364,7 +365,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusImportado());
 		    importarMedicionesForm.setRespuesta(res);
 	    }
-	    
+
 	    if (importarMedicionesForm.getRespuesta().equals("Error"))
 	    {
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.fin.importar.archivo.error"));
@@ -380,16 +381,16 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    int posicionPeriodo = 0;
 	    int posicionMedicion = 0;
 	    int filas = 0;
-		
+
 	    String res = "";
     	ActionMessages messages = getMessages(request);
-    	
-	    try 
+
+	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = importarMedicionesForm.getFileForm();
 	    	Workbook workbook = Workbook.getWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	Sheet sheet = workbook.getSheet(0);
 	    	Cell celda = null;
@@ -399,11 +400,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    		for ( int j=0, k=sheet.getColumns(); j<k; j++ )
 	    		{
 	    			celda = sheet.getCell(j, i);
-	    			
+
 	    			// Obtenemos el contenido de la celda
 	    			campo = celda.getContents();
 					if (campo.equalsIgnoreCase("Codigo"))
-						posicionCodigo = j + 1; 
+						posicionCodigo = j + 1;
 					else if (campo.equalsIgnoreCase("Ano"))
 						posicionAno = j + 1;
 					else if (campo.equalsIgnoreCase("Periodo"))
@@ -418,13 +419,13 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    		if (posicionCodigo != 0 && posicionAno != 0 && posicionPeriodo != 0 && posicionMedicion != 0)
 					break;
 	    	}
-	    	
+
 	    	workbook.close();
 
 	    	if (posicionCodigo != 0 && posicionAno != 0 && posicionPeriodo != 0 && posicionMedicion != 0)
 	    	{
 	    		String[][] datos = new String[filas][4];
-		    
+
 		    	String codigoArchivo = "";
 		    	String anoArchivo = "";
 		    	String periodoArchivo = "";
@@ -432,7 +433,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 		    	// Lo primero es leer un workbook que representa todo el documento XLS
 		    	workbook = Workbook.getWorkbook(archivo.getInputStream());
-		    	
+
 		    	//Elegimos la primera hoja
 		    	sheet = workbook.getSheet(0);
 		    	celda = null;
@@ -443,25 +444,25 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			    	codigoArchivo = "";
 			    	anoArchivo = "";
 			    	periodoArchivo = "";
-			    	medicionArchivo = ""; 
+			    	medicionArchivo = "";
 		    		for ( int j=0, k=sheet.getColumns(); j<k; j++ )
 		    		{
 		    			celda = sheet.getCell(j, r);
 
 		    			campo = celda.getContents();
 						if ((j + 1) == posicionCodigo)
-							codigoArchivo = campo; 
+							codigoArchivo = campo;
 						else if ((j + 1) == posicionAno)
 							anoArchivo = campo;
 						else if ((j + 1) == posicionPeriodo)
 							periodoArchivo = campo;
 						else if ((j + 1) == posicionMedicion)
 							medicionArchivo = getValue(celda);
-		    			
+
 						if (!codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 							break;
 					}
-		    	
+
 					if (!codigoArchivo.equalsIgnoreCase("Codigo") && !codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 					{
 						datos[filas][0] = codigoArchivo;
@@ -471,9 +472,9 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						filas++;
 					}
 		    	}
-		    	
+
 		    	workbook.close();
-		    	
+
 				if (datos.length > 0)
 					Importar(request, log, messageResources, datos, importarMedicionesForm);
 				else
@@ -484,7 +485,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				}
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -497,14 +498,14 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusImportado());
 		    importarMedicionesForm.setRespuesta(res);
 	    }
-	    
+
 	    if (importarMedicionesForm.getRespuesta().equals("Error"))
 	    {
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.fin.importar.archivo.error"));
 		    saveMessages(request, messages);
 	    }
 	}
-	
+
 	private void BuscarDatosExcel2010(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
 	    String campo = "";
@@ -515,20 +516,20 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    Integer filas = 0;
 	    Integer filaError = null;
 	    Integer columnaError = null;
-		
+
 	    String res = "";
     	ActionMessages messages = getMessages(request);
-    	
-	    try 
+
+	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = importarMedicionesForm.getFileForm();
 	    	XSSFWorkbook workBook = new XSSFWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	XSSFSheet hssfSheet = workBook.getSheetAt(0);
 	    	filas = hssfSheet.getPhysicalNumberOfRows();
-	    	for (Iterator<Row> i = hssfSheet.rowIterator(); i.hasNext(); ) 
+	    	for (Iterator<Row> i = hssfSheet.rowIterator(); i.hasNext(); )
             {
             	XSSFRow hssfRow = (XSSFRow)i.next();
             	for (Iterator<org.apache.poi.ss.usermodel.Cell> j = hssfRow.cellIterator(); j.hasNext(); )
@@ -536,7 +537,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
             		XSSFCell hssfCell = (XSSFCell) j.next();
             		campo = hssfCell.toString();
 					if (campo.equalsIgnoreCase("Codigo"))
-						posicionCodigo = hssfCell.getColumnIndex(); 
+						posicionCodigo = hssfCell.getColumnIndex();
 					else if (campo.equalsIgnoreCase("Ano"))
 						posicionAno = hssfCell.getColumnIndex();
 					else if (campo.equalsIgnoreCase("Periodo"))
@@ -546,16 +547,16 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 					if (posicionCodigo != null && posicionAno != null && posicionPeriodo != null && posicionMedicion != null)
 						break;
-            		
+
             	}
             	if (posicionCodigo != null && posicionAno != null && posicionPeriodo != null && posicionMedicion != null)
 					break;
             }
-	    			
+
 	    	if (posicionCodigo != null && posicionAno != null && posicionPeriodo != null && posicionMedicion != null)
 	    	{
 	    		String[][] datos = new String[filas][4];
-		    
+
 		    	String codigoArchivo = "";
 		    	String anoArchivo = "";
 		    	String periodoArchivo = "";
@@ -563,7 +564,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 		    	// Lo primero es leer un workbook que representa todo el documento XLS
 		    	workBook = new XSSFWorkbook(archivo.getInputStream());
-		    	
+
 		    	//Elegimos la primera hoja
 		    	hssfSheet = workBook.getSheetAt(0);
 		    	int fila = 0;
@@ -580,28 +581,28 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			    		XSSFCell hssfCell = (XSSFCell) j.next();
 			    		columnaError = hssfCell.getColumnIndex();
 						if (hssfCell.getColumnIndex() == posicionCodigo)
-							codigoArchivo = hssfCell.toString(); 
+							codigoArchivo = hssfCell.toString();
 						else if (hssfCell.getColumnIndex() == posicionAno)
 						{
-							if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_STRING)
+							if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING)
 								anoArchivo = hssfCell.toString();
-							else if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
+							else if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC)
 								anoArchivo = ((Integer) ((int) hssfCell.getNumericCellValue())).toString();
 						}
 						else if (hssfCell.getColumnIndex() == posicionPeriodo)
 						{
-							if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_STRING)
+							if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING)
 								periodoArchivo = hssfCell.toString();
-							else if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
+							else if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC)
 								periodoArchivo = ((Integer) ((int) hssfCell.getNumericCellValue())).toString();
 						}
 						else if (hssfCell.getColumnIndex() == posicionMedicion)
 							medicionArchivo = getValue(hssfCell);
-		    			
+
 						if (!codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 							break;
 					}
-		    	
+
 					if (!codigoArchivo.equalsIgnoreCase("Codigo") && !codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 					{
 						datos[fila][0] = codigoArchivo;
@@ -611,7 +612,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						fila++;
 					}
 		    	}
-		    	
+
 				if (datos.length > 0)
 					Importar(request, log, messageResources, datos, importarMedicionesForm);
 				else
@@ -622,7 +623,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				}
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -650,14 +651,14 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusFileError());
 		    importarMedicionesForm.setRespuesta(res);
 	    }
-	    
+
 	    if (importarMedicionesForm.getRespuesta().equals("Error"))
 	    {
 		    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.fin.importar.archivo.error"));
 		    saveMessages(request, messages);
 	    }
 	}
-	
+
 	private void BuscarDatosBd(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
 		ActionMessages messages = getMessages(request);
@@ -668,7 +669,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		String sql = null;
 		if (importarMedicionesForm.getBdPassword() == null || importarMedicionesForm.getBdPassword().equals(""))
 			importarMedicionesForm.setBdPasswrod(request.getParameter("password"));
-		
+
 		if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePostGreSQL().byteValue())
 		{
 			driver = "org.postgresql.Driver";
@@ -684,9 +685,9 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 			url ="jdbc:sqlserver://" + importarMedicionesForm.getBdServidor() + ":" + importarMedicionesForm.getBdPuerto() + ";databaseName=" + importarMedicionesForm.getBdNombre() + ";user=" + importarMedicionesForm.getBdUsuario() + ";password=" + importarMedicionesForm.getBdPassword() + ";";
 		}
-	    
-		Boolean conexionExitosa = false;
-	    try 
+
+		boolean conexionExitosa = false;
+	    try
 	    {
 	    	Class.forName(driver);
 	    	cn = DriverManager.getConnection(url, importarMedicionesForm.getBdUsuario(), importarMedicionesForm.getBdPassword());
@@ -694,11 +695,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    	Statement stm = cn.createStatement();
 
 	    	sql = "SELECT COUNT(*) AS Rec_Count FROM " + importarMedicionesForm.getBdTabla();
-	    	
+
 	    	ResultSet rs = stm.executeQuery(sql);
-			
+
 	    	int filas = 0;
-			while (rs.next()) 
+			while (rs.next())
 				filas = rs.getInt("Rec_Count");
 			rs.close();
 
@@ -706,24 +707,24 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			if (filas > 0)
 			{
 	    		datos = new String[filas][4];
-	    	    
+
 		    	String codigoArchivo = "";
 		    	String anoArchivo = "";
 		    	String periodoArchivo = "";
 		    	String medicionArchivo = "";
-		    	
+
 		    	sql = "SELECT codigo, ano, periodo, medicion FROM " + importarMedicionesForm.getBdTabla();
-		    	
+
 		    	rs = stm.executeQuery(sql);
 
 		    	filas = 0;
-				while (rs.next()) 
+				while (rs.next())
 				{
 					codigoArchivo = rs.getString("codigo");
 					anoArchivo = rs.getString("ano");
 					periodoArchivo = rs.getString("periodo");
 					medicionArchivo = rs.getString("medicion");
-					
+
 					if (!codigoArchivo.equalsIgnoreCase("Codigo") && !codigoArchivo.equals("") && !anoArchivo.equals("") && !periodoArchivo.equals("") && !medicionArchivo.equals(""))
 					{
 						datos[filas][0] = codigoArchivo;
@@ -732,14 +733,14 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						datos[filas][3] = medicionArchivo;
 						filas++;
 					}
-				}	    	
+				}
 				rs.close();
 			}
 
 			stm.close();
 	    	cn.close();
 	    	cn = null;
-	    	
+
 	    	if (datos != null)
 	    		Importar(request, log, messageResources, datos, importarMedicionesForm);
 	    	else
@@ -749,7 +750,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			    saveMessages(request, messages);
 	    	}
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 
@@ -777,11 +778,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	private String getValue(XSSFCell hssfCell)
 	{
 		String value = "";
-		
-		if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_STRING) 
-			value = hssfCell.toString(); 
-		else if (hssfCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC || hssfCell.getCellType() == XSSFCell.CELL_TYPE_FORMULA) 
-		{ 
+
+		if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING)
+			value = hssfCell.toString();
+		else if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC || hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_FORMULA)
+		{
 			Double valor = null;
 			//try
 			//{
@@ -792,34 +793,34 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				//return null;
 			//}
 			if (valor != null)
-				value = valor.toString(); 
+				value = valor.toString();
 		}
-		
+
 		return value;
 	}
-	
+
 	private String getValue(Cell celda)
 	{
 		String value = "";
-		
-		if (celda.getType() == CellType.LABEL) 
-		{ 
-			LabelCell lc = (LabelCell) celda; 
-			value = lc.getString(); 
+
+		if (celda.getType() == CellType.LABEL)
+		{
+			LabelCell lc = (LabelCell) celda;
+			value = lc.getString();
 		}
-		else if (celda.getType() == CellType.NUMBER || celda.getType() == CellType.NUMBER_FORMULA) 
-		{ 
+		else if (celda.getType() == CellType.NUMBER || celda.getType() == CellType.NUMBER_FORMULA)
+		{
 			NumberCell nc = (NumberCell) celda;
 			Double valor = nc.getValue();
-			value = valor.toString(); 
+			value = valor.toString();
 		}
-		else if (celda.getType() == CellType.DATE) 
-		{ 
+		else if (celda.getType() == CellType.DATE)
+		{
 			DateCell dc = (DateCell) celda;
 			Date valor = dc.getDate();
-			value = valor.toString(); 
-		} 		
-		
+			value = valor.toString();
+		}
+
 		return value;
 	}
 
@@ -835,10 +836,10 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		else
 		{
 			ServicioForm servicioForm = new ServicioForm();
-			
+
 			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 			Configuracion configuracion = frameworkService.getConfiguracion("Strategos.Servicios.Configuracion");
-			
+
 			if (configuracion == null)
 			{
 				importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusNoConfigurado());
@@ -848,14 +849,14 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			else
 			{
 				//XML
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-		        DocumentBuilder db = dbf.newDocumentBuilder(); 
-		        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8"))); 
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		        DocumentBuilder db = dbf.newDocumentBuilder();
+		        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8")));
 		        doc.getDocumentElement().normalize();
 				NodeList nList = doc.getElementsByTagName("properties");
 				Element eElement = (Element) nList.item(0);
 				/** Se obtiene el FormBean haciendo el casting respectivo */
-				String url = VgcAbstractService.getTagValue("url", eElement);;
+				String url = VgcAbstractService.getTagValue("url", eElement);
 				String driver = VgcAbstractService.getTagValue("driver", eElement);
 				String user = VgcAbstractService.getTagValue("user", eElement);
 				String password = VgcAbstractService.getTagValue("password", eElement);
@@ -871,7 +872,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				{
 					byte tipoMedicion = request.getParameter("tipoMedicion") != null ? Byte.parseByte(request.getParameter("tipoMedicion").toString()) : 0;
 					Usuario usuario = getUsuarioConectado(request);
-					Boolean todosOrganizacion = request.getParameter("todosOrganizacion") != null ? (request.getParameter("todosOrganizacion").toString().equals("1") ? true : false) : false; 
+					boolean todosOrganizacion = request.getParameter("todosOrganizacion") != null ? (request.getParameter("todosOrganizacion").toString().equals("1") ? true : false) : false;
 					servicioForm.setProperty("url", url);
 					servicioForm.setProperty("driver", driver);
 					servicioForm.setProperty("user", user);
@@ -881,7 +882,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 					servicioForm.setProperty("logMediciones", ((Boolean)(request.getParameter("logMediciones") != null ? (request.getParameter("logMediciones").toString().equals("1") ? true : false) : false)).toString());
 					servicioForm.setProperty("logErrores", ((Boolean)(request.getParameter("logErrores") != null ? (request.getParameter("logErrores").toString().equals("1") ? true : false) : false)).toString());
 					servicioForm.setProperty("todosPlanes", ((Boolean)(request.getParameter("todosPlanes") != null ? (request.getParameter("todosPlanes").toString().equals("1") ? true : false) : false)).toString());
-					servicioForm.setProperty("todosOrganizacion", todosOrganizacion.toString());
+					servicioForm.setProperty("todosOrganizacion", Boolean.toString(todosOrganizacion));
 					servicioForm.setProperty("tipoMedicion", ((Byte)(tipoMedicion)).toString());
 					servicioForm.setProperty("tipoImportacion", ((Byte)(request.getParameter("tipoImportacion") != null ? Byte.parseByte(request.getParameter("tipoImportacion").toString()) : 0)).toString());
 					servicioForm.setProperty("calcular", ((Boolean)(request.getParameter("calcularMediciones") != null ? (request.getParameter("calcularMediciones").toString().equals("1") ? true : false) : false)).toString());
@@ -895,7 +896,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 					servicioForm.setProperty("usuarioId", usuario.getUsuarioId().toString());
 					if (!todosOrganizacion)
 						servicioForm.setProperty("organizacionId", (String)request.getSession().getAttribute("organizacionId"));
-					
+
 					StringBuffer logBefore = log;
 					boolean respuesta = new com.visiongc.servicio.strategos.importar.ImportarManager(servicioForm.Get(), log, com.visiongc.servicio.web.importar.util.VgcMessageResources.getVgcMessageResources("StrategosWeb")).Ejecutar(datos);
 					log = logBefore;
@@ -917,24 +918,24 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						res = "Successful";
 					    messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.importacion.archivo.configuracion.alerta.fin"));
 					    saveMessages(request, messages);
-					    
+
 						if (usuario != null)
 						{
 							Calendar ahora = Calendar.getInstance();
 							byte tipoEvento = AuditoriaTipoEvento.getAuditoriaTipoEventoImportar();
-							Servicio servicio = new Servicio();  
+							Servicio servicio = new Servicio();
 							servicio.setUsuarioId(usuario.getUsuarioId());
 							servicio.setFecha(VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy") + " " + VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a"));
 							servicio.setNombre(messageResources.getResource("jsp.asistente.importacion.titulocalculo"));
-							
+
 							String[] argsReemplazo = new String[2];
 						    argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
 						    argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
 
 							servicio.setMensaje(messageResources.getResource("jsp.asistente.importacion.log.fechafin.programada", argsReemplazo));
 							servicio.setEstatus(CalcularStatus.getCalcularStatusCalculado());
-							
-							frameworkService.registrarAuditoriaEvento((Object) servicio, usuario, tipoEvento);
+
+							frameworkService.registrarAuditoriaEvento(servicio, usuario, tipoEvento);
 						}
 					}
 
@@ -942,11 +943,11 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 					importarMedicionesForm.setRespuesta(res);
 				}
 			}
-			
+
 			frameworkService.close();
 		}
 	}
-	
+
 	private void Verificar(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
 	    if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePlano().byteValue())
@@ -960,7 +961,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    		|| importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeSqlServer().byteValue())
 	    	ObtenerTablasBd(request, importarMedicionesForm);
 	}
-	
+
 	private void ObtenerTablasBd(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
 		String tablas = null;
@@ -973,7 +974,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		Boolean verificarTabla = Boolean.parseBoolean(request.getParameter("verificarTabla"));
 		if (importarMedicionesForm.getBdPassword() == null || importarMedicionesForm.getBdPassword().equals("") || (importarMedicionesForm.getBdPassword() != null && !importarMedicionesForm.getBdPassword().equals(request.getParameter("password"))))
 			importarMedicionesForm.setBdPasswrod(request.getParameter("password"));
-		
+
 		if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePostGreSQL().byteValue())
 		{
 			driver = "org.postgresql.Driver";
@@ -992,9 +993,9 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			url ="jdbc:sqlserver://" + importarMedicionesForm.getBdServidor() + ":" + importarMedicionesForm.getBdPuerto() + ";databaseName=" + importarMedicionesForm.getBdNombre() + ";user=" + importarMedicionesForm.getBdUsuario() + ";password=" + importarMedicionesForm.getBdPassword() + ";";
 			sql = "SELECT name AS TBNAME FROM sysobjects WHERE (type = 'U' OR type = 'V') ORDER BY name";
 		}
-	    
-		Boolean conexionExitosa = false;
-	    try 
+
+		boolean conexionExitosa = false;
+	    try
 	    {
 	    	Class.forName(driver);
 	    	cn = DriverManager.getConnection(url, importarMedicionesForm.getBdUsuario(), importarMedicionesForm.getBdPassword());
@@ -1002,14 +1003,14 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    	Statement stm = cn.createStatement();
 
 	    	ResultSet rs = stm.executeQuery(sql);
-			
+
 	    	tablas = "";
-			while (rs.next()) 
+			while (rs.next())
 			{
 				if (tablas != null && !tablas.equals(""))
 					tablas = tablas + "|";
 				tablas = tablas + rs.getString("TBNAME");
-			}	    	
+			}
 			rs.close();
 
 			if (verificarTabla)
@@ -1022,8 +1023,8 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 					sql = "SELECT COLUMN_NAME AS columnName FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + importarMedicionesForm.getBdTabla().toUpperCase() + "'";
 
 				rs = stm.executeQuery(sql);
-				
-				while (rs.next()) 
+
+				while (rs.next())
 				{
 					String campo = rs.getString("columnName");
 					if (!hayCodigo && campo.equalsIgnoreCase("Codigo"))
@@ -1034,18 +1035,18 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						hayPeriodo = true;
 					else if (!hayMedicion && campo.equalsIgnoreCase("Medicion"))
 						hayMedicion = true;
-				}	    	
+				}
 				rs.close();
 			}
-			
+
 			stm.close();
 	    	cn.close();
 	    	cn = null;
 	    }
-    	catch (Exception e2) 
+    	catch (Exception e2)
     	{
     	}
-	    
+
 	    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusValidado());
 	    if (!conexionExitosa)
 	    {
@@ -1072,7 +1073,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 		    importarMedicionesForm.setRespuesta(respuesta);
 	    }
 	}
-	
+
 	private void VerificarTxt(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
 	    String separador = importarMedicionesForm.getSeparador();
@@ -1082,14 +1083,14 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	    FormFile archivo = (FormFile) importarMedicionesForm.getMultipartRequestHandler().getFileElements().get("file_browse");
 	    importarMedicionesForm.setFileForm(archivo);
-	    
+
 	    String res;
-	    try 
+	    try
 	    {
 	    	entrada = new BufferedReader(new InputStreamReader(archivo.getInputStream()));
 	    	String linea;
 
-	    	while(entrada.ready()) 	    
+	    	while(entrada.ready())
 	    	{
 	    		linea = entrada.readLine();
 	    		indice = 0;
@@ -1120,23 +1121,23 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						else if (!hayMedicion && linea.equalsIgnoreCase("Medicion"))
 							hayMedicion = true;
 					}
-					
+
 					if (hayCodigo && hayAno && hayPeriodo && hayMedicion)
 						break;
 				}
-				
+
 				if (hayCodigo && hayAno && hayPeriodo && hayMedicion)
 					break;
 	    	}
-	    	
+
 	    	entrada.close();
-	    	
+
 	    	res = "Codigo=" + (hayCodigo ? "true" : "false") + ",";
 		    res = res + "Ano=" + (hayAno ? "true" : "false") + ",";
 		    res = res + "Periodo=" + (hayPeriodo ? "true" : "false") + ",";
-		    res = res + "Medicion=" + (hayMedicion ? "true" : "false");	    	
+		    res = res + "Medicion=" + (hayMedicion ? "true" : "false");
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
@@ -1146,32 +1147,32 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    importarMedicionesForm.setRespuesta(res);
     	importarMedicionesForm.setBdStatusTabla(res);
 	}
-	
+
 	private void VerificarExcel2007(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
 	    String res;
 	    String campo;
-	    
+
 	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = (FormFile) importarMedicionesForm.getMultipartRequestHandler().getFileElements().get("file_browse");
 	    	importarMedicionesForm.setFileForm(archivo);
 	    	Workbook workbook = Workbook.getWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	Sheet sheet = workbook.getSheet(0);
 	    	Cell celda = null;
-	    	
+
 	    	for ( int i=0, z=sheet.getRows(); i<z; i++ )
 	    	{
 	    		for ( int j=0, k=sheet.getColumns(); j<k; j++ )
 	    		{
 	    			celda = sheet.getCell(j, i);
-	    			
+
 	    			// Obtenemos el contenido de la celda
 	    			campo = celda.getContents();
-	    			
+
 					if (!hayCodigo && campo.equalsIgnoreCase("Codigo"))
 						hayCodigo = true;
 					else if (!hayAno && campo.equalsIgnoreCase("Ano"))
@@ -1188,40 +1189,40 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    		if (hayCodigo && hayAno && hayPeriodo && hayMedicion)
 					break;
 	    	}
-	    	
+
 	    	workbook.close();
-	    	
+
 	    	res = "Codigo=" + (hayCodigo ? "true" : "false") + ",";
 		    res = res + "Ano=" + (hayAno ? "true" : "false") + ",";
 		    res = res + "Periodo=" + (hayPeriodo ? "true" : "false") + ",";
-		    res = res + "Medicion=" + (hayMedicion ? "true" : "false");	    	
+		    res = res + "Medicion=" + (hayMedicion ? "true" : "false");
 	    }
-	    catch(Exception e) 
+	    catch(Exception e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
-	    }	        
+	    }
 
 	    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusValidado());
 	    importarMedicionesForm.setRespuesta(res);
 	    importarMedicionesForm.setBdStatusTabla(res);
 	}
-	
+
 	private void VerificarExcel2010(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
 	    String res;
 	    String campo;
-	    
+
 	    try
 	    {
 	    	// Lo primero es leer un workbook que representa todo el documento XLS
 	    	FormFile archivo = (FormFile) importarMedicionesForm.getMultipartRequestHandler().getFileElements().get("file_browse");
 	    	importarMedicionesForm.setFileForm(archivo);
 	    	XSSFWorkbook workBook = new XSSFWorkbook(archivo.getInputStream());
-	    	
+
 	    	//Elegimos la primera hoja
 	    	XSSFSheet hssfSheet = workBook.getSheetAt(0);
-	    	
+
 	    	Iterator<Row> rowIterator = hssfSheet.rowIterator();
 	    	while (rowIterator.hasNext())
 	    	{
@@ -1233,7 +1234,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	    			// Obtenemos el contenido de la celda
 	    			campo = hssfCell.toString();
-	    			
+
 					if (!hayCodigo && campo.equalsIgnoreCase("Codigo"))
 						hayCodigo = true;
 					else if (!hayAno && campo.equalsIgnoreCase("Ano"))
@@ -1249,27 +1250,27 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 				if (hayCodigo && hayAno && hayPeriodo && hayMedicion)
 					break;
 	    	}
-	    	
+
 	    	res = "Codigo=" + (hayCodigo ? "true" : "false") + ",";
 		    res = res + "Ano=" + (hayAno ? "true" : "false") + ",";
 		    res = res + "Periodo=" + (hayPeriodo ? "true" : "false") + ",";
-		    res = res + "Medicion=" + (hayMedicion ? "true" : "false");	    	
+		    res = res + "Medicion=" + (hayMedicion ? "true" : "false");
 	    }
-	    catch(Exception e) 
+	    catch(Exception e)
 	    {
 	    	e.printStackTrace();
 	    	res = "Error";
-	    }	        
+	    }
 
 	    importarMedicionesForm.setStatus(ImportarStatus.getImportarStatusValidado());
 	    importarMedicionesForm.setRespuesta(res);
 	    importarMedicionesForm.setBdStatusTabla(res);
 	}
-	
+
 	private int Salvar(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
 		int respuesta = 10000;
-		
+
 		ActionMessages messages = getMessages(request);
 		Usuario usuario = getUsuarioConectado(request);
 
@@ -1286,15 +1287,15 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			importacion.setId(new Long(0L));
 			nuevo = true;
 		}
-		
+
 		importacion.setNombre(importarMedicionesForm.getNombre());
 		importacion.setTipo(importarMedicionesForm.getTipoFuente());
 		importacion.setUsuario(usuario);
 		importacion.setUsuarioId(usuario.getUsuarioId());
 		importacion.setConfiguracion(importarMedicionesForm.getXml());
-		
+
 		respuesta = importarService.saveImportacion(importacion, usuario);
-		if (respuesta == 10000) 
+		if (respuesta == 10000)
 		{
 			importarService.unlockObject(request.getSession().getId(), importarMedicionesForm.getId());
 			destruirPoolLocksUsoEdicion(request, importarService);
@@ -1308,7 +1309,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
 
 		importarService.close();
-		
+
 	    if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePlano().byteValue())
 	    	importarMedicionesForm.setRespuesta(importarMedicionesForm.getBdStatusTabla());
 	    else if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeExcel().byteValue() && importarMedicionesForm.getExcelTipo().byteValue() == 0)
@@ -1321,16 +1322,16 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    	importarMedicionesForm.setRespuesta(importarMedicionesForm.getBdListaTablas() + "," + importarMedicionesForm.getBdStatusTabla());
 
 		saveMessages(request, messages);
-		
+
 		return respuesta;
 	}
-	
+
 	private int Eliminar(Long id, HttpServletRequest request)
 	{
 		int result = 10000;
-		
+
 		ActionMessages messages = getMessages(request);
-		
+
 		ImportacionService importarService = FrameworkServiceFactory.getInstance().openImportacionService();
 
 		importarService.unlockObject(request.getSession().getId(), id);
@@ -1338,7 +1339,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    boolean bloqueado = !importarService.lockForDelete(request.getSession().getId(), id);
 
 	    Importacion importacion = (Importacion)importarService.load(Importacion.class, new Long(id));
-		
+
 	    if (importacion != null)
 	    {
 	    	if (bloqueado)
@@ -1353,7 +1354,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	    			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", importacion.getNombre()));
 	    	}
 	    }
-	    else 
+	    else
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 	    importarService.unlockObject(request.getSession().getId(), id);
@@ -1361,6 +1362,6 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	    saveMessages(request, messages);
 
-		return result; 
+		return result;
 	}
 }

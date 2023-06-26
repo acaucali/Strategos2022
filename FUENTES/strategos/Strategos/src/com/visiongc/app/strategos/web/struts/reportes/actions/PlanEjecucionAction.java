@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
@@ -25,15 +25,14 @@ import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.HistoricoType;
+import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.commons.util.HistoricoType;
-import com.visiongc.commons.util.PaginaLista;
 
 /**
  * @author Kerwin
@@ -41,10 +40,12 @@ import com.visiongc.commons.util.PaginaLista;
  */
 public class PlanEjecucionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -53,21 +54,21 @@ public class PlanEjecucionAction extends VgcAction
 
 		ReporteForm reporteForm = (ReporteForm)form;
 		reporteForm.clear();
-		
+
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		Usuario user = getUsuarioConectado(request);
-		
+
 		boolean isAdmin=false;
 		if(user.getIsAdmin()){
-			
+
 			isAdmin=true;
 		}
-	  
+
 		/* Parametros para el reporte */
 		String planId = request.getParameter("planId");
 		String source = request.getParameter("source");
 		Long iniciativaId = null;
-		Long perspectivaId = null;		
+		Long perspectivaId = null;
 
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 		if (source.equals("Plan"))
@@ -86,11 +87,11 @@ public class PlanEjecucionAction extends VgcAction
 				filtro.setNombre(filtroNombre);
 			reporteForm.setFiltro(filtro);
 		}
-				   
+
 	    /*Asigna a la Forma que genera reportes, el nombre de la organizacion y plan seleccionados*/
 	    reporteForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
 		reporteForm.setSource(source);
-		
+
 		Plan plan = null;
 		Calendar ahora = Calendar.getInstance();
 		if (planId != null && !planId.equals(""))
@@ -100,13 +101,13 @@ public class PlanEjecucionAction extends VgcAction
 			reporteForm.setNombrePlan(plan.getNombre());
 			reporteForm.setPlanId(plan.getPlanId());
 			reporteForm.setGrupoAnos(PeriodoUtil.getListaNumeros(plan.getAnoInicial(), plan.getAnoFinal()));
-		}			
+		}
 		else
 			reporteForm.setGrupoAnos(PeriodoUtil.getListaNumeros(ahora.get(1) - 5, ahora.get(1) + 5));
     	reporteForm.setGrupoMeses(PeriodoUtil.getListaMeses());
     	reporteForm.setMesInicial("1");
     	reporteForm.setMesFinal("12");
-    	   	
+
 		if (source.equals("Plan"))
 		{
 			reporteForm.setObjetoSeleccionadoId(perspectivaId);
@@ -125,28 +126,28 @@ public class PlanEjecucionAction extends VgcAction
 			reporteForm.setVisualizarActividadEjecutado(true);
 			reporteForm.setVisualizarActividadMeta(true);
 			reporteForm.setVisualizarActividadAlerta(true);
-			
+
 	    	reporteForm.setAnoInicial(((Integer) ahora.get(1)).toString());
 			reporteForm.setAnoFinal(((Integer) ahora.get(1)).toString());
 		}
-		
+
 		Map<String, String> filtros = new HashMap<String, String>();
-		
+
 		StrategosTipoProyectoService strategosTiposProyectoService = StrategosServiceFactory.getInstance().openStrategosTipoProyectoService();
 		Map<String, String> filtrosTipo = new HashMap();
 		PaginaLista paginaTipos = strategosTiposProyectoService.getTiposProyecto(0, 0, "tipoProyectoId", "asc", true, filtros);
 		strategosTiposProyectoService.close();
-		
+
 		List<TipoProyecto> tipos = new ArrayList<TipoProyecto>();
-		
-		for (Iterator<TipoProyecto> iter = paginaTipos.getLista().iterator(); iter.hasNext(); ) 
+
+		for (Iterator<TipoProyecto> iter = paginaTipos.getLista().iterator(); iter.hasNext(); )
 		{
-			TipoProyecto tipoProyecto = (TipoProyecto)iter.next();
+			TipoProyecto tipoProyecto = iter.next();
 			tipos.add(tipoProyecto);
 		}
-		
+
 		reporteForm.setTipos(tipos);
-	    
+
 	    strategosPlanesService.close();
 
 		return mapping.findForward(forward);

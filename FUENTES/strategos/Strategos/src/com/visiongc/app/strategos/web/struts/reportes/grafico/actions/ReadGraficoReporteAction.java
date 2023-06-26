@@ -1,11 +1,12 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.actions;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,10 +42,12 @@ import com.visiongc.framework.model.ConfiguracionUsuario;
  */
 public class ReadGraficoReporteAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -61,7 +64,7 @@ public class ReadGraficoReporteAction extends VgcAction
 				graficoForm.setShowPresentacion(presentacion.getData().equals("1") ? true : false);
 			frameworkService.close();
 		}
-		  
+
 		if (request.getParameter("xml") != null && !request.getParameter("xml").equals(""))
 		{
 			String res = "";
@@ -82,9 +85,9 @@ public class ReadGraficoReporteAction extends VgcAction
 		else
 			graficoForm.setFrecuencia((byte) 3);
 		graficoForm.setFrecuencias(Frecuencia.getFrecuencias());
-		  
+
 		Calendar ahora = Calendar.getInstance();
-		  
+
 		graficoForm.setPeriodoInicial(new Integer("1"));
 		graficoForm.setPeriodoFinal(new Integer("12"));
 		graficoForm.setNumeroMaximoPeriodos(12);
@@ -93,10 +96,10 @@ public class ReadGraficoReporteAction extends VgcAction
 
 		return mapping.findForward(forward);
 	}
-	  
+
 	public Byte CheckIndicadores(Grafico grafico) throws ParserConfigurationException, SAXException, IOException
 	{
-		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
     	DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(grafico.getConfiguracion()))));
 		NodeList lista = doc.getElementsByTagName("properties");
@@ -107,18 +110,18 @@ public class ReadGraficoReporteAction extends VgcAction
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
 			Indicador indicador = new Indicador();
-				
-			for (int i = 0; i < lista.getLength() ; i ++) 
+
+			for (int i = 0; i < lista.getLength() ; i ++)
 			{
 				Node node = lista.item(i);
 				Element elemento = (Element) node;
 				NodeList nodeLista = null;
 				Node valor = null;
-				
+
 				if (elemento.getElementsByTagName("id").getLength() > 0)
 				{
 					nodeLista = elemento.getElementsByTagName("id").item(0).getChildNodes();
-					valor = (Node) nodeLista.item(0);
+					valor = nodeLista.item(0);
 					if (valor != null)
 					{
 						indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(valor.getNodeValue()));
@@ -126,7 +129,7 @@ public class ReadGraficoReporteAction extends VgcAction
 						{
 							if (frecuencia == null)
 								frecuencia = indicador.getFrecuencia();
-							
+
 							if (frecuencia.byteValue() != indicador.getFrecuencia().byteValue())
 							{
 								frecuencia = null;
@@ -137,10 +140,10 @@ public class ReadGraficoReporteAction extends VgcAction
 				}
 
 			}
-			
+
 			strategosIndicadoresService.close();
 		}
 
 		return frecuencia;
-	}	  
+	}
 }

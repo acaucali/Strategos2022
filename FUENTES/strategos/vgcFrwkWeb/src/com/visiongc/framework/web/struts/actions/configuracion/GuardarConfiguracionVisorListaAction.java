@@ -54,6 +54,7 @@ public class GuardarConfiguracionVisorListaAction
     String nombreVisorLista = request.getParameter("nombreVisorLista");
     Boolean esPropio = Boolean.valueOf(request.getParameter("esPropio") != null ? Boolean.parseBoolean(request.getParameter("esPropio")) : false);
     String data = request.getParameter("data");
+    Boolean instrumento = Boolean.valueOf(request.getParameter("instrumento") != null ? Boolean.parseBoolean(request.getParameter("instrumento")) : false);
     
     String ts = null;
     if (!esPropio.booleanValue())
@@ -61,7 +62,6 @@ public class GuardarConfiguracionVisorListaAction
       boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
       ts = request.getParameter("ts");
       String ultimoTs = (String)request.getSession().getAttribute("GuardarConfiguracionVisorListaAction.ultimoTs");
-      
 
       if ((ts == null) || (ts.equals(""))) {
         cancelar = true;
@@ -72,7 +72,10 @@ public class GuardarConfiguracionVisorListaAction
         }
       }
       if (cancelar) {
-        return getForwardBack(request, 1, true);
+    	  if(instrumento)
+    		  return getForwardBack(request, 2, true);
+    	  else
+    		  return getForwardBack(request, 1, true);
       }
     }
     XmlNodo configuracionVisorLista = null;
@@ -124,7 +127,10 @@ public class GuardarConfiguracionVisorListaAction
       
 
       if (forward.equals("exito")) {
-        return getForwardBack(request, 1, false);
+    	  if(instrumento)
+    		  return getForwardBack(request, 2, true);
+    	  else
+    		  return getForwardBack(request, 1, true);
       }
       return mapping.findForward(forward);
     }

@@ -297,6 +297,14 @@
 		{
 			$('#txtRestriccionUsoHoraHasta').timepicker({'timeFormat': 'h:i A' });
 		});
+		
+		function modificarAdjuntos(){	
+			//alert('El proceso de Unificación se está realizando en segundo plano, cuando finalice el sistema le avisará con el ícono de mensajes')
+		    activarBloqueoEspera();
+			window.document.configurarInicioSesionForm.action='<html:rewrite action="/explicaciones/modificarAdjuntos" />';
+			window.document.configurarInicioSesionForm.submit();						
+						
+		}
 			
 		// validar: expiracion si aplica, duracion y advertencia deben tener valor
 		// todos los demas campos deben tener numero y ademas mayor a cero	
@@ -320,6 +328,21 @@
 				<html:hidden property="restriccionUsoHoraDesde" />
 				<html:hidden property="restriccionUsoHoraHasta" />
 			
+				<table class="contenedorBotonesSeleccion" width="100%">
+					<tr>
+						<td colspan="2"><b>Unificación Adjuntos</td>
+					</tr>
+					<tr>
+						<td width="350px" style="padding-left:10px;">
+							Unificar almacenamiento de adjuntos
+						</td>
+						<td>
+							<input type="button" style="width:150px; height:20px; cursor:pointer" class="cuadroTexto" value="Unificar" onclick="modificarAdjuntos();">
+						</td>
+						 <s:actionmessage/>
+					</tr>
+				</table>
+				<br>
 				<table class="contenedorBotonesSeleccion" width="100%">
 					<tr>
 						<td colspan="2"><b><vgcutil:message key="jsp.framework.iniciosesion.configcontrasena" /></b></td>

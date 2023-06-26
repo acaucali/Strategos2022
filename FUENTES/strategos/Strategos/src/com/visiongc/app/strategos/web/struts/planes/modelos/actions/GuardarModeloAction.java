@@ -1,5 +1,14 @@
 package com.visiongc.app.strategos.web.struts.planes.modelos.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.planes.StrategosModelosService;
 import com.visiongc.app.strategos.planes.model.Modelo;
@@ -8,38 +17,33 @@ import com.visiongc.app.strategos.util.StatusUtil;
 import com.visiongc.app.strategos.web.struts.planes.modelos.forms.EditarModeloForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarModeloAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		EditarModeloForm editarModeloForm = (EditarModeloForm)form;
-		
+
 		ActionMessages messages = getMessages(request);
-		
+
 		if (request.getSession().getAttribute("modeloPlanId") != null)
 			request.getSession().removeAttribute("modeloPlanId");
-		
+
 		StrategosModelosService strategosModelosService = StrategosServiceFactory.getInstance().openStrategosModelosService();
-		
+
 		String editar = request.getParameter("editar") == null ? "0" : request.getParameter("editar");
 		String previsualizar = request.getParameter("previsualizar") == null ? "0" : request.getParameter("previsualizar");
-		
+
 		editarModeloForm.setEditar(editar);
 		editarModeloForm.setPrevisualizar(previsualizar);
 
@@ -59,7 +63,7 @@ public class GuardarModeloAction extends VgcAction
 			modelo.getPk().setModeloId(editarModeloForm.getModeloId());
 		}
 
-		if ((editarModeloForm.getBinario() != null) && (editarModeloForm.getBinario().equals(""))) 
+		if ((editarModeloForm.getBinario() != null) && (editarModeloForm.getBinario().equals("")))
 			editarModeloForm.setBinario(null);
 
 		modelo.setBinario(editarModeloForm.getBinario());
@@ -82,7 +86,7 @@ public class GuardarModeloAction extends VgcAction
 
 		strategosModelosService.close();
 
-		if (editarModeloForm.getPrevisualizar().equals("1")) 
+		if (editarModeloForm.getPrevisualizar().equals("1"))
 			messages.clear();
 
 		saveMessages(request, messages);

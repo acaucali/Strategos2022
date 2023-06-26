@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
@@ -24,20 +33,14 @@ import com.visiongc.app.strategos.web.struts.planes.perspectivas.forms.Gestionar
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class GuardarPerspectivaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -56,7 +59,7 @@ public class GuardarPerspectivaAction extends VgcAction
 
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(ts)))
 			cancelar = true;
 
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
@@ -98,37 +101,34 @@ public class GuardarPerspectivaAction extends VgcAction
 		perspectiva.setNombre(editarPerspectivaForm.getNombre());
 		perspectiva.setFrecuencia(editarPerspectivaForm.getFrecuencia());
 		perspectiva.setTipoCalculo(editarPerspectivaForm.getTipoCalculo());
-		
-		if (perspectiva.getTipoCalculo() == null) 
+
+		if (perspectiva.getTipoCalculo() == null)
 			perspectiva.setTipoCalculo(TipoCalculoPerspectiva.getTipoCalculoPerspectivaManual());
 
 		if ((editarPerspectivaForm.getResponsableId() != null) && (!editarPerspectivaForm.getResponsableId().equals("")) && (editarPerspectivaForm.getResponsableId().byteValue() != 0))
 			perspectiva.setResponsableId(editarPerspectivaForm.getResponsableId());
-		else 
+		else
 			perspectiva.setResponsableId(null);
 
 		if ((editarPerspectivaForm.getDescripcion() != null) && (!editarPerspectivaForm.getDescripcion().equals("")))
 			perspectiva.setDescripcion(editarPerspectivaForm.getDescripcion());
-		else 
+		else
 			perspectiva.setDescripcion(null);
-		
-  		if ((editarPerspectivaForm.getInsumosAsociados() != null) && (!editarPerspectivaForm.getInsumosAsociados().equals(""))) 
+
+  		if ((editarPerspectivaForm.getInsumosAsociados() != null) && (!editarPerspectivaForm.getInsumosAsociados().equals("")))
   		{
   			String[] insumos = editarPerspectivaForm.getInsumosAsociados().split(editarPerspectivaForm.getSeparadorObjetivos());
-  			String[] strInsumo = (String[])null;
+  			String[] strInsumo = null;
   			boolean foundAsociado = false;
   			PerspectivaRelacion relacionCopia;
-  			Set<PerspectivaRelacion> insumosRemover = new HashSet<PerspectivaRelacion>(); 
+  			Set<PerspectivaRelacion> insumosRemover = new HashSet<PerspectivaRelacion>();
   			// Remover los Insumos que no existen
-			for (Iterator<PerspectivaRelacion> k = perspectiva.getRelacion().iterator(); k.hasNext(); ) 
-			{
-				PerspectivaRelacion relacion = k.next();
-  				foundAsociado = false;
-	  			for (int i = 0; i < insumos.length; i++) 
-	  			{
-	  				strInsumo = insumos[i].split("\\]\\[");
-	  				Long insumoAsociado = new Long(strInsumo[1].substring("perspectivaId:".length()));
-    				if (relacion.getPk().getRelacionId() == insumoAsociado.longValue())
+			for (PerspectivaRelacion relacion : perspectiva.getRelacion()) {
+				foundAsociado = false;
+	  			for (String element : insumos) {
+	  				strInsumo = element.split("\\]\\[");
+	  				long insumoAsociado = Long.parseLong(strInsumo[1].substring("perspectivaId:".length()));
+    				if (relacion.getPk().getRelacionId() == insumoAsociado)
         			{
     					foundAsociado = true;
     					break;
@@ -139,22 +139,17 @@ public class GuardarPerspectivaAction extends VgcAction
 					insumosRemover.add(relacion);
 			}
 
-  			for (Iterator<PerspectivaRelacion> k = insumosRemover.iterator(); k.hasNext(); )
-			{
-				PerspectivaRelacion relacion = k.next();
+  			for (PerspectivaRelacion relacion : insumosRemover) {
 				perspectiva.getRelacion().remove(relacion);
 			}
 
 			// Agregar los insumos que no existen
-  			for (int i = 0; i < insumos.length; i++) 
-  			{
+  			for (String element : insumos) {
   				foundAsociado = false;
-  				strInsumo = insumos[i].split("\\]\\[");
+  				strInsumo = element.split("\\]\\[");
   				Long insumoAsociado = new Long(strInsumo[1].substring("perspectivaId:".length()));
-  				
-  				for (Iterator<PerspectivaRelacion> k = perspectiva.getRelacion().iterator(); k.hasNext(); ) 
-    			{
-    				PerspectivaRelacion relacion = k.next();
+
+  				for (PerspectivaRelacion relacion : perspectiva.getRelacion()) {
     				if (relacion.getPk().getRelacionId() == insumoAsociado.longValue())
         			{
     					foundAsociado = true;
@@ -164,36 +159,32 @@ public class GuardarPerspectivaAction extends VgcAction
 
 				if (!foundAsociado)
     			{
-					
+
 					Perspectiva relacion = (Perspectiva)strategosPerspectivasService.load(Perspectiva.class, insumoAsociado);
-					
+
 					relacionCopia = new PerspectivaRelacion();
     				relacionCopia.setPk(new PerspectivaRelacionPK());
     				relacionCopia.getPk().setPerspectivaId(perspectiva.getPerspectivaId());
     				relacionCopia.getPk().setRelacionId(relacion.getPerspectivaId());
     				relacionCopia.setPerspectiva(perspectiva);
     				relacionCopia.setRelacion(relacion);
-    				
+
 					perspectiva.getRelacion().add(relacionCopia);
     			}
   			}
   		}
   		else if (perspectiva.getRelacion() != null && perspectiva.getRelacion().size() > 0)
 		{
-  			Set<PerspectivaRelacion> insumosRemover = new HashSet<PerspectivaRelacion>(); 
+  			Set<PerspectivaRelacion> insumosRemover = new HashSet<PerspectivaRelacion>();
   			// Remover los Insumos que no existen
-			for (Iterator<PerspectivaRelacion> k = perspectiva.getRelacion().iterator(); k.hasNext(); ) 
-			{
-				PerspectivaRelacion relacion = k.next();
+			for (PerspectivaRelacion relacion : perspectiva.getRelacion()) {
 				insumosRemover.add(relacion);
 			}
-			for (Iterator<PerspectivaRelacion> k = insumosRemover.iterator(); k.hasNext(); )
-			{
-				PerspectivaRelacion relacion = k.next();
+			for (PerspectivaRelacion relacion : insumosRemover) {
 				perspectiva.getRelacion().remove(relacion);
 			}
 		}
-		
+
 		respuesta = strategosPerspectivasService.savePerspectiva(perspectiva, getUsuarioConectado(request));
 
 		if (respuesta == 10000)
@@ -212,10 +203,10 @@ public class GuardarPerspectivaAction extends VgcAction
 				    String[] tipoOrden = new String[1];
 				    orden[0] = "nombre";
 				    tipoOrden[0] = "asc";
-				
+
 					List<Perspectiva> perspectivasHijas = servicioPerspectivas.getPerspectivas(orden, tipoOrden, filtros);
 					Byte frecuencia = null;
-			        for (Iterator<?> iter = perspectivasHijas.iterator(); iter.hasNext(); ) 
+			        for (Iterator<?> iter = perspectivasHijas.iterator(); iter.hasNext(); )
 			        {
 			        	Perspectiva pers = (Perspectiva)iter.next();
 			        	if (frecuencia == null)
@@ -223,12 +214,12 @@ public class GuardarPerspectivaAction extends VgcAction
 			        	else if (frecuencia.byteValue() < pers.getFrecuencia().byteValue())
 			        		frecuencia = pers.getFrecuencia();
 			        }
-			        
+
 			        if (frecuencia != null && padre.getFrecuencia().byteValue() != frecuencia.byteValue())
 			        {
 			        	padre.setFrecuencia(frecuencia);
 			        	respuesta = servicioPerspectivas.savePerspectiva(padre, getUsuarioConectado(request));
-			        	
+
 			        	if (respuesta == 10000)
 			        	{
 				        	StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -247,14 +238,14 @@ public class GuardarPerspectivaAction extends VgcAction
 					        	if (respuesta == 10000)
 					        		respuesta = servicioPlanes.saveAlertaIndicadorPlan(indicadorLogro.getIndicadorId(), plan.getPlanId(), null, getUsuarioConectado(request));
 				        	}
-				        	
+
 				        	if (respuesta == 10000)
 				        	{
 					        	indicadorLogro = (Indicador)strategosIndicadoresService.load(Indicador.class, plan.getNlParIndicadorId());
 					        	if (indicadorLogro != null)
 					        	{
 						        	indicadorLogro.setFrecuencia(frecuencia);
-						        	respuesta = strategosIndicadoresService.saveIndicador(indicadorLogro, getUsuarioConectado(request));			        	
+						        	respuesta = strategosIndicadoresService.saveIndicador(indicadorLogro, getUsuarioConectado(request));
 						        	if (respuesta == 10000)
 						        		respuesta = servicioPlanes.deleteIndicadorEstados(indicadorLogro.getIndicadorId(), plan.getPlanId(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), null, null, null, null);
 						        	if (respuesta == 10000)
@@ -272,7 +263,7 @@ public class GuardarPerspectivaAction extends VgcAction
 			        servicioPerspectivas.close();
 				}
 			}
-			
+
 			strategosPerspectivasService.unlockObject(request.getSession().getId(), editarPerspectivaForm.getPerspectivaId());
 			forward = "exito";
 			if (nuevo)
@@ -280,9 +271,9 @@ public class GuardarPerspectivaAction extends VgcAction
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.nuevo.ok"));
 				forward = "crearPerspectiva";
 			}
-			else 
+			else
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.modificar.ok"));
-		} 
+		}
 		else if (respuesta == 10003)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
 
@@ -291,8 +282,8 @@ public class GuardarPerspectivaAction extends VgcAction
 		saveMessages(request, messages);
 
 		request.getSession().setAttribute("GuardarPerspectivaAction.ultimoTs", ts);
-		
-		if (forward.equals("exito")) 
+
+		if (forward.equals("exito"))
 			return getForwardBack(request, 1, true);
 
 		return mapping.findForward(forward);

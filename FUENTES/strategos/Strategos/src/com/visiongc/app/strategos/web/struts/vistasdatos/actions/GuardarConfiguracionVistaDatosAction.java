@@ -1,23 +1,12 @@
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.reportes.StrategosReportesService;
-import com.visiongc.app.strategos.reportes.model.Reporte;
-import com.visiongc.app.strategos.reportes.model.Reporte.ReporteTipo;
-import com.visiongc.app.strategos.vistasdatos.model.util.TipoAtributo;
-import com.visiongc.app.strategos.web.struts.vistasdatos.forms.ConfigurarVistaDatosForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.xmldata.XmlControl;
-import com.visiongc.commons.util.xmldata.XmlNodo;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.model.Usuario;
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,40 +14,54 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.xml.sax.SAXException;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.app.strategos.reportes.StrategosReportesService;
+import com.visiongc.app.strategos.reportes.model.Reporte;
+import com.visiongc.app.strategos.vistasdatos.model.util.TipoAtributo;
+import com.visiongc.app.strategos.web.struts.vistasdatos.forms.ConfigurarVistaDatosForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.xmldata.XmlControl;
+import com.visiongc.commons.util.xmldata.XmlNodo;
+import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.model.Usuario;
+
 public final class GuardarConfiguracionVistaDatosAction
   extends VgcAction
 {
   public static final String ACTION_KEY = "GuardarConfiguracionVistaDatosAction";
-  
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     String forward = mapping.getParameter();
-    
+
     ActionMessages messages = getMessages(request);
-    
+
     ConfigurarVistaDatosForm configurarVistaDatosForm = (ConfigurarVistaDatosForm)form;
-    Boolean cancelar = Boolean.valueOf(Boolean.parseBoolean(request.getParameter("cancelar")));
-    
+    boolean cancelar = Boolean.parseBoolean(request.getParameter("cancelar"));
+
     StrategosReportesService reportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
-    if (cancelar.booleanValue())
+    if (cancelar)
     {
       reportesService.unlockObject(request.getSession().getId(), configurarVistaDatosForm.getReporteId());
-      
+
       destruirPoolLocksUsoEdicion(request, reportesService);
-      
+
       reportesService.close();
-      
+
       return getForwardBack(request, 2, true);
     }
     boolean nuevo = false;
-    
+
     Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
-    
+
     Long reporteId = (request.getParameter("reporteId") != null) && (request.getParameter("reporteId") != "") ? new Long(request.getParameter("reporteId")) : null;
     Reporte reporte = null;
     if (reporteId != null) {
@@ -68,7 +71,7 @@ public final class GuardarConfiguracionVistaDatosAction
     {
       nuevo = true;
       reporte = new Reporte();
-      
+
       Long organizacionId = new Long((String)request.getSession().getAttribute("organizacionId"));
       OrganizacionStrategos organizacion = (OrganizacionStrategos)reportesService.load(OrganizacionStrategos.class, organizacionId);
       reporte.setOrganizacion(organizacion);
@@ -82,13 +85,13 @@ public final class GuardarConfiguracionVistaDatosAction
     Boolean showTotalColumnas = Boolean.valueOf(request.getParameter("showTotalColumnas") != null ? Boolean.parseBoolean(request.getParameter("showTotalColumnas")) : false);
     configurarVistaDatosForm.setShowTotalFilas(showTotalFilas);
     configurarVistaDatosForm.setShowTotalColumnas(showTotalColumnas);
-    
+
     reporte.setNombre(configurarVistaDatosForm.getNombre());
     reporte.setDescripcion(configurarVistaDatosForm.getDescripcion());
     reporte.setPublico(configurarVistaDatosForm.getPublico());
     reporte.setCorte(configurarVistaDatosForm.getCorte());
     reporte.setConfiguracion(guardarConfiguracion(configurarVistaDatosForm, request));
-    
+
     int respuesta = reportesService.save(reporte, usuario);
     if (respuesta == 10000)
     {
@@ -105,28 +108,28 @@ public final class GuardarConfiguracionVistaDatosAction
       messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
     }
     reportesService.close();
-    
+
     saveMessages(request, messages);
-    
+
     return mapping.findForward(forward);
   }
-  
+
   private String verificarValoresNulos(String valor)
   {
     return valor == null ? "" : valor;
   }
-  
+
   private String verificarValoresNulos(Byte valor)
   {
     return valor == null ? "" : valor.toString();
   }
-  
+
   public String guardarConfiguracion(ConfigurarVistaDatosForm configurarVistaDatosForm, HttpServletRequest request)
     throws ParserConfigurationException, SAXException, IOException
   {
     XmlNodo nodoVistaDatos = new XmlNodo();
     XmlControl xmlControl = new XmlControl();
-    
+
     nodoVistaDatos.setValorAtributo("nombre", "configuracion vista datos");
     nodoVistaDatos.setValorAtributo("id", "vistadatos" + ((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId().toString());
     nodoVistaDatos.setValorAtributo("textoMiembrosVariable", verificarValoresNulos(configurarVistaDatosForm.getTextoMiembrosVariable()));
@@ -153,19 +156,18 @@ public final class GuardarConfiguracionVistaDatosAction
     nodoVistaDatos.setValorAtributo("showTotalColumnas", verificarValoresNulos(configurarVistaDatosForm.getShowTotalColumnas().booleanValue() ? "true" : "false"));
     nodoVistaDatos.setValorAtributo("acumularPeriodos", verificarValoresNulos((configurarVistaDatosForm.getAcumularPeriodos() != null) && (configurarVistaDatosForm.getAcumularPeriodos().booleanValue()) ? "true" : "false"));
     nodoVistaDatos.setValorAtributo("atributos", getAtributos(configurarVistaDatosForm, request.getParameter("xmlAtributos"), getUsuarioConectado(request)));
-    
+
     return xmlControl.buildXml(nodoVistaDatos);
   }
-  
+
   private String getAtributos(ConfigurarVistaDatosForm configurarVistaDatosForm, String xmlAtributos, Usuario usuario)
   {
     List<TipoAtributo> atributos = new ConfigurarVistaDatosAction().buscarAtributos(configurarVistaDatosForm, xmlAtributos, usuario);
-    
+
     String valorAtributo = "";
-    for (int f = 0; f < atributos.size(); f++)
-    {
-      TipoAtributo tipoAtributo = (TipoAtributo)atributos.get(f);
-      
+    for (TipoAtributo element : atributos) {
+      TipoAtributo tipoAtributo = element;
+
       valorAtributo = valorAtributo + tipoAtributo.getOrden() + ",";
       valorAtributo = valorAtributo + tipoAtributo.getTipoAtributoId().toString() + ",";
       valorAtributo = valorAtributo + tipoAtributo.getNombre() + ",";
@@ -174,9 +176,9 @@ public final class GuardarConfiguracionVistaDatosAction
       valorAtributo = valorAtributo + (tipoAtributo.getAgrupar().booleanValue() ? "1" : "0") + "|";
     }
     valorAtributo = valorAtributo.substring(0, valorAtributo.length() - 1);
-    
+
     configurarVistaDatosForm.setAtributos(atributos);
-    
+
     return valorAtributo;
   }
 }

@@ -1,20 +1,8 @@
 package com.visiongc.app.strategos.web.struts.reportes.grafico.forms;
 
-import com.visiongc.app.strategos.model.util.Frecuencia;
-import com.visiongc.app.strategos.reportes.model.Reporte;
-import com.visiongc.app.strategos.vistasdatos.model.util.DatoCelda;
-import com.visiongc.app.strategos.vistasdatos.model.util.TipoAtributo;
-import com.visiongc.app.strategos.vistasdatos.model.util.TipoDimension;
-import com.visiongc.app.strategos.vistasdatos.model.util.VistaDatosUtil;
-import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
-import com.visiongc.commons.util.ObjetoValorNombre;
-import com.visiongc.commons.util.TextEncoder;
-import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -37,6 +25,17 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.visiongc.app.strategos.model.util.Frecuencia;
+import com.visiongc.app.strategos.reportes.model.Reporte;
+import com.visiongc.app.strategos.vistasdatos.model.util.DatoCelda;
+import com.visiongc.app.strategos.vistasdatos.model.util.TipoAtributo;
+import com.visiongc.app.strategos.vistasdatos.model.util.TipoDimension;
+import com.visiongc.app.strategos.vistasdatos.model.util.VistaDatosUtil;
+import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
+import com.visiongc.commons.util.ObjetoValorNombre;
+import com.visiongc.commons.util.TextEncoder;
+import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
 public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 {
@@ -115,7 +114,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 	private String descripcion;
 	private Boolean publico;
 	private Long reporteId;
-	private String usuarioCreado; 
+	private String usuarioCreado;
 	private Byte source;
 	private String configuracion;
 	private Byte corte;
@@ -136,372 +135,372 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 	private List listaPeriodos;
 	private List anosPeriodos;
 	private Byte tipo;
-	
+
 	final String SEPARADOR_ATRIBUTOS = "|";
 	final String SEPARADOR_ELEMENTOS = ",";
-  
+
 	public final String SEPARADOR_VARIABLES = "!@!";
 
-	public String getTextoMiembrosAtributo() 
+	public String getTextoMiembrosAtributo()
 	{
 		return this.textoMiembrosAtributo;
 	}
 
-	public void setTextoMiembrosAtributo(String textoMiembrosAtributo) 
+	public void setTextoMiembrosAtributo(String textoMiembrosAtributo)
 	{
 		this.textoMiembrosAtributo = textoMiembrosAtributo;
 		this.miembrosAtributo = VistaDatosUtil.convertirCadenaLista(this.textoMiembrosAtributo, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTextoMiembrosIndicador() 
+	public String getTextoMiembrosIndicador()
 	{
 		return this.textoMiembrosIndicador;
 	}
 
-	public void setTextoMiembrosIndicador(String textoMiembrosIndicador) 
+	public void setTextoMiembrosIndicador(String textoMiembrosIndicador)
 	{
 		this.textoMiembrosIndicador = textoMiembrosIndicador;
 		this.miembrosIndicador = VistaDatosUtil.convertirCadenaLista(this.textoMiembrosIndicador, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTextoMiembrosOrganizacion() 
+	public String getTextoMiembrosOrganizacion()
 	{
 		return this.textoMiembrosOrganizacion;
 	}
 
-	public void setTextoMiembrosOrganizacion(String textoMiembrosOrganizacion) 
+	public void setTextoMiembrosOrganizacion(String textoMiembrosOrganizacion)
 	{
 		this.textoMiembrosOrganizacion = textoMiembrosOrganizacion;
 		this.miembrosOrganizacion = VistaDatosUtil.convertirCadenaLista(this.textoMiembrosOrganizacion, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTextoMiembrosPlan() 
+	public String getTextoMiembrosPlan()
 	{
 		return this.textoMiembrosPlan;
 	}
 
-	public void setTextoMiembrosPlan(String textoMiembrosPlan) 
+	public void setTextoMiembrosPlan(String textoMiembrosPlan)
 	{
 		this.textoMiembrosPlan = textoMiembrosPlan;
 		this.miembrosPlan = VistaDatosUtil.convertirCadenaLista(this.textoMiembrosPlan, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTextoMiembrosTiempo() 
+	public String getTextoMiembrosTiempo()
 	{
 		return this.textoMiembrosTiempo;
 	}
 
-	public void setTextoMiembrosTiempo(String textoMiembrosTiempo) 
+	public void setTextoMiembrosTiempo(String textoMiembrosTiempo)
 	{
 		this.textoMiembrosTiempo = textoMiembrosTiempo;
 		this.miembrosTiempo = VistaDatosUtil.convertirCadenaLista(this.textoMiembrosTiempo, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTextoMiembrosVariable() 
+	public String getTextoMiembrosVariable()
 	{
 		return this.textoMiembrosVariable;
 	}
 
-	public void setTextoMiembrosVariable(String textoMiembrosVariable) 
+	public void setTextoMiembrosVariable(String textoMiembrosVariable)
 	{
 		this.textoMiembrosVariable = textoMiembrosVariable;
 		this.miembrosVariable = VistaDatosUtil.convertirCadenaLista(textoMiembrosVariable, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public List<ObjetoValorNombre> getDimensiones() 
+	public List<ObjetoValorNombre> getDimensiones()
 	{
 		return this.dimensiones;
 	}
 
-	public void setDimensiones(List<ObjetoValorNombre> dimensiones) 
+	public void setDimensiones(List<ObjetoValorNombre> dimensiones)
 	{
 		this.dimensiones = dimensiones;
 		this.textoDimensiones = VistaDatosUtil.convertirListaCadena(dimensiones, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public List<ObjetoValorNombre> getMiembrosIndicador() 
+	public List<ObjetoValorNombre> getMiembrosIndicador()
 	{
 		return this.miembrosIndicador;
 	}
 
-	public void setMiembrosIndicador(List<ObjetoValorNombre> miembrosIndicador) 
+	public void setMiembrosIndicador(List<ObjetoValorNombre> miembrosIndicador)
 	{
 		this.miembrosIndicador = miembrosIndicador;
 	}
 
-	public List<ObjetoValorNombre> getMiembrosOrganizacion() 
+	public List<ObjetoValorNombre> getMiembrosOrganizacion()
 	{
 		return this.miembrosOrganizacion;
 	}
 
-	public void setMiembrosOrganizacion(List<ObjetoValorNombre> miembrosOrganizacion) 
+	public void setMiembrosOrganizacion(List<ObjetoValorNombre> miembrosOrganizacion)
 	{
 		this.miembrosOrganizacion = miembrosOrganizacion;
 	}
 
-	public List<ObjetoValorNombre> getMiembrosPlan() 
+	public List<ObjetoValorNombre> getMiembrosPlan()
 	{
 		return this.miembrosPlan;
 	}
 
-	public void setMiembrosPlan(List<ObjetoValorNombre> miembrosPlan) 
+	public void setMiembrosPlan(List<ObjetoValorNombre> miembrosPlan)
 	{
 		this.miembrosPlan = miembrosPlan;
 	}
 
-	public List<ObjetoValorNombre> getMiembrosTiempo() 
+	public List<ObjetoValorNombre> getMiembrosTiempo()
 	{
 		return this.miembrosTiempo;
 	}
 
-	public void setMiembrosTiempo(List<ObjetoValorNombre> miembrosTiempo) 
+	public void setMiembrosTiempo(List<ObjetoValorNombre> miembrosTiempo)
 	{
 		this.miembrosTiempo = miembrosTiempo;
 	}
 
-	public List<ObjetoValorNombre> getMiembrosVariable() 
+	public List<ObjetoValorNombre> getMiembrosVariable()
 	{
 		return this.miembrosVariable;
 	}
 
-	public void setMiembrosVariable(List<ObjetoValorNombre> miembrosVariable) 
+	public void setMiembrosVariable(List<ObjetoValorNombre> miembrosVariable)
 	{
 		this.miembrosVariable = miembrosVariable;
 	}
 
-	public List<ObjetoValorNombre> getSelectores() 
+	public List<ObjetoValorNombre> getSelectores()
 	{
 		return this.selectores;
 	}
 
-	public void setSelectores(List<ObjetoValorNombre> selectores) 
+	public void setSelectores(List<ObjetoValorNombre> selectores)
 	{
 		this.selectores = selectores;
 	}
 
-	public String getAtributoOrdenDimensiones() 
+	public String getAtributoOrdenDimensiones()
 	{
 		return this.atributoOrdenDimensiones;
 	}
 
-	public void setAtributoOrdenDimensiones(String atributoOrdenDimensiones) 
+	public void setAtributoOrdenDimensiones(String atributoOrdenDimensiones)
 	{
 		this.atributoOrdenDimensiones = atributoOrdenDimensiones;
 	}
 
-	public String getAtributoOrdenMiembros() 
+	public String getAtributoOrdenMiembros()
 	{
 		return this.atributoOrdenMiembros;
 	}
 
-	public void setAtributoOrdenMiembros(String atributoOrdenMiembros) 
+	public void setAtributoOrdenMiembros(String atributoOrdenMiembros)
 	{
 		this.atributoOrdenMiembros = atributoOrdenMiembros;
 	}
 
-	public String getAtributoOrdenSelectores() 
+	public String getAtributoOrdenSelectores()
 	{
 		return this.atributoOrdenSelectores;
 	}
 
-	public void setAtributoOrdenSelectores(String atributoOrdenSelectores) 
+	public void setAtributoOrdenSelectores(String atributoOrdenSelectores)
 	{
 		this.atributoOrdenSelectores = atributoOrdenSelectores;
 	}
 
-	public Byte getDimensionId() 
+	public Byte getDimensionId()
 	{
 		return this.dimensionId;
 	}
 
-	public void setDimensionId(Byte dimensionId) 
+	public void setDimensionId(Byte dimensionId)
 	{
 		this.dimensionId = dimensionId;
 	}
 
-	public Long getMiembroId() 
+	public Long getMiembroId()
 	{
 		return this.miembroId;
 	}
 
-	public void setMiembroId(Long miembroId) 
+	public void setMiembroId(Long miembroId)
 	{
 		this.miembroId = miembroId;
 	}
 
-	public String getNombreDimension() 
+	public String getNombreDimension()
 	{
 		return this.nombreDimension;
 	}
 
-	public void setNombreDimension(String nombreDimension) 
+	public void setNombreDimension(String nombreDimension)
 	{
 		this.nombreDimension = nombreDimension;
 	}
 
-	public String getNombreMiembro() 
+	public String getNombreMiembro()
 	{
 		return this.nombreMiembro;
 	}
 
-	public void setNombreMiembro(String nombreMiembro) 
+	public void setNombreMiembro(String nombreMiembro)
 	{
 		this.nombreMiembro = nombreMiembro;
 	}
 
-	public String getNombreSelector() 
+	public String getNombreSelector()
 	{
 		return this.nombreSelector;
 	}
 
-	public void setNombreSelector(String nombreSelector) 
+	public void setNombreSelector(String nombreSelector)
 	{
 		this.nombreSelector = nombreSelector;
 	}
 
-	public int getPaginaDimensiones() 
+	public int getPaginaDimensiones()
 	{
 		return this.paginaDimensiones;
 	}
 
-	public void setPaginaDimensiones(int paginaDimensiones) 
+	public void setPaginaDimensiones(int paginaDimensiones)
 	{
 		this.paginaDimensiones = paginaDimensiones;
 	}
 
-	public int getPaginaMiembros() 
+	public int getPaginaMiembros()
 	{
 		return this.paginaMiembros;
 	}
 
-	public void setPaginaMiembros(int paginaMiembros) 
+	public void setPaginaMiembros(int paginaMiembros)
 	{
 		this.paginaMiembros = paginaMiembros;
 	}
 
-	public List<ObjetoValorNombre> getMiembrosAtributo() 
+	public List<ObjetoValorNombre> getMiembrosAtributo()
 	{
 		return this.miembrosAtributo;
 	}
 
-	public void setMiembrosAtributo(List<ObjetoValorNombre> miembrosAtributo) 
+	public void setMiembrosAtributo(List<ObjetoValorNombre> miembrosAtributo)
 	{
 		this.miembrosAtributo = miembrosAtributo;
 	}
 
-	public int getPaginaSelectores() 
+	public int getPaginaSelectores()
 	{
 		return this.paginaSelectores;
 	}
 
-	public void setPaginaSelectores(int paginaSelectores) 
+	public void setPaginaSelectores(int paginaSelectores)
 	{
 		this.paginaSelectores = paginaSelectores;
 	}
 
-	public String getSeleccionadosDimensiones() 
+	public String getSeleccionadosDimensiones()
 	{
 		return this.seleccionadosDimensiones;
 	}
 
-	public void setSeleccionadosDimensiones(String seleccionadosDimensiones) 
+	public void setSeleccionadosDimensiones(String seleccionadosDimensiones)
 	{
 		this.seleccionadosDimensiones = seleccionadosDimensiones;
 	}
 
-	public String getSeleccionadosMiembros() 
+	public String getSeleccionadosMiembros()
 	{
 		return this.seleccionadosMiembros;
 	}
 
-	public void setSeleccionadosMiembros(String seleccionadosMiembros) 
+	public void setSeleccionadosMiembros(String seleccionadosMiembros)
 	{
 		this.seleccionadosMiembros = seleccionadosMiembros;
 	}
 
-	public String getSeleccionadosSelectores() 
+	public String getSeleccionadosSelectores()
 	{
 		return this.seleccionadosSelectores;
 	}
 
-	public void setSeleccionadosSelectores(String seleccionadosSelectores) 
+	public void setSeleccionadosSelectores(String seleccionadosSelectores)
 	{
 		this.seleccionadosSelectores = seleccionadosSelectores;
 	}
 
-	public Byte getSelectorId() 
+	public Byte getSelectorId()
 	{
 		return this.selectorId;
 	}
 
-	public void setSelectorId(Byte selectorId) 
+	public void setSelectorId(Byte selectorId)
 	{
 		this.selectorId = selectorId;
 	}
 
-	public String getTextoDimensiones() 
+	public String getTextoDimensiones()
 	{
 		return this.textoDimensiones;
 	}
 
-	public void setTextoDimensiones(String textoDimensiones) 
+	public void setTextoDimensiones(String textoDimensiones)
 	{
 		this.textoDimensiones = textoDimensiones;
 		this.dimensiones = VistaDatosUtil.convertirCadenaLista(textoDimensiones, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTextoMiembros() 
+	public String getTextoMiembros()
 	{
 		return this.textoMiembros;
 	}
 
-	public void setTextoMiembros(String textoMiembros) 
+	public void setTextoMiembros(String textoMiembros)
 	{
 		this.textoMiembros = textoMiembros;
 	}
 
-	public String getTextoSelectores() 
+	public String getTextoSelectores()
 	{
 		return this.textoSelectores;
 	}
 
-	public void setTextoSelectores(String textoSelectores) 
+	public void setTextoSelectores(String textoSelectores)
 	{
 		this.textoSelectores = textoSelectores;
 		this.selectores = VistaDatosUtil.convertirCadenaLista(textoSelectores, getSeparadorElementos(), getSeparadorAtributos());
 	}
 
-	public String getTipoOrdenDimensiones() 
+	public String getTipoOrdenDimensiones()
 	{
 		return this.tipoOrdenDimensiones;
 	}
 
-	public void setTipoOrdenDimensiones(String tipoOrdenDimensiones) 
+	public void setTipoOrdenDimensiones(String tipoOrdenDimensiones)
 	{
 		this.tipoOrdenDimensiones = tipoOrdenDimensiones;
 	}
 
-	public String getTipoOrdenMiembros() 
+	public String getTipoOrdenMiembros()
 	{
 		return this.tipoOrdenMiembros;
 	}
 
-	public void setTipoOrdenMiembros(String tipoOrdenMiembros) 
+	public void setTipoOrdenMiembros(String tipoOrdenMiembros)
 	{
 		this.tipoOrdenMiembros = tipoOrdenMiembros;
 	}
 
-	public String getTipoOrdenSelectores() 
+	public String getTipoOrdenSelectores()
 	{
 		return this.tipoOrdenSelectores;
 	}
 
-	public void setTipoOrdenSelectores(String tipoOrdenSelectores) 
+	public void setTipoOrdenSelectores(String tipoOrdenSelectores)
 	{
 		this.tipoOrdenSelectores = tipoOrdenSelectores;
 	}
 
-	public String getValoresSeleccionadosDimensiones() 
+	public String getValoresSeleccionadosDimensiones()
 	{
 		return this.valoresSeleccionadosDimensiones;
 	}
@@ -511,7 +510,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 		this.valoresSeleccionadosDimensiones = valoresSeleccionadosDimensiones;
 	}
 
-	public String getValoresSeleccionadosMiembros() 
+	public String getValoresSeleccionadosMiembros()
 	{
 		return this.valoresSeleccionadosMiembros;
 	}
@@ -521,7 +520,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 		this.valoresSeleccionadosMiembros = valoresSeleccionadosMiembros;
 	}
 
-	public String getValoresSeleccionadosSelectores() 
+	public String getValoresSeleccionadosSelectores()
 	{
 		return this.valoresSeleccionadosSelectores;
 	}
@@ -531,262 +530,262 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 		this.valoresSeleccionadosSelectores = valoresSeleccionadosSelectores;
 	}
 
-	public String getColumnasId() 
+	public String getColumnasId()
 	{
 		return this.columnasId;
 	}
 
-	public void setColumnasId(String columnasId) 
+	public void setColumnasId(String columnasId)
 	{
 		this.columnasId = columnasId;
 	}
 
-	public String getFilasId() 
+	public String getFilasId()
 	{
 		return this.filasId;
 	}
 
-	public void setFilasId(String filasId) 
+	public void setFilasId(String filasId)
 	{
 		this.filasId = filasId;
 	}
 
-	public String getNombreColumnas() 
+	public String getNombreColumnas()
 	{
 		return this.nombreColumnas;
 	}
 
-	public void setNombreColumnas(String nombreColumnas) 
+	public void setNombreColumnas(String nombreColumnas)
 	{
 		this.nombreColumnas = nombreColumnas;
 	}
 
-	public String getNombreFilas() 
+	public String getNombreFilas()
 	{
 		return this.nombreFilas;
 	}
 
-	public void setNombreFilas(String nombreFilas) 
+	public void setNombreFilas(String nombreFilas)
 	{
 		this.nombreFilas = nombreFilas;
 	}
 
-	public String getSeparadorElementos() 
+	public String getSeparadorElementos()
 	{
 		return "%-%";
 	}
 
-	public String getSeparadorAtributos() 
+	public String getSeparadorAtributos()
 	{
 		return "|";
 	}
 
-	public Byte getTipoDimensionVariable() 
+	public Byte getTipoDimensionVariable()
 	{
 		return TipoDimension.getTipoDimensionVariable();
 	}
 
-	public Byte getTipoDimensionAtributo() 
+	public Byte getTipoDimensionAtributo()
 	{
 		return TipoDimension.getTipoDimensionAtributo();
 	}
 
-	public Byte getTipoDimensionTiempo() 
+	public Byte getTipoDimensionTiempo()
 	{
 		return TipoDimension.getTipoDimensionTiempo();
 	}
 
-	public Byte getTipoDimensionIndicador() 
+	public Byte getTipoDimensionIndicador()
 	{
 		return TipoDimension.getTipoDimensionIndicador();
 	}
 
-	public Byte getTipoDimensionPlan() 
+	public Byte getTipoDimensionPlan()
 	{
 		return TipoDimension.getTipoDimensionPlan();
 	}
 
-	public Byte getTipoDimensionOrganizacion() 
+	public Byte getTipoDimensionOrganizacion()
 	{
 		return TipoDimension.getTipoDimensionOrganizacion();
 	}
 
-	public Byte getFrecuencia() 
+	public Byte getFrecuencia()
 	{
 		return this.frecuencia;
 	}
 
-	public void setFrecuencia(Byte frecuencia) 
+	public void setFrecuencia(Byte frecuencia)
 	{
 		this.frecuencia = frecuencia;
 	}
 
-	public List<Frecuencia> getFrecuencias() 
+	public List<Frecuencia> getFrecuencias()
 	{
 		return this.frecuencias;
 	}
 
-	public void setFrecuencias(List<Frecuencia> frecuencias) 
+	public void setFrecuencias(List<Frecuencia> frecuencias)
 	{
 		this.frecuencias = frecuencias;
 	}
 
-	public List<ObjetoValorNombre> getColumnas() 
+	public List<ObjetoValorNombre> getColumnas()
 	{
 		return this.columnas;
 	}
 
-	public void setColumnas(List<ObjetoValorNombre> columnas) 
+	public void setColumnas(List<ObjetoValorNombre> columnas)
 	{
 		this.columnas = columnas;
 	}
 
-	public List<ObjetoValorNombre> getFilas() 
+	public List<ObjetoValorNombre> getFilas()
 	{
 		return this.filas;
 	}
 
-	public void setFilas(List<ObjetoValorNombre> filas) 
+	public void setFilas(List<ObjetoValorNombre> filas)
 	{
 		this.filas = filas;
 	}
 
-	public List<ObjetoValorNombre> getSelector1() 
+	public List<ObjetoValorNombre> getSelector1()
 	{
 		return this.selector1;
 	}
 
-	public void setSelector1(List<ObjetoValorNombre> selector1) 
+	public void setSelector1(List<ObjetoValorNombre> selector1)
 	{
 		this.selector1 = selector1;
 	}
 
-	public Long getSelector1Id() 
+	public Long getSelector1Id()
 	{
 		return this.selector1Id;
 	}
 
-	public void setSelector1Id(Long selector1Id) 
+	public void setSelector1Id(Long selector1Id)
 	{
 		this.selector1Id = selector1Id;
 	}
 
-	public List<ObjetoValorNombre> getSelector2() 
+	public List<ObjetoValorNombre> getSelector2()
 	{
 		return this.selector2;
 	}
 
-	public void setSelector2(List<ObjetoValorNombre> selector2) 
+	public void setSelector2(List<ObjetoValorNombre> selector2)
 	{
 		this.selector2 = selector2;
 	}
 
-	public Long getSelector2Id() 
+	public Long getSelector2Id()
 	{
 		return this.selector2Id;
 	}
 
-	public void setSelector2Id(Long selector2Id) 
+	public void setSelector2Id(Long selector2Id)
 	{
 		this.selector2Id = selector2Id;
 	}
 
-	public List<ObjetoValorNombre> getSelector3() 
+	public List<ObjetoValorNombre> getSelector3()
 	{
 		return this.selector3;
 	}
 
-	public void setSelector3(List<ObjetoValorNombre> selector3) 
+	public void setSelector3(List<ObjetoValorNombre> selector3)
 	{
 		this.selector3 = selector3;
 	}
 
-	public Long getSelector3Id() 
+	public Long getSelector3Id()
 	{
 		return this.selector3Id;
 	}
 
-	public void setSelector3Id(Long selector3Id) 
+	public void setSelector3Id(Long selector3Id)
 	{
 		this.selector3Id = selector3Id;
 	}
 
-	public List<ObjetoValorNombre> getSelector4() 
+	public List<ObjetoValorNombre> getSelector4()
 	{
 		return this.selector4;
 	}
 
-	public void setSelector4(List<ObjetoValorNombre> selector4) 
+	public void setSelector4(List<ObjetoValorNombre> selector4)
 	{
 		this.selector4 = selector4;
 	}
 
-	public Long getSelector4Id() 
+	public Long getSelector4Id()
 	{
 		return this.selector4Id;
 	}
 
-	public void setSelector4Id(Long selector4Id) 
+	public void setSelector4Id(Long selector4Id)
 	{
 		this.selector4Id = selector4Id;
 	}
 
-	public List<ObjetoValorNombre> getSelectorTiempoDesde() 
+	public List<ObjetoValorNombre> getSelectorTiempoDesde()
 	{
 		return this.selectorTiempoDesde;
 	}
 
-	public void setSelectorTiempoDesde(List<ObjetoValorNombre> selectorTiempoDesde) 
+	public void setSelectorTiempoDesde(List<ObjetoValorNombre> selectorTiempoDesde)
 	{
 		this.selectorTiempoDesde = selectorTiempoDesde;
 	}
 
-	public List<ObjetoValorNombre> getSelectorTiempoHasta() 
+	public List<ObjetoValorNombre> getSelectorTiempoHasta()
 	{
 		return this.selectorTiempoHasta;
 	}
 
-	public void setSelectorTiempoHasta(List<ObjetoValorNombre> selectorTiempoHasta) 
+	public void setSelectorTiempoHasta(List<ObjetoValorNombre> selectorTiempoHasta)
 	{
 		this.selectorTiempoHasta = selectorTiempoHasta;
 	}
-	
-	public String getNombreSelector1() 
+
+	public String getNombreSelector1()
 	{
 		return this.nombreSelector1;
 	}
 
-	public void setNombreSelector1(String nombreSelector1) 
+	public void setNombreSelector1(String nombreSelector1)
 	{
 		this.nombreSelector1 = nombreSelector1;
 	}
 
-	public String getNombreSelector2() 
+	public String getNombreSelector2()
 	{
 		return this.nombreSelector2;
 	}
 
-	public void setNombreSelector2(String nombreSelector2) 
+	public void setNombreSelector2(String nombreSelector2)
 	{
 		this.nombreSelector2 = nombreSelector2;
 	}
 
-	public String getNombreSelector3() 
+	public String getNombreSelector3()
 	{
 		return this.nombreSelector3;
 	}
 
-	public void setNombreSelector3(String nombreSelector3) 
+	public void setNombreSelector3(String nombreSelector3)
 	{
 		this.nombreSelector3 = nombreSelector3;
 	}
 
-	public String getNombreSelector4() 
+	public String getNombreSelector4()
 	{
 		return this.nombreSelector4;
 	}
 
-	public void setNombreSelector4(String nombreSelector4) 
+	public void setNombreSelector4(String nombreSelector4)
 	{
 		this.nombreSelector4 = nombreSelector4;
 	}
@@ -796,67 +795,67 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 		return this.valorSelector1;
 	}
 
-	public void setValorSelector1(String valorSelector1) 
+	public void setValorSelector1(String valorSelector1)
 	{
 		this.valorSelector1 = valorSelector1;
 	}
 
-	public String getValorSelector2() 
+	public String getValorSelector2()
 	{
 		return this.valorSelector2;
 	}
 
-	public void setValorSelector2(String valorSelector2) 
+	public void setValorSelector2(String valorSelector2)
 	{
 		this.valorSelector2 = valorSelector2;
 	}
 
-	public String getValorSelector3() 
+	public String getValorSelector3()
 	{
 		return this.valorSelector3;
-	}	
+	}
 
-	public void setValorSelector3(String valorSelector3) 
+	public void setValorSelector3(String valorSelector3)
 	{
 		this.valorSelector3 = valorSelector3;
 	}
 
-	public String getValorSelector4() 
+	public String getValorSelector4()
 	{
 		return this.valorSelector4;
 	}
 
-	public void setValorSelector4(String valorSelector4) 
+	public void setValorSelector4(String valorSelector4)
 	{
 		this.valorSelector4 = valorSelector4;
 	}
 
-	public String getValorSelectorTiempoDesde() 
+	public String getValorSelectorTiempoDesde()
 	{
 		return this.valorSelectorTiempoDesde;
 	}
 
-	public void setValorSelectorTiempoDesde(String valorSelectorTiempoDesde) 
+	public void setValorSelectorTiempoDesde(String valorSelectorTiempoDesde)
 	{
 		this.valorSelectorTiempoDesde = valorSelectorTiempoDesde;
 	}
 
-	public String getValorSelectorTiempoHasta() 
+	public String getValorSelectorTiempoHasta()
 	{
 		return this.valorSelectorTiempoHasta;
 	}
 
-	public void setValorSelectorTiempoHasta(String valorSelectorTiempoHasta) 
+	public void setValorSelectorTiempoHasta(String valorSelectorTiempoHasta)
 	{
 		this.valorSelectorTiempoHasta = valorSelectorTiempoHasta;
 	}
-	
+
   	public List<List<DatoCelda>> getMatrizDatos()
   	{
   		return this.matrizDatos;
   	}
 
-  	public void setMatrizDatos(List<List<DatoCelda>> matrizDatos) 
+  	public void setMatrizDatos(List<List<DatoCelda>> matrizDatos)
   	{
   		this.matrizDatos = matrizDatos;
   	}
@@ -866,7 +865,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   		return this.nombreFrecuencia;
   	}
 
-  	public void setNombreFrecuencia(String nombreFrecuencia) 
+  	public void setNombreFrecuencia(String nombreFrecuencia)
   	{
   		this.nombreFrecuencia = nombreFrecuencia;
   	}
@@ -876,27 +875,27 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   		return this.anchoTablaDatos;
   	}
 
-  	public void setAnchoTablaDatos(Integer anchoTablaDatos) 
+  	public void setAnchoTablaDatos(Integer anchoTablaDatos)
   	{
   		this.anchoTablaDatos = anchoTablaDatos;
   	}
-  
+
   	public String getNombre()
   	{
   		return this.nombre;
   	}
 
-  	public void setNombre(String nombre) 
+  	public void setNombre(String nombre)
   	{
   		this.nombre = nombre;
   	}
-  
+
   	public String getDescripcion()
   	{
   		return this.descripcion;
   	}
 
-  	public void setDescripcion(String descripcion) 
+  	public void setDescripcion(String descripcion)
   	{
   		this.descripcion = descripcion;
   	}
@@ -906,17 +905,17 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   		return this.publico;
   	}
 
-  	public void setPublico(Boolean publico) 
+  	public void setPublico(Boolean publico)
   	{
   		this.publico = publico;
   	}
-  	
+
   	public Long getReporteId()
   	{
   		return this.reporteId;
   	}
 
-  	public void setReporteId(Long reporteId) 
+  	public void setReporteId(Long reporteId)
   	{
   		this.reporteId = reporteId;
   	}
@@ -926,7 +925,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   		return this.usuarioCreado;
   	}
 
-  	public void setUsuarioCreado(String usuarioCreado) 
+  	public void setUsuarioCreado(String usuarioCreado)
   	{
   		this.usuarioCreado = usuarioCreado;
   	}
@@ -936,7 +935,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   		return this.source;
   	}
 
-  	public void setSource(Byte source) 
+  	public void setSource(Byte source)
   	{
   		this.source = SourceType.getTypeSource(source);
   	}
@@ -946,156 +945,156 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   		return this.corte;
   	}
 
-  	public void setCorte(Byte corte) 
+  	public void setCorte(Byte corte)
   	{
   		this.corte = Reporte.ReporteCorte.getCorte(corte);
   	}
-  	
+
  	public String getConfiguracion()
   	{
   		return this.configuracion;
   	}
 
-  	public void setConfiguracion(String configuracion) 
+  	public void setConfiguracion(String configuracion)
   	{
   		this.configuracion = configuracion;
   	}
-  	
-    public String getSeparadorIndicadores() 
+
+    public String getSeparadorIndicadores()
     {
         return EditarIndicadorForm.SEPARADOR_INDICADORES;
     }
-    
-  	public String getSeparadorSeries() 
+
+  	public String getSeparadorSeries()
   	{
   		return EditarIndicadorForm.SEPARADOR_SERIES;
   	}
-  	
+
   	public String getSeparadorVariables()
   	{
   		return SEPARADOR_VARIABLES;
   	}
-  	
-	public List<TipoAtributo> getAtributos() 
+
+	public List<TipoAtributo> getAtributos()
 	{
 		return this.atributos;
 	}
 
-	public void setAtributos(List<TipoAtributo> atributos) 
+	public void setAtributos(List<TipoAtributo> atributos)
 	{
 		this.atributos = atributos;
 	}
 
-	public Boolean getShowVariable() 
+	public Boolean getShowVariable()
 	{
 		return this.showVariable;
 	}
 
-	public void setShowVariable(Boolean showVariable) 
+	public void setShowVariable(Boolean showVariable)
 	{
 		this.showVariable = showVariable;
 	}
 
-	public Boolean getShowTablaParametro() 
+	public Boolean getShowTablaParametro()
 	{
 		return this.showTablaParametro;
 	}
 
-	public void setShowTablaParametro(Boolean showTablaParametro) 
+	public void setShowTablaParametro(Boolean showTablaParametro)
 	{
 		this.showTablaParametro = showTablaParametro;
 	}
-	
-	public Boolean getShowTotalFilas() 
+
+	public Boolean getShowTotalFilas()
 	{
 		return this.showTotalFilas;
 	}
 
-	public void setShowTotalFilas(Boolean showTotalFilas) 
+	public void setShowTotalFilas(Boolean showTotalFilas)
 	{
 		this.showTotalFilas = showTotalFilas;
 	}
 
-	public Boolean getShowTotalColumnas() 
+	public Boolean getShowTotalColumnas()
 	{
 		return this.showTotalColumnas;
 	}
 
-	public void setShowTotalColumnas(Boolean showTotalColumnas) 
+	public void setShowTotalColumnas(Boolean showTotalColumnas)
 	{
 		this.showTotalColumnas = showTotalColumnas;
 	}
 
-	public Boolean getAcumularPeriodos() 
+	public Boolean getAcumularPeriodos()
 	{
 		return this.acumularPeriodos;
 	}
 
-	public void setAcumularPeriodos(Boolean acumularPeriodos) 
+	public void setAcumularPeriodos(Boolean acumularPeriodos)
 	{
 		this.acumularPeriodos = acumularPeriodos;
 	}
-	
-	public Integer getAnoInicial() 
+
+	public Integer getAnoInicial()
 	{
 		return this.anoInicial;
 	}
 
-	public void setAnoInicial(Integer anoInicial) 
+	public void setAnoInicial(Integer anoInicial)
 	{
 		this.anoInicial = anoInicial;
 	}
 
-	public Integer getAnoFinal() 
+	public Integer getAnoFinal()
 	{
 		return this.anoFinal;
 	}
 
-	public void setAnoFinal(Integer anoFinal) 
+	public void setAnoFinal(Integer anoFinal)
 	{
 		this.anoFinal = anoFinal;
 	}
 
-	public Integer getPeriodoInicial() 
+	public Integer getPeriodoInicial()
 	{
 		return this.periodoInicial;
 	}
 
-	public void setPeriodoInicial(Integer periodoInicial) 
+	public void setPeriodoInicial(Integer periodoInicial)
 	{
 		this.periodoInicial = periodoInicial;
 	}
 
-	public Integer getPeriodoFinal() 
+	public Integer getPeriodoFinal()
 	{
 		return this.periodoFinal;
 	}
 
-	public void setPeriodoFinal(Integer periodoFinal) 
+	public void setPeriodoFinal(Integer periodoFinal)
 	{
 		this.periodoFinal = periodoFinal;
 	}
-	
-	public String getFechaInicial() 
+
+	public String getFechaInicial()
 	{
 		return this.fechaInicial;
 	}
 
-	public void setFechaInicial(String fechaInicial) 
+	public void setFechaInicial(String fechaInicial)
 	{
 		this.fechaInicial = fechaInicial;
 	}
 
-	public String getFechaFinal() 
+	public String getFechaFinal()
 	{
 		return this.fechaFinal;
 	}
 
-	public void setFechaFinal(String fechaFinal) 
+	public void setFechaFinal(String fechaFinal)
 	{
 		this.fechaFinal = fechaFinal;
 	}
-		
+
   	public Long getSerieId() {
 		return serieId;
 	}
@@ -1103,7 +1102,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 	public void setSerieId(Long serieId) {
 		this.serieId = serieId;
 	}
-	
+
 	public List getListaAnos() {
 		return listaAnos;
 	}
@@ -1136,13 +1135,14 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 		this.tipo = tipo;
 	}
 
+	@Override
 	public void clear()
   	{
   		this.nombre = "";
   		this.descripcion = "";
   		this.publico = true;
   		this.reporteId = null;
- 
+
   		this.textoMiembrosVariable = null;
   		this.textoMiembrosTiempo = null;
   		this.textoMiembrosIndicador = null;
@@ -1230,9 +1230,9 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
   	  	this.listaAnos = null;
   	  	this.listaPeriodos = null;
   	  	this.anosPeriodos = null;
-  	  	
+
   	}
-  	
+
 	public static class SourceType
 	{
 		private static final byte VISTA_SOURCE_GESTIONAR = 1;
@@ -1250,23 +1250,23 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 			else
 				return null;
 		}
-		
-		public static byte getSourceGestionar() 
+
+		public static byte getSourceGestionar()
 		{
 			return VISTA_SOURCE_GESTIONAR;
 		}
 
-		public static byte getSourceEditar() 
+		public static byte getSourceEditar()
 		{
 			return VISTA_SOURCE_EDITAR;
 		}
-		
-		public static byte getSourceReporte() 
+
+		public static byte getSourceReporte()
 		{
 			return VISTA_SOURCE_REPORTE;
 		}
 	}
-	
+
   	public String getXml() throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
   	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -1284,7 +1284,7 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 		raiz.appendChild(elemento);
 
 		Source source = new DOMSource(document);
-		
+
 		StringWriter writer = new StringWriter();
 		Result result = new StreamResult(writer);
 
@@ -1293,32 +1293,32 @@ public class ConfigurarReporteGraficoForm extends EditarObjetoForm
 
   		return writer.toString().trim();
   	}
-  	
+
   	public void setXml(String xml) throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException, SAXException, IOException
   	{
-  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
   		DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(xml))));
 		NodeList lista = doc.getElementsByTagName("properties");
-		 
-		for (int i = 0; i < lista.getLength() ; i ++) 
+
+		for (int i = 0; i < lista.getLength() ; i ++)
 		{
 			Node node = lista.item(i);
 			Element elemento = (Element) node;
 			NodeList nodeLista = null;
 			Node valor = null;
-			
+
 			if (elemento.getElementsByTagName("showTablaParametro").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("showTablaParametro").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.showTablaParametro = valor.getNodeValue().equals("1") ? true : false;
 				else
 					this.showTablaParametro = true;
 			}
 		}
   	}
-  	
-  	
+
+
 }

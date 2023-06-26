@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.transacciones.forms;
 
@@ -34,8 +34,8 @@ import org.xml.sax.SAXException;
 import com.visiongc.commons.util.Password;
 import com.visiongc.commons.util.TextEncoder;
 import com.visiongc.framework.model.Columna;
-import com.visiongc.framework.model.Transaccion;
 import com.visiongc.framework.model.Importacion.ImportacionType;
+import com.visiongc.framework.model.Transaccion;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
 /**
@@ -78,7 +78,7 @@ public class TransaccionForm extends EditarObjetoForm
 	private Byte frecuencia;
 	private FormFile fileForm;
 	private Long transaccionId;
-	
+
 	// Campos para el Reporte
 	private String fechaInicial;
 	private String fechaFinal;
@@ -98,37 +98,41 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.transaccion;
 	}
 
-	public void setTransaccion(Transaccion transaccion) 
+	public void setTransaccion(Transaccion transaccion)
 	{
 	    this.transaccion = transaccion;
 	}
 
+	@Override
 	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	@Override
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
 
+	@Override
 	public Byte getStatus()
 	{
 		return this.status;
 	}
 
-	public void setStatus(Byte status) 
+	@Override
+	public void setStatus(Byte status)
 	{
 		this.status = TransaccionStatus.getTransaccionStatus(status);
 	}
 
-	public Byte getTipoFuente() 
+	public Byte getTipoFuente()
 	{
 		return this.tipoFuente;
 	}
 
-  	public void setTipoFuente(Byte tipoFuente) 
+  	public void setTipoFuente(Byte tipoFuente)
   	{
   		this.tipoFuente = ImportacionType.getType(tipoFuente);
   	}
@@ -138,17 +142,17 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.tiposFuentes;
 	}
 
-	public void setTiposFuentes(List<ImportacionType> tiposFuentes) 
+	public void setTiposFuentes(List<ImportacionType> tiposFuentes)
 	{
 		this.tiposFuentes = tiposFuentes;
 	}
-  	
-	public Byte getExcelTipo() 
+
+	public Byte getExcelTipo()
 	{
 		return this.excelTipo;
 	}
 
-	public void setExcelTipo(Byte excelTipo) 
+	public void setExcelTipo(Byte excelTipo)
 	{
 		this.excelTipo = excelTipo;
 	}
@@ -158,7 +162,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.fuenteSeleccion;
 	}
 
-	public void setFuenteSeleccion(String fuenteSeleccion) 
+	public void setFuenteSeleccion(String fuenteSeleccion)
 	{
 		this.fuenteSeleccion = fuenteSeleccion;
 	}
@@ -168,92 +172,92 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.fuenteSeleccionArchivo;
 	}
 
-	public void setFuenteSeleccionArchivo(String fuenteSeleccionArchivo) 
+	public void setFuenteSeleccionArchivo(String fuenteSeleccionArchivo)
 	{
 		this.fuenteSeleccionArchivo = fuenteSeleccionArchivo;
 	}
 
-	public String getBdNombre() 
+	public String getBdNombre()
 	{
 		return this.bdNombre;
 	}
 
-	public void setBdNombre(String bdNombre) 
+	public void setBdNombre(String bdNombre)
 	{
 		this.bdNombre = bdNombre;
 	}
 
-	public String getBdUsuario() 
+	public String getBdUsuario()
 	{
 		return this.bdUsuario;
 	}
 
-	public void setBdUsuario(String bdUsuario) 
+	public void setBdUsuario(String bdUsuario)
 	{
 		this.bdUsuario = bdUsuario;
 	}
-	
-	public String getBdPassword() 
+
+	public String getBdPassword()
 	{
 		return this.bdPassword;
 	}
 
-	public void setBdPasswrod(String bdPassword) 
+	public void setBdPasswrod(String bdPassword)
 	{
 		this.bdPassword = bdPassword;
 	}
 
-	public String getBdServidor() 
+	public String getBdServidor()
 	{
 		return this.bdServidor;
 	}
 
-	public void setBdServidor(String bdServidor) 
+	public void setBdServidor(String bdServidor)
 	{
 		this.bdServidor = bdServidor;
 	}
-	
-	public String getBdPuerto() 
+
+	public String getBdPuerto()
 	{
 		return this.bdPuerto;
 	}
 
-	public void setBdPuerto(String bdPuerto) 
+	public void setBdPuerto(String bdPuerto)
 	{
 		this.bdPuerto = bdPuerto;
 	}
 
-	public String getBdTabla() 
+	public String getBdTabla()
 	{
 		return this.bdTabla;
 	}
 
-	public void setBdTabla(String bdTabla) 
+	public void setBdTabla(String bdTabla)
 	{
 		this.bdTabla = bdTabla;
 	}
-	
-	public String getBdListaTablas() 
+
+	public String getBdListaTablas()
 	{
 		return this.bdListaTablas;
 	}
 
-	public void setBdListaTablas(String bdListaTablas) 
+	public void setBdListaTablas(String bdListaTablas)
 	{
 		this.bdListaTablas = bdListaTablas;
 	}
 
-	public String getBdStatusTabla() 
+	public String getBdStatusTabla()
 	{
 		return this.bdStatusTabla;
 	}
 
-	public void setBdStatusTabla(String bdStatusTabla) 
+	public void setBdStatusTabla(String bdStatusTabla)
 	{
 		this.bdStatusTabla = bdStatusTabla;
 	}
 
-	public String getPasswordConexionEncript() 
+	public String getPasswordConexionEncript()
 	{
 		return Password.encriptPassWord(this.bdPassword);
 	}
@@ -262,53 +266,53 @@ public class TransaccionForm extends EditarObjetoForm
 	{
 		return Password.decriptPassWord(passwordConexion);
 	}
-	
-	public String getNombreForma() 
+
+	public String getNombreForma()
 	{
 		return nombreForma;
 	}
 
-	public void setNombreForma(String nombreForma) 
+	public void setNombreForma(String nombreForma)
 	{
 		this.nombreForma = nombreForma;
 	}
 
-	public String getNombreCampoOculto() 
+	public String getNombreCampoOculto()
 	{
 		return nombreCampoOculto;
 	}
 
-	public void setNombreCampoOculto(String nombreCampoOculto) 
+	public void setNombreCampoOculto(String nombreCampoOculto)
 	{
 		this.nombreCampoOculto = nombreCampoOculto;
 	}
 
-	public String getNombreCampoValor() 
+	public String getNombreCampoValor()
 	{
 		return nombreCampoValor;
 	}
 
-	public void setNombreCampoValor(String nombreCampoValor) 
+	public void setNombreCampoValor(String nombreCampoValor)
 	{
 		this.nombreCampoValor = nombreCampoValor;
 	}
 
-	public String getFuncionCierre() 
+	public String getFuncionCierre()
 	{
 		return funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
-	
+
 	public String getSeparador()
 	{
 		return this.separador;
 	}
 
-	public void setSeparador(String separador) 
+	public void setSeparador(String separador)
 	{
 		this.separador = separador;
 	}
@@ -318,7 +322,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.logMediciones;
 	}
 
-	public void setLogMediciones(Boolean logMediciones) 
+	public void setLogMediciones(Boolean logMediciones)
 	{
 		this.logMediciones = logMediciones;
 	}
@@ -328,7 +332,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.logErrores;
 	}
 
-	public void setLogErrores(Boolean logErrores) 
+	public void setLogErrores(Boolean logErrores)
 	{
 		this.logErrores = logErrores;
 	}
@@ -338,7 +342,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.hayColumnaFecha;
 	}
 
-	public void setHayColumnaFecha(Boolean hayColumnaFecha) 
+	public void setHayColumnaFecha(Boolean hayColumnaFecha)
 	{
 		this.hayColumnaFecha = hayColumnaFecha;
 	}
@@ -348,17 +352,17 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.hayColumnaMonto;
 	}
 
-	public void setHayColumnaMonto(Boolean hayColumnaMonto) 
+	public void setHayColumnaMonto(Boolean hayColumnaMonto)
 	{
 		this.hayColumnaMonto = hayColumnaMonto;
 	}
-	
+
 	public Long getIndicadorTransaccionesId()
 	{
 		return this.indicadorTransaccionesId;
 	}
 
-	public void setIndicadorTransaccionesId(Long indicadorTransaccionesId) 
+	public void setIndicadorTransaccionesId(Long indicadorTransaccionesId)
 	{
 		this.indicadorTransaccionesId = indicadorTransaccionesId;
 	}
@@ -368,7 +372,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.indicadorTransaccionesNombre;
 	}
 
-	public void setIndicadorTransaccionesNombre(String indicadorTransaccionesNombre) 
+	public void setIndicadorTransaccionesNombre(String indicadorTransaccionesNombre)
 	{
 		this.indicadorTransaccionesNombre = indicadorTransaccionesNombre;
 	}
@@ -378,7 +382,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.indicadorMontoId;
 	}
 
-	public void setIndicadorMontoId(Long indicadorMontoId) 
+	public void setIndicadorMontoId(Long indicadorMontoId)
 	{
 		this.indicadorMontoId = indicadorMontoId;
 	}
@@ -388,27 +392,27 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.indicadorMontoNombre;
 	}
 
-	public void setIndicadorMontoNombre(String indicadorMontoNombre) 
+	public void setIndicadorMontoNombre(String indicadorMontoNombre)
 	{
 		this.indicadorMontoNombre = indicadorMontoNombre;
 	}
-	
-	public Byte getFrecuencia() 
+
+	public Byte getFrecuencia()
 	{
 		return this.frecuencia;
 	}
 
-	public void setFrecuencia(Byte frecuencia) 
+	public void setFrecuencia(Byte frecuencia)
 	{
 		this.frecuencia = frecuencia;
 	}
-	
+
 	public FormFile getFileForm()
 	{
 		return this.fileForm;
 	}
 
-	public void setFileForm(FormFile fileForm) 
+	public void setFileForm(FormFile fileForm)
 	{
 		this.fileForm = fileForm;
 	}
@@ -418,7 +422,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.transaccionId;
 	}
 
-	public void setTransaccionId(Long transaccionId) 
+	public void setTransaccionId(Long transaccionId)
 	{
 		this.transaccionId = transaccionId;
 	}
@@ -428,7 +432,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.fechaInicial;
 	}
 
-	public void setFechaInicial(String fechaInicial) 
+	public void setFechaInicial(String fechaInicial)
 	{
 		this.fechaInicial = fechaInicial;
 	}
@@ -438,7 +442,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.fechaFinal;
 	}
 
-	public void setFechaFinal(String fechaFinal) 
+	public void setFechaFinal(String fechaFinal)
 	{
 		this.fechaFinal = fechaFinal;
 	}
@@ -448,7 +452,7 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.numeroRegistros;
 	}
 
-	public void setNumeroRegistros(Integer numeroRegistros) 
+	public void setNumeroRegistros(Integer numeroRegistros)
 	{
 		this.numeroRegistros = numeroRegistros;
 	}
@@ -458,37 +462,37 @@ public class TransaccionForm extends EditarObjetoForm
 		return this.datos;
 	}
 
-	public void setDatos(List<List<Columna>> datos) 
+	public void setDatos(List<List<Columna>> datos)
 	{
 		this.datos = datos;
 	}
-	
-	public Boolean getShowTablaParametro() 
+
+	public Boolean getShowTablaParametro()
 	{
 		return this.showTablaParametro;
 	}
 
-	public void setShowTablaParametro(Boolean showTablaParametro) 
+	public void setShowTablaParametro(Boolean showTablaParametro)
 	{
 		this.showTablaParametro = showTablaParametro;
 	}
-	
-    public String getNombre() 
+
+    public String getNombre()
     {
         return this.nombre;
     }
 
-    public void setNombre(String nombre) 
+    public void setNombre(String nombre)
     {
         this.nombre = nombre;
     }
-    
+
   	public String getNombreFrecuencia()
   	{
   		return this.nombreFrecuencia;
   	}
 
-  	public void setNombreFrecuencia(String nombreFrecuencia) 
+  	public void setNombreFrecuencia(String nombreFrecuencia)
   	{
   		this.nombreFrecuencia = nombreFrecuencia;
   	}
@@ -498,17 +502,17 @@ public class TransaccionForm extends EditarObjetoForm
   		return this.columnas;
   	}
 
-  	public void setColumnas(List<Columna> columnas) 
+  	public void setColumnas(List<Columna> columnas)
   	{
   		this.columnas = columnas;
   	}
-  	
+
   	public Integer getAnchoTablaDatos()
   	{
   		return this.anchoTablaDatos;
   	}
 
-  	public void setAnchoTablaDatos(Integer anchoTablaDatos) 
+  	public void setAnchoTablaDatos(Integer anchoTablaDatos)
   	{
   		this.anchoTablaDatos = anchoTablaDatos;
   	}
@@ -518,7 +522,7 @@ public class TransaccionForm extends EditarObjetoForm
   		return this.totalColumnas;
   	}
 
-  	public void setTotalColumnas(Integer totalColumnas) 
+  	public void setTotalColumnas(Integer totalColumnas)
   	{
   		this.totalColumnas = totalColumnas;
   	}
@@ -528,7 +532,7 @@ public class TransaccionForm extends EditarObjetoForm
   		return this.totalConsolidado;
   	}
 
-  	public void setTotalConsolidado(String totalConsolidado) 
+  	public void setTotalConsolidado(String totalConsolidado)
   	{
   		this.totalConsolidado = totalConsolidado;
   	}
@@ -538,12 +542,13 @@ public class TransaccionForm extends EditarObjetoForm
   		return this.totalOperacion;
   	}
 
-  	public void setTotalOperacion(String totalOperacion) 
+  	public void setTotalOperacion(String totalOperacion)
   	{
   		this.totalOperacion = totalOperacion;
   	}
-  	
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);
@@ -583,13 +588,13 @@ public class TransaccionForm extends EditarObjetoForm
 		this.columnas = new ArrayList<Columna>();
 		this.anchoTablaDatos = null;
 		this.totalColumnas = 0;
-		
+
 		//Setear solo Excel
 		List<Byte> tipos = new ArrayList<Byte>();
 		tipos.add(ImportacionType.getImportacionTypeExcel());
 		this.tiposFuentes = ImportacionType.getTipos(tipos);
 	}
-	
+
 	public static class TransaccionStatus
 	{
 		private static final byte IMPORTARSTATUS_SUCCESS = 0;
@@ -600,7 +605,7 @@ public class TransaccionForm extends EditarObjetoForm
 		private static final byte IMPORTARSTATUS_NOCONFIGURADO = 5;
 		private static final byte IMPORTARSTATUS_NOSALVADO = 6;
 		private static final byte IMPORTARSTATUS_READSUCCESSFULL = 7;
-		
+
 		private static Byte getTransaccionStatus(Byte status)
 		{
 			if (status == IMPORTARSTATUS_SUCCESS)
@@ -622,48 +627,48 @@ public class TransaccionForm extends EditarObjetoForm
 			else
 				return null;
 		}
-		
-		public static Byte getImportarStatusSuccess() 
+
+		public static Byte getImportarStatusSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_SUCCESS);
 		}
-		
-		public static Byte getImportarStatusNoSuccess() 
+
+		public static Byte getImportarStatusNoSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_NOSUCCESS);
 		}
 
-		public static Byte getImportarStatusValidado() 
+		public static Byte getImportarStatusValidado()
 		{
 			return new Byte(IMPORTARSTATUS_VALIDADO);
 		}
 
-		public static Byte getImportarStatusSalvado() 
+		public static Byte getImportarStatusSalvado()
 		{
 			return new Byte(IMPORTARSTATUS_SALVADO);
 		}
 
-		public static Byte getImportarStatusImportado() 
+		public static Byte getImportarStatusImportado()
 		{
 			return new Byte(IMPORTARSTATUS_IMPORTADO);
 		}
 
-		public static Byte getImportarStatusNoConfigurado() 
+		public static Byte getImportarStatusNoConfigurado()
 		{
 			return new Byte(IMPORTARSTATUS_NOCONFIGURADO);
 		}
 
-		public static Byte getImportarStatusNoSalvado() 
+		public static Byte getImportarStatusNoSalvado()
 		{
 			return new Byte(IMPORTARSTATUS_NOSALVADO);
 		}
 
-		public static Byte getImportarStatusReadSuccess() 
+		public static Byte getImportarStatusReadSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_READSUCCESSFULL);
 		}
 	}
-	
+
   	public String getXmlParametros(String xmlAtributos) throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
   	{
   		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -699,9 +704,9 @@ public class TransaccionForm extends EditarObjetoForm
 		text = document.createTextNode(xmlAtributos); //Ingresamos la info
 		elemento.appendChild(text);
 		raiz.appendChild(elemento);
-		
+
 		Source source = new DOMSource(document);
-		
+
 		StringWriter writer = new StringWriter();
 		Result result = new StreamResult(writer);
 
@@ -710,64 +715,64 @@ public class TransaccionForm extends EditarObjetoForm
 
   		return writer.toString().trim();
   	}
-  	
+
   	public String setParametros(String xml) throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException, SAXException, IOException
   	{
   		String atributos = null;
-  		
-  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+
+  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
   		DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(xml))));
 		NodeList lista = doc.getElementsByTagName("properties");
-		 
-		for (int i = 0; i < lista.getLength() ; i ++) 
+
+		for (int i = 0; i < lista.getLength() ; i ++)
 		{
 			Node node = lista.item(i);
 			Element elemento = (Element) node;
 			NodeList nodeLista = null;
 			Node valor = null;
-			
+
 			if (elemento.getElementsByTagName("fechaInicial").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("fechaInicial").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null && this.fechaInicial == null) 
+				valor = nodeLista.item(0);
+				if (valor != null && this.fechaInicial == null)
 					this.fechaInicial = valor.getNodeValue();
 			}
 
 			if (elemento.getElementsByTagName("fechaFinal").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("fechaFinal").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null && this.fechaFinal == null) 
+				valor = nodeLista.item(0);
+				if (valor != null && this.fechaFinal == null)
 					this.fechaFinal = valor.getNodeValue();
 			}
 
 			if (elemento.getElementsByTagName("numeroRegistros").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("numeroRegistros").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null && this.numeroRegistros == null) 
+				valor = nodeLista.item(0);
+				if (valor != null && this.numeroRegistros == null)
 					this.numeroRegistros = Integer.parseInt(valor.getNodeValue());
 			}
 
 			if (elemento.getElementsByTagName("showTablaParametro").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("showTablaParametro").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null && this.showTablaParametro == null) 
+				valor = nodeLista.item(0);
+				if (valor != null && this.showTablaParametro == null)
 					this.showTablaParametro = valor.getNodeValue().equals("1") ? true : false;
 			}
 
 			if (elemento.getElementsByTagName("xmlAtributos").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("xmlAtributos").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					atributos = valor.getNodeValue();
 			}
 		}
-		
+
 		return atributos;
-  	}	
+  	}
 }

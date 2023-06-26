@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.plancuentas.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.plancuentas.model.Cuenta;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.ArbolBean;
@@ -7,28 +19,19 @@ import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.TreeviewWeb;
 import com.visiongc.framework.arboles.ArbolesService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.util.PermisologiaUsuario;
 import com.visiongc.framework.web.struts.forms.SelectorArbolForm;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class SeleccionarCuentasAction extends VgcAction
 {
   public static final String ACTION_KEY = "SeleccionarCuentasAction";
 
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);

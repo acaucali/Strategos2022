@@ -1,11 +1,13 @@
 package com.visiongc.app.strategos.web.struts.planes.metas.forms;
 
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.commons.util.VgcFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import org.apache.struts.validator.ValidatorActionForm;
+
+import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
+import com.visiongc.commons.util.VgcFormatter;
 
 public class EditarMetasForm extends ValidatorActionForm
 {
@@ -224,16 +226,16 @@ public class EditarMetasForm extends ValidatorActionForm
     return SerieTiempo.getSerieMetaId();
   }
 
-	public boolean getBloquear() 
+	public boolean getBloquear()
 	{
 	  return this.bloquear;
 	}
 
-	public void setBloquear(boolean bloquear) 
+	public void setBloquear(boolean bloquear)
 	{
 		this.bloquear = bloquear;
 	}
-  
+
   public void clear() {
     this.organizacionId = null;
     this.nombreOrganizacion = null;

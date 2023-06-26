@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
@@ -17,12 +17,14 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DownloadAction;
 import org.apache.struts.util.MessageResources;
 
-import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
@@ -41,17 +43,18 @@ import com.visiongc.app.strategos.web.struts.vistasdatos.forms.ConfigurarVistaDa
  * @author Kerwin
  *
  */
-public class ImprimirVistaDatosXLSAction extends DownloadAction 
+public class ImprimirVistaDatosXLSAction extends DownloadAction
 {
-	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	@Override
+	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    ConfigurarVistaDatosForm configurarVistaDatosForm = (ConfigurarVistaDatosForm)form;
 	    MessageResources mensajes = getResources(request);
-	    
+
 		Long reporteId = ((request.getParameter("reporteId") != null && request.getParameter("reporteId") != "") ? new Long(request.getParameter("reporteId")) : null);
 		Byte source = ((request.getParameter("source") != null && request.getParameter("source") != "") ? new Byte(request.getParameter("source")) : null);
 		Byte corte = ((request.getParameter("corte") != null && request.getParameter("corte") != "") ? new Byte(request.getParameter("corte")) : null);
-		
+
 		if (corte != null && ReporteCorte.getCorteLongitudinal().byteValue() == corte.byteValue())
 			return getCorteLongitudinal(source, reporteId, configurarVistaDatosForm, request, mensajes);
 		else
@@ -72,37 +75,37 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
     		{
     			ReporteForm reporteForm = new ReporteForm();
     			reporteForm.clear();
-    			
+
     			new MostrarReporteAction().getReporte(reporteForm, reporte, reporteId, request);
-		
-				// Proceso la información y genero el xls
+
+				// Proceso la informaciï¿½n y genero el xls
 				objWB = new HSSFWorkbook();
-		
+
 				// Creamos la celda, aplicamos el estilo y definimos
-				// el tipo de dato que contendrá la celda
+				// el tipo de dato que contendrï¿½ la celda
 				HSSFCell celda = null;
-		
+
 				// Creo la hoja
 				HSSFSheet hoja1 = objWB.createSheet("Vista Datos");
-		
-				// Proceso la información y genero el xls.
+
+				// Proceso la informaciï¿½n y genero el xls.
 				int numeroFila = 1;
 				int numeroCelda = 1;
 				HSSFRow fila = hoja1.createRow(numeroFila++);
-		
+
 				// Creamos la celda, aplicamos el estilo y definimos
-				// el tipo de dato que contendrá la celda
+				// el tipo de dato que contendrï¿½ la celda
 				celda = fila.createCell(numeroCelda);
-				celda.setCellType(HSSFCell.CELL_TYPE_STRING);
-		
+				celda.setCellType(Cell.CELL_TYPE_STRING);
+
 				// Finalmente, establecemos el valor
 				celda.setCellValue(mensajes.getMessage("jsp.mostrarvistadatos.titulo") + " / " + request.getSession().getAttribute("organizacionNombre"));
-		
+
 				numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				celda = fila.createCell(numeroCelda);
 				celda.setCellValue(reporteForm.getReporteNombre());
-		
+
 				if (reporteForm.getPeriodoInicial() != null && reporteForm.getPeriodoFinal() != null && reporteForm.getAnoInicial() != null && reporteForm.getAnoFinal() != null)
 				{
 					numeroCelda = 1;
@@ -111,43 +114,43 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 					String periodo = "Desde " + PeriodoUtil.convertirPeriodoToTexto(reporteForm.getPeriodoInicial(), reporteForm.getFrecuencia(), new Integer(reporteForm.getAnoInicial())) + " Hasta " + PeriodoUtil.convertirPeriodoToTexto(reporteForm.getPeriodoFinal(), reporteForm.getFrecuencia(), new Integer(reporteForm.getAnoFinal()));
 					celda.setCellValue(periodo);
 				}
-				
+
 				numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				celda = fila.createCell(numeroCelda);
 				celda.setCellValue("");
-				
+
 				numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
 				celda = fila.createCell(numeroCelda);
 				celda.setCellValue("");
-	
+
 				for (int f = 0; f < reporteForm.getMatrizDatos().size(); f++)
 				{
-					List<DatoCelda> filaDatos = (List<DatoCelda>)reporteForm.getMatrizDatos().get(f);
-		
+					List<DatoCelda> filaDatos = reporteForm.getMatrizDatos().get(f);
+
 					numeroCelda = 1;
 					fila = hoja1.createRow(numeroFila++);
 					for (int k = 0; k < filaDatos.size(); k++)
 					{
-						DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
-						
+						DatoCelda datoCelda = filaDatos.get(k);
+
 						celda = fila.createCell(k+numeroCelda);
 						if (f == 0)
 							celda.setCellStyle(GetEstiloEncabezado(objWB));
 						else
 							celda.setCellStyle(GetEstiloCuerpo(objWB));
-						if (datoCelda.getValor() != null) 
+						if (datoCelda.getValor() != null)
 						{
-							celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+							celda.setCellType(Cell.CELL_TYPE_STRING);
 							celda.setCellValue(datoCelda.getValor());
-						} 
+						}
 					}
 				}
     		}
 		}
-		
-		// Volcamos la información a un archivo.
+
+		// Volcamos la informaciï¿½n a un archivo.
 		String strNombreArchivo = "exportar.xls";
 		File objFile = new File(strNombreArchivo);
 
@@ -157,7 +160,7 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 
 		return new FileStreamInfo("application/vnd.ms-excel", new File(strNombreArchivo));
 	}
-	
+
 	private StreamInfo getCorteLongitudinal(Byte source, Long reporteId, ConfigurarVistaDatosForm configurarVistaDatosForm, HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		if (source == null)
@@ -168,7 +171,7 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 			{
 				if (configurarVistaDatosForm == null)
 					configurarVistaDatosForm = new ConfigurarVistaDatosForm();
-				configurarVistaDatosForm.clear(); 
+				configurarVistaDatosForm.clear();
 				configurarVistaDatosForm.setSource(SourceType.getSourceGestionar());
 				new ConfigurarVistaDatosAction().cargarConfiguracion(configurarVistaDatosForm, request);
 			}
@@ -178,19 +181,19 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 			if (configurarVistaDatosForm == null)
 			{
 				configurarVistaDatosForm = new ConfigurarVistaDatosForm();
-				configurarVistaDatosForm.clear(); 
+				configurarVistaDatosForm.clear();
 				configurarVistaDatosForm.setSource(SourceType.getSourceGestionar());
 				new ConfigurarVistaDatosAction().cargarConfiguracion(configurarVistaDatosForm, request);
 			}
 		}
-	    
+
   		String valorSelectorOrganizacion = ((request.getParameter("organizacionId") != null && request.getParameter("organizacionId") != "") ? request.getParameter("organizacionId") : null);
   		if (valorSelectorOrganizacion != null && !valorSelectorOrganizacion.equals(""))
   		{
   			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
   			OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosIndicadoresService.load(OrganizacionStrategos.class, new Long(valorSelectorOrganizacion));
   			strategosIndicadoresService.close();
-  			
+
   			valorSelectorOrganizacion = null;
   			if (organizacion != null)
   			{
@@ -199,9 +202,9 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
   	  			configurarVistaDatosForm.setSelector1Id(new Long(TipoDimension.getTipoDimensionOrganizacion()));
   	  			configurarVistaDatosForm.setValorSelector1(organizacion.getOrganizacionId().toString());
   			}
-  			
+
   		}
-  		
+
   		String valorSelectorTiempo = ((request.getParameter("tiempo") != null && request.getParameter("tiempo") != "") ? request.getParameter("tiempo") : null);
   		if (valorSelectorTiempo != null && !valorSelectorTiempo.equals(""))
   		{
@@ -211,26 +214,26 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
   		}
 
   		new MostrarVistaDatosAction().setConfigurarVistaDatosForm(configurarVistaDatosForm, getResources(request));
-		
-		// Proceso la información y genero el xls
+
+		// Proceso la informaciï¿½n y genero el xls
 		HSSFWorkbook objWB = new HSSFWorkbook();
 
 		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
+		// el tipo de dato que contendrï¿½ la celda
 		HSSFCell celda = null;
 
 		// Creo la hoja
 		HSSFSheet hoja1 = objWB.createSheet("Vista Datos");
 
-		// Proceso la información y genero el xls.
+		// Proceso la informaciï¿½n y genero el xls.
 		int numeroFila = 1;
 		int numeroCelda = 1;
 		HSSFRow fila = hoja1.createRow(numeroFila++);
 
 		// Creamos la celda, aplicamos el estilo y definimos
-		// el tipo de dato que contendrá la celda
+		// el tipo de dato que contendrï¿½ la celda
 		celda = fila.createCell(numeroCelda);
-		celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+		celda.setCellType(Cell.CELL_TYPE_STRING);
 
 		// Finalmente, establecemos el valor
 		celda.setCellValue(mensajes.getMessage("jsp.mostrarvistadatos.titulo") + " / " + request.getSession().getAttribute("organizacionNombre"));
@@ -248,21 +251,21 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 			String periodo = "Desde " + PeriodoUtil.convertirPeriodoToTexto(configurarVistaDatosForm.getPeriodoInicial(), configurarVistaDatosForm.getFrecuencia(), configurarVistaDatosForm.getAnoInicial()) + " Hasta " + PeriodoUtil.convertirPeriodoToTexto(configurarVistaDatosForm.getPeriodoFinal(), configurarVistaDatosForm.getFrecuencia(), configurarVistaDatosForm.getAnoFinal());
 			celda.setCellValue(periodo);
 		}
-		
+
   		if (valorSelectorOrganizacion != null && !valorSelectorOrganizacion.equals(""))
   		{
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
-			String organizacionSeleccionada = "Organizacion : " + valorSelectorOrganizacion;    
+			String organizacionSeleccionada = "Organizacion : " + valorSelectorOrganizacion;
 			celda.setCellValue(organizacionSeleccionada);
   		}
-  		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
 		celda.setCellValue("");
-		
+
 		numeroCelda = 1;
 		fila = hoja1.createRow(numeroFila++);
 		celda = fila.createCell(numeroCelda);
@@ -270,14 +273,14 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 
 		for (int f = 0; f < configurarVistaDatosForm.getMatrizDatos().size(); f++)
 		{
-			List<DatoCelda> filaDatos = (List<DatoCelda>)configurarVistaDatosForm.getMatrizDatos().get(f);
+			List<DatoCelda> filaDatos = configurarVistaDatosForm.getMatrizDatos().get(f);
 
 			numeroCelda = 1;
 			fila = hoja1.createRow(numeroFila++);
 			for (int k = 0; k < filaDatos.size(); k++)
 			{
-				DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
-				
+				DatoCelda datoCelda = filaDatos.get(k);
+
 				celda = fila.createCell(k+numeroCelda);
 				if (f == 0)
 					celda.setCellStyle(GetEstiloEncabezado(objWB));
@@ -285,39 +288,39 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 					celda.setCellStyle(GetEstiloCuerpo(objWB));
 				if (!datoCelda.getEsAlerta())
 				{
-					celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+					celda.setCellType(Cell.CELL_TYPE_STRING);
 					celda.setCellValue(datoCelda.getValor());
-				} 
+				}
 				else if (datoCelda.getValor() != null)
 				{
 					String alerta = null;
-					switch (new Integer(datoCelda.getValor())) 
-			        { 
+					switch (new Integer(datoCelda.getValor()))
+			        {
 				        case 0:
-					        alerta = "Roja"; 
+					        alerta = "Roja";
 					        break;
 				        case 2:
-				        	alerta = "Verde"; 
+				        	alerta = "Verde";
 					    	break;
 				        case 3:
-				        	alerta = "Amarilla"; 
+				        	alerta = "Amarilla";
 				        	break;
 				        case 1:
 				        	alerta = "Blanca";
 					        break;
 			        }
-					celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+					celda.setCellType(Cell.CELL_TYPE_STRING);
 					celda.setCellValue(alerta);
 				}
 				else
 				{
-					celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+					celda.setCellType(Cell.CELL_TYPE_STRING);
 					celda.setCellValue(datoCelda.getValor());
 				}
 			}
 		}
-		
-		// Volcamos la información a un archivo.
+
+		// Volcamos la informaciï¿½n a un archivo.
 		String strNombreArchivo = "exportar.xls";
 		File objFile = new File(strNombreArchivo);
 
@@ -327,7 +330,7 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 
 		return new FileStreamInfo("application/vnd.ms-excel", new File(strNombreArchivo));
 	}
-	
+
 	private HSSFCellStyle GetEstiloEncabezado(HSSFWorkbook objWB)
 	{
 		// Aunque no es necesario podemos establecer estilos a las celdas.
@@ -335,33 +338,33 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 		HSSFFont fuente = objWB.createFont();
 		fuente.setFontHeightInPoints((short) 11);
 		fuente.setFontName(HSSFFont.FONT_ARIAL);
-		fuente.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		fuente.setBoldweight(Font.BOLDWEIGHT_BOLD);
 
-		// Luego creamos el objeto que se encargará de aplicar el estilo a la
+		// Luego creamos el objeto que se encargarï¿½ de aplicar el estilo a la
 		// celda
 		HSSFCellStyle estiloCelda = objWB.createCellStyle();
 		estiloCelda.setWrapText(true);
-		estiloCelda.setAlignment(HSSFCellStyle.ALIGN_JUSTIFY);
-		estiloCelda.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		estiloCelda.setAlignment(CellStyle.ALIGN_JUSTIFY);
+		estiloCelda.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		estiloCelda.setFont(fuente);
 
-		// También, podemos establecer bordes...
-		estiloCelda.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+		// Tambiï¿½n, podemos establecer bordes...
+		estiloCelda.setBorderBottom(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setBottomBorderColor((short) 8);
-		estiloCelda.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderLeft(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setLeftBorderColor((short) 8);
-		estiloCelda.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderRight(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setRightBorderColor((short) 8);
-		estiloCelda.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderTop(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setTopBorderColor((short) 8);
 
 		// Establecemos el tipo de sombreado de nuestra celda
 		estiloCelda.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-		estiloCelda.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		
-		return estiloCelda; 
+		estiloCelda.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+		return estiloCelda;
 	}
-	
+
 	private HSSFCellStyle GetEstiloCuerpo(HSSFWorkbook objWB)
 	{
 		// Aunque no es necesario podemos establecer estilos a las celdas.
@@ -369,30 +372,30 @@ public class ImprimirVistaDatosXLSAction extends DownloadAction
 		HSSFFont fuente = objWB.createFont();
 		fuente.setFontHeightInPoints((short) 11);
 		fuente.setFontName(HSSFFont.FONT_ARIAL);
-		fuente.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+		fuente.setBoldweight(Font.BOLDWEIGHT_NORMAL);
 
-		// Luego creamos el objeto que se encargará de aplicar el estilo a la
+		// Luego creamos el objeto que se encargarï¿½ de aplicar el estilo a la
 		// celda
 		HSSFCellStyle estiloCelda = objWB.createCellStyle();
 		estiloCelda.setWrapText(true);
-		estiloCelda.setAlignment(HSSFCellStyle.ALIGN_JUSTIFY);
-		estiloCelda.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+		estiloCelda.setAlignment(CellStyle.ALIGN_JUSTIFY);
+		estiloCelda.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		estiloCelda.setFont(fuente);
 
-		// También, podemos establecer bordes...
-		estiloCelda.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+		// Tambiï¿½n, podemos establecer bordes...
+		estiloCelda.setBorderBottom(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setBottomBorderColor((short) 8);
-		estiloCelda.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderLeft(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setLeftBorderColor((short) 8);
-		estiloCelda.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderRight(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setRightBorderColor((short) 8);
-		estiloCelda.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+		estiloCelda.setBorderTop(CellStyle.BORDER_MEDIUM);
 		estiloCelda.setTopBorderColor((short) 8);
 
 		// Establecemos el tipo de sombreado de nuestra celda
 		estiloCelda.setFillForegroundColor(HSSFColor.WHITE.index);
-		estiloCelda.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-		
-		return estiloCelda; 
+		estiloCelda.setFillPattern(CellStyle.SOLID_FOREGROUND);
+
+		return estiloCelda;
 	}
 }

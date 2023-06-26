@@ -8,21 +8,21 @@ public class ReporteComiteEjecutivoForm extends EditarObjetoForm {
 
 	/** nullable persistent field */
 	private String organizaciones;
-	
+
 	private String fecha;
-	
+
 	private String indicadores;
-	
+
 	private String clases;
-	
+
 	private Integer totalOrganizacionesAsociadas;
-	
+
 	private Integer vista;
 
 	public final static String SEPARADOR_CAMPOS = ":";
 
 	public final static String SEPARADOR_FILAS = ";";
-	
+
 	public String getOrganizaciones() {
 		return organizaciones;
 	}
@@ -55,16 +55,17 @@ public class ReporteComiteEjecutivoForm extends EditarObjetoForm {
 			Integer totalOrganizacionesAsociadas) {
 		this.totalOrganizacionesAsociadas = totalOrganizacionesAsociadas;
 	}
-	
+
 	public String getSeparadorCampos() {
 		return SEPARADOR_CAMPOS;
 	}
-	
+
 	public String getSeparadorFilas() {
 		return SEPARADOR_FILAS;
 	}
-	
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		this.organizaciones = null;
 		this.fecha = null;

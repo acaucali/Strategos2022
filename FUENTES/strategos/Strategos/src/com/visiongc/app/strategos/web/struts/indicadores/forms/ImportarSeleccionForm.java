@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.forms;
 
@@ -17,44 +17,44 @@ public class ImportarSeleccionForm extends SelectorListaForm
 	private String rutaCompletaOrganizacion;
 	private String nombre;
 
-	public String getRutaCompletaOrganizacion() 
+	public String getRutaCompletaOrganizacion()
 	{
 		return this.rutaCompletaOrganizacion;
 	}
 
-	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
 	{
 		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
-	  
-	public Long getOrganizacionId() 
+
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
-	  
-	public void clear() 
+
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);
 		setNombreCampoOculto(null);
 		setSeleccionados(null);
 		setValoresSeleccionados(null);
-		  
+
 		this.rutaCompletaOrganizacion = null;
 		this.organizacionId = 0L;
 	}

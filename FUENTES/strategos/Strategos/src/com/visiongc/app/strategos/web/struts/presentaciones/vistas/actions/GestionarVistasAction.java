@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.vistas.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.presentaciones.StrategosVistasService;
 import com.visiongc.app.strategos.presentaciones.model.Vista;
@@ -8,24 +19,18 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.web.controles.SplitControl;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 
 public class GestionarVistasAction extends VgcAction
 {
 	public static final String ACTION_KEY = "GestionarVistasAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrlSinParametros(url, nombre, new Integer(2));
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -36,7 +41,7 @@ public class GestionarVistasAction extends VgcAction
 
 		GestionarVistasForm gestionarVistasForm = (GestionarVistasForm)form;
 		ActionMessages messages = getMessages(request);
-    
+
 		request.getSession().setAttribute("alerta", new com.visiongc.framework.web.struts.alertas.actions.GestionarAlertasAction().getAlerta(getUsuarioConectado(request)));
 
 		String organizacionId = (String)request.getSession().getAttribute("organizacionId");
@@ -44,23 +49,23 @@ public class GestionarVistasAction extends VgcAction
 		String tipoOrden = gestionarVistasForm.getTipoOrdenVistas();
 		int pagina = gestionarVistasForm.getPaginaSeleccionadaVistas();
 		String seleccionados = gestionarVistasForm.getSeleccionadosVistas();
-		
+
 		gestionarVistasForm.setVerForma(getPermisologiaUsuario(request).tienePermiso("VISTA_VIEWALL"));
 		gestionarVistasForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("VISTA_EDIT"));
 
-		if ((atributoOrden == null) || (atributoOrden.equals(""))) 
+		if ((atributoOrden == null) || (atributoOrden.equals("")))
 		{
 			atributoOrden = "nombre";
 			gestionarVistasForm.setAtributoOrdenVistas(atributoOrden);
 		}
-		
-		if ((tipoOrden == null) || (tipoOrden.equals(""))) 
+
+		if ((tipoOrden == null) || (tipoOrden.equals("")))
 		{
 			tipoOrden = "ASC";
 			gestionarVistasForm.setTipoOrdenVistas(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosVistasService strategosVistasService = StrategosServiceFactory.getInstance().openStrategosVistasService();
@@ -75,22 +80,22 @@ public class GestionarVistasAction extends VgcAction
 		int indiceVista = 0;
 		int totalVistas = 0;
 		boolean interrumpirCiclo = false;
-		if ((paginaVistas != null) && (paginaVistas.getLista() != null) && (paginaVistas.getLista().size() > 0)) 
+		if ((paginaVistas != null) && (paginaVistas.getLista() != null) && (paginaVistas.getLista().size() > 0))
 		{
 			totalVistas = paginaVistas.getLista().size();
 			interrumpirCiclo = totalVistas == 0;
-		} 
-		else 
-		{	
+		}
+		else
+		{
 			seleccionados = null;
       		gestionarVistasForm.setSeleccionadosVistas(seleccionados);
 		}
-		
+
 		Vista vistaSeleccionada = null;
 
-		while (!interrumpirCiclo) 
+		while (!interrumpirCiclo)
 		{
-			if ((seleccionados == null) || (seleccionados.equals(""))) 
+			if ((seleccionados == null) || (seleccionados.equals("")))
 			{
 				Long vistaId = null;
 				if ((paginaVistas != null) && (paginaVistas.getLista() != null) && (paginaVistas.getLista().size() > indiceVista))
@@ -104,19 +109,19 @@ public class GestionarVistasAction extends VgcAction
 			}
 
 			vistaSeleccionada = null;
-			if ((seleccionados != null) && (!seleccionados.equals(""))) 
+			if ((seleccionados != null) && (!seleccionados.equals("")))
 			{
 				vistaSeleccionada = (Vista)strategosVistasService.load(Vista.class, new Long(gestionarVistasForm.getSeleccionadosVistas()));
 
-				if (vistaSeleccionada != null) 
+				if (vistaSeleccionada != null)
 				{
 					if (vistaSeleccionada.getOrganizacionId().longValue() != new Long(organizacionId).longValue())
 						vistaSeleccionada = null;
-					else 
+					else
 						gestionarVistasForm.setNombreVistaSeleccionada(vistaSeleccionada.getNombre());
 				}
 
-				if (vistaSeleccionada == null) 
+				if (vistaSeleccionada == null)
 				{
 					seleccionados = null;
 					gestionarVistasForm.setSeleccionadosVistas(seleccionados);
@@ -126,9 +131,9 @@ public class GestionarVistasAction extends VgcAction
 
 			interrumpirCiclo = seleccionados != null;
 
-			if (!interrumpirCiclo) 
+			if (!interrumpirCiclo)
 				interrumpirCiclo = indiceVista >= totalVistas;
-			if (interrumpirCiclo) 
+			if (interrumpirCiclo)
 				gestionarVistasForm.setBloqueadosVistas(seleccionados);
 		}
 

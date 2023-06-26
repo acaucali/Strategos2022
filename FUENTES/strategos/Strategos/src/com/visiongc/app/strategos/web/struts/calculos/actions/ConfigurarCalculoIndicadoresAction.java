@@ -1,30 +1,13 @@
 package com.visiongc.app.strategos.web.struts.calculos.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
-import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.Perspectiva;
-import com.visiongc.app.strategos.planes.model.Plan;
-import com.visiongc.app.strategos.web.struts.calculos.forms.CalculoIndicadoresForm;
-import com.visiongc.app.strategos.web.struts.calculos.forms.CalculoIndicadoresForm.CalcularStatus;
-import com.visiongc.commons.impl.VgcAbstractService;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.FrameworkService;
-import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.model.Configuracion;
-import com.visiongc.framework.model.ConfiguracionUsuario;
-import com.visiongc.framework.model.Usuario;
-import com.visiongc.framework.util.FrameworkConnection;
-import com.visiongc.framework.web.struts.forms.servicio.GestionarServiciosForm;
 import java.io.ByteArrayInputStream;
 import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -34,19 +17,38 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
+import com.visiongc.app.strategos.indicadores.model.Indicador;
+import com.visiongc.app.strategos.planes.StrategosPlanesService;
+import com.visiongc.app.strategos.planes.model.Perspectiva;
+import com.visiongc.app.strategos.planes.model.Plan;
+import com.visiongc.app.strategos.web.struts.calculos.forms.CalculoIndicadoresForm;
+import com.visiongc.commons.impl.VgcAbstractService;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.FrameworkService;
+import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.Configuracion;
+import com.visiongc.framework.model.ConfiguracionUsuario;
+import com.visiongc.framework.util.FrameworkConnection;
+import com.visiongc.framework.web.struts.forms.servicio.GestionarServiciosForm;
+
 public final class ConfigurarCalculoIndicadoresAction
   extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
-  
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {}
+
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
-    
+
     ActionMessages messages = getMessages(request);
     String forward = mapping.getParameter();
-    
+
     CalculoIndicadoresForm calculoIndicadoresForm = (CalculoIndicadoresForm)form;
     String funcion = request.getParameter("funcion");
     if ((funcion == null) || ((funcion != null) && (!funcion.equals("getNumeroIndicadoresPorAlcance")))) {
@@ -76,7 +78,7 @@ public final class ConfigurarCalculoIndicadoresAction
       doc.getDocumentElement().normalize();
       NodeList nList = doc.getElementsByTagName("properties");
       Element eElement = (Element)nList.item(0);
-      
+
       String url = VgcAbstractService.getTagValue("url", eElement);
       String driver = VgcAbstractService.getTagValue("driver", eElement);
       String user = VgcAbstractService.getTagValue("user", eElement);
@@ -115,23 +117,23 @@ public final class ConfigurarCalculoIndicadoresAction
     String planId = request.getParameter("planId");
     String perspectivaId = request.getParameter("perspectivaId");
     Long iniciativaId = request.getParameter("iniciativaId") != null ? Long.valueOf(Long.parseLong(request.getParameter("iniciativaId"))) : null;
-    
+
     boolean desdeOrganizaciones = (organizacionId != null) && (!organizacionId.equals(""));
     boolean desdeIndicadores = (claseId != null) && (!claseId.equals(""));
     boolean desdePlanes = (planId != null) && (!planId.equals(""));
     boolean desdePerspectivas = (perspectivaId != null) && (!perspectivaId.equals(""));
-    Boolean desdeIniciativa = Boolean.valueOf(request.getParameter("desdeIniciativa") != null ? Boolean.parseBoolean(request.getParameter("desdeIniciativa")) : false);
+    boolean desdeIniciativa = request.getParameter("desdeIniciativa") != null ? Boolean.parseBoolean(request.getParameter("desdeIniciativa")) : false;
     Plan plan = null;
     if ((desdeIndicadores) || (desdePlanes)) {
       desdeOrganizaciones = false;
     }
-    if ((!desdeIniciativa.booleanValue()) && (desdeOrganizaciones))
+    if ((!desdeIniciativa) && (desdeOrganizaciones))
     {
       calculoIndicadoresForm.setOrigen(calculoIndicadoresForm.getOrigenOrganizaciones());
       calculoIndicadoresForm.setAlcance(calculoIndicadoresForm.getAlcanceOrganizacion());
       calculoIndicadoresForm.setOrganizacionId(new Long(organizacionId));
     }
-    else if ((!desdeIniciativa.booleanValue()) && (desdeIndicadores))
+    else if ((!desdeIniciativa) && (desdeIndicadores))
     {
       calculoIndicadoresForm.setOrigen(calculoIndicadoresForm.getOrigenIndicadores());
       calculoIndicadoresForm.setAlcance(calculoIndicadoresForm.getAlcanceClase());
@@ -147,11 +149,11 @@ public final class ConfigurarCalculoIndicadoresAction
       }
       calculoIndicadoresForm.setPorNombre(new Boolean(false));
     }
-    else if ((!desdeIniciativa.booleanValue()) && (desdePlanes))
+    else if ((!desdeIniciativa) && (desdePlanes))
     {
       calculoIndicadoresForm.setOrigen(calculoIndicadoresForm.getOrigenPlanes());
       calculoIndicadoresForm.setAlcance(calculoIndicadoresForm.getAlcancePlan());
-      
+
       StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
       if ((desdePlanes) && (planId != null) && (!planId.equals(""))) {
         plan = (Plan)strategosPlanesService.load(Plan.class, new Long(planId));
@@ -172,7 +174,7 @@ public final class ConfigurarCalculoIndicadoresAction
         strategosPlanesService.close();
       }
     }
-    else if (desdeIniciativa.booleanValue())
+    else if (desdeIniciativa)
     {
       calculoIndicadoresForm.setOrganizacionId(new Long(organizacionId));
       calculoIndicadoresForm.setIniciativaId(new Long(iniciativaId.longValue()));
@@ -208,10 +210,10 @@ public final class ConfigurarCalculoIndicadoresAction
     }
     else
     {
-      Integer anoInicial = Integer.valueOf(ahora.get(1) - 20);
-      Integer anoFinal = Integer.valueOf(ahora.get(1) + 20);
-      calculoIndicadoresForm.setAnoInicio(anoInicial.toString());
-      calculoIndicadoresForm.setAnoFin(anoFinal.toString());
+      int anoInicial = ahora.get(1) - 20;
+      int anoFinal = ahora.get(1) + 20;
+      calculoIndicadoresForm.setAnoInicio(Integer.toString(anoInicial));
+      calculoIndicadoresForm.setAnoFin(Integer.toString(anoFinal));
     }
     return mapping.findForward(forward);
   }

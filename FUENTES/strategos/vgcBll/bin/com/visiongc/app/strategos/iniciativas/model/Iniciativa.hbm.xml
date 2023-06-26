@@ -55,6 +55,7 @@
 		<property name="alcance" type="java.lang.String" column="alcance" length="450" />
 		<property name="objetivoGeneral" type="java.lang.String" column="objetivo_general" length="450" />
 		<property name="objetivoEspecificos" type="java.lang.String" column="objetivos_especificos" length="450" />
+		<property name="cargoId" type="java.lang.Long" column="cargo_id" />
 
 		<!-- Asociación uno a uno para organizacion -->
 		<many-to-one name="organizacion" class="com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos" column="organizacion_id" unique="true" insert="false" update="false"></many-to-one>

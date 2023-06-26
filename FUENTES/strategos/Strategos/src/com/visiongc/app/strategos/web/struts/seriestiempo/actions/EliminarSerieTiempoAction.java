@@ -1,32 +1,35 @@
 package com.visiongc.app.strategos.web.struts.seriestiempo.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.seriestiempo.StrategosSeriesTiempoService;
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.model.Usuario;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.seriestiempo.StrategosSeriesTiempoService;
+import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.model.Usuario;
+
 public class EliminarSerieTiempoAction extends VgcAction
 {
 	private static final String ACTION_KEY = "EliminarSerieTiempoAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		ActionMessages messages = getMessages(request);
 
 		String serieId = request.getParameter("serieId");
@@ -39,7 +42,7 @@ public class EliminarSerieTiempoAction extends VgcAction
 			cancelar = true;
 		else if ((serieId == null) || (serieId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(serieId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(serieId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
@@ -48,7 +51,7 @@ public class EliminarSerieTiempoAction extends VgcAction
 		StrategosSeriesTiempoService strategosSeriesTiempoService = StrategosServiceFactory.getInstance().openStrategosSeriesTiempoService();
 
 		bloqueado = !strategosSeriesTiempoService.lockForDelete(request.getSession().getId(), serieId);
-		
+
 		SerieTiempo serieTiempo = (SerieTiempo)strategosSeriesTiempoService.load(SerieTiempo.class, new Long(serieId));
 
 		if (serieTiempo != null)
@@ -62,9 +65,9 @@ public class EliminarSerieTiempoAction extends VgcAction
 					serieTiempo.setSerieId(Long.valueOf(serieId));
 					Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 					int res = strategosSeriesTiempoService.deleteSerieTiempo(serieTiempo, usuario);
-					
+
 					strategosSeriesTiempoService.unlockObject(request.getSession().getId(), serieId);
-	
+
 					if (res == 10004)
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", serieTiempo.getNombre()));
 					else
@@ -76,11 +79,11 @@ public class EliminarSerieTiempoAction extends VgcAction
 		}
 		else
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
-		
+
 		strategosSeriesTiempoService.close();
 
 		saveMessages(request, messages);
-		
+
 		request.getSession().setAttribute("EliminarSerieTiempoAction.ultimoTs", serieId + "&" + ts);
 
 		return getForwardBack(request, 1, true);

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
@@ -31,7 +31,6 @@ import com.visiongc.app.strategos.indicadores.model.SerieIndicador;
 import com.visiongc.app.strategos.indicadores.model.SerieIndicadorPK;
 import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
-import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.IndicadorConsolidadoForm;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.IndicadorConsolidadoForm.ConsolidarStatus;
@@ -48,17 +47,19 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class IndicadoresConsolidadosAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 		ActionMessages messages = getMessages(request);
-		
+
 		boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
 	    String ts = request.getParameter("ts");
 
@@ -74,17 +75,17 @@ public class IndicadoresConsolidadosAction extends VgcAction
 	    	organizacionId = new Long(request.getParameter("organizacionId"));
 	    else
 	    	organizacionId = indicadorConsolidadoForm.getOrganizacionId();
-	    
+
 	    indicadorConsolidadoForm.setOrganizacionId(organizacionId);
 	    indicadorConsolidadoForm.setStatus(ConsolidarStatus.getConsolidarStatusLoad());
-	    
+
 		if (request.getParameter("funcion") != null)
 		{
 	    	String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("Consolidar")) 
+	    	if (funcion.equals("Consolidar"))
 	    	{
 	    		indicadorConsolidadoForm.setStatus(Consolidar(request, indicadorConsolidadoForm));
-	    		
+
 	    		if (indicadorConsolidadoForm.getStatus().byteValue() == ConsolidarStatus.getConsolidarStatusNoSuccess().byteValue())
 	    		{
 	    			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.asistente.consolidado.fin.reporte.archivo.error"));
@@ -102,7 +103,7 @@ public class IndicadoresConsolidadosAction extends VgcAction
 
 	    return mapping.findForward(forward);
 	}
-	
+
 	private byte Consolidar(HttpServletRequest request, IndicadorConsolidadoForm indicadorConsolidadoForm)
 	{
 		String[] clases = request.getParameter("clases").split(indicadorConsolidadoForm.getSeparadorClases());
@@ -113,7 +114,7 @@ public class IndicadoresConsolidadosAction extends VgcAction
 
 		StringBuffer log = new StringBuffer();
 		VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
-		
+
 	    log.append(messageResources.getResource("jsp.asistente.consolidado.log.titulo") + "\n");
 
 	    Calendar ahora = Calendar.getInstance();
@@ -125,42 +126,42 @@ public class IndicadoresConsolidadosAction extends VgcAction
 		List<String> campos = new ArrayList<String>();
 		campos.add("nombre");
 		campos.add("frecuencia");
-		
+
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-		
+
 		String orden = "nombre";
 		String tipoOrden = "ASC";
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
-		for (int i = 0; i < clases.length; i++)
-			parametroClases = parametroClases + clases[i] + ", ";
-		
+		for (String element : clases)
+			parametroClases = parametroClases + element + ", ";
+
 		if (!parametroClases.equals(""))
 			parametroClases = parametroClases.substring(0, parametroClases.length() - 2);
-		
+
 		filtros.put("clases", parametroClases);
-		
+
 		List<Indicador> indicadores = strategosIndicadoresService.getIndicadoresNombreFrecuencia(orden, tipoOrden, campos, true, filtros);
-		
-		List<Long> ids; 
+
+		List<Long> ids;
 		Indicador indicador = new Indicador();
 		Indicador indicadorConsolidado = new Indicador();
-    	for (Iterator<?> iter = indicadores.iterator(); iter.hasNext(); ) 
+    	for (Iterator<?> iter = indicadores.iterator(); iter.hasNext(); )
         {
     		indicador = (Indicador)iter.next();
-    		
+
     		filtros = new HashMap<String, Object>();
     		filtros.put("nombre", indicador.getNombre());
     		filtros.put("clases", parametroClases);
     		filtros.put("frecuencia", indicador.getFrecuencia());
-    		
+
     		ids = strategosIndicadoresService.getIndicadoresIds(filtros);
-    		
+
     		if (ids.size() > 0)
     		{
     			Indicador indicadorFuente = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(ids.get(0)));
-    			
+
 	    		indicadorConsolidado = new Indicador();
 	    		indicadorConsolidado.setIndicadorId(new Long(0L));
 	    		indicadorConsolidado.setClaseId(claseId);
@@ -213,10 +214,8 @@ public class IndicadoresConsolidadosAction extends VgcAction
 	    		Set<SerieIndicador> seriesIndicador = indicadorFuente.getSeriesIndicador();
 	    		indicadorConsolidado.getSeriesIndicador().clear();
 
-	    		for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext(); ) 
-	    		{
-	    			SerieIndicador serie = i.next();
-	              	SerieIndicador serieIndicador = new SerieIndicador();
+	    		for (SerieIndicador serie : seriesIndicador) {
+	    			SerieIndicador serieIndicador = new SerieIndicador();
 	              	serieIndicador.setIndicador(indicadorConsolidado);
 	              	serieIndicador.setPk(new SerieIndicadorPK());
 	              	serieIndicador.getPk().setSerieId(serie.getPk().getSerieId());
@@ -227,26 +226,26 @@ public class IndicadoresConsolidadosAction extends VgcAction
 	    	            serieIndicador.setNaturaleza(indicadorFuente.getNaturaleza());
 	              		serieReal = serieIndicador;
 	              	}
-	              	else 
+	              	else
 	    	            serieIndicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
 
 	              	indicadorConsolidado.getSeriesIndicador().add(serieIndicador);
 	    		}
-	    		
+
 	        	indicadorConsolidado.setUrl(indicadorFuente.getUrl());
 	        	indicadorConsolidado.setPlanId(null);
 	        	indicadorConsolidado.setPerspectivaId(null);
-	
+
 	        	indicadorConsolidado.setCodigoEnlace(null);
 	        	indicadorConsolidado.setEnlaceParcial(null);
 	        	indicadorConsolidado.getEscalaCualitativa().clear();
-	
+
 	            Formula formulaIndicador = new Formula();
 	            formulaIndicador.setInsumos(new HashSet<Object>());
 	            formulaIndicador.setExpresion(IndicadorValidator.ConstruirFormula(ids, 0, "+"));
-	       	
+
 	            Long insumo;
-	        	for (Iterator<?> id = ids.iterator(); id.hasNext(); ) 
+	        	for (Iterator<?> id = ids.iterator(); id.hasNext(); )
 	            {
 	        		insumo = (Long)id.next();
 
@@ -259,7 +258,7 @@ public class IndicadoresConsolidadosAction extends VgcAction
 	                formulaIndicador.getInsumos().add(insumoFormula);
 	            }
 	        	serieReal.getFormulas().add(formulaIndicador);
-	
+
 	            respuesta = strategosIndicadoresService.saveIndicador(indicadorConsolidado, getUsuarioConectado(request));
 	            if (respuesta != 10000)
 	            {
@@ -274,7 +273,7 @@ public class IndicadoresConsolidadosAction extends VgcAction
 	            }
     		}
         }
-		
+
 		strategosIndicadoresService.close();
 
 	    ahora = Calendar.getInstance();
@@ -288,7 +287,7 @@ public class IndicadoresConsolidadosAction extends VgcAction
 	    else
 	    	log.append(messageResources.getResource("jsp.asistente.consolidado.log.nosuccess") + "\n\n");
 	    request.getSession().setAttribute("verArchivoLog", log);
-		
+
 		if (respuesta == 10000)
 			return ConsolidarStatus.getConsolidarStatusSuccess();
 		else

@@ -1,5 +1,15 @@
 package com.visiongc.app.strategos.web.struts.estadosacciones.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.estadosacciones.StrategosEstadosService;
 import com.visiongc.app.strategos.estadosacciones.model.EstadoAcciones;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
@@ -7,21 +17,16 @@ import com.visiongc.app.strategos.web.struts.estadosacciones.forms.GestionarEsta
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class GestionarEstadosAccionesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -31,14 +36,14 @@ public class GestionarEstadosAccionesAction extends VgcAction
 		GestionarEstadosAccionesForm gestionarEstadoAccionesForm = (GestionarEstadosAccionesForm)form;
 
 		int pagina = gestionarEstadoAccionesForm.getPagina();
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosEstadosService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosEstadosService();
 
 		Map<String, String> filtros = new HashMap<String, String>();
 
-		if ((gestionarEstadoAccionesForm.getFiltroNombre() != null) && (!gestionarEstadoAccionesForm.getFiltroNombre().equals(""))) 
+		if ((gestionarEstadoAccionesForm.getFiltroNombre() != null) && (!gestionarEstadoAccionesForm.getFiltroNombre().equals("")))
 			filtros.put("nombre", gestionarEstadoAccionesForm.getFiltroNombre());
 
 		PaginaLista paginaEstadosAcciones = strategosUnidadesService.getEstadosAcciones(pagina, 30, "orden", "asc", true, filtros);
@@ -49,9 +54,9 @@ public class GestionarEstadosAccionesAction extends VgcAction
 
 		strategosUnidadesService.close();
 
-		if (paginaEstadosAcciones.getLista().size() > 0) 
+		if (paginaEstadosAcciones.getLista().size() > 0)
 		{
-			if (gestionarEstadoAccionesForm.getSeleccionados() == null) 
+			if (gestionarEstadoAccionesForm.getSeleccionados() == null)
 			{
 				EstadoAcciones estadoAcciones = (EstadoAcciones)paginaEstadosAcciones.getLista().get(0);
 				gestionarEstadoAccionesForm.setSeleccionados(estadoAcciones.getEstadoId().toString());

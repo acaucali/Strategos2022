@@ -15,8 +15,15 @@
 		</composite-id>
 
 		<!-- Atributos del objeto conceptual para  AdjuntoExplicacion -->
-		<property name="ruta" type="java.lang.String" column="ruta" />
+		<property name="ruta" type="java.lang.String" column="ruta" /> 
 		<property name="titulo" type="java.lang.String" column="titulo" />
+		<!-- <property name="archivo" type="blob" lazy="true" column="adjunto_binario" insert="false" update="false"/>
+		<property name="archivo" column="adjunto_binario" type="binary" /> -->
+		<property name="archivoBytes" type="binary">
+    		<column name="adjunto_binario" sql-type="blob" />
+		</property>
+ 		
+		
 		<!-- <property name="documentoBlob" type="blob" lazy="true" column="documento" insert="false" update="false" />-->
 
 		<!-- Asociación muchos a uno para Explicacion -->

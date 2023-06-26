@@ -1,10 +1,11 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
 import java.net.URL;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +30,7 @@ import com.visiongc.app.strategos.web.struts.reportes.actions.MostrarReporteActi
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
 import com.visiongc.app.strategos.web.struts.vistasdatos.forms.ConfigurarVistaDatosForm;
 import com.visiongc.app.strategos.web.struts.vistasdatos.forms.ConfigurarVistaDatosForm.SourceType;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.web.util.WebUtil;
@@ -40,31 +42,33 @@ import com.visiongc.commons.web.util.WebUtil;
 public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 {
 	private String titulo = null;
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		titulo = mensajes.getMessage("jsp.mostrarvistadatos.titulo") + " / " + request.getSession().getAttribute("organizacionNombre");
 		return titulo;
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 	    documento.setPageSize(PageSize.LETTER.rotate());
-	    
+
 	    ConfigurarVistaDatosForm configurarVistaDatosForm = (ConfigurarVistaDatosForm)form;
 		Long reporteId = ((request.getParameter("reporteId") != null && request.getParameter("reporteId") != "") ? new Long(request.getParameter("reporteId")) : null);
 		Byte source = ((request.getParameter("source") != null && request.getParameter("source") != "") ? new Byte(request.getParameter("source")) : null);
 		Byte corte = ((request.getParameter("corte") != null && request.getParameter("corte") != "") ? new Byte(request.getParameter("corte")) : null);
-		
+
 		if (corte != null && ReporteCorte.getCorteLongitudinal().byteValue() == corte.byteValue())
 			getCorteLongitudinal(source, reporteId, configurarVistaDatosForm, request, documento);
 		else
 			getCorteTransversal(reporteId, request, documento);
 	}
-	
+
 	private void getCorteTransversal(Long reporteId, HttpServletRequest request, Document documento) throws Exception
 	{
 	    Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
-		
+
 		if (reporteId != null)
 		{
 			StrategosReportesService reportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
@@ -76,26 +80,26 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
     		{
     			ReporteForm reporteForm = new ReporteForm();
     			reporteForm.clear();
-    			
+
     			new MostrarReporteAction().getReporte(reporteForm, reporte, reporteId, request);
-			    
+
 				String subTitulo = reporteForm.getReporteNombre();
-				
+
 				documento.add(new Paragraph(" "));
 			    agregarSubTitulo(documento, getConfiguracionPagina(request), subTitulo, true, true, 13.0F);
 				documento.add(new Paragraph(" "));
-				
+
 				if (reporteForm.getPeriodoInicial() != null && reporteForm.getPeriodoFinal() != null && reporteForm.getAnoInicial() != null && reporteForm.getAnoFinal() != null)
 				{
-					String periodo = "Desde " + PeriodoUtil.convertirPeriodoToTexto(reporteForm.getPeriodoInicial(), reporteForm.getFrecuencia(), new Integer(reporteForm.getAnoInicial())) + " Hasta " + PeriodoUtil.convertirPeriodoToTexto(reporteForm.getPeriodoFinal(), reporteForm.getFrecuencia(), new Integer(reporteForm.getAnoFinal()));    
+					String periodo = "Desde " + PeriodoUtil.convertirPeriodoToTexto(reporteForm.getPeriodoInicial(), reporteForm.getFrecuencia(), new Integer(reporteForm.getAnoInicial())) + " Hasta " + PeriodoUtil.convertirPeriodoToTexto(reporteForm.getPeriodoFinal(), reporteForm.getFrecuencia(), new Integer(reporteForm.getAnoFinal()));
 				    agregarSubTitulo(documento, getConfiguracionPagina(request), periodo, true, true, 13.0F);
 					documento.add(new Paragraph(" "));
 				}
-			    
+
 				TablaBasicaPDF tabla = new TablaBasicaPDF(getConfiguracionPagina(request), request);
 				if (reporteForm.getMatrizDatos().size() > 0)
 				{
-				    int[] columnas = new int[((List<DatoCelda>)reporteForm.getMatrizDatos().get(0)).size()];
+				    int[] columnas = new int[reporteForm.getMatrizDatos().get(0).size()];
 				    columnas[0] = 25;
 				    for (int f = 1; f < columnas.length; f++)
 				    	columnas[f] = 10;
@@ -104,7 +108,7 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 				    tabla.setAmplitudTabla(100);
 				    tabla.crearTabla(columnas);
 				    tabla.setFormatoFont(font.style());
-				    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+				    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 				    tabla.setTamanoFont(10);
 				    tabla.setCellpadding(0);
 				    tabla.setColorLetra(255, 255, 255);
@@ -112,16 +116,16 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 				    tabla.setColorBorde(120, 114, 77);
 				    tabla.setColspan(1);
 
-				    String[] columnasTitulo = new String[columnas.length];  
-					List<DatoCelda> filaDatos = (List<DatoCelda>)reporteForm.getMatrizDatos().get(0);
+				    String[] columnasTitulo = new String[columnas.length];
+					List<DatoCelda> filaDatos = reporteForm.getMatrizDatos().get(0);
 					for (int k = 0; k < filaDatos.size(); k++)
 					{
-						DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
+						DatoCelda datoCelda = filaDatos.get(k);
 						columnasTitulo[k] = datoCelda.getValor();
 					}
-				    
+
 					tabla = saltoPaginaTabla(font, false, documento, tabla, columnas, columnasTitulo, "", "", request);
-					
+
 					int numeroLineas = 0;
 					int tamanoLineas = 14;
 					tabla.setTamanoFont(8);
@@ -132,28 +136,27 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 		    				numeroLineas = 0;
 		    				tabla = saltoPaginaTabla(font, true, documento, tabla, columnas, columnasTitulo, titulo, subTitulo, request);
 		    			}
-						
-						filaDatos = (List<DatoCelda>)reporteForm.getMatrizDatos().get(f);
-						for (int k = 0; k < filaDatos.size(); k++)
-						{
-							DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
-							if (datoCelda.getValor() != null) 
+
+						filaDatos = reporteForm.getMatrizDatos().get(f);
+						for (DatoCelda element : filaDatos) {
+							DatoCelda datoCelda = element;
+							if (datoCelda.getValor() != null)
 								tabla.agregarCelda(datoCelda.getValor());
 						}
-						
+
 						numeroLineas++;
 					}
-			    	
+
 					documento.add(tabla.getTabla());
 				}
     		}
 		}
 	}
-	
+
 	private void getCorteLongitudinal(Byte source, Long reporteId, ConfigurarVistaDatosForm configurarVistaDatosForm, HttpServletRequest request, Document documento) throws Exception
 	{
 	    Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
-	    
+
 		if (source == null)
 		{
 			if (reporteId == null)
@@ -162,7 +165,7 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 			{
 				if (configurarVistaDatosForm == null)
 					configurarVistaDatosForm = new ConfigurarVistaDatosForm();
-				configurarVistaDatosForm.clear(); 
+				configurarVistaDatosForm.clear();
 				configurarVistaDatosForm.setSource(SourceType.getSourceGestionar());
 				new ConfigurarVistaDatosAction().cargarConfiguracion(configurarVistaDatosForm, request);
 			}
@@ -172,21 +175,21 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 			if (configurarVistaDatosForm == null)
 			{
 				configurarVistaDatosForm = new ConfigurarVistaDatosForm();
-				configurarVistaDatosForm.clear(); 
+				configurarVistaDatosForm.clear();
 				configurarVistaDatosForm.setSource(SourceType.getSourceGestionar());
 				new ConfigurarVistaDatosAction().cargarConfiguracion(configurarVistaDatosForm, request);
 			}
 		}
 
 		String subTitulo = configurarVistaDatosForm.getNombre();
-		
+
   		String valorSelectorOrganizacion = ((request.getParameter("organizacionId") != null && request.getParameter("organizacionId") != "") ? request.getParameter("organizacionId") : null);
   		if (valorSelectorOrganizacion != null && !valorSelectorOrganizacion.equals(""))
   		{
   			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
   			OrganizacionStrategos organizacion = (OrganizacionStrategos)strategosIndicadoresService.load(OrganizacionStrategos.class, new Long(valorSelectorOrganizacion));
   			strategosIndicadoresService.close();
-  			
+
   			valorSelectorOrganizacion = null;
   			if (organizacion != null)
   			{
@@ -195,9 +198,9 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
   	  			configurarVistaDatosForm.setSelector1Id(new Long(TipoDimension.getTipoDimensionOrganizacion()));
   	  			configurarVistaDatosForm.setValorSelector1(organizacion.getOrganizacionId().toString());
   			}
-  			
+
   		}
-  		
+
   		String valorSelectorTiempo = ((request.getParameter("tiempo") != null && request.getParameter("tiempo") != "") ? request.getParameter("tiempo") : null);
   		if (valorSelectorTiempo != null && !valorSelectorTiempo.equals(""))
   		{
@@ -205,31 +208,31 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
   			configurarVistaDatosForm.setSelector1Id(new Long(TipoDimension.getTipoDimensionTiempo()));
   			configurarVistaDatosForm.setValorSelector1(valorSelectorTiempo);
   		}
-  		
+
 		new MostrarVistaDatosAction().setConfigurarVistaDatosForm(configurarVistaDatosForm, getResources(request));
-	    
+
 		documento.add(new Paragraph(" "));
 	    agregarSubTitulo(documento, getConfiguracionPagina(request), subTitulo, true, true, 13.0F);
 		documento.add(new Paragraph(" "));
-		
+
 		if (configurarVistaDatosForm.getPeriodoInicial() != null && configurarVistaDatosForm.getPeriodoFinal() != null && configurarVistaDatosForm.getAnoInicial() != null && configurarVistaDatosForm.getAnoFinal() != null)
 		{
-			String periodo = "Desde " + PeriodoUtil.convertirPeriodoToTexto(configurarVistaDatosForm.getPeriodoInicial(), configurarVistaDatosForm.getFrecuencia(), configurarVistaDatosForm.getAnoInicial()) + " Hasta " + PeriodoUtil.convertirPeriodoToTexto(configurarVistaDatosForm.getPeriodoFinal(), configurarVistaDatosForm.getFrecuencia(), configurarVistaDatosForm.getAnoFinal());    
+			String periodo = "Desde " + PeriodoUtil.convertirPeriodoToTexto(configurarVistaDatosForm.getPeriodoInicial(), configurarVistaDatosForm.getFrecuencia(), configurarVistaDatosForm.getAnoInicial()) + " Hasta " + PeriodoUtil.convertirPeriodoToTexto(configurarVistaDatosForm.getPeriodoFinal(), configurarVistaDatosForm.getFrecuencia(), configurarVistaDatosForm.getAnoFinal());
 		    agregarSubTitulo(documento, getConfiguracionPagina(request), periodo, true, true, 13.0F);
 			documento.add(new Paragraph(" "));
 		}
-		
+
   		if (valorSelectorOrganizacion != null && !valorSelectorOrganizacion.equals(""))
   		{
-			String organizacionSeleccionada = "Organizacion : " + valorSelectorOrganizacion;    
+			String organizacionSeleccionada = "Organizacion : " + valorSelectorOrganizacion;
 		    agregarSubTitulo(documento, getConfiguracionPagina(request), organizacionSeleccionada, true, true, 13.0F);
 			documento.add(new Paragraph(" "));
   		}
-	    
+
 		TablaBasicaPDF tabla = new TablaBasicaPDF(getConfiguracionPagina(request), request);
 		if (configurarVistaDatosForm.getMatrizDatos().size() > 0)
 		{
-		    int[] columnas = new int[((List<DatoCelda>)configurarVistaDatosForm.getMatrizDatos().get(0)).size()];
+		    int[] columnas = new int[configurarVistaDatosForm.getMatrizDatos().get(0).size()];
 		    columnas[0] = 25;
 		    for (int f = 1; f < columnas.length; f++)
 		    	columnas[f] = 10;
@@ -238,8 +241,8 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 		    tabla.setAmplitudTabla(100);
 		    tabla.crearTabla(columnas);
 		    tabla.setFormatoFont(font.style());
-		    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
-		    tabla.setAlineacionVertical(TablaBasicaPDF.V_ALINEACION_MIDDLE);
+		    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
+		    tabla.setAlineacionVertical(Tabla.V_ALINEACION_MIDDLE);
 		    tabla.setTamanoFont(10);
 		    tabla.setCellpadding(0);
 		    tabla.setColorLetra(255, 255, 255);
@@ -247,16 +250,16 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 		    tabla.setColorBorde(120, 114, 77);
 		    tabla.setColspan(1);
 
-		    String[] columnasTitulo = new String[columnas.length];  
-			List<DatoCelda> filaDatos = (List<DatoCelda>)configurarVistaDatosForm.getMatrizDatos().get(0);
+		    String[] columnasTitulo = new String[columnas.length];
+			List<DatoCelda> filaDatos = configurarVistaDatosForm.getMatrizDatos().get(0);
 			for (int k = 0; k < filaDatos.size(); k++)
 			{
-				DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
+				DatoCelda datoCelda = filaDatos.get(k);
 				columnasTitulo[k] = datoCelda.getValor();
 			}
-		    
+
 			tabla = saltoPaginaTabla(font, false, documento, tabla, columnas, columnasTitulo, "", "", request);
-			
+
 			int numeroLineas = 0;
 			int tamanoLineas = 14;
 			tabla.setTamanoFont(8);
@@ -268,25 +271,24 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
     				numeroLineas = 0;
     				tabla = saltoPaginaTabla(font, true, documento, tabla, columnas, columnasTitulo, titulo, subTitulo, request);
     			}
-				
-				filaDatos = (List<DatoCelda>)configurarVistaDatosForm.getMatrizDatos().get(f);
-				for (int k = 0; k < filaDatos.size(); k++)
-				{
-					DatoCelda datoCelda = (DatoCelda)filaDatos.get(k);
+
+				filaDatos = configurarVistaDatosForm.getMatrizDatos().get(f);
+				for (DatoCelda element : filaDatos) {
+					DatoCelda datoCelda = element;
 					if (!datoCelda.getEsAlerta())
 						tabla.agregarCelda(datoCelda.getValor());
-					else if (datoCelda.getValor() != null) 
+					else if (datoCelda.getValor() != null)
 					{
-				    	switch (new Integer(datoCelda.getValor())) 
-				        { 
+				    	switch (new Integer(datoCelda.getValor()))
+				        {
 					        case 0:
-						        imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaRoja5X5.gif"))); 
+						        imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaRoja5X5.gif")));
 						        break;
 					        case 2:
-						    	imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaVerde5X5.gif"))); 
+						    	imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaVerde5X5.gif")));
 						    	break;
 					        case 3:
-					        	imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaAmarilla5X5.gif"))); 
+					        	imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaAmarilla5X5.gif")));
 					        	break;
 					        case 1:
 						        imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaBlanca5X5.gif")));
@@ -297,10 +299,10 @@ public class ImprimirVistaDatosPDFAction extends VgcReporteBasicoAction
 					else
 						tabla.agregarCelda(datoCelda.getValor());
 				}
-				
+
 				numeroLineas++;
 			}
-	    	
+
 			documento.add(tabla.getTabla());
 		}
 	}

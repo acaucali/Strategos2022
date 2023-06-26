@@ -5,12 +5,12 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarCooperantesForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long cooperanteId;
-	private String nombre;  
+	private String nombre;
 	private String descripcion;
 	private String pais;
-			
+
 	public Long getCooperanteId() {
 		return cooperanteId;
 	}
@@ -42,8 +42,9 @@ public class EditarCooperantesForm extends EditarObjetoForm
 	public void setPais(String pais) {
 		this.pais = pais;
 	}
-	
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		this.cooperanteId = new Long(0L);
 		this.nombre = null;

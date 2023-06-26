@@ -4624,11 +4624,11 @@ alter table iniciativa_objeto
 
 ALTER TABLE iniciativa 
     add column responsable_proyecto character varying(150),
-	add column cargo_responsable character varying(50),
+	add column cargo_responsable character varying(200),
 	add column organizaciones_involucradas character varying(250),
 	add column objetivo_estrategico character varying(1024),
-	add column fuente_financiacion character varying(50),
-	add column monto_financiamiento character varying(50),
+	add column fuente_financiacion character varying(100),
+	add column monto_financiamiento character varying(100),
 	add column iniciativa_estrategica character varying(150),
 	add column lider_iniciativa character varying(150),
 	add column tipo_iniciativa character varying(150),
@@ -4683,8 +4683,27 @@ ALTER TABLE instrumento_peso
 	ADD CONSTRAINT fk_instrumento_peso FOREIGN KEY (instrumento_id) REFERENCES instrumentos (instrumento_id) ON UPDATE NO ACTION ON DELETE CASCADE;
 
 
+UPDATE afw_permiso set permiso = 'Desasociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_DELETE';
+UPDATE afw_permiso set permiso = 'Asociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_ADD';
 
--- Completed on 2012-05-31 19:43:20
+-- alter table explicacion_adjunto drop column ruta;
+
+alter table explicacion_adjunto add adjunto_binario bytea;
+
+ALTER TABLE instrumentos
+    ALTER COLUMN nombre_corto type varchar(150) ;
+ALTER TABLE instrumentos 
+    ALTER COLUMN observaciones type varchar(2500) ;
+
+ALTER TABLE planes
+    ALTER COLUMN nombre type varchar(150) ;
+
+CREATE TABLE cargo (
+	cargo_id numeric(10,0) NOT NULL,
+	nombre character varying(50) NOT NULL
+);
+
+-- Completed on 2023-04-27 19:43:20
 
 --
 -- PostgreSQL database dump complete

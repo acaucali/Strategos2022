@@ -504,25 +504,20 @@
 			 	
 			 	
 			 	var periodoactual= obtenerPeriodoActual(document.editarMedicionesForm.frecuencia.value)
-			 	periodoactual = periodoactual +1;
-			 	if(periodoactual < document.editarMedicionesForm.periodoHasta.value || document.editarMedicionesForm.anioFinal.value < document.editarMedicionesForm.anoHasta.value){			 						 	
-				 	var alerta = confirm('Esta intentando cargar mediciones a futuro');
-				 	if(alerta){
-				 		var confirmacion = confirm('¿ESTA SEGURO DE REALIZAR ESTA ACCCION?');
-				 		if(confirmacion){
-				 			document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
-							document.editarMedicionesForm.submit();
-				 		}
-				 		else{
-					 		cancelar();
-					 	}
-				 	}else{
-				 		cancelar();
-				 	}
-			 	}else{
+			 	periodoactual = periodoactual +1;			 	
+			 	
+			 	// Caso 1 : Anio hasta menor  
+			 	if(document.editarMedicionesForm.anoHasta.value < document.editarMedicionesForm.anioFinal.value){
 			 		document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
 					document.editarMedicionesForm.submit();
-			 	}			 				 	
+			 		console.log('Caso:  1' );
+			 	}else if(document.editarMedicionesForm.periodoHasta.value <= periodoactual && document.editarMedicionesForm.anoHasta.value == document.editarMedicionesForm.anioFinal.value){   // Caso 2 : Periodo hasta menor o igual && Anio hasta igual			 		
+			 		document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
+					document.editarMedicionesForm.submit();
+			 		console.log('Caso:  2' );
+			 	}else{
+			 		alerta();
+			 	}	 	
 			}
 
 			function onAceptar()
@@ -541,6 +536,22 @@
 			{
 				if (_setCloseParent)
 					cancelar();
+			}
+			
+			function alerta(){
+				var alerta = confirm('Esta intentando cargar mediciones a futuro');
+		 		if(alerta){
+		 			var confirmacion = confirm('¿ESTA SEGURO DE REALIZAR ESTA ACCCION?');
+		 			if(confirmacion){
+		 				document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/editarMediciones"/>' + "?source=" + document.editarMedicionesForm.sourceScreen.value + "&funcion=Validar&tipo=0";
+						document.editarMedicionesForm.submit();
+		 			}
+		 			else{
+			 			cancelar();
+			 		}
+		 		}else{
+		 			cancelar();
+		 		}
 			}
 
 		</script>

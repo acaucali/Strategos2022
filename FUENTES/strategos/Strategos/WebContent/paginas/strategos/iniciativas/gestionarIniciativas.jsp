@@ -421,6 +421,11 @@
 		configurarVisorLista('com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguracionesBase', 'visorIniciativas', _tituloIniciativa);
 	}
 	
+	function configurarVisorIniciativasInstrumentos() 
+	{
+		configurarVisorLista('com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguracionesBase', 'visorIniciativas');
+	}
+	
 	function desbloquearCulminado(){
 		
 		activarBloqueoEspera();
@@ -463,6 +468,10 @@
 	 {
 		 abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/medicionesAtrasadas" />', "Iniciativa", 520, 460);
 	 }
+	 
+	 function reporteDetalladoProyectosAsociados(){		 				
+		abrirVentanaModal('<html:rewrite action="/instrumentos/reporteDetalladoProyectosAsociadosIniciativas" />?iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value , "reporteDetalladoProyectosAsociados", 350, 200);			     	 	 
+	}
 	
 	
 </script>
@@ -561,47 +570,61 @@
 						</logic:notEqual>
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
-
+				
+			
 				<%-- Men�: Evaluaci�n --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
-					<vgcinterfaz:menuBotones id="menuEvaluacionIniciativas" key="menu.evaluacion">
-						<logic:notEmpty scope="session" name="planActivoId">
-							<vgcinterfaz:menuAnidado key="menu.evaluacion.graficos" agregarSeparador="true">
-								<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.estatus" permisoId="INICIATIVA_EVALUAR_GRAFICO_ESTATUS" aplicaOrganizacion="true" onclick="graficarIniciativa(0);" />
-								<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.porcentajes" permisoId="INICIATIVA_EVALUAR_GRAFICO_PORCENTAJE" aplicaOrganizacion="true" onclick="graficarIniciativa(1);" />
-							</vgcinterfaz:menuAnidado>
+					<vgcinterfaz:menuBotones id="menuEvaluacionIniciativas1" key="menu.evaluacion">
+						
+					<logic:equal name="gestionarIniciativasForm" property="source" value="instrumentos">
+							<vgcinterfaz:botonMenu key="jsp.reporte.instrumentos.detallado.proyectos.asociados" onclick="reporteDetalladoProyectosAsociados();" permisoId="INSTRUMENTOS" />
+					</logic:equal>
+					
+					
+						<logic:notEqual name="gestionarIniciativasForm" property="source" value="instrumentos">
+							<logic:notEmpty scope="session" name="planActivoId">
+								<vgcinterfaz:menuAnidado key="menu.evaluacion.graficos" agregarSeparador="true">
+									<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.estatus" permisoId="INICIATIVA_EVALUAR_GRAFICO_ESTATUS" aplicaOrganizacion="true" onclick="graficarIniciativa(0);" />
+									<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.porcentajes" permisoId="INICIATIVA_EVALUAR_GRAFICO_PORCENTAJE" aplicaOrganizacion="true" onclick="graficarIniciativa(1);" />
+								</vgcinterfaz:menuAnidado>
 							
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
+									<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
+										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
+									</logic:equal>
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+						
+								
+							</logic:notEmpty>
+						 
+							<logic:empty scope="session" name="planActivoId">
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
-								<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
-									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
-								</logic:equal>
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-						
+								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.mediciones.atrasadas" onclick="generarReporteMedicionesAtrasadas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.planes.accion" onclick="reporteDetalladoProyectosAsociados();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 								
-						</logic:notEmpty>
-						 
-						<logic:empty scope="session" name="planActivoId">
-							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
-							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
-							<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.mediciones.atrasadas" onclick="generarReporteMedicionesAtrasadas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
-							<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
+								</logic:equal>
 								
-							</logic:equal>
-							
-						</logic:empty>
+							</logic:empty>
 						
-						
+						</logic:notEqual>
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 				
 				<%-- Men�: Herramientas --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuHerramientasIniciativas" key="menu.herramientas">
-						<vgcinterfaz:botonMenu key="menu.herramientas.configurarvisorlista" onclick="configurarVisorIniciativas();" />
+						<logic:equal name="gestionarIniciativasForm" property="source" value="instrumentos">
+							<vgcinterfaz:botonMenu key="menu.herramientas.configurarvisorlista" onclick="configurarVisorIniciativasInstrumentos();" />
+						</logic:equal>
+						<logic:notEqual name="gestionarIniciativasForm" property="source" value="instrumentos">
+							<vgcinterfaz:botonMenu key="menu.herramientas.configurarvisorlista" onclick="configurarVisorIniciativas();" />
+						</logic:notEqual>
 						<vgcinterfaz:botonMenu key="menu.herramientas.culminado" onclick="desbloquearCulminado();" />
 						<vgcinterfaz:botonMenu key="menu.herramientas.bloquear.iniciativa" onclick="protegerLiberarIniciativas();" permisoId="PROTEGER_LIBERAR_INICIATIVA" aplicaOrganizacion="true" />
 					</vgcinterfaz:menuBotones>
@@ -615,7 +638,7 @@
 			<%-- Barra de Herramientas --%>
 			<vgcinterfaz:barraHerramientas nombre="barraGestionarIniciativas">
 				<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
-					<vgcinterfaz:barraHerramientasBoton permisoId="INICIATIVA_ADD" aplicaOrganizacion="true" nombreImagen="nuevo" pathImagenes="/componentes/barraHerramientas/" nombre="nuevo" onclick="javascript:nuevoIniciativa();">
+					<vgcinterfaz:barraHerramientasBoton  permisoId="INICIATIVA_ADD" aplicaOrganizacion="true" nombreImagen="nuevo" pathImagenes="/componentes/barraHerramientas/" nombre="nuevo" onclick="javascript:nuevoIniciativa();">
 						<vgcinterfaz:barraHerramientasBotonTitulo>
 							<vgcutil:message key="menu.edicion.nuevo" />
 						</vgcinterfaz:barraHerramientasBotonTitulo>
@@ -801,6 +824,9 @@
 			<vgcinterfaz:columnaVisorLista nombre="porcentajeCompletado" width="70px">
 				<vgcutil:message key="jsp.gestionariniciativasplan.columna.porcentajecompletado" />
 			</vgcinterfaz:columnaVisorLista>
+			<vgcinterfaz:columnaVisorLista nombre="porcentajeEsperado" width="70px">
+				<vgcutil:message key="jsp.gestionariniciativasplan.columna.porcentajeesperado" />
+			</vgcinterfaz:columnaVisorLista>
 			<vgcinterfaz:columnaVisorLista nombre="fechaUltimaMedicion" width="100px">
 				<vgcutil:message key="jsp.gestionariniciativasplan.columna.fechaUltimaMedicion" />
 			</vgcinterfaz:columnaVisorLista>
@@ -860,6 +886,9 @@
 				</vgcinterfaz:valorFilaColumnaVisorLista>
 				<vgcinterfaz:valorFilaColumnaVisorLista nombre="porcentajeCompletado" align="center">
 					<bean:write name="iniciativa" property="porcentajeCompletadoFormateado" />
+				</vgcinterfaz:valorFilaColumnaVisorLista>
+				<vgcinterfaz:valorFilaColumnaVisorLista nombre="porcentajeEsperado" align="center">
+					<bean:write name="iniciativa" property="porcentajeEsperadoFormateado" />
 				</vgcinterfaz:valorFilaColumnaVisorLista>
 				<vgcinterfaz:valorFilaColumnaVisorLista nombre="fechaUltimaMedicion" align="center">
 					<bean:write name="iniciativa" property="fechaUltimaMedicion" />

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.actions;
 
@@ -20,6 +20,7 @@ import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.portafolios.StrategosPortafoliosService;
 import com.visiongc.app.strategos.portafolios.model.Portafolio;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.CondicionType;
@@ -30,11 +31,13 @@ import com.visiongc.commons.util.CondicionType;
  */
 public class ReportePortafoliosAction extends VgcReporteBasicoAction
 {
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		return mensajes.getMessage("action.reporteportafolio.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 		String atributoOrden = request.getParameter("atributoOrden");
@@ -54,34 +57,34 @@ public class ReportePortafoliosAction extends VgcReporteBasicoAction
 		columnas[0] = 100;
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-		
+
 		Map<String, String> filtros = new HashMap<String, String>();
 
-	    if (atributoOrden == null || atributoOrden.equals("")) 
+	    if (atributoOrden == null || atributoOrden.equals(""))
 	    	atributoOrden = "nombre";
-	    if (tipoOrden == null || tipoOrden.equals("")) 
+	    if (tipoOrden == null || tipoOrden.equals(""))
 	    	tipoOrden = "ASC";
-		
+
 		if (nombre != null && !nombre.equals(""))
 			filtros.put("nombre", nombre);
-		if (selectCondicionType != null && 
+		if (selectCondicionType != null &&
 				(selectCondicionType.byteValue() == CondicionType.getFiltroCondicionActivo() || selectCondicionType.byteValue() == CondicionType.getFiltroCondicionInactivo()))
 			filtros.put("activo", selectCondicionType.toString());
 
 		List<Portafolio> portafolios = strategosPortafoliosService.getPortafolios(0, 0, atributoOrden, tipoOrden, false, filtros).getLista();
 
 		tabla.setFormatoFont(font.style());
-		tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+		tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
 		tabla.agregarCelda(mensajes.getMessage("action.reporteportafolio.nombre"));
 
 		tabla.setDefaultAlineacionHorizontal();
-		if ((portafolios != null) && (portafolios.size() > 0)) 
+		if ((portafolios != null) && (portafolios.size() > 0))
 		{
-			for (Iterator<Portafolio> iter = portafolios.iterator(); iter.hasNext(); ) 
+			for (Iterator<Portafolio> iter = portafolios.iterator(); iter.hasNext(); )
 			{
-				Portafolio portafolio = (Portafolio)iter.next();
-				
+				Portafolio portafolio = iter.next();
+
 				tabla.setDefaultAlineacionHorizontal();
 				tabla.agregarCelda(portafolio.getNombre());
 			}

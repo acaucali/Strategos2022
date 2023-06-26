@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,14 +19,13 @@ import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
-import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.GestionarIniciativasForm;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.commons.util.HistoricoType;
 
 /**
  * @author Kerwin
@@ -34,14 +33,16 @@ import com.visiongc.commons.util.HistoricoType;
  */
 public class HistoricoIniciativaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		GestionarIniciativasForm gestionarIniciativasForm = (GestionarIniciativasForm)form;
@@ -54,7 +55,7 @@ public class HistoricoIniciativaAction extends VgcAction
 		Long planId = (request.getParameter("planId") != null && request.getParameter("planId") != "") ? Long.parseLong(request.getParameter("planId")) : null;
 		if (planId == null && request.getSession().getAttribute("planActivoId") != null)
 			planId = Long.parseLong((String) request.getSession().getAttribute("planActivoId"));
-		
+
 		String funcion = request.getParameter("funcion");
 		if (funcion == null)
 		{
@@ -71,7 +72,7 @@ public class HistoricoIniciativaAction extends VgcAction
 				filtro.setNombre(filtroNombre);
 			filtro.setIncluirTodos(false);
 			gestionarIniciativasForm.setFiltro(filtro);
-			
+
 			if (source != null)
 				gestionarIniciativasForm.setSource(source);
 			if (planId != null)
@@ -86,44 +87,44 @@ public class HistoricoIniciativaAction extends VgcAction
 				strategosIniciativasService.marcarHistorico(seleccionados);
 			else
 				strategosIniciativasService.desMarcarHistorico(seleccionados);
-			
+
 			ActionMessages messages = this.getMessages(request);
-			
+
 			gestionarIniciativasForm.setRespuesta(VgcReturnCode.FORM_SAVE.toString());
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.modificar.ok"));
 			saveMessages(request, messages);
 		}
 		gestionarIniciativasForm.setEstatus(selectEstatusType);
-		
+
 		StrategosIniciativaEstatusService strategosIniciativaEstatusService = StrategosServiceFactory.getInstance().openStrategosIniciativaEstatusService();
 		Map<String, String> filtros = new HashMap<String, String>();
 		PaginaLista paginaIniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc", true, filtros);
 		strategosIniciativaEstatusService.close();
 		gestionarIniciativasForm.setTiposEstatus(paginaIniciativaEstatus.getLista());
-		
+
 		// tipos
-	    
+
 	    StrategosTipoProyectoService strategosTiposProyectoService = StrategosServiceFactory.getInstance().openStrategosTipoProyectoService();
 	    Map<String, String> filtrosTipo = new HashMap();
 	    PaginaLista paginaTipos = strategosTiposProyectoService.getTiposProyecto(0, 0, "tipoProyectoId", "asc", true, filtrosTipo);
 	    strategosTiposProyectoService.close();
 	    gestionarIniciativasForm.setTipos(paginaTipos.getLista());
-		
+
 		filtros = new HashMap<String, String>();
-		
+
 		String atributoOrden = gestionarIniciativasForm.getAtributoOrden();
 		String tipoOrden = gestionarIniciativasForm.getTipoOrden();
 		int paginaIniciativa = gestionarIniciativasForm.getPagina();
-		
-		if (atributoOrden == null) 
+
+		if (atributoOrden == null)
 			gestionarIniciativasForm.setAtributoOrden("nombre");
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 			gestionarIniciativasForm.setTipoOrden("ASC");
-		if (paginaIniciativa < 1) 
+		if (paginaIniciativa < 1)
 			paginaIniciativa = 1;
-		if (organizacionId != null && !organizacionId.equals("") && (gestionarIniciativasForm.getSource() != null && !gestionarIniciativasForm.getSource().equals("Plan"))) 
+		if (organizacionId != null && !organizacionId.equals("") && (gestionarIniciativasForm.getSource() != null && !gestionarIniciativasForm.getSource().equals("Plan")))
 			filtros.put("organizacionId", organizacionId);
-		if (planId != null && planId != 0L) 
+		if (planId != null && planId != 0L)
 			filtros.put("planId", planId.toString());
 		if (gestionarIniciativasForm.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
 			filtros.put("historicoDate", "IS NULL");
@@ -137,11 +138,11 @@ public class HistoricoIniciativaAction extends VgcAction
 		      filtros.put("estatusId", gestionarIniciativasForm.getEstatus().toString());
 		if (gestionarIniciativasForm.getTipo() != null)
 		        filtros.put("tipoId", gestionarIniciativasForm.getTipo().toString());
-		
+
 		PaginaLista paginaIniciativas = strategosIniciativasService.getIniciativas(paginaIniciativa, 30, gestionarIniciativasForm.getAtributoOrden(), gestionarIniciativasForm.getTipoOrden(), true, filtros);
 		paginaIniciativas.setTamanoSetPaginas(5);
 		request.setAttribute("paginaIniciativas", paginaIniciativas);
-		
+
 		strategosIniciativasService.close();
 
 		return mapping.findForward(forward);

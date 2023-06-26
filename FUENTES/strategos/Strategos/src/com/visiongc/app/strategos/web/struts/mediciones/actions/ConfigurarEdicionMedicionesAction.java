@@ -1,5 +1,23 @@
 package com.visiongc.app.strategos.web.struts.mediciones.actions;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -28,28 +46,14 @@ import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class ConfigurarEdicionMedicionesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -58,14 +62,14 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 
 		EditarMedicionesForm editarMedicionesForm = (EditarMedicionesForm)form;
 		editarMedicionesForm.clear();
-		
+
 		ActionMessages messages = getMessages(request);
-		
-			
+
+
 		boolean noExistenIndicadores = false;
 		editarMedicionesForm.setDesdeClase(Boolean.parseBoolean(request.getParameter("desdeClases")));
 		editarMedicionesForm.setDesdeIndicadorOrg(false);
-		
+
 		Byte source = Byte.parseByte(request.getParameter("source"));
 		if (source.byteValue() == TipoSource.SOURCE_CLASE) {
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_CLASE);
@@ -75,7 +79,7 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		else if (source.byteValue() == TipoSource.SOURCE_INICIATIVA)
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_INICIATIVA);
 		else if (source.byteValue() == TipoSource.SOURCE_INDICADOR) {
-			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_CLASE);	
+			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_CLASE);
 			editarMedicionesForm.setDesdeIndicadorOrg(true);
 		}
 		else
@@ -84,7 +88,7 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		if (request.getQueryString().indexOf("cambioFrecuencia=") > -1)
 		{
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-			
+
 			setPeriodos(editarMedicionesForm, strategosIndicadoresService);
 
 			strategosIndicadoresService.close();
@@ -97,33 +101,33 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		editarMedicionesForm.setSoloSeleccionados(false);
 		if (editarMedicionesForm.getSourceScreen() == TipoSource.SOURCE_ACTIVIDAD)
 		{
-			setup(editarMedicionesForm, request);	
+			setup(editarMedicionesForm, request);
 			editarMedicionesForm.setDesdeIndicador(false);
 		}
-		if (request.getQueryString().indexOf("claseId=") > -1) 
+		if (request.getQueryString().indexOf("claseId=") > -1)
 			editarMedicionesForm.setClaseId(new Long(request.getParameter("claseId")));
-		if (request.getQueryString().indexOf("planId=") > -1) 
+		if (request.getQueryString().indexOf("planId=") > -1)
 			editarMedicionesForm.setPlanId(new Long(request.getParameter("planId")));
-		if (request.getQueryString().indexOf("perspectivaId=") > -1) 
+		if (request.getQueryString().indexOf("perspectivaId=") > -1)
 			editarMedicionesForm.setPerspectivaId(new Long(request.getParameter("perspectivaId")));
 
 		if (request.getQueryString().indexOf("indicadorId=") > -1)
 		{
 			String strIndicadorId = request.getParameter("indicadorId");
-			if (((strIndicadorId != null ? 1 : 0) & (strIndicadorId.equals("") ? 0 : 1)) != 0) 
+			if (((strIndicadorId != null ? 1 : 0) & (strIndicadorId.equals("") ? 0 : 1)) != 0)
 			{
 				String[] ids = strIndicadorId.split(",");
 				indicadorId = new Long[ids.length];
-				for (int i = 0; i < ids.length; i++) 
+				for (int i = 0; i < ids.length; i++)
 					indicadorId[i] = new Long(ids[i]);
 			}
 		}
-    
+
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
 		boolean editarMediciones = false;
 		PaginaLista paginaSeries = null;
-		
+
 		if (editarMedicionesForm.getSourceScreen() == TipoSource.SOURCE_ACTIVIDAD)
 			editarMediciones = true;
 
@@ -131,41 +135,41 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		{
 			List<Indicador> indicadores = new ArrayList<Indicador>();
 
-			for (int i = indicadorId.length - 1; i > -1; i--) 
+			for (int i = indicadorId.length - 1; i > -1; i--)
 			{
 				Long id = indicadorId[i];
 
 				Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, id);
-				
-				if (indicador != null) { 
+
+				if (indicador != null) {
 					indicadores.add(0, indicador);
 					if(source.byteValue() == TipoSource.SOURCE_INDICADOR) {
 						editarMedicionesForm.setClaseId(indicador.getClaseId());
 						editarMedicionesForm.setSoloSeleccionados(true);
 					}
 				}
-					
+
 			}
 
-			if (indicadores.size() > 0) 
+			if (indicadores.size() > 0)
 			{
 				editarMediciones = true;
 				editarMedicionesForm.setIndicadores(indicadores);
 			}
 		}
-    
-		if (editarMedicionesForm.getClaseId() != null) 
+
+		if (editarMedicionesForm.getClaseId() != null)
 		{
 			if (strategosIndicadoresService.getNumeroIndicadoresPorClase(editarMedicionesForm.getClaseId(), null) == 0)
 			{
 				noExistenIndicadores = true;
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.configuraredicionmediciones.mensaje.noindicadores"));
 			}
-			else 
+			else
 			{
 				ClaseIndicadores clase = (ClaseIndicadores)strategosIndicadoresService.load(ClaseIndicadores.class, editarMedicionesForm.getClaseId());
-				
-				if (clase != null) 
+
+				if (clase != null)
 				{
 					editarMediciones = true;
 					editarMedicionesForm.setClase(clase.getNombre());
@@ -173,8 +177,8 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 					editarMedicionesForm.setOrganizacion(clase.getOrganizacion().getNombre());
 				}
 			}
-		} 
-		else if (editarMedicionesForm.getPerspectivaId() != null) 
+		}
+		else if (editarMedicionesForm.getPerspectivaId() != null)
 		{
 			if (strategosIndicadoresService.getNumeroIndicadoresPorPerspectiva(editarMedicionesForm.getPerspectivaId(), null) == 0)
 			{
@@ -185,31 +189,31 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 			{
 				Perspectiva perspectiva = (Perspectiva)strategosIndicadoresService.load(Perspectiva.class, editarMedicionesForm.getPerspectivaId());
 
-				if (perspectiva != null) 
+				if (perspectiva != null)
 				{
-					if ((request.getParameter("nivel") != null) && (!request.getParameter("nivel").equals("")) && (request.getParameter("plantillaPlanesId") != null) && (!request.getParameter("plantillaPlanesId").equals(""))) 
+					if ((request.getParameter("nivel") != null) && (!request.getParameter("nivel").equals("")) && (request.getParameter("plantillaPlanesId") != null) && (!request.getParameter("plantillaPlanesId").equals("")))
 					{
 						int nivel = 1;
-						if ((request.getParameter("nivel") != null) && (!request.getParameter("nivel").equals(""))) 
+						if ((request.getParameter("nivel") != null) && (!request.getParameter("nivel").equals("")))
 							nivel = Integer.parseInt(request.getParameter("nivel"));
-						else 
+						else
 						{
 							Perspectiva padre = perspectiva;
-							while (padre.getPadre() != null) 
+							while (padre.getPadre() != null)
 							{
 								padre = padre.getPadre();
 								nivel++;
 							}
 						}
-            
+
 						PlantillaPlanes plantillaPlanes = (PlantillaPlanes)strategosIndicadoresService.load(PlantillaPlanes.class, new Long(request.getParameter("plantillaPlanesId")));
 						Set<?> elementosPlantillaPlanes = plantillaPlanes.getElementos();
-						if ((elementosPlantillaPlanes != null) && (nivel > 1)) 
+						if ((elementosPlantillaPlanes != null) && (nivel > 1))
 						{
-							for (Iterator<?> iterElemento = elementosPlantillaPlanes.iterator(); iterElemento.hasNext(); ) 
+							for (Iterator<?> iterElemento = elementosPlantillaPlanes.iterator(); iterElemento.hasNext(); )
 							{
 								ElementoPlantillaPlanes elemento = (ElementoPlantillaPlanes)iterElemento.next();
-								if (elemento.getOrden().intValue() == nivel - 2) 
+								if (elemento.getOrden().intValue() == nivel - 2)
 								{
 									perspectiva.setNombreObjetoPerspectiva(elemento.getNombre());
 									editarMedicionesForm.setNombreObjetoPerspectiva(elemento.getNombre());
@@ -229,7 +233,7 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 			}
 		}
 
-		if (editarMediciones) 
+		if (editarMediciones)
 		{
 			StrategosSeriesTiempoService strategosSeriesTiempoService = StrategosServiceFactory.getInstance().openStrategosSeriesTiempoService(strategosIndicadoresService);
 
@@ -238,29 +242,27 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 				List<SerieTiempo> series = new ArrayList<SerieTiempo>();
 				series.add(SerieTiempo.getSerieReal());
 				series.add(SerieTiempo.getSerieProgramado());
-				
+
 				paginaSeries = strategosSeriesTiempoService.getSeriesTiempoByList(0, 0, "serieId", "asc", true, null, series, getUsuarioConectado(request));
 				PaginaLista paginaSeries2 = strategosSeriesTiempoService.getSeriesTiempoByList(0, 0, "serieId", "asc", true, null, series, getUsuarioConectado(request));
-    	  
+
 				Boolean haySerie = null;
 				for (Iterator<SerieTiempo> iter = paginaSeries2.getLista().iterator(); iter.hasNext(); )
 				{
 					SerieTiempo serie = iter.next();
 					haySerie = false;
-					for (Iterator<SerieTiempo> iter2 = series.iterator(); iter2.hasNext(); )
-					{
-						SerieTiempo serie2 = iter2.next();
+					for (SerieTiempo serie2 : series) {
 						if (serie.getNombre().equals(serie2.getNombre()))
 						{
 							haySerie = true;
 							break;
 						}
 					}
-    		  
+
 					if (!haySerie)
 						paginaSeries.getLista().remove(serie);
 				}
-    	  
+
 				for (Iterator<SerieTiempo> iter = paginaSeries.getLista().iterator(); iter.hasNext(); )
 				{
 					SerieTiempo serie = iter.next();
@@ -271,12 +273,12 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 			{
 				Map<Object, Object> filtros = new HashMap<Object, Object>();
 				filtros.put("oculta", false);
-				
+
 				paginaSeries = strategosSeriesTiempoService.getSeriesTiempo(0, 0, "serieId", "asc", true, filtros);
 			}
 
 			editarMedicionesForm.setPaginaSeriesTiempo(paginaSeries);
-			
+
 			strategosSeriesTiempoService.close();
 
 			List<Frecuencia> frecuencias = null;
@@ -290,13 +292,13 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 			editarMedicionesForm.setFrecuencias(frecuencias);
 
 			int anoActual = Calendar.getInstance().get(1);
-			
+
 			if (!noExistenIndicadores && editarMedicionesForm.getSourceScreen() != TipoSource.SOURCE_ACTIVIDAD)
 			{
 				FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 				ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Configuracion.Medicion.Editar.Parametros", "EDITARMEDICIONES");
 				frameworkService.close();
-				
+
 				if (configuracionUsuario != null && configuracionUsuario.getData() != null)
 					editarMedicionesForm.setConfiguracion(configuracionUsuario.getData());
 				else
@@ -314,7 +316,7 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 				else
 					editarMedicionesForm.setFrecuencia(Frecuencia.getFrecuenciaMensual());
 			}
-			
+
 			if (editarMedicionesForm.getSourceScreen() != TipoSource.SOURCE_ACTIVIDAD)
 			{
 				Calendar ahora = Calendar.getInstance();
@@ -335,17 +337,17 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 				}
 				else
 				{
-					Integer anoInicial = anoActual - 20; 
-					Integer anoFinal = anoActual + 20;
-					editarMedicionesForm.setAnoInicial(anoInicial.toString());
-					editarMedicionesForm.setAnoFinal(anoFinal.toString());
+					int anoInicial = anoActual - 20;
+					int anoFinal = anoActual + 20;
+					editarMedicionesForm.setAnoInicial(Integer.toString(anoInicial));
+					editarMedicionesForm.setAnoFinal(Integer.toString(anoFinal));
 				}
-				
+
 				editarMedicionesForm.setIniciativaId(null);
 				editarMedicionesForm.setOrganizacionId(null);
 				editarMedicionesForm.setFechaDesde(VgcFormatter.formatearFecha(ahora.getTime(), "formato.fecha.corta"));
-				editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(ahora.getTime(), "formato.fecha.corta"));				
-				editarMedicionesForm.setAnioFinal(ahora.getTime().getYear()+1900);				
+				editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(ahora.getTime(), "formato.fecha.corta"));
+				editarMedicionesForm.setAnioFinal(new Date().getYear()+1900);
 				editarMedicionesForm.setAnoDesde(new Integer(anoActual).toString());
 				editarMedicionesForm.setAnoHasta(new Integer(anoActual).toString());
 
@@ -354,10 +356,10 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 			}
 			else
 			{
-				Integer anoInicial = anoActual - 20; 
-				Integer anoFinal = anoActual + 20;
-				editarMedicionesForm.setAnoInicial(anoInicial.toString());
-				editarMedicionesForm.setAnoFinal(anoFinal.toString());
+				int anoInicial = anoActual - 20;
+				int anoFinal = anoActual + 20;
+				editarMedicionesForm.setAnoInicial(Integer.toString(anoInicial));
+				editarMedicionesForm.setAnoFinal(Integer.toString(anoFinal));
 			}
 		}
 		else
@@ -367,13 +369,13 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 				editarMedicionesForm.setIniciativaId(null);
 				editarMedicionesForm.setOrganizacionId(null);
 			}
-			
+
 			if (!noExistenIndicadores && editarMedicionesForm.getSourceScreen() != TipoSource.SOURCE_ACTIVIDAD)
 			{
 				FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 				ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Configuracion.Medicion.Editar.Parametros", "EDITARMEDICIONES");
 				frameworkService.close();
-				
+
 				if (configuracionUsuario != null && configuracionUsuario.getData() != null)
 					editarMedicionesForm.setConfiguracion(configuracionUsuario.getData());
 			}
@@ -389,7 +391,7 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		strategosIndicadoresService.close();
 
 		saveMessages(request, messages);
-    
+
 		return mapping.findForward(forward);
 	}
 
@@ -409,11 +411,10 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		fecha.set(1, Integer.parseInt(editarMedicionesForm.getAnoHasta()));
 		fecha.set(2, 11);
 		fecha.set(5, 31);
-		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta"));		
-		editarMedicionesForm.setAnioFinal(fecha.getTime().getYear()+1900);		
-				
+		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta"));
+		editarMedicionesForm.setAnioFinal(new Date().getYear()+1900);
 	}
-  
+
 	private String[] setup(EditarMedicionesForm editarMedicionesForm, HttpServletRequest request)
 	{
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
@@ -421,23 +422,23 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 
 		editarMedicionesForm.setSoloSeleccionados(true);
 		editarMedicionesForm.setDesdePlanificacion(true);
-		
-		Long tipo = new Long(request.getParameter("tipo"));
+
+		long tipo = Long.parseLong(request.getParameter("tipo"));
 		List<SerieTiempo> series = new ArrayList<SerieTiempo>();
-		if (tipo.longValue() == SerieTiempo.getSerieReal().getSerieId().longValue())
+		if (tipo == SerieTiempo.getSerieReal().getSerieId().longValue())
 		{
 			series.add(SerieTiempo.getSerieReal());
 			series.add(SerieTiempo.getSerieProgramado());
 		}
-		else if (tipo.longValue() == SerieTiempo.getSerieProgramado().getSerieId().longValue())
+		else if (tipo == SerieTiempo.getSerieProgramado().getSerieId().longValue())
 			series.add(SerieTiempo.getSerieProgramado());
-		
+
 		StrategosSeriesTiempoService strategosSeriesTiempoService = StrategosServiceFactory.getInstance().openStrategosSeriesTiempoService(strategosIndicadoresService);
 		PaginaLista paginaSeries = strategosSeriesTiempoService.getSeriesTiempoByList(0, 0, "serieId", "asc", true, null, series, getUsuarioConectado(request));
 		strategosSeriesTiempoService.close();
-		
+
 		editarMedicionesForm.setPaginaSeriesTiempo(paginaSeries);
-		
+
 		Date fechaIni = null;
 		Date fechaFin = null;
 		Integer ano = null;
@@ -445,56 +446,55 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		if (request.getQueryString().indexOf("actividadId=") > -1)
 		{
 			String strActividadId = request.getParameter("actividadId");
-			if (((strActividadId != null ? 1 : 0) & (strActividadId.equals("") ? 0 : 1)) != 0) 
+			if (((strActividadId != null ? 1 : 0) & (strActividadId.equals("") ? 0 : 1)) != 0)
 			{
 				String[] ids = strActividadId.split(",");
 				editarMedicionesForm.setIndicadores(new ArrayList<Indicador>());
 				StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-				for (int i = 0; i < ids.length; i++) 
-				{
-					PryActividad actividad = (PryActividad)strategosPryActividadesService.load(PryActividad.class, new Long(ids[i]));
+				for (String id : ids) {
+					PryActividad actividad = (PryActividad)strategosPryActividadesService.load(PryActividad.class, new Long(id));
 					if (actividad != null)
 					{
-						if (tipo.longValue() == SerieTiempo.getSerieReal().getSerieId().longValue())
+						if (tipo == SerieTiempo.getSerieReal().getSerieId().longValue())
 						{
 							editarMedicionesForm.setDesdeReal(true);
-							
-							if(getUsuarioConectado(request).getIsAdmin() == true) {
+
+							if(getUsuarioConectado(request).getIsAdmin()) {
 								editarMedicionesForm.setEsAdmin(true);
 							}else {
 								editarMedicionesForm.setEsAdmin(false);
 							}
-							
+
 							List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(), SerieTiempo.getSerieReal().getSerieId(), new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
 							if (mediciones.size() > 0)
 							{
 								if (ano == null)
-									ano = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getAno();
+									ano = mediciones.get(mediciones.size() -1).getMedicionId().getAno();
 								if (periodo == null)
-									periodo = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getPeriodo();
-								
+									periodo = mediciones.get(mediciones.size() -1).getMedicionId().getPeriodo();
+
 								String anoIni = ano.toString();
 								String periodoIni = periodo.toString();
 								String periodoIniStr = periodoIni.length() == 1 ? ("00" + periodoIni) : (periodoIni.length() == 2 ? ("0" + periodoIni) : periodoIni);
 								String perIni = anoIni + periodoIniStr;
-								
-								String anoFin = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getAno().toString();
-								String periodoFin = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getPeriodo().toString();
-								String periodoFinStr = periodoFin.length() == 1 ? ("00" + periodoFin) : (periodoFin.length() == 2 ? ("0" + periodoFin) : periodoFin);  
-								String perFin = anoFin + periodoFinStr;  
-								
+
+								String anoFin = mediciones.get(mediciones.size() -1).getMedicionId().getAno().toString();
+								String periodoFin = mediciones.get(mediciones.size() -1).getMedicionId().getPeriodo().toString();
+								String periodoFinStr = periodoFin.length() == 1 ? ("00" + periodoFin) : (periodoFin.length() == 2 ? ("0" + periodoFin) : periodoFin);
+								String perFin = anoFin + periodoFinStr;
+
 								if (Integer.parseInt(perIni) < Integer.parseInt(perFin))
 								{
 									ano = Integer.parseInt(anoFin);
 									periodo = Integer.parseInt(periodoFin);
 								}
 							}
-							
+
 							if (fechaIni == null)
 								fechaIni = actividad.getComienzoReal() != null ? actividad.getComienzoReal() : actividad.getComienzoPlan();
 							if (fechaFin == null)
 								fechaFin = actividad.getFinReal() != null ? actividad.getFinReal() : actividad.getFinPlan();
-							
+
 							Date fecha = actividad.getComienzoReal() != null ? actividad.getComienzoReal() : actividad.getComienzoPlan();
 							if (fecha != null && fecha.before(fechaIni))
 								fechaIni = fecha;
@@ -508,20 +508,20 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 							if (mediciones.size() > 0)
 							{
 								if (ano == null)
-									ano = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getAno();
+									ano = mediciones.get(mediciones.size() -1).getMedicionId().getAno();
 								if (periodo == null)
-									periodo = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getPeriodo();
-								
+									periodo = mediciones.get(mediciones.size() -1).getMedicionId().getPeriodo();
+
 								String anoIni = ano.toString();
 								String periodoIni = periodo.toString();
 								String periodoIniStr = periodoIni.length() == 1 ? ("00" + periodoIni) : (periodoIni.length() == 2 ? ("0" + periodoIni) : periodoIni);
 								String perIni = anoIni + periodoIniStr;
-								
-								String anoFin = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getAno().toString();
-								String periodoFin = ((Medicion)mediciones.get(mediciones.size() -1)).getMedicionId().getPeriodo().toString();
-								String periodoFinStr = periodoFin.length() == 1 ? ("00" + periodoFin) : (periodoFin.length() == 2 ? ("0" + periodoFin) : periodoFin);  
-								String perFin = anoFin + periodoFinStr;  
-								
+
+								String anoFin = mediciones.get(mediciones.size() -1).getMedicionId().getAno().toString();
+								String periodoFin = mediciones.get(mediciones.size() -1).getMedicionId().getPeriodo().toString();
+								String periodoFinStr = periodoFin.length() == 1 ? ("00" + periodoFin) : (periodoFin.length() == 2 ? ("0" + periodoFin) : periodoFin);
+								String perFin = anoFin + periodoFinStr;
+
 								if (Integer.parseInt(perIni) < Integer.parseInt(perFin))
 								{
 									ano = Integer.parseInt(anoFin);
@@ -532,14 +532,14 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 								fechaIni = actividad.getComienzoPlan();
 							if (fechaFin == null)
 								fechaFin = actividad.getFinPlan() != null ? actividad.getFinPlan() : actividad.getComienzoPlan();
-							
+
 							if (actividad.getComienzoPlan() != null && actividad.getComienzoPlan().before(fechaIni))
 								fechaIni = actividad.getComienzoPlan();
 							Date fecha = actividad.getFinPlan() != null ? actividad.getFinPlan() : actividad.getComienzoPlan();
 							if (fecha != null && fecha.after(fechaFin))
 								fechaFin = fecha;
 						}
-						
+
 						Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(actividad.getIndicadorId()));
 						editarMedicionesForm.setFrecuencia(indicador.getFrecuencia());
 						indicador.setActividadId(actividad.getActividadId());
@@ -549,17 +549,17 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 				strategosMedicionesService.close();
 			}
 		}
-		
+
 		editarMedicionesForm.setIniciativaId(new Long(request.getParameter("iniciativaId")));
 		editarMedicionesForm.setOrganizacionId(new Long(request.getParameter("organizacionId")));
-	
+
 		Iniciativa iniciativa = (Iniciativa)strategosPryActividadesService.load(Iniciativa.class, new Long(editarMedicionesForm.getIniciativaId()));
 		editarMedicionesForm.setIniciativa(iniciativa.getNombre());
 		editarMedicionesForm.setOrganizacion(iniciativa.getOrganizacion().getNombre());
 
 		Calendar calFechaDesde = Calendar.getInstance();
 		calFechaDesde.setTime(fechaIni);
-		
+
 		Calendar calFechaHasta = Calendar.getInstance();
 		if (ano != null && periodo != null)
 		{
@@ -574,9 +574,9 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		editarMedicionesForm.setAnoDesde(new Integer(calFechaDesde.get(1)).toString());
 		editarMedicionesForm.setPeriodoDesde(PeriodoUtil.getPeriodoDeFecha(calFechaDesde, editarMedicionesForm.getFrecuencia()));
 		editarMedicionesForm.setPeriodosD(PeriodoUtil.getListaNumeros(editarMedicionesForm.getPeriodoDesde(), editarMedicionesForm.getPeriodoDesde()));
-		
-		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(calFechaHasta.getTime(), "formato.fecha.corta"));		
-		editarMedicionesForm.setAnioFinal(calFechaHasta.getTime().getYear()+1900);		
+
+		editarMedicionesForm.setFechaHasta(VgcFormatter.formatearFecha(calFechaHasta.getTime(), "formato.fecha.corta"));
+		editarMedicionesForm.setAnioFinal(new Date().getYear()+1900);
 		editarMedicionesForm.setAnosH(PeriodoUtil.getListaNumeros(new Integer(editarMedicionesForm.getFechaHasta().split("/")[2]), new Integer(editarMedicionesForm.getFechaHasta().split("/")[2])));
 		editarMedicionesForm.setAnoHasta(new Integer(calFechaHasta.get(1)).toString());
 		editarMedicionesForm.setPeriodoHasta(PeriodoUtil.getPeriodoDeFecha(calFechaHasta, editarMedicionesForm.getFrecuencia()));
@@ -584,15 +584,15 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 
 		editarMedicionesForm.setAnos(PeriodoUtil.getListaNumeros(new Integer(editarMedicionesForm.getFechaDesde().split("/")[2]), new Integer(editarMedicionesForm.getFechaHasta().split("/")[2])));
 		editarMedicionesForm.setPeriodos(PeriodoUtil.getListaNumeros(editarMedicionesForm.getPeriodoDesde(), editarMedicionesForm.getPeriodoHasta()));
-  
+
 		int numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(editarMedicionesForm.getFrecuencia().byteValue(), calFechaHasta.get(1));
 		editarMedicionesForm.setNumeroMaximoPeriodos(numeroMaximoPeriodos);
-		
+
 		strategosIndicadoresService.close();
 		strategosPryActividadesService.close();
-		
+
 		String[] serie = null;
-		if (tipo.longValue() == SerieTiempo.getSerieReal().getSerieId().longValue())
+		if (tipo == SerieTiempo.getSerieReal().getSerieId().longValue())
 		{
 			serie = new String[2];
 			serie[0] = SerieTiempo.getSerieReal().getSerieId().toString();
@@ -601,11 +601,11 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		else
 		{
 			serie = new String[1];
-			serie[0] = tipo.toString();
+			serie[0] = Long.toString(tipo);
 		}
-		
+
 		return serie;
 	}
-	
-	
+
+
 }

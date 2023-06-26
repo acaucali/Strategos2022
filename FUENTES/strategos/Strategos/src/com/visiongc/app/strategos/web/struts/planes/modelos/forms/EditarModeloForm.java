@@ -5,7 +5,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarModeloForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long modeloId;
 	private Long planId;
 	private String nombre;
@@ -20,93 +20,94 @@ public class EditarModeloForm extends EditarObjetoForm
 	{
 		return this.editar;
 	}
-	
-	public void setEditar(String editar) 
+
+	public void setEditar(String editar)
 	{
 		this.editar = editar;
 	}
-	
-	public String getBinario() 
+
+	public String getBinario()
 	{
 		return this.binario;
 	}
 
-	public void setBinario(String binario) 
+	public void setBinario(String binario)
 	{
 		this.binario = binario;
 	}
 
-	public String getDatosArbolPlan() 
+	public String getDatosArbolPlan()
 	{
 		return this.datosArbolPlan;
 	}
-	
-	public void setDatosArbolPlan(String datosArbolPlan) 
+
+	public void setDatosArbolPlan(String datosArbolPlan)
 	{
 		this.datosArbolPlan = datosArbolPlan;
 	}
 
-	public String getDescripcion() 
+	public String getDescripcion()
 	{
 		return this.descripcion;
 	}
 
-	public void setDescripcion(String descripcion) 
+	public void setDescripcion(String descripcion)
 	{
 		this.descripcion = descripcion;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
 
-	public Long getPlanId() 
+	public Long getPlanId()
 	{
 		return this.planId;
 	}
 
-	public void setPlanId(Long planId) 
+	public void setPlanId(Long planId)
 	{
 		this.planId = planId;
 	}
 
-	public Long getModeloId() 
+	public Long getModeloId()
 	{
 		return this.modeloId;
 	}
 
-	public void setModeloId(Long modeloId) 
+	public void setModeloId(Long modeloId)
 	{
 		this.modeloId = modeloId;
 	}
 
-	public String getPrevisualizar() 
+	public String getPrevisualizar()
 	{
 		return this.previsualizar;
 	}
 
-	public void setPrevisualizar(String previsualizar) 
+	public void setPrevisualizar(String previsualizar)
 	{
 		this.previsualizar = previsualizar;
 	}
-	
+
  	public Byte getSource()
   	{
   		return this.source;
   	}
 
-  	public void setSource(Byte source) 
+  	public void setSource(Byte source)
   	{
   		this.source = SourceType.getTypeSource(source);
   	}
 
-	public void clear() 
+	@Override
+	public void clear()
 	{
 		this.planId = new Long(0L);
 		this.descripcion = null;
@@ -115,7 +116,7 @@ public class EditarModeloForm extends EditarObjetoForm
 
 		setBloqueado(new Boolean(false));
 	}
-	
+
 	public static class SourceType
 	{
 		private static final byte SOURCE_GESTIONAR = 1;
@@ -130,13 +131,13 @@ public class EditarModeloForm extends EditarObjetoForm
 			else
 				return null;
 		}
-		
-		public static byte getSourceGestionar() 
+
+		public static byte getSourceGestionar()
 		{
 			return SOURCE_GESTIONAR;
 		}
 
-		public static byte getSourcePlan() 
+		public static byte getSourcePlan()
 		{
 			return SOURCE_PLAN;
 		}

@@ -6,7 +6,7 @@ import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 public class SeleccionarIndicadoresForm extends SelectorListaForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	public static final String SEPARADOR_INDICADORES = "!;!";
 	public static final String SEPARADOR_SERIES = "!@!";
 	public static final String SEPARADOR_RUTA = "!#!";
@@ -40,313 +40,315 @@ public class SeleccionarIndicadoresForm extends SelectorListaForm
   	private Boolean permitirPlanes;
   	private Boolean agregarSerieMeta;
   	private String seleccionadosPlanId;
-  
+
   	public Long getClaseSeleccionadaId()
   	{
   		return this.claseSeleccionadaId;
   	}
 
-  	public void setClaseSeleccionadaId(Long claseSeleccionadaId) 
+  	public void setClaseSeleccionadaId(Long claseSeleccionadaId)
   	{
   		this.claseSeleccionadaId = claseSeleccionadaId;
   	}
 
-  	public Long getOrganizacionSeleccionadaId() 
+  	public Long getOrganizacionSeleccionadaId()
   	{
   		return this.organizacionSeleccionadaId;
   	}
 
-  	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId) 
+  	public void setOrganizacionSeleccionadaId(Long organizacionSeleccionadaId)
   	{
   		this.organizacionSeleccionadaId = organizacionSeleccionadaId;
   	}
 
-  	public String getNombreCampoRutasCompletas() 
+  	public String getNombreCampoRutasCompletas()
   	{
   		return this.nombreCampoRutasCompletas;
   	}
 
-  	public void setNombreCampoRutasCompletas(String nombreCampoRutasCompletas) 
+  	public void setNombreCampoRutasCompletas(String nombreCampoRutasCompletas)
   	{
   		this.nombreCampoRutasCompletas = nombreCampoRutasCompletas;
   	}
 
-  	public Boolean getMostrarSeriesTiempo() 
+  	public Boolean getMostrarSeriesTiempo()
   	{
   		return this.mostrarSeriesTiempo;
   	}
 
-  	public void setMostrarSeriesTiempo(Boolean mostrarSeriesTiempo) 
+  	public void setMostrarSeriesTiempo(Boolean mostrarSeriesTiempo)
   	{
   		this.mostrarSeriesTiempo = mostrarSeriesTiempo;
   	}
 
-  	public Byte getFrecuenciaSeleccionada() 
+  	public Byte getFrecuenciaSeleccionada()
   	{
   		return this.frecuenciaSeleccionada;
   	}
 
-  	public void setFrecuenciaSeleccionada(Byte frecuenciaSeleccionada) 
+  	public void setFrecuenciaSeleccionada(Byte frecuenciaSeleccionada)
   	{
   		this.frecuenciaSeleccionada = frecuenciaSeleccionada;
   	}
 
-  	public Byte getFrecuenciasContenidasSeleccionada() 
+  	public Byte getFrecuenciasContenidasSeleccionada()
   	{
   		return this.frecuenciasContenidasSeleccionada;
   	}
 
-  	public void setFrecuenciasContenidasSeleccionada(Byte frecuenciasContenidasSeleccionada) 
+  	public void setFrecuenciasContenidasSeleccionada(Byte frecuenciasContenidasSeleccionada)
   	{
   		this.frecuenciasContenidasSeleccionada = frecuenciasContenidasSeleccionada;
   	}
 
-  	public Boolean getPermitirCambiarOrganizacion() 
+  	public Boolean getPermitirCambiarOrganizacion()
   	{
   		return this.permitirCambiarOrganizacion;
   	}
 
-  	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion) 
+  	public void setPermitirCambiarOrganizacion(Boolean permitirCambiarOrganizacion)
   	{
   		this.permitirCambiarOrganizacion = permitirCambiarOrganizacion;
   	}
 
-  	public Boolean getPermitirCambiarClase() 
+  	public Boolean getPermitirCambiarClase()
   	{
   		return this.permitirCambiarClase;
   	}
 
-  	public void setPermitirCambiarClase(Boolean permitirCambiarClase) 
+  	public void setPermitirCambiarClase(Boolean permitirCambiarClase)
   	{
   		this.permitirCambiarClase = permitirCambiarClase;
   	}
 
-  	public String getPanelSeleccionado() 
+  	public String getPanelSeleccionado()
   	{
   		return this.panelSeleccionado;
   	}
 
-  	public void setPanelSeleccionado(String panelSeleccionado) 
+  	public void setPanelSeleccionado(String panelSeleccionado)
   	{
   		this.panelSeleccionado = panelSeleccionado;
   	}
 
-  	public String getFuncionCierre() 
+  	@Override
+	public String getFuncionCierre()
   	{
   		return this.funcionCierre;
   	}
 
-  	public void setFuncionCierre(String funcionCierre) 
+  	@Override
+	public void setFuncionCierre(String funcionCierre)
   	{
   		this.funcionCierre = funcionCierre;
   	}
 
-  	public String getRutaCompletaClaseIndicadores() 
+  	public String getRutaCompletaClaseIndicadores()
   	{
   		return this.rutaCompletaClaseIndicadores;
   	}
 
-  	public void setRutaCompletaClaseIndicadores(String rutaCompletaClaseIndicadores) 
+  	public void setRutaCompletaClaseIndicadores(String rutaCompletaClaseIndicadores)
   	{
   		this.rutaCompletaClaseIndicadores = rutaCompletaClaseIndicadores;
   	}
 
-  	public String getRutaCompletaOrganizacion() 
+  	public String getRutaCompletaOrganizacion()
   	{
   		return this.rutaCompletaOrganizacion;
   	}
 
-  	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion) 
+  	public void setRutaCompletaOrganizacion(String rutaCompletaOrganizacion)
   	{
   		this.rutaCompletaOrganizacion = rutaCompletaOrganizacion;
   	}
 
-  	public Boolean getIniciado() 
+  	public Boolean getIniciado()
   	{
   		return this.iniciado;
   	}
 
-  	public void setIniciado(Boolean iniciado) 
+  	public void setIniciado(Boolean iniciado)
   	{
   		this.iniciado = iniciado;
   	}
 
-  	public Boolean getSeleccionMultiple() 
+  	public Boolean getSeleccionMultiple()
   	{
   		return this.seleccionMultiple;
   	}
-  	
-  	public void setSeleccionMultiple(Boolean seleccionMultiple) 
+
+  	public void setSeleccionMultiple(Boolean seleccionMultiple)
   	{
   		this.seleccionMultiple = seleccionMultiple;
   	}
 
-  	public Boolean getPermitirCualitativos() 
+  	public Boolean getPermitirCualitativos()
   	{
   		return this.permitirCualitativos;
   	}
 
-  	public void setPermitirCualitativos(Boolean permitirCualitativos) 
+  	public void setPermitirCualitativos(Boolean permitirCualitativos)
   	{
   		this.permitirCualitativos = permitirCualitativos;
   	}
 
-  	public Boolean getSoloCompuestos() 
+  	public Boolean getSoloCompuestos()
   	{
   		return this.soloCompuestos;
   	}
 
-  	public void setSoloCompuestos(Boolean soloCompuestos) 
+  	public void setSoloCompuestos(Boolean soloCompuestos)
   	{
   		this.soloCompuestos = soloCompuestos;
   	}
 
-  	public Boolean getPermitirPlanes() 
+  	public Boolean getPermitirPlanes()
   	{
   		return this.permitirPlanes;
   	}
 
-  	public void setPermitirPlanes(Boolean permitirPlanes) 
+  	public void setPermitirPlanes(Boolean permitirPlanes)
   	{
   		this.permitirPlanes = permitirPlanes;
   	}
-  	
-  	public String getExcluirIds() 
+
+  	public String getExcluirIds()
   	{
   		return this.excluirIds;
   	}
 
-  	public void setExcluirIds(String exluirIds) 
+  	public void setExcluirIds(String exluirIds)
   	{
   		this.excluirIds = exluirIds;
   	}
 
-  	public Boolean getPermitirIniciativas() 
+  	public Boolean getPermitirIniciativas()
   	{
   		return this.permitirIniciativas;
   	}
 
-  	public void setPermitirIniciativas(Boolean permitirIniciativas) 
+  	public void setPermitirIniciativas(Boolean permitirIniciativas)
   	{
   		this.permitirIniciativas = permitirIniciativas;
   	}
 
-  	public String getPanelIndicadores() 
+  	public String getPanelIndicadores()
   	{
   		return this.panelIndicadores;
   	}
 
-  	public void setPanelIndicadores(String panelIndicadores) 
+  	public void setPanelIndicadores(String panelIndicadores)
   	{
   		this.panelIndicadores = panelIndicadores;
   	}
 
-  	public String getIniciativasNodoSeleccionadoId() 
+  	public String getIniciativasNodoSeleccionadoId()
   	{
   		return this.iniciativasNodoSeleccionadoId;
   	}
 
-  	public void setIniciativasNodoSeleccionadoId(String iniciativasNodoSeleccionadoId) 
+  	public void setIniciativasNodoSeleccionadoId(String iniciativasNodoSeleccionadoId)
   	{
   		this.iniciativasNodoSeleccionadoId = iniciativasNodoSeleccionadoId;
   	}
 
-  	public NodoArbol getIniciativasNodoSeleccionado() 
+  	public NodoArbol getIniciativasNodoSeleccionado()
   	{
   		return this.iniciativasNodoSeleccionado;
   	}
 
-  	public void setIniciativasNodoSeleccionado(NodoArbol iniciativasNodoSeleccionado) 
+  	public void setIniciativasNodoSeleccionado(NodoArbol iniciativasNodoSeleccionado)
   	{
   		this.iniciativasNodoSeleccionado = iniciativasNodoSeleccionado;
   	}
 
-  	public String getPlanesNodoSeleccionadoId() 
+  	public String getPlanesNodoSeleccionadoId()
   	{
   		return this.planesNodoSeleccionadoId;
   	}
 
-  	public void setPlanesNodoSeleccionadoId(String planesNodoSeleccionadoId) 
+  	public void setPlanesNodoSeleccionadoId(String planesNodoSeleccionadoId)
   	{
   		this.planesNodoSeleccionadoId = planesNodoSeleccionadoId;
   	}
 
-  	public NodoArbol getPlanesNodoSeleccionado() 
+  	public NodoArbol getPlanesNodoSeleccionado()
   	{
   		return this.planesNodoSeleccionado;
   	}
 
-  	public void setPlanesNodoSeleccionado(NodoArbol planesNodoSeleccionado) 
+  	public void setPlanesNodoSeleccionado(NodoArbol planesNodoSeleccionado)
   	{
 	  this.planesNodoSeleccionado = planesNodoSeleccionado;
   	}
 
-  	public Long getPlanId() 
+  	public Long getPlanId()
   	{
   		return this.planId;
   	}
 
-  	public void setPlanId(Long planId) 
+  	public void setPlanId(Long planId)
   	{
   		this.planId = planId;
   	}
 
-  	public Long getIndicadorId() 
+  	public Long getIndicadorId()
   	{
   		return this.indicadorId;
   	}
 
-  	public void setIndicadorId(Long indicadorId) 
+  	public void setIndicadorId(Long indicadorId)
   	{
   		this.indicadorId = indicadorId;
   	}
-  	
-  	public Boolean getMostrarPanelIndicadores() 
+
+  	public Boolean getMostrarPanelIndicadores()
   	{
   		return this.mostrarPanelIndicadores;
   	}
-  	
-  	public void setMostrarPanelIndicadores(Boolean mostrarPanelIndicadores) 
+
+  	public void setMostrarPanelIndicadores(Boolean mostrarPanelIndicadores)
   	{
   		this.mostrarPanelIndicadores = mostrarPanelIndicadores;
   	}
-  	
-  	public Boolean getAgregarSerieMeta() 
+
+  	public Boolean getAgregarSerieMeta()
   	{
   		return this.agregarSerieMeta;
   	}
-  	
-  	public void setAgregarSerieMeta(Boolean agregarSerieMeta) 
+
+  	public void setAgregarSerieMeta(Boolean agregarSerieMeta)
   	{
 	  	this.agregarSerieMeta = agregarSerieMeta;
   	}
 
-  	public String getSeleccionadosPlanId() 
+  	public String getSeleccionadosPlanId()
   	{
   		return this.seleccionadosPlanId;
   	}
-  	
-  	public void setSeleccionadosPlanId(String seleccionadosPlanId) 
+
+  	public void setSeleccionadosPlanId(String seleccionadosPlanId)
   	{
 	  	this.seleccionadosPlanId = seleccionadosPlanId;
   	}
-  	
-  	public String getSeparadorIndicadores() 
+
+  	public String getSeparadorIndicadores()
   	{
   		return "!;!";
   	}
 
-  	public String getSeparadorSeries() 
+  	public String getSeparadorSeries()
   	{
   		return "!@!";
   	}
 
-  	public String getCodigoIndicadorEliminado() 
+  	public String getCodigoIndicadorEliminado()
   	{
   		return "!ELIMINADO!";
   	}
 
-  	public void clear() 
+  	public void clear()
   	{
   		setNombreForma(null);
   		setNombreCampoValor(null);
@@ -354,7 +356,7 @@ public class SeleccionarIndicadoresForm extends SelectorListaForm
   		setSeleccionados(null);
   		setValoresSeleccionados(null);
   		setSeleccionadosPlanId(null);
-  		
+
   		this.organizacionSeleccionadaId = null;
   		this.claseSeleccionadaId = null;
   		this.frecuenciaSeleccionada = null;

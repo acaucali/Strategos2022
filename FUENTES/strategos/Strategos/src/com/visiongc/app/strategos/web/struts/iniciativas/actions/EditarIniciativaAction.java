@@ -1,5 +1,22 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
+import com.visiongc.app.strategos.cargos.StrategosCargosService;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
@@ -21,29 +38,14 @@ import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.model.Configuracion;
-import com.visiongc.framework.model.ConfiguracionUsuario;
-import com.visiongc.framework.model.Usuario;
-import com.visiongc.framework.model.UsuarioGrupo;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class EditarIniciativaAction extends VgcAction {
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
@@ -230,6 +232,8 @@ public class EditarIniciativaAction extends VgcAction {
 				editarIniciativaForm.setAlcance(iniciativa.getAlcance());
 				editarIniciativaForm.setObjetivoGeneral(iniciativa.getObjetivoGeneral());
 				editarIniciativaForm.setObjetivoEspecificos(iniciativa.getObjetivoEspecificos());
+				
+				editarIniciativaForm.setCargoId(iniciativa.getCargoId());
 
 				estatusId = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction()
 						.CalcularEstatus(iniciativa.getPorcentajeCompletado());
@@ -283,6 +287,11 @@ public class EditarIniciativaAction extends VgcAction {
 
 		editarIniciativaForm.setFrecuencias(Frecuencia.getFrecuencias());
 		editarIniciativaForm.setGrupoAnos(anos);
+		
+		StrategosCargosService strategosCargosService = StrategosServiceFactory.getInstance().openStrategosCargosService();
+		Map<String, String> filtrosCargos = new HashMap<String, String>();
+		PaginaLista paginaCargos = strategosCargosService.getCargos(0, 0, "id", "asc", true, filtrosCargos);
+		editarIniciativaForm.setCargos(paginaCargos.getLista());
 
 		// estatus
 		editarIniciativaForm.setEstatuses(new ArrayList<IniciativaEstatus>());
@@ -298,7 +307,7 @@ public class EditarIniciativaAction extends VgcAction {
 		strategosIniciativaEstatusService.close();
 		IniciativaEstatus estatusProbable = null;
 		for (Iterator<IniciativaEstatus> iter = paginaIniciativaEstatus.getLista().iterator(); iter.hasNext();) {
-			IniciativaEstatus iniciativaEstatus = (IniciativaEstatus) iter.next();
+			IniciativaEstatus iniciativaEstatus = iter.next();
 			if (iniciativaEstatus.getId().longValue() == EstatusType.getEstatusCencelado().longValue())
 				editarIniciativaForm.getEstatuses().add(iniciativaEstatus);
 			if (iniciativaEstatus.getId().longValue() == EstatusType.getEstatusSuspendido().longValue())
@@ -331,7 +340,7 @@ public class EditarIniciativaAction extends VgcAction {
 		strategosTiposProyectoService.close();
 
 		for (Iterator<TipoProyecto> iter = paginaTipos.getLista().iterator(); iter.hasNext();) {
-			TipoProyecto tipoProyecto = (TipoProyecto) iter.next();
+			TipoProyecto tipoProyecto = iter.next();
 			editarIniciativaForm.getTipos().add(tipoProyecto);
 		}
 

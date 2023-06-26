@@ -1,7 +1,8 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.paginas.forms;
 
-import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 import java.util.Set;
+
+import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
 public class EditarPaginaForm extends EditarObjetoForm
 {
@@ -107,7 +108,8 @@ public class EditarPaginaForm extends EditarObjetoForm
     this.numero = numero;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.paginaId = new Long(0L);
     this.vistaId = new Long(0L);
     this.Descripcion = null;

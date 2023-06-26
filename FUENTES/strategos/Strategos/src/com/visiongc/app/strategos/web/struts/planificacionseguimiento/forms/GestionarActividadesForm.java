@@ -1,12 +1,13 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms;
 
-import com.visiongc.framework.web.struts.forms.VisorListaForm;
 import java.util.List;
+
+import com.visiongc.framework.web.struts.forms.VisorListaForm;
 
 public class GestionarActividadesForm extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long iniciativaId;
 	private Long iniciativaClaseId;
 	private Long organizacionId;
@@ -32,7 +33,7 @@ public class GestionarActividadesForm extends VisorListaForm
 	private Boolean bloqueado;
 	private String nombreIniciativa;
 	private Boolean desdeInstrumento;
-		
+
 	public Boolean getDesdeInstrumento() {
 		return desdeInstrumento;
 	}
@@ -46,7 +47,7 @@ public class GestionarActividadesForm extends VisorListaForm
 		return this.iniciativaId;
 	}
 
-	public void setIniciativaId(Long iniciativaId) 
+	public void setIniciativaId(Long iniciativaId)
 	{
 		this.iniciativaId = iniciativaId;
 	}
@@ -56,117 +57,117 @@ public class GestionarActividadesForm extends VisorListaForm
 		return this.iniciativaClaseId;
 	}
 
-	public void setIniciativaClaseId(Long iniciativaClaseId) 
+	public void setIniciativaClaseId(Long iniciativaClaseId)
 	{
 		this.iniciativaClaseId = iniciativaClaseId;
 	}
-	
-	public Long getOrganizacionId() 
+
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
 
-	public Byte getFrecuenciaIniciativa() 
+	public Byte getFrecuenciaIniciativa()
 	{
 		return this.frecuenciaIniciativa;
 	}
 
-	public void setFrecuenciaIniciativa(Byte frecuenciaIniciativa) 
+	public void setFrecuenciaIniciativa(Byte frecuenciaIniciativa)
 	{
 		this.frecuenciaIniciativa = frecuenciaIniciativa;
 	}
 
-	public Long getProyectoId() 
+	public Long getProyectoId()
 	{
 		return this.proyectoId;
 	}
 
-	public void setProyectoId(Long proyectoId) 
+	public void setProyectoId(Long proyectoId)
 	{
 		this.proyectoId = proyectoId;
 	}
 
-	public Long getPlanId() 
+	public Long getPlanId()
 	{
 		return this.planId;
-	}	
+	}
 
-	public void setPlanId(Long planId) 
+	public void setPlanId(Long planId)
 	{
 		this.planId = planId;
 	}
 
-	public Boolean getSoloLectura() 
+	public Boolean getSoloLectura()
 	{
 		return this.soloLectura;
 	}
 
-	public void setSoloLectura(Boolean soloLectura) 
+	public void setSoloLectura(Boolean soloLectura)
 	{
 		this.soloLectura = soloLectura;
 	}
 
-	public Boolean getIniciativaVinculada() 
+	public Boolean getIniciativaVinculada()
 	{
 		return this.iniciativaVinculada;
 	}
 
-	public void setIniciativaVinculada(Boolean iniciativaVinculada) 
+	public void setIniciativaVinculada(Boolean iniciativaVinculada)
 	{
 		this.iniciativaVinculada = iniciativaVinculada;
 	}
 
-	public String getNombreActividadPlural() 
+	public String getNombreActividadPlural()
 	{
 		return this.nombreActividadPlural;
 	}
 
-	public void setNombreActividadPlural(String nombreActividadPlural) 
+	public void setNombreActividadPlural(String nombreActividadPlural)
 	{
 		this.nombreActividadPlural = nombreActividadPlural;
-	}	
+	}
 
-	public String getNombreActividadSingular() 
+	public String getNombreActividadSingular()
 	{
 		return this.nombreActividadSingular;
 	}
 
-	public void setNombreActividadSingular(String nombreActividadSingular) 
+	public void setNombreActividadSingular(String nombreActividadSingular)
 	{
 		this.nombreActividadSingular = nombreActividadSingular;
 	}
 
-	public String getNombreIniciativaPlural() 
+	public String getNombreIniciativaPlural()
 	{
 		return this.nombreIniciativaPlural;
 	}
 
-	public void setNombreIniciativaPlural(String nombreIniciativaPlural) 
+	public void setNombreIniciativaPlural(String nombreIniciativaPlural)
 	{
 		this.nombreIniciativaPlural = nombreIniciativaPlural;
 	}
 
-	public String getNombreIniciativaSingular() 
+	public String getNombreIniciativaSingular()
 	{
 		return this.nombreIniciativaSingular;
 	}
 
-	public void setNombreIniciativaSingular(String nombreIniciativaSingular) 
+	public void setNombreIniciativaSingular(String nombreIniciativaSingular)
 	{
 		this.nombreIniciativaSingular = nombreIniciativaSingular;
 	}
 
-	public String getFiltroNombre() 
+	public String getFiltroNombre()
 	{
 		return this.filtroNombre;
 	}
 
-	public void setFiltroNombre(String filtroNombre) 
+	public void setFiltroNombre(String filtroNombre)
 	{
 		this.filtroNombre = filtroNombre;
 	}
@@ -176,111 +177,111 @@ public class GestionarActividadesForm extends VisorListaForm
 		return this.frecuenciaGantt;
 	}
 
-	public void setFrecuenciaGantt(Byte frecuenciaGantt) 
+	public void setFrecuenciaGantt(Byte frecuenciaGantt)
 	{
 		this.frecuenciaGantt = frecuenciaGantt;
 	}
 
-	public List getFrecuenciasGantt() 
+	public List getFrecuenciasGantt()
 	{
 		return this.frecuenciasGantt;
 	}
 
-	public void setFrecuenciasGantt(List frecuenciasGantt) 
+	public void setFrecuenciasGantt(List frecuenciasGantt)
 	{
 		this.frecuenciasGantt = frecuenciasGantt;
 	}
 
-	public Integer getTotalPixeles() 
+	public Integer getTotalPixeles()
 	{
 		return this.totalPixeles;
 	}
 
-	public void setTotalPixeles(Integer totalPixeles) 
+	public void setTotalPixeles(Integer totalPixeles)
 	{
 		this.totalPixeles = totalPixeles;
-	}	
+	}
 
-	public List getEscalaInferior() 
+	public List getEscalaInferior()
 	{
 		return this.escalaInferior;
 	}
 
-	public void setEscalaInferior(List escalaInferior) 
+	public void setEscalaInferior(List escalaInferior)
 	{
 		this.escalaInferior = escalaInferior;
-	}	
+	}
 
-	public List getEscalaSuperior() 
+	public List getEscalaSuperior()
 	{
 		return this.escalaSuperior;
 	}
 
-	public void setEscalaSuperior(List escalaSuperior) 
+	public void setEscalaSuperior(List escalaSuperior)
 	{
 		this.escalaSuperior = escalaSuperior;
-	}	
-	
-	public List getListaActividades() 
+	}
+
+	public List getListaActividades()
 	{
 		return this.listaActividades;
-	}	
+	}
 
-	public void setListaActividades(List listaActividades) 
+	public void setListaActividades(List listaActividades)
 	{
 		this.listaActividades = listaActividades;
 	}
 
-	public Byte getZoom() 
+	public Byte getZoom()
 	{
 		return this.zoom;
-	}	
+	}
 
-	public void setZoom(Byte zoom) 
+	public void setZoom(Byte zoom)
 	{
 		this.zoom = zoom;
 	}
 
-	public Boolean getMostrarGantt() 
+	public Boolean getMostrarGantt()
 	{
 		return this.mostrarGantt;
 	}
 
-	public void setMostrarGantt(Boolean mostrarGantt) 
+	public void setMostrarGantt(Boolean mostrarGantt)
 	{
 		this.mostrarGantt = mostrarGantt;
-	}	
-  
-	public String getRespuesta() 
+	}
+
+	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
-	public Boolean getBloqueado() 
+
+	public Boolean getBloqueado()
 	{
 		return this.bloqueado;
 	}
 
-	public void setBloqueado(Boolean bloqueado) 
+	public void setBloqueado(Boolean bloqueado)
 	{
 		this.bloqueado = bloqueado;
 	}
-	
-	public String getNombreIniciativa() 
+
+	public String getNombreIniciativa()
 	{
 		return this.nombreIniciativa;
 	}
 
-	public void setNombreIniciativa(String nombreIniciativa) 
+	public void setNombreIniciativa(String nombreIniciativa)
 	{
 		this.nombreIniciativa = nombreIniciativa;
 	}
-	
+
 	public void clear() {
 		this.iniciativaId = new Long(0L);
 		this.iniciativaClaseId = null;

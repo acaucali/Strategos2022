@@ -71,25 +71,32 @@ public class FrameworkServiceImpl extends VgcAbstractService
     public Usuario getUsuarioPorLoginPwd(String login, String pwd, String challenge, String hashFailed)
     {
         Usuario usuario = persistenceSession.getUsuarioPorLogin(login);
+       
         if(usuario != null)
             try
             {
                 if(pwd.isEmpty())
                 {
                     usuario = null;
+                   
                 } else
                 {
+                	
                     String pwdDecriptado = Password.decriptPassWord(usuario.getPwd());
+                   
                     String hash = Md5.crearMD5((new StringBuilder(String.valueOf(challenge))).append(pwdDecriptado).toString());
+                 
                     String mensaje = null;
-                    if(challenge.equals(Password.MD2) || challenge.equals(Password.MD5) || challenge.equals(Password.SHA1) || challenge.equals(Password.SHA256) || challenge.equals(Password.SHA384) || challenge.equals(Password.SHA512))
-                        mensaje = Password.getStringMessageDigest(pwd, challenge);
+                  
+                    if(challenge.equals(Password.MD2) || challenge.equals(Password.MD5) || challenge.equals(Password.SHA1) || challenge.equals(Password.SHA256) || challenge.equals(Password.SHA384) || challenge.equals(Password.SHA512)) {
+                    	mensaje = Password.getStringMessageDigest(pwd, challenge);
+                    }
                     if(mensaje == null && !hash.equals(pwd))
                     {
-                        if(!pwd.equals(pwdDecriptado) && !Password.decriptJavaScript(hashFailed).equals(pwdDecriptado))
-                            usuario = null;
-                    } else
-                    if(mensaje != null && !mensaje.equals(pwd))
+                        if(!pwd.equals(pwdDecriptado) && !Password.decriptJavaScript(hashFailed).equals(pwdDecriptado))                           {
+                        	usuario = null;
+                        }
+                    } else if(mensaje != null && !mensaje.equals(pwd))
                         usuario = null;
                 }
             }

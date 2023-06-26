@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.configuracion.actions;
 
-import java.io.*;
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,27 +14,30 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.web.struts.forms.configuracion.EditarConfiguracionPaginaForm;
 
 /**
- * @Descripción: Action Validar Configuración Pagina
+ * @Descripciï¿½n: Action Validar Configuraciï¿½n Pagina
  *
  * @author: Kerwin Arias (16/01/2012)
  *
  */
 public class ValidarConfiguracionPaginaAction extends VgcAction {
 
-	private static int TAMANO_MAXIMO_IMAGEN = (20480); /** 20K es el tamaño del archivo */
+	private static int TAMANO_MAXIMO_IMAGEN = (20480); /** 20K es el tamaï¿½o del archivo */
 
-	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) 
+	@Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 
-		/** El Action no se agrega a la barra de navegación */
+		/** El Action no se agrega a la barra de navegaciï¿½n */
 
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		/** Se ejecuta el servicio del Action padre (OBLIGATORIO !!!) */
@@ -46,7 +50,7 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 
 		/** Se obtiene la cola de mensajes */
 		ActionMessages messages = this.getMessages(request);
-		
+
 		String respuesta = "Success";
 
 		boolean cancelar = mapping.getPath().toLowerCase().indexOf("cancelar") > -1;
@@ -78,7 +82,7 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 				mensaje = "action.guardarconfiguracion.validacion.dimensionInvalida";
 			else if (resp[0].equals("direcciondesconocida"))
 				mensaje = "action.guardarconfiguracion.validacion.direcciondesconocida";
-	
+
 			String mensaje2 = "";
 			if (resp[1].equals("imagenSupIzq"))
 				mensaje2 = "imagen superior izquierda";
@@ -92,12 +96,12 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 				mensaje2 = "imagen inferior central";
 			else if (resp[1].equals("imagenInfDer"))
 				mensaje2 = "imagen inferior derecha";
-			
+
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage(mensaje, mensaje2));
-			
+
 			/** Guarda la cola de mensajes */
 			this.saveMessages(request, messages);
-			
+
 			/** Se retorna el forward destino a ser ejecutado despues del action */
 			return mapping.findForward(resp[0]);
 		}
@@ -107,7 +111,7 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 			return mapping.findForward("ajaxResponse");
 		}
 	}
-	
+
 	private String ValidarImagen(HttpServletRequest request, EditarConfiguracionPaginaForm editarConfiguracionPaginaForm, boolean cancelar, String nombreImagen) throws Exception
 	{
 		String respuesta = "Success";
@@ -115,24 +119,24 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 		FormFile archivo = null;
 		if (imagen == null)
 		{
-			if (nombreImagen == "imagenSupIzq") 
+			if (nombreImagen == "imagenSupIzq")
 				imagen = editarConfiguracionPaginaForm.getNombreImagenSupIzq();
-			else if (nombreImagen == "imagenSupCen") 
+			else if (nombreImagen == "imagenSupCen")
 				imagen = editarConfiguracionPaginaForm.getNombreImagenSupCen();
-			else if (nombreImagen == "imagenSupDer") 
+			else if (nombreImagen == "imagenSupDer")
 				imagen = editarConfiguracionPaginaForm.getNombreImagenSupDer();
-			else if (nombreImagen == "imagenInfIzq") 
+			else if (nombreImagen == "imagenInfIzq")
 				imagen = editarConfiguracionPaginaForm.getNombreImagenInfIzq();
-			else if (nombreImagen == "imagenInfCen") 
+			else if (nombreImagen == "imagenInfCen")
 				imagen = editarConfiguracionPaginaForm.getNombreImagenInfCen();
-			else if (nombreImagen == "imagenInfDer") 
+			else if (nombreImagen == "imagenInfDer")
 				imagen = editarConfiguracionPaginaForm.getNombreImagenInfDer();
 
 			archivo = (FormFile) editarConfiguracionPaginaForm.getMultipartRequestHandler().getFileElements().get(nombreImagen);
 		}
-		
-		/** Verificación de llamada no repetida */
-		if ((imagen == null) || (imagen.equals(""))) 
+
+		/** Verificaciï¿½n de llamada no repetida */
+		if ((imagen == null) || (imagen.equals("")))
 			cancelar = true;
 
 		if (!cancelar)
@@ -148,10 +152,10 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 						respuesta = "tamanoInvalido" + "," + nombreImagen;
 					else
 					{
-						java.awt.Image image = javax.imageio.ImageIO.read(archivo.getInputStream()); 
-						int height = image.getHeight(null);  
+						java.awt.Image image = javax.imageio.ImageIO.read(archivo.getInputStream());
+						int height = image.getHeight(null);
 						int width = image.getWidth(null);
-						
+
 						if (height > 50 || width > 50)
 							respuesta = "dimensionInvalida" + "," + nombreImagen;
 					}
@@ -170,10 +174,10 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 							respuesta = "tamanoInvalido" + "," + nombreImagen;
 						else
 						{
-							java.awt.Image image = javax.imageio.ImageIO.read(sarchivo); 
-							int height = image.getHeight(null);  
+							java.awt.Image image = javax.imageio.ImageIO.read(sarchivo);
+							int height = image.getHeight(null);
 							int width = image.getWidth(null);
-							
+
 							if (height > 50 || width > 50)
 								respuesta = "dimensionInvalida" + "," + nombreImagen;
 						}
@@ -181,7 +185,7 @@ public class ValidarConfiguracionPaginaAction extends VgcAction {
 				}
 			}
 		}
-		
+
 		return respuesta;
 	}
 }

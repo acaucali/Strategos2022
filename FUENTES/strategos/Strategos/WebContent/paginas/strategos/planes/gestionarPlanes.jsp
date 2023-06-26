@@ -399,13 +399,7 @@
 			</script>
 
 		</html:form>
-		<script type="text/javascript">
-			resizeAlto(document.getElementById('body-planes'), 262);	
-
-			var visor = document.getElementById('tablaPlanes');
-			if (visor != null)
-				visor.style.width = (parseInt(_myWidth) - 140) + "px";
-		</script>
+		
 
 	</tiles:put>
 

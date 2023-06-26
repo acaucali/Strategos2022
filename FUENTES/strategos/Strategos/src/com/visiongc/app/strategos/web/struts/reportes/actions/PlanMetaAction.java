@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
@@ -17,7 +17,6 @@ import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.ObjetoClaveValor;
 import com.visiongc.commons.web.NavigationBar;
 
 /**
@@ -26,10 +25,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class PlanMetaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
-	
+
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -38,21 +39,21 @@ public class PlanMetaAction extends VgcAction
 
 		ReporteForm reporteForm = (ReporteForm)form;
 		reporteForm.clear();
-	  
+
 		/* Parametros para el reporte */
 		String planId = request.getParameter("planId");
-				   
+
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 	    Plan plan = (Plan)strategosPlanesService.load(Plan.class, new Long(planId));
-	     
+
 	    /*Asigna a la Forma que genera reportes, el nombre de la organizacion y plan seleccionados*/
 	    reporteForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
 		reporteForm.setNombrePlan(plan.getNombre());
 		reporteForm.setPlanId(plan.getPlanId());
     	reporteForm.setGrupoAnos(PeriodoUtil.getListaNumeros(plan.getAnoInicial(), plan.getAnoFinal()));
-    	reporteForm.setAno(Integer.parseInt(((ObjetoClaveValor)reporteForm.getGrupoAnos().get(0)).getValor()));
+    	reporteForm.setAno(Integer.parseInt(reporteForm.getGrupoAnos().get(0).getValor()));
     	reporteForm.setAcumular(false);
-    	
+
 	    strategosPlanesService.close();
 
 		return mapping.findForward(forward);

@@ -1,5 +1,5 @@
 /************************************************/
-/*            Configuración Básica              */
+/*            Configuraciï¿½n Bï¿½sica              */
 /************************************************/
 INSERT INTO AFW_USUARIO (USUARIO_ID, FULL_NAME, U_ID, PWD, IS_ADMIN, IS_CONNECTED, ESTATUS, BLOQUEADO, IS_SYSTEM) VALUES (1, 'Administrador', 'admin', '&H07056D763639BF0585A18A0E5BAB9343CBA302B251758A1953191E03342B', 1, 0, 0, 0, 1);
 INSERT INTO ORGANIZACION (ORGANIZACION_ID, NOMBRE, MES_CIERRE, VISIBLE, READ_ONLY) VALUES (1, 'Organizaciones', 12, 1, 0);
@@ -72,7 +72,7 @@ INSERT INTO afw_configuracion (PARAMETRO, VALOR) VALUES ('visorLista.visorIndica
         <xmlNodo id="estadoParcial" orden="06" titulo="Estado Parcial" ancho="100" visible="true">
           <xmlLista/>
         </xmlNodo>
-        <xmlNodo id="ultimoPeriodoMedicion" orden="07" titulo="Último Período" ancho="130" visible="true">
+        <xmlNodo id="ultimoPeriodoMedicion" orden="07" titulo="ï¿½ltimo Perï¿½odo" ancho="130" visible="true">
           <xmlLista/>
         </xmlNodo>
         <xmlNodo id="metaAnual" orden="08" titulo="Meta Anual" ancho="100" visible="true">
@@ -99,7 +99,7 @@ INSERT INTO afw_configuracion (PARAMETRO, VALOR) VALUES ('visorLista.visorIndica
         <xmlNodo id="orden" orden="15" titulo="Orden" ancho="60" visible="false">
           <xmlLista/>
         </xmlNodo>
-        <xmlNodo id="codigoEnlace" orden="16" titulo="Código de Enlace" ancho="150" visible="false">
+        <xmlNodo id="codigoEnlace" orden="16" titulo="Cï¿½digo de Enlace" ancho="150" visible="false">
           <xmlLista/>
         </xmlNodo>
       </xmlLista>
@@ -128,7 +128,7 @@ INSERT INTO afw_configuracion (PARAMETRO, VALOR) VALUES ('visorLista.visorIndica
         <xmlNodo id="programado" orden="05" titulo="Programado" ancho="60" visible="true">
           <xmlLista/>
         </xmlNodo>
-        <xmlNodo id="ultimoPeriodoMedicion" orden="06" titulo="Último Período" ancho="130" visible="true">
+        <xmlNodo id="ultimoPeriodoMedicion" orden="06" titulo="ï¿½ltimo Perï¿½odo" ancho="130" visible="true">
           <xmlLista/>
         </xmlNodo>
         <xmlNodo id="cumplimientoParcial" orden="07" titulo="% Cumplimiento Parcial" ancho="60" visible="true">
@@ -140,7 +140,7 @@ INSERT INTO afw_configuracion (PARAMETRO, VALOR) VALUES ('visorLista.visorIndica
         <xmlNodo id="naturaleza" orden="09" titulo="Naturaleza" ancho="100" visible="true">
           <xmlLista/>
         </xmlNodo>
-        <xmlNodo id="codigoEnlace" orden="10" titulo="Código de Enlace" ancho="90" visible="true">
+        <xmlNodo id="codigoEnlace" orden="10" titulo="Cï¿½digo de Enlace" ancho="90" visible="true">
           <xmlLista/>
         </xmlNodo>
         <xmlNodo id="prioridad" orden="11" titulo="Prioridad" ancho="70" visible="false">
@@ -200,11 +200,11 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('FORO_ADD', 'Crear', 'FORO', 1, 1, 1, 'Crear');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('FORO_VIEW', 'Ver', 'FORO', 1, 2, 1, 'Ver');
 --Categoria
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA', 'Gestionar Categorías de Medición', NULL, 0, 3, 1, 'Gestionar Categorías de Medición');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA', 'Gestionar Categorï¿½as de Mediciï¿½n', NULL, 0, 3, 1, 'Gestionar Categorï¿½as de Mediciï¿½n');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA_ADD', 'Crear', 'CATEGORIA', 1, 1, 1, 'Crear');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA_EDIT', 'Modificar', 'CATEGORIA', 1, 2, 1, 'Modificar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA_DELETE', 'Eliminar', 'CATEGORIA', 1, 3, 1, 'Eliminar');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA_PRINT', 'Imprimir Reporte de Categorías', 'CATEGORIA', 1, 4, 1, 'Imprimir Reporte de Categorías');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CATEGORIA_PRINT', 'Imprimir Reporte de Categorï¿½as', 'CATEGORIA', 1, 4, 1, 'Imprimir Reporte de Categorï¿½as');
 --Estatus
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ESTATUS', 'Gestionar Estados de Acciones', NULL, 0, 4, 1, 'Gestionar Estados de Acciones');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ESTATUS_ADD', 'Crear', 'ESTATUS', 1, 1, 1, 'Crear');
@@ -221,7 +221,7 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('IMPUTACION_ADD', 'Crear', 'IMPUTACION', 1, 1, 1, 'Crear');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('IMPUTACION_EDIT', 'Modificar', 'IMPUTACION', 1, 2, 1, 'Modificar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('IMPUTACION_DELETE', 'Eliminar', 'IMPUTACION', 1, 3, 1, 'Eliminar');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('IMPUTACION_MASK', 'Definir Mascara de Código de Plan de Cuentas', 'IMPUTACION', 1, 4, 1, 'Definir Mascara de Código de Plan de Cuentas');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('IMPUTACION_MASK', 'Definir Mascara de Cï¿½digo de Plan de Cuentas', 'IMPUTACION', 1, 4, 1, 'Definir Mascara de Cï¿½digo de Plan de Cuentas');
 --Serie de Tiempo
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SERIE_TIEMPO', 'Gestionar Series de Tiempo', NULL, 0, 7, 1, 'Gestionar Series de Tiempo');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SERIE_TIEMPO_ADD', 'Crear', 'SERIE_TIEMPO', 1, 1, 1, 'Crear');
@@ -236,19 +236,19 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('EXPLICACION_VIEW', 'Ver', 'EXPLICACION', 1, 4, 1, 'Ver');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('EXPLICACION_PUBLIC', 'Publicar', 'EXPLICACION', 1, 5, 1, 'Publicar');
 --Configuracion
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CONFIG', 'Configuración del Sistema', NULL, 0, 9, 1, 'Configuración del Sistema');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CONFIGURACION_SISTEMA', 'Gestionar Configuración del Sistema', 'CONFIG', 1, 1, 0, 'Gestionar Configuración del Sistema');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CONFIG', 'Configuraciï¿½n del Sistema', NULL, 0, 9, 1, 'Configuraciï¿½n del Sistema');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CONFIGURACION_SISTEMA', 'Gestionar Configuraciï¿½n del Sistema', 'CONFIG', 1, 1, 0, 'Gestionar Configuraciï¿½n del Sistema');
 --Organizacion
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION', 'Gestionar Organizaciones', NULL, 0, 10, 1, 'Gestionar Organizaciones');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_ADD', 'Crear Organización', 'ORGANIZACION', 1, 1, 0, 'Crear Organización');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_EDIT', 'Modificar Organización', 'ORGANIZACION', 1, 2, 0, 'Modificar Organización');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_COPY', 'Copiar Organización', 'ORGANIZACION', 1, 3, 0, 'Copiar Organización');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_DELETE', 'Eliminar Organización', 'ORGANIZACION', 1, 4, 0, 'Eliminar Organización');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_PRINT', 'Imprimir Reporte de Organización', 'ORGANIZACION', 1, 5, 0, 'Imprimir Reporte de Organización');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_ADD', 'Crear Organizaciï¿½n', 'ORGANIZACION', 1, 1, 0, 'Crear Organizaciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_EDIT', 'Modificar Organizaciï¿½n', 'ORGANIZACION', 1, 2, 0, 'Modificar Organizaciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_COPY', 'Copiar Organizaciï¿½n', 'ORGANIZACION', 1, 3, 0, 'Copiar Organizaciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_DELETE', 'Eliminar Organizaciï¿½n', 'ORGANIZACION', 1, 4, 0, 'Eliminar Organizaciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_PRINT', 'Imprimir Reporte de Organizaciï¿½n', 'ORGANIZACION', 1, 5, 0, 'Imprimir Reporte de Organizaciï¿½n');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_READONLY', 'Marcar como solo lectura', 'ORGANIZACION', 1, 6, 0, 'Marcar como solo lectura');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_VIEWALL', 'Ver Organización', 'ORGANIZACION', 1, 7, 1, 'Ver Organización');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_MOVE', 'Mover Organización', 'ORGANIZACION', 1, 8, 1, 'Mover Organización');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_CODIGO_ENLACE', 'Generar Códigos de Enlace', 'ORGANIZACION', 1, 9, 1, 'Generar Códigos de Enlace');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_VIEWALL', 'Ver Organizaciï¿½n', 'ORGANIZACION', 1, 7, 1, 'Ver Organizaciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_MOVE', 'Mover Organizaciï¿½n', 'ORGANIZACION', 1, 8, 1, 'Mover Organizaciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_CODIGO_ENLACE', 'Generar Cï¿½digos de Enlace', 'ORGANIZACION', 1, 9, 1, 'Generar Cï¿½digos de Enlace');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_CALCULAR', 'Calcular', 'ORGANIZACION', 1, 10, 1, 'Calcular');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_CALCULAR_INDICADOR', 'Indicadores', 'ORGANIZACION_CALCULAR', 2, 1, 1, 'Indicadores');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ORGANIZACION_CALCULAR_INICIATIVA', 'Iniciativas', 'ORGANIZACION_CALCULAR', 2, 2, 1, 'Iniciativas');
@@ -262,10 +262,10 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_VINCULAR', 'Vincular', 'INICIATIVA', 2, 6, 0, 'Vincular');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_DESVINCULAR', 'Desvincular', 'INICIATIVA', 2, 7, 0, 'Desvincular');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_GESTION', 'Gestionar Iniciativas / Proyectos', 'INICIATIVA', 2, 8, 0, 'Gestionar Iniciativas / Proyectos');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_SEGUIMIENTO', 'Planificación y Seguimiento', 'INICIATIVA', 2, 9, 0, 'Planificación y Seguimiento');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_SEGUIMIENTO', 'Planificaciï¿½n y Seguimiento', 'INICIATIVA', 2, 9, 0, 'Planificaciï¿½n y Seguimiento');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_EMAIL', 'Enviar Correo', 'INICIATIVA', 2, 10, 0, 'Enviar Correo');
 INSERT INTO AFW_PERMISO ( permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_RELACION', 'Iniciativas Relacionadas', 'INICIATIVA', 2, 11, 0, 'Iniciativas Relacionadas');
-INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR',  'INICIATIVA',  'Evaluación de Iniciativas',  2,   12,   0,  'Evaluación de Iniciativas');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR',  'INICIATIVA',  'Evaluaciï¿½n de Iniciativas',  2,   12,   0,  'Evaluaciï¿½n de Iniciativas');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_GRAFICO',  'INICIATIVA_EVALUAR',  'Graficar',  3,   1,   0,  'Graficar');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_GRAFICO_ESTATUS',  'INICIATIVA_EVALUAR_GRAFICO',  'Iniciativa por Estatus',  4,   1,   0,  'Iniciativa por Estatus');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_GRAFICO_PORCENTAJE',  'INICIATIVA_EVALUAR_GRAFICO',  'Iniciativa por Porcentaje',  4,   2,   0,  'Iniciativa por Porcentaje');
@@ -291,7 +291,7 @@ INSERT INTO afw_permiso( permiso_id, padre_id, permiso, nivel, grupo, global, de
 INSERT INTO afw_permiso( permiso_id, padre_id, permiso, nivel, grupo, global, descripcion) VALUES ('ACTIVIDAD_PROTEGER_BLOQUEAR',  'ACTIVIDAD_PROTEGER',  'Bloquear',  3,   2,   0,  'Bloquear');
 INSERT INTO afw_permiso( permiso_id, padre_id, permiso, nivel, grupo, global, descripcion) VALUES ('ACTIVIDAD_EMAIL',  'ACTIVIDAD',  'Enviar Correo',  2,   12,   0,  'Enviar Correo');
 --Indicador
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INDICADOR_RAIZ', 'Módulo de Indicadores', 'ORGANIZACION', 1, 11, 0, 'Módulo de Indicadores');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INDICADOR_RAIZ', 'Mï¿½dulo de Indicadores', 'ORGANIZACION', 1, 11, 0, 'Mï¿½dulo de Indicadores');
 -- Clase
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CLASE', 'Gestionar Clases de Indicadores', 'INDICADOR_RAIZ', 2, 1, 0, 'Gestionar Clases de Indicadores');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CLASE_ADD', 'Crear', 'CLASE', 3, 1, 0, 'Crear');
@@ -316,14 +316,14 @@ INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  globa
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR',  'INDICADOR_MEDICION',  'Cargar',  4,   1,   0,  'Cargar');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR_REAL',  'INDICADOR_MEDICION_CARGAR',  'Real',  5,   1,   0,  'Real');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR_PROG',  'INDICADOR_MEDICION_CARGAR',  'Programado',  5,   2,   0,  'Programado');
-INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR_MAX',  'INDICADOR_MEDICION_CARGAR',  'Máximo',  5,   3,   0,  'Máximo');
-INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR_MIN',  'INDICADOR_MEDICION_CARGAR',  'Mínimo',  5,   4,   0,  'Mínimo');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR_MAX',  'INDICADOR_MEDICION_CARGAR',  'Mï¿½ximo',  5,   3,   0,  'Mï¿½ximo');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CARGAR_MIN',  'INDICADOR_MEDICION_CARGAR',  'Mï¿½nimo',  5,   4,   0,  'Mï¿½nimo');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_IMPORTAR',  'INDICADOR_MEDICION',  'Importar',  4,   2,   0,  'Importar');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_CALCULAR',  'INDICADOR_MEDICION',  'Calcular',  4,   3,   0,  'Calcular');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_PROTECCION', 'INDICADOR_MEDICION', 'Proteger', 4,  4,  0,  'Proteger');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_DESPROTECCION', 'INDICADOR_MEDICION', 'No Proteger', 4,  5,  0,  'No Proteger');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_MEDICION_VIEW', 'INDICADOR_MEDICION', 'Ver', 4, 6, 0, 'Ver');
-INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR',  'INDICADOR',  'Evaluación de Indicadores',  3,   11,   0,  'Evaluación de Indicadores');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR',  'INDICADOR',  'Evaluaciï¿½n de Indicadores',  3,   11,   0,  'Evaluaciï¿½n de Indicadores');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_GRAFICO',  'INDICADOR_EVALUAR',  'Graficar',  4,   1,   0,  'Graficar');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_GRAFICO_GRAFICO',  'INDICADOR_EVALUAR_GRAFICO',  'Graficar',  5,   1,   0,  'Graficar');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_GRAFICO_PLANTILLA',  'INDICADOR_EVALUAR_GRAFICO',  'Plantilla',  5,   2,   0,  'Plantilla');
@@ -331,7 +331,7 @@ INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  globa
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_REPORTE',  'INDICADOR_EVALUAR',  'Reportes',  4,   2,   0,  'Reportes');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_REPORTE_PLANTILLA',  'INDICADOR_EVALUAR_REPORTE',  'Plantilla',  5,   1,   0,  'Plantilla');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_REPORTE_ASISTENTE',  'INDICADOR_EVALUAR_REPORTE',  'Asistente',  5,   2,   0,  'Asistente');
---INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_REPORTE_COMITE',  'INDICADOR_EVALUAR_REPORTE',  'Reporte Comité Ejecutivo',  5,   3,   0,  'Reporte Comité Ejecutivo');
+--INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_REPORTE_COMITE',  'INDICADOR_EVALUAR_REPORTE',  'Reporte Comitï¿½ Ejecutivo',  5,   3,   0,  'Reporte Comitï¿½ Ejecutivo');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_EVALUAR_ARBOL',  'INDICADOR_EVALUAR',  'Arbol de Dupont',  4,   3,   0,  'Arbol de Dupont');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_VALOR_INICIAL',  'INDICADOR',  'Valor Inicial',  3,   12,   0,  'Valor Inicial');
 INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INDICADOR_VALOR_INICIAL_CARGAR',  'INDICADOR_VALOR_INICIAL',  'Cargar',  4,   1,   0,  'Cargar');
@@ -364,7 +364,7 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_VIEW', 'Ver', 'PLAN', 2, 3, 0, 'Ver');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_COPY', 'Copiar', 'PLAN', 2, 4, 0, 'Copiar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_PESO', 'Asignar Pesos', 'PLAN', 2, 5, 0, 'Asignar Pesos');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_DISENO', 'Diseño Modelo Causa Efecto', 'PLAN', 2, 6, 0, 'Diseño Modelo Causa Efecto');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_DISENO', 'Diseï¿½o Modelo Causa Efecto', 'PLAN', 2, 6, 0, 'Diseï¿½o Modelo Causa Efecto');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_DISENO_ADD', 'Crear', 'PLAN_MODELO_DISENO', 3, 1, 0, 'Crear');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_DISENO_EDIT', 'Modificar', 'PLAN_MODELO_DISENO', 3, 2, 0, 'Modificar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_DISENO_DELETE', 'Eliminar', 'PLAN_MODELO_DISENO', 3, 3, 0, 'Eliminar');
@@ -372,7 +372,7 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_DISENO_PRINT', 'Imprimir', 'PLAN_MODELO_DISENO', 3, 5, 0, 'Imprimir');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_MODELO_VER', 'Ver Modelo Causa Efecto', 'PLAN', 2, 7, 0, 'Ver Modelo Causa Efecto');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_REPORTE', 'Reportes', 'PLAN', 2, 8, 0, 'Reportes');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_EJECUTIVO', 'Diseño Ejecutivo', 'PLAN', 2, 9, 0, 'Diseño Ejecutivo');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_EJECUTIVO', 'Diseï¿½o Ejecutivo', 'PLAN', 2, 9, 0, 'Diseï¿½o Ejecutivo');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_PERSPECTIVA', 'Perspectiva / Objetivo', 'PLAN', 2, 10, 0, 'Perspectiva / Objetivo');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_PERSPECTIVA_ADD', 'Crear', 'PLAN_PERSPECTIVA', 3, 1, 0, 'Crear');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PLAN_PERSPECTIVA_EDIT', 'Modificar', 'PLAN_PERSPECTIVA', 3, 2, 0, 'Modificar');
@@ -396,7 +396,7 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('VISTA_DELETE', 'Eliminar', 'VISTA', 2, 3, 1, 'Eliminar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('VISTA_VIEW', 'Visualizar', 'VISTA', 2, 4, 1, 'Visualizar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('VISTA_VIEWALL', 'Ver', 'VISTA', 2, 5, 0, 'Ver');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PAGINA', 'Gestionar Páginas', 'VISTA', 2, 6, 0, 'Gestionar Páginas');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PAGINA', 'Gestionar Pï¿½ginas', 'VISTA', 2, 6, 0, 'Gestionar Pï¿½ginas');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PAGINA_ADD', 'Crear', 'PAGINA', 3, 1, 1, 'Crear');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PAGINA_EDIT', 'Modificar', 'PAGINA', 3, 2, 1, 'Modificar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('PAGINA_DELETE', 'Eliminar', 'PAGINA', 3, 3, 1, 'Eliminar');
@@ -424,7 +424,7 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ACCION_PRINT', 'Imprimir Reporte', 'ACCION', 5, 4, 0, 'Imprimir Reporte');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('ACCION_VIEWALL', 'Ver', 'ACCION', 5, 5, 0, 'Ver');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SEGUIMIENTO', 'Seguimiento', 'ACCION', 5, 6, 0, 'Seguimiento');
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SEGUIMIENTO_ADD', 'Añadir', 'SEGUIMIENTO', 6, 1, 0, 'Añadir');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SEGUIMIENTO_ADD', 'Aï¿½adir', 'SEGUIMIENTO', 6, 1, 0, 'Aï¿½adir');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SEGUIMIENTO_EDIT', 'Modificar', 'SEGUIMIENTO', 6, 2, 0, 'Modificar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SEGUIMIENTO_MENSAJE', 'Mensaje', 'SEGUIMIENTO', 6, 3, 0, 'Mensaje');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('SEGUIMIENTO_DELETE', 'Eliminar', 'SEGUIMIENTO', 6, 4, 0, 'Eliminar');
@@ -439,9 +439,9 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('VISTA_DATOS_REPORTE_PRINT', 'Imprimir', 'VISTA_DATOS_REPORTE', 3, 2, 1, 'Imprimir');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('VISTA_DATOS_REPORTE_EXPORT', 'Exportar', 'VISTA_DATOS_REPORTE', 3, 3, 1, 'Exportar');
 /*            	Administracion            	  	*/
-INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CONFIGURACION', 'Administración', NULL, 0, 11, 1, 'Administración');
---Inicio de Sesión
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('CONFIGURACION_SET',  'CONFIGURACION',  'Inicio de Sesión',  1,   1,   1,   'Inicio de Sesión');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CONFIGURACION', 'Administraciï¿½n', NULL, 0, 11, 1, 'Administraciï¿½n');
+--Inicio de Sesiï¿½n
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('CONFIGURACION_SET',  'CONFIGURACION',  'Inicio de Sesiï¿½n',  1,   1,   1,   'Inicio de Sesiï¿½n');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('CONFIGURACION_SET_SAVE', 'CONFIGURACION_SET', 'Salvar', 2, 1, 1, 'Salvar');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('CONFIGURACION_SET_VIEW', 'CONFIGURACION_SET', 'Ver', 2, 2, 1, 'Ver');
 --Usuarios
@@ -453,8 +453,8 @@ INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DE
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_PROPERTIES', 'USUARIO', 'Propiedades', 1, 5, 1, 'Propiedades');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_CLAVE', 'USUARIO', 'Cambiar Clave', 2, 6, 1, 'Cambiar Clave');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_SET_VIEW', 'USUARIO', 'Configurar Visor Vista', 2, 7, 1, 'Configurar Visor Vista');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_PRINT', 'USUARIO', 'Presentación Preliminar', 2, 8, 1, 'Presentación Preliminar');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_PRINT_SET', 'USUARIO', 'Preparar Página', 2, 9, 1, 'Preparar Página');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_PRINT', 'USUARIO', 'Presentaciï¿½n Preliminar', 2, 8, 1, 'Presentaciï¿½n Preliminar');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('USUARIO_PRINT_SET', 'USUARIO', 'Preparar Pï¿½gina', 2, 9, 1, 'Preparar Pï¿½gina');
 --Grupos
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO', 'CONFIGURACION', 'Grupos', 1, 2, 1, 'Grupos');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_ADD', 'GRUPO', 'Crear', 2, 1, 1, 'Crear');
@@ -462,20 +462,20 @@ INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DE
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_DELETE', 'GRUPO', 'Eliminar', 2, 3, 1, 'Eliminar');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_COPY', 'GRUPO', 'Copiar', 2, 4, 1, 'Copiar');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_PROPERTIES', 'GRUPO', 'Propiedades', 2, 5, 1, 'Propiedades');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_PRINT', 'GRUPO', 'Presentación Preliminar', 2, 6, 1, 'Presentación Preliminar');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_PRINT_SET', 'GRUPO', 'Preparar Página', 2, 7, 1, 'Preparar Página');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_PRINT', 'GRUPO', 'Presentaciï¿½n Preliminar', 2, 6, 1, 'Presentaciï¿½n Preliminar');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('GRUPO_PRINT_SET', 'GRUPO', 'Preparar Pï¿½gina', 2, 7, 1, 'Preparar Pï¿½gina');
 --Error
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('ERROR', 'CONFIGURACION', 'Error', 1, 3, 1, 'Error');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('ERROR_PRINT', 'ERROR', 'Presentación Preliminar', 2, 1, 1, 'Presentación Preliminar');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('ERROR_PRINT_SET', 'ERROR', 'Preparar Página', 2, 2, 1, 'Preparar Página');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('ERROR_PRINT', 'ERROR', 'Presentaciï¿½n Preliminar', 2, 1, 1, 'Presentaciï¿½n Preliminar');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('ERROR_PRINT_SET', 'ERROR', 'Preparar Pï¿½gina', 2, 2, 1, 'Preparar Pï¿½gina');
 --Auditoria
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('AUDITORIA', 'CONFIGURACION', 'Auditoria', 1, 4, 1, 'Auditoria');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('AUDITORIA_PRINT', 'AUDITORIA', 'Presentación Preliminar', 2, 1, 1, 'Presentación Preliminar');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('AUDITORIA_PRINT_SET', 'AUDITORIA', 'Preparar Página', 2, 2, 1, 'Preparar Página');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('AUDITORIA_PRINT', 'AUDITORIA', 'Presentaciï¿½n Preliminar', 2, 1, 1, 'Presentaciï¿½n Preliminar');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('AUDITORIA_PRINT_SET', 'AUDITORIA', 'Preparar Pï¿½gina', 2, 2, 1, 'Preparar Pï¿½gina');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('AUDITORIA_SET_VIEW', 'AUDITORIA', 'Configurar Visor Vista', 2, 3, 1, 'Configurar Visor Vista');
 --Servicio
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('SERVICIO', 'CONFIGURACION', 'Servicio', 1, 5, 1, 'Servicio');
-INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('SERVICIO_SET', 'SERVICIO', 'Configuración de Servicio', 2, 1, 1, 'Configuración de Servicio');
+INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('SERVICIO_SET', 'SERVICIO', 'Configuraciï¿½n de Servicio', 2, 1, 1, 'Configuraciï¿½n de Servicio');
 INSERT INTO AFW_PERMISO (PERMISO_ID, PADRE_ID, PERMISO, NIVEL, GRUPO, GLOBAL, DESCRIPCION) VALUES ('SERVICIO_LOG', 'SERVICIO', 'Ejecutar Reporte Log', 3, 2, 1, 'Ejecutar Reporte Log');
 --Estatus de Iniciativa
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_ESTATUS', 'Gestionar Estatus de Iniciativa', NULL, 0, 12, 1, 'Gestionar Estatus de Iniciativa');
@@ -1247,8 +1247,13 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INSTRUMENTOS_ASOCIAR', 'Asociar', 'INSTRUMENTOS', 1, 8, 1, 'Asociar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INSTRUMENTOS_DESASOCIAR', 'Desasociar', 'INSTRUMENTOS', 1, 9, 1, 'Desasociar');
 
-UPDATE afw_sistema set actual = '8.01-220307';  
-UPDATE afw_sistema set build = 220307;
-
 UPDATE afw_permiso set permiso = 'Desasociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_DELETE';
 UPDATE afw_permiso set permiso = 'Asociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_ADD';
+
+UPDATE afw_sistema set actual = '8.01-230505';  
+UPDATE afw_sistema set build = 230505;
+
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS', 'Gestionar Cargos', NULL, 0, 3, 1, 'Gestionar Categorï¿½as de Mediciï¿½n');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS_ADD', 'Crear', 'CARGOS', 1, 1, 1, 'Crear');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS_EDIT', 'Modificar', 'CARGOS', 1, 2, 1, 'Modificar');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS_DELETE', 'Eliminar', 'CARGOS', 1, 3, 1, 'Eliminar');

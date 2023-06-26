@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.estatus.actions;
 
@@ -13,15 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
-import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus;
 import com.visiongc.app.strategos.util.StatusUtil;
 import com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms.EditarIniciativaEstatusForm;
-
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
@@ -36,10 +33,12 @@ import com.visiongc.commons.web.util.WebUtil;
  */
 public class GuardarIniciativaEstatusAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -51,20 +50,20 @@ public class GuardarIniciativaEstatusAction extends VgcAction
 		Long id = (request.getParameter("id") != null && request.getParameter("id") != "" ? Long.parseLong(request.getParameter("id")) : 0L);
 		Double porcentajeInicial = (request.getParameter("porcentajeInicial") != null && request.getParameter("porcentajeInicial") != "" ? Double.parseDouble(request.getParameter("porcentajeInicial")) : null);
 		Double porcentajeFinal = (request.getParameter("porcentajeFinal") != null && request.getParameter("porcentajeFinal") != "" ? Double.parseDouble(request.getParameter("porcentajeFinal")) : null);
-		
+
 		editarIniciativaEstatusForm.setId(id);
 		editarIniciativaEstatusForm.setPorcentajeInicial(porcentajeInicial);
 		editarIniciativaEstatusForm.setPorcentajeFinal(porcentajeFinal);
-		
+
 		StrategosIniciativaEstatusService strategosIniciativaEstatusService = StrategosServiceFactory.getInstance().openStrategosIniciativaEstatusService();
 		boolean porcentajesIncorrectos = false;
-		
+
 		Map<String, String> filtros = new HashMap<String, String>();
 		PaginaLista paginaIniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc", true, filtros);
-		
-		for (Iterator<IniciativaEstatus> iter = paginaIniciativaEstatus.getLista().iterator(); iter.hasNext(); ) 
+
+		for (Iterator<IniciativaEstatus> iter = paginaIniciativaEstatus.getLista().iterator(); iter.hasNext(); )
 		{
-			IniciativaEstatus iniciativaEstatus = (IniciativaEstatus)iter.next();
+			IniciativaEstatus iniciativaEstatus = iter.next();
 			if (iniciativaEstatus.getId().longValue() != editarIniciativaEstatusForm.getId().longValue())
 			{
 				if (editarIniciativaEstatusForm.getPorcentajeInicial() != null && editarIniciativaEstatusForm.getPorcentajeFinal() != null && iniciativaEstatus.getPorcentajeInicial() != null && iniciativaEstatus.getPorcentajeFinal() != null)
@@ -90,7 +89,7 @@ public class GuardarIniciativaEstatusAction extends VgcAction
 					break;
 			}
 		}
-		
+
 		int respuesta = VgcReturnCode.DB_OK;
 		boolean nuevo = false;
 		if (!porcentajesIncorrectos)

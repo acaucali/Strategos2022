@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.vistasdatos.actions;
 
@@ -15,9 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.presentaciones.StrategosVistasService;
 import com.visiongc.app.strategos.reportes.StrategosReportesService;
-import com.visiongc.app.strategos.vistasdatos.StrategosVistasDatosService;
 import com.visiongc.app.strategos.web.struts.vistasdatos.forms.GestionarVistasDatosForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
@@ -32,11 +30,13 @@ public class GestionarVistaDatosAction extends VgcAction
 {
 	public static final String ACTION_KEY = "GestionarVistasDatosAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrlSinParametros(url, nombre, new Integer(2));
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    super.execute(mapping, form, request, response);
@@ -47,7 +47,7 @@ public class GestionarVistaDatosAction extends VgcAction
 
 	    GestionarVistasDatosForm gestionarVistasDatosForm = (GestionarVistasDatosForm)form;
 	    ActionMessages messages = getMessages(request);
-	    
+
 	    request.getSession().setAttribute("alerta", new com.visiongc.framework.web.struts.alertas.actions.GestionarAlertasAction().getAlerta(getUsuarioConectado(request)));
 
 	    String organizacionId = (String)request.getSession().getAttribute("organizacionId");
@@ -57,24 +57,24 @@ public class GestionarVistaDatosAction extends VgcAction
 
 	    gestionarVistasDatosForm.setVerForma(getPermisologiaUsuario(request).tienePermiso("VISTA_DATOS_VIEW"));
 	    gestionarVistasDatosForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("VISTA_DATOS_EDIT"));
-	    
-	    if ((atributoOrden == null) || (atributoOrden.equals(""))) 
+
+	    if ((atributoOrden == null) || (atributoOrden.equals("")))
 	    {
 	    	atributoOrden = "nombre";
 	    	gestionarVistasDatosForm.setAtributoOrdenVistas(atributoOrden);
 	    }
-	    if ((tipoOrden == null) || (tipoOrden.equals(""))) 
+	    if ((tipoOrden == null) || (tipoOrden.equals("")))
 	    {
 	    	tipoOrden = "ASC";
 	    	gestionarVistasDatosForm.setTipoOrdenVistas(tipoOrden);
 	    }
 
-	    if (pagina < 1) 
+	    if (pagina < 1)
 	    	pagina = 1;
 
 	    Map<String, Object> filtros = new HashMap<String, Object>();
 
-	    if ((organizacionId != null) && (!organizacionId.equals(""))) 
+	    if ((organizacionId != null) && (!organizacionId.equals("")))
 	    	filtros.put("organizacionId", organizacionId);
 
 	    StrategosReportesService strategosReportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();

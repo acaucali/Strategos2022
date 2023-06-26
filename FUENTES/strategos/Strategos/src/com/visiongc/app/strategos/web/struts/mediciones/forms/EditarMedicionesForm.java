@@ -1,18 +1,5 @@
 package com.visiongc.app.strategos.web.struts.mediciones.forms;
 
-import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
-import com.visiongc.app.strategos.model.util.Frecuencia;
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.app.strategos.web.struts.util.Columna;
-import com.visiongc.commons.util.ObjetoClaveValor;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.util.TextEncoder;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.util.VgcMessageResources;
-import com.visiongc.commons.util.VgcResourceManager;
-import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -42,10 +29,23 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.visiongc.app.strategos.indicadores.model.Indicador;
+import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
+import com.visiongc.app.strategos.model.util.Frecuencia;
+import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
+import com.visiongc.app.strategos.web.struts.util.Columna;
+import com.visiongc.commons.util.ObjetoClaveValor;
+import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.util.TextEncoder;
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.commons.util.VgcMessageResources;
+import com.visiongc.commons.util.VgcResourceManager;
+import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
+
 public class EditarMedicionesForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long claseId;
 	private Long planId;
 	private Long perspectivaId;
@@ -74,7 +74,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 	private String anchoMatriz;
 	private Boolean desdeIndicador;
 	private Boolean desdeIndicadorOrg;
-	
+
 	private Long iniciativaId;
 	private Long organizacionId;
 	private String iniciativa;
@@ -95,20 +95,30 @@ public class EditarMedicionesForm extends EditarObjetoForm
 	private String[] serieId;
 	private Byte tipoCargaDesdePlanificacion = null;
 	private List<Columna> columnas;
-	
+
 	private Boolean desdeReal;
 	private Boolean esAdmin;
-	
-	private Integer periodoFinal; 
+
+	private Integer periodoFinal;
 	private Integer anioFinal;
-	
+
 	public static final String SEPARADOR_SERIES = ":";
 	public static final String SEPARADOR_MEDICIONES = ";";
 	public static final String SEPARADOR_CAMPOS = "_";
 	public static final String SEPARADOR_INDICADORES = "-";
-	
-	
-	
+
+	public Boolean serieBloqueada;
+	public Boolean programado;
+
+
+	public Boolean getProgramado() {
+		return programado;
+	}
+
+	public void setProgramado(Boolean programado) {
+		this.programado = programado;
+	}
+
 	public Boolean getDesdeIndicadorOrg() {
 		return desdeIndicadorOrg;
 	}
@@ -122,7 +132,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.indicadoresSeries;
 	}
 
-	public void setIndicadoresSeries(String indicadoresSeries) 
+	public void setIndicadoresSeries(String indicadoresSeries)
 	{
 		this.indicadoresSeries = indicadoresSeries;
 	}
@@ -132,7 +142,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.desdeClase;
 	}
 
-	public void setDesdeClase(Boolean desdeClase) 
+	public void setDesdeClase(Boolean desdeClase)
 	{
 		this.desdeClase = desdeClase;
 	}
@@ -142,17 +152,17 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.desdePlanificacion;
 	}
 
-	public void setDesdePlanificacion(Boolean desdePlanificacion) 
+	public void setDesdePlanificacion(Boolean desdePlanificacion)
 	{
 		this.desdePlanificacion = desdePlanificacion;
 	}
-  
+
 	public Long getIniciativaId()
 	{
 		return this.iniciativaId;
 	}
 
-	public void setIniciativaId(Long iniciativaId) 
+	public void setIniciativaId(Long iniciativaId)
 	{
 		this.iniciativaId = iniciativaId;
 	}
@@ -162,7 +172,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
@@ -172,272 +182,272 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.iniciativa;
 	}
 
-	public void setIniciativa(String iniciativa) 
+	public void setIniciativa(String iniciativa)
 	{
 		this.iniciativa = iniciativa;
 	}
-  
-  	public List<Frecuencia> getFrecuencias() 
+
+  	public List<Frecuencia> getFrecuencias()
   	{
   		return this.frecuencias;
   	}
 
-  	public void setFrecuencias(List<Frecuencia> frecuencias) 
+  	public void setFrecuencias(List<Frecuencia> frecuencias)
   	{
   		this.frecuencias = frecuencias;
   	}
 
-  	public Boolean getSoloSeleccionados() 
+  	public Boolean getSoloSeleccionados()
   	{
   		return this.soloSeleccionados;
   	}
 
-  	public void setSoloSeleccionados(Boolean soloSeleccionados) 
+  	public void setSoloSeleccionados(Boolean soloSeleccionados)
   	{
   		this.soloSeleccionados = soloSeleccionados;
   	}
 
-  	public List<Indicador> getIndicadores() 
+  	public List<Indicador> getIndicadores()
   	{
   		return this.indicadores;
   	}
 
-  	public void setIndicadores(List<Indicador> indicadores) 
+  	public void setIndicadores(List<Indicador> indicadores)
   	{
   		this.indicadores = indicadores;
   	}
 
-  	public Boolean[] getBloqueados() 
+  	public Boolean[] getBloqueados()
   	{
   		return this.bloqueado;
   	}
 
-  	public void setBloqueados(Boolean[] bloqueado) 
+  	public void setBloqueados(Boolean[] bloqueado)
   	{
   		this.bloqueado = bloqueado;
   	}
-  	
-  	public Byte getFrecuencia() 
+
+  	public Byte getFrecuencia()
   	{
   		return this.frecuencia;
   	}
 
-  	public void setFrecuencia(Byte frecuencia) 
+  	public void setFrecuencia(Byte frecuencia)
   	{
   		this.frecuencia = frecuencia;
   	}
 
-  	public Long getClaseId() 
+  	public Long getClaseId()
   	{
   		return this.claseId;
   	}
 
-  	public void setClaseId(Long claseId) 
+  	public void setClaseId(Long claseId)
   	{
   		this.claseId = claseId;
   	}
 
-  	public Long getPlanId() 
+  	public Long getPlanId()
   	{
   		return this.planId;
   	}
 
-  	public void setPlanId(Long planId) 
+  	public void setPlanId(Long planId)
   	{
   		this.planId = planId;
   	}
 
-  	public Long getPerspectivaId() 
+  	public Long getPerspectivaId()
   	{
   		return this.perspectivaId;
   	}
 
-  	public void setPerspectivaId(Long perspectivaId) 
+  	public void setPerspectivaId(Long perspectivaId)
   	{
   		this.perspectivaId = perspectivaId;
   	}
 
-  	public String getPerspectivaNombre() 
+  	public String getPerspectivaNombre()
   	{
   		return this.perspectivaNombre;
   	}
 
-  	public void setPerspectivaNombre(String perspectivaNombre) 
+  	public void setPerspectivaNombre(String perspectivaNombre)
   	{
   		this.perspectivaNombre = perspectivaNombre;
   	}
 
-  	public String getNombreObjetoPerspectiva() 
+  	public String getNombreObjetoPerspectiva()
   	{
   		return this.nombreObjetoPerspectiva;
   	}
 
-  	public void setNombreObjetoPerspectiva(String nombreObjetoPerspectiva) 
+  	public void setNombreObjetoPerspectiva(String nombreObjetoPerspectiva)
   	{
   		this.nombreObjetoPerspectiva = nombreObjetoPerspectiva;
   	}
 
-  	public String getOrganizacion() 
+  	public String getOrganizacion()
   	{
   		return this.organizacion;
   	}
 
-  	public void setOrganizacion(String organizacion) 
+  	public void setOrganizacion(String organizacion)
   	{
   		this.organizacion = organizacion;
   	}
 
-  	public String getClase() 
+  	public String getClase()
   	{
   		return this.clase;
   	}
 
-  	public void setClase(String clase) 
+  	public void setClase(String clase)
   	{
   		this.clase = clase;
   	}
 
-  	public String getAnoDesde() 
+  	public String getAnoDesde()
   	{
   		return this.anoDesde;
   	}
 
-  	public void setAnoDesde(String anoDesde) 
+  	public void setAnoDesde(String anoDesde)
   	{
   		this.anoDesde = anoDesde;
   	}
 
-  	public String getAnoHasta() 
+  	public String getAnoHasta()
   	{
   		return this.anoHasta;
   	}
 
-  	public void setAnoHasta(String anoHasta) 
+  	public void setAnoHasta(String anoHasta)
   	{
   		this.anoHasta = anoHasta;
   	}
 
-  	public String getAnoInicial() 
+  	public String getAnoInicial()
   	{
   		return this.anoInicial;
   	}
 
-  	public void setAnoInicial(String anoInicial) 
+  	public void setAnoInicial(String anoInicial)
   	{
   		this.anoInicial = anoInicial;
   	}
-  	
-  	public String getAnoFinal() 
+
+  	public String getAnoFinal()
   	{
   		return this.anoFinal;
   	}
 
-  	public void setAnoFinal(String anoFinal) 
+  	public void setAnoFinal(String anoFinal)
   	{
   		this.anoFinal = anoFinal;
   	}
-  	
-  	public List<ObjetoClaveValor> getAnos() 
+
+  	public List<ObjetoClaveValor> getAnos()
   	{
   		return this.anos;
   	}
 
-  	public void setAnos(List<ObjetoClaveValor> anos) 
+  	public void setAnos(List<ObjetoClaveValor> anos)
   	{
   		this.anos = anos;
   	}
 
-  	public Integer getNumeroMaximoPeriodos() 
+  	public Integer getNumeroMaximoPeriodos()
   	{
   		return this.numeroMaximoPeriodos;
   	}
 
-  	public void setNumeroMaximoPeriodos(Integer numeroMaximoPeriodos) 
+  	public void setNumeroMaximoPeriodos(Integer numeroMaximoPeriodos)
   	{
   		this.numeroMaximoPeriodos = numeroMaximoPeriodos;
   	}
 
-  	public List<ObjetoClaveValor> getPeriodos() 
+  	public List<ObjetoClaveValor> getPeriodos()
   	{
   		return this.periodos;
   	}
 
-  	public void setPeriodos(List<ObjetoClaveValor> periodos) 
+  	public void setPeriodos(List<ObjetoClaveValor> periodos)
   	{
   		this.periodos = periodos;
   	}
 
-  	public Integer getPeriodoDesde() 
+  	public Integer getPeriodoDesde()
   	{
   		return this.periodoDesde;
   	}
 
-  	public void setPeriodoDesde(Integer periodoDesde) 
+  	public void setPeriodoDesde(Integer periodoDesde)
   	{
   		this.periodoDesde = periodoDesde;
   	}
 
-  	public Integer getPeriodoHasta() 
+  	public Integer getPeriodoHasta()
   	{
   		return this.periodoHasta;
   	}
 
-  	public void setPeriodoHasta(Integer periodoHasta) 
+  	public void setPeriodoHasta(Integer periodoHasta)
   	{
   		this.periodoHasta = periodoHasta;
   	}
 
-  	public String getFechaDesde() 
+  	public String getFechaDesde()
   	{
   		return this.fechaDesde;
   	}
 
-  	public void setFechaDesde(String fechaDesde) 
+  	public void setFechaDesde(String fechaDesde)
   	{
   		this.fechaDesde = fechaDesde;
   	}
 
-  	public String getFechaHasta() 
+  	public String getFechaHasta()
   	{
   		return this.fechaHasta;
   	}
 
-  	public void setFechaHasta(String fechaHasta) 
+  	public void setFechaHasta(String fechaHasta)
   	{
   		this.fechaHasta = fechaHasta;
   	}
 
-  	public PaginaLista getPaginaSeriesTiempo() 
+  	public PaginaLista getPaginaSeriesTiempo()
   	{
   		return this.paginaSeriesTiempo;
   	}
 
-  	public void setPaginaSeriesTiempo(PaginaLista paginaSeriesTiempo) 
+  	public void setPaginaSeriesTiempo(PaginaLista paginaSeriesTiempo)
   	{
   		this.paginaSeriesTiempo = paginaSeriesTiempo;
   	}
 
-  	public Boolean getVisualizarIndicadoresCompuestos() 
+  	public Boolean getVisualizarIndicadoresCompuestos()
   	{
   		return this.visualizarIndicadoresCompuestos;
   	}
 
-  	public void setVisualizarIndicadoresCompuestos(Boolean visualizarIndicadoresCompuestos) 
+  	public void setVisualizarIndicadoresCompuestos(Boolean visualizarIndicadoresCompuestos)
   	{
   		this.visualizarIndicadoresCompuestos = visualizarIndicadoresCompuestos;
   	}
 
-  	public String getAnchoMatriz() 
+  	public String getAnchoMatriz()
   	{
   		return this.anchoMatriz;
   	}
 
-  	public void setAnchoMatriz(String anchoMatriz) 
+  	public void setAnchoMatriz(String anchoMatriz)
   	{
   		this.anchoMatriz = anchoMatriz;
   	}
 
-  	public String getSeparadorCampos() 
+  	public String getSeparadorCampos()
   	{
   		return "_";
   	}
@@ -527,123 +537,127 @@ public class EditarMedicionesForm extends EditarObjetoForm
   {
     return Naturaleza.getNaturalezaIndice();
   }
-  
-  public List<ObjetoClaveValor> getAnosD() 
+
+  public List<ObjetoClaveValor> getAnosD()
   {
 	  return this.anosD;
   }
 
-  public void setAnosD(List<ObjetoClaveValor> anosD) 
+  public void setAnosD(List<ObjetoClaveValor> anosD)
   {
       this.anosD = anosD;
   }
-  
-  public List<ObjetoClaveValor> getAnosH() 
+
+  public List<ObjetoClaveValor> getAnosH()
   {
   	    return this.anosH;
   }
 
-  public void setAnosH(List<ObjetoClaveValor> anosH) 
+  public void setAnosH(List<ObjetoClaveValor> anosH)
   {
       this.anosH = anosH;
   }
 
-  public List<ObjetoClaveValor> getPeriodosD() 
+  public List<ObjetoClaveValor> getPeriodosD()
   {
 	  return this.periodosD;
   }
 
-  public void setPeriodosD(List<ObjetoClaveValor> periodosD) 
+  public void setPeriodosD(List<ObjetoClaveValor> periodosD)
   {
       this.periodosD = periodosD;
   }
 
-  public List<ObjetoClaveValor> getPeriodosH() 
+  public List<ObjetoClaveValor> getPeriodosH()
   {
 	  return this.periodosH;
   }
 
-	public void setPeriodosH(List<ObjetoClaveValor> periodosH) 
+	public void setPeriodosH(List<ObjetoClaveValor> periodosH)
   	{
   		this.periodosH = periodosH;
 	}
 
-  	public Byte getSourceScreen() 
+  	public Byte getSourceScreen()
   	{
   		return this.sourceScreen;
   	}
 
-  	public void setSourceScreen(Byte sourceScreen) 
+  	public void setSourceScreen(Byte sourceScreen)
   	{
   		this.sourceScreen = sourceScreen;
   	}
-  
-	public String getNombreForma() 
+
+	public String getNombreForma()
 	{
 		return nombreForma;
 	}
 
-	public void setNombreForma(String nombreForma) 
+	public void setNombreForma(String nombreForma)
 	{
 		this.nombreForma = nombreForma;
 	}
 
-	public String getNombreCampoOculto() 
+	public String getNombreCampoOculto()
 	{
 		return nombreCampoOculto;
 	}
 
-	public void setNombreCampoOculto(String nombreCampoOculto) 
+	public void setNombreCampoOculto(String nombreCampoOculto)
 	{
 		this.nombreCampoOculto = nombreCampoOculto;
 	}
 
-	public String getNombreCampoValor() 
+	public String getNombreCampoValor()
 	{
 		return nombreCampoValor;
 	}
 
-	public void setNombreCampoValor(String nombreCampoValor) 
+	public void setNombreCampoValor(String nombreCampoValor)
 	{
 		this.nombreCampoValor = nombreCampoValor;
 	}
 
-	public String getFuncionCierre() 
+	public String getFuncionCierre()
 	{
 		return funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
 
+	@Override
 	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	@Override
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
+
+	@Override
 	public Byte getStatus()
 	{
 		return this.status;
 	}
 
-	public void setStatus(Byte status) 
+	@Override
+	public void setStatus(Byte status)
 	{
 		this.status = EditarStatus.getEditarStatus(status);
 	}
-	
+
 	public String[] getSerieId()
 	{
 		return this.serieId;
 	}
 
-	public void setSerieId(String[] serieId) 
+	public void setSerieId(String[] serieId)
 	{
 		this.serieId = serieId;
 	}
@@ -653,7 +667,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.tipoCargaDesdePlanificacion;
 	}
 
-	public void setTipoCargaDesdePlanificacion(Byte tipoCargaDesdePlanificacion) 
+	public void setTipoCargaDesdePlanificacion(Byte tipoCargaDesdePlanificacion)
 	{
 		this.tipoCargaDesdePlanificacion = TipoCargaActividad.getTipoCargaActividad(tipoCargaDesdePlanificacion);
 	}
@@ -663,21 +677,21 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		return this.columnas;
 	}
 
-	public void setColumnas(List<Columna> columnas) 
+	public void setColumnas(List<Columna> columnas)
 	{
 		this.columnas = columnas;
 	}
-	
-  	public Boolean getDesdeIndicador() 
+
+  	public Boolean getDesdeIndicador()
   	{
   		return this.desdeIndicador;
   	}
 
-  	public void setDesdeIndicador(Boolean desdeIndicador) 
+  	public void setDesdeIndicador(Boolean desdeIndicador)
   	{
   		this.desdeIndicador = desdeIndicador;
   	}
-  
+
 	public Boolean getDesdeReal() {
 		return desdeReal;
 	}
@@ -700,7 +714,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 	{
 		private static final byte CARGA_REAL = 0;
 		private static final byte CARGA_PROGRAMADO = 1;
-		
+
 		private static Byte getTipoCargaActividad(Byte status)
 		{
 			if (status == CARGA_REAL)
@@ -710,18 +724,18 @@ public class EditarMedicionesForm extends EditarObjetoForm
 			else
 				return null;
 		}
-		
-		public static Byte getTipoCargaActividadReal() 
+
+		public static Byte getTipoCargaActividadReal()
 		{
 			return new Byte(CARGA_REAL);
 		}
 
-		public static Byte getTipoCargaActividadProgramado() 
+		public static Byte getTipoCargaActividadProgramado()
 		{
 			return new Byte(CARGA_PROGRAMADO);
 		}
 	}
-	
+
 	public class TipoSource
 	{
 		public static final byte SOURCE_CLASE = 0;
@@ -729,93 +743,93 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		public static final byte SOURCE_INICIATIVA = 2;
 		public static final byte SOURCE_ACTIVIDAD = 3;
 		public static final byte SOURCE_INDICADOR = 4;
-	}  
-  
+	}
+
   	public void setConfiguracion(String xml) throws ParserConfigurationException, SAXException, IOException
   	{
-	  DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+	  DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(xml))));
 		NodeList lista = doc.getElementsByTagName("properties");
-		 
-		for (int i = 0; i < lista.getLength() ; i ++) 
+
+		for (int i = 0; i < lista.getLength() ; i ++)
 		{
 			Node node = lista.item(i);
 			Element elemento = (Element) node;
 			NodeList nodeLista = null;
 			Node valor = null;
-			
+
 			if (elemento.getElementsByTagName("frecuencia").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("frecuencia").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.frecuencia = Byte.parseByte(valor.getNodeValue());
 			}
 
 			if (elemento.getElementsByTagName("anoDesde").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("anoDesde").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.anoDesde = valor.getNodeValue();
 			}
-			
+
 			if (elemento.getElementsByTagName("anoHasta").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("anoHasta").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.anoHasta = valor.getNodeValue();
 			}
-			
+
 			if (elemento.getElementsByTagName("periodoDesde").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("periodoDesde").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.periodoDesde = Integer.parseInt(valor.getNodeValue());
 			}
 
 			if (elemento.getElementsByTagName("periodoHasta").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("periodoHasta").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.periodoHasta = Integer.parseInt(valor.getNodeValue());
 			}
 
 			if (elemento.getElementsByTagName("fechaDesde").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("fechaDesde").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.fechaDesde = valor.getNodeValue();
 			}
 
 			if (elemento.getElementsByTagName("fechaHasta").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("fechaHasta").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) this.fechaHasta = valor.getNodeValue();
 			}
 		}
-		
+
 		lista = doc.getElementsByTagName("serie");
 		Long serieId = null;
 		if (lista.getLength() > 0)
 		{
-			for (int i = 0; i < lista.getLength() ; i ++) 
+			for (int i = 0; i < lista.getLength() ; i ++)
 			{
 				Node node = lista.item(i);
 				Element elemento = (Element) node;
 				NodeList nodeLista = null;
 				Node valor = null;
-				
+
 				if (elemento.getElementsByTagName("serieId").getLength() > 0)
 				{
 					nodeLista = elemento.getElementsByTagName("serieId").item(0).getChildNodes();
-					valor = (Node) nodeLista.item(0);
+					valor = nodeLista.item(0);
 					if (valor != null)
 					{
 						serieId = Long.parseLong(valor.getNodeValue());
 						for (Iterator<SerieTiempo> j = this.paginaSeriesTiempo.getLista().iterator(); j.hasNext(); )
 						{
-							SerieTiempo serie = (SerieTiempo)j.next();
+							SerieTiempo serie = j.next();
 							if (serie.getSerieId().longValue() == serieId.longValue())
 							{
 								serie.setPreseleccionada(true);
@@ -827,7 +841,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 			}
 		}
   	}
-  	
+
   	public String getXml(String[] serieId) throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
   	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -873,23 +887,22 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		text = document.createTextNode(this.fechaHasta);
 		elemento.appendChild(text);
 		raiz.appendChild(elemento);
-		
+
 		Element indicadores = document.createElement("series");  // creamos el elemento raiz
 		raiz.appendChild(indicadores);
 
-		for (int iSerie = 0; iSerie < serieId.length; iSerie++)
-		{
+		for (String element : serieId) {
 			Element indicadorElement = document.createElement("serie");  // creamos el elemento raiz
 			indicadores.appendChild(indicadorElement);
-			
+
 			elemento = document.createElement("serieId");
-			text = document.createTextNode(serieId[iSerie]);
+			text = document.createTextNode(element);
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
 		}
-        
+
 		Source source = new DOMSource(document);
-		
+
 		StringWriter writer = new StringWriter();
 		Result result = new StreamResult(writer);
 
@@ -898,14 +911,14 @@ public class EditarMedicionesForm extends EditarObjetoForm
 
   		return writer.toString().trim();
   	}
-  	
+
 	public static class EditarStatus
 	{
 		private static final byte EDITARSTATUS_INICIO = 0;
 		private static final byte EDITARSTATUS_SUCCESS = 1;
 		private static final byte EDITARSTATUS_NOSUCCESS = 2;
 		private static final byte EDITARSTATUS_NOMETA = 3;
-		
+
 		private static Byte getEditarStatus(Byte status)
 		{
 			if (status == EDITARSTATUS_INICIO)
@@ -919,29 +932,30 @@ public class EditarMedicionesForm extends EditarObjetoForm
 			else
 				return null;
 		}
-		
-		public static Byte getEditarStatusInicio() 
+
+		public static Byte getEditarStatusInicio()
 		{
 			return new Byte(EDITARSTATUS_INICIO);
 		}
 
-		public static Byte getEditarStatusSuccess() 
+		public static Byte getEditarStatusSuccess()
 		{
 			return new Byte(EDITARSTATUS_SUCCESS);
 		}
-		
-		public static Byte getEditarStatusNoSuccess() 
+
+		public static Byte getEditarStatusNoSuccess()
 		{
 			return new Byte(EDITARSTATUS_NOSUCCESS);
 		}
 
-		public static Byte getEditarStatusNoMeta() 
+		public static Byte getEditarStatusNoMeta()
 		{
 			return new Byte(EDITARSTATUS_NOMETA);
 		}
 	}
-  
-  	public void clear() 
+
+  	@Override
+	public void clear()
   	{
   		this.anchoMatriz = null;
   		Calendar fecha = Calendar.getInstance();
@@ -959,11 +973,11 @@ public class EditarMedicionesForm extends EditarObjetoForm
   		this.nombreObjetoPerspectiva = null;
   		this.soloSeleccionados = new Boolean(false);
   		this.desdeIndicador = new Boolean(false);
-  		
+
   		fecha.set(2, 0);
   		fecha.set(5, 1);
   		this.fechaDesde = VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta");
-  		
+
   		fecha.set(2, 11);
   		fecha.set(5, 31);
   		this.fechaHasta = VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta");
@@ -976,7 +990,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
   		this.periodoDesde = null;
   		this.periodoHasta = null;
   		this.periodos = null;
-	
+
   		this.iniciativaId = null;
   		this.organizacionId = null;
   		this.desdePlanificacion = false;
@@ -987,12 +1001,13 @@ public class EditarMedicionesForm extends EditarObjetoForm
   		this.indicadoresSeries = "";
   		this.status = EditarStatus.getEditarStatusInicio();
   		this.columnas = new ArrayList<Columna>();
+  		this.serieBloqueada = null;
   	}
-  	
+
   	public String setColumnasDefault() throws TransformerFactoryConfigurationError, TransformerException, ParserConfigurationException
   	{
   		VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
-  		
+
   		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		DOMImplementation implementation = builder.getDOMImplementation();
@@ -1005,7 +1020,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		// Columna Nombre
 		Element columna = document.createElement("columnas");  // creamos el elemento raiz
 		raiz.appendChild(columna);
-		
+
 		Element elemento = document.createElement("titulo"); //creamos un nuevo elemento
 		Text text = document.createTextNode(messageResources.getResource("jsp.editarmediciones.ficha.indicador")); //Ingresamos la info
 		elemento.appendChild(text);
@@ -1029,7 +1044,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		// Columna Unidad
 		columna = document.createElement("columnas");  // creamos el elemento raiz
 		raiz.appendChild(columna);
-		
+
 		elemento = document.createElement("titulo"); //creamos un nuevo elemento
 		text = document.createTextNode(messageResources.getResource("jsp.editarmediciones.ficha.unidad")); //Ingresamos la info
 		elemento.appendChild(text);
@@ -1049,11 +1064,11 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		text = document.createTextNode("150"); //Ingresamos la info
 		elemento.appendChild(text);
 		columna.appendChild(elemento);
-		
+
 		// Columna Serie
 		columna = document.createElement("columnas");  // creamos el elemento raiz
 		raiz.appendChild(columna);
-		
+
 		elemento = document.createElement("titulo"); //creamos un nuevo elemento
 		text = document.createTextNode(messageResources.getResource("jsp.editarmediciones.ficha.serie")); //Ingresamos la info
 		elemento.appendChild(text);
@@ -1077,7 +1092,7 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		// Columna periodos
 		columna = document.createElement("columnas");  // creamos el elemento raiz
 		raiz.appendChild(columna);
-		
+
 		elemento = document.createElement("titulo"); //creamos un nuevo elemento
 		text = document.createTextNode(messageResources.getResource("jsp.editarmediciones.ficha.periodo")); //Ingresamos la info
 		elemento.appendChild(text);
@@ -1097,9 +1112,9 @@ public class EditarMedicionesForm extends EditarObjetoForm
 		text = document.createTextNode("150"); //Ingresamos la info
 		elemento.appendChild(text);
 		columna.appendChild(elemento);
-		
+
 		Source source = new DOMSource(document);
-		
+
 		StringWriter writer = new StringWriter();
 		Result result = new StreamResult(writer);
 
@@ -1108,18 +1123,18 @@ public class EditarMedicionesForm extends EditarObjetoForm
 
   		return writer.toString().trim();
   	}
-  	
+
   	public void setColumnas(String xml) throws ParserConfigurationException, SAXException, IOException
   	{
   		VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
-  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
   		DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(xml))));
 		NodeList lista = doc.getElementsByTagName("columnas");
-		 
+
 		this.columnas = new ArrayList<Columna>();
-		Integer orden = 0;
-		for (int i = 0; i < lista.getLength() ; i ++) 
+		int orden = 0;
+		for (int i = 0; i < lista.getLength() ; i ++)
 		{
 			Node node = lista.item(i);
 			Element elemento = (Element) node;
@@ -1128,13 +1143,13 @@ public class EditarMedicionesForm extends EditarObjetoForm
 
 			Columna columna = new Columna();
 			orden++;
-			
+
 			String atributo = "";
 			if (elemento.getElementsByTagName("titulo").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("titulo").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) atributo = valor.getNodeValue(); else atributo = messageResources.getResource("jsp.editarmediciones.ficha.columna.nodefinida"); 
+				valor = nodeLista.item(0);
+				if (valor != null) atributo = valor.getNodeValue(); else atributo = messageResources.getResource("jsp.editarmediciones.ficha.columna.nodefinida");
 			}
 			columna.setNombre(atributo);
 
@@ -1142,29 +1157,29 @@ public class EditarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("orden").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("orden").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) atributo = valor.getNodeValue(); else atributo = orden.toString();
+				valor = nodeLista.item(0);
+				if (valor != null) atributo = valor.getNodeValue(); else atributo = Integer.toString(orden);
 			}
 			columna.setOrden(atributo);
-			
+
 			atributo = "";
 			if (elemento.getElementsByTagName("visible").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("visible").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) atributo = valor.getNodeValue(); else atributo = "true";
 			}
 			columna.setMostrar(atributo);
-			
+
 			atributo = "";
 			if (elemento.getElementsByTagName("ancho").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("ancho").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null) atributo = valor.getNodeValue(); else atributo = "150";
 			}
 			columna.setTamano(atributo);
-			
+
 			this.columnas.add(columna);
 		}
   	}
@@ -1184,4 +1199,13 @@ public class EditarMedicionesForm extends EditarObjetoForm
 	public void setAnioFinal(Integer anioFinal) {
 		this.anioFinal = anioFinal;
 	}
+
+	public Boolean getSerieBloqueada() {
+		return serieBloqueada;
+	}
+
+	public void setSerieBloqueada(Boolean serieBloqueada) {
+		this.serieBloqueada = serieBloqueada;
+	}
+
 }

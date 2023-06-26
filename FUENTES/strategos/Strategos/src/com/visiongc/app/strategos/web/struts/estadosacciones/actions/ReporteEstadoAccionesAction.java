@@ -1,31 +1,35 @@
 package com.visiongc.app.strategos.web.struts.estadosacciones.actions;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.MessageResources;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.estadosacciones.StrategosEstadosService;
 import com.visiongc.app.strategos.estadosacciones.model.EstadoAcciones;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.MessageResources;
 
 public class ReporteEstadoAccionesAction extends VgcReporteBasicoAction
 {
-  protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
+  @Override
+protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
     throws Exception
   {
     return mensajes.getMessage("action.reporteestadosacciones.titulo");
   }
 
-  protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
+  @Override
+protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
     throws Exception
   {
     Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
@@ -47,7 +51,7 @@ public class ReporteEstadoAccionesAction extends VgcReporteBasicoAction
     List estadoAcciones = strategosEstadosService.getEstadosAcciones(0, 0, "orden", "asc", false, null).getLista();
 
     tabla.setFormatoFont(font.style());
-    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
     tabla.agregarCelda(mensajes.getMessage("action.reporteestadosacciones.nombre"));
     tabla.agregarCelda(mensajes.getMessage("action.reporteestadosacciones.aplicaseguimiento"));
@@ -63,7 +67,7 @@ public class ReporteEstadoAccionesAction extends VgcReporteBasicoAction
 
         tabla.agregarCelda(estadoAccion.getNombre());
 
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         if ((estadoAccion.getAplicaSeguimiento() != null) && (estadoAccion.getAplicaSeguimiento().booleanValue()))
           tabla.agregarCelda(mensajes.getMessage("comunes.si"));
         else if ((estadoAccion.getAplicaSeguimiento() != null) && (!estadoAccion.getAplicaSeguimiento().equals("true"))) {
@@ -72,7 +76,7 @@ public class ReporteEstadoAccionesAction extends VgcReporteBasicoAction
 
         tabla.agregarCelda(estadoAccion.getOrden().toString());
 
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         if ((estadoAccion.getCondicion() != null) && (estadoAccion.getCondicion().booleanValue()))
           tabla.agregarCelda(mensajes.getMessage("comunes.si"));
         else if ((estadoAccion.getCondicion() != null) && (!estadoAccion.getCondicion().equals("true"))) {

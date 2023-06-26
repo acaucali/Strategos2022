@@ -71,6 +71,7 @@ public class EditarConfiguracionVisorListaAction
 
 
     String nombreConfiguracionBase = request.getParameter("nombreConfiguracionBase");
+  
     String nombreVisorLista = request.getParameter("nombreVisorLista");
     Boolean esPropio = Boolean.valueOf(request.getParameter("esPropio") != null ? Boolean.parseBoolean(request.getParameter("esPropio")) : false);
     String altoPagina = request.getParameter("alto") != null ? Integer.valueOf(Integer.parseInt(request.getParameter("alto")) - 20).toString() : null;
@@ -79,6 +80,7 @@ public class EditarConfiguracionVisorListaAction
     editarConfiguracionVisorListaForm.setNombreConfiguracionBase(nombreConfiguracionBase);
     editarConfiguracionVisorListaForm.setNombreVisorLista("visorLista." + nombreVisorLista);
     editarConfiguracionVisorListaForm.setTituloVisorLista(request.getParameter("tituloVisorLista"));
+    System.out.print(editarConfiguracionVisorListaForm.getTituloVisorLista());
     editarConfiguracionVisorListaForm.setAlto(altoPagina);
     editarConfiguracionVisorListaForm.setAncho(anchoPagina);
     editarConfiguracionVisorListaForm.setEsPropio(esPropio);
@@ -91,7 +93,6 @@ public class EditarConfiguracionVisorListaAction
     XmlNodo configuracionBase = null;
     VgcObjetoConfigurable visorLista = null;
     Configuracion configuracionGeneral = null;
-    
     if (configuracionUsuario == null)
     {
       configuracionGeneral = frameworkService.getConfiguracion("visorLista." + nombreVisorLista);

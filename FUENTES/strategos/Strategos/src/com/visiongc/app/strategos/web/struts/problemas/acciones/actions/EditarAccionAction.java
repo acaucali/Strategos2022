@@ -1,33 +1,34 @@
 package com.visiongc.app.strategos.web.struts.problemas.acciones.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.problemas.StrategosAccionesService;
-import com.visiongc.app.strategos.problemas.model.Accion;
-import com.visiongc.app.strategos.problemas.model.ResponsableAccion;
-import com.visiongc.app.strategos.problemas.model.ResponsableAccionPK;
-import com.visiongc.app.strategos.responsables.model.Responsable;
-import com.visiongc.app.strategos.web.struts.problemas.acciones.forms.EditarAccionForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.NavigationBar;
 import java.util.Iterator;
-import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.problemas.StrategosAccionesService;
+import com.visiongc.app.strategos.problemas.model.Accion;
+import com.visiongc.app.strategos.problemas.model.ResponsableAccion;
+import com.visiongc.app.strategos.web.struts.problemas.acciones.forms.EditarAccionForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EditarAccionAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -147,7 +148,7 @@ public class EditarAccionAction extends VgcAction
 	}
 	else if (!bloqueado && !verForm && !editarForm)
 		messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
-    
+
     saveMessages(request, messages);
 
     if (forward.equals("noencontrado")) {

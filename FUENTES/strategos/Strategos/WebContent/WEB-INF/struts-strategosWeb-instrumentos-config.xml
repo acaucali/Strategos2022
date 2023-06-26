@@ -36,6 +36,8 @@
 		<forward name="reporteInstrumentoEjecucion" path="/paginas/strategos/instrumentos/resumidaEjecucion.jsp" />
 		<forward name="reporteInstrumentoEjecucionDetalle" path="/paginas/strategos/instrumentos/resumidaEjecucionDetalle.jsp" />
 		<forward name="reporteProyectosAsociados" path="/paginas/strategos/instrumentos/reporteProyectosAsociados.jsp" />
+		<forward name="reporteDetalladoProyectosAsociados" path="/paginas/strategos/instrumentos/reporteDetalladoProyectosAsociados.jsp" />
+		<forward name="reporteDetalladoProyectosAsociadosIniciativas" path="/paginas/strategos/instrumentos/reporteDetalladoProyectosAsociadosIniciativas.jsp" />
 		
 		<forward name="asignarPesosInstrumentosIniciativas" path="/paginas/strategos/instrumentos/asignarPesos.jsp" />
 		<forward name="asignarPesosInstrumentos" path="/paginas/strategos/instrumentos/asignarPesosInstrumentos.jsp" />
@@ -174,6 +176,15 @@
 		
 		<!-- Mapeo del Action: Generar Reporte Proyectos Asociados Excel-->
 		<action path="/instrumentos/reporteProyectosAsociadosXls" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.ReporteProyectosAsociadosXls"></action>
+
+		<!-- Mapeo del Action: Generar Reporte Detallado Proyectos Asociados-->
+		<action path="/instrumentos/reporteDetalladoProyectosAsociados" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.ReporteDetalladoProyectosAsociadosAction" scope="request" name="reporteForm" parameter="reporteDetalladoProyectosAsociados"></action>
+		
+		<!-- Mapeo del Action: Generar Reporte Detallado Proyectos Asociados-->
+		<action path="/instrumentos/reporteDetalladoProyectosAsociadosIniciativas" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.ReporteDetalladoProyectosAsociadosIniciativasAction" scope="request" name="reporteForm" parameter="reporteDetalladoProyectosAsociadosIniciativas"></action>
+		
+		<!-- Mapeo del Action: Generar Reporte Detallado Proyectos Asociados PDF-->
+		<action path="/instrumentos/reporteDetalladoProyectosAsociadosPdf" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.ReporteDetalladoProyectosAsociadosPdf"></action>
 
 		<!-- Mapeo del Action: Seleccionar Organizacion -->
 		<action path="/instrumentos/seleccionarOrganizacion" type="com.visiongc.app.strategos.web.struts.instrumentos.actions.SeleccionarOrganizacionAction" scope="session" name="seleccionarOrganizacionForm" parameter="seleccionarOrganizacion">

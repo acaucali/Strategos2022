@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" "struts-config_1_3.dtd">
+
+<!-- Modificado por: Andres Martinez(22/06/2023) -->
+
+<struts-config>
+
+	<!-- Definiciones: Form Bean -->
+	<form-beans>
+		<form-bean name="editarCargosForm" type="com.visiongc.app.strategos.web.struts.cargos.forms.EditarCargosForm" />
+		<form-bean name="gestionarCargosForm" type="com.visiongc.app.strategos.web.struts.cargos.forms.GestionarCargosForm" />
+		<form-bean name="seleccionarCargosForm" type="com.visiongc.framework.web.struts.forms.SelectorListaForm" />
+	</form-beans>
+	
+	<!-- Definiciones: Global Forward -->
+	<global-forwards>
+		<forward name="editarCargos" path="/paginas/strategos/cargos/editarCargos.jsp" />
+	</global-forwards>
+	
+	<!-- Definiciones: Action Mapping -->
+	<action-mappings>
+		
+		<!-- Mapeo del Action: Gestionar Cargos -->
+		<action path="/cargos/gestionarCargos" type="com.visiongc.app.strategos.web.struts.cargos.actions.GestionarCargosAction" scope="session" name="gestionarCargosForm" parameter="gestionarCargos">
+			<forward name="gestionarCargos" path="/paginas/strategos/cargos/gestionarCargos.jsp" />
+		</action>
+		
+		<!-- Mapeo del Action: Crear Cargo -->
+		<action path="/cargos/crearCargo" type="com.visiongc.app.strategos.web.struts.cargos.actions.EditarCargoAction" scope="request" name="editarCargosForm" parameter="editarCargos"></action>
+		
+		<!-- Mapeo del Action: Modificar Cargo -->
+		<action path="/cargos/modificarCargo" type="com.visiongc.app.strategos.web.struts.cargos.actions.EditarCargoAction" scope="request" name="editarCargosForm" parameter="editarCargos"></action>
+		
+		<!-- Mapeo del Action: Guardar Cargo -->
+		<action path="/cargos/guardarCargo" type="com.visiongc.app.strategos.web.struts.cargos.actions.GuardarCargoAction" name="editarCargosForm" scope="request" input="editarCargos" validate="true" parameter="editarCargos">
+			<forward name="crearCargos" path="/cargos/crearCargo.action" />
+		</action>
+		
+		<!-- Mapeo del Action: Cancelar Guardar Cargo -->
+		<action path="/cargos/cancelarGuardarCargo" type="com.visiongc.app.strategos.web.struts.cargos.actions.GuardarCargoAction" name="editarCargosForm" scope="request" parameter="editarCargos"></action>
+		
+		<!-- Mapeo del Action: Eliminar Cargo -->
+		<action path="/cargos/eliminarCargo" type="com.visiongc.app.strategos.web.struts.cargos.actions.EliminarCargoAction"></action>
+		
+		<!-- Mapeo del Action: Seleccionar Cargo -->
+		<action path="/cargos/seleccionarCargo" type="com.visiongc.app.strategos.web.struts.cargos.actions.seleccionarCargosAction" scope="request" name="editarCargosForm" parameter="seleccionarCargos">
+			<set-property property="secure" value="false" />
+			<forward name="seleccionarCargos" path="/paginas/strategos/cargos/seleccionarCargos.jsp" />
+		</action>
+	</action-mappings>
+
+</struts-config>

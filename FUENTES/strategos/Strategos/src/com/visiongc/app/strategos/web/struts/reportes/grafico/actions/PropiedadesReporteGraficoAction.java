@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.actions;
 
@@ -26,10 +26,12 @@ import com.visiongc.framework.usuarios.UsuariosService;
  */
 public class PropiedadesReporteGraficoAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -38,10 +40,10 @@ public class PropiedadesReporteGraficoAction extends VgcAction
 
 	    ConfigurarVistaDatosForm configurarVistaDatosForm = (ConfigurarVistaDatosForm)form;
 	    configurarVistaDatosForm.clear();
-	    
+
 	    Long reporteId = (request.getParameter("reporteId") != null ? new Long(request.getParameter("reporteId")) : null);
 	    StrategosReportesService reportesService = StrategosServiceFactory.getInstance().openStrategosReportesService();
-	    
+
 		if (reporteId != null)
 		{
 			Reporte reporte = (Reporte) reportesService.load(Reporte.class, reporteId);
@@ -50,13 +52,13 @@ public class PropiedadesReporteGraficoAction extends VgcAction
 				configurarVistaDatosForm.setNombre(reporte.getNombre());
 				configurarVistaDatosForm.setDescripcion(reporte.getDescripcion());
 				configurarVistaDatosForm.setPublico(reporte.getPublico());
-				
+
 				UsuariosService strategosUsuarioService = FrameworkServiceFactory.getInstance().openUsuariosService();
 				Usuario usuario = null;
-				if (reporte.getUsuarioId() != null) 
+				if (reporte.getUsuarioId() != null)
 				{
 					usuario = (Usuario)strategosUsuarioService.load(Usuario.class, reporte.getUsuarioId());
-					if (usuario != null) 
+					if (usuario != null)
 						configurarVistaDatosForm.setCreadoUsuarioNombre(usuario.getFullName());
 				}
 				strategosUsuarioService.close();

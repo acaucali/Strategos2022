@@ -25,7 +25,8 @@ public class EditarCategoriaMedicionForm extends EditarObjetoForm
     this.nombre = nombre;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.categoriaId = new Long(0L);
     this.nombre = null;
     setBloqueado(new Boolean(false));

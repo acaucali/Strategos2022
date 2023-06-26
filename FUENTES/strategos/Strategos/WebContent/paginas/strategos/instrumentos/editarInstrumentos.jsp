@@ -307,7 +307,7 @@
 					</tr>
 					
 					<tr>
-						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.responsable.pgn" /></td>
+						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.responsable" /></td>
 						<td><html:text property="nombreReposnsableAreas" size="45" maxlength="50" styleClass="cuadroTexto" /></td>
 				
 						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.responsable.cgi" /></td>

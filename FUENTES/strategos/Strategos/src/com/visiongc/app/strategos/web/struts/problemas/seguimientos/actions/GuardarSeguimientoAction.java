@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.problemas.seguimientos.actions;
 
+import java.util.Date;
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.problemas.StrategosAccionesService;
 import com.visiongc.app.strategos.problemas.StrategosSeguimientosService;
@@ -10,26 +22,17 @@ import com.visiongc.app.strategos.problemas.model.Seguimiento;
 import com.visiongc.app.strategos.web.struts.problemas.seguimientos.forms.EditarSeguimientoForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarSeguimientoAction extends VgcAction
 {
 	private static final String ACTION_KEY = "GuardarSeguimientoAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -47,7 +50,7 @@ public class GuardarSeguimientoAction extends VgcAction
 
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(ts)))
 			cancelar = true;
 
 		StrategosSeguimientosService strategosSeguimientosService = StrategosServiceFactory.getInstance().openStrategosSeguimientosService();
@@ -55,7 +58,7 @@ public class GuardarSeguimientoAction extends VgcAction
 		if (cancelar)
 		{
 			strategosSeguimientosService.unlockObject(request.getSession().getId(), editarSeguimientoForm.getSeguimientoId());
-			
+
 			strategosSeguimientosService.close();
 
 			return getForwardBack(request, 1, true);
@@ -94,7 +97,7 @@ public class GuardarSeguimientoAction extends VgcAction
 			seguimiento.setNota(editarSeguimientoForm.getNota());
 		}
 
-		if ((editarSeguimientoForm.getMemoResumen() != null) && (!editarSeguimientoForm.getMemoResumen().equals(""))) 
+		if ((editarSeguimientoForm.getMemoResumen() != null) && (!editarSeguimientoForm.getMemoResumen().equals("")))
 		{
 			MemoSeguimiento memoSeguimiento = new MemoSeguimiento();
 			memoSeguimiento.setPk(new MemoSeguimientoPK(seguimiento.getSeguimientoId(), new Byte((byte) 0)));
@@ -102,7 +105,7 @@ public class GuardarSeguimientoAction extends VgcAction
 			seguimiento.getMemosSeguimiento().add(memoSeguimiento);
 		}
 
-		if ((editarSeguimientoForm.getMemoComentario() != null) && (!editarSeguimientoForm.getMemoComentario().equals(""))) 
+		if ((editarSeguimientoForm.getMemoComentario() != null) && (!editarSeguimientoForm.getMemoComentario().equals("")))
 		{
 			MemoSeguimiento memoSeguimiento = new MemoSeguimiento();
 			memoSeguimiento.setPk(new MemoSeguimientoPK(seguimiento.getSeguimientoId(), new Byte((byte) 1)));
@@ -113,11 +116,11 @@ public class GuardarSeguimientoAction extends VgcAction
 		respuesta = strategosSeguimientosService.saveSeguimiento(seguimiento, getUsuarioConectado(request));
 
 		strategosSeguimientosService.close();
-		
+
 		if ((editarSeguimientoForm.getAprobado() != null) && (editarSeguimientoForm.getAprobado().booleanValue()))
 		{
 			StrategosAccionesService strategosAccionesService = StrategosServiceFactory.getInstance().openStrategosAccionesService();
-			
+
 			Accion accion = (Accion)strategosAccionesService.load(Accion.class, accionCorrectiva.getAccionId());
 
 			accion.setEstadoId(editarSeguimientoForm.getEstadoId());
@@ -129,7 +132,7 @@ public class GuardarSeguimientoAction extends VgcAction
 		if (respuesta == 10000)
 		{
 			strategosSeguimientosService.unlockObject(request.getSession().getId(), editarSeguimientoForm.getSeguimientoId());
-			
+
 			if (nuevo)
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarseguimiento.confirmar.envioseguimiento"));
 			else
@@ -137,7 +140,7 @@ public class GuardarSeguimientoAction extends VgcAction
 		}
 
 		saveMessages(request, messages);
-		
+
 		request.getSession().setAttribute("GuardarSeguimientoAction.ultimoTs", ts);
 
 		return mapping.findForward(forward);

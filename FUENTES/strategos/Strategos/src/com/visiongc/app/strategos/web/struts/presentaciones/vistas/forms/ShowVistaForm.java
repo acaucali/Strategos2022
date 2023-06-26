@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.presentaciones.vistas.forms;
 
@@ -18,7 +18,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class ShowVistaForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private String alertaVacia;
 	private Long paginaPreviaId;
 	private Long paginaSiguienteId;
@@ -35,161 +35,162 @@ public class ShowVistaForm extends EditarObjetoForm
 	private Integer altoPagina;
 	private Integer paginas;
 
-	public Integer getPaginas() 
+	public Integer getPaginas()
 	{
 	    return this.paginas;
 	}
 
-	public void setPaginas(Integer paginas) 
+	public void setPaginas(Integer paginas)
 	{
 	    this.paginas = paginas;
 	}
 
-	public Integer getAltoPagina() 
+	public Integer getAltoPagina()
 	{
 	    return this.altoPagina;
 	}
 
-	public void setAltoPagina(Integer altoPagina) 
+	public void setAltoPagina(Integer altoPagina)
 	{
 	    this.altoPagina = altoPagina;
 	}
 
-	public Integer getAltoCelda() 
+	public Integer getAltoCelda()
 	{
 	    return this.altoCelda;
 	}
 
-	public void setAltoCelda(Integer altoCelda) 
+	public void setAltoCelda(Integer altoCelda)
 	{
 	    this.altoCelda = altoCelda;
 	}
 
-	public Integer getAnchoPagina() 
+	public Integer getAnchoPagina()
 	{
 	    return this.anchoPagina;
 	}
 
-	public void setAnchoPagina(Integer anchoPagina) 
+	public void setAnchoPagina(Integer anchoPagina)
 	{
 	    this.anchoPagina = anchoPagina;
 	}
 
-	public Integer getAnchoCelda() 
+	public Integer getAnchoCelda()
 	{
 	    return this.anchoCelda;
 	}
 
-	public void setAnchoCelda(Integer anchoCelda) 
+	public void setAnchoCelda(Integer anchoCelda)
 	{
 	    this.anchoCelda = anchoCelda;
 	}
-	
-	public Integer getAnchoMarco() 
+
+	public Integer getAnchoMarco()
 	{
 	    return this.anchoMarco;
 	}
 
-	public void setAnchoMarco(Integer anchoMarco) 
+	public void setAnchoMarco(Integer anchoMarco)
 	{
 	    this.anchoMarco = anchoMarco;
 	}
 
-	public Byte getFrecuencia() 
+	public Byte getFrecuencia()
 	{
 	    return this.frecuencia;
 	}
 
-	public void setFrecuencia(Byte frecuencia) 
+	public void setFrecuencia(Byte frecuencia)
 	{
 	    this.frecuencia = frecuencia;
 	}
 
-	public List<Celda> getCeldas() 
+	public List<Celda> getCeldas()
 	{
 	    return this.celdas;
 	}
 
-	public void setCeldas(List<Celda> celdas) 
+	public void setCeldas(List<Celda> celdas)
 	{
 	    this.celdas = celdas;
 	}
 
-	public Vista getVista() 
+	public Vista getVista()
 	{
 	    return this.vista;
 	}
 
-	public void setVista(Vista vista) 
+	public void setVista(Vista vista)
 	{
 	    this.vista = vista;
 	}
 
-	public Pagina getPagina() 
+	public Pagina getPagina()
 	{
 	    return this.pagina;
 	}
 
-	public void setPagina(Pagina pagina) 
+	public void setPagina(Pagina pagina)
 	{
 	    this.pagina = pagina;
 	}
 
-	public Long getPaginaSiguienteId() 
+	public Long getPaginaSiguienteId()
 	{
 	    return this.paginaSiguienteId;
 	}
 
-	public void setPaginaSiguienteId(Long paginaSiguienteId) 
+	public void setPaginaSiguienteId(Long paginaSiguienteId)
 	{
 	    this.paginaSiguienteId = paginaSiguienteId;
 	}
 
-	public Long getPaginaPreviaId() 
+	public Long getPaginaPreviaId()
 	{
 	    return this.paginaPreviaId;
 	}
 
-	public void setPaginaPreviaId(Long paginaPreviaId) 
+	public void setPaginaPreviaId(Long paginaPreviaId)
 	{
 	    this.paginaPreviaId = paginaPreviaId;
 	}
-	
-	public String getAlertaVacia() 
+
+	public String getAlertaVacia()
 	{
 	    return this.alertaVacia;
 	}
 
-	public void setAlertaVacia(String alertaVacia) 
+	public void setAlertaVacia(String alertaVacia)
 	{
 	    this.alertaVacia = alertaVacia;
 	}
-	
-	public String getSeparadorSeries() 
+
+	public String getSeparadorSeries()
 	{
 		return new com.visiongc.app.strategos.web.struts.graficos.forms.GraficoForm().getSeparadorSeries();
 	}
-	
-	public void setPaginaId(Long paginaId) 
+
+	public void setPaginaId(Long paginaId)
 	{
 	    this.paginaId = paginaId;
 	}
 
-	public Long getPaginaId() 
+	public Long getPaginaId()
 	{
 	    return this.paginaId;
 	}
 
-	public void setVistaId(Long vistaId) 
+	public void setVistaId(Long vistaId)
 	{
 	    this.vistaId = vistaId;
 	}
 
-	public Long getVistaId() 
+	public Long getVistaId()
 	{
 	    return this.vistaId;
 	}
 
+	@Override
 	public void clear()
 	{
 		this.alertaVacia = null;

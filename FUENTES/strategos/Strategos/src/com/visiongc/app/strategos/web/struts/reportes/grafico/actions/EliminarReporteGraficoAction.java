@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.grafico.actions;
 
@@ -24,10 +24,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class EliminarReporteGraficoAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -36,20 +38,20 @@ public class EliminarReporteGraficoAction extends VgcAction
 
 		String reporteId = request.getParameter("reporteId");
 
-		
+
 		StrategosReportesGraficoService reportesGraficoService = StrategosServiceFactory.getInstance().openStrategosReportesGraficoService();
-		
+
 
 		if (reporteId != null)
 		{
 			reportesGraficoService.unlockObject(request.getSession().getId(), reporteId);
-	
+
 			boolean bloqueado = !reportesGraficoService.lockForDelete(request.getSession().getId(), reporteId);
-			
-			
+
+
 			ReporteGrafico reporte= reportesGraficoService.obtenerReporte(new Long(reporteId));
 			//ReporteGrafico reporte= (ReporteGrafico)reportesGraficoService.load(ReporteGrafico.class, reporteId);
-	
+
 			if (reporte != null)
 			{
 				if (bloqueado)
@@ -58,16 +60,16 @@ public class EliminarReporteGraficoAction extends VgcAction
 				{
 					reporte.setReporteId(Long.valueOf(reporteId));
 					int res = reportesGraficoService.deleteReporte(reporte, getUsuarioConectado(request));
-					
+
 					if (res == 10004)
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", reporte.getNombre()));
 					else
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", reporte.getNombre()));
 				}
 			}
-			else 
+			else
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
-	
+
 			reportesGraficoService.unlockObject(request.getSession().getId(), reporteId);
 		}
 		reportesGraficoService.close();

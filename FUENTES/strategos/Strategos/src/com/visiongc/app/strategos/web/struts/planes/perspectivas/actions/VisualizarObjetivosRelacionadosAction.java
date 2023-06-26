@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.actions;
 
@@ -44,11 +44,13 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 {
 	public static final String ACTION_KEY = "VisualizarObjetivosRelacionadosAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -57,7 +59,7 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 
 		if (request.getParameter("accion") != null && request.getParameter("accion").equals("cancelar"))
 			return getForwardBack(request, 2, true);
-		
+
 		ActionMessages messages = getMessages(request);
 
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
@@ -66,11 +68,11 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 
 		String perspectivaId = request.getParameter("perspectivaId") != null ? request.getParameter("perspectivaId") : null;
 		seleccionarPerspectivasForm.setOrganizacionSeleccionadaId(new Long((String)request.getSession().getAttribute("organizacionId")));
-		
+
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
-		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan(); 
+		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
 		strategosPlanesService.close();
-		
+
 		Perspectiva perspectiva = null;
 		if (perspectivaId != null && !perspectivaId.equals("") && !perspectivaId.equals("0"))
 		{
@@ -79,7 +81,7 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 			if (perspectiva != null)
 			{
 				perspectiva.setConfiguracionPlan(configuracionPlan);
-				
+
 				Plan plan = (Plan)strategosPerspectivasService.load(Plan.class, new Long(perspectiva.getPlanId()));
 				seleccionarPerspectivasForm.setNombrePlan(plan.getNombre());
 				perspectiva.setPlan(plan);
@@ -100,7 +102,7 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 						perspectivaAsociada.setNombre(organizacion.getNombre() + " / " + perspectivaAsociada.getNombre());
 					}
 				}
-				
+
 				setRutaCompletaOrganizacion(seleccionarPerspectivasForm, perspectiva.getOrganizacion(), strategosPerspectivasService);
 			}
 		}
@@ -110,44 +112,44 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 		if (request.getParameter("accion") != null && request.getParameter("accion").equals("refrescar"))
 			arbolRelacionBean = null;
 
-		if (arbolRelacionBean == null) 
+		if (arbolRelacionBean == null)
 		{
 			arbolRelacionBean = new ArbolBean();
 			arbolRelacionBean.clear();
 			request.getSession().setAttribute("gestionarObjetivosRelacionadosArbolBean", arbolRelacionBean);
 		}
 
-		if (arbolRelacionBean.getNodoSeleccionado() == null) 
+		if (arbolRelacionBean.getNodoSeleccionado() == null)
 			setNodoRoot(request, perspectiva, arbolRelacionBean, strategosPerspectivasService, configuracionPlan);
 		else
 		{
 			String selectedId = request.getParameter("selectedId");
 			String openId = request.getParameter("openId");
 			String closeId = request.getParameter("closeId");
-			
+
 			NodoArbol nodoSeleccionado = null;
 
-			if (request.getAttribute("VisualizarObjetivosRelacionadosAction.reloadId") != null) 
+			if (request.getAttribute("VisualizarObjetivosRelacionadosAction.reloadId") != null)
 			{
-				nodoSeleccionado = (NodoArbol)arbolRelacionBean.getNodos().get((String)request.getAttribute("VisualizarObjetivosRelacionadosAction.reloadId"));
+				nodoSeleccionado = (NodoArbol)arbolRelacionBean.getNodos().get(request.getAttribute("VisualizarObjetivosRelacionadosAction.reloadId"));
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, nodoSeleccionado.getNodoArbolId());
-			} 
-			else if ((selectedId != null) && (!selectedId.equals(""))) 
+			}
+			else if ((selectedId != null) && (!selectedId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol)arbolRelacionBean.getNodos().get(selectedId);
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, nodoSeleccionado.getNodoArbolId());
-			} 
-			else if ((openId != null) && (!openId.equals(""))) 
+			}
+			else if ((openId != null) && (!openId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol)arbolRelacionBean.getNodos().get(openId);
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, openId);
-			} 
-			else if ((closeId != null) && (!closeId.equals(""))) 
+			}
+			else if ((closeId != null) && (!closeId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol)arbolRelacionBean.getNodos().get(closeId);
 				TreeviewWeb.publishArbolCerrarNodo(arbolRelacionBean, closeId);
-			} 
-			else 
+			}
+			else
 			{
 				nodoSeleccionado = (NodoArbol)arbolRelacionBean.getNodos().get(arbolRelacionBean.getSeleccionadoId());
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, nodoSeleccionado.getNodoArbolId());
@@ -159,16 +161,16 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 
 		arbolesService.close();
 		seleccionarPerspectivasForm.setIniciado(new Boolean(true));
-		
+
 		strategosPerspectivasService.close();
-		
+
 		saveMessages(request, messages);
-		
+
 		actualizarAlertas(perspectiva, request);
 
 		return mapping.findForward(forward);
 	}
-	
+
 	private void setRutaCompletaOrganizacion(SeleccionarPerspectivasForm seleccionarPerspectivasForm, OrganizacionStrategos organizacion, StrategosPerspectivasService strategosPerspectivasService)
 	{
 		OrganizacionStrategos org = organizacion;
@@ -176,24 +178,24 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 		if (org.getPadreId() != null)
 		{
 			org.setPadre((OrganizacionStrategos)strategosPerspectivasService.load(OrganizacionStrategos.class, new Long(org.getPadreId())));
-			while (org.getPadre() != null) 
+			while (org.getPadre() != null)
 			{
 				org = org.getPadre();
 				rutaCompleta = org.getNombre() + " / " + rutaCompleta;
 			}
 		}
-    
+
 		seleccionarPerspectivasForm.setRutaCompletaOrganizacion(rutaCompleta);
 	}
-	
-	private void setNodoRoot(HttpServletRequest request, Perspectiva perspectiva, ArbolBean arbolRelacionBean, StrategosPerspectivasService strategosPerspectivasService, ConfiguracionPlan configuracionPlan) throws Exception 
+
+	private void setNodoRoot(HttpServletRequest request, Perspectiva perspectiva, ArbolBean arbolRelacionBean, StrategosPerspectivasService strategosPerspectivasService, ConfiguracionPlan configuracionPlan) throws Exception
 	{
 		arbolRelacionBean.setNodoRaiz(perspectiva);
 		arbolRelacionBean.getNodos().put(perspectiva.getNodoArbolId(), perspectiva);
 		perspectiva.setNodoArbolHijos(perspectiva.getPerspectivasAsociadas());
 		perspectiva.setNodoArbolHijosCargados(true);
 		perspectiva.setConfiguracionPlan(configuracionPlan);
-		for (Iterator<?> iter = perspectiva.getNodoArbolHijos().iterator(); iter.hasNext(); ) 
+		for (Iterator<?> iter = perspectiva.getNodoArbolHijos().iterator(); iter.hasNext(); )
 		{
 			Perspectiva perspectivaAsociada = (Perspectiva)iter.next();
 			perspectivaAsociada.setPerspectivasAsociadas(strategosPerspectivasService.getPerspectivasAsociadas(perspectivaAsociada.getPerspectivaId()));
@@ -222,16 +224,16 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 		arbolRelacionBean.setNodoSeleccionado(perspectiva);
 		arbolRelacionBean.setSeleccionadoId(perspectiva.getNodoArbolId());
 	}
-	
+
 	private void refrescarRelacion(ArbolBean arbolRelacionBean, NodoArbol perspectiva, List<Perspectiva> perspectivasAsociadas, StrategosPerspectivasService strategosPerspectivasService, ConfiguracionPlan configuracionPlan)
 	{
 		List<Perspectiva> nodosHijos = perspectivasAsociadas;
 		if (perspectiva.getNodoArbolHijosCargados())
 		{
-			for (Iterator<?> iter = nodosHijos.iterator(); iter.hasNext(); ) 
+			for (Iterator<?> iter = nodosHijos.iterator(); iter.hasNext(); )
 			{
 				NodoArbol nodoHijo = (NodoArbol)iter.next();
-				if (arbolRelacionBean.getNodos().get(nodoHijo.getNodoArbolId()) == null) 
+				if (arbolRelacionBean.getNodos().get(nodoHijo.getNodoArbolId()) == null)
 				{
 					perspectiva.getNodoArbolHijos().add(nodoHijo);
 					arbolRelacionBean.getNodos().put(nodoHijo.getNodoArbolId(), nodoHijo);
@@ -239,10 +241,10 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 			}
 
 			int index = 0;
-			while (index < perspectiva.getNodoArbolHijos().size()) 
+			while (index < perspectiva.getNodoArbolHijos().size())
 			{
-				NodoArbol perspectivaHija = (NodoArbol)((List<NodoArbol>)perspectiva.getNodoArbolHijos()).get(index);
-				if (nodosHijos.contains(perspectivaHija)) 
+				NodoArbol perspectivaHija = ((List<NodoArbol>)perspectiva.getNodoArbolHijos()).get(index);
+				if (nodosHijos.contains(perspectivaHija))
 				{
 					Perspectiva perspectivaInsumo = (Perspectiva)strategosPerspectivasService.load(Perspectiva.class, new Long(perspectivaHija.getNodoArbolId()));
 					perspectivaInsumo.setConfiguracionPlan(configuracionPlan);
@@ -268,32 +270,32 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 							perspectivaAsociada.setNombre(organizacion.getNombre() + " / " + perspectivaAsociada.getNombre());
 						}
 					}
-					
+
 					refrescarRelacion(arbolRelacionBean, perspectivaHija, perspectivaInsumo.getPerspectivasAsociadas(), strategosPerspectivasService, configuracionPlan);
 					index++;
-				} 
-				else 
+				}
+				else
 					((List<NodoArbol>)perspectiva.getNodoArbolHijos()).remove(index);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			perspectiva.setNodoArbolHijos(nodosHijos);
 			perspectiva.setNodoArbolHijosCargados(true);
-			for (Iterator<NodoArbol> iter = perspectiva.getNodoArbolHijos().iterator(); iter.hasNext(); ) 
+			for (Iterator<NodoArbol> iter = perspectiva.getNodoArbolHijos().iterator(); iter.hasNext(); )
 			{
-				NodoArbol perspectivaHija = (NodoArbol)iter.next();
+				NodoArbol perspectivaHija = iter.next();
 				perspectivaHija.setNodoArbolPadre(perspectiva);
 				arbolRelacionBean.getNodos().put(perspectivaHija.getNodoArbolId(), perspectivaHija);
 			}
 		}
 	}
-	
-	private boolean refrescarArbol(HttpServletRequest request, Perspectiva perspectiva, ArbolBean arbolRelacionBean, NodoArbol nodoSeleccionado, StrategosPerspectivasService strategosPerspectivasService, ConfiguracionPlan configuracionPlan) throws Exception 
+
+	private boolean refrescarArbol(HttpServletRequest request, Perspectiva perspectiva, ArbolBean arbolRelacionBean, NodoArbol nodoSeleccionado, StrategosPerspectivasService strategosPerspectivasService, ConfiguracionPlan configuracionPlan) throws Exception
 	{
 		boolean rootCargado = false;
 		NodoArbol nodoActualizado = (NodoArbol)strategosPerspectivasService.load(Perspectiva.class, new Long(nodoSeleccionado.getNodoArbolId()));
-		if (nodoActualizado == null || nodoActualizado.getNodoArbolId().equals(perspectiva.getPerspectivaId().toString())) 
+		if (nodoActualizado == null || nodoActualizado.getNodoArbolId().equals(perspectiva.getPerspectivaId().toString()))
 		{
 			Long perspectivaId = perspectiva.getPerspectivaId();
 			perspectiva = null;
@@ -307,7 +309,7 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 
 				OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos)strategosPerspectivasService.load(OrganizacionStrategos.class, new Long(plan.getOrganizacionId()));
 				perspectiva.setOrganizacion(organizacionStrategos);
-				
+
 				perspectiva.setPerspectivasAsociadas(strategosPerspectivasService.getPerspectivasAsociadas(perspectiva.getPerspectivaId()));
 				for (Iterator<?> iter = perspectiva.getPerspectivasAsociadas().iterator(); iter.hasNext(); )
 				{
@@ -368,32 +370,32 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 
 		return true;
 	}
-	
+
 	private void actualizarAlertas(Perspectiva raiz, HttpServletRequest request)
 	{
 		Map<String, String> perspectivaIds = new HashMap<String, String>();
 		getIds(raiz.getNodoArbolHijos(), perspectivaIds);
-		
+
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 		Plan plan = (Plan) strategosPerspectivasService.load(Plan.class, raiz.getPlanId());
 		List<PerspectivaEstado> estados = strategosPerspectivasService.getPerspectivaEstadosUltimoPeriodo(plan.getPlanId(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), plan.getAnoFinal());
 		Map<Long, Byte> alertasParcial = new HashMap<Long, Byte>();
 		Map<Long, Double> nivelParcial = new HashMap<Long, Double>();
-		for (Iterator<PerspectivaEstado> iter = estados.iterator(); iter.hasNext(); ) 
+		for (Iterator<PerspectivaEstado> iter = estados.iterator(); iter.hasNext(); )
 		{
-			PerspectivaEstado estado = (PerspectivaEstado)iter.next();
+			PerspectivaEstado estado = iter.next();
 			if (estado.getPk().getTipo().byteValue() == TipoIndicadorEstado.getTipoIndicadorEstadoParcial())
 			{
 				alertasParcial.put(estado.getPk().getPerspectivaId(), estado.getAlerta());
 				nivelParcial.put(estado.getPk().getPerspectivaId(), estado.getEstado());
 			}
 		}
-		
+
 		Map<Long, Byte> alertasAnual = new HashMap<Long, Byte>();
 		Map<Long, Double> nivelAnual = new HashMap<Long, Double>();
-		for (Iterator<PerspectivaEstado> iter = estados.iterator(); iter.hasNext(); ) 
+		for (Iterator<PerspectivaEstado> iter = estados.iterator(); iter.hasNext(); )
 		{
-			PerspectivaEstado estado = (PerspectivaEstado)iter.next();
+			PerspectivaEstado estado = iter.next();
 			if (estado.getPk().getTipo().byteValue() == TipoIndicadorEstado.getTipoIndicadorEstadoAnual())
 			{
 				alertasAnual.put(estado.getPk().getPerspectivaId(), estado.getAlerta());
@@ -401,18 +403,18 @@ public class VisualizarObjetivosRelacionadosAction extends VgcAction
 			}
 		}
 		strategosPerspectivasService.close();
-		
+
 		new com.visiongc.app.strategos.web.struts.planes.perspectivas.actions.GestionarPerspectivasAction().actualizarAlertas(raiz.getNodoArbolHijos(), alertasParcial, nivelParcial, TipoIndicadorEstado.getTipoIndicadorEstadoParcial());
 		new com.visiongc.app.strategos.web.struts.planes.perspectivas.actions.GestionarPerspectivasAction().actualizarAlertas(raiz.getNodoArbolHijos(), alertasAnual, nivelAnual, TipoIndicadorEstado.getTipoIndicadorEstadoAnual());
 	}
 
-	private void getIds(Collection<NodoArbol> nodos, Map<String, String> ids) 
+	private void getIds(Collection<NodoArbol> nodos, Map<String, String> ids)
 	{
 		if (nodos != null)
 		{
-			for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext(); ) 
+			for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext(); )
 			{
-				NodoArbol nodo = (NodoArbol)iter.next();
+				NodoArbol nodo = iter.next();
 				ids.put(nodo.getNodoArbolId(), nodo.getNodoArbolId());
 				getIds(nodo.getNodoArbolHijos(), ids);
 			}

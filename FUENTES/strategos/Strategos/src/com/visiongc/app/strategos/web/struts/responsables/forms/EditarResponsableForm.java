@@ -1,9 +1,10 @@
 package com.visiongc.app.strategos.web.struts.responsables.forms;
 
+import java.util.Set;
+
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.Set;
 
 public class EditarResponsableForm extends EditarObjetoForm
 {
@@ -136,7 +137,8 @@ public class EditarResponsableForm extends EditarObjetoForm
     this.organizacion = organizacion;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.responsableId = new Long(0L);
     this.usuarioId = new Long(0L);
     this.organizacionId = new Long(0L);

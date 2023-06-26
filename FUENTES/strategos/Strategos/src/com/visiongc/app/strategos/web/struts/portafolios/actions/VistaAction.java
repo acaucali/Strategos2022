@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.actions;
 
@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
@@ -75,11 +76,13 @@ import com.visiongc.commons.web.util.WebUtil;
  */
 public class VistaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -88,12 +91,12 @@ public class VistaAction extends VgcAction
 		String forward = mapping.getParameter();
 
 		Long portafolioId = (request.getParameter("id") != null && request.getParameter("id") != "") ? Long.parseLong(request.getParameter("id")) : null;
-		
+
 		StrategosPortafoliosService strategosPortafoliosService = StrategosServiceFactory.getInstance().openStrategosPortafoliosService();
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 		Portafolio portafolio = null;
 		List<Iniciativa> iniciativas = new ArrayList<Iniciativa>();
-		
+
 		boolean hayPagina = true;
 		boolean hayIniciativas = true;
 		List<Pagina> paginas = null;
@@ -102,13 +105,13 @@ public class VistaAction extends VgcAction
 			portafolio = (Portafolio)strategosPortafoliosService.load(Portafolio.class, new Long(portafolioId));
 			if (portafolio != null)
 			{
-				Map<String, String> filtros = new HashMap<String, String>();		
-				
+				Map<String, String> filtros = new HashMap<String, String>();
+
 				filtros.put("historicoDate", "IS NULL");
 				filtros.put("portafolioId", portafolio.getId().toString());
-				
-				iniciativas = (List<Iniciativa>)strategosIniciativasService.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
-				
+
+				iniciativas = strategosIniciativasService.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
+
 				StrategosPaginasService strategosPaginasService = StrategosServiceFactory.getInstance().openStrategosPaginasService();
 			    filtros = new HashMap<String, String>();
 			    filtros.put("portafolioId", portafolio.getId().toString());
@@ -121,14 +124,14 @@ public class VistaAction extends VgcAction
 					hayIniciativas = false;
 			}
 		}
-		
+
 		Integer anchoCelda = new Integer(0);
 		Integer altoCelda = new Integer(0);
 
 		Integer anchoPagina = new Integer(0);
 		Integer altoPagina = new Integer(0);
 
-		if (portafolio != null && hayPagina && hayIniciativas) 
+		if (portafolio != null && hayPagina && hayIniciativas)
 		{
 			Vista vista = new Vista(portafolio.getId(), portafolio.getOrganizacionId(), portafolio.getNombre(), null, null, null, true);
 			vista.setPaginas(new HashSet<Pagina>());
@@ -141,7 +144,7 @@ public class VistaAction extends VgcAction
 
 			anchoPagina = new Integer(pagina.getAncho().intValue() * pagina.getColumnas().intValue());
 			altoPagina = new Integer(pagina.getAlto().intValue() * pagina.getFilas().intValue());
-			
+
 			List<Celda> listaCeldas = new ArrayList<Celda>();
 			listaCeldas = getListaCeldas(pagina.getPaginaId(), request);
 			if (listaCeldas.size() == 0)
@@ -161,7 +164,7 @@ public class VistaAction extends VgcAction
 
 				ShowVistaForm showVistaForm = (ShowVistaForm)form;
 				showVistaForm.clear();
-				
+
 				showVistaForm.setPaginaPreviaId(controlPaginacion[0]);
 				showVistaForm.setPaginaSiguienteId(controlPaginacion[1]);
 				showVistaForm.setAnchoPagina(anchoPagina);
@@ -179,7 +182,7 @@ public class VistaAction extends VgcAction
 				showVistaForm.setVistaId(vista != null ? vista.getVistaId() : 0);
 			}
 		}
-		else 
+		else
 		{
 			if (!hayIniciativas)
 			{
@@ -197,13 +200,13 @@ public class VistaAction extends VgcAction
 
 		strategosIniciativasService.close();
 		strategosPortafoliosService.close();
-		
+
 		if (!hayPagina)
 			return getForwardBack(request, 2, true);
 		else
 			return mapping.findForward(forward);
 	}
-	
+
 	private List<Celda> getListaCeldas(Long paginaId, HttpServletRequest request)
 	{
 		StrategosCeldasService strategosCeldasService = StrategosServiceFactory.getInstance().openStrategosCeldasService();
@@ -216,10 +219,10 @@ public class VistaAction extends VgcAction
 
 		PaginaLista paginaCeldas = strategosCeldasService.getCeldas(pagina, 30, atributoOrden, tipoOrden, true, filtros, getUsuarioConectado(request));
 		strategosCeldasService.close();
-		
+
 		for (Iterator<Celda> i = paginaCeldas.getLista().iterator(); i.hasNext(); )
 		{
-			Celda celda = (Celda)i.next();
+			Celda celda = i.next();
 			celda.setTipo(GraficoTipo.getTipoColumna());
 			if (celda.getFila().byteValue() == 1 && celda.getColumna().byteValue() == 1)
 				celda.setTipoGrafico(GraficoTipoIniciativa.getGraficoTipoEstatus());
@@ -230,14 +233,14 @@ public class VistaAction extends VgcAction
 			else if (celda.getFila().byteValue() == 2 && celda.getColumna().byteValue() == 2)
 				celda.setTipoGrafico(GraficoTipoIniciativa.getGraficoPorcentajePortafolio());
 		}
-		
+
 		return paginaCeldas.getLista();
 	}
-	
+
 	public void GetImgGrafico(HttpServletRequest request, Celda celda, List<Iniciativa> iniciativas, Portafolio portafolio, GraficoForm graficoForm, Integer ano, Integer periodo, StrategosIniciativasService strategosIniciativasService) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
 	{
 		StrategosCeldasService strategosCeldasService = StrategosServiceFactory.getInstance().openStrategosCeldasService();
-		
+
 		List<DatosSerie> series = null;
 		Grafico grafico;
 		Byte frecuencia = Frecuencia.getFrecuenciaMensual();
@@ -253,7 +256,7 @@ public class VistaAction extends VgcAction
 		graficoForm.setFrecuenciasCompatibles(Frecuencia.getFrecuenciasCompatibles(Frecuencia.getFrecuenciaDiaria()));
 		graficoForm.setVirtual(true);
 		graficoForm.setTipoGrafico(celda.getTipoGrafico());
-		
+
 		if (celda.getTipoGrafico().byteValue() == GraficoTipoIniciativa.getGraficoPorcentajePortafolio().byteValue())
 		{
 			graficoForm.setVirtual(true);
@@ -269,7 +272,7 @@ public class VistaAction extends VgcAction
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 			indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, portafolio.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 			strategosIndicadoresService.close();
-			
+
 			if (celda.getConfiguracion() != null)
 			{
 				celda.setDatosSeries(new ArrayList<DatosSerie>());
@@ -283,16 +286,16 @@ public class VistaAction extends VgcAction
 				Integer periodoFinal = 000;
 
 				StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-				List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), anoInicial, anoFinal, periodoInicial, periodoFinal);
+				List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), anoInicial, anoFinal, periodoInicial, periodoFinal);
 				strategosMedicionesService.close();
 				Integer anoDesde = null;
 				Integer anoHasta = null;
 				Integer periodoDesde = null;
 				Integer periodoHasta = null;
-				
+
 		    	for (Iterator<Medicion> iterAportes = mediciones.iterator(); iterAportes.hasNext(); )
 		    	{
-		    		Medicion aporte = (Medicion)iterAportes.next();
+		    		Medicion aporte = iterAportes.next();
 			    		if (anoDesde == null)
 			    			anoDesde = aporte.getMedicionId().getAno();
 		    		if (anoHasta == null)
@@ -301,7 +304,7 @@ public class VistaAction extends VgcAction
 		    			periodoDesde = aporte.getMedicionId().getPeriodo();
 		    		if (periodoHasta == null)
 		    			periodoHasta = aporte.getMedicionId().getPeriodo();
-		    		
+
 		    		if (anoDesde.intValue() > aporte.getMedicionId().getAno())
 		    			anoDesde = aporte.getMedicionId().getAno();
 		    		if (anoHasta.intValue() < aporte.getMedicionId().getAno())
@@ -319,11 +322,11 @@ public class VistaAction extends VgcAction
 	    			periodoDesde = periodo;
 	    		if (periodoHasta == null)
 	    			periodoHasta = periodo;
-	    		
+
 				series = new ArrayList<DatosSerie>();
 				for (Iterator<SerieIndicador> j = indicador.getSeriesIndicador().iterator(); j.hasNext(); )
 				{
-					SerieIndicador serie = (SerieIndicador)j.next();
+					SerieIndicador serie = j.next();
 
 					DatosSerie datosSerie = new DatosSerie();
 			        datosSerie.setIndicador(indicador);
@@ -338,7 +341,7 @@ public class VistaAction extends VgcAction
 					datosSerie.setNivelClase(null);
 					datosSerie.setBloquear(false);
 					datosSerie.setSerieAnoAnterior(false);
-							
+
 					series.add(datosSerie);
 				}
 
@@ -355,8 +358,8 @@ public class VistaAction extends VgcAction
 				celda.setPeriodoFinal(periodoHasta);
 				celda.setDatosSeries(series);
 			}
-			
-			List<Object> objetos = new ArrayList<Object>();			
+
+			List<Object> objetos = new ArrayList<Object>();
 			objetos.add(celda);
 			grafico = new Grafico();
 			new com.visiongc.app.strategos.web.struts.graficos.actions.GraficoAction().SetGrafico(objetos, grafico, graficoForm.getSource(), null, true, request);
@@ -368,10 +371,10 @@ public class VistaAction extends VgcAction
 			}
 
 			graficoForm.setMostrarLeyendas(celda.getVerLeyenda() != null ? celda.getVerLeyenda() : false);
-			
+
 			new com.visiongc.app.strategos.web.struts.graficos.actions.GraficoAction().GetObjeto(graficoForm, grafico);
 			new com.visiongc.app.strategos.web.struts.graficos.actions.GraficoAction().GetGrafico(graficoForm, request);
-			
+
 			celda.setTipo(graficoForm.getTipo());
 			celda.setEjeX(graficoForm.getEjeX());
 			celda.setSerieName(graficoForm.getSerieName());
@@ -391,7 +394,7 @@ public class VistaAction extends VgcAction
 				celda.setShowDuppont(true);
 				celda.setIndicadorId(indicador.getIndicadorId().toString());
 			}
-			
+
 			if (alerta != null)
 			{
 				celda.setShowAlerta(true);
@@ -400,9 +403,9 @@ public class VistaAction extends VgcAction
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaVerde.gif")).toString();
 	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaAmarilla().byteValue())
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaAmarilla.gif")).toString();
-	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaRoja().byteValue()) 
+	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaRoja().byteValue())
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaRoja.gif")).toString();
-				
+
 				celda.setAlerta(imagenAlerta);
 			}
 			else
@@ -419,11 +422,11 @@ public class VistaAction extends VgcAction
 			}
 
 			new com.visiongc.app.strategos.web.struts.portafolios.actions.CrearGraficoAction().setValores(graficoForm, iniciativas, strategosIniciativasService);
-			
+
 			List<Object> objetos = new ArrayList<Object>();
 			String[] ids = graficoForm.getObjetosIds().split(",");
-			for (int j = 0; j < ids.length; j++)
-				objetos.add(Long.parseLong(ids[j]));
+			for (String id : ids)
+				objetos.add(Long.parseLong(id));
 
 			grafico = new Grafico();
 			grafico.setNombre(celda.getNombre());
@@ -439,7 +442,7 @@ public class VistaAction extends VgcAction
 			series = new ArrayList<DatosSerie>();
 			for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();)
 			{
-				Iniciativa iniciativa = (Iniciativa)iter.next();
+				Iniciativa iniciativa = iter.next();
 				if (!esPrimero)
 				{
 					Ids = Ids + "!;!";
@@ -448,18 +451,18 @@ public class VistaAction extends VgcAction
 				}
 				Ids = Ids + iniciativa.getIniciativaId().toString();
 				Nombres = Nombres + iniciativa.getNombre();
-				
+
 				indicador = (Indicador)strategosIniciativasService.load(Indicador.class, iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 				if (indicador != null)
 				{
 					SerieIndicador serie = null;
 					for (Iterator<SerieIndicador> j = indicador.getSeriesIndicador().iterator(); j.hasNext(); )
 					{
-						serie = (SerieIndicador)j.next();
+						serie = j.next();
 						if (serie.getPk().getSerieId().longValue() == SerieTiempo.getSerieRealId().longValue())
 							break;
 					}
-			
+
 					DatosSerie datosSerie = new DatosSerie();
 			        datosSerie.setIndicador(indicador);
 			        datosSerie.setSerieIndicador(serie);
@@ -473,12 +476,12 @@ public class VistaAction extends VgcAction
 					datosSerie.setNivelClase(null);
 					datosSerie.setBloquear(false);
 					datosSerie.setSerieAnoAnterior(false);
-							
+
 					series.add(datosSerie);
 				}
 				esPrimero = false;
 			}
-			
+
 			if (celda.getConfiguracion() == null)
 			{
 				celda.setFrecuencia(frecuencia);
@@ -505,11 +508,11 @@ public class VistaAction extends VgcAction
 				strategosCeldasService.saveCelda(celda, getUsuarioConectado(request));
 			}
 			res = new com.visiongc.app.strategos.web.struts.graficos.actions.SeleccionarGraficoAction().ReadXmlProperties(res, grafico);
-			res = res + "|" + "indicadorInsumoSeleccionadoIds!,!" + Ids + "|" + "indicadorInsumoSeleccionadoNombres!,!" + Nombres + "|" + "indicadorInsumoSeleccionadoSeriePlanId!,!" + SeriePlanId;			
+			res = res + "|" + "indicadorInsumoSeleccionadoIds!,!" + Ids + "|" + "indicadorInsumoSeleccionadoNombres!,!" + Nombres + "|" + "indicadorInsumoSeleccionadoSeriePlanId!,!" + SeriePlanId;
 			graficoForm.setRespuesta(res);
-		
+
 			new com.visiongc.app.strategos.web.struts.portafolios.actions.CrearGraficoAction().GetObjeto(graficoForm, grafico, null, null, null);
-			
+
 			graficoForm.setClassName(grafico.getClassName());
 			graficoForm.setFrecuencias(Frecuencia.getFrecuencias());
 
@@ -517,12 +520,12 @@ public class VistaAction extends VgcAction
 
 			Calendar fecha = PeriodoUtil.getDateByPeriodo(graficoForm.getFrecuencia(), graficoForm.getAno(), graficoForm.getPeriodo(), true);
 			graficoForm.setFecha(VgcFormatter.formatearFecha(fecha.getTime(), "formato.fecha.corta"));
-			
+
 			graficoForm.setMostrarLeyendas(celda.getVerLeyenda() != null ? celda.getVerLeyenda() : false);
 			graficoForm.setMostrarTooltips(false);
 			graficoForm.setTamanoLeyenda(8);
 			graficoForm.setSource("Celda");
-			
+
 			celda.setEjeX(graficoForm.getEjeX());
 			celda.setSerieName(graficoForm.getSerieName());
 			celda.setSerieData(graficoForm.getSerieData());
@@ -530,18 +533,18 @@ public class VistaAction extends VgcAction
 			celda.setSerieTipo(graficoForm.getSerieTipo());
 			celda.setRangoAlertas(graficoForm.getRangoAlertas());
 			celda.setIsAscendente(graficoForm.getIsAscendente());
-			
+
 			Byte alerta = null;
 			Long indicadorId = null;
 			Boolean hayUnIndicador = true;
 			for (Iterator<DatosSerie> j = celda.getDatosSeries().iterator(); j.hasNext(); )
 			{
-				DatosSerie serie = (DatosSerie)j.next();
+				DatosSerie serie = j.next();
 				if (serie.getIndicador() != null)
 				{
 					if (indicadorId == null)
 						indicadorId = serie.getIndicador().getIndicadorId();
-					
+
 					if (indicadorId.longValue() == serie.getIndicador().getIndicadorId() && (serie.getPlanId() == null || serie.getPlanId() == 0L))
 					{
 						if (serie.getIndicador() != null)
@@ -551,7 +554,7 @@ public class VistaAction extends VgcAction
 						hayUnIndicador = false;
 				}
 			}
-			
+
 			celda.setShowDuppont(false);
 			celda.setShowImage(false);
 			if (indicadorId != null)
@@ -560,14 +563,14 @@ public class VistaAction extends VgcAction
 			{
 				if (indicador == null)
 					indicador = (Indicador)strategosIniciativasService.load(Indicador.class, indicadorId);
-				
+
 				if (indicador != null && indicador.getNaturaleza().byteValue() == Naturaleza.getNaturalezaFormula().byteValue())
 				{
 					celda.setShowDuppont(true);
 					celda.setIndicadorId(indicadorId.toString());
 				}
 			}
-			
+
 			if (alerta != null)
 			{
 				celda.setShowAlerta(hayUnIndicador);
@@ -576,34 +579,34 @@ public class VistaAction extends VgcAction
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaVerde.gif")).toString();
 	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaAmarilla().byteValue())
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaAmarilla.gif")).toString();
-	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaRoja().byteValue()) 
+	            else if (alerta.byteValue() == AlertaIniciativaProducto.getAlertaRoja().byteValue())
 	            	imagenAlerta = new URL(WebUtil.getUrl(request, "/paginas/strategos/presentaciones/vistas/imagenes/alertaRoja.gif")).toString();
-				
+
 				celda.setAlerta(imagenAlerta);
 			}
 			else
 				celda.setShowAlerta(false);
 		}
-		
+
 		strategosCeldasService.close();
 	}
-	
+
 	private void GetImgByCelda(HttpServletRequest request, List<Celda> celdas, List<Iniciativa> iniciativas, Portafolio portafolio, StrategosIniciativasService strategosIniciativasService) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
 	{
 		GraficoForm graficoForm;
 		Calendar ahora = Calendar.getInstance();
 		Integer ano = ahora.get(1);
 		Integer periodo = 1;
-		
+
 		for (Iterator<Celda> i = celdas.iterator(); i.hasNext(); )
 		{
-			Celda celda = (Celda)i.next();
+			Celda celda = i.next();
 			graficoForm = new GraficoForm();
-			
+
 			GetImgGrafico(request, celda, iniciativas, portafolio, graficoForm, ano, periodo, strategosIniciativasService);
 		}
 	}
-	
+
 	private Long[] obtenerControlPaginacion(List<Pagina> paginas, Pagina pagina)
 	{
 		Long[] controlPaginacion = new Long[2];
@@ -611,10 +614,10 @@ public class VistaAction extends VgcAction
 		int indicePaginaPrevia = pagina.getNumero().intValue() - 2;
 		int indicePaginaSiguiente = pagina.getNumero().intValue();
 
-		if (indicePaginaPrevia < 0) 
+		if (indicePaginaPrevia < 0)
 			indicePaginaPrevia = mayorIndice;
 
-		if (indicePaginaSiguiente > mayorIndice) 
+		if (indicePaginaSiguiente > mayorIndice)
 			indicePaginaSiguiente = 0;
 
 		controlPaginacion[0] = ((Pagina)paginas.toArray()[indicePaginaPrevia]).getPaginaId();
@@ -622,19 +625,19 @@ public class VistaAction extends VgcAction
 
 		return controlPaginacion;
 	}
-	
+
 	public void setDatos(Celda celda, MessageResources mensajes, StrategosIniciativasService strategosIniciativasService) throws ParserConfigurationException, SAXException, IOException
 	{
 		Calendar ahora = Calendar.getInstance();
 		Integer ano = ahora.get(1);
 		Integer periodo = 1;
-		
-		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+
+		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(celda.getConfiguracion()))));
 		NodeList lista = doc.getElementsByTagName("properties");
-		 
-		for (int i = 0; i < lista.getLength() ; i ++) 
+
+		for (int i = 0; i < lista.getLength() ; i ++)
 		{
 			Node node = lista.item(i);
 			Element elemento = (Element) node;
@@ -644,7 +647,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("tipo").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("tipo").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setTipo(Byte.parseByte(valor.getNodeValue()));
 				else
@@ -656,7 +659,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("titulo").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("titulo").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setTitulo(valor.getNodeValue());
 				else
@@ -668,7 +671,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("tituloEjeY").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("tituloEjeY").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setTituloEjeY(valor.getNodeValue());
 				else
@@ -680,7 +683,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("tituloEjeX").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("tituloEjeX").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setTituloEjeX(valor.getNodeValue());
 				else
@@ -692,7 +695,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("nombre").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("nombre").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setNombre(valor.getNodeValue());
 			}
@@ -700,7 +703,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("verTituloImprimir").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("verTituloImprimir").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setVerTituloImprimir(valor.getNodeValue());
 				else
@@ -712,7 +715,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("ajustarEscala").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("ajustarEscala").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setAjustarEscala(valor.getNodeValue());
 				else
@@ -724,7 +727,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("ano").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("ano").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setAnoInicial(Integer.parseInt(valor.getNodeValue()));
 				else
@@ -737,7 +740,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("periodo").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("periodo").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setPeriodoInicial(Integer.parseInt(valor.getNodeValue()));
 				else
@@ -746,11 +749,11 @@ public class VistaAction extends VgcAction
 			else
 				celda.setPeriodoInicial(periodo);
 			celda.setPeriodoFinal(celda.getPeriodoInicial());
-			
+
 			if (elemento.getElementsByTagName("anoInicial").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("anoInicial").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setAnoInicial(Integer.parseInt(valor.getNodeValue()));
 				else
@@ -762,7 +765,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("periodoInicial").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("periodoInicial").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setPeriodoInicial(Integer.parseInt(valor.getNodeValue()));
 				else
@@ -774,7 +777,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("anoFinal").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("anoFinal").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setAnoFinal(Integer.parseInt(valor.getNodeValue()));
 				else
@@ -786,7 +789,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("periodoFinal").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("periodoFinal").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setPeriodoFinal(Integer.parseInt(valor.getNodeValue()));
 				else
@@ -794,11 +797,11 @@ public class VistaAction extends VgcAction
 			}
 			else
 				celda.setPeriodoFinal(periodo);
-			
+
 			if (elemento.getElementsByTagName("frecuencia").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("frecuencia").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setFrecuencia(Byte.parseByte(valor.getNodeValue()));
 				else
@@ -810,7 +813,7 @@ public class VistaAction extends VgcAction
 			if (elemento.getElementsByTagName("frecuenciaAgrupada").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("frecuenciaAgrupada").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setFrecuenciaAgrupada(Byte.parseByte(valor.getNodeValue()));
 				else
@@ -818,11 +821,11 @@ public class VistaAction extends VgcAction
 			}
 			else
 				celda.setFrecuenciaAgrupada(Frecuencia.getFrecuenciaMensual());
-			
+
 			if (elemento.getElementsByTagName("condicion").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("condicion").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
+				valor = nodeLista.item(0);
 				if (valor != null && !valor.getNodeValue().equals(""))
 					celda.setCondicion(valor.getNodeValue());
 				else
@@ -831,11 +834,11 @@ public class VistaAction extends VgcAction
 			else
 				celda.setCondicion("0");
 		}
-		
+
 		lista = doc.getElementsByTagName("indicador");
 		if (lista.getLength() > 0)
 		{
-			for (int i = 0; i < lista.getLength() ; i ++) 
+			for (int i = 0; i < lista.getLength() ; i ++)
 			{
 				Node node = lista.item(i);
 				Element elemento = (Element) node;
@@ -844,7 +847,7 @@ public class VistaAction extends VgcAction
 				if (elemento.getElementsByTagName("id").getLength() > 0)
 				{
 					nodeLista = elemento.getElementsByTagName("id").item(0).getChildNodes();
-					valor = (Node) nodeLista.item(0);
+					valor = nodeLista.item(0);
 					if (valor != null)
 					{
 						Indicador indicador = (Indicador)strategosIniciativasService.load(Indicador.class, new Long(valor.getNodeValue()));
@@ -854,7 +857,7 @@ public class VistaAction extends VgcAction
 					        if (elemento.getElementsByTagName("serie").getLength() > 0)
 					        {
 								nodeLista = elemento.getElementsByTagName("serie").item(0).getChildNodes();
-								valor = (Node) nodeLista.item(0);
+								valor = nodeLista.item(0);
 								if (valor != null && !valor.getNodeValue().equals(""))
 									serieNodo = Long.parseLong(valor.getNodeValue());
 								else
@@ -862,11 +865,11 @@ public class VistaAction extends VgcAction
 					        }
 							else
 								serieNodo = SerieTiempo.getSerieRealId();
-							
+
 							SerieIndicador serie = null;
 							for (Iterator<SerieIndicador> j = indicador.getSeriesIndicador().iterator(); j.hasNext(); )
 							{
-								serie = (SerieIndicador)j.next();
+								serie = j.next();
 								if (serie.getPk().getSerieId().longValue() == serieNodo.longValue())
 									break;
 							}
@@ -875,23 +878,23 @@ public class VistaAction extends VgcAction
 					        datosSerie.setIndicador(indicador);
 					        datosSerie.setSerieIndicador(serie);
 							datosSerie.setTipoSerie(-1);
-							
+
 							datosSerie.setNombreLeyenda(indicador.getNombre());
 					        if (elemento.getElementsByTagName("leyenda").getLength() > 0)
 					        {
 								nodeLista = elemento.getElementsByTagName("leyenda").item(0).getChildNodes();
-								valor = (Node) nodeLista.item(0);
+								valor = nodeLista.item(0);
 								if (valor != null && !valor.getNodeValue().equals(""))
 									datosSerie.setNombreLeyenda(valor.getNodeValue());
 					        }
-						        
+
 					        String color = null;
 					        String colorDecimal = null;
 					        String colorEntero = null;
 					        if (elemento.getElementsByTagName("color").getLength() > 0)
 					        {
 								nodeLista = elemento.getElementsByTagName("color").item(0).getChildNodes();
-								valor = (Node) nodeLista.item(0);
+								valor = nodeLista.item(0);
 								if (valor != null && !valor.getNodeValue().equals(""))
 									color = valor.getNodeValue();
 								else
@@ -901,7 +904,7 @@ public class VistaAction extends VgcAction
 					        	color = ColorUtil.getRndColorRGB();
 				        	colorDecimal = ColorUtil.convertRGBDecimal(color);
 				        	colorEntero = colorDecimal;
-				        	
+
 				        	datosSerie.setColor(color);
 				        	datosSerie.setColorDecimal(colorDecimal);
 					        datosSerie.setColorEntero(colorEntero);
@@ -910,16 +913,16 @@ public class VistaAction extends VgcAction
 					        if (elemento.getElementsByTagName("visible").getLength() > 0)
 					        {
 								nodeLista = elemento.getElementsByTagName("visible").item(0).getChildNodes();
-								valor = (Node) nodeLista.item(0);
+								valor = nodeLista.item(0);
 								if (valor != null && !valor.getNodeValue().equals(""))
 									datosSerie.setVisualizar(valor.getNodeValue() == "1" || Integer.parseInt(valor.getNodeValue()) == 1 ? true : false);
 					        }
-							
+
 							datosSerie.setShowOrganizacion(false);
 							datosSerie.setNivelClase(null);
 							datosSerie.setBloquear(false);
 							datosSerie.setSerieAnoAnterior(false);
-							
+
 							celda.getDatosSeries().add(datosSerie);
 						}
 					}

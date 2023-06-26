@@ -1,17 +1,5 @@
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
-import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
-import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
-
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.model.Usuario;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,25 +9,38 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
+import com.visiongc.app.strategos.indicadores.model.Indicador;
+import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
+import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
+import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.model.Usuario;
+
 public class EliminarIndicadorAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		ActionMessages messages = getMessages(request);
-		
+
 		Long[] indicadores = new Long[0];
 		String indicadorId = null;
 		String strIndicadorId = "";
 		if (request.getQueryString().indexOf("indicadorId=") > -1)
 		{
 			strIndicadorId = request.getParameter("indicadorId");
-			if (((strIndicadorId != null ? 1 : 0) & (strIndicadorId.equals("") ? 0 : 1)) != 0) 
+			if (((strIndicadorId != null ? 1 : 0) & (strIndicadorId.equals("") ? 0 : 1)) != 0)
 			{
 				String[] ids = strIndicadorId.split(",");
 				indicadores = new Long[ids.length];
@@ -50,7 +51,7 @@ public class EliminarIndicadorAction extends VgcAction
 				}
 			}
 		}
-		
+
 		if ((indicadorId == null) || (indicadorId.equals("")))
 		{
 			indicadorId = request.getParameter("indicadorIniciativaId");
@@ -67,24 +68,24 @@ public class EliminarIndicadorAction extends VgcAction
 			cancelar = true;
 		else if ((indicadorId == null) || (indicadorId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(indicadorId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(indicadorId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
 			return getForwardBack(request, 1, true);
-		
+
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 		if (indicadores.length > 0)
 		{
-		    if (request.getParameter("funcion") != null) 
+		    if (request.getParameter("funcion") != null)
 		    {
 		    	String funcion = request.getParameter("funcion");
-		    	if (funcion.equals("check")) 
+		    	if (funcion.equals("check"))
 		    	{
 		    		boolean esInsumo = false;
-					for (int i = indicadores.length - 1; i > -1; i--) 
+					for (int i = indicadores.length - 1; i > -1; i--)
 					{
-						esInsumo = strategosIndicadoresService.esInsumo(indicadores[i]); 
+						esInsumo = strategosIndicadoresService.esInsumo(indicadores[i]);
 						if (esInsumo)
 						{
 				    		request.setAttribute("ajaxResponse", "true|" + strIndicadorId);
@@ -100,14 +101,14 @@ public class EliminarIndicadorAction extends VgcAction
 		    }
 
 			int res = 0;
-			for (int i = indicadores.length - 1; i > -1; i--) 
+			for (int i = indicadores.length - 1; i > -1; i--)
 			{
 				Long id = indicadores[i];
 
 				bloqueado = !strategosIndicadoresService.lockForDelete(request.getSession().getId(), id);
 				Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(id));
-	
-				if (indicador != null) 
+
+				if (indicador != null)
 				{
 					if ((indicador.getSoloLectura() != null) && (indicador.getSoloLectura().booleanValue()))
 					{
@@ -129,15 +130,15 @@ public class EliminarIndicadorAction extends VgcAction
 							StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 							PryActividad actividad = strategosPryActividadesService.getActividadByIndicador(indicador.getIndicadorId());
 							strategosPryActividadesService.close();
-							
+
 							if (actividad == null)
 							{
 								indicador.setIndicadorId(Long.valueOf(id));
 								Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 								res = strategosIndicadoresService.deleteIndicador(indicador, usuario);
-								
+
 								strategosIndicadoresService.unlockObject(request.getSession().getId(), id);
-			
+
 								if (res == 10004)
 								{
 									messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.relacion", indicador.getNombre()));
@@ -156,11 +157,11 @@ public class EliminarIndicadorAction extends VgcAction
 							break;
 						}
 					}
-					
+
 				}
 				else
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
-			}			
+			}
 			if (res == 10000)
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionmultipleok"));
 		}
@@ -173,7 +174,7 @@ public class EliminarIndicadorAction extends VgcAction
 
 		if (request.getSession().getAttribute("GuardarIndicador") == null)
 			request.getSession().setAttribute("GuardarIndicador", "true");
-		
+
 		return getForwardBack(request, 1, true);
 	}
 }

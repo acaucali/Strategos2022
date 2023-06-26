@@ -127,12 +127,12 @@
 							{
 								/*
 								activarBloqueoEspera();
-								*/
+								
 								
 								abrirReporte('<html:rewrite action="/vistasdatos/mostrarVistaDatos"/>?reporteId=' + document.gestionarVistasDatosForm.seleccionados.value);
-								/*
-							    window.location.href='<html:rewrite action="/vistasdatos/mostrarVistaDatos"/>?reporteId=' + document.gestionarVistasDatosForm.seleccionados.value;
 								*/
+							    window.location.href='<html:rewrite action="/vistasdatos/mostrarVistaDatos"/>?reporteId=' + document.gestionarVistasDatosForm.seleccionados.value;
+								
 							
 							}
 							
@@ -140,13 +140,13 @@
 							{
 								/*
 								activarBloqueoEspera();
-								*/
+								
 								
 								abrirReporte('<html:rewrite action="/reportes/mostrarReporte"/>?reporteId=' + document.gestionarVistasDatosForm.seleccionados.value);
-								
-								/*
-								window.location.href='<html:rewrite action="/reportes/mostrarReporte"/>?reporteId=' + document.gestionarVistasDatosForm.seleccionados.value;
 								*/
+								
+								window.location.href='<html:rewrite action="/reportes/mostrarReporte"/>?reporteId=' + document.gestionarVistasDatosForm.seleccionados.value;
+								
 							}
 							
 						}

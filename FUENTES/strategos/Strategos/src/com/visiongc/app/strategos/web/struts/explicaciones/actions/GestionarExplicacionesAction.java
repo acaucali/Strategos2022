@@ -1,5 +1,15 @@
 package com.visiongc.app.strategos.web.struts.explicaciones.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion.TipoExplicacion;
@@ -11,6 +21,8 @@ import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
+import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
 import com.visiongc.app.strategos.presentaciones.StrategosCeldasService;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
 import com.visiongc.app.strategos.presentaciones.model.IndicadorCelda;
@@ -18,21 +30,16 @@ import com.visiongc.app.strategos.web.struts.explicaciones.forms.GestionarExplic
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class GestionarExplicacionesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -41,20 +48,25 @@ public class GestionarExplicacionesAction extends VgcAction
 
 		String objetoId = request.getParameter("objetoId");
 		String objetoKey = request.getParameter("objetoKey");
-		Integer tipo = Integer.parseInt(request.getParameter("tipo"));
+		String tip = request.getParameter("tipo");
+		
+		Integer tipo = 0;
+		if(tip!= null || !tip.equals(""))
+			 tipo = Integer.parseInt(tip);
 
 		boolean cancelar = false;
 		if ((objetoId == null) || (objetoId.equals("")))
 		{
 			objetoId = (String)request.getSession().getAttribute("objetoId");
-			if ((objetoId == null) || (objetoId.equals(""))) 
+			if ((objetoId == null) || (objetoId.equals("")))
 				cancelar = true;
 		}
-
+						
 		if ((objetoKey == null) || (objetoKey.equals("")))
 		{
+			
 			objetoKey = (String)request.getSession().getAttribute("objetoKey");
-			if ((objetoKey == null) || (objetoKey.equals(""))) 
+			if ((objetoKey == null) || (objetoKey.equals("")))
 				cancelar = true;
 		}
 
@@ -105,41 +117,41 @@ public class GestionarExplicacionesAction extends VgcAction
 			gestionarExplicacionesForm.setAddForma(getPermisologiaUsuario(request).tienePermiso("EXPLICACION_ADD"));
 			gestionarExplicacionesForm.setDeleteForma(getPermisologiaUsuario(request).tienePermiso("EXPLICACION_DELETE"));
 		}
-		
-		
+
+
 		gestionarExplicacionesForm.setObjetoId(Long.parseLong(objetoId));
 		gestionarExplicacionesForm.setTipoObjetoKey(objetoKey);
 		gestionarExplicacionesForm.setTipo(tipo);
-		
+
 		String atributoOrden = gestionarExplicacionesForm.getAtributoOrden();
 		String tipoOrden = gestionarExplicacionesForm.getTipoOrden();
 		int pagina = gestionarExplicacionesForm.getPagina();
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "fecha";
 			gestionarExplicacionesForm.setAtributoOrden(atributoOrden);
 		}
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "DESC";
 			gestionarExplicacionesForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosExplicacionesService strategosExplicacionesService = StrategosServiceFactory.getInstance().openStrategosExplicacionesService();
 
 		Map<String, Comparable> filtros = new HashMap<String, Comparable>();
 
-		if (tipo != null) 
+		if (tipo != null)
 			filtros.put("tipo", tipo);
-		if ((gestionarExplicacionesForm.getFiltroTitulo() != null) && (!gestionarExplicacionesForm.getFiltroTitulo().equals(""))) 
+		if ((gestionarExplicacionesForm.getFiltroTitulo() != null) && (!gestionarExplicacionesForm.getFiltroTitulo().equals("")))
 			filtros.put("titulo", gestionarExplicacionesForm.getFiltroTitulo());
-		if ((gestionarExplicacionesForm.getFiltroAutor() != null) && (!gestionarExplicacionesForm.getFiltroAutor().equals(""))) 
+		if ((gestionarExplicacionesForm.getFiltroAutor() != null) && (!gestionarExplicacionesForm.getFiltroAutor().equals("")))
 			filtros.put("autor", gestionarExplicacionesForm.getFiltroAutor());
-		if ((objetoId != null) && (!objetoId.equals("")) && Long.parseLong(objetoId) != 0) 
+		if ((objetoId != null) && (!objetoId.equals("")) && Long.parseLong(objetoId) != 0)
 			filtros.put("objetoId", objetoId);
 		if (objetoKey.equals("Indicador"))
 			filtros.put("objetoKey", "0");
@@ -151,6 +163,8 @@ public class GestionarExplicacionesAction extends VgcAction
 			filtros.put("objetoKey", "3");
 		if (objetoKey.equals("Instrumento"))
 			filtros.put("objetoKey", "6");
+		if (objetoKey.equals("pryActividad"))
+			filtros.put("objetoKey", "7");
 
 		PaginaLista paginaExplicaciones = strategosExplicacionesService.getExplicaciones(pagina, 30, atributoOrden, tipoOrden, true, filtros);
 
@@ -166,10 +180,10 @@ public class GestionarExplicacionesAction extends VgcAction
 			request.getSession().setAttribute("indicador", indicador);
 			request.getSession().setAttribute("objetoKey", objetoKey);
 			request.getSession().setAttribute("objetoId", objetoId);
-			
+
 			gestionarExplicacionesForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
 			gestionarExplicacionesForm.setNombreObjetoKey(indicador.getNombre());
-			
+
 			strategosIndicadoresService.close();
 		}
 
@@ -180,11 +194,11 @@ public class GestionarExplicacionesAction extends VgcAction
 
 			String nombreObjetoKey = "";
 
-			if (celda.getIndicadoresCelda() != null) 
+			if (celda.getIndicadoresCelda() != null)
 			{
-				if ((celda.getIndicadoresCelda().size() == 0) || (celda.getIndicadoresCelda().size() > 1)) 
+				if ((celda.getIndicadoresCelda().size() == 0) || (celda.getIndicadoresCelda().size() > 1))
 					nombreObjetoKey = celda.getTitulo();
-				else if (celda.getIndicadoresCelda().size() == 1) 
+				else if (celda.getIndicadoresCelda().size() == 1)
 				{
 					IndicadorCelda indicadorCelda = (IndicadorCelda)celda.getIndicadoresCelda().toArray()[0];
 					StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -201,7 +215,7 @@ public class GestionarExplicacionesAction extends VgcAction
 
 			gestionarExplicacionesForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
 			gestionarExplicacionesForm.setNombreObjetoKey(nombreObjetoKey);
-			
+
 			strategosCeldasService.close();
 		}
 
@@ -209,21 +223,21 @@ public class GestionarExplicacionesAction extends VgcAction
 		{
 			StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 			Iniciativa iniciativa = (Iniciativa)strategosIniciativasService.load(Iniciativa.class, new Long(objetoId));
-			
+
 			request.getSession().setAttribute("iniciativa", iniciativa);
 			request.getSession().setAttribute("objetoKey", objetoKey);
 			request.getSession().setAttribute("objetoId", objetoId);
 
 			gestionarExplicacionesForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
 			gestionarExplicacionesForm.setNombreObjetoKey(iniciativa.getNombre());
-			
+
 			strategosIniciativasService.close();
 		}
 
 		if (objetoKey.equals("Organizacion"))
 		{
 			OrganizacionStrategos organizacion = ((OrganizacionStrategos)request.getSession().getAttribute("organizacion"));
-			
+
 			request.getSession().setAttribute("organizacion", organizacion);
 			request.getSession().setAttribute("objetoKey", objetoKey);
 			request.getSession().setAttribute("objetoId", objetoId);
@@ -231,35 +245,46 @@ public class GestionarExplicacionesAction extends VgcAction
 			gestionarExplicacionesForm.setNombreOrganizacion(organizacion.getNombre());
 			gestionarExplicacionesForm.setNombreObjetoKey(organizacion.getNombre());
 		}
-		
+
 		if (objetoKey.equals("Instrumento"))
 		{
-			
+
 			StrategosInstrumentosService strategosInstrumentosService = StrategosServiceFactory.getInstance().openStrategosInstrumentosService();
 			Instrumentos instrumento = (Instrumentos)strategosInstrumentosService.load(Instrumentos.class, new Long(objetoId));
-					
+
 			request.getSession().setAttribute("instrumento", instrumento);
+			request.getSession().setAttribute("objetoKey", objetoKey);
+			request.getSession().setAttribute("objetoId", objetoId);
+
+			gestionarExplicacionesForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
+			gestionarExplicacionesForm.setNombreObjetoKey(instrumento.getNombreCorto());
+			gestionarExplicacionesForm.setDesdeInstrumento(true);
+
+			strategosInstrumentosService.close();
+		}
+		if(objetoKey.equals("pryActividad")) {
+			StrategosPryProyectosService strategosPryProyectosService = StrategosServiceFactory.getInstance().openStrategosPryProyectosService();
+			PryActividad pryActividad = (PryActividad)strategosPryProyectosService.load(PryActividad.class, new Long(objetoId));
+			
+			request.getSession().setAttribute("actividad", pryActividad);
 			request.getSession().setAttribute("objetoKey", objetoKey);
 			request.getSession().setAttribute("objetoId", objetoId);
 			
 			gestionarExplicacionesForm.setNombreOrganizacion(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
-			gestionarExplicacionesForm.setNombreObjetoKey(instrumento.getNombreCorto());
-			gestionarExplicacionesForm.setDesdeInstrumento(true);
-			
-			strategosInstrumentosService.close();
+			gestionarExplicacionesForm.setNombreObjetoKey(pryActividad.getNombre());
 		}
-		
+
 		strategosExplicacionesService.close();
 
-		if (paginaExplicaciones.getLista().size() > 0) 
+		if (paginaExplicaciones.getLista().size() > 0)
 		{
 			Explicacion explicacion = (Explicacion)paginaExplicaciones.getLista().get(0);
 			gestionarExplicacionesForm.setSeleccionados(explicacion.getExplicacionId().toString());
 			gestionarExplicacionesForm.setValoresSeleccionados(explicacion.getTitulo());
-		} 
-		else 
+		}
+		else
 			gestionarExplicacionesForm.setSeleccionados(null);
 
 		return mapping.findForward(forward);
-	}	
+	}
 }

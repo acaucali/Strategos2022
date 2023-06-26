@@ -1,21 +1,5 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions;
 
-import com.visiongc.app.strategos.gantts.model.util.ActividadPeriodo;
-import com.visiongc.app.strategos.gantts.model.util.Periodo;
-import com.visiongc.app.strategos.gantts.util.VgcGanttGrafico;
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
-import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.model.util.Frecuencia;
-import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
-import com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.GestionarActividadesForm;
-
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.model.Usuario;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,13 +15,30 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.gantts.model.util.ActividadPeriodo;
+import com.visiongc.app.strategos.gantts.model.util.Periodo;
+import com.visiongc.app.strategos.gantts.util.VgcGanttGrafico;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
+import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
+import com.visiongc.app.strategos.model.util.Frecuencia;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
+import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
+import com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.GestionarActividadesForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.model.Usuario;
+
 public class GestionarActividadesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrlSinParametros(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)	throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -49,43 +50,43 @@ public class GestionarActividadesAction extends VgcAction
 		String atributoOrden = gestionarActividadesForm.getAtributoOrden();
 		String tipoOrden = gestionarActividadesForm.getTipoOrden();
 		int pagina = gestionarActividadesForm.getPagina();
-		
+
 		Boolean desdeInstrumento = (request.getParameter("desdeInstrumento") != null && request.getParameter("desdeInstrumento") != "") ? Boolean.valueOf(request.getParameter("desdeInstrumento")) : null;
-		
-		
+
+
 		String identar = request.getParameter("identar") != null ? request.getParameter("identar") : "";
 		String ascender = request.getParameter("ascender") != null ? request.getParameter("ascender") : "";
 		String seleccionados = request.getParameter("seleccionados");
-		boolean mostrarGantt = false; 
-		
-		
-		
-		if (request.getParameter("mostrarGantt") != null)		
+		boolean mostrarGantt = false;
+
+
+
+		if (request.getParameter("mostrarGantt") != null)
 			mostrarGantt = new Long(request.getParameter("mostrarGantt")).intValue() == 1;
 
-		if (gestionarActividadesForm.getMostrarGantt() == null) 
+		if (gestionarActividadesForm.getMostrarGantt() == null)
 			gestionarActividadesForm.setMostrarGantt(new Boolean(false));
 
-		if (request.getParameter("mostrarGantt") != null) 
+		if (request.getParameter("mostrarGantt") != null)
 			gestionarActividadesForm.setMostrarGantt(new Boolean(mostrarGantt));
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "fila";
 			gestionarActividadesForm.setAtributoOrden(atributoOrden);
 		}
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarActividadesForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 
-		if (seleccionados != null && !seleccionados.equals("") && seleccionados.indexOf(",") == -1) 
+		if (seleccionados != null && !seleccionados.equals("") && seleccionados.indexOf(",") == -1)
 		{
 			PryActividad actividad = strategosPryActividadesService.getHermanoInmediatoAnterior(new Long(seleccionados));
 			if (actividad != null && actividad.getObjetoAsociadoId() != null)
@@ -110,9 +111,9 @@ public class GestionarActividadesAction extends VgcAction
 
 				if (ascender.equals("1"))
 					strategosPryActividadesService.moverFila(new Long(seleccionados), true, (Usuario)request.getSession().getAttribute("usuario"));
-				else if (ascender.equals("0")) 
+				else if (ascender.equals("0"))
 					strategosPryActividadesService.moverFila(new Long(seleccionados), false, (Usuario)request.getSession().getAttribute("usuario"));
-				
+
 				if (calcularActividad && gestionarActividadesForm.getIniciativaId() != null && gestionarActividadesForm.getIniciativaId() != 0L && gestionarActividadesForm.getPlanId() != null && gestionarActividadesForm.getPlanId() != 0L && actividad != null)
 					new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction().CalcularPadre(actividad, gestionarActividadesForm.getIniciativaId(), request);
 			}
@@ -120,18 +121,18 @@ public class GestionarActividadesAction extends VgcAction
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
-		if ((gestionarActividadesForm.getFiltroNombre() != null) && (!gestionarActividadesForm.getFiltroNombre().equals(""))) 
+		if ((gestionarActividadesForm.getFiltroNombre() != null) && (!gestionarActividadesForm.getFiltroNombre().equals("")))
 			filtros.put("nombre", gestionarActividadesForm.getFiltroNombre());
 
 		filtros.put("proyectoId", gestionarActividadesForm.getProyectoId());
 
-		if (!gestionarActividadesForm.getVerForma()) 
+		if (!gestionarActividadesForm.getVerForma())
 			filtros.put("visible", true);
 
 		gestionarActividadesForm.setSeleccionados(seleccionados);
 
 		PaginaLista paginaActividades = strategosPryActividadesService.getActividades(pagina, 30, atributoOrden, tipoOrden, true, filtros);
-		if ((seleccionados == null || seleccionados.equals("")) && paginaActividades.getLista().size() > 0) 
+		if ((seleccionados == null || seleccionados.equals("")) && paginaActividades.getLista().size() > 0)
 		{
 			gestionarActividadesForm.setSeleccionados(((PryActividad)paginaActividades.getLista().get(0)).getActividadId().toString());
 			gestionarActividadesForm.setValoresSeleccionados(((PryActividad)paginaActividades.getLista().get(0)).getNombre().toString());
@@ -142,19 +143,19 @@ public class GestionarActividadesAction extends VgcAction
 		paginaActividades.setTamanoSetPaginas(5);
 
 		request.setAttribute("paginaActividades", paginaActividades);
-		
+
 		Iniciativa iniciativa = null;
 		if (gestionarActividadesForm.getIniciativaId() != null)
 			iniciativa = (Iniciativa)strategosPryActividadesService.load(Iniciativa.class, new Long(gestionarActividadesForm.getIniciativaId()));
 		else if (gestionarActividadesForm.getProyectoId() != null)
 		{
 			  StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService(strategosPryActividadesService);
-			  iniciativa = (Iniciativa)strategosIniciativasService.getIniciativaByProyecto(gestionarActividadesForm.getProyectoId());
+			  iniciativa = strategosIniciativasService.getIniciativaByProyecto(gestionarActividadesForm.getProyectoId());
 			  strategosIniciativasService.close();
 		}
-		
+
 		if (iniciativa != null) {
-			gestionarActividadesForm.setBloqueado(false);			
+			gestionarActividadesForm.setBloqueado(false);
 		}else {
 			gestionarActividadesForm.setBloqueado(false);
 		}
@@ -172,16 +173,16 @@ public class GestionarActividadesAction extends VgcAction
 	{
 		Byte zoom = gestionarActividadesForm.getZoom();
 		Byte frecuenciaGantt = gestionarActividadesForm.getFrecuenciaGantt();
-		
-		if (frecuenciaGantt == null) 
+
+		if (frecuenciaGantt == null)
 			frecuenciaGantt = Frecuencia.getFrecuenciaMensual();
 
-		if (zoom != null) 
+		if (zoom != null)
 		{
 			if (!zoom.equals(new Byte((byte) 0)))
 				frecuenciaGantt = aplicarZoom(zoom, frecuenciaGantt);
 		}
-		else 
+		else
 			gestionarActividadesForm.setFrecuenciaGantt(Frecuencia.getFrecuenciaMensual());
 
 		gestionarActividadesForm.setZoom(new Byte((byte) 0));
@@ -190,12 +191,12 @@ public class GestionarActividadesAction extends VgcAction
 
 		Calendar fechaDesde = (Calendar)fechaMinMaxGantt.get(0);
 		Calendar fechaHasta = (Calendar)fechaMinMaxGantt.get(1);
-		if (frecuenciaGantt.equals(Frecuencia.getFrecuenciaDiaria())) 
+		if (frecuenciaGantt.equals(Frecuencia.getFrecuenciaDiaria()))
 		{
 			fechaDesde.set(5, fechaDesde.get(5) - 7);
 			fechaHasta.set(5, fechaHasta.get(5) + 7);
-		} 
-		else 
+		}
+		else
 			fechaHasta.set(1, fechaHasta.get(1) + 1);
 
 		List<?> escalaPeriodos = VgcGanttGrafico.obtenerEscalaPeriodos(fechaDesde, fechaHasta, frecuenciaGantt, false);
@@ -206,7 +207,7 @@ public class GestionarActividadesAction extends VgcAction
 		{
 			int numeroAnos = ((List<?>)escalaPeriodos.get(0)).size();
 
-			for (int i = 0; i < numeroAnos; i++) 
+			for (int i = 0; i < numeroAnos; i++)
 				totalPixeles += ((Periodo)((List<?>)escalaPeriodos.get(0)).get(i)).getPixeles().intValue();
 		}
 
@@ -224,29 +225,29 @@ public class GestionarActividadesAction extends VgcAction
 	{
 		Byte frecuenciaZoom = new Byte(frecuencia.byteValue());
 		Byte frecuenciaActual = null;
-		
+
 		List<?> frecuencias = Frecuencia.getFrecuencias();
 
 		for (Iterator<?> i = frecuencias.iterator(); i.hasNext(); )
 		{
 			Frecuencia objFrecuencia = (Frecuencia)i.next();
-			
+
 			frecuenciaActual = new Byte(objFrecuencia.getFrecuenciaId().byteValue());
 
-			if ((!frecuenciaActual.equals(Frecuencia.getFrecuenciaSemanal())) && (!frecuenciaActual.equals(Frecuencia.getFrecuenciaQuincenal()))) 
+			if ((!frecuenciaActual.equals(Frecuencia.getFrecuenciaSemanal())) && (!frecuenciaActual.equals(Frecuencia.getFrecuenciaQuincenal())))
 			{
-				if (frecuenciaActual.equals(frecuencia)) 
+				if (frecuenciaActual.equals(frecuencia))
 				{
 					if (!zoom.equals(new Byte((byte) 2)))
 						break;
-					if (frecuenciaActual.equals(Frecuencia.getFrecuenciaDiaria())) 
+					if (frecuenciaActual.equals(Frecuencia.getFrecuenciaDiaria()))
 					{
-						frecuenciaZoom = Frecuencia.getFrecuenciaMensual(); 
+						frecuenciaZoom = Frecuencia.getFrecuenciaMensual();
 						break;
 					}
-					if (frecuenciaActual.equals(Frecuencia.getFrecuenciaAnual())) 
+					if (frecuenciaActual.equals(Frecuencia.getFrecuenciaAnual()))
 					{
-						frecuenciaZoom = Frecuencia.getFrecuenciaAnual(); 
+						frecuenciaZoom = Frecuencia.getFrecuenciaAnual();
 						break;
 					}
 					objFrecuencia = (Frecuencia)i.next();

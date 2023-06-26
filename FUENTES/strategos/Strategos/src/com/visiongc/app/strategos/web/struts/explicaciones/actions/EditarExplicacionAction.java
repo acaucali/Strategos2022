@@ -1,5 +1,18 @@
 package com.visiongc.app.strategos.web.struts.explicaciones.actions;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.AdjuntoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
@@ -16,33 +29,26 @@ import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
+import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
 import com.visiongc.app.strategos.presentaciones.StrategosCeldasService;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
 import com.visiongc.app.strategos.presentaciones.model.IndicadorCelda;
 import com.visiongc.app.strategos.web.struts.explicaciones.forms.EditarExplicacionForm;
+import com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.EditarActividadForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
 
-import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class EditarExplicacionAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -60,6 +66,7 @@ public class EditarExplicacionAction extends VgcAction
 		Boolean verForm = null;
 		Boolean editarForm = null;
 		Boolean publicar = null;
+		
 		if (tipo.intValue() == TipoExplicacion.getTipoExplicacion().intValue())
 		{
 			verForm = getPermisologiaUsuario(request).tienePermiso("EXPLICACION_VIEW");
@@ -96,13 +103,14 @@ public class EditarExplicacionAction extends VgcAction
 			editarForm = getPermisologiaUsuario(request).tienePermiso("EXPLICACION_EDIT");
 			publicar = getPermisologiaUsuario(request).tienePermiso("EXPLICACION_PUBLIC");
 		}
-		
-		
+
+
 		boolean bloqueado = false;
 		Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 
 		StrategosExplicacionesService strategosExplicacionesService = StrategosServiceFactory.getInstance().openStrategosExplicacionesService();
 
+		
 		if ((explicacionId != null) && (!explicacionId.equals("")) && (!explicacionId.equals("0")))
 		{
 			bloqueado = !strategosExplicacionesService.lockForUpdate(request.getSession().getId(), explicacionId, null);
@@ -116,6 +124,11 @@ public class EditarExplicacionAction extends VgcAction
 				if (bloqueado)
 					messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.bloqueado"));
 
+				if(explicacion.getUsuarioCreado().getUsuarioId().intValue() == ((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId().intValue())
+					editarExplicacionForm.setCreador(true);
+				else
+					editarExplicacionForm.setCreador(false);
+				
 				editarExplicacionForm.setExplicacionId(explicacion.getExplicacionId());
 				editarExplicacionForm.setCreadoId(explicacion.getCreadoId());
 				editarExplicacionForm.setObjetoKey(explicacion.getObjetoKey());
@@ -129,15 +142,15 @@ public class EditarExplicacionAction extends VgcAction
 
 				if (explicacion.getFecha() != null)
 					editarExplicacionForm.setFecha(VgcFormatter.formatearFecha(explicacion.getFecha(), "formato.fecha.corta"));
-				else 
+				else
 					editarExplicacionForm.setFecha(null);
 				if (explicacion.getFechaCompromiso() != null)
 					editarExplicacionForm.setFechaCompromiso(VgcFormatter.formatearFecha(explicacion.getFechaCompromiso(), "formato.fecha.corta"));
-				else 
+				else
 					editarExplicacionForm.setFechaCompromiso(null);
 				if (explicacion.getFechaReal() != null)
 					editarExplicacionForm.setFechaReal(VgcFormatter.formatearFecha(explicacion.getFechaReal(), "formato.fecha.corta"));
-				else 
+				else
 					editarExplicacionForm.setFechaReal(null);
 
 				if (explicacion.getAdjuntosExplicacion() != null)
@@ -145,6 +158,7 @@ public class EditarExplicacionAction extends VgcAction
 					editarExplicacionForm.setAdjuntosExplicacion(new ArrayList());
 					for (Iterator<?> iter = explicacion.getAdjuntosExplicacion().iterator(); iter.hasNext(); )
 					{
+						
 						AdjuntoExplicacion adjunto = (AdjuntoExplicacion)iter.next();
 						editarExplicacionForm.getAdjuntosExplicacion().add(adjunto);
 					}
@@ -154,7 +168,7 @@ public class EditarExplicacionAction extends VgcAction
 				if (explicacion.getObjetoKey().byteValue() == ObjetivoKey.getKeyIndicador().byteValue())
 				{
 					StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-					
+
 					Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, explicacion.getObjetoId());
 
 					editarExplicacionForm.setNombreObjetoKey(indicador.getNombre());
@@ -168,7 +182,7 @@ public class EditarExplicacionAction extends VgcAction
 					strategosIndicadoresService.close();
 					strategosOrganizacionesService.close();
 				}
-				
+
 				if (explicacion.getObjetoKey().byteValue() == ObjetivoKey.getKeyOrganizacion().byteValue())
 				{
 					OrganizacionStrategos organizacion = ((OrganizacionStrategos)request.getSession().getAttribute("organizacion"));
@@ -177,26 +191,41 @@ public class EditarExplicacionAction extends VgcAction
 					editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyOrganizacion());
 					editarExplicacionForm.setObjetoId(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getOrganizacionId());
 				}
-				
+
 				if (explicacion.getObjetoKey().byteValue() == ObjetivoKey.getKeyInstrumento().byteValue())
 				{
-					
+
 					StrategosInstrumentosService strategosInstrumentosService = StrategosServiceFactory.getInstance().openStrategosInstrumentosService();
 					StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
-					
+
 					Instrumentos instrumento = (Instrumentos) strategosInstrumentosService.load(Instrumentos.class, explicacion.getObjetoId());
 					editarExplicacionForm.setNombreObjetoKey(instrumento.getNombreCorto());
 					editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyInstrumento());
+
+					OrganizacionStrategos organizacion = ((OrganizacionStrategos)request.getSession().getAttribute("organizacion"));
+					editarExplicacionForm.setNombreOrganizacion(organizacion.getNombre());
+
+					strategosOrganizacionesService.close();
+					strategosInstrumentosService.close();
+
+				}
+				if (explicacion.getObjetoKey().byteValue() == ObjetivoKey.getKeyActividad().byteValue())
+				{
+					StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
+					StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
+					
+					PryActividad pryActividad = (PryActividad) strategosPryActividadesService.load(PryActividad.class, explicacion.getObjetoId());
+					editarExplicacionForm.setNombreObjetoKey(pryActividad.getNombre());
+					editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyActividad());
 					
 					OrganizacionStrategos organizacion = ((OrganizacionStrategos)request.getSession().getAttribute("organizacion"));
 					editarExplicacionForm.setNombreOrganizacion(organizacion.getNombre());
 					
 					strategosOrganizacionesService.close();
-					strategosInstrumentosService.close();
-										
+					strategosPryActividadesService.close();
 				}
 
-				for (Iterator<?> i = explicacion.getMemosExplicacion().iterator(); i.hasNext(); ) 
+				for (Iterator<?> i = explicacion.getMemosExplicacion().iterator(); i.hasNext(); )
 				{
 					MemoExplicacion memoExplicacion = (MemoExplicacion)i.next();
 					Byte tipoMemo = memoExplicacion.getPk().getTipo();
@@ -210,22 +239,22 @@ public class EditarExplicacionAction extends VgcAction
 						editarExplicacionForm.setMemoImpactos(memoExplicacion.getMemo());
 					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_PERSPECTIVAS)))
 						editarExplicacionForm.setMemoPerspectivas(memoExplicacion.getMemo());
-					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_URL))) 
+					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_URL)))
 						editarExplicacionForm.setMemoUrl(memoExplicacion.getMemo());
-					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO1))) 
+					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO1)))
 						editarExplicacionForm.setLogro1(memoExplicacion.getMemo());
-					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO2))) 
+					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO2)))
 						editarExplicacionForm.setLogro2(memoExplicacion.getMemo());
-					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO3))) 
+					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO3)))
 						editarExplicacionForm.setLogro3(memoExplicacion.getMemo());
-					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO4))) 
+					else if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_LOGRO4)))
 						editarExplicacionForm.setLogro4(memoExplicacion.getMemo());
 				}
 			}
 			else
 			{
 				strategosExplicacionesService.unlockObject(request.getSession().getId(), new Long(explicacionId));
-				
+
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 				forward = "noencontrado";
 			}
@@ -243,7 +272,7 @@ public class EditarExplicacionAction extends VgcAction
 			editarExplicacionForm.setModificadoId(((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId());
 			editarExplicacionForm.setFechaModificado(VgcFormatter.formatearFecha(new Date(), "formato.fecha.corta"));
 			editarExplicacionForm.setTipo(tipo);
-			
+
 			if (publicar == null && usuario.getIsAdmin())
 				editarExplicacionForm.setPublico(true);
 			else if (publicar == null)
@@ -258,8 +287,8 @@ public class EditarExplicacionAction extends VgcAction
 				editarExplicacionForm.setFecha(VgcFormatter.formatearFecha(new Date(), "formato.fecha.corta"));
 			else if (tipo.intValue() == TipoExplicacion.getTipoNoticia().intValue())
 				editarExplicacionForm.setFecha(VgcFormatter.formatearFecha(new Date(), "formato.fecha.corta"));
-			
-			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Indicador")) 
+
+			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Indicador"))
 			{
 				editarExplicacionForm.setNombreObjetoKey(((Indicador)request.getSession().getAttribute("indicador")).getNombre());
 				editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyIndicador());
@@ -273,19 +302,19 @@ public class EditarExplicacionAction extends VgcAction
 
 				String nombreObjetoKey = "";
 
-				if (celda.getIndicadoresCelda() != null) 
+				if (celda.getIndicadoresCelda() != null)
 				{
-					if ((celda.getIndicadoresCelda().size() == 0) || (celda.getIndicadoresCelda().size() > 1)) 
+					if ((celda.getIndicadoresCelda().size() == 0) || (celda.getIndicadoresCelda().size() > 1))
 						nombreObjetoKey = celda.getTitulo();
-					else if (celda.getIndicadoresCelda().size() == 1) 
+					else if (celda.getIndicadoresCelda().size() == 1)
 					{
 						IndicadorCelda indicadorCelda = (IndicadorCelda)celda.getIndicadoresCelda().toArray()[0];
 						StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 						Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, indicadorCelda.getIndicador().getIndicadorId());
 						nombreObjetoKey = indicador.getNombre();
 					}
-				}	
-				else 
+				}
+				else
 					nombreObjetoKey = celda.getTitulo();
 
 				editarExplicacionForm.setNombreObjetoKey(nombreObjetoKey);
@@ -293,25 +322,31 @@ public class EditarExplicacionAction extends VgcAction
 				editarExplicacionForm.setObjetoId(((Celda)request.getSession().getAttribute("celda")).getCeldaId());
 			}
 
-			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Iniciativa")) 
+			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Iniciativa"))
 			{
 				editarExplicacionForm.setNombreObjetoKey(((Iniciativa)request.getSession().getAttribute("iniciativa")).getNombre());
 				editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyIniciativa());
 				editarExplicacionForm.setObjetoId(((Iniciativa)request.getSession().getAttribute("iniciativa")).getIniciativaId());
 			}
-			
+
 			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Organizacion"))
 			{
 				editarExplicacionForm.setNombreObjetoKey(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getNombre());
 				editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyOrganizacion());
 				editarExplicacionForm.setObjetoId(((OrganizacionStrategos)request.getSession().getAttribute("organizacion")).getOrganizacionId());
 			}
-			
+
 			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("Instrumento"))
 			{
 				editarExplicacionForm.setNombreObjetoKey(((Instrumentos)request.getSession().getAttribute("instrumento")).getNombreCorto());
 				editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyInstrumento());
 				editarExplicacionForm.setObjetoId(((Instrumentos)request.getSession().getAttribute("instrumento")).getInstrumentoId());
+			}
+			if (editarExplicacionForm.getNombreTipoObjetoKey().equals("pryActividad"))
+			{
+				editarExplicacionForm.setNombreObjetoKey(((PryActividad)request.getSession().getAttribute("actividad")).getNombre());
+				editarExplicacionForm.setObjetoKey(ObjetivoKey.getKeyActividad());
+				editarExplicacionForm.setObjetoId(((PryActividad)request.getSession().getAttribute("actividad")).getActividadId());
 			}
 		}
 
@@ -338,12 +373,12 @@ public class EditarExplicacionAction extends VgcAction
 		}
 		else if (!bloqueado && !verForm && !editarForm)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.sinpermiso"));
-		
+
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
-    
+
 		return mapping.findForward(forward);
 	}
 }

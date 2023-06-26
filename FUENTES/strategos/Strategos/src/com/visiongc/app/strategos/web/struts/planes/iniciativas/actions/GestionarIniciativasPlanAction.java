@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.planes.iniciativas.actions;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -16,31 +28,20 @@ import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.planes.forms.GestionarPlanForm;
 import com.visiongc.app.strategos.web.struts.planes.iniciativas.forms.GestionarIniciativasPlanForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.commons.util.HistoricoType;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class GestionarIniciativasPlanAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -61,7 +62,7 @@ public class GestionarIniciativasPlanAction extends VgcAction
         PaginaLista paginaTipos = strategosTiposProyectoService.getTiposProyecto(0, 0, "tipoProyectoId", "asc", true, filtrosTipo);
         strategosTiposProyectoService.close();
         gestionarIniciativasPlanForm.setTipos(paginaTipos.getLista());
-		
+
 		FiltroForm filtro = new FiltroForm();
 		filtro.setHistorico(selectHitoricoType);
 		if (filtroNombre.equals(""))
@@ -75,18 +76,18 @@ public class GestionarIniciativasPlanAction extends VgcAction
 		gestionarIniciativasPlanForm.setFiltro(filtro);
 		gestionarIniciativasPlanForm.setEstatus(selectEstatusType);
 		gestionarIniciativasPlanForm.setTipo(selectTipos);
-		
+
 		StrategosIniciativaEstatusService strategosIniciativaEstatusService = StrategosServiceFactory.getInstance().openStrategosIniciativaEstatusService();
 		Map<String, String> filtros = new HashMap<String, String>();
 		PaginaLista paginaIniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc", true, filtros);
 		strategosIniciativaEstatusService.close();
 		gestionarIniciativasPlanForm.setTiposEstatus(paginaIniciativaEstatus.getLista());
-		
+
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 
 		Perspectiva perspectiva = (Perspectiva)strategosIniciativasService.load(Perspectiva.class, gestionarPlanForm.getPerspectivaId());
 
-		if (perspectiva != null) 
+		if (perspectiva != null)
 		{
 			gestionarIniciativasPlanForm.setNombreIniciativaPlural(perspectiva.getPlan().getMetodologia().getNombreIniciativaPlural());
 			gestionarIniciativasPlanForm.setNombreIniciativaSingular(perspectiva.getPlan().getMetodologia().getNombreIniciativaSingular());
@@ -97,20 +98,20 @@ public class GestionarIniciativasPlanAction extends VgcAction
 		String atributoOrden = gestionarIniciativasPlanForm.getAtributoOrden();
 		String tipoOrden = gestionarIniciativasPlanForm.getTipoOrden();
 		int pagina = gestionarIniciativasPlanForm.getPagina();
-		
-		if (atributoOrden == null || atributoOrden.equals("orden")) 
+
+		if (atributoOrden == null || atributoOrden.equals("orden"))
 		{
 			atributoOrden = "nombre";
 			gestionarIniciativasPlanForm.setAtributoOrden(atributoOrden);
 		}
 
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarIniciativasPlanForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		filtros = new HashMap<String, String>();
@@ -129,23 +130,23 @@ public class GestionarIniciativasPlanAction extends VgcAction
 		if (gestionarIniciativasPlanForm.getTipo() != null) {
 	        filtros.put("tipoId", gestionarIniciativasPlanForm.getTipo().toString());
 	    }
-		
+
 		PaginaLista paginaIniciativasPlan = strategosIniciativasService.getIniciativas(0, 0, atributoOrden, tipoOrden, true, filtros);
 		paginaIniciativasPlan.setTamanoSetPaginas(5);
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-		
-		for (Iterator<Iniciativa> iter = paginaIniciativasPlan.getLista().iterator(); iter.hasNext(); ) 
+
+		for (Iterator<Iniciativa> iter = paginaIniciativasPlan.getLista().iterator(); iter.hasNext(); )
 		{
-			Iniciativa iniciativa = (Iniciativa)iter.next();
+			Iniciativa iniciativa = iter.next();
 			if (iniciativa.getPorcentajeCompletado() != null)
 			{
 				Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 				if (indicador != null)
 				{
 					boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue());
-					
+
 					Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(), indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(), indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
 					if (medicionReal != null)
 					{
@@ -153,9 +154,9 @@ public class GestionarIniciativasPlanAction extends VgcAction
 
 						List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null, medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
 						Double programado = null;
-						for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext(); ) 
+						for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext(); )
 						{
-		            		Medicion medicion = (Medicion)iter2.next();
+		            		Medicion medicion = iter2.next();
 		            		if (medicion.getValor() != null && programado == null)
 		            			programado = medicion.getValor();
 		            		else if (medicion.getValor() != null && programado != null && acumular)
@@ -163,7 +164,7 @@ public class GestionarIniciativasPlanAction extends VgcAction
 		            		else if (medicion.getValor() != null && programado != null && !acumular)
 		            			programado = medicion.getValor();
 						}
-						
+
 						if (programado != null)
 							iniciativa.setPorcentajeEsperado(programado);
 					}
@@ -172,7 +173,7 @@ public class GestionarIniciativasPlanAction extends VgcAction
 		}
 		strategosIndicadoresService.close();
 		strategosMedicionesService.close();
-		
+
 		request.setAttribute("paginaIniciativasPlan", paginaIniciativasPlan);
 
 		strategosIniciativasService.close();

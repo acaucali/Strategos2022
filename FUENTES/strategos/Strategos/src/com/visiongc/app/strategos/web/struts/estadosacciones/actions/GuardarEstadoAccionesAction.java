@@ -1,28 +1,31 @@
 package com.visiongc.app.strategos.web.struts.estadosacciones.actions;
 
-import com.visiongc.app.strategos.estadosacciones.StrategosEstadosService;
-import com.visiongc.app.strategos.estadosacciones.model.EstadoAcciones;
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.web.struts.estadosacciones.forms.EditarEstadoAccionesForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.estadosacciones.StrategosEstadosService;
+import com.visiongc.app.strategos.estadosacciones.model.EstadoAcciones;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.web.struts.estadosacciones.forms.EditarEstadoAccionesForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.web.NavigationBar;
+
 public class GuardarEstadoAccionesAction extends VgcAction
 {
 	private static final String ACTION_KEY = "GuardarEstadoAccionesAction";
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -40,7 +43,7 @@ public class GuardarEstadoAccionesAction extends VgcAction
 
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(ts)))
 			cancelar = true;
 
 		StrategosEstadosService strategosEstadosService = StrategosServiceFactory.getInstance().openStrategosEstadosService();
@@ -48,7 +51,7 @@ public class GuardarEstadoAccionesAction extends VgcAction
 		if (cancelar)
 		{
 			strategosEstadosService.unlockObject(request.getSession().getId(), editarEstadoAccionesForm.getEstadoId());
-			
+
 			strategosEstadosService.close();
 
 			return getForwardBack(request, 1, true);
@@ -75,14 +78,14 @@ public class GuardarEstadoAccionesAction extends VgcAction
 
 		EstadoAcciones estadoAccionesIndicaFinalizacion = strategosEstadosService.estadoAccionesIndicaFinalizacion();
 
-		if (estadoAccionesIndicaFinalizacion != null) 
+		if (estadoAccionesIndicaFinalizacion != null)
 			estadoAccionesEstaEnUso = strategosEstadosService.estadoAccionesEstaEnUso(estadoAccionesIndicaFinalizacion.getEstadoId());
 
-		if (estadoAccionesEstaEnUso.booleanValue()) 
+		if (estadoAccionesEstaEnUso.booleanValue())
 			estadoAcciones.setCondicion(new Boolean(false));
-		else 
+		else
 		{
-			if ((estadoAccionesIndicaFinalizacion != null) && (editarEstadoAccionesForm.getIndicaFinalizacion() != null) && (editarEstadoAccionesForm.getIndicaFinalizacion().booleanValue())) 
+			if ((estadoAccionesIndicaFinalizacion != null) && (editarEstadoAccionesForm.getIndicaFinalizacion() != null) && (editarEstadoAccionesForm.getIndicaFinalizacion().booleanValue()))
 			{
 				estadoAccionesIndicaFinalizacion.setCondicion(new Boolean(false));
 				strategosEstadosService.saveEstadoAcciones(estadoAccionesIndicaFinalizacion, getUsuarioConectado(request));
@@ -114,9 +117,9 @@ public class GuardarEstadoAccionesAction extends VgcAction
 
 		request.getSession().setAttribute("GuardarEstadoAccionesAction.ultimoTs", ts);
 
-		if (forward.equals("exito")) 
+		if (forward.equals("exito"))
 			return getForwardBack(request, 1, true);
-    
+
 		return mapping.findForward(forward);
 	}
 }

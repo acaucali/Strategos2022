@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
@@ -30,10 +30,11 @@ import com.lowagie.text.pdf.PdfWriter;
  */
 public class VerArchivoLog extends DownloadAction
 {
+	@Override
 	protected DownloadAction.StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String contentType = "application/pdf";
-	    byte[] myPdfBytes = (byte[])null;
+	    byte[] myPdfBytes = null;
 
 	    ByteArrayOutputStream baosPDF = null;
 
@@ -56,54 +57,56 @@ public class VerArchivoLog extends DownloadAction
 	    doc.open();
 
 	    StringBuffer log = null;
-	    while (log == null) 
+	    while (log == null)
 	    	log = (StringBuffer)request.getSession().getAttribute("verArchivoLog");
 
 	    doc.add(new Phrase(log.toString(), new Font(1, 8.0F)));
 
-	    if (doc != null) 
+	    if (doc != null)
 	    	doc.close();
 
-	    if (docWriter != null) 
+	    if (docWriter != null)
 	    	docWriter.close();
 
 	    myPdfBytes = baosPDF.toByteArray();
-	    
+
 	    request.getSession().removeAttribute("verArchivoLog");
 
 	    return new ByteArrayStreamInfo(contentType, myPdfBytes);
 	}
 
-	protected class ByteArrayStreamInfo implements DownloadAction.StreamInfo 
+	protected class ByteArrayStreamInfo implements DownloadAction.StreamInfo
 	{
 		protected String contentType;
 		protected byte[] bytes;
 
-	    public ByteArrayStreamInfo(String contentType, byte[] bytes) 
+	    public ByteArrayStreamInfo(String contentType, byte[] bytes)
 	    {
 	    	this.contentType = contentType;
 	    	this.bytes = bytes;
 	    }
 
-	    public String getContentType() 
+	    @Override
+		public String getContentType()
 	    {
 	    	return this.contentType;
 	    }
 
-	    public InputStream getInputStream() throws IOException 
+	    @Override
+		public InputStream getInputStream() throws IOException
 	    {
 	    	return new ByteArrayInputStream(this.bytes);
 	    }
 	}
-	
+
 	private StringBuffer GetFileLog(HttpServletRequest request)
 	{
 		StringBuffer log = new StringBuffer();
-		
+
 		String direccion = request.getParameter("direccion").toString();
 	    File file = new File(direccion);
 	    BufferedReader entrada;
-	    try 
+	    try
 	    {
 	    	if (file.exists())
 	    	{
@@ -113,18 +116,18 @@ public class VerArchivoLog extends DownloadAction
 		    		log.append(entrada.readLine());
 		    		log.append("\n");
 		    	}
-		    	
+
 		    	entrada.close();
 	    	}
 	    	else
 	    		log.append("\n");
-	    	
+
 	    }
-	    catch (IOException e) 
+	    catch (IOException e)
 	    {
 	    	e.printStackTrace();
 	    }
-		
+
 		return log;
 	}
 }

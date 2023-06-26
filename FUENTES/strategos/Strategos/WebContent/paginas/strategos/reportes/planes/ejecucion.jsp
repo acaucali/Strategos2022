@@ -406,7 +406,7 @@
 							<!-- Organizacion Seleccionada-->
 							<tr>
 								<td align="left"><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.organizacion" /> : </td>
-								<td colspan="3"><b><bean:write name="reporteForm" property="nombreOrganizacion" /></b></td>
+								<td colspan="1"><b><bean:write name="reporteForm" property="nombreOrganizacion" /></b></td>
 							</tr>
 							<!-- Plan Seleccionado -->
 							<tr>
@@ -482,8 +482,8 @@
 						<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">
 							<!-- Organizacion Seleccionada-->
 							<tr>
-								<td align="left"><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.organizacion" />:</td>
-								<td colspan="15" width="300"><b><bean:write name="reporteForm" property="nombreOrganizacion" /></b></td>
+								<td align="left"><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.organizacion" /> : </td>
+								<td colspan="0"><b><bean:write name="reporteForm" property="nombreOrganizacion" /></b></td>
 							</tr>
 							<!-- Plan Seleccionado -->
 							<tr>
@@ -730,7 +730,7 @@
 							<!-- Organizacion Seleccionada-->
 							<tr>
 								<td align="left"><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.organizacion" /> : </td>
-								<td colspan="3"><b><script>truncarTxt('<bean:write name="reporteForm" property="nombreOrganizacion" />', 30);</script></b></td>
+								<td colspan="3"><b><bean:write name="reporteForm" property="nombreOrganizacion" /></b></td>
 							</tr>
 							<!-- Plan Seleccionado -->
 							<tr>

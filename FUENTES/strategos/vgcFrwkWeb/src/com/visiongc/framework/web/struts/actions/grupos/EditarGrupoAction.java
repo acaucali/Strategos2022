@@ -22,19 +22,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 public final class EditarGrupoAction
   extends VgcAction
 {
@@ -144,8 +131,7 @@ public final class EditarGrupoAction
       Set<?> roots = frameworkService.getPermisosRoot(true);
       
       frameworkService.close();
-      
-
+            
       Permiso permiso = new Permiso();
       permiso.setPermisoId(editarGrupoForm.getPermisoIdRoot());
       permiso.setPermiso(getResources(request).getMessage("action.framework.editargrupo.permisoroot"));

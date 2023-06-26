@@ -24,6 +24,7 @@
 		<forward name="copiarPerspectiva" path="/paginas/strategos/planes/perspectivas/copiarPerspectiva.jsp" />
 		<forward name="visualizarPerspectivasRelacionadas" path="/paginas/strategos/planes/perspectivas/visualizarPerspectivasRelacionadas.jsp" />
 		<forward name="trasladarMetas" path="/paginas/strategos/planes/perspectivas/trasladarMetas.jsp" />
+		<forward name="eliminarMasivos" path="/paginas/strategos/planes/perspectivas/eliminarElementosMasivos.jsp" />
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -54,6 +55,9 @@
 		<!-- Mapeo del Action: Eliminar Perspectiva -->
 		<action path="/planes/perspectivas/eliminarPerspectiva" type="com.visiongc.app.strategos.web.struts.planes.perspectivas.actions.EliminarPerspectivaAction"></action>
 
+		<!-- Mapeo del Action: Eliminar Elementos Masivos Perspectiva -->
+		<action path="/planes/perspectivas/eliminarElementosMasivos" type="com.visiongc.app.strategos.web.struts.planes.perspectivas.actions.EliminarElementosMasivosAction" name="editarPerspectivaForm" scope="request" parameter="eliminarMasivos"></action>
+		
 		<!-- Mapeo del Action: Generar Reporte de Perspectivas -->
 		<action path="/planes/perspectivas/generarReportePerspectivas" type="com.visiongc.app.strategos.web.struts.planes.perspectivas.actions.ReportePerspectivasAction"></action>
 

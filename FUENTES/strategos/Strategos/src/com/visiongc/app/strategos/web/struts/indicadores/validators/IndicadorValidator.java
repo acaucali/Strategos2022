@@ -3,12 +3,8 @@ package com.visiongc.app.strategos.web.struts.indicadores.validators;
 import java.util.Iterator;
 import java.util.List;
 
-import com.visiongc.app.strategos.calculos.model.util.VgcFormulaEvaluator;
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
-import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.validator.Field;
 import org.apache.commons.validator.Validator;
 import org.apache.commons.validator.ValidatorAction;
@@ -16,6 +12,12 @@ import org.apache.commons.validator.util.ValidatorUtils;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.validator.Resources;
+
+import com.visiongc.app.strategos.calculos.model.util.VgcFormulaEvaluator;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
+import com.visiongc.app.strategos.indicadores.model.Indicador;
+import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 
 public class IndicadorValidator
 {
@@ -28,15 +30,14 @@ public class IndicadorValidator
 		reservados[1] = "]";
 		reservados[2] = "{";
 		reservados[3] = "}";
-		
+
 		if (isString(bean))
 			value = (String)bean;
-		else 
+		else
 			value = ValidatorUtils.getValueAsString(bean, field.getProperty());
 
-		for (int i = 0; i < reservados.length; i++) 
-		{
-			if (value.indexOf(reservados[i]) > -1) 
+		for (String element : reservados) {
+			if (value.indexOf(element) > -1)
 			{
 				errors.add(field.getKey(), Resources.getActionMessage(validator, request, validatorAction, field));
 				hayReservados = true;
@@ -50,20 +51,20 @@ public class IndicadorValidator
 	public static boolean validateRevision(Object bean, ValidatorAction validatorAction, Field field, ActionMessages errors, Validator validator, HttpServletRequest request)
 	{
 		boolean revisionValida = true;
-		
+
 		EditarIndicadorForm editarIndicadorForm = (EditarIndicadorForm)bean;
 
 		Long indicadorId = editarIndicadorForm.getIndicadorAsociadoId();
 
 		Byte revision = editarIndicadorForm.getIndicadorAsociadoRevision();
 
-		if ((indicadorId != null) && (indicadorId.longValue() > 0L) && (revision != null) && (!request.getParameter("indicadorAsociadoRevision").equals(""))) 
+		if ((indicadorId != null) && (indicadorId.longValue() > 0L) && (revision != null) && (!request.getParameter("indicadorAsociadoRevision").equals("")))
 		{
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-			
+
 			Indicador indicadorProgramado = strategosIndicadoresService.getIndicadorProgramado(indicadorId, revision);
 
-			if ((indicadorProgramado != null) && ((editarIndicadorForm.getIndicadorId() == null) || (editarIndicadorForm.getIndicadorId().longValue() != indicadorProgramado.getIndicadorId().longValue()))) 
+			if ((indicadorProgramado != null) && ((editarIndicadorForm.getIndicadorId() == null) || (editarIndicadorForm.getIndicadorId().longValue() != indicadorProgramado.getIndicadorId().longValue())))
 			{
 				errors.add(field.getKey(), new ActionMessage("validation.editarindicador.revisionrepetida", revision.toString()));
 				revisionValida = false;
@@ -81,27 +82,27 @@ public class IndicadorValidator
 
 		if (isString(bean))
 			value = (String)bean;
-		else 
+		else
 			value = ValidatorUtils.getValueAsString(bean, field.getProperty());
 
 		if (bean.getClass().getName().equals("com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm"))
 		{
 			EditarIndicadorForm forma = (EditarIndicadorForm)bean;
 
-			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue()) 
+			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue())
 				return true;
-			if ((value != null) && (forma.getInsumosFormula() != null)) 
+			if ((value != null) && (forma.getInsumosFormula() != null))
 				value = parseFormula(value, forma.getInsumosFormula());
 
 			String[] strMacros = new String[1];
 			strMacros[0] = value;
-			if (!stripMacros(strMacros)) 
+			if (!stripMacros(strMacros))
 			{
 				errors.add(field.getKey(), Resources.getActionMessage(validator, request, validatorAction, field));
 				forma.setPuntoEdicion("definicionFormula");
 				return false;
 			}
-			
+
 			return true;
 		}
 
@@ -113,24 +114,24 @@ public class IndicadorValidator
 		String value = null;
 		if (isString(bean))
 			value = (String)bean;
-		else 
+		else
 			value = ValidatorUtils.getValueAsString(bean, field.getProperty());
 
-		if (value == null) 
+		if (value == null)
 			return true;
-		if (bean.getClass().getName().equals("com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm")) 
+		if (bean.getClass().getName().equals("com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm"))
 		{
 			EditarIndicadorForm forma = (EditarIndicadorForm)bean;
-			
-			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue()) 
+
+			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue())
 				return true;
-			if (value.indexOf("][") > -1) 
+			if (value.indexOf("][") > -1)
 			{
 				errors.add(field.getKey(), Resources.getActionMessage(validator, request, va, field));
 				forma.setPuntoEdicion("definicionFormula");
 				return false;
 			}
-			
+
 			return true;
 		}
 
@@ -142,7 +143,7 @@ public class IndicadorValidator
 		String value = null;
 		if (isString(bean))
 			value = (String)bean;
-		else 
+		else
 			value = ValidatorUtils.getValueAsString(bean, field.getProperty());
 		if (value == null)
 			return true;
@@ -151,10 +152,10 @@ public class IndicadorValidator
 		{
 			EditarIndicadorForm forma = (EditarIndicadorForm)bean;
 
-			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue()) 
+			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue())
 				return true;
 
-			if (value.indexOf("[P]:") > -1) 
+			if (value.indexOf("[P]:") > -1)
 			{
 				forma.setPuntoEdicion("definicionFormula");
 				errors.add(field.getKey(), Resources.getActionMessage(validator, request, va, field));
@@ -172,21 +173,21 @@ public class IndicadorValidator
 
 		if (isString(bean))
 			value = (String)bean;
-		else 
+		else
 			value = ValidatorUtils.getValueAsString(bean, field.getProperty());
 
-		if (value == null) 
+		if (value == null)
 			return true;
 
 		if (bean.getClass().getName().equals("com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm"))
 		{
 			EditarIndicadorForm forma = (EditarIndicadorForm)bean;
-			
-			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue()) 
+
+			if (forma.getNaturaleza().byteValue() != forma.getNaturalezaFormula().byteValue())
 				return true;
-			if ((value != null) && (forma.getInsumosFormula() != null)) 
+			if ((value != null) && (forma.getInsumosFormula() != null))
 				value = parseFormula(value, forma.getInsumosFormula());
-			if ((value.indexOf("[") == -1) || (value.indexOf("]") == -1)) 
+			if ((value.indexOf("[") == -1) || (value.indexOf("]") == -1))
 			{
 				errors.add(field.getKey(), Resources.getActionMessage(validator, request, validatorAction, field));
 				forma.setPuntoEdicion("definicionFormula");
@@ -202,13 +203,13 @@ public class IndicadorValidator
 
 			vgcFormulaEvaluator.setExpresion(value);
 
-			if (!vgcFormulaEvaluator.expresionEsValida()) 
+			if (!vgcFormulaEvaluator.expresionEsValida())
 			{
 				errors.add(field.getKey(), Resources.getActionMessage(validator, request, validatorAction, field));
 				forma.setPuntoEdicion("definicionFormula");
 				return false;
 			}
-			
+
 			return true;
 		}
 
@@ -218,48 +219,45 @@ public class IndicadorValidator
 	private static String parseFormula(String formula, String insumos)
 	{
 		String[] insumosFormula = insumos.split(";");
-		for (int i = 0; i < insumosFormula.length; i++) 
-		{
-			if (!insumosFormula[i].equals("")) {
-				int index1 = insumosFormula[i].indexOf("][");
-				int index2 = index1 + insumosFormula[i].substring(index1 + 1, insumosFormula[i].length()).indexOf("]");
-				String buscado = "\\\\[" + insumosFormula[i].substring((insumosFormula[i].indexOf("[") + 1), index1) + "\\\\]";
-				String reemplazo = insumosFormula[i].substring(index1 + 1, index2 + 2);
+		for (String element : insumosFormula) {
+			if (!element.equals("")) {
+				int index1 = element.indexOf("][");
+				int index2 = index1 + element.substring(index1 + 1, element.length()).indexOf("]");
+				String buscado = "\\\\[" + element.substring((element.indexOf("[") + 1), index1) + "\\\\]";
+				String reemplazo = element.substring(index1 + 1, index2 + 2);
 				formula = formula.replaceAll(buscado, reemplazo);
 			}
 		}
 
-		for (int i = 0; i < insumosFormula.length; i++) 
-		{
-			if (!insumosFormula[i].equals("")) 
+		for (String element : insumosFormula) {
+			if (!element.equals(""))
 			{
-				int index1 = insumosFormula[i].indexOf("][");
-				int index2 = index1 + insumosFormula[i].substring(index1 + 1, insumosFormula[i].length()).indexOf("]");
-				String buscado = "\\\\[" + insumosFormula[i].substring(index1 + 2, index2 + 1) + "\\\\]";
+				int index1 = element.indexOf("][");
+				int index2 = index1 + element.substring(index1 + 1, element.length()).indexOf("]");
+				String buscado = "\\\\[" + element.substring(index1 + 2, index2 + 1) + "\\\\]";
 				formula = formula.replaceAll(buscado, "1");
 			}
 		}
 
 		formula = formula.replaceAll("\\\\[P\\\\]", "1");
-		
+
 		return formula;
 	}
 
 	public static String reemplazarCorrelativosFormula(String formula, String insumos)
 	{
-		if (insumos == null) 
+		if (insumos == null)
 			return formula;
 
 		String[] insumosFormula = insumos.split("!;!");
-		for (int i = 0; i < insumosFormula.length; i++) 
-		{
-			if (!insumosFormula[i].equals("")) 
+		for (String element : insumosFormula) {
+			if (!element.equals(""))
 			{
-				int index1 = insumosFormula[i].indexOf("][");
-				int index2 = index1 + insumosFormula[i].substring(index1 + 1, insumosFormula[i].length()).indexOf("][");
-				int index3 = index2 + insumosFormula[i].substring(index2 + 2, insumosFormula[i].length()).indexOf("][");
-				String buscado = "\\[" + insumosFormula[i].substring(1, index1) + "\\]";
-				String reemplazo = "[" + insumosFormula[i].substring(index1 + 2 + "indicadorId:".length(), index2 + 1) + "." + insumosFormula[i].substring(index2 + 3 + "serieId:".length(), index3 + 2) + "]";
+				int index1 = element.indexOf("][");
+				int index2 = index1 + element.substring(index1 + 1, element.length()).indexOf("][");
+				int index3 = index2 + element.substring(index2 + 2, element.length()).indexOf("][");
+				String buscado = "\\[" + element.substring(1, index1) + "\\]";
+				String reemplazo = "[" + element.substring(index1 + 2 + "indicadorId:".length(), index2 + 1) + "." + element.substring(index2 + 3 + "serieId:".length(), index3 + 2) + "]";
 				formula = formula.replaceAll(buscado, reemplazo);
 			}
 		}
@@ -270,11 +268,11 @@ public class IndicadorValidator
 	public static String ConstruirFormula(List<Long> insumos, int serie, String operador)
 	{
 		String formula = "";
-		if (insumos.size() == 0) 
+		if (insumos.size() == 0)
 			return formula;
-		
+
 		Long insumo;
-		for (Iterator<?> id = insumos.iterator(); id.hasNext(); ) 
+		for (Iterator<?> id = insumos.iterator(); id.hasNext(); )
 		{
 			insumo = (Long)id.next();
 			formula = formula + "[" + insumo.toString() + "." + serie + "]" + operador;
@@ -283,37 +281,36 @@ public class IndicadorValidator
 
 		return formula;
 	}
-  
+
 	public static String reemplazarIdsPorCorrelativosFormula(String formula, String insumos)
 	{
 		String[] insumosFormula = insumos.split("!;!");
-		for (int i = 0; i < insumosFormula.length; i++) 
-		{
-			if (!insumosFormula[i].equals("")) 
+		for (String element : insumosFormula) {
+			if (!element.equals(""))
 			{
-				int index1 = insumosFormula[i].indexOf("][");
-				int index2 = index1 + insumosFormula[i].substring(index1 + 1, insumosFormula[i].length()).indexOf("][");
-				int index3 = index2 + insumosFormula[i].substring(index2 + 2, insumosFormula[i].length()).indexOf("][");
-				String buscado = "\\[" + insumosFormula[i].substring(index1 + 2 + "indicadorId:".length(), index2 + 1) + "." + insumosFormula[i].substring(index2 + 3 + "serieId:".length(), index3 + 2) + "\\]";
-				String reemplazo = insumosFormula[i].substring(0, index1 + 1);
+				int index1 = element.indexOf("][");
+				int index2 = index1 + element.substring(index1 + 1, element.length()).indexOf("][");
+				int index3 = index2 + element.substring(index2 + 2, element.length()).indexOf("][");
+				String buscado = "\\[" + element.substring(index1 + 2 + "indicadorId:".length(), index2 + 1) + "." + element.substring(index2 + 3 + "serieId:".length(), index3 + 2) + "\\]";
+				String reemplazo = element.substring(0, index1 + 1);
 				formula = formula.replaceAll(buscado, reemplazo);
 			}
 		}
 
 		return formula;
 	}
-  
-	private static boolean stripMacros(String[] entrada) 
+
+	private static boolean stripMacros(String[] entrada)
 	{
 		String validos = "-1234567890@#%&S";
 		String macrosValidos = "@#%&S";
 
 		String buffer = entrada[0] + " ";
 		int valorCentinela;
-		do 
-		{ 
+		do
+		{
 			valorCentinela = buffer.indexOf(":");
-			if (valorCentinela <= -1) 
+			if (valorCentinela <= -1)
 				continue;
 
 			boolean posicionMacro = false;
@@ -321,49 +318,49 @@ public class IndicadorValidator
 
 			boolean incomplete = false;
 
-			for (int c = valorCentinela + 1; c < buffer.length(); c++) 
+			for (int c = valorCentinela + 1; c < buffer.length(); c++)
 			{
 				if (validos.indexOf(buffer.substring(c, c + 1)) == -1)
 				{
-					if (incomplete) 
+					if (incomplete)
 					{
 						entrada[0] = buffer;
 						return false;
 					}
-          
+
 					buffer = buffer.substring(0, valorCentinela) + buffer.substring(c);
 					break;
 				}
-				if (lastEntry == 0) 
+				if (lastEntry == 0)
 				{
-					if (macrosValidos.indexOf(buffer.substring(c, c + 1)) == -1) 
+					if (macrosValidos.indexOf(buffer.substring(c, c + 1)) == -1)
 						lastEntry = 1;
-					else 
+					else
 						lastEntry = 2;
 
-					if ("-".indexOf(buffer.substring(c, c + 1)) > -1) 
+					if ("-".indexOf(buffer.substring(c, c + 1)) > -1)
 					{
 						incomplete = true;
 					}
 				}
 				else
 				{
-					if ("-".indexOf(buffer.substring(c, c + 1)) > -1) 
+					if ("-".indexOf(buffer.substring(c, c + 1)) > -1)
 					{
 						entrada[0] = buffer;
 						return false;
 					}
 					int newEntry;
-					if (macrosValidos.indexOf(buffer.substring(c, c + 1)) == -1) 
+					if (macrosValidos.indexOf(buffer.substring(c, c + 1)) == -1)
 					{
 						newEntry = 1;
-						
+
 						incomplete = false;
-					} 
-					else 
+					}
+					else
 						newEntry = 2;
 
-					if (((lastEntry == 2) && (newEntry == 2)) || ((lastEntry == 1) && (newEntry == 2))) 
+					if (((lastEntry == 2) && (newEntry == 2)) || ((lastEntry == 1) && (newEntry == 2)))
 					{
 						entrada[0] = buffer;
 						return false;
@@ -374,7 +371,7 @@ public class IndicadorValidator
 				posicionMacro = true;
 			}
 
-			if (!posicionMacro) 
+			if (!posicionMacro)
 			{
 				entrada[0] = buffer;
 				return false;
@@ -386,7 +383,7 @@ public class IndicadorValidator
 		return true;
 	}
 
-	protected static boolean isString(Object o) 
+	protected static boolean isString(Object o)
 	{
 		return o == null ? true : String.class.isInstance(o);
 	}

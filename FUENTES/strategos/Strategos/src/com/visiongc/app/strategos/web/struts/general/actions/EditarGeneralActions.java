@@ -1,12 +1,16 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.general.actions;
 
 import java.io.ByteArrayInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,12 +21,11 @@ import org.w3c.dom.NodeList;
 
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
-import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion.TipoExplicacion;
+import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.util.TipoMemoExplicacion;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.web.struts.general.forms.EditarGeneralInformeForms;
-
 import com.visiongc.commons.impl.VgcAbstractService;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcMessageResources;
@@ -32,14 +35,13 @@ import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.Modulo;
 import com.visiongc.framework.model.Modulo.ModuloType;
-import com.visiongc.framework.web.struts.actions.LogonAction;
 import com.visiongc.framework.web.struts.forms.NavegadorForm;
 
 /**
  * @author Kerwin
  *
  */
-public class EditarGeneralActions 
+public class EditarGeneralActions
 {
 	public NavegadorForm getModulo(String modulo, Boolean preCargado)
 	{
@@ -47,15 +49,15 @@ public class EditarGeneralActions
 
 		NavegadorForm moduloActivo = new NavegadorForm();
 		moduloActivo.clear();
-		
+
 		moduloActivo.setObjeto(new Modulo().getModuloActivo(modulo));
-		
+
 		if (preCargado != null && preCargado && moduloActivo.getObjeto() == null)
 		{
 			Modulo mod = new Modulo();
 			mod.setId(modulo);
 			mod.setActivo(true);
-			
+
 			if (modulo == ModuloType.Actividades.Actividades)
 				mod.setModulo(messageResources.getResource("jsp.modulo.actividad.titulo.singular"));
 			else if (modulo == ModuloType.Iniciativas.Iniciativas)
@@ -66,7 +68,7 @@ public class EditarGeneralActions
 				mod.setModulo(messageResources.getResource("jsp.modulo.plan.titulo.singular"));
 			moduloActivo.setObjeto(mod);
 		}
-		
+
 		if ((modulo == ModuloType.Actividades.Actividades || modulo == ModuloType.Iniciativas.Iniciativas))
 		{
 			try
@@ -76,17 +78,17 @@ public class EditarGeneralActions
 				if (modulo.equals(ModuloType.Iniciativas.Iniciativas))
 					configuracion = frameworkService.getConfiguracion("Strategos.Configuracion.Iniciativas");
 				frameworkService.close();
-	
+
 				if (configuracion != null)
 				{
 					//XML
-					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-			        DocumentBuilder db = dbf.newDocumentBuilder(); 
-			        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8"))); 
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			        DocumentBuilder db = dbf.newDocumentBuilder();
+			        Document doc = db.parse(new ByteArrayInputStream(configuracion.getValor().getBytes("UTF-8")));
 			        doc.getDocumentElement().normalize();
 					NodeList nList = doc.getElementsByTagName("properties");
 					Element eElement = (Element) nList.item(0);
-	
+
 					moduloActivo.setNombreSingular(VgcAbstractService.getTagValue("nombre", eElement));
 					String vocales = "aeiou";
 					if (vocales.indexOf(moduloActivo.getNombreSingular().substring((moduloActivo.getNombreSingular().length() -1), moduloActivo.getNombreSingular().length()).toLowerCase()) != -1)
@@ -107,7 +109,7 @@ public class EditarGeneralActions
 						nombre = messageResources.getResource("jsp.modulo.problema.titulo.singular");
 					else if (modulo == ModuloType.Plan.Plan)
 						nombre = messageResources.getResource("jsp.modulo.plan.titulo.singular");
-						
+
 					moduloActivo.setNombreSingular(nombre);
 					String vocales = "aeiou";
 					if (vocales.indexOf(moduloActivo.getNombreSingular().substring((moduloActivo.getNombreSingular().length() -1), moduloActivo.getNombreSingular().length()).toLowerCase()) != -1)
@@ -116,7 +118,7 @@ public class EditarGeneralActions
 						moduloActivo.setNombrePlural(moduloActivo.getNombreSingular() + "es");
 				}
 			}
-			catch (Exception e) 
+			catch (Exception e)
 			{
 				String nombre = null;
 				if (moduloActivo.getObjeto() != null && moduloActivo.getObjeto().getModulo() != null && !moduloActivo.getObjeto().getModulo().equals(""))
@@ -129,7 +131,7 @@ public class EditarGeneralActions
 					nombre = messageResources.getResource("jsp.modulo.problema.titulo.singular");
 				else if (modulo == ModuloType.Plan.Plan)
 					nombre = messageResources.getResource("jsp.modulo.plan.titulo.singular");
-					
+
 				moduloActivo.setNombreSingular(nombre);
 				String vocales = "aeiou";
 				if (vocales.indexOf(moduloActivo.getNombreSingular().substring((moduloActivo.getNombreSingular().length() -1), moduloActivo.getNombreSingular().length()).toLowerCase()) != -1)
@@ -138,7 +140,7 @@ public class EditarGeneralActions
 					moduloActivo.setNombrePlural(moduloActivo.getNombreSingular() + "es");
 			}
 		}
-		
+
 		return moduloActivo;
 	}
 
@@ -146,7 +148,7 @@ public class EditarGeneralActions
 	{
 		EditarGeneralInformeForms informe = new EditarGeneralInformeForms();
 		informe.clear();
-		
+
 		Modulo modulo = new Modulo().getModuloActivo(ModuloType.Informe.Tipos.Cualitativos);
 		if (modulo != null)
 		{
@@ -176,12 +178,12 @@ public class EditarGeneralActions
 			{
 				informe.setHayInformen(true);
 				StrategosExplicacionesService strategosExplicacionesService = StrategosServiceFactory.getInstance().openStrategosExplicacionesService();
-				
+
 				Map<String, Integer> filtros = new HashMap<String, Integer>();
-	
+
 				filtros.put("tipo", TipoExplicacion.getTipoNoticia());
 				PaginaLista paginaNoticias = strategosExplicacionesService.getExplicaciones(0, 0, "fecha", "DESC", true, filtros);
-				
+
 				if (paginaNoticias.getLista().size() > 0)
 				{
 					for (Iterator<?> e = paginaNoticias.getLista().iterator(); e.hasNext(); )
@@ -191,13 +193,31 @@ public class EditarGeneralActions
 						{
 							informe.setMostrarAlerta(true);
 							informe.setAlerta(explicacion.getTitulo());
-							for (Iterator<?> i = explicacion.getMemosExplicacion().iterator(); i.hasNext(); ) 
+							for (Iterator<?> i = explicacion.getMemosExplicacion().iterator(); i.hasNext(); )
 							{
 								MemoExplicacion memoExplicacion = (MemoExplicacion)i.next();
 								Byte tipoMemo = memoExplicacion.getPk().getTipo();
 								if (tipoMemo.equals(new Byte(TipoMemoExplicacion.TIPO_MEMO_EXPLICACION_DESCRIPCION)))
 								{
-									informe.setDescripcion(memoExplicacion.getMemo());
+									
+									URI url = null ;
+									
+									Pattern pattern = Pattern.compile("https://") ;
+									Matcher matcher = pattern.matcher(memoExplicacion.getMemo());
+									Pattern pattern2 = Pattern.compile("http://") ;
+									Matcher matcher2 = pattern2.matcher(memoExplicacion.getMemo());
+									
+									boolean matchFound = matcher.find();
+									boolean matchFound2 = matcher2.find();
+									if(matchFound || matchFound2) {
+										try {
+											url = new URI(memoExplicacion.getMemo());
+											informe.setDescripcionUrl(url);
+									    } catch (URISyntaxException ex) {
+									        System.err.println( ex.getMessage() );
+									    }										
+									} else
+										informe.setDescripcion(memoExplicacion.getMemo());
 									break;
 								}
 							}
@@ -208,7 +228,9 @@ public class EditarGeneralActions
 				strategosExplicacionesService.close();
 			}
 		}
-		
-		return informe;
-	}
+
+		return informe;	
+	}	
+	
+	
 }

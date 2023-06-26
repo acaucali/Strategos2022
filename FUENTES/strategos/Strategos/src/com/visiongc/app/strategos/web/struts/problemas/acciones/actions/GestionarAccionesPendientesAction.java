@@ -1,5 +1,18 @@
 package com.visiongc.app.strategos.web.struts.problemas.acciones.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.problemas.StrategosProblemasService;
 import com.visiongc.app.strategos.problemas.StrategosSeguimientosService;
@@ -9,25 +22,15 @@ import com.visiongc.app.strategos.responsables.StrategosResponsablesService;
 import com.visiongc.app.strategos.responsables.model.Responsable;
 import com.visiongc.app.strategos.web.struts.problemas.acciones.forms.GestionarAccionesPendientesForm;
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcMessageResources;
 import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 public class GestionarAccionesPendientesAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
     VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
 
@@ -54,7 +57,8 @@ public class GestionarAccionesPendientesAction extends VgcAction
     }
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);

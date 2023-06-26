@@ -1,5 +1,21 @@
 package com.visiongc.app.strategos.web.struts.planes.valoresiniciales.actions;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
@@ -15,26 +31,15 @@ import com.visiongc.app.strategos.web.struts.planes.valoresiniciales.forms.Edita
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public final class EditarValoresInicialesAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -50,9 +55,9 @@ public final class EditarValoresInicialesAction extends VgcAction
 		boolean mostrarCodigoEnlace = mapping.getPath().toLowerCase().indexOf("mostrarCodigoEnlace") > -1;
 		boolean editarValoresIniciales = getPermisologiaUsuario(request).tienePermiso("INDICADOR_VALOR_INICIAL_CARGAR");
 
-		if (mostrarUnidadMedida) 
+		if (mostrarUnidadMedida)
 			editarValoresInicialesForm.setMostrarUnidadMedida(new Boolean(request.getParameter("mostrarUnidadMedida")).booleanValue());
-		if (mostrarCodigoEnlace) 
+		if (mostrarCodigoEnlace)
 			editarValoresInicialesForm.setMostrarCodigoEnlace(new Boolean(request.getParameter("mostrarCodigoEnlace")).booleanValue());
 
 		StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance().openStrategosMetasService();
@@ -70,18 +75,18 @@ public final class EditarValoresInicialesAction extends VgcAction
 			for (Iterator<?> iterador = listaIndicadores.iterator(); iterador.hasNext(); )
 			{
 				Indicador indicador = (Indicador)iterador.next();
-				
+
 				ValorInicialIndicador valorInicialIndicador = new ValorInicialIndicador();
 				valorInicialIndicador.setIndicador(indicador);
-				
+
 				setPeriodosIndicador(valorInicialIndicador);
 
 				valorInicialIndicador.setValorInicial(strategosMetasService.getValorInicial(valorInicialIndicador.getIndicador().getIndicadorId(), editarValoresInicialesForm.getPlanId()));
 				valorInicialIndicador.setProteger(!editarValoresIniciales);
-				
+
 				setValidacionPeriodoAno(valorInicialIndicador);
 
-				if (!editarValoresInicialesForm.getVisualizarIndicadoresCompuestos().booleanValue()) 
+				if (!editarValoresInicialesForm.getVisualizarIndicadoresCompuestos().booleanValue())
 				{
 					if (valorInicialIndicador.getIndicador().getNaturaleza().byteValue() != Naturaleza.getNaturalezaSimple().byteValue())
 						continue;
@@ -96,13 +101,13 @@ public final class EditarValoresInicialesAction extends VgcAction
 		{
 			for (Iterator<ValorInicialIndicador> iterador = editarValoresInicialesForm.getValoresInicialesIndicadores().iterator(); iterador.hasNext(); )
 			{
-				ValorInicialIndicador valorInicialIndicador = (ValorInicialIndicador)iterador.next();
-				
+				ValorInicialIndicador valorInicialIndicador = iterador.next();
+
 				setPeriodosIndicador(valorInicialIndicador);
 
 				valorInicialIndicador.setValorInicial(strategosMetasService.getValorInicial(valorInicialIndicador.getIndicador().getIndicadorId(), editarValoresInicialesForm.getPlanId()));
 				valorInicialIndicador.setProteger(!editarValoresIniciales);
-				
+
 				setValidacionPeriodoAno(valorInicialIndicador);
 			}
 		}
@@ -117,12 +122,12 @@ public final class EditarValoresInicialesAction extends VgcAction
 		}
 
 		editarValoresInicialesForm.setBloquear(!editarValoresIniciales);
-		
+
 		strategosMetasService.close();
 
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
 
 		return mapping.findForward(forward);
@@ -137,7 +142,7 @@ public final class EditarValoresInicialesAction extends VgcAction
 
 	private void setValidacionPeriodoAno(ValorInicialIndicador valorInicialIndicador)
 	{
-		if ((valorInicialIndicador.getValorInicial().getMetaId().getPeriodo() != null) && (valorInicialIndicador.getValorInicial().getMetaId().getPeriodo().byteValue() == 0)) 
+		if ((valorInicialIndicador.getValorInicial().getMetaId().getPeriodo() != null) && (valorInicialIndicador.getValorInicial().getMetaId().getPeriodo().byteValue() == 0))
 			valorInicialIndicador.getValorInicial().getMetaId().setPeriodo(null);
 		if ((valorInicialIndicador.getValorInicial().getMetaId().getAno() != null) && (valorInicialIndicador.getValorInicial().getMetaId().getAno().byteValue() == 0))
 			valorInicialIndicador.getValorInicial().getMetaId().setAno(null);
@@ -158,7 +163,7 @@ public final class EditarValoresInicialesAction extends VgcAction
 		{
 			if (gestionarPerspectivasForm.getVerIndicadoresLogroPlan())
 				filtros.put("indicadoresLogroPlanId", gestionarPlanForm.getPlanId().toString());
-			else 
+			else
 				filtros.put("planId", gestionarPlanForm.getPlanId().toString());
 		}
 
@@ -166,7 +171,7 @@ public final class EditarValoresInicialesAction extends VgcAction
 
 		if (gestionarPerspectivasForm.getVerIndicadoresLogroPlan())
 			paginaIndicadores = strategosIndicadoresService.getIndicadoresLogroPlan(0, 0, null, null, true, filtros);
-		else 
+		else
 			paginaIndicadores = strategosIndicadoresService.getIndicadores(0, 0, null, null, true, filtros, null, null, false);
 
 		if (perspectiva.getPadreId() != null)
@@ -174,23 +179,23 @@ public final class EditarValoresInicialesAction extends VgcAction
 			if (perspectiva.getTipoCalculo().equals(TipoCalculoPerspectiva.getTipoCalculoPerspectivaAutomatico()))
 			{
 				int numeroVeces = paginaIndicadores.getLista().size();
-				for (int k = 1; k <= numeroVeces; k++) 
+				for (int k = 1; k <= numeroVeces; k++)
 				{
-					for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); ) 
+					for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); )
 					{
 						boolean eliminarIndicador = true;
 						Indicador indicador = (Indicador)i.next();
-						for (Iterator<?> p = perspectiva.getHijos().iterator(); p.hasNext(); ) 
+						for (Iterator<?> p = perspectiva.getHijos().iterator(); p.hasNext(); )
 						{
 							Perspectiva perspectivaHija = (Perspectiva)p.next();
-							if ((indicador.getIndicadorId().longValue() == perspectivaHija.getNlAnoIndicadorId().longValue()) || (indicador.getIndicadorId().longValue() == perspectivaHija.getNlParIndicadorId().longValue())) 
+							if ((indicador.getIndicadorId().longValue() == perspectivaHija.getNlAnoIndicadorId().longValue()) || (indicador.getIndicadorId().longValue() == perspectivaHija.getNlParIndicadorId().longValue()))
 							{
 								eliminarIndicador = false;
 								break;
 							}
 						}
-            
-						if (eliminarIndicador) 
+
+						if (eliminarIndicador)
 						{
 							paginaIndicadores.getLista().remove(indicador);
 							break;
@@ -201,22 +206,22 @@ public final class EditarValoresInicialesAction extends VgcAction
 			else
 			{
 				int numeroVeces = paginaIndicadores.getLista().size();
-				for (int k = 1; k <= numeroVeces; k++) 
+				for (int k = 1; k <= numeroVeces; k++)
 				{
-					for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); ) 
+					for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); )
 					{
 						boolean eliminarIndicador = false;
 						Indicador indicador = (Indicador)i.next();
-						for (Iterator<?> p = perspectiva.getHijos().iterator(); p.hasNext(); ) 
+						for (Iterator<?> p = perspectiva.getHijos().iterator(); p.hasNext(); )
 						{
 							Perspectiva perspectivaHija = (Perspectiva)p.next();
-							if ((indicador.getIndicadorId().longValue() == perspectivaHija.getNlAnoIndicadorId().longValue()) || (indicador.getIndicadorId().longValue() == perspectivaHija.getNlParIndicadorId().longValue())) 
+							if ((indicador.getIndicadorId().longValue() == perspectivaHija.getNlAnoIndicadorId().longValue()) || (indicador.getIndicadorId().longValue() == perspectivaHija.getNlParIndicadorId().longValue()))
 							{
 								eliminarIndicador = true;
 								break;
 							}
 						}
-						if (eliminarIndicador) 
+						if (eliminarIndicador)
 						{
 							paginaIndicadores.getLista().remove(indicador);
 							break;
@@ -225,7 +230,7 @@ public final class EditarValoresInicialesAction extends VgcAction
 				}
 			}
 		}
-		else if (!gestionarPerspectivasForm.getVerIndicadoresLogroPlan()) 
+		else if (!gestionarPerspectivasForm.getVerIndicadoresLogroPlan())
 			paginaIndicadores.getLista().clear();
 
 		return paginaIndicadores.getLista();

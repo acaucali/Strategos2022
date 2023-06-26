@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.modulo.codigoEnlace.forms;
 
@@ -12,7 +12,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
 public class GestionarCodigoEnlaceForm extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private String filtroNombre;
 
 	public String getFiltroNombre()
@@ -20,7 +20,7 @@ public class GestionarCodigoEnlaceForm extends VisorListaForm
 		return this.filtroNombre;
 	}
 
-	public void setFiltroNombre(String filtroNombre) 
+	public void setFiltroNombre(String filtroNombre)
 	{
 		this.filtroNombre = filtroNombre;
 	}

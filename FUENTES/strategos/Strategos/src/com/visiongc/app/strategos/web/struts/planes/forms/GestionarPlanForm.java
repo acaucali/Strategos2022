@@ -1,12 +1,13 @@
 package com.visiongc.app.strategos.web.struts.planes.forms;
 
-import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import org.apache.struts.action.ActionForm;
+
+import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 
 public class GestionarPlanForm extends ActionForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long organizacionId;
 	private Long planId;
 	private Long perspectivaId;
@@ -21,77 +22,77 @@ public class GestionarPlanForm extends ActionForm
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
 
-	public Long getPlanId() 
+	public Long getPlanId()
 	{
 		return this.planId;
 	}
 
-	public void setPlanId(Long planId) 
+	public void setPlanId(Long planId)
 	{
 		this.planId = planId;
 	}
 
-	public Long getPerspectivaId() 
+	public Long getPerspectivaId()
 	{
 		return this.perspectivaId;
 	}
 
-	public void setPerspectivaId(Long perspectivaId) 
+	public void setPerspectivaId(Long perspectivaId)
 	{
 		this.perspectivaId = perspectivaId;
 	}
 
-	public String getNombrePlan() 
+	public String getNombrePlan()
 	{
 		return this.nombrePlan;
 	}
 
-	public void setNombrePlan(String nombrePlan) 
+	public void setNombrePlan(String nombrePlan)
 	{
 		this.nombrePlan = nombrePlan;
 	}
 
-	public Long getClaseId() 
+	public Long getClaseId()
 	{
 		return this.claseId;
 	}
 
-	public void setClaseId(Long claseId) 
+	public void setClaseId(Long claseId)
 	{
 		this.claseId = claseId;
 	}
 
-	public PlantillaPlanes getPlantillaPlanes() 
+	public PlantillaPlanes getPlantillaPlanes()
 	{
 		return this.plantillaPlanes;
 	}
 
-	public void setPlantillaPlanes(PlantillaPlanes plantillaPlanes) 
+	public void setPlantillaPlanes(PlantillaPlanes plantillaPlanes)
 	{
 		this.plantillaPlanes = plantillaPlanes;
 	}
 
-	public String getAnchoPorDefecto() 
+	public String getAnchoPorDefecto()
 	{
 		return this.anchoPorDefecto;
 	}
 
-	public void setAnchoPorDefecto(String anchoPorDefecto) 
+	public void setAnchoPorDefecto(String anchoPorDefecto)
 	{
 		this.anchoPorDefecto = anchoPorDefecto;
 	}
-	
-	public String getAltoPorDefecto() 
+
+	public String getAltoPorDefecto()
 	{
 		return this.altoPorDefecto;
 	}
 
-	public void setAltoPorDefecto(String altoPorDefecto) 
+	public void setAltoPorDefecto(String altoPorDefecto)
 	{
 		this.altoPorDefecto = altoPorDefecto;
 	}

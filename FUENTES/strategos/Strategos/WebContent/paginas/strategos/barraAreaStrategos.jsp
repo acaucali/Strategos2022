@@ -495,14 +495,14 @@
 		</vgcinterfaz:botonBarraAreas>
     
 
-    <!-- Reportes Graficos -->
+    <!-- Reportes Graficos 
 
 		<vgcinterfaz:botonBarraAreas permisoId="" onclick="reporteGrafico();"
 			nombre="reporteGrafico"
 			urlImage="/paginas/strategos/indicadores/imagenes/barraHerramientas/grafico_1.gif">
 			<vgcutil:message key="barraareas.strategos.reporte" />
 		</vgcinterfaz:botonBarraAreas>
-
+-->
 		<!-- Informes -->
 		<logic:notEmpty scope="session" name="activarInforme">
 			<logic:equal scope="session" name="activarInforme"

@@ -1,5 +1,19 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.actions;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
@@ -20,25 +34,15 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class VisualizarPerspectivaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -57,27 +61,27 @@ public class VisualizarPerspectivaAction extends VgcAction
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
 
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
-		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan(); 
+		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
 		strategosPlanesService.close();
-		
+
 		Perspectiva perspectiva = (Perspectiva)strategosPerspectivasService.load(Perspectiva.class, new Long(perspectivaId));
 		PaginaLista paginaPerspectivaHijas = new PaginaLista();
 		perspectiva.setListaHijos(new ArrayList<Perspectiva>());
 		perspectiva.setConfiguracionPlan(configuracionPlan);
-		for (Iterator<Perspectiva> p = perspectiva.getHijos().iterator(); p.hasNext(); ) 
+		for (Iterator<Perspectiva> p = perspectiva.getHijos().iterator(); p.hasNext(); )
 		{
-			Perspectiva perspectivaHija = (Perspectiva)p.next();
+			Perspectiva perspectivaHija = p.next();
 			perspectivaHija.setConfiguracionPlan(configuracionPlan);
 			perspectiva.getListaHijos().add(perspectivaHija);
 		}
-		
+
 		paginaPerspectivaHijas.setLista(perspectiva.getListaHijos());
 		paginaPerspectivaHijas.setNroPagina(1);
 		paginaPerspectivaHijas.setTamanoPagina(perspectiva.getListaHijos().size());
 		paginaPerspectivaHijas.setTamanoSetPaginas(1);
 		paginaPerspectivaHijas.setTotal(perspectiva.getListaHijos().size());
-		
-		request.setAttribute("paginaPerspectivaHijas", paginaPerspectivaHijas);		
+
+		request.setAttribute("paginaPerspectivaHijas", paginaPerspectivaHijas);
 		request.getSession().setAttribute("configuracionPlan", configuracionPlan);
 
 		visualizarPerspectivaForm.setTipoVista(new Byte((byte) 1));
@@ -91,7 +95,7 @@ public class VisualizarPerspectivaAction extends VgcAction
 
 			int nivel = 1;
 			Perspectiva padre = perspectiva;
-			while (padre.getPadre() != null) 
+			while (padre.getPadre() != null)
 			{
 				padre = padre.getPadre();
 				nivel++;
@@ -99,21 +103,21 @@ public class VisualizarPerspectivaAction extends VgcAction
 
 			visualizarPerspectivaForm.setNivel(new Integer(nivel));
 
-			if (plan != null) 
+			if (plan != null)
 			{
 				visualizarPerspectivaForm.setPlan(plan);
 				visualizarPerspectivaForm.setPlanId(plan.getPlanId());
 				PlantillaPlanes plantillaPlan = (PlantillaPlanes)strategosPerspectivasService.load(PlantillaPlanes.class, plan.getMetodologiaId());
-				if (plantillaPlan != null) 
+				if (plantillaPlan != null)
 				{
 					visualizarPerspectivaForm.setPlantillaPlan(plantillaPlan);
 					Set elementosPlantillaPlanes = plantillaPlan.getElementos();
-					if ((elementosPlantillaPlanes != null) && (nivel > 1)) 
+					if ((elementosPlantillaPlanes != null) && (nivel > 1))
 					{
-						for (Iterator iterElemento = elementosPlantillaPlanes.iterator(); iterElemento.hasNext(); ) 
+						for (Iterator iterElemento = elementosPlantillaPlanes.iterator(); iterElemento.hasNext(); )
 						{
 							ElementoPlantillaPlanes elemento = (ElementoPlantillaPlanes)iterElemento.next();
-							if (elemento.getOrden().intValue() == nivel - 2) 
+							if (elemento.getOrden().intValue() == nivel - 2)
 							{
 								perspectiva.setNombreObjetoPerspectiva(elemento.getNombre());
 								visualizarPerspectivaForm.setNombreObjetoPerspectiva(elemento.getNombre());
@@ -133,19 +137,19 @@ public class VisualizarPerspectivaAction extends VgcAction
 			visualizarPerspectivaForm.setEstadoAnual(perspectiva.getUltimaMedicionAnualFormateado());
 			visualizarPerspectivaForm.setEstadoParcial(perspectiva.getUltimaMedicionParcialFormateado());
 
-			if ((visualizarPerspectivaForm.getResponsableId() != null) && (!visualizarPerspectivaForm.getResponsableId().equals("")) && (visualizarPerspectivaForm.getResponsableId().byteValue() != 0)) 
+			if ((visualizarPerspectivaForm.getResponsableId() != null) && (!visualizarPerspectivaForm.getResponsableId().equals("")) && (visualizarPerspectivaForm.getResponsableId().byteValue() != 0))
 			{
 				Responsable responsable = (Responsable)strategosPerspectivasService.load(Responsable.class, visualizarPerspectivaForm.getResponsableId());
 				visualizarPerspectivaForm.setNombreResponsable(responsable.getNombreCargo());
 			}
 
 			Integer ano = null;
-			if (visualizarPlanForm != null) 
+			if (visualizarPlanForm != null)
 				ano = visualizarPlanForm.getAno();
 
-			if ((request.getParameter("mostrarObjetosAsociados") != null) && (request.getParameter("mostrarObjetosAsociados").equalsIgnoreCase("true"))) 
+			if ((request.getParameter("mostrarObjetosAsociados") != null) && (request.getParameter("mostrarObjetosAsociados").equalsIgnoreCase("true")))
 				visualizarObjetosAsociados(request, perspectiva, plan, ano, visualizarPerspectivaForm);
-			else 
+			else
 			{
 				List perspectivaEstados = strategosPerspectivasService.getPerspectivaEstados(perspectiva.getPerspectivaId(), null, ano, ano, null, null);
 				request.setAttribute("perspectivaEstados", perspectivaEstados);
@@ -157,23 +161,23 @@ public class VisualizarPerspectivaAction extends VgcAction
 			forward = "noencontrado";
 		}
 
-		if (visualizarPerspectivaForm.getMostrarObjetosAsociados() == null) 
+		if (visualizarPerspectivaForm.getMostrarObjetosAsociados() == null)
 			visualizarPerspectivaForm.setMostrarObjetosAsociados(new Boolean(false));
 
 		strategosPerspectivasService.close();
 
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
-    
+
 		return mapping.findForward(forward);
 	}
 
 	private void visualizarObjetosAsociados(HttpServletRequest request, Perspectiva perspectiva, Plan plan, Integer ano, VisualizarPerspectivaForm visualizarPerspectivaForm)
 	{
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-		
+
 		PerspectivasActionsUtil.setIniciativas(request, strategosIniciativasService, perspectiva);
 
 		strategosIniciativasService.close();
@@ -184,19 +188,19 @@ public class VisualizarPerspectivaAction extends VgcAction
 		PerspectivasActionsUtil.setIndicadoresAsociados(request, strategosIndicadoresService, strategosPlanesService, strategosPerspectivasService, perspectiva, plan, true, ano);
 
 		String indicadoresIds = "";
-		for (Iterator iter = perspectiva.getListaIndicadores().iterator(); iter.hasNext(); ) 
+		for (Iterator iter = perspectiva.getListaIndicadores().iterator(); iter.hasNext(); )
 		{
 			Indicador indicador = (Indicador)iter.next();
 			indicadoresIds = indicadoresIds + indicador.getIndicadorId().toString() + ",";
 		}
-		
-		for (Iterator iter = perspectiva.getListaIndicadoresGuia().iterator(); iter.hasNext(); ) 
+
+		for (Iterator iter = perspectiva.getListaIndicadoresGuia().iterator(); iter.hasNext(); )
 		{
 			Indicador indicador = (Indicador)iter.next();
 			indicadoresIds = indicadoresIds + indicador.getIndicadorId().toString() + ",";
 		}
-		
-		if (indicadoresIds.length() > 0) 
+
+		if (indicadoresIds.length() > 0)
 			indicadoresIds = indicadoresIds.substring(0, indicadoresIds.length() - 1);
 		visualizarPerspectivaForm.setIndicadoresIds(indicadoresIds);
 

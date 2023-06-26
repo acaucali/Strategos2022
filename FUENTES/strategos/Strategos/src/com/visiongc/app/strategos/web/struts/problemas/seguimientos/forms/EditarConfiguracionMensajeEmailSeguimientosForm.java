@@ -70,7 +70,8 @@ public class EditarConfiguracionMensajeEmailSeguimientosForm extends EditarObjet
     this.modificadoId = modificadoId;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.mensajeId = new Long(0L);
     this.descripcion = null;
     this.mensaje = null;

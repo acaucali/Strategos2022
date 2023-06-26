@@ -1,10 +1,9 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.visiongc.app.strategos.StrategosService;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -30,41 +28,28 @@ import com.visiongc.app.strategos.indicadores.model.Medicion;
 import com.visiongc.app.strategos.indicadores.model.MedicionPK;
 import com.visiongc.app.strategos.indicadores.model.SerieIndicador;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
-import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
-import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
 import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
 import com.visiongc.app.strategos.instrumentos.model.InstrumentoIniciativa;
 import com.visiongc.app.strategos.instrumentos.model.InstrumentoPeso;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
-import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.instrumentos.forms.EditarInstrumentosForm;
-import com.visiongc.app.strategos.web.struts.mediciones.forms.ProtegerLiberarMedicionesForm;
-import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.web.NavigationBar;
-import com.visiongc.framework.FrameworkService;
-import com.visiongc.framework.impl.FrameworkServiceFactory;
-import com.visiongc.framework.model.Usuario;
-import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.web.NavigationBar;
 
 /**
  * @author Andres
  *
  */
 public class CalcularIndicadoresEjecucionAction extends VgcAction {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -104,11 +89,13 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 				.openStrategosIndicadoresService();
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance()
 				.openStrategosMedicionesService();
-
-		Byte alcance = editarInstrumentoForm.getAlcance();
-		Integer anio = editarInstrumentoForm.getAno();
-		Integer mesInicial = editarInstrumentoForm.getMesInicial();
-		Integer mesFinal = editarInstrumentoForm.getMesFinal();
+		String ano = request.getParameter("anio") != null ? request.getParameter("anio") : "";
+		String desde = request.getParameter("desde") != null ? request.getParameter("desde") : "";
+		String hasta = request.getParameter("hasta") != null ? request.getParameter("hasta") : "";
+ 		
+		Integer anio = Integer.valueOf(ano);
+		Integer mesInicial =  Integer.valueOf(desde);
+		Integer mesFinal =  Integer.valueOf(hasta);
 
 		Map<String, String> filtros = new HashMap();
 
@@ -138,6 +125,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 			filtros.put("estatusId", "2");
 			filtros.put("instrumentoId", editarInstrumentoForm.getInstrumentoId().toString());
+			
 
 			Instrumentos instrumento = (Instrumentos) strategosInstrumentosService.load(Instrumentos.class,
 					new Long(editarInstrumentoForm.getInstrumentoId()));
@@ -153,7 +141,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 			int respuesta = 10000;
 
-			Boolean hayPesos = true;
+			boolean hayPesos = true;
 
 			if (iniciativas.size() > 0) {
 
@@ -166,7 +154,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 						for (Iterator<InstrumentoIniciativa> iter = instrumentoIniciativas.iterator(); iter
 								.hasNext();) {
-							InstrumentoIniciativa instrumentoIniciativa = (InstrumentoIniciativa) iter.next();
+							InstrumentoIniciativa instrumentoIniciativa = iter.next();
 
 							if (instrumentoIniciativa.getIniciativa().getIniciativaId().equals(ini.getIniciativaId())) {
 								peso = instrumentoIniciativa.getPeso();
@@ -183,7 +171,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 									mesInicial, mesFinal);
 
 							for (Medicion med : medicionesPeriodo) {
-								Double suma = (med.getValor() * (peso / 100));
+								double suma = (med.getValor() * (peso / 100));
 								valorAcumulado = valorAcumulado + suma;
 							}
 
@@ -244,7 +232,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 							for (Iterator<InstrumentoIniciativa> iter = instrumentoIniciativas.iterator(); iter
 									.hasNext();) {
-								InstrumentoIniciativa instrumentoIniciativa = (InstrumentoIniciativa) iter.next();
+								InstrumentoIniciativa instrumentoIniciativa = iter.next();
 
 								if (instrumentoIniciativa.getIniciativa().getIniciativaId()
 										.equals(ini.getIniciativaId())) {
@@ -264,7 +252,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 										indice, indice);
 
 								for (Medicion med : medicionesPeriodo) {
-									Double suma = (med.getValor() * (peso / 100));
+									double suma = (med.getValor() * (peso / 100));
 									valorAcumulado = valorAcumulado + suma;
 								}
 							} else {
@@ -286,7 +274,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 													.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento())),
 											new Integer(anio), new Integer(indice),
 											new Long(SerieTiempo.getSerieReal().getSerieId())),
-									valorAcumulado, new Boolean(false));						
+									valorAcumulado, new Boolean(false));
 							mediciones.add(medicionCalculada);
 							respuesta = strategosMedicionesService.saveMediciones(mediciones, null,
 									getUsuarioConectado(request), new Boolean(true), new Boolean(true));
@@ -356,7 +344,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 			int respuesta = 10000;
 
-			Boolean hayPesos = true;
+			boolean hayPesos = true;
 			if (instrumentos.size() > 0) {
 				if (mesInicial == mesFinal) {
 					Double valorAcumulado = 0.0;
@@ -367,7 +355,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 						if (instrumentoIniciativas.size() > 0) {
 							Double peso = 0.0;
 							for (Iterator<InstrumentoPeso> iter = instrumentoPesos.iterator(); iter.hasNext();) {
-								InstrumentoPeso instrumentoPeso = (InstrumentoPeso) iter.next();
+								InstrumentoPeso instrumentoPeso = iter.next();
 								if (instrumentoPeso.getInstrumentoId().equals(ins.getInstrumentoId())) {
 									peso = instrumentoPeso.getPeso();
 								}
@@ -383,7 +371,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 										mesInicial, mesFinal);
 
 								for (Medicion med : medicionesPeriodo) {
-									Double suma = (med.getValor() * (peso / 100));
+									double suma = (med.getValor() * (peso / 100));
 									valorAcumulado = valorAcumulado + suma;
 								}
 							} else {
@@ -403,7 +391,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 						List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true,
 								filtrosAnio, null, null, Boolean.valueOf(false)).getLista();
 						if (inds.size() > 0) {
-							indicador = (Indicador) inds.get(0);
+							indicador = inds.get(0);
 						}
 
 						Medicion medicionCalculada = new Medicion(
@@ -442,7 +430,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 							if (instrumentoIniciativas.size() > 0) {
 								Double peso = 0.0;
 								for (Iterator<InstrumentoPeso> iter = instrumentoPesos.iterator(); iter.hasNext();) {
-									InstrumentoPeso instrumentoPeso = (InstrumentoPeso) iter.next();
+									InstrumentoPeso instrumentoPeso = iter.next();
 									if (instrumentoPeso.getInstrumentoId().equals(ins.getInstrumentoId())) {
 										peso = instrumentoPeso.getPeso();
 									}
@@ -458,7 +446,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 											indicadorId, SerieTiempo.getSerieReal().getSerieId().longValue(), anio,
 											anio, mesInicial, mesFinal);
 									Medicion med = medicionesPeriodo.get(indice - 1);
-									Double suma = (med.getValor() * (peso / 100));
+									double suma = (med.getValor() * (peso / 100));
 									valorAcumulado = valorAcumulado + suma;
 								} else {
 									hayPesos = false;
@@ -476,7 +464,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 							List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC",
 									true, filtrosAnio, null, null, Boolean.valueOf(false)).getLista();
 							if (inds.size() > 0) {
-								indicador = (Indicador) inds.get(0);
+								indicador = inds.get(0);
 							}
 							Medicion medicionCalculada = new Medicion(
 									new MedicionPK(new Long(indicador.getIndicadorId()), new Integer(anio),
@@ -504,7 +492,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 										"action.guardarmediciones.mensaje.guardarmediciones.related"));
 								saveMessages(request, messages);
 							}
-							
+
 						}
 					}
 				}
@@ -528,7 +516,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 			if (instrumentos.size() > 0) {
 				for (Iterator<Instrumentos> iter = instrumentos.iterator(); iter.hasNext();) {
-					Instrumentos instrumento = (Instrumentos) iter.next();
+					Instrumentos instrumento = iter.next();
 
 					filtros = new HashMap();
 
@@ -554,7 +542,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 
 					filtros.put("estatusId", "2");
 					filtros.put("instrumentoId", instrumento.getInstrumentoId().toString());
-
+					
 					List<InstrumentoIniciativa> instrumentoIniciativas = strategosInstrumentosService
 							.getIniciativasInstrumento(editarInstrumentoForm.getInstrumentoId());
 					List<Iniciativa> iniciativas = new ArrayList<Iniciativa>();
@@ -565,7 +553,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 					iniciativas = paginaIniciativas.getLista();
 
 					int respuesta = 10000;
-					Boolean hayPesos = true;
+					boolean hayPesos = true;
 
 					if (iniciativas.size() > 0) {
 
@@ -578,10 +566,9 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 							for (Iniciativa ini : iniciativas) {
 								Double peso = 0.0;
 
-								for (Iterator<InstrumentoIniciativa> iterIni = instrumentoIniciativas.iterator(); iter
-										.hasNext();) {
-									InstrumentoIniciativa instrumentoIniciativa = (InstrumentoIniciativa) iterIni
-											.next();
+								for (InstrumentoIniciativa iterIni : instrumentoIniciativas) {
+									System.out.print("\nInter ini " + iterIni);
+									InstrumentoIniciativa instrumentoIniciativa = iterIni;
 
 									if (instrumentoIniciativa.getIniciativa().getIniciativaId()
 											.equals(ini.getIniciativaId())) {
@@ -601,7 +588,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 											anio, mesInicial, mesFinal);
 
 									for (Medicion med : medicionesPeriodo) {
-										Double suma = (med.getValor() * (peso / 100));
+										double suma = (med.getValor() * (peso / 100));
 										valorAcumulado = valorAcumulado + suma;
 									}
 								} else {
@@ -662,13 +649,9 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 								for (Iniciativa ini : iniciativas) {
 									Double peso = 0.0;
 
-									for (Iterator<InstrumentoIniciativa> iterIni = instrumentoIniciativas
-											.iterator(); iter.hasNext();) {
-										InstrumentoIniciativa instrumentoIniciativa = (InstrumentoIniciativa) iterIni
-												.next();
-
-										if (instrumentoIniciativa.getIniciativa().getIniciativaId()
-												.equals(ini.getIniciativaId())) {
+									for (InstrumentoIniciativa iterIni : instrumentoIniciativas) {
+										InstrumentoIniciativa instrumentoIniciativa = iterIni;
+										if (instrumentoIniciativa.getIniciativa().getIniciativaId().equals(ini.getIniciativaId())) {
 											peso = instrumentoIniciativa.getPeso();
 										}
 									}
@@ -687,7 +670,7 @@ public class CalcularIndicadoresEjecucionAction extends VgcAction {
 														indice, indice);
 
 										for (Medicion med : medicionesPeriodo) {
-											Double suma = (med.getValor() * (peso / 100));
+											double suma = (med.getValor() * (peso / 100));
 											valorAcumulado = valorAcumulado + suma;
 										}
 									} else {

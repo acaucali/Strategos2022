@@ -192,7 +192,7 @@
 										<logic:iterate name="reporteForm" property="tipos" id="tip">
 											<bean:define id="tipoProyectoId" toScope="page"><bean:write name='tip' property='tipoProyectoId' /></bean:define>
 											<bean:define id="nombre" toScope="page"><bean:write name='tip' property='nombre' /></bean:define>											
-											<option value="<%=tipoProyectoId%>" selected><%=nombre%></option>											
+											<option value="<%=tipoProyectoId%>" ><%=nombre%></option>											
 										</logic:iterate>
 										<option value="0" selected>Todos</option>		
 									</select>

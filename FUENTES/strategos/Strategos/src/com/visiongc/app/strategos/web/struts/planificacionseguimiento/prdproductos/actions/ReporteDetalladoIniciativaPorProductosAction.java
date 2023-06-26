@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproductos.actions;
 
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.MessageResources;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
@@ -9,36 +20,27 @@ import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPrdProductosService;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdProducto;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimiento;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimientoPK;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimientoProducto;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimientoProductoPK;
 import com.visiongc.app.strategos.planificacionseguimiento.model.util.AlertaIniciativaProducto;
 import com.visiongc.app.strategos.planificacionseguimiento.model.util.AlertaProducto;
-import com.visiongc.app.strategos.responsables.model.Responsable;
 import com.visiongc.app.strategos.util.PeriodoUtil;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.web.util.WebUtil;
-import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.MessageResources;
 
 public class ReporteDetalladoIniciativaPorProductosAction extends VgcReporteBasicoAction
 {
-  protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
+  @Override
+protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes)
     throws Exception
   {
     return mensajes.getMessage("reporte.iniciativas.detallado.titulo");
   }
 
-  protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
+  @Override
+protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento)
     throws Exception
   {
     String iniciativaId = request.getParameter("iniciativaId");
@@ -61,7 +63,7 @@ public class ReporteDetalladoIniciativaPorProductosAction extends VgcReporteBasi
     Iniciativa iniciativa = (Iniciativa)strategosPrdProductosService.load(Iniciativa.class, new Long(iniciativaId));
 
     tabla.setFormatoFont(font.style());
-    tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+    tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
 
     tabla.setDefaultAlineacionHorizontal();
     Image imagenAlerta = null;
@@ -159,9 +161,9 @@ public class ReporteDetalladoIniciativaPorProductosAction extends VgcReporteBasi
         tabla.setAmplitudTabla(100);
         tabla.crearTabla(columnas);
 
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
         tabla.agregarCelda(mensajes.getMessage("reporte.iniciativas.detallado.actividad"));
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         tabla.agregarCelda(mensajes.getMessage("reporte.iniciativas.detallado.fechaentrega"));
         tabla.agregarCelda(mensajes.getMessage("reporte.iniciativas.detallado.fechareprogramada"));
         tabla.agregarCelda(mensajes.getMessage("reporte.iniciativas.detallado.estadoentrega"));
@@ -169,9 +171,9 @@ public class ReporteDetalladoIniciativaPorProductosAction extends VgcReporteBasi
         for (Iterator iter = productos.iterator(); iter.hasNext(); ) {
           PrdProducto producto = (PrdProducto)iter.next();
 
-          tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+          tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
           tabla.agregarCelda(producto.getNombre());
-          tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+          tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
           Set seguimientosProductos = producto.getSeguimientosProducto();
 
           if (seguimientosProductos.size() > 0) {
@@ -181,7 +183,7 @@ public class ReporteDetalladoIniciativaPorProductosAction extends VgcReporteBasi
               iterSeg = seguimientosProductos.iterator();
             if (iterSeg != null)
             {
-	            while (true) 
+	            while (true)
 	            {
 	              PrdSeguimientoProducto segProducto = (PrdSeguimientoProducto)iterSeg.next();
 	              if ((segProducto.getPk().getAno().toString().equals(ano)) && (segProducto.getPk().getPeriodo().toString().equals(periodo))) {
@@ -239,23 +241,23 @@ public class ReporteDetalladoIniciativaPorProductosAction extends VgcReporteBasi
         tabla.setAnchoBordeCelda(0);
         tabla.crearTabla(columnas);
 
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
         tabla.agregarCelda(mensajes.getMessage("reporte.iniciativas.detallado.alerta"));
         tabla.agregarCelda(mensajes.getMessage("reporte.iniciativas.detallado.significado"));
         imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaBlanca.gif")));
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         tabla.agregarCelda(imagenAlerta);
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
         tabla.agregarCelda(AlertaProducto.getNombre(AlertaProducto.getAlertaEnEsperaComienzo().byteValue()));
         imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         tabla.agregarCelda(imagenAlerta);
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
         tabla.agregarCelda(AlertaProducto.getNombre(AlertaProducto.getAlertaEntregado().byteValue()));
         imagenAlerta = Image.getInstance(new URL(WebUtil.getUrl(request, "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
         tabla.agregarCelda(imagenAlerta);
-        tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_LEFT);
+        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_LEFT);
         tabla.agregarCelda(AlertaProducto.getNombre(AlertaProducto.getAlertaNoEntregado().byteValue()));
 
         documento.add(tabla.getTabla());

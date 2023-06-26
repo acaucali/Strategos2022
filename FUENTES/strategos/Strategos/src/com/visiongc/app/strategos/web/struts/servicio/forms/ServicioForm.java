@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.servicio.forms;
 
@@ -12,7 +12,7 @@ import java.util.Properties;
  * @author Kerwin
  *
  */
-public class ServicioForm 
+public class ServicioForm
 {
 	private static Properties defaultProps;
 	private List<String> keys = new ArrayList<String>();
@@ -25,19 +25,19 @@ public class ServicioForm
 	    }
 	    catch (Exception localException)
 	    {
-	    	try { } catch (Exception localException1) { } 
-	    } 
-	    finally 
-	    { 
+	    	try { } catch (Exception localException1) { }
+	    }
+	    finally
+	    {
 	    	try { } catch (Exception localException2) { }
 	    }
 	}
-	
+
 	public String getProperty(String key, String def)
 	{
 		return defaultProps.getProperty(key, def);
 	}
-	
+
 	public void setProperty(String key, String def)
 	{
 		defaultProps.put(key, def);

@@ -119,6 +119,9 @@
 						url = url + '&desdeInstrumento=' + desdeInstrumento;
 						url = url + '&instrumentoId=' + document.editarIniciativaForm.instrumentoId.value;
 					}
+					var selectCargo = document.getElementById('selectCargo');
+					if (selectCargo != null)
+						url = url + '&selectCargo=' + selectCargo.value;
 					
 					window.document.editarIniciativaForm.action = '<html:rewrite action="/iniciativas/guardarIniciativa"/>' + url;
 					return true;
@@ -296,11 +299,13 @@
 			<html:hidden property="estatusId" />
 			<html:hidden property="desdeInstrumento" />
 			<html:hidden property="instrumentoId" />
+			<html:hidden property="cargoId" />
+			
 			
 			
 			
 
-			<vgcinterfaz:contenedorForma width="1040px" height="780px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
+			<vgcinterfaz:contenedorForma width="940px" height="740px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::
@@ -327,7 +332,7 @@
 
 				</vgcinterfaz:contenedorFormaTitulo>
 
-				<vgcinterfaz:contenedorPaneles height="650px" width="950px" nombre="editarIniciativa">
+				<vgcinterfaz:contenedorPaneles height="630px" width="860px" nombre="editarIniciativa">
 
 					<!-- Panel: Datos Básicos -->
 					<vgcinterfaz:panelContenedor anchoPestana="105" nombre="datosBasicos">
@@ -359,13 +364,13 @@
 							<!-- Campo Nombre -->
 							<tr>
 								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.nombre" /></td>
-								<td colspan="3"><html:text property="nombre" onkeypress="ejecutarPorDefecto(event)" size="89" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="250" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombre, document.editarIniciativaForm.nombreLargo, 250, document.editarIniciativaForm.sincronizarNombres.checked)" /><input type="checkbox" name="sincronizarNombres" title="SincronizarNombres"></td>
+								<td colspan="3"><html:text property="nombre" onkeypress="ejecutarPorDefecto(event)" size="85" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="250" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombre, document.editarIniciativaForm.nombreLargo, 250, document.editarIniciativaForm.sincronizarNombres.checked)" /><input type="checkbox" name="sincronizarNombres" title="SincronizarNombres"></td>
 							</tr>
 
 							<!-- Campo Nombre Largo -->
 							<tr>
 								<td align=""left""><vgcutil:message key="jsp.editariniciativa.ficha.nombrelargo" /></td>
-								<td colspan="3"><html:text property="nombreLargo" size="89" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="300" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombreLargo, document.editarIniciativaForm.nombre, 300, document.editarIniciativaForm.sincronizarNombres.checked)" /></td>
+								<td colspan="3"><html:text property="nombreLargo" size="88" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="300" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombreLargo, document.editarIniciativaForm.nombre, 300, document.editarIniciativaForm.sincronizarNombres.checked)" /></td>
 							</tr>
 
 							<%-- Campo descripción --%>
@@ -484,31 +489,50 @@
 								
 								<!-- Cargo -->
 								<td align="left"><vgcutil:message key="jsp.editariniciativa.ficha.cargo" /></td>
-								<td><html:text property="cargoResponsable" onkeypress="ejecutarPorDefecto(event)" size="31" maxlength="150" styleClass="cuadroTexto" />			
-							</tr>						
-																												
-							<%-- Campo Organizaciones involucradas --%>
-							<tr>								
-								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.organizacionesinvolucradas" /></td>
-								<td colspan="3"><html:textarea  property="organizacionesInvolucradas" onkeypress="ejecutarPorDefecto(event)" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
-							</tr>		
+								<td>
+									<select class="cuadroCombinado" name="selectCargo" id="selectCargo">
+									<option value="" selected></option>
+										<logic:iterate name="editarIniciativaForm" property="cargos" id="car">
 											
+											<bean:define id="cargoId" toScope="page"><bean:write name='car' property='cargoId' /></bean:define>								
+											<bean:define id="nombre" toScope="page"><bean:write name='car' property='nombre' /></bean:define>
+											
+											<logic:equal name='editarIniciativaForm' property='cargoId' value='<%=cargoId.toString()%>'>
+															<option value="<%=cargoId%>" selected><%=nombre%></option>
+											</logic:equal>
+											<logic:notEqual name='editarIniciativaForm' property='cargoId' value='<%=cargoId.toString()%>'>
+															<option value="<%=cargoId%>"><%=nombre%></option>
+											</logic:notEqual>
+											
+										</logic:iterate>
+									</select>
+							
+								</td>
+							</tr>			
+							
 							<%-- Campo Objetivo Estrategico --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.objetivoestrategico" /></td>
-								<td colspan="3"><html:textarea  property="objetivoEstrategico" onkeypress="ejecutarPorDefecto(event)" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
-							</tr>		
-							
-							<%-- Campo Fuente financiacion - monto --%>
-							<tr>
-								<!-- Fuente FInanciacion -->
-								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.fuentefinanciacion" /></td>
-								<td colspan="1"><html:text property="fuenteFinanciacion" onkeypress="ejecutarPorDefecto(event)" size="33" maxlength="150" styleClass="cuadroTexto" />
-								
-								<!-- Monto Financiamiento -->
-								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.monto" /></td>
-								<td colspan="1"><html:text property="montoFinanciamiento" onkeypress="" size="31" maxlength="150" styleClass="cuadroTexto" />			
+								<td colspan="3"><html:textarea  property="objetivoEstrategico" onkeypress="ejecutarPorDefecto(event)" cols="88" rows="4" styleClass="cuadroTexto" /></td>																		
 							</tr>	
+							
+							<%-- Campo Iniciativa Estrategica--%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.iniciativaestrategica" /></td>
+								<td colspan="3"><html:textarea  property="iniciativaEstrategica" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
+							</tr>	
+														
+							<%-- Campo Poblacion Beneficiada --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.poblacionbeneficiada" /></td>
+								<td colspan="3"><html:textarea  property="poblacionBeneficiada" onkeypress="" cols="88" rows="3" styleClass="cuadroTexto" /></td>																		
+							</tr>
+																													
+							<%-- Campo Contexto --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.contexto" /></td>
+								<td colspan="3"><html:textarea  property="contexto" onkeypress="" cols="88" rows="4" styleClass="cuadroTexto" /></td>																		
+							</tr>																											
 							<!-- Campo enteEjecutor
 							<tr>
 								<td align="right"><vgcutil:message key="jsp.editariniciativa.ficha.enteejecutor" /></td>
@@ -526,59 +550,60 @@
 						</vgcinterfaz:panelContenedorTitulo>
 						<table class="bordeFichaDatos" cellpadding="5" cellspacing="4" border="0">											
 																												
-							<%-- Campo Iniciativa Estrategica--%>
-							<tr>								
-								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.iniciativaestrategica" /></td>
-								<td colspan="3"><html:textarea  property="iniciativaEstrategica" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
-							</tr>		
+								
 											
 							<%-- Campo Lider Iniciativa --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.lideriniciativa" /></td>
-								<td colspan="3"><html:textarea  property="liderIniciativa" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
+								<td colspan="3"><html:textarea  property="liderIniciativa" onkeypress="" cols="85" rows="3" styleClass="cuadroTexto" /></td>																		
 							</tr>		
 							
 							<%-- Campo Tipo Iniciativa --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.tipoiniciativa" /></td>
-								<td colspan="3"><html:textarea  property="tipoIniciativa" onkeypress="" cols="88" rows="1" styleClass="cuadroTexto" /></td>																		
+								<td colspan="3"><html:textarea  property="tipoIniciativa" onkeypress="" cols="85" rows="3" styleClass="cuadroTexto" /></td>																		
 							</tr>		
-							
-							<%-- Campo Poblacion Beneficiada --%>
-							<tr>								
-								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.poblacionbeneficiada" /></td>
-								<td colspan="3"><html:textarea  property="poblacionBeneficiada" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
-							</tr>		
-							
-							<%-- Campo Contexto --%>
-							<tr>								
-								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.contexto" /></td>
-								<td colspan="3"><html:textarea  property="contexto" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
-							</tr>		
-							
+																				
 							<%-- Campo Definicion problema --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.definicionproblema" /></td>
-								<td colspan="3"><html:textarea  property="definicionProblema" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+								<td colspan="3"><html:textarea  property="definicionProblema" onkeypress="" cols="85" rows="5" styleClass="cuadroTexto" /></td>																		
 							</tr>		
 							
 							<%-- Campo Alcance --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.alcance" /></td>
-								<td colspan="3"><html:textarea  property="alcance" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+								<td colspan="3"><html:textarea  property="alcance" onkeypress="" cols="85" rows="5" styleClass="cuadroTexto" /></td>																		
 							</tr>		
 							
 							<%-- Campo Objetivo General --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.objetivogeneral" /></td>
-								<td colspan="3"><html:textarea  property="objetivoGeneral" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
+								<td colspan="3"><html:textarea  property="objetivoGeneral" onkeypress="" cols="85" rows="5" styleClass="cuadroTexto" /></td>																		
 							</tr>
 							
 							<%-- Campo Objetivos Especificos --%>
 							<tr>								
 								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.objetivosespecificos" /></td>
-								<td colspan="3"><html:textarea  property="objetivoEspecificos" onkeypress="" cols="88" rows="5" styleClass="cuadroTexto" /></td>																		
-							</tr>											
+								<td colspan="3"><html:textarea  property="objetivoEspecificos" onkeypress="" cols="85" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+							
+							<%-- Campo Organizaciones involucradas --%>
+							<tr>								
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.organizacionesinvolucradas" /></td>
+								<td colspan="3"><html:textarea  property="organizacionesInvolucradas" onkeypress="ejecutarPorDefecto(event)" cols="85" rows="5" styleClass="cuadroTexto" /></td>																		
+							</tr>		
+																										
+							<%-- Campo Fuente financiacion - monto --%>
+							<tr>
+								<!-- Fuente FInanciacion -->
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.fuentefinanciacion" /></td>
+								<td colspan="1"><html:text property="fuenteFinanciacion" onkeypress="ejecutarPorDefecto(event)" size="33" maxlength="150" styleClass="cuadroTexto" />
+								
+								<!-- Monto Financiamiento -->
+								<td align="left" colspan="1"><vgcutil:message key="jsp.editariniciativa.ficha.monto" /></td>
+								<td colspan="1"><html:text property="montoFinanciamiento" onkeypress="" size="40" maxlength="150" styleClass="cuadroTexto" />			
+							</tr>									
 																																										
 						</table>
 

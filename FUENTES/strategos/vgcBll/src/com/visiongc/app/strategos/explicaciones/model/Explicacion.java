@@ -308,6 +308,7 @@ public class Explicacion
     private static final Byte KEY_PLAN = Byte.valueOf((byte)4);
     private static final Byte KEY_OBJETIVO = Byte.valueOf((byte)5);
     private static final Byte KEY_INSTRUMENTO = Byte.valueOf((byte)6);
+    private static final Byte KEY_ACTIVIDAD = Byte.valueOf((byte)7);
     
     public ObjetivoKey() {}
     
@@ -323,9 +324,10 @@ public class Explicacion
         return new Byte(KEY_PLAN.byteValue());
       if (Key.byteValue() == KEY_INSTRUMENTO.byteValue()) 
           return new Byte(KEY_INSTRUMENTO.byteValue());
-      if (Key.byteValue() == KEY_OBJETIVO.byteValue()) {
+      if (Key.byteValue() == KEY_OBJETIVO.byteValue()) 
         return new Byte(KEY_OBJETIVO.byteValue());
-      }
+      if (Key.byteValue() == KEY_ACTIVIDAD.byteValue())
+        return new Byte(KEY_ACTIVIDAD.byteValue());
       return null;
     }
     
@@ -362,6 +364,10 @@ public class Explicacion
     public static Byte getKeyInstrumento()
     {
       return new Byte(KEY_INSTRUMENTO.byteValue());
+    }
+    public static Byte getKeyActividad()
+    {
+      return new Byte(KEY_ACTIVIDAD.byteValue());
     }
   }
 }

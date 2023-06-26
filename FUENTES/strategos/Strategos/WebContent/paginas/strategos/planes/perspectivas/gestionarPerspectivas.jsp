@@ -103,6 +103,10 @@
 		if (respuesta) 
 			window.location.href = '<html:rewrite action="/planes/perspectivas/eliminarPerspectiva"/>?perspectivaId=<bean:write name="perspectiva" property="perspectivaId"/>' + '&ts=<%=(new java.util.Date()).getTime()%>';
 	}
+	
+	function eliminarElementosMasivos(){
+		window.location.href = '<html:rewrite action="/planes/perspectivas/eliminarElementosMasivos"/>?perspectivaId=<bean:write name="perspectiva" property="perspectivaId"/>' + '&ts=<%=(new java.util.Date()).getTime()%>';
+	}
 
 	function reporte() 
 	{
@@ -359,6 +363,7 @@
 								</logic:greaterThan>
 							</logic:equal>
 						</logic:notEmpty>
+						<vgcinterfaz:botonMenu key="menu.edicion.eliminar.masivo" permisoId="PLAN_PERSPECTIVA_DELETE" onclick="eliminarElementosMasivos();" />	
 						<vgcinterfaz:botonMenu key="menu.edicion.email" permisoId="PLAN_PERSPECTIVA_EMAIL" onclick="enviarEmailPerspecitva();" />						
 
 					</vgcinterfaz:menuBotones>

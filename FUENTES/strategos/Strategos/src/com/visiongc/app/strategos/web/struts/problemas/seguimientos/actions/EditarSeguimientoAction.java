@@ -1,42 +1,38 @@
 package com.visiongc.app.strategos.web.struts.problemas.seguimientos.actions;
 
-import com.visiongc.app.strategos.estadosacciones.StrategosEstadosService;
-import com.visiongc.app.strategos.estadosacciones.model.EstadoAcciones;
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.problemas.StrategosSeguimientosService;
-import com.visiongc.app.strategos.problemas.model.Accion;
-import com.visiongc.app.strategos.problemas.model.MemoSeguimiento;
-import com.visiongc.app.strategos.problemas.model.MemoSeguimientoPK;
-import com.visiongc.app.strategos.problemas.model.Problema;
-import com.visiongc.app.strategos.problemas.model.ResponsableAccion;
-import com.visiongc.app.strategos.problemas.model.Seguimiento;
-import com.visiongc.app.strategos.responsables.model.Responsable;
-import com.visiongc.app.strategos.web.struts.problemas.seguimientos.forms.EditarSeguimientoForm;
-import com.visiongc.app.strategos.web.struts.problemas.seguimientos.forms.GestionarSeguimientosForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.NavigationBar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.estadosacciones.StrategosEstadosService;
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.problemas.StrategosSeguimientosService;
+import com.visiongc.app.strategos.problemas.model.MemoSeguimiento;
+import com.visiongc.app.strategos.problemas.model.ResponsableAccion;
+import com.visiongc.app.strategos.problemas.model.Seguimiento;
+import com.visiongc.app.strategos.web.struts.problemas.seguimientos.forms.EditarSeguimientoForm;
+import com.visiongc.app.strategos.web.struts.problemas.seguimientos.forms.GestionarSeguimientosForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EditarSeguimientoAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);

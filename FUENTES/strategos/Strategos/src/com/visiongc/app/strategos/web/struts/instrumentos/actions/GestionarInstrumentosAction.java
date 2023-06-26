@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,24 +31,15 @@ import com.visiongc.app.strategos.instrumentos.StrategosTiposConvenioService;
 import com.visiongc.app.strategos.instrumentos.model.Cooperante;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
 import com.visiongc.app.strategos.instrumentos.model.TipoConvenio;
-import com.visiongc.app.strategos.portafolios.StrategosPortafoliosService;
-import com.visiongc.app.strategos.portafolios.model.Portafolio;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.GestionarIniciativasForm;
-import com.visiongc.app.strategos.web.struts.instrumentos.forms.GestionarConveniosForm;
 import com.visiongc.app.strategos.web.struts.instrumentos.forms.GestionarInstrumentosForm;
-import com.visiongc.app.strategos.web.struts.portafolios.forms.GestionarPortafoliosForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.CondicionType;
-import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.util.lang.ChainedRuntimeException;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.ConfiguracionUsuarioPK;
-import com.visiongc.framework.web.controles.SplitControl;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 /**
@@ -55,10 +47,12 @@ import com.visiongc.framework.web.struts.forms.FiltroForm;
  *
  */
 public class GestionarInstrumentosAction extends VgcAction {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 		navBar.agregarUrlSinParametros(url, nombre, new Integer(2));
 	}
 
+	@Override
 	@SuppressWarnings("unlikely-arg-type")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -83,8 +77,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 			iniciativaId = Long.parseLong(request.getParameter("iniciativaSeleccionadaId"));
 		else if (iniciativaSeleccionadoId != null && !iniciativaSeleccionadoId.equals(""))
 			iniciativaId = Long.parseLong(iniciativaSeleccionadoId);
-		
-		
+
+
 
 		Long instrumentoId = null;
 		Long indicadorId = null;
@@ -93,7 +87,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if (request.getParameter("instrumentoId") != null && request.getParameter("instrumentoId") != "")
 			instrumentoId = Long.parseLong(request.getParameter("instrumentoId"));
 		else if (instrumentoSeleccionadoId != null && instrumentoSeleccionadoId != "")
-			instrumentoId = Long.parseLong(instrumentoSeleccionadoId);		
+			instrumentoId = Long.parseLong(instrumentoSeleccionadoId);
 		if (instrumentoId != null)
 			gestionarInstrumentosForm.setSeleccionados(instrumentoId.toString());
 		if (iniciativaId != null)
@@ -109,8 +103,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if (estatusSt != null && estatusSt != "") {
 			estatus = Byte.valueOf(estatusSt);
 		}
-			
-		
+
+
 		Long cooperanteId = (request.getParameter("cop") != null) && (request.getParameter("cop") != "")
 				&& (!request.getParameter("cop").equals("0"))
 						? Long.valueOf(Long.parseLong(request.getParameter("cop")))
@@ -136,20 +130,20 @@ public class GestionarInstrumentosAction extends VgcAction {
 
 		gestionarInstrumentosForm.setInstrumentoId(instrumentoId);
 
-		
-		
+
+
 		Map<String, String> filtros = new HashMap<String, String>();
-			
+
 		int pagina = gestionarInstrumentosForm.getPagina();
 		String atributoOrden = null;
-		String tipoOrden = null;		
+		String tipoOrden = null;
 
 		if (atributoOrden == null)
 			atributoOrden = "nombreCorto";
 		if (tipoOrden == null)
 			tipoOrden = "ASC";
 		if (pagina < 1)
-			pagina = 1;				
+			pagina = 1;
 
 		if ((gestionarInstrumentosForm.getNombreCorto() != null) && gestionarInstrumentosForm.getNombreCorto() != "") {
 			filtros.put("nombreCorto", gestionarInstrumentosForm.getNombreCorto());
@@ -157,7 +151,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if ((gestionarInstrumentosForm.getAnio() != null) && gestionarInstrumentosForm.getAnio() != "") {
 			filtros.put("anio", gestionarInstrumentosForm.getAnio());
 		}
-		if ((gestionarInstrumentosForm.getEstatus() != null)) {	
+		if ((gestionarInstrumentosForm.getEstatus() != null)) {
 			if((gestionarInstrumentosForm.getEstatus() != 0))
 				filtros.put("estatus", gestionarInstrumentosForm.getEstatus().toString());
 		}
@@ -168,19 +162,19 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if ((gestionarInstrumentosForm.getCooperanteId() != null) && gestionarInstrumentosForm.getCooperanteId() != 0) {
 			filtros.put("cooperanteId", gestionarInstrumentosForm.getCooperanteId().toString());
 		}
-		
+
 		if(request.getParameter("limpiar") != null) {
-			if(request.getParameter("limpiar").equals("1")) 
-				filtros.clear();;
-		}		
-									
+			if(request.getParameter("limpiar").equals("1"))
+				filtros.clear();
+		}
+
 		PaginaLista paginaInstrumentos = strategosInstrumentosService.getInstrumentos(pagina, 30, atributoOrden,
 				tipoOrden, true, filtros);
 
 		if (paginaInstrumentos.getLista().size() > 0) {
 
 			for (Iterator<Instrumentos> iter = paginaInstrumentos.getLista().iterator(); iter.hasNext();) {
-				Instrumentos instrumento = (Instrumentos) iter.next();
+				Instrumentos instrumento = iter.next();
 
 				SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -204,7 +198,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 			if (configuracionUsuario != null) {
 				instrumentoIdFocus = new Long(configuracionUsuario.getData());
 				for (Iterator<Instrumentos> iter = paginaInstrumentos.getLista().iterator(); iter.hasNext();) {
-					Instrumentos instrumento = (Instrumentos) iter.next();
+					Instrumentos instrumento = iter.next();
 					if (instrumento.getInstrumentoId().longValue() == instrumentoIdFocus.longValue()) {
 						instrumentoEnLaLista = true;
 						break;
@@ -235,7 +229,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 					gestionarInstrumentosForm.setIndicadorAnioId(indicadorAnioId.toString());
 			} else {
 				for (Iterator<Instrumentos> iter = paginaInstrumentos.getLista().iterator(); iter.hasNext();) {
-					Instrumentos instru = (Instrumentos) iter.next();
+					Instrumentos instru = iter.next();
 					if (instru.getInstrumentoId().longValue() == new Long(gestionarInstrumentosForm.getSeleccionados())
 							.longValue()) {
 						instrumentoEnLaLista = true;
@@ -323,7 +317,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 				filtrosTipoConvenio);
 
 		for (Iterator<TipoConvenio> iter = paginaTipos.getLista().iterator(); iter.hasNext();) {
-			TipoConvenio tipoProyecto = (TipoConvenio) iter.next();
+			TipoConvenio tipoProyecto = iter.next();
 			gestionarInstrumentosForm.getConvenios().add(tipoProyecto);
 		}
 
@@ -337,7 +331,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 				filtrosCooperantes);
 
 		for (Iterator<Cooperante> iter = paginaCooperantes.getLista().iterator(); iter.hasNext();) {
-			Cooperante cooperante = (Cooperante) iter.next();
+			Cooperante cooperante = iter.next();
 			gestionarInstrumentosForm.getCooperantes().add(cooperante);
 		}
 
@@ -358,7 +352,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		Long indicadorId = null;
 		Long instru = Long.parseLong(instrumentoId);
 		for (Iterator<Instrumentos> iter = paginaInstrumentos.getLista().iterator(); iter.hasNext();) {
-			Instrumentos instrumento = (Instrumentos) iter.next();
+			Instrumentos instrumento = iter.next();
 			if (instrumento.getInstrumentoId().longValue() == instru.longValue()) {
 				indicadorId = instrumento.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento());
 			}
@@ -371,7 +365,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		Long claseId = null;
 		Long instru = Long.parseLong(instrumentoId);
 		for (Iterator<Instrumentos> iter = paginaInstrumentos.getLista().iterator(); iter.hasNext();) {
-			Instrumentos instrumento = (Instrumentos) iter.next();
+			Instrumentos instrumento = iter.next();
 			if (instrumento.getInstrumentoId().longValue() == instru.longValue()) {
 				claseId = instrumento.getClaseId();
 			}
@@ -390,7 +384,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		Long instru = Long.parseLong(instrumentoId);
 		try {
 			for (Iterator<Instrumentos> iter = paginaInstrumentos.getLista().iterator(); iter.hasNext();) {
-				Instrumentos instrumento = (Instrumentos) iter.next();
+				Instrumentos instrumento = iter.next();
 				if (instrumento.getInstrumentoId().longValue() == instru.longValue()) {
 
 					ClaseIndicadores claseIns = (ClaseIndicadores) strategosClasesIndicadoresService
@@ -403,7 +397,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 					List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0, "nombre", "ASC", true,
 							filtrosAnio, null, null, Boolean.valueOf(false)).getLista();
 					if (inds.size() > 0) {
-						indicador = (Indicador) inds.get(0);
+						indicador = inds.get(0);
 						indicadorAnioId = indicador.getIndicadorId();
 					}else{
 						indicadorAnioId = null;

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.actions;
 
@@ -38,10 +38,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class AsignarPesosIniciativasPortafolioAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -56,12 +58,12 @@ public class AsignarPesosIniciativasPortafolioAction extends VgcAction
 	    Portafolio portafolio = (Portafolio)strategosPortafoliosService.load(Portafolio.class, new Long(id));
 	    PaginaLista paginaIniciativas = new PaginaLista();
 
-	    if (portafolio != null)	    
+	    if (portafolio != null)
 	    {
 		    editarPortafolioForm.clear();
 		    editarPortafolioForm.setId(id);
-		    
-		    if (request.getParameter("funcion") != null) 
+
+		    if (request.getParameter("funcion") != null)
 		    {
 		    	String funcion = request.getParameter("funcion");
 		    	if (funcion.equals("guardar"))
@@ -74,22 +76,22 @@ public class AsignarPesosIniciativasPortafolioAction extends VgcAction
 		    	    	editarPortafolioForm.setStatus(StatusUtil.getStatusInvalido());
 		    	}
 		    }
-	
+
 		    List<PortafolioIniciativa> portafolioIniciativas = strategosPortafoliosService.getIniciativasPortafolio(portafolio.getId());
-	
-	    	for (Iterator<PortafolioIniciativa> iter = portafolioIniciativas.iterator(); iter.hasNext(); ) 
+
+	    	for (Iterator<PortafolioIniciativa> iter = portafolioIniciativas.iterator(); iter.hasNext(); )
 	    	{
-	    		PortafolioIniciativa portafolioIniciativa = (PortafolioIniciativa)iter.next();
+	    		PortafolioIniciativa portafolioIniciativa = iter.next();
 	    		Iniciativa iniciativa = (Iniciativa) strategosPortafoliosService.load(Iniciativa.class, portafolioIniciativa.getIniciativa().getIniciativaId());
 	    		portafolioIniciativa.setIniciativa(iniciativa);
 	    	}
-	    	
+
 	    	OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosPortafoliosService.load(OrganizacionStrategos.class, portafolio.getOrganizacionId());
-	    	
+
 		    editarPortafolioForm.setNombre(portafolio.getNombre());
 		    editarPortafolioForm.setOrganizacion(organizacion);
 		    editarPortafolioForm.setPortafolio(portafolio);
-			
+
 		    paginaIniciativas = new PaginaLista();
 		    paginaIniciativas.setLista(portafolioIniciativas);
 		    paginaIniciativas.setTamanoSetPaginas(5);
@@ -104,13 +106,13 @@ public class AsignarPesosIniciativasPortafolioAction extends VgcAction
 	    	ActionMessages messages = getMessages(request);
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.calcularregistro.noencontrado"));
 	    	saveMessages(request, messages);
-	    	
+
 		    paginaIniciativas.setLista(new ArrayList<PortafolioIniciativa>());
 		    paginaIniciativas.setTamanoSetPaginas(5);
 	    }
 
 	    request.setAttribute("asignarPesosIniciativasPortafolio.paginaIniciativas", paginaIniciativas);
-	    
+
 	    strategosPortafoliosService.close();
 
 	    return mapping.findForward(forward);
@@ -120,23 +122,23 @@ public class AsignarPesosIniciativasPortafolioAction extends VgcAction
 	{
 		  List<PortafolioIniciativa> portafolioIniciativas = new ArrayList<PortafolioIniciativa>();
 		  Map<?, ?> nombresParametros = request.getParameterMap();
-		  
-		  for (Iterator<?> iter = nombresParametros.keySet().iterator(); iter.hasNext(); ) 
+
+		  for (Iterator<?> iter = nombresParametros.keySet().iterator(); iter.hasNext(); )
 		  {
 			  String nombre = (String)iter.next();
 			  int index = nombre.indexOf("pesoIniciativa");
-			  if (index > -1) 
+			  if (index > -1)
 			  {
 				  PortafolioIniciativa portafolioIniciativa = new PortafolioIniciativa();
-				  PortafolioIniciativaPK pk = new PortafolioIniciativaPK(); 
+				  PortafolioIniciativaPK pk = new PortafolioIniciativaPK();
 				  pk.setIniciativaId(new Long(nombre.substring("pesoIniciativa".length())));
 				  pk.setPortafolioId(editarPortafolioForm.getId());
 				  portafolioIniciativa.setPk(pk);
 				  if ((request.getParameter(nombre) != null) && (!request.getParameter(nombre).equals("")))
 					  portafolioIniciativa.setPeso(new Double(VgcFormatter.parsearNumeroFormateado(request.getParameter(nombre))));
-				  portafolioIniciativas.add(portafolioIniciativa);				  
+				  portafolioIniciativas.add(portafolioIniciativa);
 			  }
-		  }		  
+		  }
 		  return strategosPortafoliosService.saveIniciativasPortafolio(portafolioIniciativas, getUsuarioConectado(request));
 	}
 }

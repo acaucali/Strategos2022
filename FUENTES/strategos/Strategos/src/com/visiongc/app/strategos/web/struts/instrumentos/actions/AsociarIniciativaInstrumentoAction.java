@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
@@ -15,8 +15,6 @@ import org.apache.struts.action.ActionMessages;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
 import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
-import com.visiongc.app.strategos.portafolios.StrategosPortafoliosService;
-import com.visiongc.app.strategos.portafolios.model.Portafolio;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 
@@ -26,10 +24,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class AsociarIniciativaInstrumentoAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar arg0, String arg1, String arg2)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -46,7 +46,7 @@ public class AsociarIniciativaInstrumentoAction extends VgcAction
 			Instrumentos instrumento = (Instrumentos)strategosInstrumentosService.load(Instrumentos.class, new Long(instrumentoId));
 			if (instrumento != null)
 				strategosInstrumentosService.asociarInstrumento(instrumentoId, iniciativaId, getUsuarioConectado(request));
-			else 
+			else
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 		}
 

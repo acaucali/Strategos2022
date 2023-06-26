@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms;
 
@@ -21,87 +21,88 @@ public class AsignarPesosActividadForm extends EditarObjetoForm
 	private Long iniciativaId;
 	private Long organizacionId;
 
-	public String getOrganizacionNombre() 
+	public String getOrganizacionNombre()
 	{
 		return this.organizacionNombre;
 	}
 
-	public void setOrganizacionNombre(String organizacionNombre) 
+	public void setOrganizacionNombre(String organizacionNombre)
 	{
 		this.organizacionNombre = organizacionNombre;
 	}
 
-	public String getPadreNombre() 
+	public String getPadreNombre()
 	{
 		return this.padreNombre;
 	}
 
-	public void setPadreNombre(String planNombre) 
+	public void setPadreNombre(String planNombre)
 	{
 		this.padreNombre = planNombre;
 	}
 
-	public String getFuncionCierre() 
+	public String getFuncionCierre()
 	{
 		return this.funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
 
-	public Byte getTipoPadre() 
+	public Byte getTipoPadre()
 	{
 		return this.tipoPadre;
 	}
 
-	public void setTipoPadre(Byte tipoPadre) 
+	public void setTipoPadre(Byte tipoPadre)
 	{
 		this.tipoPadre = tipoPadre;
 	}
 
-	public Long getActividadId() 
+	public Long getActividadId()
 	{
 		return this.actividadId;
 	}
 
-	public void setActividadId(Long actividadId) 
+	public void setActividadId(Long actividadId)
 	{
 		this.actividadId = actividadId;
 	}
 
-	public Long getProyectoId() 
+	public Long getProyectoId()
 	{
 		return this.proyectoId;
 	}
 
-	public void setProyectoId(Long proyectoId) 
+	public void setProyectoId(Long proyectoId)
 	{
 		this.proyectoId = proyectoId;
 	}
 
-	public Long getIniciativaId() 
+	public Long getIniciativaId()
 	{
 		return this.iniciativaId;
 	}
 
-	public void setIniciativaId(Long iniciativaId) 
+	public void setIniciativaId(Long iniciativaId)
 	{
 		this.iniciativaId = iniciativaId;
 	}
 
-	public Long getOrganizacionId() 
+	public Long getOrganizacionId()
 	{
 		return this.organizacionId;
 	}
 
-	public void setOrganizacionId(Long organizacionId) 
+	public void setOrganizacionId(Long organizacionId)
 	{
 		this.organizacionId = organizacionId;
 	}
-	
-	public void clear() 
+
+	@Override
+	public void clear()
 	{
 		this.organizacionNombre = null;
 		this.padreNombre = null;

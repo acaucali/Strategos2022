@@ -394,9 +394,10 @@ public class Password
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         String script = "var _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='; \tfunction decode(input)\t{\t\tvar output = '';\t\tvar chr1, chr2, chr3;\t\tvar enc1, enc2, enc3, enc4;\t\tvar i = 0; \t\t\t\tinput = input.replace(/[^A-Za-z0-9\\+\\/\\=]/g, '');\t\t\t\twhile (i < input.length)\t\t{\t\t\tenc1 = this._keyStr.indexOf(input.charAt(i++));\t\t\tenc2 = this._keyStr.indexOf(input.charAt(i++));\t\t\tenc3 = this._keyStr.indexOf(input.charAt(i++));\t\t\tenc4 = this._keyStr.indexOf(input.charAt(i++));\t\t\t\t\t\tchr1 = (enc1 << 2) | (enc2 >> 4);\t\t\tchr2 = ((enc2 & 15) << 4) | (enc3 >> 2);\t\t\tchr3 = ((enc3 & 3) << 6) | enc4;\t\t\t\t\t\toutput = output + String.fromCharCode(chr1);\t\t\t\t\t\tif (enc3 != 64)\t\t\t\toutput = output + String.fromCharCode(chr2);\t\t\tif (enc4 != 64)\t\t\t\toutput = output + String.fromCharCode(chr3);\t\t}\t\t\t\toutput = _utf8_decode(output);\t\t\t\treturn output;\t} \t\tfunction _utf8_decode(utftext)\t{\t\tvar string = '';\t\tvar i = 0;\t\tvar c = c1 = c2 = 0;\t\t\t\twhile ( i < utftext.length )\t\t{\t\t\tc = utftext.charCodeAt(i);\t\t\t\t\t\tif (c < 128) \t\t\t{\t\t\t\tstring += String.fromCharCode(c);\t\t\t\ti++;\t\t\t}\t\t\telse if((c > 191) && (c < 224))\t\t\t{\t\t\t\tc2 = utftext.charCodeAt(i+1);\t\t\t\tstring += String.fromCharCode(((c & 31) << 6) | (c2 & 63));\t\t\t\ti += 2;\t\t\t}\t\t\telse\t\t\t{\t\t\t\tc2 = utftext.charCodeAt(i+1);\t\t\t\tc3 = utftext.charCodeAt(i+2);\t\t\t\tstring += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));\t\t\t\ti += 3;\t\t\t}\t\t}\t\t\t\treturn string;\t}";
+        
         try
         {
-            engine.eval(script);
+            engine.eval(script);            
             Invocable inv = (Invocable)engine;
             returnValue = (String)inv.invokeFunction("decode", new Object[] {
                 texto

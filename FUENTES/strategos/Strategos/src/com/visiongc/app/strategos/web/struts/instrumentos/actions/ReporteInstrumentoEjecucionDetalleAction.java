@@ -1,13 +1,10 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,23 +14,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
-import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.Plan;
-import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Usuario;
-import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.commons.util.HistoricoType;
-import com.visiongc.commons.util.PaginaLista;
 
 /**
  * @author Andres
@@ -41,11 +27,13 @@ import com.visiongc.commons.util.PaginaLista;
  */
 public class ReporteInstrumentoEjecucionDetalleAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
-		
+
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -54,30 +42,30 @@ public class ReporteInstrumentoEjecucionDetalleAction extends VgcAction
 
 		ReporteForm reporteForm = (ReporteForm)form;
 		reporteForm.clear();
-	  
+
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		Usuario user = getUsuarioConectado(request);
 		String instrumentoId = (request.getParameter("instrumentoId"));
-		
+
 		String nombreCorto = request.getParameter("nombreCorto") != null ? request.getParameter("nombreCorto") : "";
 		String anio = request.getParameter("anio") != null ? request.getParameter("anio") : "";
-		
+
 		Long cooperanteId = (request.getParameter("cop") != null) && (request.getParameter("cop") != "") && (!request.getParameter("cop").equals("0")) ? Long.valueOf(Long.parseLong(request.getParameter("cop"))) : null;
 		Long tiposConvenioId = (request.getParameter("con") != null) && (request.getParameter("con") != "") && (!request.getParameter("con").equals("0")) ? Long.valueOf(Long.parseLong(request.getParameter("con"))) : null;
-		
-		
+
+
 		boolean isAdmin=false;
 		if(user.getIsAdmin()){
-			
+
 			isAdmin=true;
 		}
-		
-		request.getSession().setAttribute("isAdmin", isAdmin); 
-		
+
+		request.getSession().setAttribute("isAdmin", isAdmin);
+
 		/* Parametros para el reporte */
-		
+
 		Calendar fecha = Calendar.getInstance();
-        
+
 		reporteForm.setId(new Long(instrumentoId));
 		if(anio != "") {
 			reporteForm.setAno(new Integer(anio));
@@ -87,9 +75,9 @@ public class ReporteInstrumentoEjecucionDetalleAction extends VgcAction
 		reporteForm.setNombre(nombreCorto);
 		reporteForm.setCooperanteId(cooperanteId);
 		reporteForm.setTipoCooperanteId(tiposConvenioId);
-		
+
 		Map<String, String> filtros = new HashMap<String, String>();
-		
+
 
 		return mapping.findForward(forward);
 	}

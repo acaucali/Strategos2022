@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,8 +29,8 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
-import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion.ObjetivoKey;
+import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.util.TipoMemoExplicacion;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -50,7 +49,6 @@ import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.planes.StrategosMetasService;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.IndicadorEstado;
 import com.visiongc.app.strategos.planes.model.Meta;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.planes.model.Plan;
@@ -66,21 +64,21 @@ import com.visiongc.app.strategos.servicio.Servicio.EjecutarTipo;
 import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
+import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
+import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.util.WebUtil;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.commons.util.HistoricoType;
 
 /**
  * Documentacion:
- * 
+ *
  * Clase para Crear el reportes consolidado en PDF.
- * 
+ *
  * @author Kerwin
  *
  */
@@ -91,10 +89,12 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 	private int inicioTamanoPagina = 70;
 	private int maxLineasAntesTabla = 4;
 
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
 		return mensajes.getMessage("jsp.reportes.plan.consolidado.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response,
 			Document documento) throws Exception {
 		MessageResources mensajes = getResources(request);
@@ -237,8 +237,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			else
 				nivel++;
 
-			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) {
-				Perspectiva perspectivaHija = (Perspectiva) iter.next();
+			for (Perspectiva perspectivaHija : perspectivas) {
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
 				SetMedicionesPerspectiva(perspectivaHija, reporte, strategosIndicadoresService,
 						strategosMedicionesService);
@@ -312,8 +311,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		List<Perspectiva> perspectivas = strategosPerspectivasService.getPerspectivas(orden, tipoOrden, filtros);
 
 		if (perspectivas.size() > 0) {
-			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) {
-				Perspectiva perspectivaHija = (Perspectiva) iter.next();
+			for (Perspectiva perspectivaHija : perspectivas) {
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
 				SetMedicionesPerspectiva(perspectivaHija, reporte, strategosIndicadoresService,
 						strategosMedicionesService);
@@ -378,6 +376,11 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		List<Indicador> indicadores = strategosIndicadoresService
 				.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, true).getLista();
 
+
+		Font fontCol = new Font(getConfiguracionPagina(request).getCodigoFuente());
+		fontCol.setSize(9);
+		fontCol.setStyle(Font.BOLD);
+
 		if (indicadores.size() > 0) {
 			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
 				lineas = inicioLineas;
@@ -385,9 +388,10 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				saltarPagina(documento, false, font, null, null, request);
 			}
 
+
 			String[][] columnas = new String[9][2];
 			int contador = 0;
-			columnas[contador][0] = "5";
+			columnas[contador][0] = "6";
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.alerta");
 
 			contador++;
@@ -395,11 +399,11 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			columnas[contador][1] = reporte.getPlantillaPlanes().getNombreIndicadorSingular();
 
 			contador++;
-			columnas[contador][0] = "8";
+			columnas[contador][0] = "7";
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.unidad");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "10";
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.ultimoperiodo");
 
 			contador++;
@@ -407,7 +411,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.metaanula");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "10";
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.real");
 
 			contador++;
@@ -428,7 +432,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			columnas[contador][1] = string.toString();
 
 			tablaIniciada = true;
-			tabla = crearTabla(true, false, columnas, reporte, font, mensajes, documento, request);
+			tabla = crearTabla(true, false, columnas, reporte, fontCol, mensajes, documento, request);
 			Object[][] fila = new Object[9][3];
 
 			BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -436,12 +440,10 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					((Float) (font.size())).intValue());
 			FontMetrics metrics = img.getGraphics().getFontMetrics(fontNormal);
 
-			for (Iterator<Indicador> iter = indicadores.iterator(); iter.hasNext();) {
+			for (Indicador indicador : indicadores) {
 				tablaIniciada = false;
 				contador = -1;
 				fila = new Object[9][3];
-				Indicador indicador = (Indicador) iter.next();
-
 				Byte alerta = strategosPlanesService.getAlertaIndicadorPorPlan(indicador.getIndicadorId(),
 						reporte.getPlanId());
 				if (reporte.getTipoPeriodo().byteValue() == reporte.getPeriodoPorPeriodo().byteValue()) {
@@ -460,7 +462,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							.byteValue()
 							&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
 									.byteValue());
-					List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(
+					List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(
 							indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
 							new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
 							periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(), acumular, acumular);
@@ -470,8 +472,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							indicador.getCorte(), indicador.getTipoCargaMedicion(), TipoMeta.getTipoMetaParcial(),
 							Integer.parseInt(reporte.getAnoInicial()), Integer.parseInt(reporte.getAnoFinal()),
 							periodoInicio, periodoFin);
-					for (Iterator<Meta> iterMeta = metas.iterator(); iterMeta.hasNext();) {
-						Meta meta = (Meta) iterMeta.next();
+					for (Meta meta : metas) {
 						medicionesMetas.add(new Medicion(
 								new MedicionPK(indicador.getIndicadorId(), meta.getMetaId().getAno(),
 										new Integer(meta.getMetaId().getPeriodo()), meta.getMetaId().getSerieId()),
@@ -535,7 +536,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = texto;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = 1;
 
 				// Nombre
@@ -545,7 +546,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				string.append("\n");
 				contador++;
 				fila[contador][0] = string.toString();
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_LEFT;
+				fila[contador][1] = Tabla.H_ALINEACION_LEFT;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Unidad
@@ -558,7 +559,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Fecha Ultima Medicion
@@ -567,7 +568,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					celda = indicador.getFechaUltimaMedicion();
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// % Meta Anual
@@ -585,7 +586,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Medicion
@@ -594,7 +595,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					celda = indicador.getUltimaMedicionFormateada();
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// % Cumplimiento
@@ -608,7 +609,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Responsable
@@ -619,7 +620,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							: "");
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Explicacion
@@ -647,7 +648,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_JUSTIFIED;
+				fila[contador][1] = Tabla.H_ALINEACION_JUSTIFIED;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Agregar Fila
@@ -657,7 +658,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					documento.add(tabla.getTabla());
 					tamanoPagina = lineasxPagina(font);
 					saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-					tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+					tabla = crearTabla(false, false, columnas, reporte, fontCol, mensajes, documento, request);
 					tablaIniciada = false;
 				}
 				tabla.agregarFila(fila);
@@ -728,8 +729,8 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		TablaBasicaPDF tabla;
 		StringBuilder string;
 		boolean tablaIniciada = false;
-		
-		
+
+
 
 		filtros = new HashMap<String, Object>();
 		filtros.put("perspectivaId", perspectiva.getPerspectivaId().toString());
@@ -742,6 +743,10 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		List<Iniciativa> iniciativas = strategosIniciativasService.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
 				.getLista();
 
+		Font fontCol = new Font(getConfiguracionPagina(request).getCodigoFuente());
+		fontCol.setSize(9);
+		fontCol.setStyle(Font.BOLD);
+
 		if (iniciativas.size() > 0) {
 			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
 				lineas = inicioLineas;
@@ -751,7 +756,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 
 			String[][] columnas = new String[10][2];
 			int contador = 0;
-			columnas[contador][0] = "5";
+			columnas[contador][0] = "7";
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.alerta");
 
 			contador++;
@@ -763,26 +768,26 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.ultimoperiodo");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "14";
 			columnas[contador][1] = mensajes
 					.getMessage("jsp.reportes.plan.consolidado.reporte.columna.porcentaje.esperado.acumulado");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "14";
 			columnas[contador][1] = mensajes
 					.getMessage("jsp.reportes.plan.consolidado.reporte.columna.porcentaje.ejecutado.acumulado");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "14";
 			columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.consolidado.reporte.columna.programado");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "14";
 			columnas[contador][1] = mensajes
 					.getMessage("jsp.reportes.plan.consolidado.reporte.columna.presupuesto.real");
 
 			contador++;
-			columnas[contador][0] = "12";
+			columnas[contador][0] = "14";
 			columnas[contador][1] = mensajes
 					.getMessage("jsp.reportes.plan.consolidado.reporte.columna.porcentaje.ejecucion");
 
@@ -800,7 +805,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			columnas[contador][1] = string.toString();
 
 			tablaIniciada = true;
-			tabla = crearTabla(true, false, columnas, reporte, font, mensajes, documento, request);
+			tabla = crearTabla(true, false, columnas, reporte, fontCol, mensajes, documento, request);
 			Object[][] fila = new Object[columnas.length][3];
 
 			BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -808,8 +813,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					((Float) (font.size())).intValue());
 			FontMetrics metrics = img.getGraphics().getFontMetrics(fontNormal);
 
-			for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-				Iniciativa iniciativa = (Iniciativa) iter.next();
+			for (Iniciativa iniciativa : iniciativas) {
 				Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 						iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
 
@@ -829,11 +833,11 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							.byteValue()
 							&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
 									.byteValue());
-					List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(
+					List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(
 							indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
 							new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
 							periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(), acumular, acumular);
-					List<Medicion> medicionesProgramadas = (List<Medicion>) strategosMedicionesService
+					List<Medicion> medicionesProgramadas = strategosMedicionesService
 							.getMedicionesPorFrecuencia(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
 									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
 									periodoInicio, periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(),
@@ -905,7 +909,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = texto;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = 1;
 
 				// Nombre
@@ -915,7 +919,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				string.append("\n");
 				contador++;
 				fila[contador][0] = string.toString();
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_LEFT;
+				fila[contador][1] = Tabla.H_ALINEACION_LEFT;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Fecha Ultima Medicion
@@ -924,7 +928,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					celda = indicador.getFechaUltimaMedicion();
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				Double totalPresupuestoReal = null;
@@ -946,27 +950,23 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							List<Medicion> medicionesProgramada = strategosMedicionesService.getMedicionesPeriodo(
 									indicadorPresupuesto.getIndicadorId(), SerieTiempo.getSerieMaximo().getSerieId(),
 									new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
-							for (Iterator<Medicion> iterMediciones = medicionesReales.iterator(); iterMediciones
-									.hasNext();) {
-								Medicion medicion = (Medicion) iterMediciones.next();
-								if (medicion.getValor() != null && totalPresupuestoReal == null)
-									totalPresupuestoReal = 0D;
-								totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
-								for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada
-										.iterator(); iterMedicionesProgramadas.hasNext();) {
-									Medicion medicionProgramada = (Medicion) iterMedicionesProgramadas.next();
-									if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
-											.getMedicionId().getAno().intValue()
-											&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
-													.getMedicionId().getPeriodo().intValue()) {
-										if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
-											totalPresupuestoProgramado = 0D;
-										totalPresupuestoProgramado = totalPresupuestoProgramado
-												+ medicionProgramada.getValor();
-										break;
-									}
-								}
-							}
+							for (Medicion medicion : medicionesReales) {
+if (medicion.getValor() != null && totalPresupuestoReal == null)
+							totalPresupuestoReal = 0D;
+totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
+for (Medicion medicionProgramada : medicionesProgramada) {
+if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
+							.getMedicionId().getAno().intValue()
+							&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
+									.getMedicionId().getPeriodo().intValue()) {
+if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
+							totalPresupuestoProgramado = 0D;
+totalPresupuestoProgramado = totalPresupuestoProgramado
+								+ medicionProgramada.getValor();
+break;
+}
+}
+}
 						} else {
 							totalPresupuestoReal = indicadorPresupuesto.getUltimaMedicion();
 
@@ -981,17 +981,15 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 										new Integer(000), new Integer(999));
 								DecimalFormat nf3 = new DecimalFormat("#000");
 								int anoPeriodoBuscar = Integer.parseInt(
-										((Integer) indicadorPresupuesto.getFechaUltimaMedicionAno()).toString()
+										indicadorPresupuesto.getFechaUltimaMedicionAno().toString()
 												+ nf3.format(indicadorPresupuesto.getFechaUltimaMedicionPeriodo())
 														.toString());
-								for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada
-										.iterator(); iterMedicionesProgramadas.hasNext();) {
-									Medicion medProgramada = (Medicion) iterMedicionesProgramadas.next();
-									int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
-											+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
-									if (anoPeriodo <= anoPeriodoBuscar)
-										totalPresupuestoProgramado = medProgramada.getValor();
-								}
+								for (Medicion medProgramada : medicionesProgramada) {
+int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
+									+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
+if (anoPeriodo <= anoPeriodoBuscar)
+								totalPresupuestoProgramado = medProgramada.getValor();
+}
 							}
 						}
 					} else {
@@ -1010,27 +1008,23 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 									indicadorPresupuesto.getIndicadorId(), SerieTiempo.getSerieMaximo().getSerieId(),
 									new Integer(0000), Integer.parseInt(reporte.getAnoInicial()), new Integer(000),
 									Integer.parseInt(reporte.getMesInicial()));
-							for (Iterator<Medicion> iterMediciones = medicionesReales.iterator(); iterMediciones
-									.hasNext();) {
-								Medicion medicion = (Medicion) iterMediciones.next();
-								if (medicion.getValor() != null && totalPresupuestoReal == null)
-									totalPresupuestoReal = 0D;
-								totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
-								for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada
-										.iterator(); iterMedicionesProgramadas.hasNext();) {
-									Medicion medicionProgramada = (Medicion) iterMedicionesProgramadas.next();
-									if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
-											.getMedicionId().getAno().intValue()
-											&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
-													.getMedicionId().getPeriodo().intValue()) {
-										if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
-											totalPresupuestoProgramado = 0D;
-										totalPresupuestoProgramado = totalPresupuestoProgramado
-												+ medicionProgramada.getValor();
-										break;
-									}
-								}
-							}
+							for (Medicion medicion : medicionesReales) {
+if (medicion.getValor() != null && totalPresupuestoReal == null)
+							totalPresupuestoReal = 0D;
+totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
+for (Medicion medicionProgramada : medicionesProgramada) {
+if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
+							.getMedicionId().getAno().intValue()
+							&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
+									.getMedicionId().getPeriodo().intValue()) {
+if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
+							totalPresupuestoProgramado = 0D;
+totalPresupuestoProgramado = totalPresupuestoProgramado
+								+ medicionProgramada.getValor();
+break;
+}
+}
+}
 						} else {
 							totalPresupuestoReal = indicadorPresupuesto.getUltimaMedicion();
 
@@ -1047,17 +1041,15 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 										Integer.parseInt(reporte.getMesInicial()));
 								DecimalFormat nf3 = new DecimalFormat("#000");
 								int anoPeriodoBuscar = Integer.parseInt(
-										((Integer) indicadorPresupuesto.getFechaUltimaMedicionAno()).toString()
+										indicadorPresupuesto.getFechaUltimaMedicionAno().toString()
 												+ nf3.format(indicadorPresupuesto.getFechaUltimaMedicionPeriodo())
 														.toString());
-								for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada
-										.iterator(); iterMedicionesProgramadas.hasNext();) {
-									Medicion medProgramada = (Medicion) iterMedicionesProgramadas.next();
-									int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
-											+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
-									if (anoPeriodo <= anoPeriodoBuscar)
-										totalPresupuestoProgramado = medProgramada.getValor();
-								}
+								for (Medicion medProgramada : medicionesProgramada) {
+int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
+									+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
+if (anoPeriodo <= anoPeriodoBuscar)
+								totalPresupuestoProgramado = medProgramada.getValor();
+}
 							}
 						}
 					}
@@ -1069,7 +1061,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					celda = indicador.getUltimoProgramadoFormateado();
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Ejecutado Acumulado
@@ -1078,7 +1070,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					celda = indicador.getUltimaMedicionFormateada();
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Total Esperado Acumulado
@@ -1086,14 +1078,14 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 						: "");
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Total Ejecutado Acumulado
 				celda = (totalPresupuestoReal != null ? VgcFormatter.formatearNumero(totalPresupuestoReal) : "");
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// % Cumplimiento
@@ -1107,7 +1099,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Responsable
@@ -1118,7 +1110,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							: "");
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_CENTER;
+				fila[contador][1] = Tabla.H_ALINEACION_CENTER;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Explicacion
@@ -1146,7 +1138,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 				contador++;
 				fila[contador][0] = celda;
-				fila[contador][1] = TablaBasicaPDF.H_ALINEACION_JUSTIFIED;
+				fila[contador][1] = Tabla.H_ALINEACION_JUSTIFIED;
 				fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 
 				// Agregar Fila
@@ -1156,7 +1148,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 					documento.add(tabla.getTabla());
 					tamanoPagina = lineasxPagina(font);
 					saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-					tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
+					tabla = crearTabla(false, false, columnas, reporte, fontCol, mensajes, documento, request);
 					tablaIniciada = false;
 				}
 				tabla.agregarFila(fila);
@@ -1175,28 +1167,24 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			if (!tablaIniciada)
 				documento.add(tabla.getTabla());
 
-			documento.add(lineaEnBlanco(font));						
+			documento.add(lineaEnBlanco(font));
 
 			if (reporte.getVisualizarActividad()) {
-				
-				
+
+
 				font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
 				font.setStyle(Font.NORMAL);
-				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
-					
-					
-					
+				for (Iniciativa iniciativa : iniciativas) {
 					Paragraph subTitulo = new Paragraph(mensajes.getMessage("jsp.modulo.actividad.titulo.singular")
 							+ " : " + iniciativa.getNombre(), font);
 					subTitulo.setAlignment(Element.ALIGN_LEFT);
 					subTitulo.setIndentationLeft(16);
 					documento.add(subTitulo);
-	
+
 					dibujarInformacionActividad(reporte, font, iniciativa, documento, strategosMedicionesService,
 							strategosIndicadoresService, mensajes, request);
 
-					documento.add(lineaEnBlanco(font));					
+					documento.add(lineaEnBlanco(font));
 				}
 			}
 
@@ -1242,10 +1230,10 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			HttpServletRequest request) throws Exception {
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance()
 				.openStrategosPryActividadesService();
-		
+
 		Font fontTitulos = new Font(getConfiguracionPagina(request).getCodigoFuente());
 		fontTitulos.setSize(14);
-		fontTitulos.setStyle(Font.BOLD);	 
+		fontTitulos.setStyle(Font.BOLD);
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 		Paragraph texto;
@@ -1278,7 +1266,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		tabla.setFormatoFont(Font.BOLD);
 		tabla.setTamanoFont(8);
 		tabla.setAlineacionHorizontal(1);
-				
+
 
 		tabla.agregarCelda(reporte.getPlantillaPlanes().getNombreActividadSingular());
 		tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio"));
@@ -1293,9 +1281,9 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 
 
 		tabla.setAlineacionHorizontal(1);
-		
-		tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
-		tabla.setAlineacionVertical(TablaBasicaPDF.V_ALINEACION_MIDDLE);
+
+		tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
+		tabla.setAlineacionVertical(Tabla.V_ALINEACION_MIDDLE);
 		tabla.setFont(Font.NORMAL);
 		tabla.setFormatoFont(Font.NORMAL);
 		tabla.setColorLetra(0, 0, 0);
@@ -1303,13 +1291,12 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		tabla.setTamanoFont(7);
 
 		if (actividades.size() > 0) {
-			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+			for (PryActividad actividad : actividades) {
 				Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 						actividad.getIndicadorId());
 
 				// Dibujar Informacion de la Iniciativa
-				
+
 				String texto1;
 				Date fechaAh = new Date();
 				Date fechaFi = new Date();
@@ -1361,16 +1348,16 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				}
 
 				tabla.agregarCelda(texto1);
-				
+
 
 			}
 			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 			documento.add(tabla.getTabla());
-			
-			
-			
-			
-			
+
+
+
+
+
 		} else {
 			// TODO
 			fontTitulos.setColor(0, 0, 255);
@@ -1427,8 +1414,8 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			anchoBorde = 0;
 			anchoBordeCelda = 0;
 			bold = false;
-			alineacionHorizontal = TablaBasicaPDF.H_ALINEACION_LEFT;
-			alineacionVertical = TablaBasicaPDF.V_ALINEACION_MIDDLE;
+			alineacionHorizontal = Tabla.H_ALINEACION_LEFT;
+			alineacionVertical = Tabla.V_ALINEACION_MIDDLE;
 		} else {
 			colorLetra = new Color(255, 255, 255);
 			colorFondo = new Color(128, 128, 128);
@@ -1441,14 +1428,15 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				colorFondo, alineacionHorizontal, alineacionVertical, request);
 
 		if (!isInformativo) {
-			tabla.setAlineacionHorizontal(TablaBasicaPDF.H_ALINEACION_CENTER);
-			tabla.setAlineacionVertical(TablaBasicaPDF.V_ALINEACION_MIDDLE);
+			tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
+			tabla.setAlineacionVertical(Tabla.V_ALINEACION_MIDDLE);
 			tabla.setFont(Font.NORMAL);
 			tabla.setFormatoFont(Font.NORMAL);
 			tabla.setColorLetra(0, 0, 0);
 			tabla.setColorFondo(255, 255, 255);
 			tabla.setTamanoFont(7);
 		}
+
 
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		java.awt.Font fontNormal = new java.awt.Font(font.getFamilyname(), font.style(),
@@ -1457,10 +1445,10 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 
 		int contador = -1;
 		Object[][] fila = new Object[columnas.length][3];
-		for (int f = 0; f < columnas.length; f++) {
+		for (String[] element : columnas) {
 			contador++;
-			fila[contador][0] = columnas[f][1];
-			fila[contador][1] = TablaBasicaPDF.H_ALINEACION_LEFT;
+			fila[contador][0] = element[1];
+			fila[contador][1] = Tabla.H_ALINEACION_LEFT;
 			fila[contador][2] = metrics.stringWidth((String) fila[contador][0]);
 		}
 
@@ -1497,7 +1485,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue()
 						&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
 								.byteValue());
-				List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(
+				List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(
 						indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()),
 						new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin, indicador.getFrecuencia(),
 						indicador.getFrecuencia(), acumular, acumular);
@@ -1525,7 +1513,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue()
 						&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
 								.byteValue());
-				List<Medicion> mediciones = (List<Medicion>) strategosMedicionesService.getMedicionesPorFrecuencia(
+				List<Medicion> mediciones = strategosMedicionesService.getMedicionesPorFrecuencia(
 						indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()),
 						new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin, indicador.getFrecuencia(),
 						indicador.getFrecuencia(), acumular, acumular);

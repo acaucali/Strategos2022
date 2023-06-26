@@ -16,7 +16,8 @@ public class AsociarResponsablesForm extends EditarObjetoForm
     this.responsableId = responsableId;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.responsableId = new Long(0L);
     setBloqueado(new Boolean(false));
   }

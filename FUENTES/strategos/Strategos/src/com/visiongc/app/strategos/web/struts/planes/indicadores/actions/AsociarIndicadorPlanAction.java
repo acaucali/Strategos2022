@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -24,42 +33,33 @@ import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.SeleccionarIndicadoresForm;
 import com.visiongc.app.strategos.web.struts.planes.indicadores.forms.ImportarProgramadoForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-
 import com.visiongc.framework.model.Usuario;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class AsociarIndicadorPlanAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		ActionMessages messages = getMessages(request);
-		
+
 		String indicadores = request.getParameter("indicadorId");
 	    int respuesta = 10000;
 
 		Long planId = new Long(request.getParameter("planId"));
 		Long perspectivaId = new Long(request.getParameter("perspectivaId"));
 		Boolean importarMetas = request.getParameter("importarMetas") != null ? Boolean.parseBoolean(request.getParameter("importarMetas")) : null;
-		Boolean actualizarForma = request.getParameter("actualizarForma") != null ? Boolean.parseBoolean((String)request.getParameter("actualizarForma")) : false;
+		Boolean actualizarForma = request.getParameter("actualizarForma") != null ? Boolean.parseBoolean(request.getParameter("actualizarForma")) : false;
     	String funcion = request.getParameter("funcion");
-		
+
 		Integer anoInicial = new Integer(0000);
 		Integer anoFinal = new Integer(9999);
 		StrategosPerspectivasService strategosPerspectivaService = StrategosServiceFactory.getInstance().openStrategosPerspectivasService();
@@ -70,16 +70,15 @@ public class AsociarIndicadorPlanAction extends VgcAction
 		Integer anoFin = null;
 		boolean respuestaBol = false;
 		boolean continuar = true;
-		
+
 		if (indicadores != null)
 		{
 			String [] ind = indicadores.split(SeleccionarIndicadoresForm.SEPARADOR_INDICADORES);
-			for (int index = 0; index < ind.length; index++)
-			{
-				Long indicadorId = new Long(ind[index]);
-			    if (funcion != null) 
+			for (String element : ind) {
+				Long indicadorId = new Long(element);
+			    if (funcion != null)
 			    {
-			    	if (funcion.equals("chequear")) 
+			    	if (funcion.equals("chequear"))
 			    	{
 						IndicadorPerspectiva indicadorPerspectiva = new IndicadorPerspectiva();
 						indicadorPerspectiva.setPk(new IndicadorPerspectivaPK());
@@ -94,9 +93,9 @@ public class AsociarIndicadorPlanAction extends VgcAction
 							indicadorAsociado = false;
 				    		hayProgramado = (getMediciones(indicadorId, anoInicial, anoFinal).size() > 0);
 						}
-						
+
 						ajaxResponse = (hayProgramado ? "true" : "false") + "|" + indicadores + "|" + planId + "|" + perspectivaId + "|" + (indicadorAsociado ? "true" : "false");
-						
+
 						continuar = false;
 						if (hayProgramado)
 							break;
@@ -106,7 +105,7 @@ public class AsociarIndicadorPlanAction extends VgcAction
 						List<MetaAnualParciales> metas = cargarMetas(indicadorId, planId, anoInicial, anoFinal);
 			    		if (metas != null)
 			    		{
-			    			for (Iterator<?> i = metas.iterator(); i.hasNext(); ) 
+			    			for (Iterator<?> i = metas.iterator(); i.hasNext(); )
 			    			{
 			    				MetaAnualParciales metasIndicador = (MetaAnualParciales)i.next();
 			    				if (anoIni == null || anoIni.intValue() > metasIndicador.getMetaAnual().getMetaId().getAno().intValue())
@@ -118,15 +117,15 @@ public class AsociarIndicadorPlanAction extends VgcAction
 						continuar = false;
 			    		break;
 			    	}
-			    	else if (funcion.equals("chequearProgramado")) 
+			    	else if (funcion.equals("chequearProgramado"))
 			    	{
 			    		boolean hayProgramado = (getMediciones(indicadorId, anoInicial, anoFinal).size() > 0);
-						
+
 			    		ajaxResponse = (hayProgramado ? "true" : "false") + "|" + indicadorId + "|" + planId + "|" + perspectivaId + "|";
 						continuar = false;
 			    		break;
 			    	}
-			    	else if (funcion.equals("importarAno")) 
+			    	else if (funcion.equals("importarAno"))
 			    	{
 			    		Integer ano = request.getParameter("ano") != null ? Integer.parseInt(request.getParameter("ano")) : null;
 			    		if (ano != 0)
@@ -152,15 +151,15 @@ public class AsociarIndicadorPlanAction extends VgcAction
 							break;
 					}
 				}
-				
+
 				if (respuesta != 10000)
 					break;
-			}			
+			}
 		}
 
-	    if (funcion != null) 
+	    if (funcion != null)
 	    {
-	    	if (funcion.equals("chequear") && respuesta == 10000) 
+	    	if (funcion.equals("chequear") && respuesta == 10000)
 	    	{
 	    		strategosPerspectivaService.close();
 	    		request.setAttribute("ajaxResponse", ajaxResponse);
@@ -175,24 +174,24 @@ public class AsociarIndicadorPlanAction extends VgcAction
 	    		importarProgramadoForm.setGrupoAnos(PeriodoUtil.getListaNumeros(anoIni, anoFin));
 	    		if (importarProgramadoForm.getGrupoAnos().size() > 0)
 	    			importarProgramadoForm.setAnoSeleccion(importarProgramadoForm.getGrupoAnos().get(0).getValor());
-	    		
+
 	    		return mapping.findForward(forward);
 	    	}
-	    	else if (funcion.equals("chequearProgramado")) 
+	    	else if (funcion.equals("chequearProgramado"))
 	    	{
 	    		strategosPerspectivaService.close();
 	    		request.setAttribute("ajaxResponse", ajaxResponse);
 	    		return mapping.findForward("ajaxResponse");
 	    	}
-	    	else if (funcion.equals("importarAno")) 
+	    	else if (funcion.equals("importarAno"))
 	    	{
 	    		strategosPerspectivaService.close();
 	    		if (respuesta == 10000)
     				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.importarprogramado.mediciones.sucessful"));
 	    		else if (respuesta == 10003)
-	    			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarmetas.mensaje.guardarmetas.relacionados"));		
+	    			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarmetas.mensaje.guardarmetas.relacionados"));
 	    		saveMessages(request, messages);
-	    	    
+
 	    		return getForwardBack(request, 1, true);
 	    	}
 	    }
@@ -200,7 +199,7 @@ public class AsociarIndicadorPlanAction extends VgcAction
 	    if (respuesta == 10000 && !respuestaBol)
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.asociarindicadorplan.error"));
 		else if (respuesta == 10003)
-			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarmetas.mensaje.guardarmetas.relacionados"));		
+			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarmetas.mensaje.guardarmetas.relacionados"));
 		else if (respuesta != 10000)
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("jsp.importarprogramado.mediciones.error"));
 		else if (respuesta == 10000 && respuestaBol)
@@ -210,16 +209,16 @@ public class AsociarIndicadorPlanAction extends VgcAction
 		}
 
 		strategosPerspectivaService.close();
-		
+
 		saveMessages(request, messages);
 
 		return getForwardBack(request, 1, true);
 	}
-	
+
 	private int importarProgramadoXMetas(Long indicadorId, Long planId, Integer anoInicial, Integer anoFinal, Usuario usuario)
 	{
 		int respuesta = 10000;
-		
+
 		StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance().openStrategosMetasService();
 
 		List<MetaAnualParciales> metas = cargarMetas(indicadorId, planId, anoInicial, anoFinal);
@@ -228,10 +227,10 @@ public class AsociarIndicadorPlanAction extends VgcAction
 		Double valorMetaAnual = null;
 		if (metas != null)
 		{
-			for (Iterator<?> i = metas.iterator(); i.hasNext(); ) 
+			for (Iterator<?> i = metas.iterator(); i.hasNext(); )
 			{
 				MetaAnualParciales metasIndicador = (MetaAnualParciales)i.next();
-				
+
 				// Se Agrega la Meta Anual
 				//metasEditadas.add(metasIndicador.getMetaAnual());
 				for (Iterator<?> iter = metasIndicador.getMetasParciales().iterator(); iter.hasNext(); )
@@ -249,7 +248,7 @@ public class AsociarIndicadorPlanAction extends VgcAction
 						ano = meta.getMetaId().getAno();
 						valorMetaAnual = null;
 					}
-					
+
 					if (meta.getTipoCargaMeta().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue())
 					{
 						if (meta.getValor() != null)
@@ -262,7 +261,7 @@ public class AsociarIndicadorPlanAction extends VgcAction
 					}
 					else
 						valorMetaAnual = meta.getValor();
-						
+
 					// Se Agrega la Meta Parcial
 					Meta metaEditada = new Meta(new MetaPK(meta.getMetaId().getPlanId(), meta.getMetaId().getIndicadorId(), meta.getMetaId().getSerieId(), meta.getMetaId().getTipo(), meta.getMetaId().getAno(), meta.getMetaId().getPeriodo()), meta.getValor(), new Boolean(false));
 					metaEditada.setTipoCargaMeta(meta.getTipoCargaMeta());
@@ -270,29 +269,29 @@ public class AsociarIndicadorPlanAction extends VgcAction
 				}
 			}
 		}
-		
+
 		if (ano != null)
 		{
 			Meta metaAnualEditada = new Meta(new MetaPK(planId, indicadorId, SerieTiempo.getSerieMeta().getSerieId(), TipoMeta.getTipoMetaAnual(), ano, 0), valorMetaAnual, new Boolean(false));
 			metasEditadas.add(metaAnualEditada);
 		}
-		
-		if (metasEditadas.size() > 0) 
+
+		if (metasEditadas.size() > 0)
 			respuesta = strategosMetasService.saveMetas(metasEditadas, usuario);
 		strategosMetasService.close();
-		
+
 		return respuesta;
 	}
-	
+
 	private List<Medicion> getMediciones(Long indicadorId, Integer anoInicial, Integer anoFinal)
 	{
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
 		List<Medicion> medicionesProgramada = strategosMedicionesService.getMedicionesPeriodo(indicadorId, SerieTiempo.getSerieProgramado().getSerieId(), anoInicial, anoFinal, new Integer(000), new Integer(999));
 		strategosMedicionesService.close();
-		
+
 		return medicionesProgramada;
 	}
-	
+
 	private List<MetaAnualParciales> cargarMetas(Long indicadorId, Long planId, Integer anoInicial, Integer anoFinal)
 	{
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -308,16 +307,16 @@ public class AsociarIndicadorPlanAction extends VgcAction
 		Meta metaParcial = null;
 		MetaPK metaPk = null;
 		List<Meta> metasParciales = null;
-		for (Iterator<Medicion> indexMedicion = medicionesProgramada.iterator(); indexMedicion.hasNext(); ) 
+		for (Iterator<Medicion> indexMedicion = medicionesProgramada.iterator(); indexMedicion.hasNext(); )
 		{
-			Medicion medicion = (Medicion)indexMedicion.next();
+			Medicion medicion = indexMedicion.next();
 			if (ano == null || ano.intValue() != medicion.getMedicionId().getAno().intValue())
 			{
 				if (metasParciales != null && metasParciales.size() > 0)
 				{
 					if (metas == null)
 						metas = new ArrayList<MetaAnualParciales>();
-					
+
 			  		metas.add(addMetas(indicador, metaAnual, metasParciales));
 				}
 				ano = medicion.getMedicionId().getAno();
@@ -325,7 +324,7 @@ public class AsociarIndicadorPlanAction extends VgcAction
 				metasParciales = new ArrayList<Meta>();
 				metaAnual = null;
 			}
-			
+
 			if (ano != null && numeroMaximoPorPeriodo != null)
 			{
 				if (metaAnual == null)
@@ -342,7 +341,7 @@ public class AsociarIndicadorPlanAction extends VgcAction
 					metaAnual.setProtegido(new Boolean(false));
 					metaAnual.setTipoCargaMeta(indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue() ? TipoMedicion.getTipoMedicionEnPeriodo() : TipoMedicion.getTipoMedicionAlPeriodo());
 				}
-				
+
   				metaParcial = new Meta();
   				metaPk = new MetaPK();
   				metaPk.setIndicadorId(indicadorId);
@@ -355,43 +354,43 @@ public class AsociarIndicadorPlanAction extends VgcAction
   				metaParcial.setProtegido(new Boolean(false));
   				metaParcial.setTipoCargaMeta(indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue() ? TipoMedicion.getTipoMedicionEnPeriodo() : TipoMedicion.getTipoMedicionAlPeriodo());
   				metaParcial.setValor(medicion.getValor());
-  				
+
   				metasParciales.add(metaParcial);
 			}
 		}
-		
+
 		if (metasParciales != null && metasParciales.size() > 0)
 		{
 			if (metas == null)
 				metas = new ArrayList<MetaAnualParciales>();
 			metas.add(addMetas(indicador, metaAnual, metasParciales));
 		}
-		
+
 		return metas;
 	}
-	
+
 	private MetaAnualParciales addMetas(Indicador indicador, Meta metaAnual, List<Meta> metasParciales)
 	{
 		MetaAnualParciales metaAnualParciales = new MetaAnualParciales();
-		
+
 		Double valorAnual = null;
 		if (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal().byteValue() && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue())
 		{
 			for (int indexMeta = metasParciales.size() - 1; indexMeta >= 0; indexMeta--)
 			{
-				Meta meta = (Meta)metasParciales.get(indexMeta);
+				Meta meta = metasParciales.get(indexMeta);
 				if (valorAnual == null)
 					valorAnual = 0D;
 				if (meta.getValor() != null)
 					valorAnual = valorAnual + meta.getValor();
 			}
 		}
-		else 
+		else
 		{
 			int numeroMaximoPorPeriodo = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia().byteValue(), metaAnual.getMetaId().getAno());
 			for (int indexMeta = metasParciales.size() - 1; indexMeta >= 0; indexMeta--)
 			{
-				Meta meta = (Meta)metasParciales.get(indexMeta);
+				Meta meta = metasParciales.get(indexMeta);
 				if (meta.getMetaId().getPeriodo().intValue() == numeroMaximoPorPeriodo)
 				{
 					valorAnual = meta.getValor();
@@ -399,12 +398,12 @@ public class AsociarIndicadorPlanAction extends VgcAction
 				}
 			}
 		}
-		
+
 		metaAnual.setValor(valorAnual);
 		metaAnualParciales.setMetaAnual(metaAnual);
 		metaAnualParciales.setMetasParciales(metasParciales);
   		metaAnualParciales.setNumeroPeriodos(Integer.valueOf(metasParciales.size()));
-		
+
   		return metaAnualParciales;
 	}
 }

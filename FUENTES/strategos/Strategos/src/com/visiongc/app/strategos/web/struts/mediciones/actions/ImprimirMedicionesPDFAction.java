@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.mediciones.actions;
 
@@ -51,7 +51,8 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 {
 	private String titulo = null;
 	private MessageResources mensajes;
-	
+
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception
 	{
 		this.mensajes = mensajes;
@@ -59,6 +60,7 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 		return titulo;
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 	    Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
@@ -69,7 +71,7 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 		ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(usuario.getUsuarioId(), "Strategos.Forma.Configuracion.Columnas", "visorLista.Medicion");
 		if (configuracionUsuario == null)
 		{
-			configuracionUsuario = new ConfiguracionUsuario(); 
+			configuracionUsuario = new ConfiguracionUsuario();
 			ConfiguracionUsuarioPK pk = new ConfiguracionUsuarioPK();
 			pk.setConfiguracionBase("Strategos.Forma.Configuracion.Columnas");
 			pk.setObjeto("visorLista.Medicion");
@@ -80,9 +82,9 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 		}
 		frameworkService.close();
 		editarMedicionesForm.setColumnas(configuracionUsuario.getData());
-		
+
 		List<SerieIndicador> seriesIndicadores = cargarDatos(editarMedicionesForm, request);
-		
+
 		construirReporte(seriesIndicadores, editarMedicionesForm, documento, request);
 	}
 
@@ -94,20 +96,20 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 	    decimalformat.applyPattern("#,##0.00");
 
 		List<SerieIndicador> seriesIndicadores = new ArrayList<SerieIndicador>();
-	    String[] indicadores = ((String) request.getParameter("indicadores")).split("!;!");
+	    String[] indicadores = request.getParameter("indicadores").split("!;!");
 	    String anoD = request.getParameter("anoDesde");
 	    String anoH = request.getParameter("anoHasta");
 	    String periodoD = request.getParameter("periodoDesde");
 	    String periodoH = request.getParameter("periodoHasta");
 	    List<Long> series = new ArrayList<Long>();
-	    
+
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
 	    editarMedicionesForm.setIndicadores(new ArrayList<Indicador>());
-		for (int iIndicador = 0; iIndicador < indicadores.length; iIndicador++)
-		{
-			String[] valores = indicadores[iIndicador].split("!:!");
+		for (String indicadore : indicadores) {
+			String[] valores = indicadore.split("!:!");			
+			
 			Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class, new Long(valores[0]));
 			if (!editarMedicionesForm.getIndicadores().contains(indicador))
 				editarMedicionesForm.getIndicadores().add(indicador);
@@ -115,24 +117,24 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 			if (!series.contains(serieId))
 				series.add(serieId);
 		}
-		
+
 		editarMedicionesForm.setAnoDesde(anoD);
 		editarMedicionesForm.setPeriodoDesde(new Integer(periodoD));
 		editarMedicionesForm.setAnoHasta(anoH);
 		editarMedicionesForm.setPeriodoHasta(new Integer(periodoH));
-		
+
 		if ((editarMedicionesForm.getIndicadores() != null) && (editarMedicionesForm.getIndicadores().size() > 0))
 		{
 			int anoDesde = Integer.parseInt(editarMedicionesForm.getAnoDesde());
 			int anoHasta = Integer.parseInt(editarMedicionesForm.getAnoHasta());
 			int periodoDesde = editarMedicionesForm.getPeriodoDesde().intValue();
 			int periodoHasta = editarMedicionesForm.getPeriodoHasta().intValue();
-			
+
 			SerieIndicador serieIndicador = null;
 			for (Iterator<?> iterInd = editarMedicionesForm.getIndicadores().iterator(); iterInd.hasNext(); )
 			{
 				Indicador indicador = (Indicador)iterInd.next();
-				
+
 				if ((indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoNominal())) || (indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoOrdinal())))
 				{
 					indicador = (Indicador) strategosIndicadoresService.load(Indicador.class, indicador.getIndicadorId());
@@ -142,10 +144,10 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 				for (Iterator<?> iterSerieId = series.iterator(); iterSerieId.hasNext(); )
 				{
 					Long serieId = (Long)iterSerieId.next();
-					
+
 					serieIndicador = (SerieIndicador)strategosMedicionesService.load(SerieIndicador.class, new SerieIndicadorPK(serieId, indicador.getIndicadorId()));
 
-					if (serieIndicador != null) 
+					if (serieIndicador != null)
 					{
 						List<?> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), serieIndicador.getPk().getSerieId(), new Integer(anoDesde), new Integer(anoHasta), new Integer(periodoDesde), new Integer(periodoHasta));
 						List<Medicion> medicionesCompletas = new ArrayList<Medicion>();
@@ -153,33 +155,33 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 						int anoActual = anoDesde;
 						int numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia(), anoActual);
 
-						for (Iterator<?> iter = mediciones.iterator(); iter.hasNext(); ) 
+						for (Iterator<?> iter = mediciones.iterator(); iter.hasNext(); )
 						{
 							Medicion proxMedicion = (Medicion)iter.next();
-							while (anoActual < proxMedicion.getMedicionId().getAno().intValue()) 
+							while (anoActual < proxMedicion.getMedicionId().getAno().intValue())
 							{
 								medicionesCompletas.add(new Medicion(new MedicionPK(indicador.getIndicadorId(), new Integer(anoActual), new Integer(periodoActual), serieIndicador.getPk().getSerieId()), null, false));
 								periodoActual++;
-								if (periodoActual > numeroMaximoPeriodos) 
+								if (periodoActual > numeroMaximoPeriodos)
 								{
 									anoActual++;
 									numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia(), anoActual);
 									periodoActual = 1;
 								}
 							}
-            	  
-							while ((periodoActual < proxMedicion.getMedicionId().getPeriodo().intValue()) && (anoActual == proxMedicion.getMedicionId().getAno().intValue())) 
+
+							while ((periodoActual < proxMedicion.getMedicionId().getPeriodo().intValue()) && (anoActual == proxMedicion.getMedicionId().getAno().intValue()))
 							{
 								medicionesCompletas.add(new Medicion(new MedicionPK(indicador.getIndicadorId(), new Integer(anoActual), new Integer(periodoActual), serieIndicador.getPk().getSerieId()), null, false));
 								periodoActual++;
-								if (periodoActual > numeroMaximoPeriodos) 
+								if (periodoActual > numeroMaximoPeriodos)
 								{
 									anoActual++;
 									numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia(), anoActual);
 									periodoActual = 1;
 								}
 							}
-              
+
 							if (proxMedicion.getValor() != null)
 							{
 								proxMedicion.setValor(new Double(VgcFormatter.parsearNumeroFormateado(proxMedicion.getValor().toString())));
@@ -187,7 +189,7 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 							}
 							medicionesCompletas.add(proxMedicion);
 							periodoActual++;
-							if (periodoActual > numeroMaximoPeriodos) 
+							if (periodoActual > numeroMaximoPeriodos)
 							{
 								anoActual++;
 								numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia(), anoActual);
@@ -195,9 +197,9 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 							}
 						}
 
-						while (anoActual < anoHasta) 
+						while (anoActual < anoHasta)
 						{
-							while (periodoActual <= numeroMaximoPeriodos) 
+							while (periodoActual <= numeroMaximoPeriodos)
 							{
 								medicionesCompletas.add(new Medicion(new MedicionPK(indicador.getIndicadorId(), new Integer(anoActual), new Integer(periodoActual), serieIndicador.getPk().getSerieId()), null, false));
 								periodoActual++;
@@ -207,16 +209,16 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 							periodoActual = 1;
 						}
 
-						while ((anoActual == anoHasta) && (periodoActual <= periodoHasta)) 
+						while ((anoActual == anoHasta) && (periodoActual <= periodoHasta))
 						{
 							medicionesCompletas.add(new Medicion(new MedicionPK(indicador.getIndicadorId(), new Integer(anoActual), new Integer(periodoActual), serieIndicador.getPk().getSerieId()), null, false));
 							periodoActual++;
-							if (periodoActual > numeroMaximoPeriodos) 
+							if (periodoActual > numeroMaximoPeriodos)
 							{
 								anoActual++;
 								numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(indicador.getFrecuencia(), anoActual);
 								periodoActual = 1;
-							}	
+							}
 						}
 
 						Set<Medicion> medicionesAux = new LinkedHashSet<Medicion>();
@@ -224,25 +226,25 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 
 						serieIndicador.setIndicador(indicador);
 						serieIndicador.setMediciones(medicionesAux);
-						
-						if ((indicador.getNaturaleza().byteValue() == Naturaleza.getNaturalezaCualitativoNominal().byteValue()) || (indicador.getNaturaleza().byteValue() == Naturaleza.getNaturalezaCualitativoOrdinal().byteValue())) 
+
+						if ((indicador.getNaturaleza().byteValue() == Naturaleza.getNaturalezaCualitativoNominal().byteValue()) || (indicador.getNaturaleza().byteValue() == Naturaleza.getNaturalezaCualitativoOrdinal().byteValue()))
 							indicador.getEscalaCualitativa();
 						seriesIndicadores.add(serieIndicador);
 					}
 				}
 			}
 		}
-		
+
 		strategosIndicadoresService.close();
 		strategosMedicionesService.close();
-		
+
 		return seriesIndicadores;
 	}
-	
+
 	private void construirReporte(List<SerieIndicador> seriesIndicadores, EditarMedicionesForm editarMedicionesForm, Document documento, HttpServletRequest request) throws Exception
 	{
 		Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
-	    
+
 		Byte source = Byte.parseByte(request.getParameter("source"));
 		if (source.byteValue() == TipoSource.SOURCE_CLASE)
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_CLASE);
@@ -252,33 +254,33 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_INICIATIVA);
 		else
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_ACTIVIDAD);
-	    
+
 		String subTitulo = null;
 		if (source.byteValue() == TipoSource.SOURCE_CLASE)
 		{
-			if (request.getQueryString().indexOf("claseId=") > -1) 
+			if (request.getQueryString().indexOf("claseId=") > -1)
 				editarMedicionesForm.setClaseId(new Long(request.getParameter("claseId")));
-			
+
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 			ClaseIndicadores clase = (ClaseIndicadores)strategosIndicadoresService.load(ClaseIndicadores.class, editarMedicionesForm.getClaseId());
 			strategosIndicadoresService.close();
-			
-			if (clase != null) 
+
+			if (clase != null)
 			{
 				editarMedicionesForm.setClase(clase.getNombre());
-				subTitulo = mensajes.getMessage("jsp.editarmediciones.ficha.clase") + ": " + editarMedicionesForm.getClase(); 
+				subTitulo = mensajes.getMessage("jsp.editarmediciones.ficha.clase") + ": " + editarMedicionesForm.getClase();
 			}
 		}
-				
+
 		if (subTitulo != null)
 		{
 		    agregarSubTitulo(documento, getConfiguracionPagina(request), subTitulo, true, true, 13.0F);
 			documento.add(new Paragraph(" "));
 		}
-			    
+
 		int numeroColumnas = 0;
 		SerieIndicador serie = seriesIndicadores.get(0);
-		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); ) 
+		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); )
 		{
 			Columna columna = (Columna)iter.next();
 			if (!columna.getNombre().equals("Periodos") && columna.getMostrar().equals("true"))
@@ -293,7 +295,7 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 	    int divisor = 10;
 	    int tamanoPeriodo = 0;
 	    String[] columnasTitulo = new String[numeroColumnas];
-		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); ) 
+		for (Iterator<?> iter = editarMedicionesForm.getColumnas().iterator(); iter.hasNext(); )
 		{
 			Columna columna = (Columna)iter.next();
 			if (!columna.getNombre().equals("Periodos") && columna.getMostrar().equals("true"))
@@ -315,10 +317,10 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 	    		}
 			}
 		}
-	    
+
 		for (int q = f; q < columnas.length; q++)
 	    	columnas[q] = tamanoPeriodo;
-		
+
 		if (seriesIndicadores.size() > 0)
 		{
 			font.setSize(8);
@@ -335,7 +337,7 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 			for (Iterator<?> iter = seriesIndicadores.iterator(); iter.hasNext(); )
 			{
 				SerieIndicador fila = (SerieIndicador)iter.next();
-				for (Iterator<?> iterColumna = editarMedicionesForm.getColumnas().iterator(); iterColumna.hasNext(); ) 
+				for (Iterator<?> iterColumna = editarMedicionesForm.getColumnas().iterator(); iterColumna.hasNext(); )
 				{
 					Columna columna = (Columna)iterColumna.next();
 					if (!columna.getNombre().equals("Periodos") && columna.getMostrar().equals("true"))
@@ -365,7 +367,7 @@ public class ImprimirMedicionesPDFAction  extends VgcReporteBasicoAction
 					}
 				}
 			}
-			
+
 			agregarTabla(documento, tabla);
 		}
 	}

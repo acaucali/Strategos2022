@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.portafolios.actions;
 
@@ -26,10 +26,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class GuardarPortafolioAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -39,11 +41,11 @@ public class GuardarPortafolioAction extends VgcAction
 		EditarPortafolioForm editarPortafolioForm = (EditarPortafolioForm)form;
 
 		Long id = (request.getParameter("id") != null && request.getParameter("id") != "" ? Long.parseLong(request.getParameter("id")) : 0L);
-		
+
 		editarPortafolioForm.setId(id);
-		
+
 		StrategosPortafoliosService strategosPortafoliosService = StrategosServiceFactory.getInstance().openStrategosPortafoliosService();
-		
+
 		int respuesta = VgcReturnCode.DB_OK;
 		boolean nuevo = false;
 
@@ -64,7 +66,7 @@ public class GuardarPortafolioAction extends VgcAction
 
 		portafolio.setNombre(editarPortafolioForm.getNombre());
 		portafolio.setActivo(editarPortafolioForm.getActivo());
-		
+
 		Boolean cambioFrecuencia = (portafolio != null && portafolio.getFrecuencia() != null && portafolio.getFrecuencia().byteValue() != editarPortafolioForm.getFrecuencia().byteValue());
 		if (cambioFrecuencia)
 			portafolio.setPorcentajeCompletado(null);

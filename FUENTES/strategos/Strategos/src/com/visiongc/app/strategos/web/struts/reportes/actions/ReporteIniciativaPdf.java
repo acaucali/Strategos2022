@@ -1,93 +1,44 @@
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
-import java.awt.Color;
-import java.io.ByteArrayInputStream;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Wrapper;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import oracle.jdbc.pool.OracleDataSource;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.MessageResources;
-import org.apache.taglibs.standard.lang.jpath.adapter.Convert;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.impl.SessionImpl;
-import org.hibernate.jmx.HibernateService;
-import org.w3c.dom.NodeList;
 
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
-import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
-import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
-import com.visiongc.app.strategos.indicadores.model.Indicador;
-import com.visiongc.app.strategos.indicadores.model.Medicion;
-import com.visiongc.app.strategos.indicadores.model.util.AlertaIndicador;
-import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
-import com.visiongc.app.strategos.iniciativas.persistence.hibernate.StrategosIniciativasHibernateSession;
-import com.visiongc.app.strategos.model.util.LapsoTiempo;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
-import com.visiongc.app.strategos.planes.StrategosMetasService;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
-import com.visiongc.app.strategos.planes.StrategosPlanesService;
-import com.visiongc.app.strategos.planes.model.IndicadorEstado;
 import com.visiongc.app.strategos.planes.model.IniciativaPerspectiva;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
-import com.visiongc.app.strategos.planes.model.Plan;
-import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
-import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
-import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
-import com.visiongc.app.strategos.planificacionseguimiento.model.PryProyecto;
-import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
-import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
-import com.visiongc.commons.impl.VgcAbstractService;
-import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.util.WebUtil;
-import com.visiongc.framework.model.Organizacion;
-import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
-import com.visiongc.framework.web.struts.forms.NavegadorForm;
-import com.visiongc.framework.web.struts.forms.servicio.GestionarServiciosForm;
 
 public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
+	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
 		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.titulo");
 	}
 
+	@Override
 	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response,
 			Document documento) throws Exception {
 		MessageResources mensajes = getResources(request);
@@ -104,16 +55,16 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		String ano = (request.getParameter("ano"));
 		String todos = (request.getParameter("todos"));
 		String estatus = (request.getParameter("estatus"));
-		
+
 		TablaPDF tablaFiltros = null;
 		tablaFiltros = new TablaPDF(getConfiguracionPagina(request), request);
-		
+
 		Paragraph textoFiltros = new Paragraph("Filtros del reporte: ", fontTitulos);
 		documento.add(textoFiltros);
 		documento.add(lineaEnBlanco(fuente));
 		crearTablaFiltros(tablaFiltros, mensajes, documento, request, todos, tipo, estatus, ano, fuente);
 		documento.add(tablaFiltros.getTabla());
-		
+
 		documento.add(lineaEnBlanco(fuente));
 		documento.add(lineaEnBlanco(fuente));
 
@@ -155,10 +106,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 					&& request.getParameter("selectHitoricoType") != "")
 							? Byte.parseByte(request.getParameter("selectHitoricoType"))
 							: HistoricoType.getFiltroHistoricoNoMarcado();
-
-			System.out.print("\n\nNumero iniciativas: " + tipo);
-			System.out.print("\n\nNumero iniciativas: " + ano);
-			System.out.print("\n\nNumero iniciativas: " + reporte.getEstatus());
+			
 			FiltroForm filtro = new FiltroForm();
 			filtro.setHistorico(selectHitoricoType);
 			if (filtroNombre.equals(""))
@@ -189,12 +137,12 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 			}
 			if (reporte.getEstatus() != null)
 				filtros.put("estatus", reporte.getEstatus());
-			
+
 			MessageResources messageResources = getResources(request);
 
 			TablaPDF tabla = null;
 			tabla = new TablaPDF(getConfiguracionPagina(request), request);
-			
+
 			crearTablaTitulo(tabla, messageResources);
 
 			List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
@@ -203,7 +151,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 					dibujarTabla(iniciativa, null, tabla, request, documento);
 				}
 				documento.add(tabla.getTabla());
@@ -219,7 +167,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 			List<OrganizacionStrategos> organizacionesSub = organizacionservice.getOrganizacionHijas(
 					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId(),
 					true);
-			
+
 			MessageResources messageResources = getResources(request);
 
 			OrganizacionStrategos org = (OrganizacionStrategos) organizacionservice.load(OrganizacionStrategos.class,
@@ -266,14 +214,14 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 			TablaPDF tabla = null;
 			tabla = new TablaPDF(getConfiguracionPagina(request), request);
-			
+
 
 			if (iniciativas.size() > 0) {
-				
+
 				crearTablaTitulo(tabla, messageResources);
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 					dibujarTabla(iniciativa, null, tabla, request, documento);
 				}
 				documento.add(tabla.getTabla());
@@ -288,12 +236,12 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 				fuente.setColor(0, 0, 0);
 				documento.add(lineaEnBlanco(fuente));
 			}
-			
+
 
 			// suborganizaciones
 			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					if (organizacion != null) {
 
@@ -335,12 +283,12 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 						TablaPDF tabla1 = null;
 						tabla1 = new TablaPDF(getConfiguracionPagina(request), request);
-						
+
 						crearTablaTitulo(tabla1, messageResources);
-						
+
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
 
-							Iniciativa iniciativa = (Iniciativa) iter1.next();							
+							Iniciativa iniciativa = iter1.next();
 							dibujarTabla(iniciativa, null, tabla1, request, documento);
 						}
 						documento.add(tabla1.getTabla());
@@ -377,12 +325,12 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 			reporte.setFiltro(filtro);
 
 			if (organizaciones.size() > 0) {
-				
+
 				MessageResources messageResources = getResources(request);
 
 				for (Iterator<OrganizacionStrategos> iter = organizaciones.iterator(); iter.hasNext();) {
 
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					if (organizacion != null) {
 						Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
@@ -422,11 +370,11 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 						TablaPDF tabla = null;
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
-						
+
 						crearTablaTitulo(tabla, messageResources);
 
 						for (Iterator<Iniciativa> iter1 = iniciativas.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();							
+							Iniciativa iniciativa = iter1.next();
 							dibujarTabla(iniciativa, organizacion, tabla, request, documento);
 						}
 						documento.add(tabla.getTabla());
@@ -445,7 +393,6 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 			}
 		}
 
-		documento.newPage();
 		organizacionservice.close();
 		iniciativaservice.close();
 
@@ -471,9 +418,9 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		}
 		return objetivo;
 	}
-	
+
 	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources messageResources) throws Exception {
-		int[] columnas = new int[7];		
+		int[] columnas = new int[7];
 		columnas[0] = 27;
 		columnas[1] = 10;
 		columnas[2] = 10;
@@ -485,7 +432,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
 
-		tabla.setColorFondo(128, 128, 128);
+		tabla.setColorFondo(21, 60, 120);
 		tabla.setColorLetra(255, 255, 255);
 		tabla.setTamanoFont(10);
 		tabla.setFormatoFont(Font.BOLD);
@@ -498,13 +445,13 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.anio"));
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.objetivo"));
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.tipo"));
-		
+
 		tabla.setColorFondo(255, 255, 255);
 		tabla.setColorLetra(0, 0, 0);
 		tabla.setTamanoFont(8);
 		tabla.setFormatoFont(Font.NORMAL);
-		
-		return tabla;		
+
+		return tabla;
 	}
 
 	public void dibujarTabla(Iniciativa iniciativa, OrganizacionStrategos organizacion, TablaPDF tabla,
@@ -539,9 +486,9 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		}
 
 	}
-			
+
 	private TablaPDF crearTablaFiltros(TablaPDF tabla, MessageResources mensajes, Document documento, HttpServletRequest request,  String todos, String tipo, String estatus, String ano, Font fuente) throws Exception {
-		
+
 		String tipoT = obtenerTipo(Long.parseLong(tipo));
 		String estatusT = obtenerEstatus(estatus);
 		String anio = "";
@@ -555,41 +502,41 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 			alcanceT = "Organización seleccionada";
 		else if(request.getParameter("alcance").equals("4"))
 			alcanceT = "Organización seleccionada y Sub-Organizaciones";
-		else 
+		else
 			alcanceT = "Todas las Organizaciones";
-				
+
 		int[] columnas = new int[4];
 		columnas[0] = 20;
 		columnas[1] = 15;
 		columnas[2] = 10;
 		columnas[3] = 15;
-		
+
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-		tabla.setColorFondo(128, 128, 128);
+		tabla.setColorFondo(21, 60, 120);
 		tabla.setColorLetra(255, 255, 255);
 		tabla.setTamanoFont(10);
 		tabla.setFormatoFont(Font.BOLD);
 		tabla.setAlineacionHorizontal(1);
-	
+
 		tabla.agregarCelda(mensajes.getMessage("jsp.editariniciativa.ficha.alcance") + " del Reporte");
 		tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.tipo"));
 		tabla.agregarCelda(mensajes.getMessage("jsp.editariniciativa.ficha.estatus"));
 		tabla.agregarCelda(mensajes.getMessage("jsp.gestionariniciativas.filtro.anio"));
-		
+
 		tabla.setColorFondo(255, 255, 255);
 		tabla.setColorLetra(0, 0, 0);
 		tabla.setTamanoFont(8);
 		tabla.setFormatoFont(Font.NORMAL);
-		
+
 		tabla.agregarCelda(alcanceT);
 		tabla.agregarCelda(tipoT);
 		tabla.agregarCelda(estatusT);
 		tabla.agregarCelda(anio);
-		
-		return tabla;		
+
+		return tabla;
 	}
-	
+
 	public String obtenerEstatus(String estatus) {
 		String nombre = "";
 		Integer est = Integer.parseInt(estatus);
@@ -625,7 +572,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		}
 		return nombre;
 	}
-	
+
 	public String obtenerTipo(Long tipo) {
 		String nombre = "";
 

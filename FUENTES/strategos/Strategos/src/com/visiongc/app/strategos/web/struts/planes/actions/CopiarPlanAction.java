@@ -6,6 +6,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -21,20 +30,14 @@ import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class CopiarPlanAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -49,14 +52,14 @@ public class CopiarPlanAction extends VgcAction
 		if (!strategosIndicadoresService.checkLicencia(request))
 		{
 			strategosIndicadoresService.close();
-			
+
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("action.guardarregistro.limite.exedido"));
 			this.saveMessages(request, messages);
-			
+
 			return this.getForwardBack(request, 1, false);
 		}
 		strategosIndicadoresService.close();
-		
+
 		String planId = request.getParameter("planId");
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 		editarPlanForm.clear();
@@ -64,13 +67,13 @@ public class CopiarPlanAction extends VgcAction
 		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0")))
 		{
 			Plan plan = (Plan)strategosPlanesService.load(Plan.class, new Long(planId));
-			
+
 			if (plan != null)
 			{
 				editarPlanForm.setPlanId(new Long(0L));
 				editarPlanForm.setOrganizacionId(plan.getOrganizacionId());
 				editarPlanForm.setPlanImpactaId(plan.getPlanImpactaId());
-				if (plan.getPlanImpactaId() != null) 
+				if (plan.getPlanImpactaId() != null)
 					editarPlanForm.setPlanImpactaNombre(plan.getPlanImpacta().getOrganizacion().getNombre() + " / " + plan.getPlanImpacta().getNombre());
 				editarPlanForm.setAnoInicial(plan.getAnoInicial());
 				editarPlanForm.setAnoFinal(plan.getAnoFinal());
@@ -99,28 +102,28 @@ public class CopiarPlanAction extends VgcAction
 
 		saveMessages(request, messages);
 
-		if (forward.equals("noencontrado")) 
+		if (forward.equals("noencontrado"))
 			return getForwardBack(request, 1, true);
-		
+
 		return mapping.findForward(forward);
 	}
-	
+
 	public int Copiar(Long organizacionOrigenId, Long organizacionDestinoId, HttpServletRequest request)
 	{
 		int respuesta = 10000;
-		
+
 	    StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService();
 
 	    Map<String, String> filtros = new HashMap<String, String>();
 
 	    filtros.put("organizacionId", organizacionOrigenId.toString());
 	    PaginaLista planes = strategosPlanesService.getPlanes(1, 999, "nombre", "ASC", true, filtros);
-	    
-        for (Iterator<?> iter = planes.getLista().iterator(); iter.hasNext(); ) 
+
+        for (Iterator<?> iter = planes.getLista().iterator(); iter.hasNext(); )
         {
         	Plan planOrigen = (Plan)iter.next();
         	Plan planDestino  = new Plan();
-        	
+
         	planDestino.setPlanId(new Long(0L));
         	planDestino.setOrganizacionId(organizacionDestinoId);
         	planDestino.setPlanImpactaId(planOrigen.getPlanImpactaId());
@@ -132,7 +135,7 @@ public class CopiarPlanAction extends VgcAction
 			planDestino.setMetodologiaId(planOrigen.getMetodologiaId());
 			planDestino.setNombre(planOrigen.getNombre());
 			planDestino.setMetodologiaId(planOrigen.getMetodologiaId());
-			
+
 			respuesta = CopiarClase(planOrigen, planDestino, request);
 			if (respuesta == 10000)
 			{
@@ -144,18 +147,18 @@ public class CopiarPlanAction extends VgcAction
         }
 
 	    strategosPlanesService.close();
-        
+
 		return respuesta;
 	}
-	
+
 	public int CopiarClase(Plan planOrigen, Plan planDestino, HttpServletRequest request)
 	{
 		int respuesta = 10000;
-		
+
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
 	    ClaseIndicadores claseOrigen = (ClaseIndicadores)strategosClasesIndicadoresService.load(ClaseIndicadores.class, planOrigen.getClaseId());
 	    ClaseIndicadores claseDestino = new ClaseIndicadores();
-	    
+
 	    Map<String, Object> filtros = new HashMap<String, Object>();
 
 	    filtros.put("organizacionId", planDestino.getOrganizacionId().toString());
@@ -166,7 +169,7 @@ public class CopiarPlanAction extends VgcAction
 	    List<ClaseIndicadores> clases = strategosClasesIndicadoresService.getClases(filtros);
 	    if (clases.size() > 0)
 	    {
-	        for (Iterator<?> iter = clases.iterator(); iter.hasNext(); ) 
+	        for (Iterator<?> iter = clases.iterator(); iter.hasNext(); )
 	        {
 	        	claseDestino = (ClaseIndicadores)iter.next();
 	        	planDestino.setClaseId(claseDestino.getClaseId());
@@ -182,7 +185,7 @@ public class CopiarPlanAction extends VgcAction
 				claseDestino.setPadreId(clasePadre.getClaseId());
 			else
 				respuesta = VgcReturnCode.DB_FK_VIOLATED;
-	
+
 			claseDestino.setClaseId(new Long(0L));
 			claseDestino.setNombre(claseOrigen.getNombre());
 			claseDestino.setOrganizacionId(planDestino.getOrganizacionId());
@@ -190,13 +193,13 @@ public class CopiarPlanAction extends VgcAction
 			claseDestino.setEnlaceParcial(claseOrigen.getEnlaceParcial());
 			claseDestino.setVisible(claseOrigen.getVisible());
 			claseDestino.setTipo(claseOrigen.getTipo());
-			
+
 			if (respuesta == VgcReturnCode.DB_OK)
 				respuesta = strategosClasesIndicadoresService.saveClaseIndicadores(claseDestino, (Usuario)request.getSession().getAttribute("usuario"));
 			if (respuesta == VgcReturnCode.DB_OK)
 				planDestino.setClaseId(claseDestino.getClaseId());
 	    }
-	    
+
 		if (respuesta == VgcReturnCode.DB_OK && planOrigen.getClaseIdIndicadoresTotales() != null)
 		{
 		    claseOrigen = (ClaseIndicadores)strategosClasesIndicadoresService.load(ClaseIndicadores.class, planOrigen.getClaseIdIndicadoresTotales());
@@ -210,7 +213,7 @@ public class CopiarPlanAction extends VgcAction
 
 		    if (clases.size() > 0)
 		    {
-		        for (Iterator<?> iter = clases.iterator(); iter.hasNext(); ) 
+		        for (Iterator<?> iter = clases.iterator(); iter.hasNext(); )
 		        {
 		        	claseDestino = (ClaseIndicadores)iter.next();
 		        	planDestino.setClaseIdIndicadoresTotales(claseDestino.getClaseId());
@@ -222,7 +225,7 @@ public class CopiarPlanAction extends VgcAction
 		    {
 				claseDestino = new ClaseIndicadores();
 				claseDestino.setPadreId(planDestino.getClaseId());
-		
+
 				claseDestino.setClaseId(new Long(0L));
 				claseDestino.setNombre(claseOrigen.getNombre());
 				claseDestino.setOrganizacionId(planDestino.getOrganizacionId());
@@ -230,7 +233,7 @@ public class CopiarPlanAction extends VgcAction
 				claseDestino.setEnlaceParcial(claseOrigen.getEnlaceParcial());
 				claseDestino.setVisible(claseOrigen.getVisible());
 				claseDestino.setTipo(claseOrigen.getTipo());
-				
+
 				respuesta = strategosClasesIndicadoresService.saveClaseIndicadores(claseDestino, (Usuario)request.getSession().getAttribute("usuario"));
 				if (respuesta == VgcReturnCode.DB_OK)
 					planDestino.setClaseIdIndicadoresTotales(claseDestino.getClaseId());
@@ -238,7 +241,7 @@ public class CopiarPlanAction extends VgcAction
 		}
 
 		strategosClasesIndicadoresService.close();
-		
+
 		if (respuesta == VgcReturnCode.DB_OK)
 		{
 		    List<ObjetosCopia> clasesCopiadas = new ArrayList<ObjetosCopia>();
@@ -246,7 +249,7 @@ public class CopiarPlanAction extends VgcAction
 
 		    respuesta = new com.visiongc.app.strategos.web.struts.indicadores.actions.CopiarIndicadorAction().CopiarIndicador(planOrigen, planDestino, clasesCopiadas, request);
 		}
-		
+
 		return respuesta;
 	}
 }

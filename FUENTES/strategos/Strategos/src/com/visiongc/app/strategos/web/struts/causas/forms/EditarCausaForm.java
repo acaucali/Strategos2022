@@ -52,7 +52,8 @@ public class EditarCausaForm extends EditarObjetoForm
     this.nivel = nivel;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.causaId = new Long(0L);
     this.padreId = new Long(0L);
     this.nombre = null;

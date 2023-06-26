@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions;
 
@@ -24,10 +24,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public final class SeleccionarActividadAction  extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -49,7 +51,7 @@ public final class SeleccionarActividadAction  extends VgcAction
 		String permitirCambiarIniciativa = request.getParameter("permitirCambiarIniciativa");
 		String iniciativaId = request.getParameter("iniciativaId");
 		String frecuencia = request.getParameter("frecuencia");
-		
+
 		seleccionarActividadForm.setNombreForma(request.getParameter("nombreForma"));
 		seleccionarActividadForm.setNombreCampoOculto(request.getParameter("nombreCampoOculto"));
 		seleccionarActividadForm.setNombreCampoValor(request.getParameter("nombreCampoValor"));
@@ -67,41 +69,41 @@ public final class SeleccionarActividadAction  extends VgcAction
 			iniciativasService.close();
 		}
 
-		if ((permitirCambiarOrganizacion != null) && (permitirCambiarOrganizacion.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarOrganizacion != null) && (permitirCambiarOrganizacion.equalsIgnoreCase("true")))
 			seleccionarActividadForm.setPermitirCambiarOrganizacion(new Boolean(true));
-		if ((permitirCambiarPlan != null) && (permitirCambiarPlan.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarPlan != null) && (permitirCambiarPlan.equalsIgnoreCase("true")))
 			seleccionarActividadForm.setPermitirCambiarPlan(new Boolean(true));
-		if ((permitirCambiarIniciativa != null) && (permitirCambiarIniciativa.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarIniciativa != null) && (permitirCambiarIniciativa.equalsIgnoreCase("true")))
 			seleccionarActividadForm.setPermitirCambiarIniciativa(new Boolean(true));
-		
-		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0"))) 
+
+		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0")))
 		{
 			StrategosIniciativasService iniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 			Plan plan = (Plan)iniciativasService.load(Plan.class, new Long(planId));
-			if (plan != null) 
+			if (plan != null)
 			{
 				seleccionarActividadForm.setPlanSeleccionadoId(plan.getPlanId());
 				seleccionarActividadForm.setOrganizacionSeleccionadaId(plan.getOrganizacionId());
 			}
 			iniciativasService.close();
 		}
-		if (seleccionarActividadForm.getPlanSeleccionadoId() == null) 
+		if (seleccionarActividadForm.getPlanSeleccionadoId() == null)
 		{
 			if ((organizacionId != null) && (!organizacionId.equals("")) && (!organizacionId.equals("0")))
 				seleccionarActividadForm.setOrganizacionSeleccionadaId(new Long(organizacionId));
-			else 
+			else
 				seleccionarActividadForm.setOrganizacionSeleccionadaId(new Long((String)request.getSession().getAttribute("organizacionId")));
 		}
-		if ((frecuencia != null) && (!frecuencia.equals(""))) 
+		if ((frecuencia != null) && (!frecuencia.equals("")))
 			seleccionarActividadForm.setFrecuenciaSeleccionada(new Byte(frecuencia));
-		if (seleccionarActividadForm.getFuncionCierre() != null) 
+		if (seleccionarActividadForm.getFuncionCierre() != null)
 		{
-			if (!seleccionarActividadForm.getFuncionCierre().equals("")) 
+			if (!seleccionarActividadForm.getFuncionCierre().equals(""))
 			{
 				if (seleccionarActividadForm.getFuncionCierre().indexOf(";") < 0)
 					seleccionarActividadForm.setFuncionCierre(seleccionarActividadForm.getFuncionCierre() + ";");
 			}
-			else 
+			else
 				seleccionarActividadForm.setFuncionCierre(null);
 		}
 

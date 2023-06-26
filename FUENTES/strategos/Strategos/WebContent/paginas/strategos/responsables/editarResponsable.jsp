@@ -48,8 +48,7 @@
 
 			function cancelar() {
 				window.document.editarResponsableForm.action = '<html:rewrite action="/responsables/cancelarGuardarResponsable"/>';
-				window.document.editarResponsableForm.submit();
-				this.close();
+				window.document.editarResponsableForm.submit();				
 			}
 
 			function ejecutarPorDefecto(e) {

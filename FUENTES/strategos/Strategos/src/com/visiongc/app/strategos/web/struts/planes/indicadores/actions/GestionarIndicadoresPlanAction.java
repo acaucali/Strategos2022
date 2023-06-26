@@ -1,5 +1,17 @@
 package com.visiongc.app.strategos.web.struts.planes.indicadores.actions;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -25,26 +37,16 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 public class GestionarIndicadoresPlanAction extends VgcAction
 {
 	private PaginaLista paginaIndicadores = null;
 
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -79,7 +81,7 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 
 		Perspectiva perspectiva = (Perspectiva)strategosIndicadoresService.load(Perspectiva.class, gestionarPlanForm.getPerspectivaId());
 
-		if (perspectiva != null) 
+		if (perspectiva != null)
 		{
 			gestionarIndicadoresPlanForm.setNombreIndicadorPlural(perspectiva.getPlan().getMetodologia().getNombreIndicadorPlural());
 			gestionarIndicadoresPlanForm.setNombreIndicadorSingular(perspectiva.getPlan().getMetodologia().getNombreIndicadorSingular());
@@ -89,29 +91,29 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		String tipoOrden = gestionarIndicadoresPlanForm.getTipoOrden();
 		int pagina = gestionarIndicadoresPlanForm.getPagina();
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "nombre";
 			gestionarIndicadoresPlanForm.setAtributoOrden(atributoOrden);
 		}
-		
-		if (tipoOrden == null) 
+
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarIndicadoresPlanForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
-		if (perspectiva.getPadreId() != null) 
+		if (perspectiva.getPadreId() != null)
 			filtros.put("perspectivaId", gestionarPlanForm.getPerspectivaId().toString());
 		else if (perspectiva.getPadreId() == null)
 		{
 			if (gestionarPerspectivasForm.getVerIndicadoresLogroPlan())
 				filtros.put("indicadoresLogroPlanId", gestionarPlanForm.getPlanId().toString());
-			else 
+			else
 				filtros.put("indicadoresLogroPerspectivasPrincipalesPlanId", gestionarPlanForm.getPlanId().toString());
 		}
 
@@ -127,21 +129,21 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 			paginaIndicadores = null;
 			request.getSession().removeAttribute("actualizarForma");
 		}
-		
+
 		boolean actualizarIndicadores = false;
 		if (paginaIndicadores == null)
 		{
 			Plan plan = (Plan)strategosIndicadoresService.load(Plan.class, gestionarPlanForm.getPlanId());
 			if (gestionarPerspectivasForm.getVerIndicadoresLogroPlan())
 				paginaIndicadores = strategosIndicadoresService.getIndicadoresLogroPlan(pagina, totalPaginas, atributoOrden, tipoOrden, true, filtros);
-			else 
+			else
 				paginaIndicadores = strategosIndicadoresService.getIndicadores(pagina, totalPaginas, atributoOrden, tipoOrden, true, filtros, plan.getAnoInicial(), plan.getAnoFinal(), true);
 			paginaIndicadores.setFiltros(filtros);
 			paginaIndicadores.setNroPagina(pagina);
 			paginaIndicadores.setTamanoPagina(totalPaginas);
 			paginaIndicadores.setOrden(atributoOrden);
 			paginaIndicadores.setTipoOrden(tipoOrden);
-			
+
 			actualizarIndicadores = true;
 		}
 
@@ -150,23 +152,23 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 			if (!perspectiva.getTipoCalculo().equals(TipoCalculoPerspectiva.getTipoCalculoPerspectivaAutomatico()))
 			{
 				int numeroVeces = paginaIndicadores.getLista().size();
-				for (int k = 1; k <= numeroVeces; k++) 
+				for (int k = 1; k <= numeroVeces; k++)
 				{
-					for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); ) 
+					for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); )
 					{
 						boolean eliminarIndicador = false;
 						Indicador indicador = (Indicador)i.next();
-						for (Iterator<?> p = perspectiva.getHijos().iterator(); p.hasNext(); ) 
+						for (Iterator<?> p = perspectiva.getHijos().iterator(); p.hasNext(); )
 						{
 							Perspectiva perspectivaHija = (Perspectiva)p.next();
-							if ((indicador.getIndicadorId().longValue() == perspectivaHija.getNlAnoIndicadorId().longValue()) || (indicador.getIndicadorId().longValue() == perspectivaHija.getNlParIndicadorId().longValue())) 
+							if ((indicador.getIndicadorId().longValue() == perspectivaHija.getNlAnoIndicadorId().longValue()) || (indicador.getIndicadorId().longValue() == perspectivaHija.getNlParIndicadorId().longValue()))
 							{
 								eliminarIndicador = true;
 								break;
 							}
 						}
-						
-						if (eliminarIndicador) 
+
+						if (eliminarIndicador)
 						{
 							paginaIndicadores.getLista().remove(indicador);
 							break;
@@ -180,39 +182,39 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService(strategosMetasService);
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
 
-		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan(); 
+		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
 		gestionarIndicadoresPlanForm.setConfiguracionPlan(configuracionPlan);
-		
+
 		if (actualizarIndicadores)
 		{
-			for (Iterator<?> iter = paginaIndicadores.getLista().iterator(); iter.hasNext(); ) 
+			for (Iterator<?> iter = paginaIndicadores.getLista().iterator(); iter.hasNext(); )
 			{
 				Indicador indicador = (Indicador)iter.next();
-				if (indicador.getFechaUltimaMedicion() != null) 
+				if (indicador.getFechaUltimaMedicion() != null)
 				{
 					List<?> metas = strategosMetasService.getMetasAnuales(indicador.getIndicadorId(), gestionarPlanForm.getPlanId(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), false);
-					if (metas.size() > 0) 
+					if (metas.size() > 0)
 						indicador.setMetaAnual(((Meta)metas.get(0)).getValor());
 					metas = strategosMetasService.getMetasParciales(indicador.getIndicadorId(), gestionarPlanForm.getPlanId(), indicador.getFrecuencia(), indicador.getOrganizacion().getMesCierre(), indicador.getCorte(), indicador.getTipoCargaMedicion(), TipoMeta.getTipoMetaParcial(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionPeriodo(), indicador.getFechaUltimaMedicionPeriodo());
-					if (metas.size() > 0) 
+					if (metas.size() > 0)
 					{
 						Meta metaParcial = (Meta)metas.get(0);
 						indicador.setMetaParcial(metaParcial.getValor());
 					}
 
 					List<?> estados = strategosPlanesService.getIndicadorEstados(indicador.getIndicadorId(), gestionarPlanForm.getPlanId(), indicador.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoParcial(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionPeriodo(), indicador.getFechaUltimaMedicionPeriodo());
-					if (estados.size() > 0) 
+					if (estados.size() > 0)
 					{
 						IndicadorEstado indEstado = (IndicadorEstado)estados.get(0);
 						indicador.setEstadoParcial(indEstado.getEstado());
 					}
 					estados = strategosPlanesService.getIndicadorEstados(indicador.getIndicadorId(), gestionarPlanForm.getPlanId(), indicador.getFrecuencia(), TipoIndicadorEstado.getTipoIndicadorEstadoAnual(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionPeriodo(), indicador.getFechaUltimaMedicionPeriodo());
-					if (estados.size() > 0) 
+					if (estados.size() > 0)
 					{
 						IndicadorEstado indEstado = (IndicadorEstado)estados.get(0);
 						indicador.setEstadoAnual(indEstado.getEstado());
 					}
-					
+
 					if (indicador.getUltimaMedicion() != null && (indicador.getMetaParcial() != null || indicador.getUltimaMedicionAnoAnterior() != null))
 					{
 						Double zonaVerde = strategosIndicadoresService.zonaVerde(indicador, indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionPeriodo(), (indicador.getMetaParcial() != null ? indicador.getMetaParcial() : indicador.getUltimaMedicionAnoAnterior()), strategosMedicionesService);
@@ -225,7 +227,7 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 				indicadorPerspectivaPk.setIndicadorId(indicador.getIndicadorId());
 				indicadorPerspectivaPk.setPerspectivaId(gestionarPlanForm.getPerspectivaId());
 				IndicadorPerspectiva indicadorPerspectiva = (IndicadorPerspectiva)strategosIndicadoresService.load(IndicadorPerspectiva.class, indicadorPerspectivaPk);
-				if (indicadorPerspectiva != null) 
+				if (indicadorPerspectiva != null)
 					indicador.setPeso(indicadorPerspectiva.getPeso());
 			}
 		}
@@ -240,13 +242,13 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		request.setAttribute("paginaIndicadores", paginaIndicadores);
 		strategosIndicadoresService.close();
 
-		if (paginaIndicadores.getLista().size() > 0) 
+		if (paginaIndicadores.getLista().size() > 0)
 		{
 			Indicador indicador = (Indicador)paginaIndicadores.getLista().get(0);
 			gestionarIndicadoresPlanForm.setSeleccionados(indicador.getIndicadorId().toString());
 			gestionarIndicadoresPlanForm.setValoresSeleccionados(indicador.getNombre());
-		} 
-		else 
+		}
+		else
 			gestionarIndicadoresPlanForm.setSeleccionados(null);
 
 		return mapping.findForward(forward);

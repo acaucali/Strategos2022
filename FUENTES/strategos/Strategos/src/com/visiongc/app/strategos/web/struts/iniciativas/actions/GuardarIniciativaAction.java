@@ -1,5 +1,22 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
@@ -23,36 +40,19 @@ import com.visiongc.app.strategos.planificacionseguimiento.model.PryActividad;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.util.StatusUtil;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.EditarIniciativaForm;
-import com.visiongc.app.strategos.web.struts.iniciativas.forms.GestionarIniciativasForm;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.util.StringUtil;
-import com.visiongc.commons.util.lang.ChainedRuntimeException;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-
 public class GuardarIniciativaAction extends VgcAction {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
@@ -237,6 +237,14 @@ public class GuardarIniciativaAction extends VgcAction {
 		} else {
 			iniciativa.setTipoId(null);
 		}
+		
+		String selectCargo = request.getParameter("selectCargo");
+
+		if (selectCargo != null && !selectCargo.equals("") && !selectCargo.equals("0")) {
+			iniciativa.setCargoId(Long.parseLong(selectCargo));
+		} else {
+			iniciativa.setCargoId(null);
+		}
 
 		if (editarIniciativaForm.getAlertaZonaAmarilla() != null
 				&& editarIniciativaForm.getHayValorPorcentajeAmarillo())
@@ -304,8 +312,7 @@ public class GuardarIniciativaAction extends VgcAction {
 			int anoCentral = FechaUtil.getAno(new Date());
 
 			int anoTemp = anoCentral - 5;
-			for (int i = 0; i < resultadosEspecificos.length; i++) {
-				String resultadoEspecifico = resultadosEspecificos[i];
+			for (String resultadoEspecifico : resultadosEspecificos) {
 				if (!resultadoEspecifico.equals("")) {
 					ResultadoEspecificoIniciativa resultadoEspecificoIniciativa = new ResultadoEspecificoIniciativa();
 
@@ -450,7 +457,7 @@ public class GuardarIniciativaAction extends VgcAction {
 	public int actualizarActividades(Boolean cambioFrecuencia, Iniciativa iniciativa, Usuario usuario,
 			StrategosIniciativasService strategosIniciativasService) {
 		int respuesta = VgcReturnCode.DB_OK;
-		;
+
 
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance()
 				.openStrategosPryActividadesService(strategosIniciativasService);
@@ -473,7 +480,7 @@ public class GuardarIniciativaAction extends VgcAction {
 			actividades = strategosPryActividadesService
 					.getActividades(pagina, 0, atributoOrden, tipoOrden, false, filtros).getLista();
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+				PryActividad actividad = iter.next();
 				if (comienzoPlan == null)
 					comienzoPlan = actividad.getComienzoPlan();
 				if (finPlan == null)
@@ -505,7 +512,7 @@ public class GuardarIniciativaAction extends VgcAction {
 				actividades = strategosPryActividadesService
 						.getActividades(pagina, 0, atributoOrden, tipoOrden, false, filtros).getLista();
 				for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-					PryActividad actividad = (PryActividad) iter.next();
+					PryActividad actividad = iter.next();
 
 					actividad.setFechaUltimaMedicion(null);
 					actividad.setPorcentajeCompletado(null);
@@ -532,7 +539,7 @@ public class GuardarIniciativaAction extends VgcAction {
 							if (inds.size() > 0) {
 								indicador = inds.get(0);
 								respuesta = VgcReturnCode.DB_OK;
-								;
+
 							}
 						}
 					}
@@ -554,7 +561,7 @@ public class GuardarIniciativaAction extends VgcAction {
 					.getActividades(pagina, 0, atributoOrden, tipoOrden, false, filtros).getLista();
 
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+				PryActividad actividad = iter.next();
 
 				if (iniciativa.getNombre() != null)
 					actividad.setNombre(iniciativa.getNombre());
@@ -678,7 +685,7 @@ public class GuardarIniciativaAction extends VgcAction {
 			actividades = strategosPryActividadesService
 					.getActividades(pagina, 0, atributoOrden, tipoOrden, false, filtros).getLista();
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
-				PryActividad actividad = (PryActividad) iter.next();
+				PryActividad actividad = iter.next();
 				indicadores.add(actividad.getIndicadorId());
 				actividad.setFechaUltimaMedicion(null);
 				actividad.setPorcentajeCompletado(null);
@@ -701,7 +708,7 @@ public class GuardarIniciativaAction extends VgcAction {
 					.openStrategosIndicadoresService();
 
 			for (Iterator<Long> iter = indicadores.iterator(); iter.hasNext();) {
-				Long indicadorId = (Long) iter.next();
+				Long indicadorId = iter.next();
 				if (indicadorId != null) {
 					if (respuesta == VgcReturnCode.DB_OK)
 						respuesta = strategosMedicionesService.deleteMediciones(indicadorId);

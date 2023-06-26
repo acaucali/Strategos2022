@@ -1,5 +1,9 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproductos.util;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeSet;
+
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdProducto;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimiento;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PrdSeguimientoProducto;
@@ -9,11 +13,6 @@ import com.visiongc.app.strategos.planificacionseguimiento.model.util.Comparator
 import com.visiongc.app.strategos.web.struts.planificacionseguimiento.prdproductos.forms.RegistrarSeguimientoForm;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class RegistroSeguimientoUtil
 {

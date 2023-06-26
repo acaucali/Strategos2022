@@ -30,7 +30,7 @@ public interface VgcPersistenceSession
 
     public abstract Blob readBlob(String s, String s1, String s2, String s3)
         throws Exception;
-
+    
     public abstract int saveBlob(String s, String s1, byte abyte0[], String as[], Object aobj[])
         throws Exception;
 

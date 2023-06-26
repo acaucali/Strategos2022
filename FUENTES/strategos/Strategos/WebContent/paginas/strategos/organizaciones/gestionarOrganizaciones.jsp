@@ -410,8 +410,13 @@
 					
 					var message = "<div style='border:1px solid; height:250; width:335;'>" + '<bean:write name="gestionarOrganizacionesForm" property="alerta" />';
 					var descripcion = '<bean:write name="gestionarOrganizacionesForm" property="descripcion" />';
+					var descripcionUrl = '<bean:write name="gestionarOrganizacionesForm" property="descripcionUrl" />';
 					if (descripcion != "")
 						message = message + "<br><br><div style='color:blue;'>" + descripcion + "</div>";
+					if (descripcionUrl != ""){
+						let result = descripcionUrl.link(descripcionUrl);
+						message = message + "<br><br><div style='text-decoration-line: underline; color:blue;'>" + result + "</div>";
+					}
 					message = message + "</div>";
 					
 					$('#dialog-message').html(message);

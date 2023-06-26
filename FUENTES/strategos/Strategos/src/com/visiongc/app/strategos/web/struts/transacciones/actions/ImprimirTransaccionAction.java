@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.transacciones.actions;
 
@@ -15,19 +15,16 @@ import org.apache.struts.util.MessageResources;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
-
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.web.struts.transacciones.forms.TransaccionForm;
-
 import com.visiongc.commons.report.TablaBasicaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
-
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.Columna;
-import com.visiongc.framework.model.Transaccion;
 import com.visiongc.framework.model.Columna.ColumnaTipo;
+import com.visiongc.framework.model.Transaccion;
 import com.visiongc.framework.transaccion.TransaccionService;
 
 /**
@@ -41,15 +38,17 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 	private int inicioTamanoPagina = 40;
 	private String tituloReporte = null;
 
-	protected String agregarTitulo(HttpServletRequest request,	MessageResources mensajes) throws Exception 
+	@Override
+	protected String agregarTitulo(HttpServletRequest request,	MessageResources mensajes) throws Exception
 	{
 		tituloReporte = request.getParameter("nombre") != null ? request.getParameter("nombre") : null;
 	    if (tituloReporte == null)
 	    	tituloReporte = mensajes.getMessage("jsp.reporte.transaccion.imprimir.titulo");
 		return tituloReporte;
 	}
-	
-	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception 
+
+	@Override
+	protected void construirReporte(ActionForm form, HttpServletRequest request, HttpServletResponse response, Document documento) throws Exception
 	{
 		Long transaccionId = (request.getParameter("transaccionId") != null ? Long.parseLong(request.getParameter("transaccionId")) : 0L);
 		String fechaInicial = (request.getParameter("fechaInicial") != null ? request.getParameter("fechaInicial") : null);
@@ -63,7 +62,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 		TransaccionForm transaccionForm = new TransaccionForm();
 		transaccionForm.clear();
 		transaccionForm.setTransaccionId(transaccionId);
-		
+
 		transaccionForm.setFechaInicial(fechaInicial);
 		transaccionForm.setFechaFinal(fechaFinal);
 		transaccionForm.setNumeroRegistros(numeroRegistros);
@@ -71,7 +70,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 		{
 			if (transaccion.getTabla() != null)
 				transaccionForm.setTransaccion(transaccion);
-			
+
 			StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 			Indicador indicador;
 			transaccionForm.setFrecuencia(transaccion.getFrecuencia());
@@ -81,7 +80,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 				transaccionForm.setTransaccion(transaccion);
 				for (Iterator<Columna> i = transaccion.getTabla().getColumnas().iterator(); i.hasNext(); )
 				{
-					Columna columna = (Columna)i.next();
+					Columna columna = i.next();
 					if (columna.getTipo().byteValue() == ColumnaTipo.getTipoDate().byteValue())
 					{
 						transaccionForm.setHayColumnaFecha(true);
@@ -95,7 +94,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 							}
 						}
 					}
-					
+
 					if (columna.getTipo().byteValue() == ColumnaTipo.getTipoFloat().byteValue())
 					{
 						transaccionForm.setHayColumnaMonto(true);
@@ -113,27 +112,26 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 			}
 			strategosIndicadoresService.close();
 		}
-		
+
 		List<Columna> columnas = new ArrayList<Columna>();
 		String atributos = request.getParameter("xmlAtributos") != null && !request.getParameter("xmlAtributos").equals("") ? request.getParameter("xmlAtributos") : "";
 		if (!atributos.equals(""))
 		{
 			String[] tipos = atributos.split("\\|");
-			for (int i = 0; i < tipos.length; i++)
-			{
-				String[] campos = tipos[i].split(",");
+			for (String element : tipos) {
+				String[] campos = element.split(",");
 				if (campos.length == 6)
 				{
 					for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 					{
-						Columna columna = (Columna)col.next();
+						Columna columna = col.next();
 						if (columna.getNombre().equals(campos[1]))
 						{
 							columna.setOrden(campos[0]);
 							columna.setVisible(campos[3].equals("1") ? true : false);
 							columna.setAncho(campos[4]);
 							columna.setAgrupar(campos[5].equals("1") ? true : false);
-							
+
 							columnas.add(columna);
 						}
 					}
@@ -141,11 +139,11 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 			}
 			transaccionForm.getTransaccion().getTabla().setColumnas(columnas);
 		}
-		
+
 		String tipoPresentacion = request.getParameter("tipoPresentacion");
-		if (tipoPresentacion == null) 
+		if (tipoPresentacion == null)
 			tipoPresentacion = "pdf";
-		
+
 		// Configurar font
 		Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
 		Font fontBold = new Font(getConfiguracionPagina(request).getCodigoFuente());
@@ -158,7 +156,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 		int totalColumnas = 0;
 		for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 		{
-			Columna columna = (Columna)col.next();
+			Columna columna = col.next();
 			if (columna.getVisible())
 				totalColumnas++;
 		}
@@ -167,13 +165,13 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 	    tamanoPagina = inicioTamanoPagina;
 		TablaBasicaPDF tabla = inicializarTabla(font, totalColumnas, request);
 		imprimirEncabezado(tabla, transaccionForm);
-	    
+
 	    for (Iterator<List<Columna>> iter = datos.iterator(); iter.hasNext();)
 	    {
-	    	List<Columna> columna = (List<Columna>)iter.next();
+	    	List<Columna> columna = iter.next();
 	    	for (Iterator<Columna> col = columna.iterator(); col.hasNext(); )
 	    	{
-				Columna c = (Columna)col.next();
+				Columna c = col.next();
 				if (c.getVisible())
 					tabla.agregarCelda(c.getValorArchivo());
 	    	}
@@ -190,7 +188,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 				imprimirEncabezado(tabla, transaccionForm);
 			}
 	    }
-		
+
 	    if (lineas < tamanoPagina)
 	    	documento.add(tabla.getTabla());
 
@@ -238,11 +236,11 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 			tabla = saltarPagina(documento, true, font, totalColumnas, tituloReporte, request);
 			lineas = 2;
 		}
-	    
+
 	    if (lineas < tamanoPagina)
 	    	documento.add(tabla.getTabla());
 	}
-	
+
 	private void imprimirEncabezado(TablaBasicaPDF tabla, TransaccionForm transaccionForm) throws Exception
 	{
 		tabla.setFont(Font.BOLD);
@@ -251,7 +249,7 @@ public class ImprimirTransaccionAction extends VgcReporteBasicoAction
 	    tabla.setColorFondo(128, 128, 128);
 		for (Iterator<Columna> col = transaccionForm.getTransaccion().getTabla().getColumnas().iterator(); col.hasNext(); )
 		{
-			Columna columna = (Columna)col.next();
+			Columna columna = col.next();
 			if (columna.getVisible())
 				tabla.agregarCelda(columna.getAlias());
 		}

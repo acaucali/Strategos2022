@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
@@ -23,30 +23,30 @@ import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.RelacionIniciativaForm;
-
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.ArbolBean;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.commons.web.TreeviewWeb;
-
 import com.visiongc.framework.arboles.ArbolesService;
 import com.visiongc.framework.arboles.NodoArbol;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
 
 /**
  * @author Kerwin
- * 
+ *
  */
-public class VisualizarIniciativasRelacionadasAction extends VgcAction 
+public class VisualizarIniciativasRelacionadasAction extends VgcAction
 {
 	public static final String ACTION_KEY = "VisualizarIniciativasRelacionadasAction";
 
-	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) 
+	@Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	@Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
@@ -65,23 +65,23 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		relacionIniciativaForm.setOrganizacionSeleccionadaId(new Long((String) request.getSession().getAttribute("organizacionId")));
 
 		Iniciativa iniciativa = null;
-		if (iniciativaId != null && !iniciativaId.equals("") && !iniciativaId.equals("0")) 
+		if (iniciativaId != null && !iniciativaId.equals("") && !iniciativaId.equals("0"))
 		{
 			relacionIniciativaForm.setIniciativaSeleccionadaId(new Long(iniciativaId));
 			iniciativa = (Iniciativa) strategosIniciativasService.load(Iniciativa.class, new Long(relacionIniciativaForm.getIniciativaSeleccionadaId()));
-			if (iniciativa != null) 
+			if (iniciativa != null)
 			{
-				if (iniciativa.getNombre().indexOf(" / ") == -1) 
+				if (iniciativa.getNombre().indexOf(" / ") == -1)
 				{
 					OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, iniciativa.getOrganizacionId());
 					iniciativa.setOrganizacion(organizacionStrategos);
 					iniciativa.setNombre(organizacionStrategos.getNombre() + " / " + iniciativa.getNombre());
 				}
 				iniciativa.setIniciativasAsociadas(strategosIniciativasService.getIniciativasAsociadas(iniciativa.getIniciativaId()));
-				for (Iterator<Iniciativa> iter = iniciativa.getIniciativasAsociadas().iterator(); iter.hasNext();) 
+				for (Iterator<Iniciativa> iter = iniciativa.getIniciativasAsociadas().iterator(); iter.hasNext();)
 				{
-					Iniciativa iniciativaAsociada = (Iniciativa) iter.next();
-					if (iniciativaAsociada.getNombre().indexOf(" / ") == -1) 
+					Iniciativa iniciativaAsociada = iter.next();
+					if (iniciativaAsociada.getNombre().indexOf(" / ") == -1)
 					{
 						OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativaAsociada.getOrganizacionId()));
 						iniciativaAsociada.setOrganizacion(organizacion);
@@ -97,7 +97,7 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		ArbolBean arbolRelacionBean = (ArbolBean) request.getSession().getAttribute("gestionarIniciativasRelacionadasArbolBean");
 		if (request.getParameter("accion") != null && request.getParameter("accion").equals("refrescar")) arbolRelacionBean = null;
 
-		if (arbolRelacionBean == null) 
+		if (arbolRelacionBean == null)
 		{
 			arbolRelacionBean = new ArbolBean();
 			arbolRelacionBean.clear();
@@ -106,7 +106,7 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 
 		if (arbolRelacionBean.getNodoSeleccionado() == null)
 			setNodoRoot(request, iniciativa, arbolRelacionBean, strategosIniciativasService);
-		else 
+		else
 		{
 			String selectedId = request.getParameter("selectedId");
 			String openId = request.getParameter("openId");
@@ -115,31 +115,31 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 			NodoArbol nodoSeleccionado = null;
 
 			if (request.getAttribute("VisualizarIniciativasRelacionadasAction.reloadId") != null) {
-				nodoSeleccionado = (NodoArbol) arbolRelacionBean.getNodos().get((String) request.getAttribute("VisualizarIniciativasRelacionadasAction.reloadId"));
+				nodoSeleccionado = (NodoArbol) arbolRelacionBean.getNodos().get(request.getAttribute("VisualizarIniciativasRelacionadasAction.reloadId"));
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, nodoSeleccionado.getNodoArbolId());
-			} 
-			else if ((selectedId != null) && (!selectedId.equals(""))) 
+			}
+			else if ((selectedId != null) && (!selectedId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol) arbolRelacionBean.getNodos().get(selectedId);
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, nodoSeleccionado.getNodoArbolId());
-			} 
-			else if ((openId != null) && (!openId.equals(""))) 
+			}
+			else if ((openId != null) && (!openId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol) arbolRelacionBean.getNodos().get(openId);
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, openId);
-			} 
-			else if ((closeId != null) && (!closeId.equals(""))) 
+			}
+			else if ((closeId != null) && (!closeId.equals("")))
 			{
 				nodoSeleccionado = (NodoArbol) arbolRelacionBean.getNodos().get(closeId);
 				TreeviewWeb.publishArbolCerrarNodo(arbolRelacionBean, closeId);
-			} 
-			else 
+			}
+			else
 			{
 				nodoSeleccionado = (NodoArbol) arbolRelacionBean.getNodos().get(arbolRelacionBean.getSeleccionadoId());
 				TreeviewWeb.publishArbolAbrirNodo(arbolRelacionBean, nodoSeleccionado.getNodoArbolId());
 			}
 
-			if (!refrescarArbol(request, iniciativa, arbolRelacionBean, nodoSeleccionado, strategosIniciativasService)) 
+			if (!refrescarArbol(request, iniciativa, arbolRelacionBean, nodoSeleccionado, strategosIniciativasService))
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
 		}
 
@@ -155,14 +155,14 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		return mapping.findForward(forward);
 	}
 
-	private void setRutaCompletaOrganizacion(RelacionIniciativaForm relacionIniciativaForm, OrganizacionStrategos organizacion, StrategosIniciativasService strategosIniciativasService) 
+	private void setRutaCompletaOrganizacion(RelacionIniciativaForm relacionIniciativaForm, OrganizacionStrategos organizacion, StrategosIniciativasService strategosIniciativasService)
 	{
 		OrganizacionStrategos org = organizacion;
 		String rutaCompleta = org.getNombre();
-		if (org.getPadreId() != null) 
+		if (org.getPadreId() != null)
 		{
 			org.setPadre((OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(org.getPadreId())));
-			while (org.getPadre() != null) 
+			while (org.getPadre() != null)
 			{
 				org = org.getPadre();
 				rutaCompleta = org.getNombre() + " / " + rutaCompleta;
@@ -172,20 +172,20 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		relacionIniciativaForm.setRutaCompletaOrganizacion(rutaCompleta);
 	}
 
-	private void setNodoRoot(HttpServletRequest request, Iniciativa iniciativa, ArbolBean arbolRelacionBean, StrategosIniciativasService strategosIniciativasService) throws Exception 
+	private void setNodoRoot(HttpServletRequest request, Iniciativa iniciativa, ArbolBean arbolRelacionBean, StrategosIniciativasService strategosIniciativasService) throws Exception
 	{
 		arbolRelacionBean.setNodoRaiz(iniciativa);
 		arbolRelacionBean.getNodos().put(iniciativa.getNodoArbolId(), iniciativa);
 		iniciativa.setNodoArbolHijos(iniciativa.getIniciativasAsociadas());
 		iniciativa.setNodoArbolHijosCargados(true);
-		for (Iterator<Iniciativa> iter = iniciativa.getNodoArbolHijos().iterator(); iter.hasNext();) 
+		for (Iterator<Iniciativa> iter = iniciativa.getNodoArbolHijos().iterator(); iter.hasNext();)
 		{
-			Iniciativa iniciativaAsociada = (Iniciativa) iter.next();
+			Iniciativa iniciativaAsociada = iter.next();
 			iniciativaAsociada.setIniciativasAsociadas(strategosIniciativasService.getIniciativasAsociadas(iniciativaAsociada.getIniciativaId()));
-			for (Iterator<Iniciativa> iterAsociadas = iniciativaAsociada.getIniciativasAsociadas().iterator(); iterAsociadas.hasNext();) 
+			for (Iterator<Iniciativa> iterAsociadas = iniciativaAsociada.getIniciativasAsociadas().iterator(); iterAsociadas.hasNext();)
 			{
-				Iniciativa hija = (Iniciativa) iterAsociadas.next();
-				if (hija.getNombre().indexOf(" / ") == -1) 
+				Iniciativa hija = iterAsociadas.next();
+				if (hija.getNombre().indexOf(" / ") == -1)
 				{
 					OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(hija.getOrganizacionId()));
 					hija.setOrganizacion(organizacion);
@@ -204,15 +204,15 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		arbolRelacionBean.setSeleccionadoId(iniciativa.getNodoArbolId());
 	}
 
-	private void refrescarRelacion(ArbolBean arbolRelacionBean, NodoArbol iniciativa, List<Iniciativa> iniciativasAsociadas, StrategosIniciativasService strategosIniciativasService) 
+	private void refrescarRelacion(ArbolBean arbolRelacionBean, NodoArbol iniciativa, List<Iniciativa> iniciativasAsociadas, StrategosIniciativasService strategosIniciativasService)
 	{
 		List<Iniciativa> nodosHijos = iniciativasAsociadas;
-		if (iniciativa.getNodoArbolHijosCargados()) 
+		if (iniciativa.getNodoArbolHijosCargados())
 		{
-			for (Iterator<?> iter = nodosHijos.iterator(); iter.hasNext();) 
+			for (Iterator<?> iter = nodosHijos.iterator(); iter.hasNext();)
 			{
 				NodoArbol nodoHijo = (NodoArbol) iter.next();
-				if (arbolRelacionBean.getNodos().get(nodoHijo.getNodoArbolId()) == null) 
+				if (arbolRelacionBean.getNodos().get(nodoHijo.getNodoArbolId()) == null)
 				{
 					iniciativa.getNodoArbolHijos().add(nodoHijo);
 					arbolRelacionBean.getNodos().put(nodoHijo.getNodoArbolId(), nodoHijo);
@@ -220,23 +220,23 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 			}
 
 			int index = 0;
-			while (index < iniciativa.getNodoArbolHijos().size()) 
+			while (index < iniciativa.getNodoArbolHijos().size())
 			{
-				NodoArbol iniciativaHija = (NodoArbol) ((List<NodoArbol>) iniciativa.getNodoArbolHijos()).get(index);
-				if (nodosHijos.contains(iniciativaHija)) 
+				NodoArbol iniciativaHija = ((List<NodoArbol>) iniciativa.getNodoArbolHijos()).get(index);
+				if (nodosHijos.contains(iniciativaHija))
 				{
 					Iniciativa iniciativaInsumo = (Iniciativa) strategosIniciativasService.load(Iniciativa.class, new Long(iniciativaHija.getNodoArbolId()));
-					if (iniciativaInsumo.getNombre().indexOf(" / ") == -1) 
+					if (iniciativaInsumo.getNombre().indexOf(" / ") == -1)
 					{
 						OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativaInsumo.getOrganizacionId()));
 						iniciativaInsumo.setOrganizacion(organizacion);
 						iniciativaInsumo.setNombre(organizacion.getNombre() + " / " + iniciativaInsumo.getNombre());
 					}
 					iniciativaInsumo.setIniciativasAsociadas(strategosIniciativasService.getIniciativasAsociadas(iniciativaInsumo.getIniciativaId()));
-					for (Iterator<Iniciativa> iter = iniciativaInsumo.getIniciativasAsociadas().iterator(); iter.hasNext();) 
+					for (Iterator<Iniciativa> iter = iniciativaInsumo.getIniciativasAsociadas().iterator(); iter.hasNext();)
 					{
-						Iniciativa iniciativaAsociada = (Iniciativa) iter.next();
-						if (iniciativaAsociada.getNombre().indexOf(" / ") == -1) 
+						Iniciativa iniciativaAsociada = iter.next();
+						if (iniciativaAsociada.getNombre().indexOf(" / ") == -1)
 						{
 							OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativaAsociada.getOrganizacionId()));
 							iniciativaAsociada.setOrganizacion(organizacion);
@@ -246,34 +246,34 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 
 					refrescarRelacion(arbolRelacionBean, iniciativaHija, iniciativaInsumo.getIniciativasAsociadas(), strategosIniciativasService);
 					index++;
-				} 
+				}
 				else
 					((List<NodoArbol>) iniciativa.getNodoArbolHijos()).remove(index);
 			}
-		} 
-		else 
+		}
+		else
 		{
 			iniciativa.setNodoArbolHijos(nodosHijos);
 			iniciativa.setNodoArbolHijosCargados(true);
-			for (Iterator<NodoArbol> iter = iniciativa.getNodoArbolHijos().iterator(); iter.hasNext();) 
+			for (Iterator<NodoArbol> iter = iniciativa.getNodoArbolHijos().iterator(); iter.hasNext();)
 			{
-				NodoArbol iniciativaHija = (NodoArbol) iter.next();
+				NodoArbol iniciativaHija = iter.next();
 				iniciativaHija.setNodoArbolPadre(iniciativa);
 				arbolRelacionBean.getNodos().put(iniciativaHija.getNodoArbolId(), iniciativaHija);
 			}
 		}
 	}
 
-	private boolean refrescarArbol(HttpServletRequest request, Iniciativa iniciativa, ArbolBean arbolRelacionBean, NodoArbol nodoSeleccionado, StrategosIniciativasService strategosIniciativasService) throws Exception 
+	private boolean refrescarArbol(HttpServletRequest request, Iniciativa iniciativa, ArbolBean arbolRelacionBean, NodoArbol nodoSeleccionado, StrategosIniciativasService strategosIniciativasService) throws Exception
 	{
 		boolean rootCargado = false;
 		NodoArbol nodoActualizado = (NodoArbol) strategosIniciativasService.load(Iniciativa.class, new Long(nodoSeleccionado.getNodoArbolId()));
-		if (nodoActualizado == null || nodoActualizado.getNodoArbolId().equals(iniciativa.getIniciativaId().toString())) 
+		if (nodoActualizado == null || nodoActualizado.getNodoArbolId().equals(iniciativa.getIniciativaId().toString()))
 		{
 			Long iniciativaId = iniciativa.getIniciativaId();
 			iniciativa = null;
 			iniciativa = (Iniciativa) strategosIniciativasService.load(Iniciativa.class, new Long(iniciativaId));
-			if (iniciativa != null) 
+			if (iniciativa != null)
 			{
 				rootCargado = true;
 
@@ -281,10 +281,10 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 				iniciativa.setOrganizacion(organizacionStrategos);
 
 				iniciativa.setIniciativasAsociadas(strategosIniciativasService.getIniciativasAsociadas(iniciativa.getIniciativaId()));
-				for (Iterator<Iniciativa> iter = iniciativa.getIniciativasAsociadas().iterator(); iter.hasNext();) 
+				for (Iterator<Iniciativa> iter = iniciativa.getIniciativasAsociadas().iterator(); iter.hasNext();)
 				{
-					Iniciativa iniciativaAsociada = (Iniciativa) iter.next();
-					if (iniciativaAsociada.getNombre().indexOf(" / ") == -1) 
+					Iniciativa iniciativaAsociada = iter.next();
+					if (iniciativaAsociada.getNombre().indexOf(" / ") == -1)
 					{
 						OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativaAsociada.getOrganizacionId()));
 						iniciativaAsociada.setOrganizacion(organizacion);
@@ -299,7 +299,7 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		}
 
 		Iniciativa iniciativaHija = (Iniciativa) strategosIniciativasService.load(Iniciativa.class, new Long(nodoSeleccionado.getNodoArbolId()));
-		if (!nodoActualizado.getNodoArbolId().equals(iniciativa.getIniciativaId().toString()) && iniciativaHija.getNombre().indexOf(" / ") == -1) 
+		if (!nodoActualizado.getNodoArbolId().equals(iniciativa.getIniciativaId().toString()) && iniciativaHija.getNombre().indexOf(" / ") == -1)
 		{
 			OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativaHija.getOrganizacionId()));
 			iniciativaHija.setOrganizacion(organizacion);
@@ -307,13 +307,13 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		}
 
 		nodoSeleccionado.setNodoArbolNombre(nodoActualizado.getNodoArbolNombre());
-		if (!rootCargado) 
+		if (!rootCargado)
 		{
 			iniciativaHija.setIniciativasAsociadas(strategosIniciativasService.getIniciativasAsociadas(iniciativaHija.getIniciativaId()));
-			for (Iterator<?> iter = iniciativaHija.getIniciativasAsociadas().iterator(); iter.hasNext();) 
+			for (Iterator<?> iter = iniciativaHija.getIniciativasAsociadas().iterator(); iter.hasNext();)
 			{
 				Iniciativa iniciativaAsociada = (Iniciativa) iter.next();
-				if (iniciativaAsociada.getNombre().indexOf(" / ") == -1) 
+				if (iniciativaAsociada.getNombre().indexOf(" / ") == -1)
 				{
 					OrganizacionStrategos organizacion = (OrganizacionStrategos) strategosIniciativasService.load(OrganizacionStrategos.class, new Long(iniciativaAsociada.getOrganizacionId()));
 					iniciativaAsociada.setOrganizacion(organizacion);
@@ -331,7 +331,7 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		return true;
 	}
 
-	private void actualizarAlertas(Iniciativa raiz, HttpServletRequest request) 
+	private void actualizarAlertas(Iniciativa raiz, HttpServletRequest request)
 	{
 		Map<String, String> iniciativaIds = new HashMap<String, String>();
 		getIds(raiz.getNodoArbolHijos(), iniciativaIds);
@@ -341,27 +341,27 @@ public class VisualizarIniciativasRelacionadasAction extends VgcAction
 		actualizarAlertas(raiz.getNodoArbolHijos(), alertas);
 	}
 
-	private void getIds(Collection<NodoArbol> nodos, Map<String, String> ids) 
+	private void getIds(Collection<NodoArbol> nodos, Map<String, String> ids)
 	{
-		if (nodos != null) 
+		if (nodos != null)
 		{
-			for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext();) 
+			for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext();)
 			{
-				NodoArbol nodo = (NodoArbol) iter.next();
+				NodoArbol nodo = iter.next();
 				ids.put(nodo.getNodoArbolId(), nodo.getNodoArbolId());
 				getIds(nodo.getNodoArbolHijos(), ids);
 			}
 		}
 	}
 
-	private void actualizarAlertas(Collection<NodoArbol> iniciativas, Map<Long, Byte> alertas) 
+	private void actualizarAlertas(Collection<NodoArbol> iniciativas, Map<Long, Byte> alertas)
 	{
-		if (iniciativas != null) 
+		if (iniciativas != null)
 		{
-			for (Iterator<NodoArbol> iter = iniciativas.iterator(); iter.hasNext();) 
+			for (Iterator<NodoArbol> iter = iniciativas.iterator(); iter.hasNext();)
 			{
 				Iniciativa iniciativa = (Iniciativa) iter.next();
-				Byte alerta = (Byte) alertas.get(iniciativa.getIniciativaId());
+				Byte alerta = alertas.get(iniciativa.getIniciativaId());
 				if (alerta != null)
 					iniciativa.setAlerta(alerta);
 				actualizarAlertas(iniciativa.getNodoArbolHijos(), alertas);

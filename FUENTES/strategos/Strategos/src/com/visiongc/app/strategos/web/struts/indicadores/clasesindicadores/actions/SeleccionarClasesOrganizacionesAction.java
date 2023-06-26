@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.clasesindicadores.actions;
 
@@ -33,11 +33,13 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 {
 	  public static final String ACTION_KEY = "SeleccionarIndicadoresOrganizacionesAction";
 
-	  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+	  @Override
+	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	  {
 	  }
 
-	  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	  @Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	  {
 		  super.execute(mapping, form, request, response);
 
@@ -63,23 +65,23 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 		  if (seleccionarClasesIndicadoresForm.getIniciado() == null)
 			  seleccionarClasesIndicadoresForm.setIniciado(false);
 		  String llamadaDesde = request.getParameter("llamadaDesde");
-		  if (llamadaDesde != null) 
+		  if (llamadaDesde != null)
 		  {
 			  if (llamadaDesde.equals("Organizaciones"))
 				  seleccionarClasesIndicadoresForm.setPanelSeleccionado("panelOrganizaciones");
-			  else if (llamadaDesde.equals("Clases")) 
+			  else if (llamadaDesde.equals("Clases"))
 				  seleccionarClasesIndicadoresForm.setPanelSeleccionado("panelClases");
 		  }
 		  else
 			  seleccionarClasesIndicadoresForm.setPanelSeleccionado("panelClases");
 
 		  ActionMessages messages = getMessages(request);
-		  
+
 		  boolean mostrarTodas = getPermisologiaUsuario(request).tienePermiso("ORGANIZACION_VIEWALL");
-		  
+
 		  ArbolesService arbolesService = FrameworkServiceFactory.getInstance().openArbolesService();
 		  ArbolBean arbolBean = (ArbolBean)request.getSession().getAttribute("seleccionarIndicadoresArbolOrganizacionesBean");
-		  
+
 		  if (arbolBean == null || inicializar)
 		  {
 			  arbolBean = new ArbolBean();
@@ -91,13 +93,13 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 		  {
 			  OrganizacionStrategos organizacionRoot = new OrganizacionStrategos();
 			  OrganizacionStrategos organizacion = null;
-			  if (seleccionarClasesIndicadoresForm.getOrganizacionSeleccionadaId() != null) 
+			  if (seleccionarClasesIndicadoresForm.getOrganizacionSeleccionadaId() != null)
 			  {
 				  organizacion = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, seleccionarClasesIndicadoresForm.getOrganizacionSeleccionadaId());
-				  if (organizacion != null) 
+				  if (organizacion != null)
 				  {
 					  List<NodoArbol> nodos = arbolesService.getRutaCompleta(organizacion);
-					  for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext(); ) 
+					  for (Iterator<NodoArbol> iter = nodos.iterator(); iter.hasNext(); )
 					  {
 						  OrganizacionStrategos org = (OrganizacionStrategos)iter.next();
 						  TreeviewWeb.publishArbolAbrirNodo(arbolBean, org.getOrganizacionId().toString());
@@ -106,33 +108,33 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 					  organizacionRoot.setOrganizacionId(((OrganizacionStrategos)nodos.get(0)).getOrganizacionId());
 					  organizacionRoot.setPadreId(((OrganizacionStrategos)nodos.get(0)).getPadreId());
 					  organizacionRoot.setNombre(((OrganizacionStrategos)nodos.get(0)).getNombre());
-				  } 
-				  else 
+				  }
+				  else
 				  {
 					  organizacionRoot = (OrganizacionStrategos)arbolesService.getNodoArbolRaiz(organizacionRoot);
 					  TreeviewWeb.publishArbol(arbolBean, null, organizacionRoot.getOrganizacionId().toString(), null, null, true);
 					  organizacion = organizacionRoot;
 				  }
-			  } 
-			  else 
+			  }
+			  else
 			  {
 				  organizacionRoot = (OrganizacionStrategos)arbolesService.getNodoArbolRaiz(organizacionRoot);
 				  TreeviewWeb.publishArbol(arbolBean, null, organizacionRoot.getOrganizacionId().toString(), null, null, true);
 				  organizacion = organizacionRoot;
 			  }
-			  
+
 			  seleccionarClasesIndicadoresForm.setOrganizacionSeleccionadaId(organizacion.getOrganizacionId());
 			  seleccionarClasesIndicadoresForm.setIniciado(false);
 			  setRutaCompletaOrganizacion(seleccionarClasesIndicadoresForm, organizacion, arbolesService);
-			  
-			  if (!seleccionarClasesIndicadoresForm.getPermitirCambiarOrganizacion().booleanValue()) 
+
+			  if (!seleccionarClasesIndicadoresForm.getPermitirCambiarOrganizacion().booleanValue())
 			  {
 				  arbolesService.close();
 				  return mapping.findForward(forward);
 			  }
-			  
+
 			  arbolBean.setNodoRaiz(organizacionRoot);
-			  
+
 			  arbolesService.refreshNodosArbol(arbolBean.getNodoRaiz(), arbolBean.getListaNodosAbiertos(), TreeviewWeb.getSeparadorTokens(), new Boolean(mostrarTodas));
 			  arbolBean.setNodoSeleccionado(organizacion);
 			  arbolBean.setSeleccionadoId(organizacion.getOrganizacionId().toString());
@@ -143,48 +145,48 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 			  String abrirOrganizacionId = request.getParameter("abrirOrganizacionId");
 			  String cerrarOrganizacionId = request.getParameter("cerrarOrganizacionId");
 			  OrganizacionStrategos organizacionSeleccionada = null;
-			  
-			  if (request.getAttribute("SeleccionarIndicadoresOrganizacionesAction.reloadId") != null) 
+
+			  if (request.getAttribute("SeleccionarIndicadoresOrganizacionesAction.reloadId") != null)
 				  organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, (Long)request.getAttribute("SeleccionarIndicadoresOrganizacionesAction.reloadId"));
-			  else if ((seleccionarOrganizacionId != null) && (!seleccionarOrganizacionId.equals(""))) 
+			  else if ((seleccionarOrganizacionId != null) && (!seleccionarOrganizacionId.equals("")))
 				  organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(seleccionarOrganizacionId));
-			  else if ((abrirOrganizacionId != null) && (!abrirOrganizacionId.equals(""))) 
+			  else if ((abrirOrganizacionId != null) && (!abrirOrganizacionId.equals("")))
 			  {
 				  TreeviewWeb.publishArbolAbrirNodo(arbolBean, abrirOrganizacionId);
 				  organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(abrirOrganizacionId));
-			  } 
-			  else if ((cerrarOrganizacionId != null) && (!cerrarOrganizacionId.equals(""))) 
+			  }
+			  else if ((cerrarOrganizacionId != null) && (!cerrarOrganizacionId.equals("")))
 			  {
 				  TreeviewWeb.publishArbolCerrarNodo(arbolBean, cerrarOrganizacionId);
 				  organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(cerrarOrganizacionId));
-			  } 
-			  else 
+			  }
+			  else
 				  organizacionSeleccionada = (OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(arbolBean.getSeleccionadoId()));
-			  
+
 			  Long reloadId;
-			  if (organizacionSeleccionada == null) 
+			  if (organizacionSeleccionada == null)
 			  {
 				  organizacionSeleccionada = (OrganizacionStrategos)arbolBean.getNodoRaiz();
 				  reloadId = organizacionSeleccionada.getOrganizacionId();
 				  TreeviewWeb.publishArbol(arbolBean, organizacionSeleccionada.getOrganizacionId().toString(), true);
-				  
+
 				  messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.editarregistro.noencontrado"));
-			  } 
-			  else 
+			  }
+			  else
 			  {
 				  reloadId = organizacionSeleccionada.getOrganizacionId();
-				  if (cerrarOrganizacionId == null) 
+				  if (cerrarOrganizacionId == null)
 					  TreeviewWeb.publishArbolAbrirNodo(arbolBean, reloadId.toString());
 			  }
-			  
+
 			  arbolesService.refreshNodosArbol(arbolBean.getNodoRaiz(), arbolBean.getListaNodosAbiertos(), TreeviewWeb.getSeparadorTokens(), new Boolean(mostrarTodas), reloadId);
-			  
+
 			  arbolBean.setNodoSeleccionado(organizacionSeleccionada);
 			  arbolBean.setSeleccionadoId(organizacionSeleccionada.getOrganizacionId().toString());
 			  setRutaCompletaOrganizacion(seleccionarClasesIndicadoresForm, organizacionSeleccionada, arbolesService);
 		  }
-		  
-		  if (!seleccionarClasesIndicadoresForm.getOrganizacionSeleccionadaId().toString().equals(arbolBean.getSeleccionadoId())) 
+
+		  if (!seleccionarClasesIndicadoresForm.getOrganizacionSeleccionadaId().toString().equals(arbolBean.getSeleccionadoId()))
 		  {
 			  request.getSession().removeAttribute("seleccionarIndicadoresArbolClasesBean");
 			  seleccionarClasesIndicadoresForm.setClaseSeleccionadaId(null);
@@ -196,7 +198,7 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 		  seleccionarClasesIndicadoresForm.setOrganizacionSeleccionadaId(new Long(arbolBean.getSeleccionadoId()));
 
 		  arbolesService.close();
-		  
+
 		  saveMessages(request, messages);
 
 		  return mapping.findForward(forward);
@@ -209,7 +211,7 @@ public final class SeleccionarClasesOrganizacionesAction extends VgcAction
 		  if (organizacion.getPadreId() != null)
 		  {
 			  org.setPadre((OrganizacionStrategos)arbolesService.load(OrganizacionStrategos.class, new Long(organizacion.getPadreId())));
-			  while (org.getPadre() != null) 
+			  while (org.getPadre() != null)
 			  {
 				  org = org.getPadre();
 				  rutaCompleta = org.getNombre() + " / " + rutaCompleta;

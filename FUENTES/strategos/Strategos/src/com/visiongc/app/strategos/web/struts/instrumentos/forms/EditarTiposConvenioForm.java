@@ -5,11 +5,11 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarTiposConvenioForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long tiposConvenioId;
 	private String descripcion;
 	private String nombre;
-		
+
 	public Long getTiposConvenioId() {
 		return tiposConvenioId;
 	}
@@ -34,7 +34,8 @@ public class EditarTiposConvenioForm extends EditarObjetoForm
 		this.nombre = nombre;
 	}
 
-	public void clear() 
+	@Override
+	public void clear()
 	{
 		this.tiposConvenioId = new Long(0L);
 		this.descripcion = null;

@@ -1,10 +1,11 @@
 package com.visiongc.app.strategos.web.struts.planes.perspectivas.forms;
 
+import java.util.List;
+
 import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
 import com.visiongc.app.strategos.planes.model.ElementoPlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.util.TipoCalculoPerspectiva;
 import com.visiongc.framework.web.struts.forms.VisorArbolForm;
-import java.util.List;
 
 public class VisualizarPerspectivasForm extends VisorArbolForm
 {

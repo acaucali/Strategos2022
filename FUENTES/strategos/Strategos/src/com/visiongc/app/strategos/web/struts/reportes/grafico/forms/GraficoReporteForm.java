@@ -14,8 +14,8 @@ public class GraficoReporteForm extends EditarObjetoForm{
 	private Integer mesFinal;
 	private Integer periodoInicial;
 	private Integer periodoFinal;
-	
-	
+
+
 	public Long getReporteId() {
 		return reporteId;
 	}
@@ -31,7 +31,7 @@ public class GraficoReporteForm extends EditarObjetoForm{
 	public void setIndicadoresId(String indicadoresId) {
 		this.indicadoresId = indicadoresId;
 	}
-	
+
 	public String getSeries() {
 		return series;
 	}
@@ -80,9 +80,10 @@ public class GraficoReporteForm extends EditarObjetoForm{
 		this.periodoFinal = periodoFinal;
 	}
 
+	@Override
 	public void clear() {
 		this.reporteId = null;
-		this.indicadoresId = "";	
+		this.indicadoresId = "";
 		this.series = "";
 		this.titulo = "";
 		this.periodoInicial = 0;
@@ -90,7 +91,7 @@ public class GraficoReporteForm extends EditarObjetoForm{
 		this.mesInicial =0;
 		this.mesFinal = 0;
 	}
-	
-	
-	
+
+
+
 }

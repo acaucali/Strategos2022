@@ -52,7 +52,8 @@ public class EditarEstadoAccionesForm extends EditarObjetoForm
     this.indicaFinalizacion = indicaFinalizacion;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.estadoId = new Long(0L);
     this.nombre = null;
     this.aplicaSeguimiento = new Boolean(false);

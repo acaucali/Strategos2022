@@ -1,7 +1,8 @@
 package com.visiongc.app.strategos.web.struts.plancuentas.forms;
 
-import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 import java.util.Set;
+
+import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
 public class DefinirMascaraCuentasForm extends EditarObjetoForm
 {
@@ -44,7 +45,8 @@ public class DefinirMascaraCuentasForm extends EditarObjetoForm
     this.gruposMascaraCodigoPlanCuentas = gruposMascaraCodigoPlanCuentas;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.mascaraId = null;
     this.niveles = null;
     this.mascara = null;

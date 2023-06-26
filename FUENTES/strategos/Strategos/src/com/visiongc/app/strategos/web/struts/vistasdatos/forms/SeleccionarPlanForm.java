@@ -1,7 +1,8 @@
 package com.visiongc.app.strategos.web.struts.vistasdatos.forms;
 
-import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 import java.util.List;
+
+import com.visiongc.framework.web.struts.forms.SelectorListaForm;
 
 public class SeleccionarPlanForm extends SelectorListaForm
 {

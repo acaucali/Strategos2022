@@ -1,5 +1,12 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
@@ -8,29 +15,24 @@ import com.visiongc.app.strategos.web.struts.iniciativas.forms.SeleccionarInicia
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 public final class SeleccionarIniciativasAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
 
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("getRutaCompletaIniciativasSeleccionadas")) 
+			if (funcion.equals("getRutaCompletaIniciativasSeleccionadas"))
 			{
 				getRutaCompletaIniciativasSeleccionadas(request);
 				return mapping.findForward("ajaxResponse");
@@ -51,7 +53,7 @@ public final class SeleccionarIniciativasAction extends VgcAction
 		String planId = request.getParameter("planId");
 		String frecuencia = request.getParameter("frecuencia");
 		String seleccionMultiple = request.getParameter("seleccionMultiple");
-		
+
 		seleccionarIniciativasForm.setNombreForma(request.getParameter("nombreForma"));
 		seleccionarIniciativasForm.setNombreCampoOculto(request.getParameter("nombreCampoOculto"));
 		seleccionarIniciativasForm.setNombreCampoValor(request.getParameter("nombreCampoValor"));
@@ -69,40 +71,40 @@ public final class SeleccionarIniciativasAction extends VgcAction
 			iniciativasService.close();
 		}
 
-		if ((permitirCambiarOrganizacion != null) && (permitirCambiarOrganizacion.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarOrganizacion != null) && (permitirCambiarOrganizacion.equalsIgnoreCase("true")))
 			seleccionarIniciativasForm.setPermitirCambiarOrganizacion(new Boolean(true));
-		if ((permitirCambiarPlan != null) && (permitirCambiarPlan.equalsIgnoreCase("true"))) 
+		if ((permitirCambiarPlan != null) && (permitirCambiarPlan.equalsIgnoreCase("true")))
 			seleccionarIniciativasForm.setPermitirCambiarPlan(new Boolean(true));
-		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0"))) 
+		if ((planId != null) && (!planId.equals("")) && (!planId.equals("0")))
 		{
 			StrategosIniciativasService iniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 			Plan plan = (Plan)iniciativasService.load(Plan.class, new Long(planId));
-			if (plan != null) 
+			if (plan != null)
 			{
 				seleccionarIniciativasForm.setPlanSeleccionadoId(plan.getPlanId());
 				seleccionarIniciativasForm.setOrganizacionSeleccionadaId(plan.getOrganizacionId());
 			}
 			iniciativasService.close();
 		}
-		if (seleccionarIniciativasForm.getPlanSeleccionadoId() == null) 
+		if (seleccionarIniciativasForm.getPlanSeleccionadoId() == null)
 		{
 			if ((organizacionId != null) && (!organizacionId.equals("")) && (!organizacionId.equals("0")))
 				seleccionarIniciativasForm.setOrganizacionSeleccionadaId(new Long(organizacionId));
-			else 
+			else
 				seleccionarIniciativasForm.setOrganizacionSeleccionadaId(new Long((String)request.getSession().getAttribute("organizacionId")));
 		}
-		if ((frecuencia != null) && (!frecuencia.equals(""))) 
+		if ((frecuencia != null) && (!frecuencia.equals("")))
 			seleccionarIniciativasForm.setFrecuenciaSeleccionada(new Byte(frecuencia));
-		if ((seleccionMultiple != null) && (seleccionMultiple.equalsIgnoreCase("true"))) 
+		if ((seleccionMultiple != null) && (seleccionMultiple.equalsIgnoreCase("true")))
 			seleccionarIniciativasForm.setSeleccionMultiple(new Boolean(true));
-		if (seleccionarIniciativasForm.getFuncionCierre() != null) 
+		if (seleccionarIniciativasForm.getFuncionCierre() != null)
 		{
-			if (!seleccionarIniciativasForm.getFuncionCierre().equals("")) 
+			if (!seleccionarIniciativasForm.getFuncionCierre().equals(""))
 			{
 				if (seleccionarIniciativasForm.getFuncionCierre().indexOf(";") < 0)
 					seleccionarIniciativasForm.setFuncionCierre(seleccionarIniciativasForm.getFuncionCierre() + ";");
 			}
-			else 
+			else
 				seleccionarIniciativasForm.setFuncionCierre(null);
 		}
 
@@ -117,27 +119,25 @@ public final class SeleccionarIniciativasAction extends VgcAction
 
 		StrategosIniciativasService iniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 
-		for (int i = 0; i < arregloIniciativasSeleccionadas.length; i++) 
-		{
-			String seleccionadoId = arregloIniciativasSeleccionadas[i];
+		for (String seleccionadoId : arregloIniciativasSeleccionadas) {
 			String rutaCompletaIniciativaSeleccionada = "";
 			Iniciativa iniciativa = (Iniciativa) iniciativasService.load(Iniciativa.class, new Long(seleccionadoId));
-			if (iniciativa != null) 
+			if (iniciativa != null)
 			{
 				rutaCompletaIniciativaSeleccionada = iniciativasService.getRutaCompletaIniciativa(iniciativa, "!#!");
 
 				agregarLockPoolLocksUsoEdicion(request, iniciativasService, iniciativa.getIniciativaId());
-			} 
-			else 
+			}
+			else
 				rutaCompletaIniciativaSeleccionada = "!ELIMINADO!";
-      
+
 			rutasCompletasIniciativasSeleccionadas = rutasCompletasIniciativasSeleccionadas + "!;!" + rutaCompletaIniciativaSeleccionada;
 		}
 
 		rutasCompletasIniciativasSeleccionadas = rutasCompletasIniciativasSeleccionadas.substring("!;!".length());
-		
+
 		iniciativasService.close();
-		
+
 		request.setAttribute("ajaxResponse", rutasCompletasIniciativasSeleccionadas);
 	}
 }

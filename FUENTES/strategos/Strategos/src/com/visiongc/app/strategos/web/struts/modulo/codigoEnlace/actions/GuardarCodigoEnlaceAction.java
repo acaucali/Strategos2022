@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.modulo.codigoEnlace.actions;
 
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
@@ -19,8 +18,6 @@ import com.visiongc.app.strategos.util.StatusUtil;
 import com.visiongc.app.strategos.web.struts.modulo.codigoEnlace.forms.EditarCodigoEnlaceForm;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.VgcMessageResources;
-import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
 
 /**
@@ -29,10 +26,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class GuardarCodigoEnlaceAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    super.execute(mapping, form, request, response);
@@ -42,7 +41,7 @@ public class GuardarCodigoEnlaceAction extends VgcAction
 	    EditarCodigoEnlaceForm editarCodigoEnlaceForm = (EditarCodigoEnlaceForm)form;
 
 	    ActionMessages messages = getMessages(request);
-	    
+
 		Long id = (request.getParameter("id") != null && request.getParameter("id") != "" ? Long.parseLong(request.getParameter("id")) : 0L);
 		Long bi = (request.getParameter("bi") != null && request.getParameter("bi") != "" ? Long.parseLong(request.getParameter("bi")) : null);
 		Long categoria = (request.getParameter("categoria") != null && request.getParameter("categoria") != "" ? Long.parseLong(request.getParameter("categoria")) : null);
@@ -50,7 +49,7 @@ public class GuardarCodigoEnlaceAction extends VgcAction
 		editarCodigoEnlaceForm.setId(id);
 		editarCodigoEnlaceForm.setBi(bi);
 		editarCodigoEnlaceForm.setCategoria(categoria);
-		
+
 	    StrategosCodigoEnlaceService strategosCodigoEnlaceService = StrategosServiceFactory.getInstance().openStrategosCodigoEnlaceService();
 
 	    CodigoEnlace codigoEnlace = new CodigoEnlace();

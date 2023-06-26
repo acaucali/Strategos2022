@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.modulo.codigoEnlace.actions;
 
@@ -27,15 +27,17 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class GestionarCodigoEnlaceAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		navBar.agregarUrl(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		
+
 		String forward = mapping.getParameter();
 
 		GestionarCodigoEnlaceForm gestionarCodigoEnlaceForm = (GestionarCodigoEnlaceForm)form;
@@ -44,42 +46,42 @@ public class GestionarCodigoEnlaceAction extends VgcAction
 		String tipoOrden = gestionarCodigoEnlaceForm.getTipoOrden();
 		int pagina = gestionarCodigoEnlaceForm.getPagina();
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "codigo";
 			gestionarCodigoEnlaceForm.setAtributoOrden(atributoOrden);
 		}
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarCodigoEnlaceForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosCodigoEnlaceService strategosCodigoEnlaceService = StrategosServiceFactory.getInstance().openStrategosCodigoEnlaceService();
 
 		Map<String, String> filtros = new HashMap<String, String>();
-		String valorBusqueda = gestionarCodigoEnlaceForm.getFiltroNombre(); 
-		if (valorBusqueda != null && !valorBusqueda.equals("")) 
+		String valorBusqueda = gestionarCodigoEnlaceForm.getFiltroNombre();
+		if (valorBusqueda != null && !valorBusqueda.equals(""))
 			filtros.put("valorBusqueda", valorBusqueda);
-		
+
 		PaginaLista paginaCodigoEnlace = strategosCodigoEnlaceService.getCodigoEnlace(pagina, 30, atributoOrden, tipoOrden, true, filtros);
-		
+
 		paginaCodigoEnlace.setTamanoSetPaginas(5);
-		
+
 		request.setAttribute("paginaCodigoEnlace", paginaCodigoEnlace);
-		
+
 		strategosCodigoEnlaceService.close();
 
-		if (paginaCodigoEnlace.getLista().size() > 0) 
+		if (paginaCodigoEnlace.getLista().size() > 0)
 		{
 			CodigoEnlace codigoEnlace = (CodigoEnlace)paginaCodigoEnlace.getLista().get(0);
 			gestionarCodigoEnlaceForm.setSeleccionados(codigoEnlace.getId().toString());
 			gestionarCodigoEnlaceForm.setValoresSeleccionados(codigoEnlace.getNombre());
-		} 
-		else 
+		}
+		else
 			gestionarCodigoEnlaceForm.setSeleccionados(null);
 
 		return mapping.findForward(forward);

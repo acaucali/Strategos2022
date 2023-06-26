@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.planes.plantillas.actions;
 
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.planes.StrategosPlantillasPlanesService;
 import com.visiongc.app.strategos.planes.model.ElementoPlantillaPlanes;
@@ -7,26 +18,18 @@ import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import com.visiongc.app.strategos.web.struts.planes.plantillas.forms.EditarPlantillaPlanesForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.web.NavigationBar;
-import java.util.HashSet;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class GuardarPlantillaPlanesAction extends VgcAction
 {
   private static final String ACTION_KEY = "GuardarPlantillaPlanesAction";
 
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -43,7 +46,7 @@ public class GuardarPlantillaPlanesAction extends VgcAction
 
     if ((ts == null) || (ts.equals("")))
       cancelar = true;
-    else if ((ultimoTs != null) && 
+    else if ((ultimoTs != null) &&
       (ultimoTs.equals(ts))) {
       cancelar = true;
     }
@@ -77,8 +80,8 @@ public class GuardarPlantillaPlanesAction extends VgcAction
       if ((editarPlantillaPlanesForm.getTextoNiveles() != null) && (!editarPlantillaPlanesForm.getTextoNiveles().equals("")))
       {
         String[] niveles = editarPlantillaPlanesForm.getTextoNiveles().split(editarPlantillaPlanesForm.getSeparadorPerspectivas());
-        for (int i = 0; i < niveles.length; i++) {
-          String[] arregloTemporal = niveles[i].split(editarPlantillaPlanesForm.getSeparadorAtributosPerspectivas());
+        for (String nivele : niveles) {
+          String[] arregloTemporal = nivele.split(editarPlantillaPlanesForm.getSeparadorAtributosPerspectivas());
           ElementoPlantillaPlanes elementoPlantillaPlanes = new ElementoPlantillaPlanes();
           elementoPlantillaPlanes.setElementoId(new Long(0L));
           elementoPlantillaPlanes.setOrden(new Integer(arregloTemporal[0]));

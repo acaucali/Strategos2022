@@ -5,7 +5,7 @@ import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 public class EditarSeguimientoForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-	
+
 	private Long seguimientoId;
 	private Long estadoId;
 	private String nombreEstado;
@@ -40,282 +40,283 @@ public class EditarSeguimientoForm extends EditarObjetoForm
   		return this.verSeguimiento;
   	}
 
-  	public void setVerSeguimiento(Boolean verSeguimiento) 
+  	public void setVerSeguimiento(Boolean verSeguimiento)
   	{
   		this.verSeguimiento = verSeguimiento;
   	}
 
-  	public Long getSeguimientoId() 
+  	public Long getSeguimientoId()
   	{
   		return this.seguimientoId;
   	}
 
-  	public void setSeguimientoId(Long seguimientoId) 
+  	public void setSeguimientoId(Long seguimientoId)
   	{
   		this.seguimientoId = seguimientoId;
   	}
 
-  	public Long getEstadoId() 
+  	public Long getEstadoId()
   	{
   		return this.estadoId;
   	}
 
-  	public void setEstadoId(Long estadoId) 
+  	public void setEstadoId(Long estadoId)
   	{
   		this.estadoId = estadoId;
   	}
 
-  	public String getNombreEstado() 
+  	public String getNombreEstado()
   	{
   		return this.nombreEstado;
   	}
 
-  	public void setNombreEstado(String nombreEstado) 
+  	public void setNombreEstado(String nombreEstado)
   	{
   		this.nombreEstado = nombreEstado;
   	}
 
-  	public Long getAccionId() 
+  	public Long getAccionId()
   	{
   		return this.accionId;
   	}
 
-  	public void setAccionId(Long accionId) 
+  	public void setAccionId(Long accionId)
   	{
   		this.accionId = accionId;
   	}
 
-  	public String getNombreAccion() 
+  	public String getNombreAccion()
   	{
   		return this.nombreAccion;
   	}
 
-  	public void setNombreAccion(String nombreAccion) 
+  	public void setNombreAccion(String nombreAccion)
   	{
   		this.nombreAccion = nombreAccion;
   	}
 
-  	public String getNota() 
+  	public String getNota()
   	{
   		return this.nota;
   	}
-  	
-  	public void setNota(String nota) 
+
+  	public void setNota(String nota)
   	{
   		this.nota = nota;
   	}
 
-  	public String getFechaEmision() 
+  	public String getFechaEmision()
   	{
   		return this.fechaEmision;
   	}
 
-  	public void setFechaEmision(String fechaEmision) 
+  	public void setFechaEmision(String fechaEmision)
   	{
   		this.fechaEmision = fechaEmision;
   	}
 
-  	public Boolean getEmisionEnviado() 
+  	public Boolean getEmisionEnviado()
   	{
   		return this.emisionEnviado;
   	}
 
-  	public void setEmisionEnviado(Boolean emisionEnviado) 
+  	public void setEmisionEnviado(Boolean emisionEnviado)
   	{
   		this.emisionEnviado = emisionEnviado;
   	}
 
-  	public String getFechaRecepcion() 
+  	public String getFechaRecepcion()
   	{
   		return this.fechaRecepcion;
   	}
 
-  	public void setFechaRecepcion(String fechaRecepcion) 
+  	public void setFechaRecepcion(String fechaRecepcion)
   	{
   		this.fechaRecepcion = fechaRecepcion;
   	}
 
-  	public Boolean getRecepcionEnviado() 
+  	public Boolean getRecepcionEnviado()
   	{
   		return this.recepcionEnviado;
   	}
 
-  	public void setRecepcionEnviado(Boolean recepcionEnviado) 
+  	public void setRecepcionEnviado(Boolean recepcionEnviado)
   	{
   		this.recepcionEnviado = recepcionEnviado;
   	}
 
-  	public String getFechaAprobacion() 
+  	public String getFechaAprobacion()
   	{
   		return this.fechaAprobacion;
   	}
 
-  	public void setFechaAprobacion(String fechaAprobacion) 
+  	public void setFechaAprobacion(String fechaAprobacion)
   	{
   		this.fechaAprobacion = fechaAprobacion;
   	}
 
-  	public String getPreparadoPor() 
+  	public String getPreparadoPor()
   	{
   		return this.preparadoPor;
   	}
 
-  	public void setPreparadoPor(String preparadoPor) 
+  	public void setPreparadoPor(String preparadoPor)
   	{
   		this.preparadoPor = preparadoPor;
   	}
 
-  	public Integer getNumeroReporte() 
+  	public Integer getNumeroReporte()
   	{
   		return this.numeroReporte;
   	}
 
-  	public void setNumeroReporte(Integer numeroReporte) 
+  	public void setNumeroReporte(Integer numeroReporte)
   	{
   		this.numeroReporte = numeroReporte;
   	}
 
-  	public String getAprobadoPor() 
+  	public String getAprobadoPor()
   	{
   		return this.aprobadoPor;
   	}
 
-  	public void setAprobadoPor(String aprobadoPor) 
+  	public void setAprobadoPor(String aprobadoPor)
   	{
   		this.aprobadoPor = aprobadoPor;
   	}
 
-  	public Boolean getAprobado() 
+  	public Boolean getAprobado()
   	{
   		return this.aprobado;
   	}
 
-  	public void setAprobado(Boolean aprobado) 
+  	public void setAprobado(Boolean aprobado)
   	{
   		this.aprobado = aprobado;
   	}
 
-  	public String getClaveCorreo() 
+  	public String getClaveCorreo()
   	{
   		return this.claveCorreo;
   	}
 
-  	public void setClaveCorreo(String claveCorreo) 
+  	public void setClaveCorreo(String claveCorreo)
   	{
   		this.claveCorreo = claveCorreo;
   	}
 
-  	public Long getCreadoId() 
+  	public Long getCreadoId()
   	{
   		return this.creadoId;
   	}
 
-  	public void setCreadoId(Long creadoId) 
+  	public void setCreadoId(Long creadoId)
   	{
   		this.creadoId = creadoId;
   	}
 
-  	public Long getModificadoId() 
+  	public Long getModificadoId()
   	{
   		return this.modificadoId;
   	}
 
-  	public void setModificadoId(Long modificadoId) 
+  	public void setModificadoId(Long modificadoId)
   	{
   		this.modificadoId = modificadoId;
   	}
 
-  	public String getFechaCreado() 
+  	public String getFechaCreado()
   	{
   		return this.fechaCreado;
   	}
 
-  	public void setFechaCreado(String fechaCreado) 
+  	public void setFechaCreado(String fechaCreado)
   	{
   		this.fechaCreado = fechaCreado;
   	}
 
-  	public String getFechaModificado() 
+  	public String getFechaModificado()
   	{
   		return this.fechaModificado;
   	}
 
-  	public void setFechaModificado(String fechaModificado) 
+  	public void setFechaModificado(String fechaModificado)
   	{
   		this.fechaModificado = fechaModificado;
   	}
 
-  	public String getNombreUsuarioCreado() 
+  	public String getNombreUsuarioCreado()
   	{
   		return this.nombreUsuarioCreado;
   	}
 
-  	public void setNombreUsuarioCreado(String nombreUsuarioCreado) 
+  	public void setNombreUsuarioCreado(String nombreUsuarioCreado)
   	{
   		this.nombreUsuarioCreado = nombreUsuarioCreado;
   	}
 
-  	public String getNombreUsuarioModificado() 
+  	public String getNombreUsuarioModificado()
   	{
   		return this.nombreUsuarioModificado;
   	}
 
-  	public void setNombreUsuarioModificado(String nombreUsuarioModificado) 
+  	public void setNombreUsuarioModificado(String nombreUsuarioModificado)
   	{
   		this.nombreUsuarioModificado = nombreUsuarioModificado;
   	}
 
-  	public String getNombreSupervisor() 
+  	public String getNombreSupervisor()
   	{
   		return this.nombreSupervisor;
   	}
 
-  	public void setNombreSupervisor(String nombreSupervisor) 
+  	public void setNombreSupervisor(String nombreSupervisor)
   	{
   		this.nombreSupervisor = nombreSupervisor;
   	}
 
-  	public String getNombreResponsable() 
+  	public String getNombreResponsable()
   	{
   		return this.nombreResponsable;
   	}
 
-  	public void setNombreResponsable(String nombreResponsable) 
+  	public void setNombreResponsable(String nombreResponsable)
   	{
   		this.nombreResponsable = nombreResponsable;
   	}
 
-  	public String getMemoResumen() 
+  	public String getMemoResumen()
   	{
   		return this.memoResumen;
   	}
 
-  	public void setMemoResumen(String memoResumen) 
+  	public void setMemoResumen(String memoResumen)
   	{
   		this.memoResumen = memoResumen;
   	}
 
-  	public String getMemoComentario() 
+  	public String getMemoComentario()
   	{
   		return this.memoComentario;
   	}
 
-  	public void setMemoComentario(String memoComentario) 
+  	public void setMemoComentario(String memoComentario)
   	{
   		this.memoComentario = memoComentario;
   	}
-  
+
   	public Boolean getSoloLectura()
   	{
   		return this.soloLectura;
   	}
 
-  	public void setSoloLectura(Boolean soloLectura) 
+  	public void setSoloLectura(Boolean soloLectura)
   	{
   		this.soloLectura = soloLectura;
   	}
 
-  	public void clear() 
+  	@Override
+	public void clear()
   	{
   		this.seguimientoId = new Long(0L);
   		this.estadoId = null;

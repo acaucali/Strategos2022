@@ -6,7 +6,7 @@ import com.visiongc.framework.web.struts.forms.VisorListaForm;
 public class GestionarIndicadoresIniciativaForm extends VisorListaForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long iniciativaId;
 	private Long claseId;
 	private Long indicadorId;
@@ -19,73 +19,73 @@ public class GestionarIndicadoresIniciativaForm extends VisorListaForm
 		return this.iniciativaId;
 	}
 
-	public void setIniciativaId(Long iniciativaId) 
+	public void setIniciativaId(Long iniciativaId)
 	{
 		this.iniciativaId = iniciativaId;
 	}
 
-	public Long getClaseId() 
+	public Long getClaseId()
 	{
 		return this.claseId;
 	}
 
-	public void setClaseId(Long claseId) 
+	public void setClaseId(Long claseId)
 	{
 		this.claseId = claseId;
 	}
 
-	public Long getIndicadorId() 
+	public Long getIndicadorId()
 	{
 		return this.indicadorId;
 	}
 
-	public void setIndicadorId(Long indicadorId) 
+	public void setIndicadorId(Long indicadorId)
 	{
 		this.indicadorId = indicadorId;
 	}
-  
-	public Byte getNaturalezaFormula() 
+
+	public Byte getNaturalezaFormula()
 	{
 		return Naturaleza.getNaturalezaFormula();
 	}
 
-	public Byte getNaturalezaCualitativoOrdinal() 
+	public Byte getNaturalezaCualitativoOrdinal()
 	{
 		return Naturaleza.getNaturalezaCualitativoOrdinal();
 	}
 
-	public Byte getNaturalezaCualitativoNominal() 
+	public Byte getNaturalezaCualitativoNominal()
 	{
 		return Naturaleza.getNaturalezaCualitativoNominal();
 	}
-	
+
 	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
-	
+
 	public Long getGraficoSeleccionadoId()
 	{
 		return this.graficoSeleccionadoId;
 	}
 
-	public void setGraficoSeleccionadoId(Long graficoSeleccionadoId) 
+	public void setGraficoSeleccionadoId(Long graficoSeleccionadoId)
 	{
 		this.graficoSeleccionadoId = graficoSeleccionadoId;
 	}
-	
-	public String getSource() 
+
+	public String getSource()
 	{
 		return this.source;
 	}
 
-	public void setSource(String source) 
+	public void setSource(String source)
 	{
 		this.source = source;
-	}	
+	}
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.indicadores.forms;
 
@@ -77,78 +77,78 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 	private Long id;
 	private String bdListaTablas;
 	private String bdStatusTabla;
-	
-	public Byte getTipoMedicionEjecutadoTodos() 
+
+	public Byte getTipoMedicionEjecutadoTodos()
 	{
 		return TipoMedicionImportar.getImportarEjecutadoTodos();
 	}
-	
-	public Byte getTipoMedicionEjecutadoReales() 
+
+	public Byte getTipoMedicionEjecutadoReales()
 	{
 		return TipoMedicionImportar.getImportarEjecutadoReales();
 	}
 
-	public Byte getTipoMedicionEjecutadoMinimos() 
+	public Byte getTipoMedicionEjecutadoMinimos()
 	{
 		return TipoMedicionImportar.getImportarEjecutadoMinimos();
 	}
 
-	public Byte getTipoMedicionEjecutadoMaximos() 
+	public Byte getTipoMedicionEjecutadoMaximos()
 	{
 		return TipoMedicionImportar.getImportarEjecutadoMaximo();
 	}
 
-	public Byte getTipoMedicionEjecutadoProgramados() 
+	public Byte getTipoMedicionEjecutadoProgramados()
 	{
 		return TipoMedicionImportar.getImportarEjecutadoProgramado();
 	}
 
-	public Byte getTipoMedicionMetasParciales() 
+	public Byte getTipoMedicionMetasParciales()
 	{
 		return TipoMedicionImportar.getImportarMetaParciales();
 	}
 
-	public Byte getTipoMedicionMetasAnuales() 
+	public Byte getTipoMedicionMetasAnuales()
 	{
 		return TipoMedicionImportar.getImportarMetaParciales();
 	}
-	
-	public Byte getTipoMedicionImportarEjecutado() 
+
+	public Byte getTipoMedicionImportarEjecutado()
 	{
 		return 0;
 	}
 
-	public Byte getTipoMedicionImportarMetas() 
+	public Byte getTipoMedicionImportarMetas()
 	{
 		return 1;
 	}
-	
-	public Byte getTipoFuente() 
+
+	public Byte getTipoFuente()
 	{
 		return this.tipoFuente;
 	}
 
-  	public void setTipoFuente(Byte tipoFuente) 
+  	public void setTipoFuente(Byte tipoFuente)
   	{
   		this.tipoFuente = tipoFuente;
   	}
 
-	public Byte getTipoImportacion() 
+	public Byte getTipoImportacion()
 	{
 		return this.tipoImportacion;
 	}
 
-  	public void setTipoImportacion(Byte tipoImportacion) 
+  	public void setTipoImportacion(Byte tipoImportacion)
   	{
   		this.tipoImportacion = tipoImportacion;
   	}
 
-	public Byte getTipoMedicion() 
+	public Byte getTipoMedicion()
 	{
 		return this.tipoMedicion;
 	}
 
-  	public void setTipoMedicion(Byte tipoMedicion) 
+  	public void setTipoMedicion(Byte tipoMedicion)
   	{
   		this.tipoMedicion = tipoMedicion;
   	}
@@ -158,7 +158,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.planSeleccion;
 	}
 
-	public void setPlanSeleccion(String planSeleccion) 
+	public void setPlanSeleccion(String planSeleccion)
 	{
 		this.planSeleccion = planSeleccion;
 	}
@@ -168,7 +168,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.planSeleccionId;
 	}
 
-	public void setPlanSeleccionId(Long planSeleccionId) 
+	public void setPlanSeleccionId(Long planSeleccionId)
 	{
 		this.planSeleccionId = planSeleccionId;
 	}
@@ -178,7 +178,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.fuenteSeleccion;
 	}
 
-	public void setFuenteSeleccion(String fuenteSeleccion) 
+	public void setFuenteSeleccion(String fuenteSeleccion)
 	{
 		this.fuenteSeleccion = fuenteSeleccion;
 	}
@@ -188,7 +188,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.fuenteSeleccionArchivo;
 	}
 
-	public void setFuenteSeleccionId(String fuenteSeleccionArchivo) 
+	public void setFuenteSeleccionId(String fuenteSeleccionArchivo)
 	{
 		this.fuenteSeleccionArchivo = fuenteSeleccionArchivo;
 	}
@@ -198,7 +198,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.todosPlanes;
 	}
 
-	public void setTodosPlanes(Boolean todosPlanes) 
+	public void setTodosPlanes(Boolean todosPlanes)
 	{
 		this.todosPlanes = todosPlanes;
 	}
@@ -208,7 +208,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.todosOrganizacion;
 	}
 
-	public void setTodosOrganizacion(Boolean todosOrganizacion) 
+	public void setTodosOrganizacion(Boolean todosOrganizacion)
 	{
 		this.todosOrganizacion = todosOrganizacion;
 	}
@@ -218,7 +218,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.separador;
 	}
 
-	public void setSeparador(String separador) 
+	public void setSeparador(String separador)
 	{
 		this.separador = separador;
 	}
@@ -228,37 +228,39 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.logMediciones;
 	}
 
-	public void setLogMediciones(Boolean logMediciones) 
+	public void setLogMediciones(Boolean logMediciones)
 	{
 		this.logMediciones = logMediciones;
 	}
-	
+
 	public Boolean getCalcularMediciones()
 	{
 		return this.calcularMediciones;
 	}
 
-	public void setCalcularMediciones(Boolean calcularMediciones) 
+	public void setCalcularMediciones(Boolean calcularMediciones)
 	{
 		this.calcularMediciones = calcularMediciones;
 	}
-	
+
 	public List<ImportacionType> getTiposFuentes()
 	{
 		return this.tiposFuentes;
 	}
 
-	public void setTiposFuentes(List<ImportacionType> tiposFuentes) 
+	public void setTiposFuentes(List<ImportacionType> tiposFuentes)
 	{
 		this.tiposFuentes = tiposFuentes;
 	}
 
+	@Override
 	public String getRespuesta()
 	{
 		return this.respuesta;
 	}
 
-	public void setRespuesta(String respuesta) 
+	@Override
+	public void setRespuesta(String respuesta)
 	{
 		this.respuesta = respuesta;
 	}
@@ -268,192 +270,192 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return this.fileForm;
 	}
 
-	public void setFileForm(FormFile fileForm) 
+	public void setFileForm(FormFile fileForm)
 	{
 		this.fileForm = fileForm;
 	}
-	
+
 	public Boolean getLogErrores()
 	{
 		return this.logErrores;
 	}
 
-	public void setLogErrores(Boolean logErrores) 
+	public void setLogErrores(Boolean logErrores)
 	{
 		this.logErrores = logErrores;
 	}
-	
+
 	public String getPlantillaSeleccion()
 	{
 		return this.plantillaSeleccion;
 	}
 
-	public void setPlantillaSeleccion(String plantillaSeleccion) 
+	public void setPlantillaSeleccion(String plantillaSeleccion)
 	{
 		this.plantillaSeleccion = plantillaSeleccion;
 	}
 
-	public Byte getAsistenteEditar() 
+	public Byte getAsistenteEditar()
 	{
 		return this.asistenteEditar;
 	}
 
-	public void setAsistenteEditar(Byte asistenteEditar) 
+	public void setAsistenteEditar(Byte asistenteEditar)
 	{
 		this.asistenteEditar = asistenteEditar;
 	}
-	
-	public String getNombreForma() 
+
+	public String getNombreForma()
 	{
 		return nombreForma;
 	}
 
-	public void setNombreForma(String nombreForma) 
+	public void setNombreForma(String nombreForma)
 	{
 		this.nombreForma = nombreForma;
 	}
 
-	public String getNombreCampoOculto() 
+	public String getNombreCampoOculto()
 	{
 		return nombreCampoOculto;
 	}
 
-	public void setNombreCampoOculto(String nombreCampoOculto) 
+	public void setNombreCampoOculto(String nombreCampoOculto)
 	{
 		this.nombreCampoOculto = nombreCampoOculto;
 	}
 
-	public String getNombreCampoValor() 
+	public String getNombreCampoValor()
 	{
 		return nombreCampoValor;
 	}
 
-	public void setNombreCampoValor(String nombreCampoValor) 
+	public void setNombreCampoValor(String nombreCampoValor)
 	{
 		this.nombreCampoValor = nombreCampoValor;
 	}
 
-	public String getFuncionCierre() 
+	public String getFuncionCierre()
 	{
 		return funcionCierre;
 	}
 
-	public void setFuncionCierre(String funcionCierre) 
+	public void setFuncionCierre(String funcionCierre)
 	{
 		this.funcionCierre = funcionCierre;
 	}
 
-	public Byte getExcelTipo() 
+	public Byte getExcelTipo()
 	{
 		return this.excelTipo;
 	}
 
-	public void setExcelTipo(Byte excelTipo) 
+	public void setExcelTipo(Byte excelTipo)
 	{
 		this.excelTipo = excelTipo;
 	}
 
-	public String getBdNombre() 
+	public String getBdNombre()
 	{
 		return this.bdNombre;
 	}
 
-	public void setBdNombre(String bdNombre) 
+	public void setBdNombre(String bdNombre)
 	{
 		this.bdNombre = bdNombre;
 	}
 
-	public String getBdUsuario() 
+	public String getBdUsuario()
 	{
 		return this.bdUsuario;
 	}
 
-	public void setBdUsuario(String bdUsuario) 
+	public void setBdUsuario(String bdUsuario)
 	{
 		this.bdUsuario = bdUsuario;
 	}
-	
-	public String getBdPassword() 
+
+	public String getBdPassword()
 	{
 		return this.bdPassword;
 	}
 
-	public void setBdPasswrod(String bdPassword) 
+	public void setBdPasswrod(String bdPassword)
 	{
 		this.bdPassword = bdPassword;
 	}
 
-	public String getBdServidor() 
+	public String getBdServidor()
 	{
 		return this.bdServidor;
 	}
 
-	public void setBdServidor(String bdServidor) 
+	public void setBdServidor(String bdServidor)
 	{
 		this.bdServidor = bdServidor;
 	}
-	
-	public String getBdPuerto() 
+
+	public String getBdPuerto()
 	{
 		return this.bdPuerto;
 	}
 
-	public void setBdPuerto(String bdPuerto) 
+	public void setBdPuerto(String bdPuerto)
 	{
 		this.bdPuerto = bdPuerto;
 	}
 
-	public String getBdTabla() 
+	public String getBdTabla()
 	{
 		return this.bdTabla;
 	}
 
-	public void setBdTabla(String bdTabla) 
+	public void setBdTabla(String bdTabla)
 	{
 		this.bdTabla = bdTabla;
 	}
 
-	public String getNombre() 
+	public String getNombre()
 	{
 		return this.nombre;
 	}
 
-	public void setNombre(String nombre) 
+	public void setNombre(String nombre)
 	{
 		this.nombre = nombre;
 	}
-	
-	public Long getId() 
+
+	public Long getId()
 	{
 		return this.id;
 	}
 
-	public void setId(Long id) 
+	public void setId(Long id)
 	{
 		this.id = id;
 	}
-	
-	public String getBdListaTablas() 
+
+	public String getBdListaTablas()
 	{
 		return this.bdListaTablas;
 	}
 
-	public void setBdListaTablas(String bdListaTablas) 
+	public void setBdListaTablas(String bdListaTablas)
 	{
 		this.bdListaTablas = bdListaTablas;
 	}
 
-	public String getBdStatusTabla() 
+	public String getBdStatusTabla()
 	{
 		return this.bdStatusTabla;
 	}
 
-	public void setBdStatusTabla(String bdStatusTabla) 
+	public void setBdStatusTabla(String bdStatusTabla)
 	{
 		this.bdStatusTabla = bdStatusTabla;
 	}
 
-	public String getPasswordConexionEncript() 
+	public String getPasswordConexionEncript()
 	{
 		return Password.encriptPassWord(this.bdPassword);
 	}
@@ -463,7 +465,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		return Password.decriptPassWord(passwordConexion);
 	}
 
-	public void clear() 
+	@Override
+	public void clear()
 	{
 		setNombreForma(null);
 		setNombreCampoValor(null);
@@ -499,7 +502,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		this.bdStatusTabla = "";
 		this.setShowPresentacion(false);
 	}
-	
+
 	public static class ImportarStatus
 	{
 		private static final byte IMPORTARSTATUS_SUCCESS = 0;
@@ -511,7 +514,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		private static final byte IMPORTARSTATUS_NOSALVADO = 6;
 		private static final byte IMPORTARSTATUS_READSUCCESSFULL = 7;
 		private static final byte IMPORTARSTATUS_FILEERROR = 8;
-		
+
 		private static Byte getImportarStatus(Byte status)
 		{
 			if (status == IMPORTARSTATUS_SUCCESS)
@@ -535,53 +538,53 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			else
 				return null;
 		}
-		
-		public static Byte getImportarStatusSuccess() 
+
+		public static Byte getImportarStatusSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_SUCCESS);
 		}
-		
-		public static Byte getImportarStatusNoSuccess() 
+
+		public static Byte getImportarStatusNoSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_NOSUCCESS);
 		}
 
-		public static Byte getImportarStatusValidado() 
+		public static Byte getImportarStatusValidado()
 		{
 			return new Byte(IMPORTARSTATUS_VALIDADO);
 		}
 
-		public static Byte getImportarStatusSalvado() 
+		public static Byte getImportarStatusSalvado()
 		{
 			return new Byte(IMPORTARSTATUS_SALVADO);
 		}
 
-		public static Byte getImportarStatusImportado() 
+		public static Byte getImportarStatusImportado()
 		{
 			return new Byte(IMPORTARSTATUS_IMPORTADO);
 		}
 
-		public static Byte getImportarStatusNoConfigurado() 
+		public static Byte getImportarStatusNoConfigurado()
 		{
 			return new Byte(IMPORTARSTATUS_NOCONFIGURADO);
 		}
 
-		public static Byte getImportarStatusNoSalvado() 
+		public static Byte getImportarStatusNoSalvado()
 		{
 			return new Byte(IMPORTARSTATUS_NOSALVADO);
 		}
 
-		public static Byte getImportarStatusReadSuccess() 
+		public static Byte getImportarStatusReadSuccess()
 		{
 			return new Byte(IMPORTARSTATUS_READSUCCESSFULL);
 		}
-		
-		public static Byte getImportarStatusFileError() 
+
+		public static Byte getImportarStatusFileError()
 		{
 			return new Byte(IMPORTARSTATUS_FILEERROR);
 		}
 	}
-	
+
   	public String getXml() throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
   	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -602,7 +605,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		text = document.createTextNode(this.nombre); //Ingresamos la info
 		elemento.appendChild(text);
 		raiz.appendChild(elemento);
-		
+
 		elemento = document.createElement("tipoFuente"); //creamos un nuevo elemento
 		text = document.createTextNode(this.tipoFuente.toString()); //Ingresamos la info
 		elemento.appendChild(text);
@@ -667,7 +670,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		text = document.createTextNode(this.tipoMedicion.toString()); //Ingresamos la info
 		elemento.appendChild(text);
 		raiz.appendChild(elemento);
-		
+
 		elemento = document.createElement("planSeleccion"); //creamos un nuevo elemento
 		text = document.createTextNode(this.planSeleccion); //Ingresamos la info
 		elemento.appendChild(text);
@@ -677,7 +680,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		text = document.createTextNode(this.planSeleccionId.toString()); //Ingresamos la info
 		elemento.appendChild(text);
 		raiz.appendChild(elemento);
-				
+
 		elemento = document.createElement("todosPlanes"); //creamos un nuevo elemento
 		text = document.createTextNode(this.todosPlanes ? "1" : "0"); //Ingresamos la info
 		elemento.appendChild(text);
@@ -704,7 +707,7 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 		raiz.appendChild(elemento);
 
 		Source source = new DOMSource(document);
-		
+
 		StringWriter writer = new StringWriter();
 		Result result = new StreamResult(writer);
 
@@ -713,26 +716,26 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 
   		return writer.toString().trim();
   	}
-  	
+
   	public void setXml(String xml) throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException, SAXException, IOException
   	{
-  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();;
+  		DocumentBuilderFactory factory  =  DocumentBuilderFactory.newInstance();
   		DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(TextEncoder.deleteCharInvalid(xml))));
 		NodeList lista = doc.getElementsByTagName("properties");
-		 
-		for (int i = 0; i < lista.getLength() ; i ++) 
+
+		for (int i = 0; i < lista.getLength() ; i ++)
 		{
 			Node node = lista.item(i);
 			Element elemento = (Element) node;
 			NodeList nodeLista = null;
 			Node valor = null;
-			
+
 			if (elemento.getElementsByTagName("asistenteEditar").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("asistenteEditar").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.asistenteEditar = Byte.parseByte(valor.getNodeValue());
 				else
 					this.asistenteEditar = 0;
@@ -741,8 +744,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("excelTipo").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("excelTipo").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.excelTipo = Byte.parseByte(valor.getNodeValue());
 				else
 					this.excelTipo = 0;
@@ -751,8 +754,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("fuenteSeleccion").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("fuenteSeleccion").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.fuenteSeleccion = valor.getNodeValue();
 				else
 					this.fuenteSeleccion = "";
@@ -761,8 +764,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("fuenteSeleccionArchivo").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("fuenteSeleccionArchivo").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.fuenteSeleccionArchivo = valor.getNodeValue();
 				else
 					this.fuenteSeleccionArchivo = "";
@@ -771,8 +774,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("separador").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("separador").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.separador = valor.getNodeValue();
 				else
 					this.separador = "|";
@@ -781,8 +784,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("bdNombre").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("bdNombre").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.bdNombre = valor.getNodeValue();
 				else
 					this.bdNombre = "";
@@ -791,8 +794,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("bdUsuario").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("bdUsuario").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.bdUsuario = valor.getNodeValue();
 				else
 					this.bdUsuario = "";
@@ -801,8 +804,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("bdPassword").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("bdPassword").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.bdPassword = this.getPasswordConexionDecriptado(valor.getNodeValue());
 				else
 					this.bdPassword = "";
@@ -811,8 +814,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("bdServidor").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("bdServidor").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.bdServidor = valor.getNodeValue();
 				else
 					this.bdServidor = "";
@@ -821,8 +824,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("bdPuerto").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("bdPuerto").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.bdPuerto = valor.getNodeValue();
 				else
 					this.bdPuerto = "";
@@ -831,8 +834,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("tipoImportacion").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("tipoImportacion").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.tipoImportacion = Byte.parseByte(valor.getNodeValue());
 				else
 					this.tipoImportacion = TipoMedicionImportar.getImportarEjecutadoReales();
@@ -841,8 +844,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("tipoMedicion").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("tipoMedicion").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.tipoMedicion = Byte.parseByte(valor.getNodeValue());
 				else
 					this.tipoMedicion = 0;
@@ -851,8 +854,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("planSeleccion").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("planSeleccion").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.planSeleccion = valor.getNodeValue();
 				else
 					this.planSeleccion = "";
@@ -861,8 +864,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("planSeleccionId").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("planSeleccionId").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.planSeleccionId = Long.parseLong(valor.getNodeValue());
 				else
 					this.planSeleccionId = new Long(0L);
@@ -871,8 +874,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("todosPlanes").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("todosPlanes").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.todosPlanes = valor.getNodeValue() == "1" ? true: false;
 				else
 					this.todosPlanes = false;
@@ -881,8 +884,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("todosOrganizacion").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("todosOrganizacion").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.todosOrganizacion = valor.getNodeValue() == "1" ? true: false;
 				else
 					this.todosOrganizacion = false;
@@ -891,8 +894,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("logMediciones").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("logMediciones").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.logMediciones = valor.getNodeValue() == "1" ? true: false;
 				else
 					this.logMediciones = true;
@@ -901,8 +904,8 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("logErrores").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("logErrores").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.logErrores = valor.getNodeValue() == "1" ? true: false;
 				else
 					this.logErrores = true;
@@ -911,12 +914,12 @@ public class ImportarMedicionesForm extends EditarObjetoForm
 			if (elemento.getElementsByTagName("calcularMediciones").getLength() > 0)
 			{
 				nodeLista = elemento.getElementsByTagName("calcularMediciones").item(0).getChildNodes();
-				valor = (Node) nodeLista.item(0);
-				if (valor != null) 
+				valor = nodeLista.item(0);
+				if (valor != null)
 					this.calcularMediciones = valor.getNodeValue() == "1" ? true: false;
 				else
 					this.calcularMediciones = true;
 			}
 		}
-  	}	
+  	}
 }

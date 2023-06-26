@@ -1,5 +1,16 @@
 package com.visiongc.app.strategos.web.struts.indicadores.actions;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.GestionarIndicadoresForm;
@@ -12,23 +23,16 @@ import com.visiongc.framework.model.Modulo.ModuloType;
 import com.visiongc.framework.model.Transaccion;
 import com.visiongc.framework.transaccion.TransaccionService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
 public class GestionarIndicadoresAction extends VgcAction
 {
 	private PaginaLista paginaIndicadores = null;
-	
+
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -37,7 +41,7 @@ public class GestionarIndicadoresAction extends VgcAction
 
 		GestionarIndicadoresForm gestionarIndicadoresForm = (GestionarIndicadoresForm)form;
 		Long claseId = new Long((String)request.getSession().getAttribute("claseId"));
-		Long organizacionId = new Long((String)request.getSession().getAttribute("organizacionId"));
+		long organizacionId = Long.parseLong((String)request.getSession().getAttribute("organizacionId"));
 		Boolean actualizarForma = request.getSession().getAttribute("actualizarForma") != null ? Boolean.parseBoolean((String)request.getSession().getAttribute("actualizarForma")) : false;
 		if (!actualizarForma)
 		{
@@ -47,42 +51,42 @@ public class GestionarIndicadoresAction extends VgcAction
 		}
 
 		if (claseId != null && claseId != 0L && gestionarIndicadoresForm != null && gestionarIndicadoresForm.getClaseId() != null && claseId.longValue() != gestionarIndicadoresForm.getClaseId().longValue())
-			gestionarIndicadoresForm.setPagina(1); 
+			gestionarIndicadoresForm.setPagina(1);
 		gestionarIndicadoresForm.setClaseId(claseId);
-		
+
 		String atributoOrden = gestionarIndicadoresForm.getAtributoOrden();
 		String tipoOrden = gestionarIndicadoresForm.getTipoOrden();
 		int pagina = gestionarIndicadoresForm.getPagina();
 		boolean mostrarTodas = getPermisologiaUsuario(request).tienePermiso("INDICADOR_VIEWALL");
-		
+
 		gestionarIndicadoresForm.setVerForma(getPermisologiaUsuario(request).tienePermiso("INDICADOR_VIEWALL"));
 		gestionarIndicadoresForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("INDICADOR_EDIT"));
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "nombre";
 			gestionarIndicadoresForm.setAtributoOrden(atributoOrden);
 		}
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarIndicadoresForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
-		filtros.put("organizacionId", organizacionId.toString());
+		filtros.put("organizacionId", Long.toString(organizacionId));
 		filtros.put("claseId", claseId.toString());
-		if ((gestionarIndicadoresForm.getFiltroNombre() != null) && (!gestionarIndicadoresForm.getFiltroNombre().equals(""))) 
+		if ((gestionarIndicadoresForm.getFiltroNombre() != null) && (!gestionarIndicadoresForm.getFiltroNombre().equals("")))
 			filtros.put("nombre", gestionarIndicadoresForm.getFiltroNombre());
-		if (!mostrarTodas) 
+		if (!mostrarTodas)
 			filtros.put("visible", true);
-		
+
 		Integer totalPaginas = 29;
 		if (paginaIndicadores != null && paginaIndicadores.getFiltros() != null)
 		{
@@ -104,7 +108,7 @@ public class GestionarIndicadoresAction extends VgcAction
 
 		paginaIndicadores.setTamanoSetPaginas(5);
 		request.setAttribute("paginaIndicadores", paginaIndicadores);
-		
+
 		Modulo modulo = new Modulo().getModuloActivo(ModuloType.Indicador.Reporte.ComiteEjecutivo);
 		if (modulo != null)
 		{
@@ -113,7 +117,7 @@ public class GestionarIndicadoresAction extends VgcAction
 				gestionarIndicadoresForm.setReporte(true);
 		}
 		strategosIndicadoresService.close();
-		
+
 		Modulo cliente = (Modulo) request.getSession().getAttribute("MIF");
 		if (cliente != null && cliente.getActivo())
 		{
@@ -124,7 +128,7 @@ public class GestionarIndicadoresAction extends VgcAction
 			gestionarIndicadoresForm.setTransacciones(transacciones);
 			transaccionService.close();
 		}
-		
+
 		return mapping.findForward(forward);
 	}
 }

@@ -1,23 +1,23 @@
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.visiongc.app.strategos.indicadores.model.util.TipoMedicion;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PryCalendario;
 import com.visiongc.app.strategos.planificacionseguimiento.model.util.NaturalezaActividad;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
 import com.visiongc.app.strategos.util.StatusUtil;
+import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class EditarActividadForm extends EditarObjetoForm
 {
 	static final long serialVersionUID = 0L;
-  
+
 	private Long actividadId;
 	private Long proyectoId;
 	private Long iniciativaId;
@@ -233,7 +233,7 @@ public class EditarActividadForm extends EditarObjetoForm
     this.indicadorId = indicadorId;
   }
 
-  	public Byte getNaturaleza() 
+  	public Byte getNaturaleza()
   	{
   		return this.naturaleza;
   	}
@@ -298,37 +298,37 @@ public class EditarActividadForm extends EditarObjetoForm
     this.objetoAsociadoId = objetoAsociadoId;
   }
 
-  	public Byte getTipoMedicion() 
+  	public Byte getTipoMedicion()
   	{
 	  return this.tipoMedicion;
   	}
 
-  	public void setTipoMedicion(Byte tipoMedicion) 
+  	public void setTipoMedicion(Byte tipoMedicion)
   	{
 	  this.tipoMedicion = tipoMedicion;
   	}
 
-  	public String getUnidadMedida() 
+  	public String getUnidadMedida()
   	{
 	  return this.unidadMedida;
   	}
 
-  	public void setUnidadMedida(String unidadMedida) 
+  	public void setUnidadMedida(String unidadMedida)
   	{
   		this.unidadMedida = unidadMedida;
   	}
-  
-  	public List<UnidadMedida> getUnidadesMedida() 
+
+  	public List<UnidadMedida> getUnidadesMedida()
   	{
 	    return this.unidadesMedida;
 	}
 
-	public void setUnidadesMedida(List<UnidadMedida> unidadesMedidas) 
+	public void setUnidadesMedida(List<UnidadMedida> unidadesMedidas)
 	{
 	    this.unidadesMedida = unidadesMedidas;
 	}
 
-	public String getResponsableFijarMeta() 
+	public String getResponsableFijarMeta()
 	{
 		return this.responsableFijarMeta;
 	}
@@ -393,52 +393,52 @@ public class EditarActividadForm extends EditarObjetoForm
     this.recursosMateriales = recursosMateriales;
   }
 
-  public Double getPorcentajeAmarillo() 
+  public Double getPorcentajeAmarillo()
   {
     return this.porcentajeAmarillo;
   }
 
-  public void setPorcentajeAmarillo(Double porcentajeAmarillo) 
+  public void setPorcentajeAmarillo(Double porcentajeAmarillo)
   {
     this.porcentajeAmarillo = porcentajeAmarillo;
   }
 
-  	public Boolean getHayValorPorcentajeAmarillo() 
+  	public Boolean getHayValorPorcentajeAmarillo()
   	{
 	  return this.hayValorPorcentajeAmarillo;
   	}
 
-  	public void setHayValorPorcentajeAmarillo(Boolean hayValorPorcentajeAmarillo) 
+  	public void setHayValorPorcentajeAmarillo(Boolean hayValorPorcentajeAmarillo)
   	{
   		this.hayValorPorcentajeAmarillo = hayValorPorcentajeAmarillo;
   	}
 
-  	public Boolean getHayValorPorcentajeVerde() 
+  	public Boolean getHayValorPorcentajeVerde()
   	{
 	  return this.hayValorPorcentajeVerde;
   	}
 
-  	public void setHayValorPorcentajeVerde(Boolean hayValorPorcentajeVerde) 
+  	public void setHayValorPorcentajeVerde(Boolean hayValorPorcentajeVerde)
   	{
   		this.hayValorPorcentajeVerde = hayValorPorcentajeVerde;
   	}
-  	
-  	public Double getPorcentajeVerde() 
+
+  	public Double getPorcentajeVerde()
   	{
   		return this.porcentajeVerde;
   	}
 
-  	public void setPorcentajeVerde(Double porcentajeVerde) 
+  	public void setPorcentajeVerde(Double porcentajeVerde)
   	{
   		this.porcentajeVerde = porcentajeVerde;
   	}
 
-  	public Byte getFrecuencia() 
+  	public Byte getFrecuencia()
   	{
   		return this.frecuencia;
   	}
 
-  	public void setFrecuencia(Byte frecuencia) 
+  	public void setFrecuencia(Byte frecuencia)
   	{
   		this.frecuencia = frecuencia;
   	}
@@ -519,136 +519,137 @@ public class EditarActividadForm extends EditarObjetoForm
     return NaturalezaActividad.getNaturalezaSimple();
   }
 
-  	public Byte getNaturalezaActividadFormula() 
+  	public Byte getNaturalezaActividadFormula()
   	{
   		return NaturalezaActividad.getNaturalezaFormula();
   	}
-  	
-  	public Byte getNaturalezaActividadAsociado() 
+
+  	public Byte getNaturalezaActividadAsociado()
   	{
   		return NaturalezaActividad.getNaturalezaAsociado();
   	}
 
-  public Boolean getDesdeIniciativasPlanes() 
+  public Boolean getDesdeIniciativasPlanes()
   {
     return this.desdeIniciativasPlanes;
   }
 
-  public void setDesdeIniciativasPlanes(Boolean desdeIniciativasPlanes) 
+  public void setDesdeIniciativasPlanes(Boolean desdeIniciativasPlanes)
   {
     this.desdeIniciativasPlanes = desdeIniciativasPlanes;
   }
 
-  public String getInsumosFormula() 
+  public String getInsumosFormula()
   {
     return this.insumosFormula;
   }
 
-  public void setInsumosFormula(String insumosFormula) 
+  public void setInsumosFormula(String insumosFormula)
   {
     this.insumosFormula = insumosFormula;
   }
-  
-  public String getFormula() 
+
+  public String getFormula()
   {
     return this.formula;
   }
 
-  public void setFormula(String formula) 
+  public void setFormula(String formula)
   {
     this.formula = formula;
   }
-  
-  public String getFuncion() 
+
+  public String getFuncion()
   {
     return "";
   }
 
-  public void setFuncion(String funcion) 
+  public void setFuncion(String funcion)
   {
   }
-  
-  public List<?> getFuncionesFormula() 
+
+  public List<?> getFuncionesFormula()
   {
     return this.funcionesFormula;
   }
 
-  public void setFuncionesFormula(List<?> funcionesFormula) 
+  public void setFuncionesFormula(List<?> funcionesFormula)
   {
     this.funcionesFormula = funcionesFormula;
   }
-  
-  public String getSeparadorIndicadores() 
+
+  public String getSeparadorIndicadores()
   {
     return new EditarIndicadorForm().getSeparadorIndicadores();
   }
 
-  public String getSeparadorSeries() 
+  public String getSeparadorSeries()
   {
     return new EditarIndicadorForm().getSeparadorSeries();
   }
 
-  public String getSeparadorRuta() 
+  public String getSeparadorRuta()
   {
     return new EditarIndicadorForm().getSeparadorRuta();
   }
 
-  public String getCodigoIndicadorEliminado() 
+  public String getCodigoIndicadorEliminado()
   {
     return new EditarIndicadorForm().getCodigoIndicadorEliminado();
   }
-  
-  	public String getSeriesIndicador() 
+
+  	public String getSeriesIndicador()
   	{
   		return this.seriesIndicador;
   	}
 
-  	public void setSeriesIndicador(String seriesIndicador) 
+  	public void setSeriesIndicador(String seriesIndicador)
   	{
   		this.seriesIndicador = seriesIndicador;
   	}
-  
-  	public Boolean getEsPadre() 
+
+  	public Boolean getEsPadre()
   	{
   		return this.esPadre;
   	}
 
-  	public void setEsPadre(Boolean esPadre) 
+  	public void setEsPadre(Boolean esPadre)
   	{
   		this.esPadre = esPadre;
   	}
 
-  	public Boolean getEliminarMediciones() 
+  	public Boolean getEliminarMediciones()
   	{
   		return this.eliminarMediciones;
   	}
 
-  	public void setEliminarMediciones(Boolean eliminarMediciones) 
+  	public void setEliminarMediciones(Boolean eliminarMediciones)
   	{
   		this.eliminarMediciones = eliminarMediciones;
   	}
-  	
-    public String getEnlaceParcial() 
+
+    public String getEnlaceParcial()
     {
         return this.enlaceParcial;
     }
 
-    public void setEnlaceParcial(String enlaceParcial) 
+    public void setEnlaceParcial(String enlaceParcial)
     {
         this.enlaceParcial = enlaceParcial;
     }
-  	
-  	public String getCodigoEnlace() 
+
+  	public String getCodigoEnlace()
   	{
   		return this.codigoEnlace;
   	}
 
-  	public void setCodigoEnlace(String codigoEnlace) 
+  	public void setCodigoEnlace(String codigoEnlace)
   	{
   		this.codigoEnlace = codigoEnlace;
   	}
-  	
-  	public void clear() 
+
+  	@Override
+	public void clear()
   	{
   		this.actividadId = new Long(0L);
     	this.padreId = null;
@@ -661,7 +662,7 @@ public class EditarActividadForm extends EditarObjetoForm
     	this.unidadMedida = null;
     	this.unidadesMedida = new ArrayList<UnidadMedida>();
     	this.tipoMedicion = TipoMedicion.getTipoMedicionEnPeriodo();
-    	
+
     	Date ahora = new Date();
     	this.comienzoPlan = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");
     	this.finPlan = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");
@@ -682,7 +683,7 @@ public class EditarActividadForm extends EditarObjetoForm
 		this.codigoEnlace = null;
 		this.enlaceParcial = null;
 		this.setBloqueado(false);
-		
+
     	String listaSeries = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries() + SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();
     	this.seriesIndicador = listaSeries;
     	this.insumosFormula = null;

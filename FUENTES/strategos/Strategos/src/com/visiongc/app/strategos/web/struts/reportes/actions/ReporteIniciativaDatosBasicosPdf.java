@@ -123,7 +123,7 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					dibujarTabla0(messageResources, request, documento);
 
@@ -208,7 +208,7 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 			if (iniciativas.size() > 0) {
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = (Iniciativa) iter.next();
+					Iniciativa iniciativa = iter.next();
 
 					dibujarTabla0(messageResources, request, documento);
 
@@ -239,7 +239,7 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
 
-					OrganizacionStrategos organizacion = (OrganizacionStrategos) iter.next();
+					OrganizacionStrategos organizacion = iter.next();
 
 					if (organizacion != null) {
 
@@ -277,7 +277,7 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 					if (iniciativasSub.size() > 0) {
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = (Iniciativa) iter1.next();
+							Iniciativa iniciativa = iter1.next();
 
 							dibujarTabla0(messageResources, request, documento);
 

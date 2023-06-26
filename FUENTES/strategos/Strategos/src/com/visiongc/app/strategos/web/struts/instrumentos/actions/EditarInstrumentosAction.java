@@ -1,25 +1,5 @@
 package com.visiongc.app.strategos.web.struts.instrumentos.actions;
 
-import com.visiongc.app.strategos.categoriasmedicion.StrategosCategoriasService;
-
-import com.visiongc.app.strategos.impl.StrategosServiceFactory;
-import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
-import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
-import com.visiongc.app.strategos.instrumentos.StrategosCooperantesService;
-import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
-import com.visiongc.app.strategos.instrumentos.StrategosTiposConvenioService;
-import com.visiongc.app.strategos.instrumentos.model.Cooperante;
-import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
-import com.visiongc.app.strategos.instrumentos.model.TipoConvenio;
-import com.visiongc.app.strategos.util.PeriodoUtil;
-import com.visiongc.app.strategos.web.struts.instrumentos.forms.EditarInstrumentosForm;
-import com.visiongc.app.strategos.web.struts.tipoproyecto.forms.EditarTiposProyectoForm;
-import com.visiongc.commons.struts.action.VgcAction;
-import com.visiongc.commons.util.FechaUtil;
-import com.visiongc.commons.util.PaginaLista;
-import com.visiongc.commons.util.VgcFormatter;
-import com.visiongc.commons.web.NavigationBar;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,20 +10,36 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.instrumentos.StrategosCooperantesService;
+import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
+import com.visiongc.app.strategos.instrumentos.StrategosTiposConvenioService;
+import com.visiongc.app.strategos.instrumentos.model.Cooperante;
+import com.visiongc.app.strategos.instrumentos.model.Instrumentos;
+import com.visiongc.app.strategos.instrumentos.model.TipoConvenio;
+import com.visiongc.app.strategos.web.struts.instrumentos.forms.EditarInstrumentosForm;
+import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.FechaUtil;
+import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.commons.web.NavigationBar;
+
 public class EditarInstrumentosAction extends VgcAction
 {
-  public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
+  @Override
+public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
   {
   }
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+  @Override
+public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
     super.execute(mapping, form, request, response);
@@ -61,7 +57,7 @@ public class EditarInstrumentosAction extends VgcAction
     StrategosInstrumentosService strategosConveniosService = StrategosServiceFactory.getInstance().openStrategosInstrumentosService();
     StrategosTiposConvenioService strategosTiposConvenioService = StrategosServiceFactory.getInstance().openStrategosTiposConvenioService();
 	StrategosCooperantesService strategosCooperantesService = StrategosServiceFactory.getInstance().openStrategosCooperantesService();
-    
+
 
     if ((instrumentoId != null) && (!instrumentoId.equals("")) && (!instrumentoId.equals("0")))
     {
@@ -82,38 +78,38 @@ public class EditarInstrumentosAction extends VgcAction
         editarInstrumentosForm.setNombreCorto(instrumentos.getNombreCorto());
         editarInstrumentosForm.setAnio(instrumentos.getAnio());
         editarInstrumentosForm.setAreasCargo(instrumentos.getAreasCargo());
-        
+
         if (instrumentos.getFechaInicio() != null)
         	editarInstrumentosForm.setFechaInicio(VgcFormatter.formatearFecha(instrumentos.getFechaInicio(), "formato.fecha.corta"));
-		else 
+		else
 			editarInstrumentosForm.setFechaInicio(null);
-			
-        
+
+
         if (instrumentos.getFechaTerminacion() != null)
         	editarInstrumentosForm.setFechaTerminacion(VgcFormatter.formatearFecha(instrumentos.getFechaTerminacion(), "formato.fecha.corta"));
-		else 
+		else
 			editarInstrumentosForm.setFechaTerminacion(null);
-			
-        
+
+
         if (instrumentos.getFechaProrroga() != null)
         	editarInstrumentosForm.setFechaProrroga(VgcFormatter.formatearFecha(instrumentos.getFechaProrroga(), "formato.fecha.corta"));
-		else 
+		else
 			editarInstrumentosForm.setFechaProrroga(null);
-			
-        
+
+
         if(instrumentos.getCooperanteId() != null) {
         	Cooperante cooperante = (Cooperante)strategosCooperantesService.load(Cooperante.class, new Long(instrumentos.getCooperanteId()));
-            editarInstrumentosForm.setCooperanteId(instrumentos.getCooperanteId());            
+            editarInstrumentosForm.setCooperanteId(instrumentos.getCooperanteId());
             editarInstrumentosForm.setCooperante(cooperante);
-            
+
         }else {
-        	
+
         	editarInstrumentosForm.setCooperante(null);
             editarInstrumentosForm.setCooperanteId(null);
         }
-           
+
         editarInstrumentosForm.setEstatus(instrumentos.getEstatus());
-        
+
         editarInstrumentosForm.setInstrumentoMarco(instrumentos.getInstrumentoMarco());
         editarInstrumentosForm.setNombreEjecutante(instrumentos.getNombreEjecutante());
         editarInstrumentosForm.setNombreInstrumento(instrumentos.getNombreInstrumento());
@@ -124,7 +120,7 @@ public class EditarInstrumentosAction extends VgcAction
         editarInstrumentosForm.setRecursosDolares(instrumentos.getRecursosDolares());
         editarInstrumentosForm.setRecursosPesos(instrumentos.getRecursosPesos());
         editarInstrumentosForm.setResponsableCgi(instrumentos.getResponsableCgi());
-        
+
         if(instrumentos.getTiposConvenioId() != null) {
         	 TipoConvenio tipoConvenio = (TipoConvenio)strategosConveniosService.load(TipoConvenio.class, new Long(instrumentos.getTiposConvenioId()));
         	 editarInstrumentosForm.setTipoConvenio(tipoConvenio);
@@ -133,7 +129,7 @@ public class EditarInstrumentosAction extends VgcAction
         	 editarInstrumentosForm.setTipoConvenio(null);
              editarInstrumentosForm.setTiposConvenioId(null);
         }
-       
+
       }
       else
       {
@@ -149,47 +145,47 @@ public class EditarInstrumentosAction extends VgcAction
       editarInstrumentosForm.clear();
     }
 
-            
+
     editarInstrumentosForm.setConvenios(new ArrayList<TipoConvenio>());
     if(editarInstrumentosForm.getTiposConvenioId() != null) {
     	editarInstrumentosForm.getConvenios().addAll(editarInstrumentosForm.getConvenios());
     }
-    
+
     // tipo convenio
-    
+
     Map<String, String> filtrosTipoConvenio = new HashMap();
     PaginaLista paginaTipos = strategosTiposConvenioService.getTiposConvenio(0, 0, "tiposConvenioId", "asc", true, filtrosTipoConvenio);
-    
-    for (Iterator<TipoConvenio> iter = paginaTipos.getLista().iterator(); iter.hasNext(); ) 
+
+    for (Iterator<TipoConvenio> iter = paginaTipos.getLista().iterator(); iter.hasNext(); )
 	{
-			TipoConvenio tipoProyecto = (TipoConvenio)iter.next();
+			TipoConvenio tipoProyecto = iter.next();
 			editarInstrumentosForm.getConvenios().add(tipoProyecto);
 	}
-		
+
     editarInstrumentosForm.setCooperantes(new ArrayList<Cooperante>());
     if(editarInstrumentosForm.getCooperanteId() != null) {
     	editarInstrumentosForm.getCooperantes().addAll(editarInstrumentosForm.getCooperantes());
     }
-    
+
     Map<String, String> filtrosCooperantes = new HashMap();
     PaginaLista paginaCooperantes = strategosCooperantesService.getCooperantes(0, 0, "cooperanteId", "asc", true, filtrosCooperantes);
-    
-    for (Iterator<Cooperante> iter = paginaCooperantes.getLista().iterator(); iter.hasNext(); ) 
+
+    for (Iterator<Cooperante> iter = paginaCooperantes.getLista().iterator(); iter.hasNext(); )
 	{
-			Cooperante cooperante = (Cooperante)iter.next();
+			Cooperante cooperante = iter.next();
 			editarInstrumentosForm.getCooperantes().add(cooperante);
 	}
-            
-    if ((editarInstrumentosForm.getFechaInicio() != null) && (!editarInstrumentosForm.getFechaInicio().equals(""))) 
+
+    if ((editarInstrumentosForm.getFechaInicio() != null) && (!editarInstrumentosForm.getFechaInicio().equals("")))
     {
     	Date dateFecha = FechaUtil.convertirStringToDate(editarInstrumentosForm.getFechaInicio(), "formato.fecha.corta");
     	FechaUtil.setHoraInicioDia(dateFecha);
     	Calendar calFecha = Calendar.getInstance();
     	calFecha.setTime(dateFecha);
     	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-    	editarInstrumentosForm.setFechaInicioTexto(format.format(dateFecha));    	
+    	editarInstrumentosForm.setFechaInicioTexto(format.format(dateFecha));
     }
-    if ((editarInstrumentosForm.getFechaTerminacion() != null) && (!editarInstrumentosForm.getFechaTerminacion().equals(""))) 
+    if ((editarInstrumentosForm.getFechaTerminacion() != null) && (!editarInstrumentosForm.getFechaTerminacion().equals("")))
     {
     	Date dateFecha = FechaUtil.convertirStringToDate(editarInstrumentosForm.getFechaTerminacion(), "formato.fecha.corta");
     	FechaUtil.setHoraFinalDia(dateFecha);
@@ -198,16 +194,16 @@ public class EditarInstrumentosAction extends VgcAction
     	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     	editarInstrumentosForm.setFechaTerminacionTexto(format.format(dateFecha));
     }
-    if ((editarInstrumentosForm.getFechaProrroga() != null) && (!editarInstrumentosForm.getFechaProrroga().equals(""))) 
+    if ((editarInstrumentosForm.getFechaProrroga() != null) && (!editarInstrumentosForm.getFechaProrroga().equals("")))
     {
     	Date dateFecha = FechaUtil.convertirStringToDate(editarInstrumentosForm.getFechaProrroga(), "formato.fecha.corta");
     	FechaUtil.setHoraFinalDia(dateFecha);
     	Calendar calFecha = Calendar.getInstance();
     	calFecha.setTime(dateFecha);
     	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-    	editarInstrumentosForm.setFechaProrrogaTexto(format.format(dateFecha));    	
-    }        
-        
+    	editarInstrumentosForm.setFechaProrrogaTexto(format.format(dateFecha));
+    }
+
     strategosConveniosService.close();
 
     saveMessages(request, messages);

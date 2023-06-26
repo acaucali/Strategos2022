@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.modulo.codigoEnlace.actions;
 
@@ -25,10 +25,12 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class EditarCodigoEnlaceAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 	    super.execute(mapping, form, request, response);
@@ -68,7 +70,7 @@ public class EditarCodigoEnlaceAction extends VgcAction
 
 	    saveMessages(request, messages);
 
-	    if (forward.equals("noencontrado")) 
+	    if (forward.equals("noencontrado"))
 	    	return getForwardBack(request, 1, true);
 	    return mapping.findForward(forward);
 	}

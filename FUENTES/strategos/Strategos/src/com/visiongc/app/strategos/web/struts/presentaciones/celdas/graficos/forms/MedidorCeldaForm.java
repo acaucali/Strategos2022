@@ -1,13 +1,14 @@
 package com.visiongc.app.strategos.web.struts.presentaciones.celdas.graficos.forms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.presentaciones.model.Celda;
 import com.visiongc.app.strategos.presentaciones.model.Pagina;
 import com.visiongc.app.strategos.presentaciones.model.Vista;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MedidorCeldaForm extends EditarObjetoForm
 {
@@ -319,7 +320,8 @@ public class MedidorCeldaForm extends EditarObjetoForm
     this.totalIndicadoresCelda = totalIndicadoresCelda;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     this.anoInicial = new Integer(0);
 
     this.anoFinal = new Integer(0);

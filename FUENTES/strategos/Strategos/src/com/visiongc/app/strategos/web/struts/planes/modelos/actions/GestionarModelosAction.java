@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planes.modelos.actions;
 
@@ -30,12 +30,14 @@ import com.visiongc.commons.web.NavigationBar;
  */
 public class GestionarModelosAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 		if (url.indexOf("listaModelo") == -1)
 			navBar.agregarUrlSinParametros(url, nombre);
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -50,57 +52,57 @@ public class GestionarModelosAction extends VgcAction
 		int pagina = gestionarModelosForm.getPagina();
 		gestionarModelosForm.setPlanId(planId);
 
-		if (atributoOrden == null) 
+		if (atributoOrden == null)
 		{
 			atributoOrden = "nombre";
 			gestionarModelosForm.setAtributoOrden(atributoOrden);
 		}
-		if (tipoOrden == null) 
+		if (tipoOrden == null)
 		{
 			tipoOrden = "ASC";
 			gestionarModelosForm.setTipoOrden(tipoOrden);
 		}
 
-		if (pagina < 1) 
+		if (pagina < 1)
 			pagina = 1;
 
 		StrategosModelosService strategosModelosService = StrategosServiceFactory.getInstance().openStrategosModelosService();
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
-		if (gestionarModelosForm.getFiltroNombre() != null && !gestionarModelosForm.getFiltroNombre().equals("")) 
+		if (gestionarModelosForm.getFiltroNombre() != null && !gestionarModelosForm.getFiltroNombre().equals(""))
 			filtros.put("nombre", gestionarModelosForm.getFiltroNombre());
-		
+
 		filtros.put("planId", gestionarModelosForm.getPlanId());
 
 		PaginaLista paginaModelos = strategosModelosService.getModelos(pagina, 29, atributoOrden, tipoOrden, true, filtros);
 
-		if (request.getParameter("funcion") != null) 
+		if (request.getParameter("funcion") != null)
 		{
 			String funcion = request.getParameter("funcion");
-			if (funcion.equals("getModeloId")) 
+			if (funcion.equals("getModeloId"))
 			{
 				String modeloId = "";
 				List<Modelo> modelos = paginaModelos.getLista();
-				for (Iterator<Modelo> iter = modelos.iterator(); iter.hasNext(); ) 
+				for (Iterator<Modelo> iter = modelos.iterator(); iter.hasNext(); )
 				{
-					Modelo modelo = (Modelo)iter.next();
+					Modelo modelo = iter.next();
 					modeloId = modeloId + modelo.getPk().getModeloId().toString() + ",";
 				}
-				if (modeloId.length() > 1) 
+				if (modeloId.length() > 1)
 					modeloId = modeloId.substring(0, modeloId.length() - 1);
 
 				request.setAttribute("ajaxResponse", modeloId);
-				
+
 				return mapping.findForward("ajaxResponse");
 			}
 		}
-		
+
 		request.setAttribute("paginaModelos", paginaModelos);
 
 		OrganizacionStrategos organizacionStrategos = (OrganizacionStrategos)strategosModelosService.load(OrganizacionStrategos.class, new Long((String)request.getSession().getAttribute("organizacionId")));
 		gestionarModelosForm.setRutaCompletaOrganizacion(organizacionStrategos.getNombre());
-		
+
 		strategosModelosService.close();
 
 		return mapping.findForward(forward);

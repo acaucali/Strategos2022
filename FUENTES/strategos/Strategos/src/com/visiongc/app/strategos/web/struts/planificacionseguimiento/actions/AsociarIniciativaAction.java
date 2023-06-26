@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions;
 
@@ -46,40 +46,42 @@ import com.visiongc.framework.model.Usuario;
  */
 public class AsociarIniciativaAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
 
 	    ActionMessages messages = getMessages(request);
-	
+
 	    Long iniciativaId = (request.getParameter("iniciativaId") != null ? Long.parseLong(request.getParameter("iniciativaId")) : 0L);
 	    Long proyectoId = (request.getParameter("proyectoId") != null ? Long.parseLong(request.getParameter("proyectoId")) : 0L);
 	    Long iniciativaAsociadaId = (request.getParameter("iniciativaAsociadaId") != null ? Long.parseLong(request.getParameter("iniciativaAsociadaId")) : 0L);
 	    Long seleccionados = (request.getParameter("seleccionados") != null ? Long.parseLong(request.getParameter("seleccionados")) : 0L);
 	    String iniciativaAsociadaNombre = request.getParameter("iniciativaAsociadaNombre");
 	    String className = request.getParameter("className");
-	    
+
 	    StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 	    Iniciativa iniciativa = (Iniciativa)strategosPryActividadesService.load(Iniciativa.class, iniciativaId);
 	    Iniciativa iniciativaAsociada = (Iniciativa)strategosPryActividadesService.load(Iniciativa.class, iniciativaAsociadaId);
-	    
+
 	    //Chequear si ya la Iniciativa esta asociada
-	    Boolean found = getRecursividad(strategosPryActividadesService, iniciativa, iniciativaAsociadaId, className);;
+	    Boolean found = getRecursividad(strategosPryActividadesService, iniciativa, iniciativaAsociadaId, className);
 
 	    //Chequear recursividad
 	    if (!found)
 	    	found = getRecursividad(strategosPryActividadesService, iniciativaAsociada, iniciativaId, className);
-	    
+
 	    if (found)
 	    {
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.circular.actividad.iniciativa", iniciativaAsociadaNombre));
 	    	saveMessages(request, messages);
 	    	strategosPryActividadesService.close();
-	    	
+
 	    	return getForwardBack(request, 1, true);
 	    }
 
@@ -94,14 +96,14 @@ public class AsociarIniciativaAction extends VgcAction
 		{
 			filtros = new HashMap<String, Comparable>();
 			filtros.put("proyectoId", iniciativaAsociada.getProyectoId().toString());
-			
+
 			String atributoOrden = "fila";
 			String tipoOrden = "ASC";
 			int pagina = 0;
 			actividades = strategosPryActividadesService.getActividades(pagina, 0, atributoOrden, tipoOrden, false, filtros).getLista();
-			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) 
+			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();)
 			{
-				PryActividad actividad = (PryActividad)iter.next();
+				PryActividad actividad = iter.next();
 				if (comienzoPlan == null)
 					comienzoPlan = actividad.getComienzoPlan();
 				if (finPlan == null)
@@ -110,7 +112,7 @@ public class AsociarIniciativaAction extends VgcAction
 					comienzoReal = actividad.getComienzoReal();
 				if (finReal == null)
 					finReal = actividad.getFinReal();
-				
+
 				if (actividad.getComienzoPlan() != null && actividad.getComienzoPlan().before(comienzoPlan))
 					comienzoPlan = actividad.getComienzoPlan();
 				if (actividad.getFinPlan() != null && actividad.getFinPlan().after(finPlan))
@@ -119,113 +121,113 @@ public class AsociarIniciativaAction extends VgcAction
 					comienzoReal = actividad.getComienzoReal();
 				if (actividad.getFinReal() != null && actividad.getFinReal().after(finReal))
 					finReal = actividad.getFinReal();
-			}			
+			}
 		}
 
 	    PryActividad pryActividad = new PryActividad();
 	    pryActividad.setActividadId(new Long(0L));
 	    pryActividad.setPryInformacionActividad(new PryInformacionActividad());
-	
+
 	    int filaNuevaActividad = 1;
 	    int nivelNuevaActividad = 1;
 	    Long padreId = null;
-	
-	    if ((seleccionados != null) && (seleccionados.longValue() != 0L)) 
+
+	    if ((seleccionados != null) && (seleccionados.longValue() != 0L))
     	{
     		filaNuevaActividad = ((Integer)strategosPryActividadesService.getValoresLimiteAlcanceHijosActividad(seleccionados.longValue(), new Boolean(false), (Usuario)request.getSession().getAttribute("usuario")).get(0)).intValue();
     		PryActividad actividadBase = (PryActividad)strategosPryActividadesService.load(PryActividad.class, seleccionados);
     		nivelNuevaActividad = actividadBase.getNivel().intValue();
     		if (actividadBase.getPadre() != null)
     			padreId = actividadBase.getPadre().getActividadId();
-    		else 
+    		else
     			padreId = null;
     	}
     	else
     		filaNuevaActividad = strategosPryActividadesService.getMaximaFila(proyectoId, (Usuario)request.getSession().getAttribute("usuario"));
-	    	
+
     	filaNuevaActividad++;
-	
+
     	pryActividad.setPadreId(padreId);
     	pryActividad.setFila(new Integer(filaNuevaActividad));
     	pryActividad.setNivel(new Integer(nivelNuevaActividad));
     	pryActividad.setProyectoId(proyectoId);
-    	
+
 	    StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService(strategosPryActividadesService);
 	    UnidadMedida unidad = strategosUnidadesService.getUnidadMedidaPorcentaje();
 	    strategosUnidadesService.close();
-	    
+
 	    pryActividad.setUnidadId(unidad.getUnidadId());
 	    pryActividad.setNaturaleza(NaturalezaActividad.getNaturalezaAsociado());
-	
+
 	    if (iniciativaAsociada.getNombre() != null)
 	    	pryActividad.setNombre(iniciativaAsociada.getNombre());
-	    else 
+	    else
 	    	pryActividad.setNombre(null);
-	
+
 	    if ((iniciativaAsociada.getMemoIniciativa() != null) && (iniciativaAsociada.getMemoIniciativa().getDescripcion() != null) && (!iniciativaAsociada.getMemoIniciativa().getDescripcion().equals("")))
 	    	pryActividad.setDescripcion(iniciativaAsociada.getMemoIniciativa().getDescripcion());
-	    else 
+	    else
 	    	pryActividad.setDescripcion(null);
 
 	    if (comienzoPlan != null)
 	    	pryActividad.setComienzoPlan(comienzoPlan);
-	    else 
+	    else
 	    	pryActividad.setComienzoPlan(null);
-	
+
 	    if (finPlan != null)
 	    	pryActividad.setFinPlan(finPlan);
-	    else 
+	    else
 	    	pryActividad.setFinPlan(null);
 
 	    if (comienzoReal != null)
 	    	pryActividad.setComienzoReal(comienzoReal);
-	    else 
+	    else
 	    	pryActividad.setComienzoReal(null);
-	
+
 	    if (finReal != null)
 	    	pryActividad.setFinReal(finReal);
-	    else 
+	    else
 	    	pryActividad.setFinReal(null);
-	    
+
 	    pryActividad.setDuracionPlan(null);
-	
+
 	    if (iniciativaAsociada.getResponsableFijarMetaId() != null && iniciativaAsociada.getResponsableFijarMetaId().equals(new Long(0L)))
 	    	pryActividad.setResponsableFijarMetaId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableFijarMetaId(iniciativaAsociada.getResponsableFijarMetaId());
-	
+
 	    if (iniciativaAsociada.getResponsableLograrMetaId() != null && iniciativaAsociada.getResponsableLograrMetaId().equals(new Long(0L)))
 	    	pryActividad.setResponsableLograrMetaId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableLograrMetaId(iniciativaAsociada.getResponsableLograrMetaId());
-	
+
 	    if (iniciativaAsociada.getResponsableSeguimientoId() != null && iniciativaAsociada.getResponsableSeguimientoId().equals(new Long(0L)))
 	    	pryActividad.setResponsableSeguimientoId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableSeguimientoId(iniciativaAsociada.getResponsableSeguimientoId());
-	
+
 	    if (iniciativaAsociada.getResponsableCargarMetaId() != null && iniciativaAsociada.getResponsableCargarMetaId().equals(new Long(0L)))
 	    	pryActividad.setResponsableCargarMetaId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableCargarMetaId(iniciativaAsociada.getResponsableCargarMetaId());
-	
+
 	    if (iniciativaAsociada.getResponsableCargarEjecutadoId() != null && iniciativaAsociada.getResponsableCargarEjecutadoId().equals(new Long(0L)))
 	    	pryActividad.setResponsableCargarEjecutadoId(null);
-	    else 
+	    else
 	    	pryActividad.setResponsableCargarEjecutadoId(iniciativaAsociada.getResponsableCargarEjecutadoId());
-	
+
     	pryActividad.getPryInformacionActividad().setProductoEsperado(null);
     	pryActividad.getPryInformacionActividad().setRecursosHumanos(null);
     	pryActividad.getPryInformacionActividad().setRecursosMateriales(null);
-	
+
 	    if (iniciativaAsociada.getAlertaZonaVerde() != null)
 	    	pryActividad.getPryInformacionActividad().setPorcentajeVerde(iniciativaAsociada.getAlertaZonaVerde());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setPorcentajeVerde(null);
-	
+
 	    if (iniciativaAsociada.getAlertaZonaAmarilla() != null)
 	    	pryActividad.getPryInformacionActividad().setPorcentajeAmarillo(iniciativaAsociada.getAlertaZonaAmarilla());
-	    else 
+	    else
 	    	pryActividad.getPryInformacionActividad().setPorcentajeAmarillo(null);
 
 	    if (iniciativaAsociada.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()) == null || iniciativaAsociada.getClaseId() == null)
@@ -233,7 +235,7 @@ public class AsociarIniciativaAction extends VgcAction
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.circular.actividad.iniciativa.sinindicador", iniciativaAsociadaNombre));
 	    	saveMessages(request, messages);
 	    	strategosPryActividadesService.close();
-	    	
+
 	    	return getForwardBack(request, 1, true);
 	    }
 
@@ -241,7 +243,7 @@ public class AsociarIniciativaAction extends VgcAction
     	pryActividad.setClaseId(new Long(iniciativaAsociada.getClaseId()));
     	pryActividad.setObjetoAsociadoClassName(className);
     	pryActividad.setObjetoAsociadoId(iniciativaAsociadaId);
-	
+
     	StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
     	StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
 		Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(pryActividad.getIndicadorId()));
@@ -254,9 +256,9 @@ public class AsociarIniciativaAction extends VgcAction
 			pryActividad.setTipoMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
 
 		Medicion medicionAlerta = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(), indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieAlerta(), indicador.getValorInicialCero(), TipoCorte.getTipoCorteTransversal(), indicador.getTipoCargaMedicion());
-		if (medicionAlerta != null) 
+		if (medicionAlerta != null)
 			pryActividad.setAlerta(AlertaIndicador.ConvertDoubleToByte(medicionAlerta.getValor()));
-	    			
+
 		Double totalReal = null;
 		Double totalProgramado = null;
 		Double ultimaMedicionReal = null;
@@ -264,17 +266,17 @@ public class AsociarIniciativaAction extends VgcAction
   		{
   		  	List<Medicion> medicionesReales = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieReal().getSerieId(), new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
   	  		List<Medicion> medicionesProgramada = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramado().getSerieId(), new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
-  		  	for (Iterator<Medicion> iterMediciones = medicionesReales.iterator(); iterMediciones.hasNext(); ) 
+  		  	for (Iterator<Medicion> iterMediciones = medicionesReales.iterator(); iterMediciones.hasNext(); )
   		  	{
-  		  		Medicion medicion = (Medicion)iterMediciones.next();
+  		  		Medicion medicion = iterMediciones.next();
   		  		if (medicion.getValor() != null && totalReal == null)
   		  			totalReal = 0D;
   		  		totalReal = totalReal + medicion.getValor();
 	  			if (medicion.getValor() != null)
 	  				ultimaMedicionReal = medicion.getValor();
-  			  	for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada.iterator(); iterMedicionesProgramadas.hasNext(); ) 
+  			  	for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada.iterator(); iterMedicionesProgramadas.hasNext(); )
   			  	{
-  			  		Medicion medicionProgramada = (Medicion)iterMedicionesProgramadas.next();
+  			  		Medicion medicionProgramada = iterMedicionesProgramadas.next();
   			  		if (medicion.getMedicionId().getAno().intValue() == medicionProgramada.getMedicionId().getAno().intValue() &&
   			  			medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada.getMedicionId().getPeriodo().intValue())
   			  		{
@@ -296,50 +298,50 @@ public class AsociarIniciativaAction extends VgcAction
 	  		if (totalReal != null)
 	  		{
 		  		List<Medicion> medicionesProgramada = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramado().getSerieId(), new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
-  			  	for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada.iterator(); iterMedicionesProgramadas.hasNext(); ) 
+  			  	for (Iterator<Medicion> iterMedicionesProgramadas = medicionesProgramada.iterator(); iterMedicionesProgramadas.hasNext(); )
   			  	{
-  			  		Medicion medProgramada = (Medicion)iterMedicionesProgramadas.next();
+  			  		Medicion medProgramada = iterMedicionesProgramadas.next();
   			  		if (medProgramada.getMedicionId().getAno().intValue() <= medicionReal.getMedicionId().getAno().intValue() &&
   			  			medProgramada.getMedicionId().getPeriodo().intValue() <= medicionReal.getMedicionId().getPeriodo().intValue())
   			  			totalProgramado = medProgramada.getValor();
 		  		}
 	  		}
   		}
-	    	
+
   		pryActividad.setPorcentajeCompletado(ultimaMedicionReal);
 	  	pryActividad.setPorcentajeEjecutado(totalReal);
 	  	pryActividad.setPorcentajeEsperado(totalProgramado);
-	  				
+
 	    respuesta = strategosPryActividadesService.saveActividad(pryActividad, getUsuarioConectado(request), false);
 
 	    if (respuesta == 10000)
 	    	respuesta = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction().CalcularFechasPadres(padreId, proyectoId, getUsuarioConectado(request));
 	    if (respuesta == 10000  && pryActividad.getActividadId() != null && iniciativa != null && iniciativa.getIniciativaId() != null)
 	    	respuesta = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction().CalcularPadre(pryActividad, iniciativa.getIniciativaId(), request);
-	    
-	    if (respuesta == 10000) 
+
+	    if (respuesta == 10000)
     		messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.nuevo.ok"));
 	    else if (respuesta == 10003)
 	    	messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.duplicado"));
-	
+
 	    strategosPryActividadesService.close();
-	
+
 	    saveMessages(request, messages);
-	
+
 	    return getForwardBack(request, 1, true);
 	}
-	  
+
 	private Boolean getRecursividad(StrategosPryActividadesService strategosPryActividadesService, Iniciativa iniciativa, Long iniciativaId, String className)
 	{
 		boolean found = false;
-		
+
 	    //Chequear si ya la Iniciativa esta asociada
 	    List<PryActividad> actividades = new ArrayList<PryActividad>();
 	    if (iniciativa.getProyectoId() != null)
 	    	actividades = strategosPryActividadesService.getObjetoAsociados(iniciativa.getProyectoId(), className);
 	    for (Iterator<PryActividad> i = actividades.iterator(); i.hasNext(); )
 	    {
-	    	PryActividad actividad = (PryActividad)i.next();
+	    	PryActividad actividad = i.next();
 	    	if (actividad.getObjetoAsociadoId().longValue() == iniciativaId.longValue())
 	    	{
 	    		found = true;
@@ -353,7 +355,7 @@ public class AsociarIniciativaAction extends VgcAction
 	    			break;
 	    	}
 	    }
-		
+
 		return found;
 	}
 }

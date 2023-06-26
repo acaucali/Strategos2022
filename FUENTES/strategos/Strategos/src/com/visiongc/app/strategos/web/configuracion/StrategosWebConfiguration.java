@@ -1,14 +1,16 @@
 package com.visiongc.app.strategos.web.configuracion;
 
-import com.visiongc.app.strategos.persistence.StrategosPersistenceSessionFactory;
-import com.visiongc.commons.VgcConfiguration;
-import com.visiongc.commons.util.lang.ChainedRuntimeException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.visiongc.app.strategos.persistence.StrategosPersistenceSessionFactory;
+import com.visiongc.commons.VgcConfiguration;
+import com.visiongc.commons.util.lang.ChainedRuntimeException;
+
 public class StrategosWebConfiguration extends VgcConfiguration
 {
+	@Override
 	public Map<String, Map<String, String>> getAbbreviatedClassNames()
 	{
 		Map<String, Map<String, String>> abbreviatedClassNames = new HashMap<String, Map<String, String>>();
@@ -20,10 +22,11 @@ public class StrategosWebConfiguration extends VgcConfiguration
 		return abbreviatedClassNames;
 	}
 
+	@Override
 	public Properties getDefaultProperties()
 	{
 		Properties properties = new Properties();
-		
+
 		properties.put("com.visiongc.app.strategos.persistence.session.factory", "hibernateStrategos");
 
 		return properties;
@@ -47,7 +50,7 @@ public class StrategosWebConfiguration extends VgcConfiguration
 			}
 			catch (Exception e)
 			{
-				throw new ChainedRuntimeException("La aplicación no está¡ configurada correctamente.", e);
+				throw new ChainedRuntimeException("La aplicaciï¿½n no estï¿½ configurada correctamente.", e);
 			}
 		}
 

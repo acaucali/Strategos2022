@@ -24,7 +24,8 @@
 		<script type="text/javascript">
 
 		function nuevo() {			
-			abrirVentanaModal('<html:rewrite action="/estadosacciones/crearEstadoAcciones"/>', "EstadosAccionesAdd", 450, 470);
+			//abrirVentanaModal('<html:rewrite action="/estadosacciones/crearEstadoAcciones"/>', "EstadosAccionesAdd", 450, 470);
+			window.location.href = '<html:rewrite action="/estadosacciones/crearEstadoAcciones"/>'
 		}
 
 		function modificar() {
@@ -32,8 +33,9 @@
 					alert('<vgcutil:message key="jsp.seleccionar.noseleccion" />');
 					return;
 				}			
-			var estadoId = document.gestionarEstadosAccionesForm.seleccionados.value;			
-			abrirVentanaModal('<html:rewrite action="/estadosacciones/modificarEstadoAcciones"/>?estadoId=' + estadoId, "EstadosAccionesAdd", 450, 470);
+			var estadoId = document.gestionarEstadosAccionesForm.seleccionados.value;	
+			window.location.href = '<html:rewrite action="/estadosacciones/modificarEstadoAcciones"/>?estadoId=' + estadoId
+			//abrirVentanaModal('<html:rewrite action="/estadosacciones/modificarEstadoAcciones"/>?estadoId=' + estadoId, "EstadosAccionesAdd", 450, 470);
 		}
 
 		function eliminar() {

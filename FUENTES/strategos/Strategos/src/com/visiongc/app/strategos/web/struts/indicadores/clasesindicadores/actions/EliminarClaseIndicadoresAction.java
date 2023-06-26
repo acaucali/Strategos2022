@@ -5,6 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
@@ -15,20 +24,15 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.model.Usuario;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 public class EliminarClaseIndicadoresAction extends VgcAction
 {
+	@Override
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre)
 	{
 	}
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
@@ -45,17 +49,17 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 			cancelar = true;
 		else if ((claseId == null) || (claseId.equals("")))
 			cancelar = true;
-		else if ((ultimoTs != null) && (ultimoTs.equals(claseId + "&" + ts))) 
+		else if ((ultimoTs != null) && (ultimoTs.equals(claseId + "&" + ts)))
 			cancelar = true;
 
 		if (cancelar)
 			return getForwardBack(request, 1, true);
 
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
-	    if (request.getParameter("funcion") != null) 
+	    if (request.getParameter("funcion") != null)
 	    {
 	    	String funcion = request.getParameter("funcion");
-	    	if (funcion.equals("check")) 
+	    	if (funcion.equals("check"))
 	    	{
 	    		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 	    		Long organizacionId = new Long((String)request.getSession().getAttribute("organizacionId"));
@@ -66,17 +70,17 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 		    		request.setAttribute("ajaxResponse", "true|" + claseId);
 		    		return mapping.findForward("ajaxResponse");
 				}
-	    		
+
 	    		Map<String, Object> filtros = new HashMap<String, Object>();
 
 	    		filtros.put("organizacionId", organizacionId.toString());
 	    		filtros.put("claseId", claseId);
-	    		
+
 	    		PaginaLista paginaIndicadores = strategosIndicadoresService.getIndicadores(1, 29, "nombre", "ASC", true, filtros, null, null, false);
-	    		for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); ) 
+	    		for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); )
 				{
 	    			Indicador indicador = (Indicador)i.next();
-					esInsumo = strategosIndicadoresService.esInsumo(indicador.getIndicadorId()); 
+					esInsumo = strategosIndicadoresService.esInsumo(indicador.getIndicadorId());
 					if (esInsumo)
 					{
 			    		request.setAttribute("ajaxResponse", "true|" + claseId);
@@ -91,7 +95,7 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 				strategosIndicadoresService.close();
 	    	}
 	    }
-		
+
 		strategosClasesIndicadoresService.unlockObject(request.getSession().getId(), claseId);
 
 		bloqueado = !strategosClasesIndicadoresService.lockForDelete(request.getSession().getId(), claseId);
@@ -109,7 +113,7 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 					Usuario usuario = (Usuario)request.getSession().getAttribute("usuario");
 					strategosClasesIndicadoresService.unlockObject(request.getSession().getId(), claseId);
 					if (claseIndicadores.getHijos() != null && claseIndicadores.getHijos().size() >= 0)
-						respuesta = EliminarHijas(Long.parseLong(claseId), usuario); 
+						respuesta = EliminarHijas(Long.parseLong(claseId), usuario);
 					if (respuesta == 10000)
 						respuesta = strategosClasesIndicadoresService.deleteClaseIndicadores(claseIndicadores, true, usuario);
 					if (respuesta == 10004)
@@ -117,7 +121,7 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 					else
 					{
 						messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.eliminacionok", claseIndicadores.getNombre()));
-						
+
 						ClaseIndicadores padre = claseIndicadores.getPadre();
 						request.setAttribute("GestionarClasesIndicadoresAction.reloadId", padre.getClaseId().toString());
 					}
@@ -126,7 +130,7 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 			else
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.nodoraiz", claseIndicadores.getNombre()));
 		}
-		else 
+		else
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.eliminarregistro.noencontrado"));
 
 		strategosClasesIndicadoresService.close();
@@ -137,18 +141,18 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 
 		return getForwardBack(request, 1, true);
 	}
-	
+
 	private int EliminarHijas(Long claseId, Usuario usuario)
 	{
 		int respuesta = VgcReturnCode.DB_OK;
-		
+
 		StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance().openStrategosClasesIndicadoresService();
-		
+
 		List<ClaseIndicadores> clases = strategosClasesIndicadoresService.getClasesHijas(claseId, null);
-		
-		for (Iterator<ClaseIndicadores> iter = clases.iterator(); iter.hasNext(); ) 
+
+		for (Iterator<ClaseIndicadores> iter = clases.iterator(); iter.hasNext(); )
 		{
-			ClaseIndicadores claseHijo = (ClaseIndicadores)iter.next();
+			ClaseIndicadores claseHijo = iter.next();
 			if (claseHijo.getHijos() != null && claseHijo.getHijos().size() >= 0)
 				respuesta = EliminarHijas(claseHijo.getClaseId(), usuario);
 			if (respuesta == VgcReturnCode.DB_OK)
@@ -156,41 +160,41 @@ public class EliminarClaseIndicadoresAction extends VgcAction
 			if (respuesta != VgcReturnCode.DB_OK)
 				break;
 		}
-		
+
 		strategosClasesIndicadoresService.close();
-		
+
 		return respuesta;
 	}
-	
+
 	private Boolean CheckInsumoHijas(Long claseId, Long organizacionId, StrategosClasesIndicadoresService strategosClasesIndicadoresService, StrategosIndicadoresService strategosIndicadoresService)
 	{
 		Boolean esInsumo = false;
 
 		List<ClaseIndicadores> clases = strategosClasesIndicadoresService.getClasesHijas(claseId, null);
 
-		for (Iterator<ClaseIndicadores> iter = clases.iterator(); iter.hasNext(); ) 
+		for (Iterator<ClaseIndicadores> iter = clases.iterator(); iter.hasNext(); )
 		{
-			ClaseIndicadores claseHijo = (ClaseIndicadores)iter.next();
+			ClaseIndicadores claseHijo = iter.next();
 			esInsumo = CheckInsumoHijas(claseHijo.getClaseId(), organizacionId, strategosClasesIndicadoresService, strategosIndicadoresService);
 			if (esInsumo)
 				break;
-			
+
     		Map<String, Object> filtros = new HashMap<String, Object>();
     		filtros.put("organizacionId", organizacionId.toString());
     		filtros.put("claseId", claseHijo.getClaseId().toString());
-    		
+
     		PaginaLista paginaIndicadores = strategosIndicadoresService.getIndicadores(1, 29, "nombre", "ASC", true, filtros, null, null, false);
-    		for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); ) 
+    		for (Iterator<?> i = paginaIndicadores.getLista().iterator(); i.hasNext(); )
 			{
     			Indicador indicador = (Indicador)i.next();
-				esInsumo = strategosIndicadoresService.esInsumo(indicador.getIndicadorId()); 
+				esInsumo = strategosIndicadoresService.esInsumo(indicador.getIndicadorId());
 				if (esInsumo)
 		    		break;
 			}
 			if (esInsumo)
 	    		break;
 		}
-		
+
 		return esInsumo;
 	}
 }
