@@ -548,7 +548,7 @@
 										<%-- Calculo Automatico --%>
 										<td colspan="2">
 											<html:checkbox disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="tipoCalculo" value="<%= tipoCalculoPerspectivaAutomatico %>"></html:checkbox>
-											<vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.tipocalculo1" /><b><bean:write name="gestionarPerspectivasForm" property="elementoPlantillaPlanes.nombre" /></b><vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.tipocalculo2" />
+											<vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.tipocalculo1" /><b><bean:write name="gestionarPerspectivasForm" property="elementoPlantillaPlanes.nombre" /></b> <vgcutil:message key="jsp.editarperspectiva.pestana.datosbasicos.ficha.tipocalculo2" />
 										</td>
 									</tr>
 								</logic:equal>

@@ -131,7 +131,7 @@ public class GraficoAction extends VgcAction
 
 		long graficoId = ((request.getParameter("graficoId") != null && request.getParameter("graficoId") != "") ? Long.parseLong(request.getParameter("graficoId")) : 0L);
 		Boolean virtual = ((request.getParameter("virtual") != null && request.getParameter("virtual") != "") ? Boolean.parseBoolean(request.getParameter("virtual")) : null);
-		String source = ((request.getParameter("source") != null && request.getParameter("source") != "") ? request.getParameter("source") : null);
+		String source = ((request.getParameter("source") != null && request.getParameter("source") != "") ? request.getParameter("source") : "");
 		Long claseId = ((request.getParameter("claseId") != null && request.getParameter("claseId") != "") ? Long.parseLong(request.getParameter("claseId")) : null);
 		Long planId = ((request.getParameter("planId") != null && request.getParameter("planId") != "") ? Long.parseLong(request.getParameter("planId")) : null);
 		String onFuncion = ((request.getParameter("onFuncion") != null && request.getParameter("onFuncion") != "") ? request.getParameter("onFuncion") : null);
@@ -142,10 +142,7 @@ public class GraficoAction extends VgcAction
 		if (onFuncion != null && onFuncion.equals("onAplicar"))
 		{
 			if (onFuncion != null && onFuncion.equals("onAplicar"))
-				request.getSession().setAttribute("configuracionGrafico", request.getParameter("data").replace("[[num]]", "#").replace("[[por]]", "%").toString());
-
-			request.setAttribute("ajaxResponse", "10000");
-    	    return mapping.findForward("ajaxResponse");
+				request.getSession().setAttribute("configuracionGrafico", request.getParameter("data").replace("[[num]]", "#").replace("Porcentaje", "%").toString());			    	    
 		}
 
 		StrategosCeldasService strategosCeldasService = StrategosServiceFactory.getInstance().openStrategosCeldasService();
@@ -249,7 +246,7 @@ public class GraficoAction extends VgcAction
 
 			String data = "";
 			if (request.getParameter("data") != null)
-				data = request.getParameter("data").replace("[[num]]", "#").replace("[[por]]", "%");
+				data = request.getParameter("data").replace("[[num]]", "#").replace("Porcentaje", "%");
 			else if (request.getSession().getAttribute("configuracionGrafico") != null)
 			{
 				data = (String) request.getSession().getAttribute("configuracionGrafico");
@@ -497,7 +494,7 @@ public class GraficoAction extends VgcAction
 
 						SetGrafico(objetos, grafico, graficoForm.getSource(), planId, false, request);
 					}
-				}
+				}								
 			}
 			else
 			{
@@ -593,33 +590,33 @@ public class GraficoAction extends VgcAction
 		}
 		// reporte grafico procesos
 		else
-		{
-			if (graficoForm.getVirtual() == null)
-				graficoForm.setVirtual(false);
-
-			if (!graficoForm.getVirtual())
-				ReadGrafico(graficoId, graficoForm, request);
+		{					
+			
+			
+			if (graficoForm.getVirtual() == null) 
+				graficoForm.setVirtual(false);					
+			if (!graficoForm.getVirtual()) 				
+				ReadGrafico(graficoId, graficoForm, request);				
 			else
 			{
-				Grafico grafico = new Grafico();
-
-				grafico.setGraficoId(Long.parseLong(request.getParameter("id")));
+				
+				Grafico grafico =  new Grafico();
 				grafico.setNombre(request.getParameter("nombre"));
+				grafico.setGraficoId(Long.valueOf(request.getParameter("id")));
 				String data = "";
 				if (request.getParameter("data") != null)
-					data = request.getParameter("data").replace("[[num]]", "#").replace("[[por]]", "%");
+					data = request.getParameter("data").replace("[[num]]", "#").replace("Porcentaje", "%");
 				else if (request.getSession().getAttribute("configuracionGrafico") != null)
 					data = (String) request.getSession().getAttribute("configuracionGrafico");
 				grafico.setConfiguracion(data);
-
+								
 				String res = "";
 				res = new com.visiongc.app.strategos.web.struts.graficos.actions.SeleccionarGraficoAction().ReadXmlProperties(res, grafico);
 				graficoForm.setRespuesta(res);
 
 				GetObjeto(graficoForm, grafico);
-			}
-		}
-
+			}				
+		}		
 		graficoForm.setFrecuencias(Frecuencia.getFrecuencias());
 		graficoForm.setTiposSerie(TipoSerieGrafico.getTiposSerie());
 
@@ -663,7 +660,7 @@ public class GraficoAction extends VgcAction
 		strategosMedicionesService.close();
 		strategosIniciativasService.close();
 
-		return mapping.findForward(forward);
+		return mapping.findForward("grafico");
 	}
 
 	private void getData(GraficoForm graficoForm)
@@ -1102,11 +1099,17 @@ public class GraficoAction extends VgcAction
 	public ActionForm ReadGrafico(Long id, GraficoForm graficoForm, HttpServletRequest request) throws ParserConfigurationException, SAXException, IOException
 	{
 		StrategosGraficosService strategosGraficosService = StrategosServiceFactory.getInstance().openStrategosGraficosService();
-		Grafico grafico = new Grafico();
+		Grafico grafico = null;
+
+		grafico = (Grafico)strategosGraficosService.load(Grafico.class, new Long(id));
+		
+		if(grafico == null)
+			grafico = new Grafico();		
 
 		String res = "";
+		
 		res = new com.visiongc.app.strategos.web.struts.graficos.actions.SeleccionarGraficoAction().ReadXmlProperties(res, grafico);
-		graficoForm.setRespuesta(res);
+		graficoForm.setRespuesta(res);		
 		graficoForm = (GraficoForm) GetObjeto(graficoForm, grafico);
 
 		strategosGraficosService.close();
@@ -1302,7 +1305,7 @@ public class GraficoAction extends VgcAction
 						graficoForm.setAcumular(null);
 				}
 				else
-					graficoForm.setAcumular(null);
+					graficoForm.setAcumular(null);			
 
 				if (elemento.getElementsByTagName("impVsAnoAnterior").getLength() > 0)
 				{
@@ -1483,18 +1486,20 @@ public class GraficoAction extends VgcAction
 							        }
 							        else
 							        	datosSerie.setVisualizar(true);
+							        							        
 
 							        if (elemento.getElementsByTagName("showOrganizacion").getLength() > 0)
 							        {
 										nodeLista = elemento.getElementsByTagName("showOrganizacion").item(0).getChildNodes();
-										valor = nodeLista.item(0);
-										if (valor != null && !valor.getNodeValue().equals(""))
+										valor = nodeLista.item(0);										
+
+										if (valor != null && !valor.getNodeValue().equals(""))											
 											datosSerie.setShowOrganizacion(valor.getNodeValue() == "1" || Integer.parseInt(valor.getNodeValue()) == 1 ? true : false);
 										else
-											datosSerie.setShowOrganizacion(false);
+											datosSerie.setShowOrganizacion(null);
 							        }
 							        else
-							        	datosSerie.setShowOrganizacion(false);
+							        	datosSerie.setShowOrganizacion(null);
 
 							        if (elemento.getElementsByTagName("nivelClase").getLength() > 0)
 							        {
@@ -1595,7 +1600,7 @@ public class GraficoAction extends VgcAction
 	}
 
 	public void GetGrafico(GraficoForm graficoForm, HttpServletRequest request) throws IOException
-	{
+	{				
 		int numeroMaximoPeriodos = 0;
 		if ((Integer.parseInt(graficoForm.getAnoInicial()) % 4 == 0) && (graficoForm.getFrecuenciaAgrupada().byteValue() == Frecuencia.getFrecuenciaDiaria().byteValue()))
 			numeroMaximoPeriodos = PeriodoUtil.getNumeroMaximoPeriodosPorFrecuencia(graficoForm.getFrecuenciaAgrupada().byteValue(), Integer.parseInt(graficoForm.getAnoInicial()));

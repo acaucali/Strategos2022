@@ -117,60 +117,7 @@
 		    	}
 			}
 			
-			function save()
-			{
-				if (!validar())
-					return;
-
-				document.graficoForm.respuesta.value = "";
-				var codificar = true;
-				var data = getXml(codificar);
-				
-				var parametros = 'data=' + data;
-				parametros = parametros + '&id=' + document.graficoForm.id.value;
-				parametros = parametros + '&nombre=' + CodificarString(document.graficoForm.titulo.value, codificar); 
-				if (document.graficoForm.objetosIds.value != null && document.graficoForm.objetosIds.value != "")
-				{
-					parametros = parametros + '&source=' + "General";
-					parametros = parametros + '&objetoId=' + "";
-				}
-				else
-				{
-					parametros = parametros + '&source=' + document.graficoForm.source.value;
-					parametros = parametros + '&objetoId=' + document.graficoForm.objetoId.value;
-				}
-				
-				if(document.graficoForm.esReporteGrafico.value){
-					parametros = parametros + '&reporteId=' + document.graficoForm.reporteId.value;
-				}
-				
-				parametros = parametros + '&claseId=' + document.graficoForm.claseId.value;
-				parametros = parametros + '&planId=' + document.graficoForm.planId.value;
-				
-				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/graficos/guardarAsistenteGrafico" />?' + parametros, document.graficoForm.respuesta, 'onSalvar()');
-			}
-
-			function onSalvar()
-			{
-				var respuesta = document.graficoForm.respuesta.value.split("|");
-				if (respuesta.length > 0 && respuesta[1] == 0)
-				{
-					<logic:empty name="graficoForm" property="paginaId">
-						cancelar();
-					</logic:empty>
-					<logic:notEmpty name="graficoForm" property="paginaId">
-						<logic:notEqual name="graficoForm" property="paginaId" value="0">
-							alert('<vgcutil:message key="jsp.asistente.grafico.alert.save.exito" /> ');
-						</logic:notEqual>
-						<logic:equal name="graficoForm" property="paginaId" value="0">
-							cancelar();
-						</logic:equal>
-					</logic:notEmpty>
-					return;
-				}
-				else if (respuesta.length > 0 && respuesta[1] == 3)
-					alert('<vgcutil:message key="jsp.asistente.grafico.alert.nombre.duplicado" /> ');
-			}
+			
 			
 			function validar(permitirRetorno) 
 			{
@@ -444,12 +391,84 @@
 
 				if (codificar)
 				{
-					valor = valor.replace("%", "[[por]]");
+					valor = valor.replace("%", "Porcentaje");
 					valor = valor.replace("#", "[[num]]");
 				}
 				
 				return valor;
 			}
+			
+		
+									
+			function save()
+			{
+				if (!validar())
+					return;
+
+				document.graficoForm.respuesta.value = "";
+				var codificar = true;
+				var data = getXml(codificar);
+				
+				var parametroCodificado = encodeURIComponent(data);
+				
+				var parametros = 'data=' + parametroCodificado;
+				
+				
+				parametros = parametros + '&id=' + document.graficoForm.id.value;
+				parametros = parametros + '&nombre=' + CodificarString(document.graficoForm.titulo.value, codificar); 
+				if (document.graficoForm.objetosIds.value != null && document.graficoForm.objetosIds.value != "")
+				{
+					parametros = parametros + '&source=' + "General";
+					parametros = parametros + '&objetoId=' + "";
+				}
+				else
+				{
+					parametros = parametros + '&source=' + document.graficoForm.source.value;
+					parametros = parametros + '&objetoId=' + document.graficoForm.objetoId.value;
+				}
+				
+				if(document.graficoForm.esReporteGrafico.value){
+					parametros = parametros + '&reporteId=' + document.graficoForm.reporteId.value;
+				}
+				
+				parametros = parametros + '&claseId=' + document.graficoForm.claseId.value;
+				parametros = parametros + '&planId=' + document.graficoForm.planId.value;
+												
+				window.location.href = '<html:rewrite action="/graficos/guardarAsistenteGrafico"/>?virtual=true&' + parametros;								
+			}
+
+			
+			
+			function saveConfiguracion(){
+				
+				if (!validar())
+					return;
+
+				document.graficoForm.respuesta.value = "";
+				var data = getXml(true);
+				var parametroCodificado = encodeURIComponent(data);
+				
+				var parametros = 'data=' + parametroCodificado;				
+				parametros = parametros + '&onFuncion=onAplicar';
+				parametros = parametros + '&id=' + document.graficoForm.id.value;
+				parametros = parametros + '&nombre=' + document.graficoForm.titulo.value; 
+				parametros = parametros + '&source=' + document.graficoForm.source.value;
+				parametros = parametros + '&portafolioId=' + document.graficoForm.portafolioId.value;
+				if (document.graficoForm.objetosIds.value != null && document.graficoForm.objetosIds.value != "")
+					parametros = parametros + '&objetoId=' + document.graficoForm.objetosIds.value;
+				else
+					parametros = parametros + '&objetoId=' + document.graficoForm.objetoId.value;
+				parametros = parametros + '&claseId=' + document.graficoForm.claseId.value;
+				parametros = parametros + '&planId=' + document.graficoForm.planId.value;
+				<logic:notEmpty name="graficoForm" property="paginaId">
+					<logic:notEqual name="graficoForm" property="paginaId" value="0">
+						parametros = parametros + '&vistaId=<bean:write name="graficoForm" property="vistaId" />&paginaId=<bean:write name="graficoForm" property="paginaId" />';
+					</logic:notEqual>
+				</logic:notEmpty>
+								
+				window.location.href='<html:rewrite action="/graficos/grafico"/>?virtual=' + document.graficoForm.virtual.value + "&" + parametros;
+				
+			}					
 			
 			function getXml(codificar)
 			{
@@ -486,10 +505,12 @@
 				var serieId;
 				var objeto;
 				var planId;
+				
 				for (var i = 0; i < insumos.length; i++) 
 				{
 					if (insumos[i].length > 0) 
 					{
+						
 						// correlativo
 						strTemp = insumos[i];
 						indice = strTemp.indexOf("][") + 1;
@@ -565,6 +586,8 @@
 	            writer.WriteEndElement();
 	            writer.WriteEndElement();
 	            writer.WriteEndDocument();
+	            
+	            console.log(writer.unFormatted());
 	            
 	            return writer.unFormatted();
 			}
@@ -646,58 +669,7 @@
 				return "<div style='font-family:Verdana; font-size:20; color:#000; text-decoration:none; text-align: center; width: 100%; height:30 pt;'>" + '<b><bean:message key="jsp.graficoindicador.organizacion" /></b>: <bean:write name="organizacion" scope="session" property="nombre" />' + '<br><br><div/>';
 			}
 			
-			function aplicar()
-			{
-				if (!validar())
-					return;
-
-				document.graficoForm.respuesta.value = "";
-				var data = getXml(true);
-				var parametros = 'data=' + data;
-				parametros = parametros + '&onFuncion=onAplicar';
-				parametros = parametros + '&id=' + document.graficoForm.id.value;
-				parametros = parametros + '&nombre=' + document.graficoForm.titulo.value; 
-				parametros = parametros + '&source=' + document.graficoForm.source.value;
-				parametros = parametros + '&portafolioId=' + document.graficoForm.portafolioId.value;
-				if (document.graficoForm.objetosIds.value != null && document.graficoForm.objetosIds.value != "")
-					parametros = parametros + '&objetoId=' + document.graficoForm.objetosIds.value;
-				else
-					parametros = parametros + '&objetoId=' + document.graficoForm.objetoId.value;
-				parametros = parametros + '&claseId=' + document.graficoForm.claseId.value;
-				parametros = parametros + '&planId=' + document.graficoForm.planId.value;
-				<logic:notEmpty name="graficoForm" property="paginaId">
-					<logic:notEqual name="graficoForm" property="paginaId" value="0">
-						parametros = parametros + '&vistaId=<bean:write name="graficoForm" property="vistaId" />&paginaId=<bean:write name="graficoForm" property="paginaId" />';
-					</logic:notEqual>
-				</logic:notEmpty>
-				
-				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/graficos/grafico"/>?virtual=' + document.graficoForm.virtual.value + "&" + parametros, document.graficoForm.respuesta, 'onAplicar()');
-			}
 			
-			function onAplicar()
-			{
-				var respuesta = document.graficoForm.respuesta.value;
-				if (respuesta == "10000")
-				{
-					var parametros = 'id=' + document.graficoForm.id.value;
-					parametros = parametros + '&nombre=' + document.graficoForm.titulo.value; 
-					parametros = parametros + '&source=' + document.graficoForm.source.value;
-					parametros = parametros + '&portafolioId=' + document.graficoForm.portafolioId.value;
-					if (document.graficoForm.objetosIds.value != null && document.graficoForm.objetosIds.value != "")
-						parametros = parametros + '&objetoId=' + document.graficoForm.objetosIds.value;
-					else
-						parametros = parametros + '&objetoId=' + document.graficoForm.objetoId.value;
-					parametros = parametros + '&claseId=' + document.graficoForm.claseId.value;
-					parametros = parametros + '&planId=' + document.graficoForm.planId.value;
-					<logic:notEmpty name="graficoForm" property="paginaId">
-						<logic:notEqual name="graficoForm" property="paginaId" value="0">
-							parametros = parametros + '&vistaId=<bean:write name="graficoForm" property="vistaId" />&paginaId=<bean:write name="graficoForm" property="paginaId" />';
-						</logic:notEqual>
-					</logic:notEmpty>
-					
-					window.location.href='<html:rewrite action="/graficos/grafico"/>?virtual=' + document.graficoForm.virtual.value + "&" + parametros;
-				}
-			}
 			
 			function rgbToHex(r, g, b) 
 			{
@@ -2122,10 +2094,7 @@
 				
 				if (_calendario != null)
 					_calendario.close();
-				window.location.href = "#close";
-				
-				if (hasValidate)
-					aplicar();
+				window.location.href = "#close";				
 			}
 			
 			function mostrarColores(objeto, txtRGBStr, txtHexStr)
@@ -2460,7 +2429,7 @@
 			<html:hidden property="graficoNombre" />
 			<html:hidden property="portafolioId" />
 			<html:hidden property="esReporteGrafico" />
-			<html:hidden property="reporteId" />
+			<html:hidden property="reporteId" />			
 			
 			
 			<bean:define id="listaTiposSerie" toScope="page" name="graficoForm" property="tiposSerie" />

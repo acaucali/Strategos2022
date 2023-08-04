@@ -74,11 +74,13 @@ public class SalvarGraficoAction extends VgcAction
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		super.execute(mapping, form, request, response);
+		super.execute(mapping, form, request, response);		
+		
+		String forward = mapping.getParameter();
 
-	    Long graficoId = !request.getParameter("id").toString().equals("") ? Long.parseLong(request.getParameter("id").toString()) : new Long(0L);
-	    String configuracion = request.getParameter("data").replace("[[por]]", "%").toString();
-	    String nombre = request.getParameter("nombre").replace("[[por]]", "%").toString();
+	    Long graficoId = !request.getParameter("id").toString().equals("") ? Long.parseLong(request.getParameter("id").toString()) : new Long(0L);	
+	    String configuracion = request.getParameter("data").replace("[[num]]", "#").replace("Porcentaje", "%");	    	    
+	    String nombre = request.getParameter("nombre").replace("Porcentaje", "%").toString();
 	    Long organizacionId = (new Long((String)request.getSession().getAttribute("organizacionId")));
 	    Long usuarioId = ((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId();
 		String source = (request.getParameter("source") != null ? request.getParameter("source") : null);
@@ -108,17 +110,15 @@ public class SalvarGraficoAction extends VgcAction
 	    	respuesta = SaveGrafico(graficoId, configuracion, nombre, organizacionId, usuarioId, source, planId, request);
 	    if (respuesta == 10000)
 	    {
+	    	forward = "grafico";
 	    	status = StatusUtil.getStatusSuccess();
 	    	if (grafico != null)
 	    		graficoId = grafico.getGraficoId();
 	    }
 	    else if (respuesta == 10003)
 	    	status = StatusUtil.getStatusRegistroDuplicado();
-
-	    String res = graficoId.toString() + "|" + status.toString();
-	    request.setAttribute("ajaxResponse", res);
-
-	    return mapping.findForward("ajaxResponse");
+	    	    	    	    
+	    return mapping.findForward(forward);
 	}
 
 	public int SaveCelda(Long celdaId, String configuracion, String nombre, Long organizacionId, Long usuarioId, String source, ActionForm form, HttpServletRequest request) throws SAXException, IOException, ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException
@@ -185,43 +185,42 @@ public class SalvarGraficoAction extends VgcAction
 
 	    }else {
 	    	*/
-
+	    
 		    if (graficoId.longValue() != 0)
 		    {
-		    	grafico = (Grafico)strategosGraficosService.load(Grafico.class, new Long(graficoId));
-
+		    	
+		    	grafico = (Grafico)strategosGraficosService.load(Grafico.class, new Long(graficoId));		    	
 		    	Grafico graficoOriginal = (Grafico)strategosGraficosService.load(Grafico.class, new Long(grafico.getGraficoId()));
 			    String data = CheckLeyendaColor(configuracion.replace("[[num]]", "#"), graficoOriginal.getConfiguracion());
 			    data = data.replace("[[num]]", "#");
-			    grafico.setConfiguracion(data);
+			    grafico.setConfiguracion(data);			    
 		    }
 		    else
-		    {
+		    {		    	
 		    	grafico = new Grafico();
 		    	grafico.setOrganizacionId(organizacionId);
 		    	grafico.setUsuarioId(usuarioId);
 		    	if (configuracion.indexOf("[[num]]") != -1)
 		    		configuracion = configuracion.replace("[[num]]", "#");
-			    grafico.setConfiguracion(CheckLeyendaColor(configuracion, configuracion));
-
+			    grafico.setConfiguracion(CheckLeyendaColor(configuracion, configuracion));			 
 			    if (source.equals("Indicador") || source.equals("Celda"))
 				{
+			    	
 					long objetoId = (request.getParameter("objetoId") != null ? Long.parseLong(request.getParameter("objetoId")) : 0L);
 				    grafico.setObjetoId(objetoId);
 				    grafico.setClassName(source);
 				}
 				else
-				{
+				{					
 				    grafico.setObjetoId(null);
 				    grafico.setClassName(null);
 				}
 		    }
 
 		    grafico.setGraficoId(graficoId);
-		    grafico.setNombre(nombre);
+		    grafico.setNombre(nombre);		    
 
-		    respuesta = strategosGraficosService.saveGrafico(grafico, getUsuarioConectado(request));
-
+		    respuesta = strategosGraficosService.saveGrafico(grafico, getUsuarioConectado(request));		    
 		    strategosGraficosService.close();
 		   // reportesService.close();
 

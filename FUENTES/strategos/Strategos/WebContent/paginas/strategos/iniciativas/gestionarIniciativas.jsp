@@ -318,14 +318,19 @@
 	
 	function limpiarFiltros()
 	{
-		var filtroNombre = document.getElementById('filtroNombre');
-		if (filtroNombre != null)
-			filtroNombre.value = "";
-		if (filtroAnio != null)
-			filtroAnio.value = "";
-		var selectHitoricoType = document.getElementById('selectHitoricoType');
-		if (selectHitoricoType != null)
-			selectHitoricoType.selectedIndex = _selectHitoricoTypeIndex;
+		var url = '?limpiarFiltros=true';
+		<logic:equal name="gestionarIniciativasForm" property="source" value="instrumentos">
+		window.location.href='<html:rewrite action="/instrumentos/gestionarInstrumentos" />' + url;
+	</logic:equal>
+	
+	<logic:notEqual name="gestionarIniciativasForm" property="source" value="instrumentos">
+		<logic:notEmpty scope="session" name="planActivoId">
+			window.location.href='<html:rewrite action="/iniciativas/gestionarIniciativasDePlan" />' + url;
+		</logic:notEmpty>
+		<logic:empty scope="session" name="planActivoId">
+			window.location.href = '<html:rewrite action="/iniciativas/gestionarIniciativas" />' + url;
+		</logic:empty>
+	</logic:notEqual>	
 		
 		
 	}
@@ -423,7 +428,7 @@
 	
 	function configurarVisorIniciativasInstrumentos() 
 	{
-		configurarVisorLista('com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguracionesBase', 'visorIniciativas');
+		configurarVisorLista('com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguracionesBase', 'visorIniciativas', 'Iniciativa-Instrumentos');
 	}
 	
 	function desbloquearCulminado(){

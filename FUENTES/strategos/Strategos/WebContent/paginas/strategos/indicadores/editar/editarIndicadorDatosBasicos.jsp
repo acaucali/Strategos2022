@@ -37,7 +37,7 @@
 	<!-- Campo Nombre Corto-->
 	<tr>
 		<td align="right"><vgcutil:message key="jsp.editarindicador.ficha.nombre" /></td>
-		<td colspan="3"><html:text property="nombre" size="82" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="150" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIndicadorForm.nombre, document.editarIndicadorForm.nombreLargo, 50, false)" onkeypress="ejecutarPorDefecto(event)" /></td>
+		<td colspan="3"><html:text property="nombre" size="90" disabled="<%= Boolean.parseBoolean(bloquearForma) %>" maxlength="150" styleClass="cuadroTexto" onkeyup="sincronizarCamposTexto(document.editarIndicadorForm.nombre, document.editarIndicadorForm.nombreLargo, 50, false)" onkeypress="ejecutarPorDefecto(event)" /></td>
 		<!--
 		<td rowspan="2" align="right" background="<html:rewrite page='/paginas/strategos/indicadores/imagenes/combinarNombres.gif'/>">
 			<logic:notEqual name="editarIndicadorForm" property="bloqueado" value="true">

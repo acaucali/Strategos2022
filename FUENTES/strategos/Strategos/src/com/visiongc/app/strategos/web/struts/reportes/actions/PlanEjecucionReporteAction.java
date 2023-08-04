@@ -198,7 +198,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		// Titulo de filtros aplicados
 		font.setSize(VgcFormatoReporte.TAMANO_FUENTE_SUBTITULO);
-		font.setStyle(Font.BOLD);
+		font.setStyle(Font.NORMAL);
 		fontBold.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
 		fontBold.setStyle(Font.BOLD);
 
@@ -248,7 +248,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance()
 				.openStrategosPlanesService();
 		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
-		strategosPlanesService.close();
 		perspectiva.setConfiguracionPlan(configuracionPlan);
 
 		Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
@@ -256,14 +255,14 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		// Nombre de la Organizacion, plan y periodo del reporte
 		font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
-		font.setStyle(Font.BOLD);
+		font.setStyle(Font.NORMAL);
 		fontBold.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
 		fontBold.setStyle(Font.BOLD);
 
 		Paragraph texto = new Paragraph(
 				mensajes.getMessage("jsp.reportes.plan.ejecucion.plantilla.organizacion") + " : "
 						+ ((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getNombre(),
-				font);
+				fontBold);
 		texto.setAlignment(Element.ALIGN_CENTER);
 		documento.add(texto);
 		lineas = getNumeroLinea((lineas + 5), inicioLineas);
@@ -273,10 +272,9 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				+ PeriodoUtil.getMesNombre(Byte.parseByte(reporte.getMesFinal())) + " -- "
 				+ (reporte.getAnoInicial().equals(reporte.getAnoFinal()) ? reporte.getAnoInicial()
 						: (reporte.getAnoInicial() + "/" + reporte.getAnoFinal())),
-				font);
+				fontBold);
 		texto.setAlignment(Element.ALIGN_CENTER);
 		documento.add(texto);
-		lineas = getNumeroLinea((lineas + 5), inicioLineas);
 
 		Integer nivel = 0;
 		if (perspectiva.getPadreId() == null || perspectiva.getPadreId() == 0L)
@@ -294,10 +292,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		documento.add(texto);
 		lineas = getNumeroLinea((lineas + 5), inicioLineas);
 
-		font.setSize(8);
-		font.setStyle(Font.NORMAL);
-		fontBold.setSize(8);
-		fontBold.setStyle(Font.BOLD);
+		font.setSize(10);
+		fontBold.setSize(10);
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
@@ -317,13 +313,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			for (Iterator<Perspectiva> iter = perspectivas.iterator(); iter.hasNext();) {
 				Perspectiva perspectivaHija = iter.next();
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
-
-				// nombre de la perspectiva primer nivel
-				if (lineas >= tamanoPagina) {
-					lineas = inicioLineas;
-					tamanoPagina = inicioTamanoPagina;
-					saltarPagina(documento, false, font, null, null, request);
-				}
 				if (reporte.getVisualizarObjetivoAlerta()) {
 					int numeroColumnas = 1;
 					if (configuracionPlan.getPlanObjetivoAlertaAnualMostrar())
@@ -340,7 +329,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						columnas[f][1] = "";
 					}
 
-					TablaBasicaPDF tab = crearTabla(true, true, columnas, reporte, font, mensajes, documento, request);
+					TablaBasicaPDF tab = crearTabla(true, true, columnas, reporte, fontBold, mensajes, documento,
+							request);
 
 					Byte alerta = null;
 
@@ -375,37 +365,40 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 							tab.agregarCelda(Image.getInstance(
 									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
 					}
+					tab.setFont(Font.BOLD);
+					tab.setTamanoFont(VgcFormatoReporte.TAMANO_FUENTE_SUBTITULO);
 					tab.agregarCelda(
-							getNombrePerspectiva(reporte, (nivel + 1)) + " : " + perspectivaHija.getNombreCompleto());
-					lineas = getNumeroLinea(lineas, inicioLineas);
+							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto());
+
+					documento.add(lineaEnBlanco(font));
+					documento.add(lineaEnBlanco(font));
 					documento.add(tab.getTabla());
-					if (lineas >= tamanoPagina) {
-						lineas = inicioLineas;
-						tamanoPagina = inicioTamanoPagina;
-						saltarPagina(documento, false, font, null, null, request);
-					}
+
 				} else {
+
 					texto = new Paragraph(
-							getNombrePerspectiva(reporte, (nivel + 1)) + " : " + perspectivaHija.getNombreCompleto(),
-							font);
+							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto(), font);
 					texto.setAlignment(Element.ALIGN_LEFT);
 					documento.add(texto);
 					lineas = getNumeroLinea(lineas, inicioLineas);
+
 				}
 
-				buildReporte((nivel + 1), reporte, font, source, perspectivaHija, documento, configuracionPlan,
+				dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectiva, documento,
 						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
 						request);
 
+				buildReporte((nivel + 1), reporte, font, source, perspectivaHija, plan, documento, configuracionPlan,
+						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService,
+						strategosPlanesService, mensajes, request);
+
 			}
-		} else
-			dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectiva, documento,
-					strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
-					request);
+		}
 
 		strategosPerspectivasService.close();
 		strategosIndicadoresService.close();
 		strategosMedicionesService.close();
+		strategosPlanesService.close();
 	}
 
 	private void EjecucionIniciativa(ReporteForm reporte, Document documento, HttpServletRequest request,
@@ -1007,8 +1000,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				crearTablaActividad(reporte, actividad, indicador, font, mensajes, documento, request, tabla);
 			}
 			documento.add(tabla.getTabla());
-			
-			
 
 			for (Iterator<PryActividad> iter = actividades.iterator(); iter.hasNext();) {
 				PryActividad actividad = iter.next();
@@ -1090,11 +1081,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			List<Medicion> medicionesProgramado, List<Medicion> medicionesEjecutado, Font font,
 			MessageResources mensajes, Document documento, HttpServletRequest request, TablaPDF tabla)
 			throws Exception {
-		if (lineas >= tamanoPagina) {
-			lineas = inicioLineas;
-			tamanoPagina = inicioTamanoPagina;
-			saltarPagina(documento, false, font, null, null, request);
-		}
 
 		PryProyecto proyecto = null;
 		if (iniciativa.getProyectoId() != null) {
@@ -1156,11 +1142,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 	private void crearTablaActividad(ReporteForm reporte, PryActividad actividad, Indicador indicador, Font font,
 			MessageResources mensajes, Document documento, HttpServletRequest request, TablaPDF tabla)
 			throws Exception {
-		if (lineas >= tamanoPagina) {
-			lineas = inicioLineas;
-			tamanoPagina = inicioTamanoPagina;
-			saltarPagina(documento, false, font, null, null, request);
-		}
 		tabla.agregarCelda(actividad.getNombre());
 		tabla.agregarCelda(VgcFormatter.formatearFecha(actividad.getComienzoPlan(), "formato.fecha.corta"));
 		tabla.agregarCelda(VgcFormatter.formatearFecha(actividad.getFinPlan(), "formato.fecha.corta"));
@@ -1185,7 +1166,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				actividad.getPorcentajeEjecutado() != null ? actividad.getPorcentajeEjecutadoFormateado() : "");
 		tabla.agregarCelda(
 				actividad.getPorcentajeEsperado() != null ? actividad.getPorcentajeEsperadoFormateado() : "");
-		if(actividad.getResponsableSeguimiento() != null)
+		if (actividad.getResponsableSeguimiento() != null)
 			tabla.agregarCelda(actividad.getResponsableSeguimiento().getNombre());
 		else
 			tabla.agregarCelda("");
@@ -1273,66 +1254,71 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			MessageResources mensajes, StrategosMedicionesService strategosMedicionesService,
 			StrategosIndicadoresService strategosIndicadoresService, Document documento, HttpServletRequest request)
 			throws Exception {
-		boolean tablaIniciada = false;
-		if (lineas >= tamanoPagina) {
-			lineas = inicioLineas;
-			tamanoPagina = inicioTamanoPagina;
-			saltarPagina(documento, false, font, null, null, request);
-		}
+
 		StrategosVistasDatosService strategosVistasDatosService = StrategosServiceFactory.getInstance()
 				.openStrategosVistasDatosService();
 
-		String[][] columnas = new String[mediciones.size() + 1][2];
+		TablaPDF tabla = new TablaPDF(getConfiguracionPagina(request), request);
+		int contador = 0;
+
+		int tamano = mediciones.size();
+		int[] columnas = new int[tamano + 1];
+
+		for (int i = 0; i <= mediciones.size(); i++) {
+			columnas[i] = 20;
+		}
+
+		tabla.setAmplitudTabla(100);
+		tabla.crearTabla(columnas);
+
+		tabla.setColorFondo(21, 60, 120);
+		tabla.setColorLetra(255, 255, 255);
+		tabla.setTamanoFont(10);
+		tabla.setFormatoFont(Font.NORMAL);
+		tabla.setAlineacionHorizontal(1);
+
 		StringBuilder string;
-		
 		string = new StringBuilder();
 		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo"));
 		string.append("\n");
-		int contador = 0;
-		columnas[contador][0] = "8";
-		columnas[contador][1] = string.toString();
+		tabla.agregarCelda(string.toString());
+
 		for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
+
 			contador++;
 			Medicion medicion = iter.next();
-			columnas[contador][0] = "8";
-
 			if (contador == (mediciones.size())) {
-				string = new StringBuilder();
-				string.append(PeriodoUtil.convertirPeriodoToTexto(medicion.getMedicionId().getPeriodo(),
+				tabla.agregarCelda(PeriodoUtil.convertirPeriodoToTexto(medicion.getMedicionId().getPeriodo(),
 						indicador.getFrecuencia(), medicion.getMedicionId().getAno()));
 
-				columnas[contador][1] = string.toString();
 			} else
-				columnas[contador][1] = PeriodoUtil.convertirPeriodoToTexto(medicion.getMedicionId().getPeriodo(),
-						indicador.getFrecuencia(), medicion.getMedicionId().getAno());
+				tabla.agregarCelda(PeriodoUtil.convertirPeriodoToTexto(medicion.getMedicionId().getPeriodo(),
+						indicador.getFrecuencia(), medicion.getMedicionId().getAno()));
 		}
 
-		TablaBasicaPDF tabla = crearTabla(true, false, columnas, reporte, font, mensajes, documento, request);
+		tabla.setColorFondo(255, 255, 255);
+		tabla.setColorLetra(0, 0, 0);
+		tabla.setTamanoFont(9);
+		tabla.setFormatoFont(Font.NORMAL);
 
 		if (showEjecutado) {
-			tablaIniciada = false;
+
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.ejecutado"));
 			string.append("\n");
-			string.append("\n");
 			tabla.agregarCelda(string.toString());
-			
+
 			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
 				Medicion medicion = iter.next();
 				tabla.agregarCelda(
 						(medicion.getValor() != null ? VgcFormatter.formatearNumero(medicion.getValor()) : ""));
 			}
-			documento.add(tabla.getTabla());
-			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-			tablaIniciada = true;
 		}
 
 		if (showMeta) {
-			tablaIniciada = false;
 
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.meta"));
-			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
 
@@ -1350,13 +1336,9 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				}
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-			documento.add(tabla.getTabla());			
-			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-			tablaIniciada = true;			
 		}
 
 		if (showEstadoParcial) {
-			tablaIniciada = false;
 
 			string = new StringBuilder();
 			if (!showEstadoParcialSuavisado)
@@ -1364,7 +1346,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			else
 				string.append(
 						mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoparcial.suavisado"));
-			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
 
@@ -1384,21 +1365,15 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-			documento.add(tabla.getTabla());			
-			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-			tablaIniciada = true;
-			
 		}
 
 		if (showEstadoAnual) {
-			tablaIniciada = false;
 
 			string = new StringBuilder();
 			if (!showEstadoAnualSuavisado)
 				string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoanual"));
 			else
 				string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoanual.suavisado"));
-			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
 
@@ -1417,18 +1392,12 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 					valor = 100D;
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-			documento.add(tabla.getTabla());
-			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-			tablaIniciada = true;
-			
 		}
 
 		if (showAlerta) {
-			tablaIniciada = false;
 
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.alerta"));
-			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
 
@@ -1474,18 +1443,14 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				} else
 					tabla.agregarCelda("");
 			}
-			documento.add(tabla.getTabla());
-			tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-			tablaIniciada = true;
-			
 		}
 
 		strategosVistasDatosService.close();
 
-		if (!tablaIniciada)
-			documento.add(tabla.getTabla());
 		documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+		documento.add(tabla.getTabla());
 		documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+
 	}
 
 	private TablaBasicaPDF crearTabla(boolean newTable, boolean isInformativo, String[][] columnas, ReporteForm reporte,
@@ -1712,12 +1677,13 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		return tabla;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void buildReporte(int nivel, ReporteForm reporte, Font font, String source, Perspectiva perspectiva,
-			Document documento, ConfiguracionPlan configuracionPlan,
+			Plan plan, Document documento, ConfiguracionPlan configuracionPlan,
 			StrategosMedicionesService strategosMedicionesService,
 			StrategosIndicadoresService strategosIndicadoresService,
-			StrategosPerspectivasService strategosPerspectivasService, MessageResources mensajes,
-			HttpServletRequest request) throws Exception {
+			StrategosPerspectivasService strategosPerspectivasService, StrategosPlanesService strategosPlanesServices,
+			MessageResources mensajes, HttpServletRequest request) throws Exception {
 		// Lista de perspectivas del primer nivel
 		Paragraph texto;
 		Map<String, Object> filtros = new HashMap<String, Object>();
@@ -1727,6 +1693,9 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		String[] tipoOrden = new String[1];
 		orden[0] = "nombre";
 		tipoOrden[0] = "asc";
+
+		font.setSize(10);
+		font.setStyle(Font.NORMAL);
 		List<Perspectiva> perspectivas = strategosPerspectivasService.getPerspectivas(orden, tipoOrden, filtros);
 
 		if (perspectivas.size() > 0) {
@@ -1735,11 +1704,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				perspectivaHija.setConfiguracionPlan(configuracionPlan);
 
 				// nombre de la perspectiva primer nivel
-				if (lineas >= tamanoPagina) {
-					lineas = inicioLineas;
-					tamanoPagina = inicioTamanoPagina;
-					saltarPagina(documento, false, font, null, null, request);
-				}
 				if (reporte.getVisualizarObjetivoAlerta()) {
 					int numeroColumnas = 1;
 					if (configuracionPlan.getPlanObjetivoAlertaAnualMostrar())
@@ -1795,53 +1759,227 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 							tab.agregarCelda(Image.getInstance(
 									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
 					}
+					tab.setFont(Font.BOLD);
+					tab.setTamanoFont(12);
 					tab.agregarCelda(
-							getNombrePerspectiva(reporte, (nivel + 1)) + " : " + perspectivaHija.getNombreCompleto());
-					lineas = getNumeroLinea(lineas, inicioLineas);
+							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto());
+
+					documento.add(lineaEnBlanco(font));
+					documento.add(lineaEnBlanco(font));
 					documento.add(tab.getTabla());
-					if (lineas >= tamanoPagina) {
-						lineas = inicioLineas;
-						tamanoPagina = inicioTamanoPagina;
-						saltarPagina(documento, false, font, null, null, request);
-					}
 				} else {
 					documento.add(lineaEnBlanco(font));
 					lineas = getNumeroLinea(lineas, inicioLineas);
-					if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-						lineas = inicioLineas;
-						tamanoPagina = inicioTamanoPagina;
-						saltarPagina(documento, false, font, null, null, request);
-					}
 
 					texto = new Paragraph(
-							getNombrePerspectiva(reporte, (nivel + 1)) + " : " + perspectivaHija.getNombreCompleto(),
-							font);
+							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto(), font);
 					texto.setAlignment(Element.ALIGN_LEFT);
 					documento.add(texto);
-					lineas = getNumeroLinea(lineas, inicioLineas);
-					if (lineas >= tamanoPagina) {
-						lineas = inicioLineas;
-						tamanoPagina = inicioTamanoPagina;
-						saltarPagina(documento, false, font, null, null, request);
-					}
+				}
 
-					documento.add(lineaEnBlanco(font));
-					lineas = getNumeroLinea(lineas, inicioLineas);
-					if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-						lineas = inicioLineas;
-						tamanoPagina = inicioTamanoPagina;
-						saltarPagina(documento, false, font, null, null, request);
+				dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectiva, documento,
+						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
+						request);
+
+				if (reporte.getVisualizarIndicadores()) {
+					filtros = new HashMap<String, Object>();
+					filtros.put("perspectivaId", perspectivaHija.getPerspectivaId().toString());
+					List<Indicador> indicadores = strategosIndicadoresService
+							.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, true).getLista();
+
+					for (Indicador indicador : indicadores) {
+
+						font.setStyle(Font.NORMAL);
+
+						LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(
+								((Integer) (Integer.parseInt(reporte.getAnoInicial()))).intValue(),
+								((Integer) (Integer.parseInt(reporte.getAnoFinal()))).intValue(),
+								((Integer) (Integer.parseInt(reporte.getMesInicial()))).intValue(),
+								((Integer) (Integer.parseInt(reporte.getMesFinal()))).intValue(),
+								indicador.getFrecuencia().byteValue());
+						int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
+						int periodoFin = periodoInicio;
+						if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
+							periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
+						List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(
+								indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
+								new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+								periodoFin);
+						List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
+								indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
+								new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+								periodoFin);
+
+						List<IndicadorEstado> estadosParciales = strategosPlanesServices.getIndicadorEstados(
+								indicador.getIndicadorId(), plan.getPlanId(), indicador.getFrecuencia(), (byte) 0,
+								new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+								periodoFin);
+						List<IndicadorEstado> estadosAnuales = strategosPlanesServices.getIndicadorEstados(
+								indicador.getIndicadorId(), plan.getPlanId(), indicador.getFrecuencia(), (byte) 1,
+								new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+								periodoFin);
+						font.setSize(10);
+						texto = new Paragraph(reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : "
+								+ indicador.getNombre(), font);
+						texto.setAlignment(Element.ALIGN_LEFT);
+						texto.setIndentationLeft(16);
+						documento.add(texto);
+						font.setSize(10);
+
+						// Crear tabla del Indicador
+						if (medicionesEjecutado.size() != 0)
+							crearTablaIndicador(indicador, reporte, medicionesEjecutado, medicionesProgramado,
+									estadosParciales, estadosAnuales, reporte.getVisualizarIndicadoresEjecutado(),
+									reporte.getVisualizarIndicadoresMeta(),
+									reporte.getVisualizarIndicadoresEstadoParcial(),
+									reporte.getVisualizarIndicadoresEstadoParcialSuavisado(),
+									reporte.getVisualizarIndicadoresEstadoAnual(),
+									reporte.getVisualizarIndicadoresEstadoAnualSuavisado(),
+									reporte.getVisualizarIndicadoresAlerta(), font, mensajes,
+									strategosMedicionesService, strategosIndicadoresService, documento, request);
+						else {
+							font.setColor(0, 0, 255);
+							texto = new Paragraph(
+									mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.iniciativas.nomediciones",
+											reporte.getPlantillaPlanes().getNombreIniciativaSingular().toLowerCase()),
+									font);
+							texto.setIndentationLeft(50);
+							documento.add(texto);
+							font.setColor(0, 0, 0);
+						}
 					}
 				}
 
-				buildReporte((nivel + 1), reporte, font, source, perspectivaHija, documento, configuracionPlan,
-						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
-						request);
+				if (reporte.getVisualizarIniciativas()) {
+					StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance()
+							.openStrategosIniciativasService();
+					filtros = new HashMap<String, Object>();
+					filtros.put("perspectivaId", perspectivaHija.getPerspectivaId().toString());
+					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
+							.byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
+						filtros.put("historicoDate", "IS NULL");
+					else if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
+							.byteValue() == HistoricoType.getFiltroHistoricoMarcado())
+						filtros.put("historicoDate", "IS NOT NULL");
+					List<Iniciativa> iniciativas = strategosIniciativasService
+							.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
+
+					if (iniciativas.size() > 0) {
+						// Inicializacion Encabezado Tabla Iniciativas
+						TablaPDF tabla = null;
+						tabla = new TablaPDF(getConfiguracionPagina(request), request);
+
+						// Se asigna el header de la tabla
+						crearTablaTitulo(tabla, mensajes, 1);
+
+						for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
+							Iniciativa iniciativa = iter2.next();
+							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
+									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
+
+							LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(
+									((Integer) (Integer.parseInt(reporte.getAnoInicial()))).intValue(),
+									((Integer) (Integer.parseInt(reporte.getAnoFinal()))).intValue(),
+									((Integer) (Integer.parseInt(reporte.getMesInicial()))).intValue(),
+									((Integer) (Integer.parseInt(reporte.getMesFinal()))).intValue(),
+									indicador.getFrecuencia().byteValue());
+							int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
+							int periodoFin = periodoInicio;
+							if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
+								periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
+							List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(
+									indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
+									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
+									periodoInicio, periodoFin);
+							List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
+									indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
+									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
+									periodoInicio, periodoFin);
+
+							// Dibujar Informacion de la Iniciativa
+							crearTablaIniciativa(reporte, iniciativa, indicador, medicionesProgramado,
+									medicionesEjecutado, font, mensajes, documento, request, tabla);
+						}
+						documento.add(tabla.getTabla());
+						for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
+							Iniciativa iniciativa = iter2.next();
+							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
+									iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
+
+							LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(
+									((Integer) (Integer.parseInt(reporte.getAnoInicial()))).intValue(),
+									((Integer) (Integer.parseInt(reporte.getAnoFinal()))).intValue(),
+									((Integer) (Integer.parseInt(reporte.getMesInicial()))).intValue(),
+									((Integer) (Integer.parseInt(reporte.getMesFinal()))).intValue(),
+									indicador.getFrecuencia().byteValue());
+							int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
+							int periodoFin = periodoInicio;
+							if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
+								periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
+							List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(
+									indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
+									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
+									periodoInicio, periodoFin);
+							List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
+									indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
+									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
+									periodoInicio, periodoFin);
+
+							texto = new Paragraph(reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : "
+									+ iniciativa.getNombre(), font);
+							texto.setAlignment(Element.ALIGN_LEFT);
+							texto.setIndentationLeft(16);
+							documento.add(texto);
+
+							texto = new Paragraph(reporte.getPlantillaPlanes().getNombreIndicadorSingular() + " : "
+									+ indicador.getNombre(), font);
+							texto.setAlignment(Element.ALIGN_LEFT);
+							texto.setIndentationLeft(16);
+							documento.add(texto);
+
+							// Crear tabla del Indicador
+							if (medicionesEjecutado.size() != 0)
+								crearTablaIndicador(indicador, reporte, medicionesEjecutado, medicionesProgramado,
+										new ArrayList<IndicadorEstado>(), new ArrayList<IndicadorEstado>(),
+										reporte.getVisualizarIniciativasEjecutado(),
+										reporte.getVisualizarIniciativasMeta(), false, false, false, false,
+										reporte.getVisualizarIniciativasAlerta(), font, mensajes,
+										strategosMedicionesService, strategosIndicadoresService, documento, request);
+							else {
+								font.setColor(0, 0, 255);
+								texto = new Paragraph(mensajes.getMessage(
+										"jsp.reportes.plan.ejecucion.reporte.iniciativas.nomediciones",
+										reporte.getPlantillaPlanes().getNombreIniciativaSingular().toLowerCase()),
+										font);
+								texto.setIndentationLeft(50);
+								documento.add(texto);
+								font.setColor(0, 0, 0);
+							}
+							if (reporte.getVisualizarActividad())
+								dibujarInformacionActividad(reporte, font, font, iniciativa, documento,
+										strategosMedicionesService, strategosIndicadoresService, mensajes, request);
+						}
+					} else {
+						documento.add(lineaEnBlanco(font));
+
+						font.setColor(0, 0, 255);
+						texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
+								"INICIATIVAS", "ORGANIZACIÓN"), font);
+						texto.setIndentationLeft(50);
+						documento.add(texto);
+						font.setColor(0, 0, 0);
+						documento.add(lineaEnBlanco(font));
+					}
+
+				}
+
+				buildReporte((nivel + 1), reporte, font, source, perspectivaHija, plan, documento, configuracionPlan,
+						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService,
+						strategosPlanesServices, mensajes, request);
 			}
-		} else
-			dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectiva, documento,
-					strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
-					request);
+
+		}
+
 	}
 
 	private void dibujarInformacionPerspectiva(int nivel, ReporteForm reporte, Font font, String source,
@@ -1884,11 +2022,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		if (estadosParciales.size() == 0 && estadosAnuales.size() == 0) {
 			documento.add(lineaEnBlanco(font));
 			lineas = getNumeroLinea(lineas, inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, null, null, request);
-			}
 
 			font.setColor(0, 0, 255);
 			texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noestados",
@@ -1897,29 +2030,14 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			documento.add(texto);
 			font.setColor(0, 0, 0);
 			lineas = getNumeroLinea(lineas, inicioLineas);
-			if (lineas >= tamanoPagina) {
-				lineas = inicioLineas;
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, null, null, request);
-			}
 
 			documento.add(lineaEnBlanco(font));
 			lineas = getNumeroLinea(lineas, inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, null, null, request);
-			}
+
 		} else {
 			if (reporte.getVisualizarObjetivo())
 				crearTablaPerspectiva(reporte, perspectiva, indicador, estadosParciales, estadosAnuales, font, mensajes,
 						strategosMedicionesService, strategosIndicadoresService, documento, request);
-		}
-
-		if (lineas >= tamanoPagina) {
-			lineas = inicioLineas;
-			tamanoPagina = inicioTamanoPagina;
-			saltarPagina(documento, false, font, null, null, request);
 		}
 	}
 
@@ -1928,35 +2046,49 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			MessageResources mensajes, StrategosMedicionesService strategosMedicionesService,
 			StrategosIndicadoresService strategosIndicadoresService, Document documento, HttpServletRequest request)
 			throws Exception {
-		if (lineas >= tamanoPagina) {
-			lineas = inicioLineas;
-			tamanoPagina = inicioTamanoPagina;
-			saltarPagina(documento, false, font, null, null, request);
-		}
 		StrategosVistasDatosService strategosVistasDatosService = StrategosServiceFactory.getInstance()
 				.openStrategosVistasDatosService();
 
-		String[][] columnas = new String[estadosParciales.size() + 1][2];
+		TablaPDF tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		int contador = 0;
-		columnas[contador][0] = "8";
-		columnas[contador][1] = mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo");
+
+		int tamano = estadosParciales.size();
+		int[] columnas = new int[tamano + 1];
+
+		for (int i = 0; i <= estadosParciales.size(); i++) {
+			columnas[i] = 20;
+		}
+
+		tabla.setAmplitudTabla(100);
+		tabla.crearTabla(columnas);
+
+		tabla.setColorFondo(21, 60, 120);
+		tabla.setColorLetra(255, 255, 255);
+		tabla.setTamanoFont(10);
+		tabla.setFormatoFont(Font.BOLD);
+		tabla.setAlineacionHorizontal(1);
+
+		StringBuilder string;
+		string = new StringBuilder();
+		string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.periodo"));
+		string.append("\n");
+		tabla.agregarCelda(string.toString());
 
 		for (Iterator<PerspectivaEstado> iter = estadosParciales.iterator(); iter.hasNext();) {
 			contador++;
 			PerspectivaEstado estadoParcial = iter.next();
-			columnas[contador][0] = "8";
-			columnas[contador][1] = PeriodoUtil.convertirPeriodoToTexto(estadoParcial.getPk().getPeriodo(),
-					perspectiva.getFrecuencia(), estadoParcial.getPk().getAno());
+			tabla.agregarCelda(PeriodoUtil.convertirPeriodoToTexto(estadoParcial.getPk().getPeriodo(),
+					perspectiva.getFrecuencia(), estadoParcial.getPk().getAno()));
 		}
 
-		boolean tablaIniciada = false;
-		TablaBasicaPDF tabla = crearTabla(true, false, columnas, reporte, font, mensajes, documento, request);
-		StringBuilder string;
+		tabla.setColorFondo(255, 255, 255);
+		tabla.setColorLetra(0, 0, 0);
+		tabla.setTamanoFont(10);
+		tabla.setFormatoFont(Font.NORMAL);
 
 		if (reporte.getVisualizarObjetivoEstadoParcial()) {
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoparcial"));
-			string.append("\n");
 			string.append("\n");
 
 			tabla.agregarCelda(string.toString());
@@ -1968,24 +2100,13 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 				tabla.agregarCelda((estadoParcial.getEstado() != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
-
 			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
 		}
 
 		if (reporte.getVisualizarObjetivoEstadoAnual()) {
-			tablaIniciada = false;
 
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.estadoanual"));
-			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
 
@@ -1999,21 +2120,12 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			}
 
 			lineas = getNumeroLinea((lineas + 1), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
 		}
 
 		if (reporte.getVisualizarObjetivoAlerta()) {
-			tablaIniciada = false;
+
 			string = new StringBuilder();
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.alerta.parcial"));
-			string.append("\n");
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
 
@@ -2044,19 +2156,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			}
 
 			lineas = getNumeroLinea((lineas + 3), inicioLineas);
-			if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
-				lineas = inicioLineas;
-				documento.add(tabla.getTabla());
-				tamanoPagina = inicioTamanoPagina;
-				saltarPagina(documento, false, font, tabla.getTabla().columns(), null, request);
-				tabla = crearTabla(false, false, columnas, reporte, font, mensajes, documento, request);
-				tablaIniciada = true;
-			}
+		}
+
+		if ((lineas + maxLineasAntesTabla) >= tamanoPagina) {
+			lineas = inicioLineas;
+			tamanoPagina = inicioTamanoPagina;
+			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+			documento.add(tabla.getTabla());
+			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+
+		} else {
+			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+			documento.add(tabla.getTabla());
+			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 		}
 
 		strategosVistasDatosService.close();
 
-		if (!tablaIniciada)
-			documento.add(tabla.getTabla());
 	}
 }

@@ -377,7 +377,7 @@
 				<logic:notEqual name="gestionarIndicadoresIniciativaForm" property="source" value="portafolio">
 					<vgcinterfaz:contenedorMenuHorizontalItem>
 						<vgcinterfaz:menuBotones id="menuMedicionesIndicadoresIniciativa" key="menu.mediciones">
-							
+							<vgcinterfaz:botonMenu key="menu.mediciones.ejecutado" onclick="editarMedicionesIndicadores();" permisoId="INDICADOR_MEDICION" aplicaOrganizacion="true" agregarSeparador="true" />
 							<vgcinterfaz:botonMenu key="menu.mediciones.importar" onclick="importarMediciones();" permisoId="INDICADOR_MEDICION_IMPORTAR" aplicaOrganizacion="true"/>
 							<vgcinterfaz:botonMenu key="menu.mediciones.calcular" onclick="calcularIndicadoresIniciativa();" permisoId="INDICADOR_MEDICION_CALCULAR" aplicaOrganizacion="true" agregarSeparador="true" />
 							<vgcinterfaz:menuAnidado key="menu.mediciones.proteccion">

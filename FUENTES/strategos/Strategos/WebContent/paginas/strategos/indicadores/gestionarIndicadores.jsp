@@ -298,7 +298,7 @@
 		var nombreCampoOculto = '&nombreCampoOculto=' + 'graficoSeleccionadoId' + '&xml=' + xml;
 		var funcionCierre = '&funcionCierre=' + 'onAsistenteGrafico()';
 		var xml = nombreForma + nombreCampoOculto + funcionCierre + '&funcion=Asistente';
-		abrirVentanaModal('<html:rewrite action="/graficos/asistenteGrafico" />' + xml, 'asistenteGraficos', '620', '440');
+		window.location.href='<html:rewrite action="/graficos/asistenteGrafico" />' + xml;
     }
     
 	function getXml()

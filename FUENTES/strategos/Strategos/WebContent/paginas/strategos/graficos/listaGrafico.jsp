@@ -35,7 +35,7 @@
 			
 			function getPropiedades(graficoId)
 			{
-				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/graficos/eliminarGrafico" />?funcion=readFull&Id=' + graficoId, document.seleccionarGraficoForm.seleccionados, 'onGetPropiedades()');
+				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/graficos/eliminarGrafico" />?funcion=readFull&virtual=true&source=Indicador&Id=' + graficoId, document.seleccionarGraficoForm.seleccionados, 'onGetPropiedades()');
 			}
 			
 			function onGetPropiedades()

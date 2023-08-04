@@ -20,7 +20,7 @@
 </logic:equal>
 
 <%-- Definición --%>
-<vgcinterfaz:contenedorPaneles height="275" width="661" nombre="editarIndicadorPanelDefinicion" mostrarSelectoresPaneles="false">
+<vgcinterfaz:contenedorPaneles height="275" width="721" nombre="editarIndicadorPanelDefinicion" mostrarSelectoresPaneles="false">
 	<vgcinterfaz:panelContenedor anchoPestana="50" nombre="definicionSimple" mostrarBorde="false">
 		<table class="panelContenedor" cellpadding="3" cellspacing="0" border="0">
 

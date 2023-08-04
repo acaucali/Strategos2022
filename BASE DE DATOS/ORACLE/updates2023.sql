@@ -268,3 +268,10 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS_DELETE', 'Eliminar', 'CARGOS', 1, 3, 1, 'Eliminar');
 
 ALTER TABLE iniciativa ADD cargo_id numeric(10);
+
+
+UPDATE afw_sistema set actual = '9.01-230727';  
+UPDATE afw_sistema set build = 230727;
+
+ALTER TABLE vista 
+    modify nombre varchar(250);

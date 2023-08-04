@@ -793,7 +793,7 @@
 								</vgcinterfaz:barraHerramientasBotonTitulo>
 							</vgcinterfaz:barraHerramientasBoton>
 							
-							<vgcinterfaz:barraHerramientasBoton permisoId="ACTIVIDAD_DESASOCIAR" aplicaOrganizacion="true" nombreImagen="desasociar" pathImagenes="/componentes/barraHerramientas/" nombre="desasociarIndicador" onclick="javascript:desasociarIniciativa();">
+							<vgcinterfaz:barraHerramientasBoton permisoId="ACTIVIDAD_DESASOCIAR" aplicaOrganizacion="true" nombreImagen="desasociar" pathImagenes="/componentes/barraHerramientas/" nombre="desasociarIndicador" onclick="javascript:desasociarIniciativa(document.gestionarActividadesForm.seleccionados.value);">
 								<vgcinterfaz:barraHerramientasBotonTitulo>
 									<vgcutil:message key="menu.edicion.desasociar.iniciativa" />
 								</vgcinterfaz:barraHerramientasBotonTitulo>

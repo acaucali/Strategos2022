@@ -53,8 +53,8 @@ public class GuardarConfiguracionVisorListaAction
     String nombreConfiguracionBase = request.getParameter("nombreConfiguracionBase");
     String nombreVisorLista = request.getParameter("nombreVisorLista");
     Boolean esPropio = Boolean.valueOf(request.getParameter("esPropio") != null ? Boolean.parseBoolean(request.getParameter("esPropio")) : false);
-    String data = request.getParameter("data");
-    Boolean instrumento = Boolean.valueOf(request.getParameter("instrumento") != null ? Boolean.parseBoolean(request.getParameter("instrumento")) : false);
+    String data = request.getParameter("data");    
+    
     
     String ts = null;
     if (!esPropio.booleanValue())
@@ -72,7 +72,7 @@ public class GuardarConfiguracionVisorListaAction
         }
       }
       if (cancelar) {
-    	  if(instrumento)
+    	  if(editarConfiguracionVisorListaForm.getTituloVisorLista().equals("Iniciativa-Instrumentos"))
     		  return getForwardBack(request, 2, true);
     	  else
     		  return getForwardBack(request, 1, true);
@@ -127,10 +127,10 @@ public class GuardarConfiguracionVisorListaAction
       
 
       if (forward.equals("exito")) {
-    	  if(instrumento)
-    		  return getForwardBack(request, 2, true);
+    	  if(editarConfiguracionVisorListaForm.getTituloVisorLista().equals("Iniciativa-Instrumentos"))
+    		  return getForwardBack(request, 2, false);
     	  else
-    		  return getForwardBack(request, 1, true);
+    		  return getForwardBack(request, 1, false);
       }
       return mapping.findForward(forward);
     }

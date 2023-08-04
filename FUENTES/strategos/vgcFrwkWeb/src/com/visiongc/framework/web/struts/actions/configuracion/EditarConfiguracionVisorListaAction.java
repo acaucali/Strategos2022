@@ -79,8 +79,7 @@ public class EditarConfiguracionVisorListaAction
     
     editarConfiguracionVisorListaForm.setNombreConfiguracionBase(nombreConfiguracionBase);
     editarConfiguracionVisorListaForm.setNombreVisorLista("visorLista." + nombreVisorLista);
-    editarConfiguracionVisorListaForm.setTituloVisorLista(request.getParameter("tituloVisorLista"));
-    System.out.print(editarConfiguracionVisorListaForm.getTituloVisorLista());
+    editarConfiguracionVisorListaForm.setTituloVisorLista(request.getParameter("tituloVisorLista"));  
     editarConfiguracionVisorListaForm.setAlto(altoPagina);
     editarConfiguracionVisorListaForm.setAncho(anchoPagina);
     editarConfiguracionVisorListaForm.setEsPropio(esPropio);

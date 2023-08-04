@@ -47,7 +47,9 @@
 		<action path="/graficos/asistenteGrafico" type="com.visiongc.app.strategos.web.struts.graficos.actions.ReadGraficoAction" name="graficoForm" scope="request" parameter="asistenteGrafico"></action>
 
 		<!-- Mapeo del Action: Guardar Grafico -->
-		<action path="/graficos/guardarAsistenteGrafico" type="com.visiongc.app.strategos.web.struts.graficos.actions.SalvarGraficoAction"></action>
+		<action path="/graficos/guardarAsistenteGrafico" type="com.visiongc.app.strategos.web.struts.graficos.actions.SalvarGraficoAction" name="graficoForm" scope="request" input="grafico" validate="true" parameter="grafico">
+			<forward name="grafico" path="/graficos/grafico.action" />
+		</action>
 		
 		<!-- Mapeo del Action: Cancelar Grafico -->
 		<action path="/graficos/cancelarAsistenteGrafico" type="com.visiongc.app.strategos.web.struts.graficos.actions.SalvarGraficoAction" name="graficoForm" scope="request" parameter="asistenteGrafico"></action>

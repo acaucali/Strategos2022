@@ -80,7 +80,8 @@ public class GuardarCargoAction extends VgcAction {
 
 			if (nuevo) {
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
-						new ActionMessage("action.guardarregistro.nuevo.ok"));				
+						new ActionMessage("action.guardarregistro.nuevo.ok"));	
+				forward = "crearCargos";
 			} else {
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
 						new ActionMessage("action.guardarregistro.modificar.ok"));

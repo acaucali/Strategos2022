@@ -598,30 +598,11 @@
 											<table>
 												<tr valign="top">
 													<td>
-														<table id="tablaListaSeries" class="tabtablainsumoSerie">
-															<tbody class="cuadroTexto">
-																<logic:iterate name="graficoForm" property="series"
-																	id="serie">
+														<table id="tablaListaSeries" class="tabtablainsumoSerie">															
+																<logic:iterate name="graficoForm" property="series" id="serie">
 																	<logic:notEmpty property="indicador" name="serie">
-																		<tr
-																			id="row_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />">
-																			<logic:empty property="id" name="serie">
-																				<td><input type="checkbox" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
-																					name="visible_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />"
-																					id="visible_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />"
-																					checked>
-																				</td>
-																				<td><input size="47" maxlength="100"
-																					type="text" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
-																					id="serie_<bean:write name='serie' property='id' />"
-																					name="serie_<bean:write name='serie' property='id' />"
-																					value="<bean:write name='serie' property='nombreLeyenda' />">
-																				</td>
-																				<td></td>
-																				<td></td>
-																				<td></td>
-																				<td></td>
-																			</logic:empty>
+																		<tr id="row_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />">
+																			
 																			<logic:notEmpty property="id" name="serie">
 																				<td><input type="checkbox" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
 																					name="visible_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />"
@@ -682,7 +663,8 @@
 																					name="showOrganizacion_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />"
 																					id="showOrganizacion_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />"
 																					checked>
-																				</td>
+																				</td>	
+																																						
 																				<td>
 																					<input size="47" maxlength="100"
 																					type="text" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
@@ -690,14 +672,15 @@
 																					name="nivelClase_<bean:write name='serie' property='indicador.indicadorId' />_<bean:write name='serie' property='serieIndicador.pk.serieId' />"
 																					value="">
 																				</td>
+																				
 																			</logic:notEmpty>
 																		</tr>
 																	</logic:notEmpty>
-																</logic:iterate>
-															</tbody>
+																</logic:iterate>																
+																													
 														</table>
 													</td>
-												</tr>
+												</tr>												
 											</table>
 										</td>
 										<td>
@@ -759,6 +742,11 @@
 							</div>
 						</div>
 					</div>
+				</td>
+			</tr>
+			<tr height="30px">
+				<td colspan="2" align="right">
+					<button type="button" class="btn btn-primary" onClick="javascript:saveConfiguracion(true)" >Guardar Configuración</button>					
 				</td>
 			</tr>
 		</table>

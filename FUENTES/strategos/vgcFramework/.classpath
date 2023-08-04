@@ -15,7 +15,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jta-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-simple-1.7.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/spher/OneDrive/Escritorio/sphera/Strategos/vgcFramework/lib/postgresql-42.6.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/antlr-2.7.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ehcache-1.2.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate3.jar"/>
@@ -24,10 +23,11 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging-api-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/spher/OneDrive/Escritorio/sphera/Strategos/vgcFramework/lib/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/spher/OneDrive/Escritorio/sphera/Strategos/vgcFramework/lib/jackson-mapper-lgpl-0.9.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/spher/OneDrive/Escritorio/sphera/Strategos/vgcFramework/lib/vgcBll.jar"/>
 	<classpathentry exported="true" kind="lib" path="/vgcBll/lib/vgcCalcular.jar" sourcepath="/vgcCalcular"/>
 	<classpathentry kind="lib" path="lib/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/vgcBll.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-42.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/java-json.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-mapper-lgpl-0.9.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

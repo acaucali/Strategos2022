@@ -375,8 +375,8 @@
 						<vgcinterfaz:botonMenu onclick="gestionarIniciativasDePlan();" permisoId="INICIATIVA" agregarSeparador="true">
 							<bean:write name="gestionarPlanForm" property="plantillaPlanes.nombreIniciativaPlural" />
 						</vgcinterfaz:botonMenu>
-						<vgcinterfaz:botonMenu key="menu.ver.modelo.causaefecto" onclick="gestionarModelo()" permisoId="PLAN_MODELO_VER" />
-						<vgcinterfaz:botonMenu key="menu.ver.diseño.causaefecto" onclick="gestionarModeloCausaEfecto()" permisoId="PLAN_MODELO_DISENO" agregarSeparador="true" />
+						<%--<vgcinterfaz:botonMenu key="menu.ver.modelo.causaefecto" onclick="gestionarModelo()" permisoId="PLAN_MODELO_VER" />
+						<vgcinterfaz:botonMenu key="menu.ver.diseño.causaefecto" onclick="gestionarModeloCausaEfecto()" permisoId="PLAN_MODELO_DISENO" agregarSeparador="true" /> --%>
 						<vgcinterfaz:botonMenu key="menu.ver.visualizarplan" onclick="visualizarPlan()" permisoId="PLAN_EJECUTIVO" agregarSeparador="true" />
 						<%-- 
 						<vgcinterfaz:botonMenu key="menu.ver.indicadoresasociadosproblemas" onclick="alert('Función no disponible')" permisoId="PROBLEMA" />
@@ -512,12 +512,12 @@
 					</vgcinterfaz:barraHerramientasBoton>
 				</logic:notEmpty>
 
-				<vgcinterfaz:barraHerramientasBoton permisoId="PLAN_MODELO_VER" nombreImagen="modelo" pathImagenes="/componentes/barraHerramientas/" nombre="modelo" onclick="javascript:gestionarModelo();">
+				<%-- <vgcinterfaz:barraHerramientasBoton permisoId="PLAN_MODELO_VER" nombreImagen="modelo" pathImagenes="/componentes/barraHerramientas/" nombre="modelo" onclick="javascript:gestionarModelo();">
 					<vgcinterfaz:barraHerramientasSeparador />
 					<vgcinterfaz:barraHerramientasBotonTitulo>
 						<vgcutil:message key="menu.ver.modelo.causaefecto" />
 					</vgcinterfaz:barraHerramientasBotonTitulo>
-				</vgcinterfaz:barraHerramientasBoton>
+				</vgcinterfaz:barraHerramientasBoton> --%>
 				
 				<logic:notEmpty name="perspectiva" property="padreId" scope="session">
 					<vgcinterfaz:barraHerramientasBoton permisoId="PLAN_PERSPECTIVA_RELACION" nombreImagen="relacion" pathImagenes="/paginas/strategos/imagenes/barraHerramientas/" nombre="relacion" onclick="javascript:visualizarPerspectivasRelacionadas();">
@@ -545,6 +545,13 @@
 					<vgcinterfaz:barraHerramientasSeparador />
 					<vgcinterfaz:barraHerramientasBotonTitulo>
 						<vgcutil:message key="menu.ver.refrescar" />
+					</vgcinterfaz:barraHerramientasBotonTitulo>
+				</vgcinterfaz:barraHerramientasBoton>
+				
+				<vgcinterfaz:barraHerramientasBoton nombreImagen="vistas_detalle" pathImagenes="/componentes/barraHerramientas/" nombre="vistas_detalle" onclick="javascript:visualizarPlan();">
+					<vgcinterfaz:barraHerramientasSeparador />
+					<vgcinterfaz:barraHerramientasBotonTitulo>
+						<vgcutil:message key="menu.ver.visualizarplan" />
 					</vgcinterfaz:barraHerramientasBotonTitulo>
 				</vgcinterfaz:barraHerramientasBoton>
 

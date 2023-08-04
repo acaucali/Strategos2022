@@ -381,25 +381,34 @@
 				var valor = value;
 
 				if (codificar)
-					valor = valor.replace("%", "[[por]]");
+					valor = valor.replace("%", "Porcentaje");
 				
 				return valor;
 			}
 			
 			function salvar() 
 			{
+				
 				if (validar())
-				{
+				{					
 					document.graficoForm.respuesta.value = "";
 
-					var parametros = 'data=' + getXml(true);
+					var data = getXml(true);
+					
+					var parametroCodificado = encodeURIComponent(data);
+					
+					var parametros = 'data=' + parametroCodificado;										
 					parametros = parametros + '&id=' + document.graficoForm.id.value;
 					parametros = parametros + '&nombre=' + CodificarString(document.graficoForm.titulo.value, true);
 					parametros = parametros + '&source=General';
 					parametros = parametros + '&showPresentacion=' + (document.graficoForm.showPresentacion.checked ? 1 : 0);
 					parametros = parametros + '&funcion=SalvarAsistente';
 					
-					ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/graficos/guardarAsistenteGrafico" />?' + parametros, document.graficoForm.respuesta, 'onSalvar()');
+					
+					//ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/graficos/guardarAsistenteGrafico" />?virtual=true&' + parametros, document.graficoForm.respuesta, 'onSalvar()');
+					window.location.href = '<html:rewrite action="/graficos/guardarAsistenteGrafico"/>?virtual=true&' + parametros;
+					
+					
 				} 
 				else
 				{
@@ -466,7 +475,7 @@
 					return;
 				}
 				
-				alert('<vgcutil:message key="jsp.asistente.grafico.alert.nombre.duplicado" /> ');
+				//alert('<vgcutil:message key="jsp.asistente.grafico.alert.nombre.duplicado" /> ');
 				pasoActual = 8;
 				mostrarBotones(pasoActual);
 				mostrarTitulo();

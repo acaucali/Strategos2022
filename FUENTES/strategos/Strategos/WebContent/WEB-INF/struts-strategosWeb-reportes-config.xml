@@ -95,6 +95,12 @@
 
 		<!-- Mapeo del Action: Generar Reporte Consolidado Plan en XLS -->
 		<action path="/reportes/planes/consolidadoReporteXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanConsolidadoReporteXLSAction"></action>
+				
+		<!-- Mapeo del Action: Generar Reporte Visualizar Plan Detallado en PDF -->
+		<action path="/reportes/planes/visualizarPlanpdf" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanVisualizarPlanReportePdfAction"></action>
+		
+		<!-- Mapeo del Action: Generar Reporte Visualizar Plan Detallado en XLS -->
+		<action path="/reportes/planes/visualizarPlanXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanVisualizarPlanReporteXlsAction"></action>
 		
 		<!-- Mapeo del Action: Pantalla de Iniciativas -->
 		<action path="/reportes/iniciativas/ejecucion" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanEjecucionAction" scope="request" name="reporteForm" parameter="ejecucionIniciativa"></action>

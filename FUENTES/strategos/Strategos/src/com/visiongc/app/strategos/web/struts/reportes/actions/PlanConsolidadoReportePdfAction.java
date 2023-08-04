@@ -215,9 +215,9 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 			lineas = getNumeroLinea((lineas + 5), inicioLineas);
 		}
 
-		font.setSize(8);
+		font.setSize(12);
 		font.setStyle(Font.NORMAL);
-		fontBold.setSize(8);
+		fontBold.setSize(12);
 		fontBold.setStyle(Font.BOLD);
 
 		documento.add(lineaEnBlanco(font));
@@ -378,7 +378,7 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 
 
 		Font fontCol = new Font(getConfiguracionPagina(request).getCodigoFuente());
-		fontCol.setSize(9);
+		fontCol.setSize(10);
 		fontCol.setStyle(Font.BOLD);
 
 		if (indicadores.size() > 0) {
@@ -1172,7 +1172,7 @@ if (anoPeriodo <= anoPeriodoBuscar)
 			if (reporte.getVisualizarActividad()) {
 
 
-				font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
+				font.setSize(VgcFormatoReporte.TAMANO_FUENTE_SUBTITULO);
 				font.setStyle(Font.NORMAL);
 				for (Iniciativa iniciativa : iniciativas) {
 					Paragraph subTitulo = new Paragraph(mensajes.getMessage("jsp.modulo.actividad.titulo.singular")
@@ -1260,7 +1260,7 @@ if (anoPeriodo <= anoPeriodoBuscar)
 
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-		tabla.setColorFondo(128, 128, 128);
+		tabla.setColorFondo(21, 60, 120);
 		tabla.setColorLetra(255, 255, 255);
 		tabla.setFont(Font.DEFAULTSIZE);
 		tabla.setFormatoFont(Font.BOLD);
@@ -1418,7 +1418,7 @@ if (anoPeriodo <= anoPeriodoBuscar)
 			alineacionVertical = Tabla.V_ALINEACION_MIDDLE;
 		} else {
 			colorLetra = new Color(255, 255, 255);
-			colorFondo = new Color(128, 128, 128);
+			colorFondo = new Color(21, 60, 120);
 		}
 
 		if (tablaHeader != null && newTable)

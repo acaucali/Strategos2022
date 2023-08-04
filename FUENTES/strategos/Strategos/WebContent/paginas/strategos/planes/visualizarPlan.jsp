@@ -17,6 +17,17 @@
 
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
+	
+	<script type="text/javascript">
+		function reportePdf(){
+			abrirReporte('<html:rewrite action="/reportes/planes/visualizarPlanpdf"/>?planId=<bean:write name="gestionarPlanForm" property="planId" scope="session" />');
+		}
+		
+		function reporteXls(){
+			abrirReporte('<html:rewrite action="/reportes/planes/visualizarPlanXls"/>?planId=<bean:write name="gestionarPlanForm" property="planId" scope="session" />');
+		}
+		
+	</script>
 		<%-- Representación de la Forma --%>
 		<html:form action="/planes/visualizarPlan" styleClass="formaHtml">
 
@@ -102,6 +113,24 @@
 							</tr>
 						</logic:notEmpty>
 					</table>
+					
+					<%-- Barra de Herramientas --%>
+					<vgcinterfaz:barraHerramientas nombre="barraGestionarPerspectivas">
+					
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="pdf" pathImagenes="/componentes/barraHerramientas/" nombre="pdf" onclick="javascript:reportePdf();">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message key="menu.archivo.presentacionpreliminar.pdf" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+						
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="exportar" pathImagenes="/componentes/barraHerramientas/" nombre="exportar" onclick="javascript:reporteXls();">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message key="menu.archivo.presentacionpreliminar.xls" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+						
+		
+					</vgcinterfaz:barraHerramientas>
 
 				</vgcinterfaz:contenedorFormaBarraGenerica>
 

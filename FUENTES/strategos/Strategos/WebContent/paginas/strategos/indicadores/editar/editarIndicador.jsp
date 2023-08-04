@@ -1249,7 +1249,7 @@
 				<bean:define scope="page" id="iniciativaDisabled" value="true"></bean:define>
 			</logic:equal>
 
-			<vgcinterfaz:contenedorForma width="820px" height="630px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20" marginTop="5px">
+			<vgcinterfaz:contenedorForma width="860px" height="630px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20" marginTop="5px">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::
@@ -1275,7 +1275,7 @@
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Paneles --%>
-				<vgcinterfaz:contenedorPaneles height="520px" width="690px" nombre="editarIndicador">
+				<vgcinterfaz:contenedorPaneles height="520px" width="740px" nombre="editarIndicador">
 
 					<%-- Datos Básicos --%>
 					<vgcinterfaz:panelContenedor anchoPestana="110px" nombre="datosBasicos">

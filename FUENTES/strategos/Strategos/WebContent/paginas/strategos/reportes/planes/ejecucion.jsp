@@ -65,7 +65,7 @@
 				alert('<vgcutil:message key="jsp.alerta.rango.fechas.invalido" /> ');
 				return false;
 			} 
-			
+						
 			<%-- Validacion del Tipo de Reporte --%>
 			var url = '?mesInicial=' + document.reporteForm.mesInicial.value; 
 			url = url + '&anoInicial=' + document.reporteForm.anoInicial.value; 

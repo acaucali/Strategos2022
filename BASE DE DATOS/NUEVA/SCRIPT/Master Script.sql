@@ -4703,6 +4703,16 @@ CREATE TABLE cargo (
 	nombre character varying(50) NOT NULL
 );
 
+ALTER TABLE cargo
+    ADD CONSTRAINT ak1_cargo UNIQUE (nombre);
+
+ALTER TABLE cargo
+    ADD CONSTRAINT pk_cargo PRIMARY KEY (cargo_id);
+    
+ALTER TABLE iniciativa ADD COLUMN cargo_id numeric(10);
+
+ALTER TABLE vista 
+    ALTER COLUMN nombre varchar(250);
 -- Completed on 2023-04-27 19:43:20
 
 --
