@@ -81,6 +81,7 @@ export class GraficoFactorComponent implements OnInit {
                 // plugin: [ChartDataLabels] , 
                 legend: {
                   position: 'top',
+                  display: false,
                 },
                 title: {
                   display: true,

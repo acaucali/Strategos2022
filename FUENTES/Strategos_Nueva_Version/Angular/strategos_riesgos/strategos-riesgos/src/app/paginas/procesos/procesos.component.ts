@@ -34,7 +34,8 @@ export class ProcesosComponent implements OnInit {
   ngOnInit() {
     
     this.activatedRoute.paramMap.subscribe( params =>{
-      this.procesosService.getProcesosArbol().subscribe(response => this.arbol = response);       
+      this.procesosService.getProcesosArbol().subscribe(response => this.arbol = response);   
+      
     });
 
   }

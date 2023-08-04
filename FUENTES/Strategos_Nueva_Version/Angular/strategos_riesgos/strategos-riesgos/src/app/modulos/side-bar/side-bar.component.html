@@ -14,78 +14,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
-               <li class="nav-item">
-                <a class="nav-link " style="cursor: pointer;">
-                  <i class="nav-icon fas fa-cog"></i>&nbsp;
-                  <p>
-                    Configuración
-                  </p> 
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/calificaciones']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i> 
-                      <p>Calificaciones Riesgo</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/causas']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Causas Riesgo</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/controles']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Controles Riesgo</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/efectividad']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Efectividad de Controles</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/efectos']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Efectos</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/tiposimpacto']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Impactos</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/macroprocesos']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Macroprocesos</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/probabilidad']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Probabilidades Riesgo</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/respuesta']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Respuestas Riesgo</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a [routerLink]="['/banco/tiposriesgo']" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Tipos de Riesgo</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>  
-
-          
+                        
           <!--    
           <li class="nav-item menu-is-opening menu-open">
             <a [routerLink]="['/banco/gestionideas']" class="nav-link ">
@@ -96,6 +25,77 @@
             </a>            
           </li>
           -->
+          <li class="nav-item">
+            <a  class="nav-link" style="cursor: pointer;">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Configuración
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a [routerLink]="['/banco/calificaciones']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i> 
+                  <p>Calificaciones Riesgo</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/causas']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Causas Riesgo</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/controles']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Controles Riesgo</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/efectividad']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Efectividad de Controles</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/efectos']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Efectos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/tiposimpacto']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Impactos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/macroprocesos']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Macroprocesos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/probabilidad']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Probabilidades Riesgo</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/respuesta']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Respuestas Riesgo</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a [routerLink]="['/banco/tiposriesgo']" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tipos de Riesgo</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           
 
           <li class="nav-item">

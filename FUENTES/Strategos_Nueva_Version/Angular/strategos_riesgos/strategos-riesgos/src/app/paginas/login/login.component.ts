@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
       
       swal.fire('Ingreso',`Bienvenido a Strategos, 
       Usuario: ${usuario.username}`, 'success');
+      
     }, error => {
       if(error.status == 400){
         swal.fire('Error Login',`Usuario o clave incorrectas !`, 'error');

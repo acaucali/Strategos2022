@@ -1,0 +1,4 @@
+ALTER TABLE afw_sistema ADD build NUMBER(10) NULL;
+ALTER TABLE afw_sistema ADD fecha TIMESTAMP NULL;
+
+COMMIT;

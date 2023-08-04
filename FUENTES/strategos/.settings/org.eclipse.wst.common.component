@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="strategos">
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/Calculo/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/prueba/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/Strategos/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/testjava/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/vgcBll/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/vgcCalcular/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/vgcFramework/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/vgcFrwkWeb/src"/>
+        <property name="context-root" value="strategos"/>
+        <property name="java-output-path" value="/strategos/Calculo/bin"/>
+    </wb-module>
+</project-modules>

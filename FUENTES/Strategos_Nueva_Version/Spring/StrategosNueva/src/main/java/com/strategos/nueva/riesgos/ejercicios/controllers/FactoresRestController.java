@@ -43,11 +43,16 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfNumber;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPage;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.strategos.nueva.riesgos.ejercicios.model.ControlesRiesgo;
 import com.strategos.nueva.riesgos.ejercicios.model.EfectoRiesgo;
@@ -348,15 +353,20 @@ public class FactoresRestController {
 	  }
 	 
 	
+	
 	public static ByteArrayInputStream createReport(List<FactoresRiesgo> factores) {
 
 		
 	    Document document = new Document();
+	    document.setPageSize(PageSize.A4.rotate());
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
+	   
 
 	    try {
 
-	    	PdfWriter.getInstance(document, out);
+	    	PdfWriter writer = PdfWriter.getInstance(document, out);
+	 
+	    	
 	        document.open();		
     		
     		document.addTitle("Reporte de factores");
@@ -366,6 +376,8 @@ public class FactoresRestController {
     		document.add(p);
     		document.add( Chunk.NEWLINE );
     		
+    		
+    		
     		PdfPTable table = new PdfPTable(11);
 
     		addTableHeader(table);
@@ -374,7 +386,8 @@ public class FactoresRestController {
     			addRows(table, fac);
     		}
     		
-    		document.add(table);            
+    		document.add(table);  
+    	
             document.close();
 	    	
 	    

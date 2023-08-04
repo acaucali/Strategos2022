@@ -1,0 +1,2 @@
+ALTER TABLE indicador MODIFY nombre_corto VARCHAR(100);
+COMMIT;

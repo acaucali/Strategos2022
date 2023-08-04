@@ -1,3 +1,11 @@
+
+export const URL_BACKEND = 'http://localhost:9090';
+export const URL_FRONT = 'http://localhost:4200/';
+export const ORGANIZACION_ID = 5436; //52
+export const STRATEGOS = 'http://localhost:8080/Strategos2023/organizaciones/gestionarOrganizaciones.action?mostrarMisionVision=undefined';
+export const URL_AUTH = 'http://localhost:9090/oauth/token';
+
+/*
 export const URL_BACKEND = 'http://localhost:8080/StrategosRBP';
 export const URL_FRONT = 'http://localhost:9095/';
 export const URL_AUTH = 'http://localhost:8080/StrategosRBP/oauth/token';

@@ -1,0 +1,15 @@
+DECLARE
+	vCount NUMBER(5);
+
+BEGIN
+	SELECT COUNT(*) INTO vCount FROM USER_TAB_COLUMNS WHERE COLUMN_NAME = UPPER('titulo') AND TABLE_NAME = UPPER('celda');
+	IF vCount > 0 THEN 
+	BEGIN
+		execute immediate 'ALTER TABLE celda MODIFY titulo VARCHAR2(100)';
+	END;
+	END IF;				
+	
+END;
+/
+
+COMMIT;
