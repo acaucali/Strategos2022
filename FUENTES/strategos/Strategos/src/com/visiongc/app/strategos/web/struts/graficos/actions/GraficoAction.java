@@ -590,19 +590,19 @@ public class GraficoAction extends VgcAction
 		}
 		// reporte grafico procesos
 		else
-		{					
-			
-			
+		{	
 			if (graficoForm.getVirtual() == null) 
 				graficoForm.setVirtual(false);					
 			if (!graficoForm.getVirtual()) 				
 				ReadGrafico(graficoId, graficoForm, request);				
 			else
-			{
-				
+			{				
 				Grafico grafico =  new Grafico();
 				grafico.setNombre(request.getParameter("nombre"));
-				grafico.setGraficoId(Long.valueOf(request.getParameter("id")));
+				if(request.getAttribute("id") != null)
+					grafico.setGraficoId(Long.valueOf(request.getParameter("id")));
+				else
+					grafico.setGraficoId(Long.valueOf(request.getSession().getAttribute("graficoId").toString()));
 				String data = "";
 				if (request.getParameter("data") != null)
 					data = request.getParameter("data").replace("[[num]]", "#").replace("Porcentaje", "%");

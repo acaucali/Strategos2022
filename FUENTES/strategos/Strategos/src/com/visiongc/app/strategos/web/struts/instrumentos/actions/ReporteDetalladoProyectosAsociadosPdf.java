@@ -58,6 +58,7 @@ import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.framework.web.struts.forms.NavegadorForm;
 
 public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoAction  {
 	private static Session sesion;
@@ -532,7 +533,8 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		tabla.agregarCelda(iniciativa.getObjetivoEstrategico());
 		
 		tabla.setFormatoFont(Font.BOLD);
-		tabla.agregarCelda("\nInicitiva Estrategica\n");
+		tabla.agregarCelda("\n" + ((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+				.getNombreSingular() +" Estrategica\n");
 		tabla.setFormatoFont(Font.NORMAL);
 		tabla.agregarCelda(iniciativa.getIniciativaEstrategica());
 		

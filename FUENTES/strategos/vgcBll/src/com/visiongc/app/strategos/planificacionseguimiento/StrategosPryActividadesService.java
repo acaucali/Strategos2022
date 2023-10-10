@@ -42,4 +42,10 @@ public abstract interface StrategosPryActividadesService
     throws Throwable;
   
   public abstract List<PryActividad> getActividades(Long paramLong);
+  
+  public abstract long getUniqueId();
+  
+  public abstract long crearClaseIndicador(long paramLong, String paramString, Usuario paramUsuario);
+  
+  public abstract long crearIndicador(long paramLong, long paramLong2, String paramString, long paramLong3, Double paramDouble, Double paramDouble2, Usuario paramUsuario);
 }

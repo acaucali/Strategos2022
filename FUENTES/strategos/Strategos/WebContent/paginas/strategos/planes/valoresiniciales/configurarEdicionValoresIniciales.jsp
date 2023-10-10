@@ -9,7 +9,7 @@
 
 <tiles:insert definition="doc.modalLayout" flush="true">
 
-	<%-- Título --%>
+	<%-- TÃ­tulo --%>
 	<tiles:put name="title" type="String">
 		<vgcutil:message key="jsp.configuraredicionvaloresiniciales.titulo" />
 	</tiles:put>
@@ -17,7 +17,7 @@
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
 
-		<%-- Funciones JavaScript locales de la página Jsp --%>
+		<%-- Funciones JavaScript locales de la pÃ¡gina Jsp --%>
 		<script type="text/javascript">
 				
 			function editarValoresIniciales() 
@@ -48,14 +48,14 @@
 
 			<vgcinterfaz:contenedorForma width="350px" height="250px">
 
-				<%-- Título --%>
+				<%-- TÃ­tulo --%>
 				<vgcinterfaz:contenedorFormaTitulo>
 					..:: <vgcutil:message key="jsp.configuraredicionvaloresiniciales.titulo" />
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<table class="bordeFichaDatos" cellpadding="3" cellspacing="0" align="center" width="95%" height="100%">
 
-					<%-- Campo: Organización --%>
+					<%-- Campo: OrganizaciÃ³n --%>
 					<tr>
 						<td colspan="2"><b><vgcutil:message key="jsp.configuraredicionvaloresiniciales.ficha.organizacion" /></b>: <bean:write name="editarValoresInicialesForm" property="nombreOrganizacion" /></td>						
 					</tr>
@@ -112,7 +112,7 @@
 
 		</html:form>
 		
-		<%-- Funciones JavaScript locales de la página Jsp --%>
+		<%-- Funciones JavaScript locales de la pï¿½gina Jsp --%>
 		<script language="Javascript1.1">			
 			
 			document.editarValoresInicialesForm.visualizarIndicadoresCompuestos.checked = true;

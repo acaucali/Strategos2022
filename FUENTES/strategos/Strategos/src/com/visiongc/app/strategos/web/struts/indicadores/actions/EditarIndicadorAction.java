@@ -253,9 +253,11 @@ public class EditarIndicadorAction extends VgcAction
 					strategosIniciativasService.close();
 				}
 
-				if (editarIndicadorForm.getIniciativaId() != null)
+				if (editarIndicadorForm.getIniciativaId() != null) {
 					editarIndicadorForm.setDesdeIniciativasPlanes(new Boolean(true));
-
+					editarIndicadorForm.setDesdeIniciativa(true);
+				}
+				
 				editarIndicadorForm.setNaturalezaNombre(indicador.getNaturalezaNombre());
 				editarIndicadorForm.setFrecuenciaNombre(indicador.getFrecuenciaNombre());
 				if (indicador.getUnidad() != null)

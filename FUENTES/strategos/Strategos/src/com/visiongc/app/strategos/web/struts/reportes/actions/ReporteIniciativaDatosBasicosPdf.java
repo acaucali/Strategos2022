@@ -26,12 +26,14 @@ import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
+import com.visiongc.framework.web.struts.forms.NavegadorForm;
 
 public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
-		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.datos.basicos");
+		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.datos.basicos",
+				((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombrePlural());
 	}
 
 	@Override
@@ -44,6 +46,8 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 		String tipo = (request.getParameter("tipo"));
 		String ano = (request.getParameter("ano"));
 		String todos = (request.getParameter("todos"));
+		String desdePortafolio = (request.getParameter("source"));
+		String portafolioId = (request.getParameter("portafolioId"));
 
 		documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 
@@ -56,263 +60,319 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 				.openStrategosOrganizacionesService();
 
 		// organizacion seleccionada
-		if (request.getParameter("alcance").equals("1")) {
 
-			OrganizacionStrategos org = (OrganizacionStrategos) organizacionservice.load(OrganizacionStrategos.class,
-					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId());
+		if (desdePortafolio.equals("Iniciativaportafolio")) {
 
-			if (org != null) {
+			filtros = new HashMap();
 
-				Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
+			filtros.put("portafolioId", portafolioId);
 
-				// Nombre de la Organizacion, plan y periodo del reporte
-				font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
-				font.setStyle(Font.NORMAL);
+			Font fuente = getConfiguracionPagina(request).getFuente();
 
-				Paragraph textoOrg = new Paragraph("Organización: " + org.getNombre(), font);
-				textoOrg.setAlignment(Element.ALIGN_LEFT);
-				documento.add(textoOrg);
+			MessageResources messageResources = getResources(request);
 
-				documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+			List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
+					.getLista();
+
+			if (iniciativas.size() > 0) {
+				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
+					Iniciativa iniciativa = iter.next();
+
+					dibujarTabla0(messageResources, request, documento);
+
+					dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
+
+					dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
+
+					dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
+
+					dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
+
+					dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
+
+					dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
+
+					documento.add(lineaEnBlanco(fuente));
+
+					dibujarTabla7(messageResources, request, documento);
+
+					dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
+
+					documento.add(lineaEnBlanco(fuente));
+					documento.add(lineaEnBlanco(fuente));
+
+				}
 			}
 
-			String filtroNombre = (request.getParameter("filtroNombre") != null) ? request.getParameter("filtroNombre")
-					: "";
-			Byte selectHitoricoType = (request.getParameter("selectHitoricoType") != null
-					&& request.getParameter("selectHitoricoType") != "")
-							? Byte.parseByte(request.getParameter("selectHitoricoType"))
-							: HistoricoType.getFiltroHistoricoNoMarcado();
+		} else {
+			if (request.getParameter("alcance").equals("1")) {
 
-			FiltroForm filtro = new FiltroForm();
-			filtro.setHistorico(selectHitoricoType);
-			filtro.setAnio("" + ano);
-			if (filtroNombre.equals(""))
-				filtro.setNombre(null);
-			else
-				filtro.setNombre(filtroNombre);
+				OrganizacionStrategos org = (OrganizacionStrategos) organizacionservice.load(
+						OrganizacionStrategos.class,
+						((OrganizacionStrategos) request.getSession().getAttribute("organizacion"))
+								.getOrganizacionId());
 
-			reporte.setFiltro(filtro);
+				if (org != null) {
 
-			if (reporte.getAlcance().byteValue() == reporte.getAlcanceObjetivo().byteValue())
+					Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
+
+					// Nombre de la Organizacion, plan y periodo del reporte
+					font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
+					font.setStyle(Font.NORMAL);
+
+					Paragraph textoOrg = new Paragraph("Organización: " + org.getNombre(), font);
+					textoOrg.setAlignment(Element.ALIGN_LEFT);
+					documento.add(textoOrg);
+
+					documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+				}
+
+				String filtroNombre = (request.getParameter("filtroNombre") != null)
+						? request.getParameter("filtroNombre")
+						: "";
+				Byte selectHitoricoType = (request.getParameter("selectHitoricoType") != null
+						&& request.getParameter("selectHitoricoType") != "")
+								? Byte.parseByte(request.getParameter("selectHitoricoType"))
+								: HistoricoType.getFiltroHistoricoNoMarcado();
+
+				FiltroForm filtro = new FiltroForm();
+				filtro.setHistorico(selectHitoricoType);
+				filtro.setAnio("" + ano);
+				if (filtroNombre.equals(""))
+					filtro.setNombre(null);
+				else
+					filtro.setNombre(filtroNombre);
+
+				reporte.setFiltro(filtro);
+
+				if (reporte.getAlcance().byteValue() == reporte.getAlcanceObjetivo().byteValue())
+					filtros.put("organizacionId",
+							((OrganizacionStrategos) request.getSession().getAttribute("organizacion"))
+									.getOrganizacionId());
+				if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
+						.byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
+					filtros.put("historicoDate", "IS NULL");
+				else if (reporte.getFiltro().getHistorico() != null
+						&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado())
+					filtros.put("historicoDate", "IS NOT NULL");
+				if (reporte.getFiltro().getNombre() != null)
+					filtros.put("nombre", reporte.getFiltro().getNombre());
+				if (reporte.getFiltro().getNombre() != null)
+					filtros.put("nombre", reporte.getFiltro().getNombre());
+				if (!tipo.equals("0")) {
+					filtros.put("tipoId", tipo);
+				}
+				if (todos.equals("false")) {
+					filtros.put("anio", ano);
+				}
+
+				Font fuente = getConfiguracionPagina(request).getFuente();
+
+				MessageResources messageResources = getResources(request);
+
+				List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
+						.getLista();
+
+				if (iniciativas.size() > 0) {
+					for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
+						Iniciativa iniciativa = iter.next();
+
+						dibujarTabla0(messageResources, request, documento);
+
+						dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
+
+						documento.add(lineaEnBlanco(fuente));
+
+						dibujarTabla7(messageResources, request, documento);
+
+						dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
+
+						documento.add(lineaEnBlanco(fuente));
+						documento.add(lineaEnBlanco(fuente));
+
+					}
+				}
+			}
+			// suborganizaciones
+			else if (request.getParameter("alcance").equals("4")) {
+
+				Map<String, Object> filtro = new HashMap<String, Object>();
+
+				filtro.put("padreId", ((OrganizacionStrategos) request.getSession().getAttribute("organizacion"))
+						.getOrganizacionId());
+
+				List<OrganizacionStrategos> organizacionesSub = organizacionservice.getOrganizacionHijas(
+						((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId(),
+						true);
+
+				Font fuente = getConfiguracionPagina(request).getFuente();
+				MessageResources messageResources = getResources(request);
+
+				OrganizacionStrategos org = (OrganizacionStrategos) organizacionservice.load(
+						OrganizacionStrategos.class,
+						((OrganizacionStrategos) request.getSession().getAttribute("organizacion"))
+								.getOrganizacionId());
+
+				if (org != null) {
+
+					Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
+
+					// Nombre de la Organizacion, plan y periodo del reporte
+					font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
+					font.setStyle(Font.NORMAL);
+
+					Paragraph textoOrg = new Paragraph("Organización: " + org.getNombre(), font);
+					textoOrg.setAlignment(Element.ALIGN_LEFT);
+					documento.add(textoOrg);
+
+					documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+				}
+
 				filtros.put("organizacionId",
 						((OrganizacionStrategos) request.getSession().getAttribute("organizacion"))
 								.getOrganizacionId());
-			if (reporte.getFiltro().getHistorico() != null
-					&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
-				filtros.put("historicoDate", "IS NULL");
-			else if (reporte.getFiltro().getHistorico() != null
-					&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado())
-				filtros.put("historicoDate", "IS NOT NULL");
-			if (reporte.getFiltro().getNombre() != null)
-				filtros.put("nombre", reporte.getFiltro().getNombre());
-			if (reporte.getFiltro().getNombre() != null)
-				filtros.put("nombre", reporte.getFiltro().getNombre());
-			if (!tipo.equals("0")) {
-				filtros.put("tipoId", tipo);
-			}
-			if (todos.equals("false")) {
-				filtros.put("anio", ano);
-			}
-
-			Font fuente = getConfiguracionPagina(request).getFuente();
-
-			MessageResources messageResources = getResources(request);
-
-			List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
-					.getLista();
-
-			if (iniciativas.size() > 0) {
-				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = iter.next();
-
-					dibujarTabla0(messageResources, request, documento);
-
-					dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
-
-					documento.add(lineaEnBlanco(fuente));
-
-					dibujarTabla7(messageResources, request, documento);
-
-					dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
-
-					documento.add(lineaEnBlanco(fuente));
-					documento.add(lineaEnBlanco(fuente));
-
+				if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
+						.byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
+					filtros.put("historicoDate", "IS NULL");
+				else if (reporte.getFiltro().getHistorico() != null
+						&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado())
+					filtros.put("historicoDate", "IS NOT NULL");
+				if (reporte.getFiltro().getNombre() != null)
+					filtros.put("nombre", reporte.getFiltro().getNombre());
+				if (reporte.getFiltro().getNombre() != null)
+					filtros.put("nombre", reporte.getFiltro().getNombre());
+				if (!tipo.equals("0")) {
+					filtros.put("tipoId", tipo);
 				}
-			}
-		}
-		// suborganizaciones
-		else if (request.getParameter("alcance").equals("4")) {
-
-			Map<String, Object> filtro = new HashMap<String, Object>();
-
-			filtro.put("padreId",
-					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId());
-
-			List<OrganizacionStrategos> organizacionesSub = organizacionservice.getOrganizacionHijas(
-					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId(),
-					true);
-
-			Font fuente = getConfiguracionPagina(request).getFuente();
-			MessageResources messageResources = getResources(request);
-
-			OrganizacionStrategos org = (OrganizacionStrategos) organizacionservice.load(OrganizacionStrategos.class,
-					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId());
-
-			if (org != null) {
-
-				Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
-
-				// Nombre de la Organizacion, plan y periodo del reporte
-				font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
-				font.setStyle(Font.NORMAL);
-
-				Paragraph textoOrg = new Paragraph("Organización: " + org.getNombre(), font);
-				textoOrg.setAlignment(Element.ALIGN_LEFT);
-				documento.add(textoOrg);
-
-				documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
-			}
-
-			filtros.put("organizacionId",
-					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId());
-			if (reporte.getFiltro().getHistorico() != null
-					&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
-				filtros.put("historicoDate", "IS NULL");
-			else if (reporte.getFiltro().getHistorico() != null
-					&& reporte.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado())
-				filtros.put("historicoDate", "IS NOT NULL");
-			if (reporte.getFiltro().getNombre() != null)
-				filtros.put("nombre", reporte.getFiltro().getNombre());
-			if (reporte.getFiltro().getNombre() != null)
-				filtros.put("nombre", reporte.getFiltro().getNombre());
-			if (!tipo.equals("0")) {
-				filtros.put("tipoId", tipo);
-			}
-			if (todos.equals("false")) {
-				filtros.put("anio", ano);
-			}
-
-			List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
-					.getLista();
-
-			if (iniciativas.size() > 0) {
-				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
-					Iniciativa iniciativa = iter.next();
-
-					dibujarTabla0(messageResources, request, documento);
-
-					dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
-
-					dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
-
-					documento.add(lineaEnBlanco(fuente));
-
-					dibujarTabla7(messageResources, request, documento);
-
-					dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
-
-					documento.add(lineaEnBlanco(fuente));
-					documento.add(lineaEnBlanco(fuente));
+				if (todos.equals("false")) {
+					filtros.put("anio", ano);
 				}
-			}
 
-			// suborganizaciones
-			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
-				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
+				List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
+						.getLista();
 
-					OrganizacionStrategos organizacion = iter.next();
+				if (iniciativas.size() > 0) {
+					for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
+						Iniciativa iniciativa = iter.next();
 
-					if (organizacion != null) {
+						dibujarTabla0(messageResources, request, documento);
 
-						Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
+						dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
 
-						// Nombre de la Organizacion, plan y periodo del reporte
-						font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
-						font.setStyle(Font.NORMAL);
+						dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
 
-						Paragraph textoOrg = new Paragraph("Organización: " + organizacion.getNombre(), font);
-						textoOrg.setAlignment(Element.ALIGN_LEFT);
-						documento.add(textoOrg);
+						dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
 
-						documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+						dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
+
+						dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
+
+						documento.add(lineaEnBlanco(fuente));
+
+						dibujarTabla7(messageResources, request, documento);
+
+						dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
+
+						documento.add(lineaEnBlanco(fuente));
+						documento.add(lineaEnBlanco(fuente));
 					}
+				}
 
-					filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
-					if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
-							.byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
-						filtros.put("historicoDate", "IS NULL");
-					else if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
-							.byteValue() == HistoricoType.getFiltroHistoricoMarcado())
-						filtros.put("historicoDate", "IS NOT NULL");
-					if (reporte.getFiltro().getNombre() != null)
-						filtros.put("nombre", reporte.getFiltro().getNombre());
-					if (!tipo.equals("0")) {
-						filtros.put("tipoId", tipo);
-					}
-					if (todos.equals("false")) {
-						filtros.put("anio", ano);
-					}
+				// suborganizaciones
+				if (organizacionesSub.size() > 0 || organizacionesSub != null) {
+					for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
 
-					List<Iniciativa> iniciativasSub = iniciativaservice
-							.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
+						OrganizacionStrategos organizacion = iter.next();
 
-					if (iniciativasSub.size() > 0) {
-						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
-							Iniciativa iniciativa = iter1.next();
+						if (organizacion != null) {
 
-							dibujarTabla0(messageResources, request, documento);
+							Font font = new Font(getConfiguracionPagina(request).getCodigoFuente());
 
-							dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
+							// Nombre de la Organizacion, plan y periodo del reporte
+							font.setSize(VgcFormatoReporte.TAMANO_FUENTE_TITULO);
+							font.setStyle(Font.NORMAL);
 
-							dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
+							Paragraph textoOrg = new Paragraph("Organización: " + organizacion.getNombre(), font);
+							textoOrg.setAlignment(Element.ALIGN_LEFT);
+							documento.add(textoOrg);
 
-							dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
+							documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+						}
 
-							dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
+						filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
+						if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
+								.byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
+							filtros.put("historicoDate", "IS NULL");
+						else if (reporte.getFiltro().getHistorico() != null && reporte.getFiltro().getHistorico()
+								.byteValue() == HistoricoType.getFiltroHistoricoMarcado())
+							filtros.put("historicoDate", "IS NOT NULL");
+						if (reporte.getFiltro().getNombre() != null)
+							filtros.put("nombre", reporte.getFiltro().getNombre());
+						if (!tipo.equals("0")) {
+							filtros.put("tipoId", tipo);
+						}
+						if (todos.equals("false")) {
+							filtros.put("anio", ano);
+						}
 
-							dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
+						List<Iniciativa> iniciativasSub = iniciativaservice
+								.getIniciativas(0, 0, "nombre", "ASC", true, filtros).getLista();
 
-							dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
+						if (iniciativasSub.size() > 0) {
+							for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
+								Iniciativa iniciativa = iter1.next();
 
+								dibujarTabla0(messageResources, request, documento);
+
+								dibujarTabla1(iniciativa, messageResources, request, documento, null, true);
+
+								dibujarTabla2(iniciativa, messageResources, request, documento, null, true);
+
+								dibujarTabla3(iniciativa, messageResources, request, documento, null, true);
+
+								dibujarTabla4(iniciativa, messageResources, request, documento, null, true);
+
+								dibujarTabla5(iniciativa, messageResources, request, documento, null, true);
+
+								dibujarTabla6(iniciativa, messageResources, request, documento, null, true);
+
+								documento.add(lineaEnBlanco(fuente));
+
+								dibujarTabla7(messageResources, request, documento);
+
+								dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
+
+								documento.add(lineaEnBlanco(fuente));
+								documento.add(lineaEnBlanco(fuente));
+							}
+						} else {
 							documento.add(lineaEnBlanco(fuente));
 
-							dibujarTabla7(messageResources, request, documento);
+							fuente.setColor(0, 0, 255);
+							texto = new Paragraph(
+									mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
+											((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+													.getNombrePlural().toUpperCase(),
+											"ORGANIZACIÓN"),
+									fuente);
+							texto.setIndentationLeft(50);
+							documento.add(texto);
+							fuente.setColor(0, 0, 0);
 
-							dibujarTabla8(iniciativa, messageResources, request, documento, null, true);
-
-							documento.add(lineaEnBlanco(fuente));
 							documento.add(lineaEnBlanco(fuente));
 						}
-					} else {
-						documento.add(lineaEnBlanco(fuente));
-
-						fuente.setColor(0, 0, 255);
-						texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-								"INICIATIVAS", "PERSPECTIVA"), fuente);
-						texto.setIndentationLeft(50);
-						documento.add(texto);
-						fuente.setColor(0, 0, 0);
-
-						documento.add(lineaEnBlanco(fuente));
 					}
 				}
 			}
@@ -334,7 +394,8 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 		tabla.setAlineacionHorizontal(1);
 		tabla.setFormatoFont(Font.BOLD);
 
-		tabla.agregarCelda("Formato Formulacion iniciativa");
+		tabla.agregarCelda("Formato Formulacion "
+				+ ((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular());
 
 		tabla.setAmplitudTabla(100);
 		tabla.setColorFondo(180, 198, 231);
@@ -446,7 +507,8 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 		tabla.setColorFondo(180, 198, 231);
 		tabla.setFormatoFont(Font.BOLD);
-		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.iniciativa.estrategica"));
+		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.iniciativa.estrategica",
+				((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular()));
 		tabla.setColorFondo(255, 255, 255);
 		tabla.setFormatoFont(Font.NORMAL);
 		tabla.agregarCelda(iniciativa.getIniciativaEstrategica());
@@ -472,14 +534,16 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 		tabla.setColorFondo(180, 198, 231);
 		tabla.setFormatoFont(Font.BOLD);
-		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.lider.iniciativa"));
+		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.lider.iniciativa",
+				((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular()));
 		tabla.setColorFondo(255, 255, 255);
 		tabla.setFormatoFont(Font.NORMAL);
 		tabla.agregarCelda(iniciativa.getLiderIniciativa());
 
 		tabla.setColorFondo(180, 198, 231);
 		tabla.setFormatoFont(Font.BOLD);
-		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.tipo.iniciativa"));
+		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.tipo.iniciativa",
+				((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular()));
 		tabla.setColorFondo(255, 255, 255);
 		tabla.setFormatoFont(Font.NORMAL);
 		tabla.agregarCelda(iniciativa.getTipoIniciativa());

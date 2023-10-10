@@ -898,6 +898,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 						servicioForm.setProperty("organizacionId", (String)request.getSession().getAttribute("organizacionId"));
 
 					StringBuffer logBefore = log;
+					System.out.print("\nAntes de ir a calcular");
 					boolean respuesta = new com.visiongc.servicio.strategos.importar.ImportarManager(servicioForm.Get(), log, com.visiongc.servicio.web.importar.util.VgcMessageResources.getVgcMessageResources("StrategosWeb")).Ejecutar(datos);
 					log = logBefore;
 					String res = "";

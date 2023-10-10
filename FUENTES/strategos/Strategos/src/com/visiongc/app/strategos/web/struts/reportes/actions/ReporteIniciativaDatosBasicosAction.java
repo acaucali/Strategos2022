@@ -52,6 +52,9 @@ public class ReporteIniciativaDatosBasicosAction extends VgcAction {
 		}
 
 		request.getSession().setAttribute("isAdmin", isAdmin);
+		String source = request.getParameter("source");		
+		String portafolioId = (request.getParameter("portafolioId"));
+				
 
 		/* Parametros para el reporte */
 
@@ -67,6 +70,8 @@ public class ReporteIniciativaDatosBasicosAction extends VgcAction {
 		reporteForm.setMesFinal(""+mes);
 		reporteForm.setAno(ano);
 		reporteForm.setAnoInicial(""+anoIn);
+		reporteForm.setPortafolioId(Long.parseLong(portafolioId));
+		reporteForm.setSource(source);
 
 		Map<String, String> filtros = new HashMap<String, String>();
 

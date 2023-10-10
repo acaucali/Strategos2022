@@ -241,6 +241,15 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorEficienciaMostrar() ? "1" : "0");
 			elemento.appendChild(text);
 			indicadorElement.appendChild(elemento);
+			
+			// Administracion Publica
+			indicadorElement = document.createElement("flag_administracion");
+			indicadores.appendChild(indicadorElement);
+			
+			elemento = document.createElement("crear");
+			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaAdministracionPublica() ? "1" : "0");
+			elemento.appendChild(text);
+			indicadorElement.appendChild(elemento);
 
 			Source source = new DOMSource(document);
 
@@ -352,6 +361,8 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 
 				editarConfiguracionSistemaForm.setIniciativaIndicadorEficienciaNombre(configuracionIniciativa.getIniciativaIndicadorEficienciaNombre());
 				editarConfiguracionSistemaForm.setIniciativaIndicadorEficienciaMostrar(configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar());
+				
+				editarConfiguracionSistemaForm.setIniciativaAdministracionPublica(configuracionIniciativa.getIniciativaAdministracionPublica());
 			}
 		}
 		catch (Exception e)

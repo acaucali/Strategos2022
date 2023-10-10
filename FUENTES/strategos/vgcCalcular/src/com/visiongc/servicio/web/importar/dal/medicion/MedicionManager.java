@@ -154,7 +154,7 @@ public class MedicionManager
 	}
 	
 	public int saveMediciones(Indicador indicador, List<Medicion> mediciones, Long planId, Boolean actualizarUltimaMedicion, boolean addIndicador, Statement stmExt)
-	{
+	{				
 		String CLASS_METHOD = "MedicionManager.saveMediciones";
 		if (this.logConsolaMetodos)
 			System.out.println(CLASS_METHOD);

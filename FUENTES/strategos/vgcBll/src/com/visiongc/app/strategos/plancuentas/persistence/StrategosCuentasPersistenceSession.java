@@ -9,4 +9,6 @@ public abstract interface StrategosCuentasPersistenceSession
   public abstract List getMascarasCodigoPlanCuentas();
   
   public abstract List getMaximoNivelGrupo();
+  
+  public abstract List getCuentas();
 }

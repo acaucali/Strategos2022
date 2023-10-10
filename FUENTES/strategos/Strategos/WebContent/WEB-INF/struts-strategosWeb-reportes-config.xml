@@ -30,6 +30,7 @@
 		<forward name="reportePortafolioResumido" path="/paginas/strategos/reportes/portafolio/reporteResumido.jsp" />
 		<forward name="reporteIniciativaDatosBasicos" path="/paginas/strategos/reportes/iniciativas/datosBasicos.jsp" />
 		<forward name="reporteIniciativaMedicionesAtrasadas" path="/paginas/strategos/reportes/iniciativas/medicionesAtrasadas.jsp" />
+		<forward name="reporteIniciativaIndicadores" path="/paginas/strategos/reportes/iniciativas/indicadoresProyecto.jsp"/>
 		
 	</global-forwards>
 
@@ -145,6 +146,14 @@
 		
 		<!-- Mapeo del Action: Generar Reporte Mediciones Atrasadas Xls de la Iniciativa-->
 		<action path="/reportes/iniciativas/medicionesAtrasadasXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaMedicionesAtrasadasXls"></action>
+		
+		
+		
+		<!-- Mapeo del Action: Pantalla de Iniciativas -->
+		<action path="/reportes/iniciativas/indicador" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaIndicadorAction" scope="request" name="reporteForm" parameter="reporteIniciativaIndicadores"></action>
+		
+		<!-- Mapeo del Action: Pantalla de Iniciativas Resumida-->
+		<action path="/reportes/iniciativas/indicadorEjecucion" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaIndicadorEjecucion"></action>
 		
 		
 		

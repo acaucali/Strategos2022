@@ -110,6 +110,8 @@ public class ReporteForm extends EditarObjetoForm
 	private List<TipoProyecto> tipos;
 	private String estatus;
 	private Boolean todosAno;
+	private Boolean acumularTrimestre;
+	private Boolean avanceTareas;	
 
 	//portafolio
 	private Long portafolioId;
@@ -1082,6 +1084,22 @@ public class ReporteForm extends EditarObjetoForm
 
 	public void setSeleccionadoId(String seleccionadoId) {
 		this.seleccionadoId = seleccionadoId;
+	}
+	
+	public Boolean getAcumularTrimestre() {
+		return acumularTrimestre;
+	}
+
+	public void setAcumularTrimestre(Boolean acumularTrimestre) {
+		this.acumularTrimestre = acumularTrimestre;
+	}
+
+	public Boolean getAvanceTareas() {
+		return avanceTareas;
+	}
+
+	public void setAvanceTareas(Boolean avanceTareas) {
+		this.avanceTareas = avanceTareas;
 	}
 
 	public static class ReporteStatus

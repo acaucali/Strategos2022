@@ -19,7 +19,7 @@
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
 
-		<vgcinterfaz:contenedorForma width="450px" height="670px" bodyCellpadding="10" marginTop="5px" >
+		<vgcinterfaz:contenedorForma width="500px" height="610px" bodyCellpadding="10" marginTop="5px" >
 			
 			<%-- Tï¿½tulo --%>
 			<vgcinterfaz:contenedorFormaTitulo>
@@ -116,6 +116,7 @@
 					<hr width="100%">
 					</td>
 				</tr>
+				<!-- 
 				<tr>
 					<td align="right"><vgcutil:message key="jsp.acerca.frameworkversion" /></td>
 					<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write name="frameworkVersion" />" /></td>
@@ -137,17 +138,18 @@
 					<hr width="100%">
 					</td>
 				</tr>
+				 -->
 				<tr>
 					<td align="right"><vgcutil:message key="jsp.acerca.aplicacion" /></td>
-					<td colspan="2"><input type="text" class="cuadroTexto" size="40" disabled value="<vgcutil:message key="aplicacion.nombre" />" /></td>
+					<td colspan="2"><input type="text" class="cuadroTexto" size="45" disabled value="<vgcutil:message key="aplicacion.nombre" />" /></td>
 				</tr>
 				<tr>
 					<td align="right"><vgcutil:message key="jsp.acerca.version" /></td>
-					<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<vgcutil:message key="aplicacion.version" /> <vgcutil:message key="aplicacion.version.text.build" /> <vgcutil:message key="aplicacion.version.build" />" /></td>
+					<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<vgcutil:message key="aplicacion.version" /> <vgcutil:message key="aplicacion.version.text.build" /> <vgcutil:message key="aplicacion.version.build" />" /></td>
 				</tr>
 				<tr>
 					<td align="right"><vgcutil:message key="aplicacion.version.text.fecha" /></td>
-					<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<vgcutil:message key="aplicacion.version.fecha" />" /></td>
+					<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<vgcutil:message key="aplicacion.version.fecha" />" /></td>
 				</tr>
 				<logic:notEmpty scope="session" name="licencia">
 					<tr>
@@ -160,27 +162,30 @@
 						
 						<!-- 
 						<td colspan="2"><input type="text" class="cuadroTexto" size="40" disabled value="Defensoria del Pueblo" /></td>
-						--> 
+						
 						
 						<td colspan="2"><input type="text" class="cuadroTexto" size="40" disabled value="<bean:write scope='session' name='licencia' property='companyName' />" /></td>
-						
-						
+						--> 
+						<td colspan="2"><input type="text" class="cuadroTexto" size="45" disabled value="CORPORACIÓN ELÉCTRICA NACIONAL S.A. (CORPOELEC)" /></td>
 					</tr>
 					<tr>
 						<td align="right"><vgcutil:message key="jsp.acerca.licencia.serial" /></td>
 						
 						<!-- 
 						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="0" /></td>
-						-->
+						
 						
 						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write scope='session' name='licencia' property='serial' />" /></td>
+						-->
+						
+						<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="202311001" /></td>
 						
 						
 					</tr>
 					<logic:notEqual scope="session" name="licencia" property="expiracion" value="">
 						<tr>
 							<td align="right"><vgcutil:message key="jsp.acerca.licencia.expiracion" /></td>
-							<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write scope='session' name='licencia' property='expiracion' />" /></td>
+							<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<bean:write scope='session' name='licencia' property='expiracion' />" /></td>
 						</tr>
 					</logic:notEqual>
 					<tr>
@@ -188,9 +193,11 @@
 						
 						<!-- 
 						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="Full Licenciamento" /></td>
-					 	-->
+					 	
 					 	
 						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write scope='session' name='licencia' property='tipo' />" /></td>
+						-->
+						<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="Licenciamiento Ilimitado" /></td>
 						
 						
 					</tr>
@@ -202,15 +209,15 @@
 				</tr>
 				<tr>
 					<td align="right"><vgcutil:message key="jsp.acerca.memoria.used" /></td>
-					<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<%=new ObjetosSistema().GetHeapSizeUsed().toString()%> Mg" /></td>
+					<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<%=new ObjetosSistema().GetHeapSizeUsed().toString()%> Mg" /></td>
 				</tr>
 				<tr>
 					<td align="right"><vgcutil:message key="jsp.acerca.memoria.free" /></td>
-					<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<%=new ObjetosSistema().GetHeapSizeFree().toString()%> Mg" /></td>
+					<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<%=new ObjetosSistema().GetHeapSizeFree().toString()%> Mg" /></td>
 				</tr>
 				<tr>
 					<td align="right"><vgcutil:message key="jsp.acerca.memoria.max" /></td>
-					<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<%=new ObjetosSistema().GetHeapSizeMax().toString()%> Mg" /></td>
+					<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<%=new ObjetosSistema().GetHeapSizeMax().toString()%> Mg" /></td>
 				</tr>
 				<tr>
 					<td colspan="3">

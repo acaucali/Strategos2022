@@ -200,13 +200,13 @@ public class StrategosClasesIndicadoresServiceImpl
           resultado = 10003;
         }
         else
-        {        	
+        {        	       
           clase.setClaseId(new Long(this.persistenceSession.getUniqueId()));
           
           Date fechaInsercionIniciativa = new Date();
           clase.setCreado(new Date(fechaInsercionIniciativa.getTime()));
-          clase.setCreadoId(usuario.getUsuarioId());                              
-          resultado = this.persistenceSession.insert(clase, usuario);
+          clase.setCreadoId(usuario.getUsuarioId());                   
+          resultado = this.persistenceSession.insert(clase, usuario);          
         }
       }
       else

@@ -30,6 +30,7 @@ import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
 import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.app.strategos.planes.model.Plan;
+import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.EditarIniciativaForm;
 import com.visiongc.commons.struts.action.VgcAction;
@@ -233,7 +234,9 @@ public class EditarIniciativaAction extends VgcAction {
 				editarIniciativaForm.setObjetivoGeneral(iniciativa.getObjetivoGeneral());
 				editarIniciativaForm.setObjetivoEspecificos(iniciativa.getObjetivoEspecificos());
 				
+				editarIniciativaForm.setCodigoIniciativa(iniciativa.getCodigoIniciativa());
 				editarIniciativaForm.setCargoId(iniciativa.getCargoId());
+				editarIniciativaForm.setUnidad(iniciativa.getUnidadId());
 
 				estatusId = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction()
 						.CalcularEstatus(iniciativa.getPorcentajeCompletado());
@@ -343,6 +346,12 @@ public class EditarIniciativaAction extends VgcAction {
 			TipoProyecto tipoProyecto = iter.next();
 			editarIniciativaForm.getTipos().add(tipoProyecto);
 		}
+		
+		StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService();
+		
+		editarIniciativaForm.setUnidadesMedida(strategosUnidadesService.getUnidadesMedida(0, 0, "nombre", "asc", false, null).getLista());
+
+	    strategosUnidadesService.close();
 
 		strategosIniciativasService.close();
 

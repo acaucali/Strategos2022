@@ -1,5 +1,6 @@
 package com.visiongc.app.strategos.iniciativas.persistence;
 
+import com.visiongc.app.strategos.iniciativas.model.IndicadorIniciativa;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.persistence.StrategosPersistenceSession;
 import com.visiongc.commons.util.ListaMap;
@@ -52,4 +53,6 @@ public abstract interface StrategosIniciativasPersistenceSession
   public abstract int desMarcarHistorico(String paramString);
   
   public abstract List<Iniciativa> getIniciativasEjecutar(Long paramLong1, Long paramLong2, Long paramLong3, Integer paramInteger1);  
+  
+  public abstract List<IndicadorIniciativa> getIndicadoresIniciativa(Long paramLong1);
 }

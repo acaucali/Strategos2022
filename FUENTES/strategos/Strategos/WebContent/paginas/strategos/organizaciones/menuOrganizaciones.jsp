@@ -249,7 +249,7 @@
 			<vgcinterfaz:botonMenu key="menu.ver.estatusiniciativas" onclick="gestionarEstatusIniciativas();" permisoId="INICIATIVA_ESTATUS" agregarSeparador="true" />
 			<vgcinterfaz:botonMenu key="menu.ver.seriestiempo" onclick="gestionarSeriesTiempo();" permisoId="SERIES_TIEMPO" />
 			<vgcinterfaz:botonMenu key="menu.ver.tipo.proyecto" onclick="gestionarTiposProyecto();" permisoId="TIPOS" />
-			<%-- <vgcinterfaz:botonMenu key="menu.ver.plancuentas" onclick="gestionarCuentas();" permisoId="IMPUTACION" agregarSeparador="true" /> --%>
+			<vgcinterfaz:botonMenu key="menu.ver.plancuentas" onclick="gestionarCuentas();" permisoId="IMPUTACION" agregarSeparador="true" /> 
 			<vgcinterfaz:botonMenu key="menu.ver.alertas" onclick="gestionarAlertas();" permisoId="ALERTA" agregarSeparador="true" />			
 			<logic:equal scope="session" name="cliente" value="PGN">
 				<vgcinterfaz:botonMenu key="menu.ver.codigo.enlace" onclick="gestionarCodigosEnlaces();" permisoId="CODIGO_ENLACE" agregarSeparador="true" />

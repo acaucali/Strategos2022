@@ -14,6 +14,7 @@
 		<form-bean name="seleccionarIniciativasForm" type="com.visiongc.app.strategos.web.struts.iniciativas.forms.SeleccionarIniciativasForm" />
 		<form-bean name="mostrarGestionIniciativaForm" type="com.visiongc.app.strategos.web.struts.iniciativas.forms.MostrarGestionIniciativaForm" />
 		<form-bean name="relacionIniciativaForm" type="com.visiongc.app.strategos.web.struts.iniciativas.forms.RelacionIniciativaForm" />
+		<form-bean name="importarIniciativasForm" type="com.visiongc.app.strategos.web.struts.iniciativas.forms.ImportarIniciativasForm" />
 		<!-- Estados de la Iniciativa -->
 		<form-bean name="gestionarIniciativaEstatusForm" type="com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms.GestionarIniciativaEstatusForm" />
 		<form-bean name="editarIniciativaEstatusForm" type="com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms.EditarIniciativaEstatusForm" />
@@ -32,6 +33,7 @@
 		<forward name="visualizarIniciativasRelacionadas" path="/paginas/strategos/iniciativas/visualizarIniciativasRelacionadas.jsp" />
 		<forward name="configurarCalculoIniciativas" path="/paginas/strategos/calculos/configurarCalculoIniciativas.jsp" />
 		<forward name="historicoIniciativas" path="/paginas/strategos/iniciativas/historicoIniciativa.jsp" />
+		<forward name="asistenteImportarIniciativas" path="/paginas/strategos/iniciativas/importacion/asistenteImportarIniciativas.jsp" />
 		<!-- Estados de la Iniciativa -->
 		<forward name="gestionarEstatusIniciativas" path="/paginas/strategos/iniciativas/estatus/gestionarEstatus.jsp" />
 		<forward name="editarIniciativaEstatus" path="/paginas/strategos/iniciativas/estatus/editarEstatus.jsp" />
@@ -152,7 +154,11 @@
 		<!-- Mapeo del Action: Salvar Proteger/Liberar Iniciativas -->
 		<action path="/iniciativas/protegerLiberarSalvar" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.ProtegerLiberarIniciativaSalvarAction" name="protegerLiberarIniciativasForm" scope="session" parameter="protegerLiberarIniciativa"></action>
 		
+		<!-- Mapeo del Action: Importar Iniciativas  -->
+		<action path="/iniciativas/importar" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.ImportarIniciativasAction" name="importarIniciativasForm" scope="session" input="asistenteImportarIniciativas" parameter="asistenteImportarIniciativas"></action>
 		
+		<!-- Mapeo del Action: Importar Mediciones  -->
+		<action path="/iniciativas/importarSalvar" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.ImportarIniciativasSalvarAction" name="importarIniciativasForm" scope="session" parameter="asistenteImportarIniciativas"></action>
 						
 		</action-mappings>
 </struts-config>

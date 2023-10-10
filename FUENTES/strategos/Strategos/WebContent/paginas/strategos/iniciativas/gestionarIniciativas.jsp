@@ -143,7 +143,7 @@
 	{
 		var url = '?source=Iniciativa' + document.gestionarIniciativasForm.source.value;
 		url = url + '&planId=' + document.gestionarIniciativasForm.planId.value;
-		url = url + '&iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value;
+		url = url + '&iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value;		
 		var filtroNombre = document.getElementById('filtroNombre');
 		if (filtroNombre != null)
 			url = url + '&filtroNombre=' + filtroNombre.value;
@@ -466,7 +466,13 @@
 	
 	 function generarReporteDatosBasicos()
 	 {
-		 abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/datosBasicos" />', "Iniciativa", 520, 460);
+		 var url = '?source=Iniciativa' + document.gestionarIniciativasForm.source.value;
+		 <logic:equal name="gestionarIniciativasForm" property="source" value="portafolio">
+			<logic:notEmpty name="gestionarIniciativasForm" property="portafolioId">
+				url = url + "&portafolioId=" + document.gestionarIniciativasForm.portafolioId.value;
+			</logic:notEmpty>
+		</logic:equal>
+		 abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/datosBasicos" />'+ url, "Iniciativa", 520, 460);
 	 }
 	 
 	 function generarReporteMedicionesAtrasadas()
@@ -477,7 +483,32 @@
 	 function reporteDetalladoProyectosAsociados(){		 				
 		abrirVentanaModal('<html:rewrite action="/instrumentos/reporteDetalladoProyectosAsociadosIniciativas" />?iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value , "reporteDetalladoProyectosAsociados", 350, 200);			     	 	 
 	}
+	 
+	 
+	 function reporteDetalladoProyectosIndicadores() 
+	 {
+			url = '&iniciativaId=' + document.gestionarIniciativasForm.seleccionadoId.value;
+			var filtroNombre = document.getElementById('filtroNombre');
+			if (filtroNombre != null)
+				url = url + '&filtroNombre=' + filtroNombre.value;
+			var selectHitoricoType = document.getElementById('selectHitoricoType');
+			if (selectHitoricoType != null)
+				url = url + '&selectHitoricoType=' + selectHitoricoType.value;
+
+	    	abrirVentanaModal('<html:rewrite action="/reportes/iniciativas/indicador" />?' + url, "reporteIniciativaIndicadores", 600, 590);
+	 }
+	 
+	function importarIniciativas()
+	{
+		var nombreForma = '?nombreForma=' + 'gestionarIniciativasForm';				
+		abrirVentanaModal('<html:rewrite action="/iniciativas/importar" />' + nombreForma , 'importarIniciativas', '590', '470');
+	}
 	
+	 function importarActividades()
+		{
+			var nombreForma = '?nombreForma=' + 'gestionarActividadesForm';				
+			abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/importar" />' + nombreForma , 'importarActividades', '590', '470');
+		}
 	
 </script>
 <%-- Representaci�n de la Forma --%>
@@ -538,12 +569,19 @@
 						</logic:notEqual>
 						<logic:equal name="gestionarIniciativasForm" property="editarForma" value="true">
 							<vgcinterfaz:botonMenu key="menu.edicion.modificar" onclick="modificarIniciativa();" />
+							
 						</logic:equal>
 						<logic:notEqual name="gestionarIniciativasForm" property="editarForma" value="true">
 							<logic:equal name="gestionarIniciativasForm" property="verForma" value="true">
 								<vgcinterfaz:botonMenu key="menu.edicion.modificar" onclick="modificarIniciativa();" />
 							</logic:equal>
-						</logic:notEqual>
+						</logic:notEqual>				
+						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
+							<vgcinterfaz:botonMenu key="menu.edicion.importar.iniciativa" onclick="importarIniciativas();" permisoId="INICIATIVA_ADD" />
+						</logic:notEqual>		
+						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
+									<vgcinterfaz:botonMenu key="menu.edicion.importar.actividades" onclick="importarActividades();" permisoId="ACTIVIDAD_ADD" />
+								</logic:notEqual>
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 							<vgcinterfaz:botonMenu key="menu.edicion.eliminar" onclick="eliminarIniciativa();" permisoId="INICIATIVA_DELETE" aplicaOrganizacion="true" agregarSeparador="true" />
 						</logic:notEqual>
@@ -585,20 +623,20 @@
 							<vgcinterfaz:botonMenu key="jsp.reporte.instrumentos.detallado.proyectos.asociados" onclick="reporteDetalladoProyectosAsociados();" permisoId="INSTRUMENTOS" />
 					</logic:equal>
 					
-					
-						<logic:notEqual name="gestionarIniciativasForm" property="source" value="instrumentos">
+											
 							<logic:notEmpty scope="session" name="planActivoId">
-								<vgcinterfaz:menuAnidado key="menu.evaluacion.graficos" agregarSeparador="true">
+								<%-- <vgcinterfaz:menuAnidado key="menu.evaluacion.graficos" agregarSeparador="true">
 									<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.estatus" permisoId="INICIATIVA_EVALUAR_GRAFICO_ESTATUS" aplicaOrganizacion="true" onclick="graficarIniciativa(0);" />
 									<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.porcentajes" permisoId="INICIATIVA_EVALUAR_GRAFICO_PORCENTAJE" aplicaOrganizacion="true" onclick="graficarIniciativa(1);" />
 								</vgcinterfaz:menuAnidado>
-							
+							--%>
 									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
 									<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
 										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 									</logic:equal>
 									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
 									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.indicadores" onclick="reporteDetalladoProyectosIndicadores();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
 						
 								
 							</logic:notEmpty>
@@ -610,14 +648,14 @@
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.mediciones.atrasadas" onclick="generarReporteMedicionesAtrasadas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
 								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.planes.accion" onclick="reporteDetalladoProyectosAsociados();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.indicadores" onclick="reporteDetalladoProyectosIndicadores();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
 								<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
 									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 								
 								</logic:equal>
 								
 							</logic:empty>
-						
-						</logic:notEqual>
+												
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 				

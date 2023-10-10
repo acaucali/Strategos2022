@@ -43,6 +43,7 @@ import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
+import com.visiongc.framework.web.struts.forms.NavegadorForm;
 
 public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 	private static Session sesion;
@@ -54,7 +55,8 @@ public class ReporteIniciativaEjecucionPdf extends VgcReporteBasicoAction {
 
 	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
-		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.titulo");
+		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.titulo", ((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+				.getNombrePlural());
 	}
 
 	@Override

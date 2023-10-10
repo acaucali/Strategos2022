@@ -70,6 +70,7 @@ public class ReadGraficoAction extends VgcAction
 			String res = "";
 			Grafico grafico = new Grafico();
 			grafico.setGraficoId(0L);
+			graficoForm.setId(grafico.getGraficoId());
 			grafico.setNombre("");
 			grafico.setConfiguracion(request.getParameter("xml"));
 			res = new com.visiongc.app.strategos.web.struts.graficos.actions.SeleccionarGraficoAction().ReadXmlProperties(res, grafico);

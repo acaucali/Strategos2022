@@ -89,11 +89,41 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private String objetivoGeneral;
 	private String objetivoEspecificos;
 	
+	private String codigoIniciativa;
 	private Long cargoId;
 	private List<Cargos> cargos;
 
+	private Byte partidas;
+	private List<Cargos> cuentas;
+	
+	private Long unidad;
+	private List<?> unidadesMedida;
 
-    public Long getInstrumentoId() {
+    public Byte getPartidas() {
+		return partidas;
+	}
+
+	public void setPartidas(Byte partidas) {
+		this.partidas = partidas;
+	}
+
+	public List<Cargos> getCuentas() {
+		return cuentas;
+	}
+
+	public void setCuentas(List<Cargos> cuentas) {
+		this.cuentas = cuentas;
+	}
+
+	public Long getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(Long unidad) {
+		this.unidad = unidad;
+	}
+
+	public Long getInstrumentoId() {
 		return instrumentoId;
 	}
 
@@ -724,8 +754,12 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.objetivoGeneral = null;
 		this.objetivoEspecificos = null;
 		
+		this.codigoIniciativa = null;
 		this.cargoId = new Long(0L);
 		this.cargos = null;
+		this.partidas = 1;
+		this.unidadesMedida = null;
+		this.unidad =  new Long(0L);
 
 		this.seriesIndicador = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries() + SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();
 	}
@@ -744,5 +778,21 @@ public class EditarIniciativaForm extends EditarObjetoForm
 
 	public void setCargos(List<Cargos> cargos) {
 		this.cargos = cargos;
+	}
+
+	public String getCodigoIniciativa() {
+		return codigoIniciativa;
+	}
+
+	public void setCodigoIniciativa(String codigoIniciativa) {
+		this.codigoIniciativa = codigoIniciativa;
+	}
+
+	public List<?> getUnidadesMedida() {
+		return unidadesMedida;
+	}
+
+	public void setUnidadesMedida(List<?> unidadesMedida) {
+		this.unidadesMedida = unidadesMedida;
 	}
 }

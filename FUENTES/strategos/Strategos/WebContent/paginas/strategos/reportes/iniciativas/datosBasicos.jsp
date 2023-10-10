@@ -11,10 +11,14 @@
 <%-- Creado por: Andres Martinez (20/04/2022) --%>
 
 <tiles:insert definition="doc.modalWindowLayout" flush="true">
+
+	<bean:define id="tituloIniciativas">
+		<bean:write scope="session" name="activarIniciativa" property="nombrePlural" />
+	</bean:define>	
 		
 		<%-- Título --%>
 	<tiles:put name="title" type="String">
-		..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" />
+		..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" arg0="<%= tituloIniciativas %>"/>
 	</tiles:put>
 	
 	<%-- Cuerpo --%>
@@ -37,7 +41,7 @@
 			{
 		 		if(!<%= session.getAttribute("isAdmin") %> && document.reporteForm.alcance.value == 3 ){
 		 			alert ('Este reporte  solo puede ser ejecutado desde una cuenta Administrador');
-		 	 	}else{
+		 	 	}else{		 	 		
 					var url = '&alcance=' + document.reporteForm.alcance.value;	
 					url = url + '&filtroNombre=' + document.reporteForm.filtroNombre.value;
 					url = url + '&selectHitoricoType=' + document.reporteForm.selectHitoricoType.value;
@@ -51,6 +55,12 @@
 					}else{
 						url = url + '&todos=' + false;
 					}
+					 <logic:equal name="reporteForm" property="source" value="Iniciativaportafolio">
+						<logic:notEmpty name="reporteForm" property="portafolioId">
+							url = url + '&source=' + document.reporteForm.source.value;
+							url = url + "&portafolioId=" + document.reporteForm.portafolioId.value;
+						</logic:notEmpty>
+					</logic:equal>
 				
 					if (document.reporteForm.tipoReporte[0].checked)
 						abrirReporte('<html:rewrite action="/reportes/iniciativas/datosBasicosPdf"/>?'+url+'&organizacionId=<bean:write name="organizacionId" scope="session" />');
@@ -67,6 +77,7 @@
 			<html:hidden property="nombrePlan" />
 			<html:hidden property="planId" />
 			<html:hidden property="source" />
+			<html:hidden property="portafolioId" />
 			<html:hidden property="objetoSeleccionadoId" />
 			
 			

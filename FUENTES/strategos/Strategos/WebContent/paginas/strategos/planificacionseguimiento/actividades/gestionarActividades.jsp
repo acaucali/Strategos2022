@@ -561,6 +561,12 @@
 				}
 			}
 		    
+		    function importarActividades()
+			{
+				var nombreForma = '?nombreForma=' + 'gestionarActividadesForm';				
+				abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/importar" />' + nombreForma , 'importarActividades', '590', '470');
+			}
+		    
 		</script>
 
 		<script type="text/javascript" src="<html:rewrite  page='/paginas/strategos/planificacionseguimiento/actividades/actividadesJs/scrollJs.js'/>"></script>
@@ -678,6 +684,11 @@
 										<vgcinterfaz:botonMenu key="menu.edicion.modificar" onclick="modificar(document.gestionarActividadesForm.seleccionados.value);" />
 									</logic:equal>
 								</logic:notEqual>
+								
+								<logic:notEqual name="gestionarActividadesForm" property="bloqueado" value="true">
+									<vgcinterfaz:botonMenu key="menu.edicion.importar.actividades" onclick="importarActividades();" permisoId="ACTIVIDAD_ADD" />
+								</logic:notEqual>
+								
 								<logic:notEqual name="gestionarActividadesForm" property="bloqueado" value="true">
 									<vgcinterfaz:botonMenu key="menu.edicion.eliminar" onclick="eliminar(document.gestionarActividadesForm.seleccionados.value);" permisoId="ACTIVIDAD_DELETE" aplicaOrganizacion="true" agregarSeparador="true" />
 									<vgcinterfaz:botonMenu key="menu.edicion.asociar.iniciativa" onclick="asociarIniciativa();" permisoId="ACTIVIDAD_ASOCIAR" aplicaOrganizacion="true"/>

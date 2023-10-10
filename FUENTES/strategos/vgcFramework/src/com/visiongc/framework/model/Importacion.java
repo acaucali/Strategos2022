@@ -123,6 +123,18 @@ public class Importacion
             tipos.add(tipo);
             return tipos;
         }
+        
+        public static List getTiposIniciativas()
+        {
+        	 VgcMessageResources messageResources = VgcResourceManager.getMessageResources("Framework");
+             List tipos = new ArrayList();
+             ImportacionType tipo = new ImportacionType();             
+             tipo = new ImportacionType();
+             tipo.setId(Byte.valueOf((byte)2));
+             tipo.nombre = messageResources.getResource("importacion.tipo.excel");
+             tipos.add(tipo);             
+             return tipos;
+        }
 
         public static String getNombre(Byte tipo)
         {

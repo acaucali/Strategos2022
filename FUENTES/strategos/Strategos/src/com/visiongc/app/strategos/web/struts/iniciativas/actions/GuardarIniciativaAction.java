@@ -246,6 +246,11 @@ public class GuardarIniciativaAction extends VgcAction {
 			iniciativa.setCargoId(null);
 		}
 
+		if((editarIniciativaForm.getCodigoIniciativa() != null) && (!editarIniciativaForm.getCodigoIniciativa().equals("")))
+			iniciativa.setCodigoIniciativa(editarIniciativaForm.getCodigoIniciativa());
+		else
+			iniciativa.setCodigoIniciativa(null);
+			
 		if (editarIniciativaForm.getAlertaZonaAmarilla() != null
 				&& editarIniciativaForm.getHayValorPorcentajeAmarillo())
 			iniciativa.setAlertaZonaAmarilla(editarIniciativaForm.getAlertaZonaAmarilla());
@@ -346,6 +351,16 @@ public class GuardarIniciativaAction extends VgcAction {
 			iniciativa.getIniciativaPlanes().add(iniciativaPlan);
 		}
 		iniciativa.setTipoMedicion(editarIniciativaForm.getTipoMedicion());
+		iniciativa.setPartidas(editarIniciativaForm.getPartidas());
+		
+		String selectUnidad = request.getParameter("selectUnidad");
+
+		if (selectUnidad != null && !selectUnidad.equals("") && !selectUnidad.equals("0")){
+			iniciativa.setUnidadId(Long.parseLong(selectUnidad));
+		}else {
+			iniciativa.setUnidadId(editarIniciativaForm.getUnidad());
+		}
+		
 
 		String selectEstatusType = request.getParameter("selectEstatusType");
 

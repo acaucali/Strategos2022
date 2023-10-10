@@ -32,6 +32,7 @@ import com.visiongc.app.strategos.indicadores.model.util.PrioridadIndicador;
 import com.visiongc.app.strategos.indicadores.model.util.TipoAsociadoIndicador;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
 import com.visiongc.app.strategos.indicadores.model.util.TipoIndicador;
+import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import com.visiongc.app.strategos.web.struts.indicadores.validators.IndicadorValidator;
@@ -66,6 +67,9 @@ public class GuardarIndicadorAction extends VgcAction
 		String ts = request.getParameter("ts");
 		String ultimoTs = (String)request.getSession().getAttribute("GuardarIndicadorAction.ultimoTs");
 		Boolean valorInicialCero = WebUtil.getValorInputCheck(request, "valorInicialCero");
+		String desdeIniciativa = (request.getParameter("desdeIniciativa") != null && request.getParameter("desdeIniciativa") != "") ? request.getParameter("desdeIniciativa") : null;
+		String iniciativaId = request.getParameter("iniciativaId");	
+		
 
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
@@ -73,6 +77,7 @@ public class GuardarIndicadorAction extends VgcAction
 			cancelar = true;
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
+		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 		StrategosIndicadorAsignarInventarioService strategosIndicadoresInventarioService = StrategosServiceFactory.getInstance().openStrategosIndicadorAsignarInventarioService();
 
 		if (cancelar)
@@ -164,6 +169,13 @@ public class GuardarIndicadorAction extends VgcAction
 
 			if (nuevo)
 			{
+				if(desdeIniciativa != null) {
+					if(indicador.getTipoFuncion().byteValue() == TipoFuncionIndicador.getTipoFuncionNormal() && (!desdeIniciativa.equals("") && desdeIniciativa.equals("true")))
+					{
+						strategosIniciativasService.asociarIndicadorTipo(new Long(iniciativaId) , indicador.getIndicadorId(), TipoFuncionIndicador.getTipoFuncionNormal(), usuario);
+					}
+				}
+				
 				messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.guardarregistro.nuevo.ok"));
 				forward = "crearIndicador";
 			}

@@ -30,12 +30,14 @@ import com.visiongc.commons.report.VgcFormatoReporte;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
+import com.visiongc.framework.web.struts.forms.NavegadorForm;
 
 public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
-		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.titulo");
+		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.titulo",((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+				.getNombrePlural());
 	}
 
 	@Override
@@ -143,7 +145,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 			TablaPDF tabla = null;
 			tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
-			crearTablaTitulo(tabla, messageResources);
+			crearTablaTitulo(tabla, messageResources, request);
 
 			List<Iniciativa> iniciativas = iniciativaservice.getIniciativas(0, 0, "nombre", "ASC", true, filtros)
 					.getLista();
@@ -218,7 +220,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 			if (iniciativas.size() > 0) {
 
-				crearTablaTitulo(tabla, messageResources);
+				crearTablaTitulo(tabla, messageResources, request);
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
 					Iniciativa iniciativa = iter.next();
@@ -230,7 +232,8 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 				fuente.setColor(0, 0, 255);
 				texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-						"INICIATIVAS", "ORGANIZACIÓN"), fuente);
+						((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+						.getNombrePlural().toUpperCase(), "ORGANIZACIÓN"), fuente);
 				texto.setIndentationLeft(50);
 				documento.add(texto);
 				fuente.setColor(0, 0, 0);
@@ -284,7 +287,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 						TablaPDF tabla1 = null;
 						tabla1 = new TablaPDF(getConfiguracionPagina(request), request);
 
-						crearTablaTitulo(tabla1, messageResources);
+						crearTablaTitulo(tabla1, messageResources, request);
 
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
 
@@ -297,7 +300,8 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 						fuente.setColor(0, 0, 255);
 						texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-								"INICIATIVAS", "ORGANIZACIÓN"), fuente);
+								((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+								.getNombrePlural().toUpperCase() , "ORGANIZACIÓN"), fuente);
 						texto.setIndentationLeft(50);
 						documento.add(texto);
 						fuente.setColor(0, 0, 0);
@@ -371,7 +375,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 						TablaPDF tabla = null;
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
-						crearTablaTitulo(tabla, messageResources);
+						crearTablaTitulo(tabla, messageResources, request);
 
 						for (Iterator<Iniciativa> iter1 = iniciativas.iterator(); iter1.hasNext();) {
 							Iniciativa iniciativa = iter1.next();
@@ -383,7 +387,8 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 
 						fuente.setColor(0, 0, 255);
 						texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-								"INICIATIVAS", "ORGANIZACIÓN"), fuente);
+								((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+								.getNombrePlural().toUpperCase(), "ORGANIZACIÓN"), fuente);
 						texto.setIndentationLeft(50);
 						documento.add(texto);
 						fuente.setColor(0, 0, 0);
@@ -419,7 +424,7 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		return objetivo;
 	}
 
-	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources messageResources) throws Exception {
+	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources messageResources, HttpServletRequest request) throws Exception {
 		int[] columnas = new int[7];
 		columnas[0] = 27;
 		columnas[1] = 10;
@@ -438,7 +443,8 @@ public class ReporteIniciativaPdf extends VgcReporteBasicoAction {
 		tabla.setFormatoFont(Font.BOLD);
 		tabla.setAlineacionHorizontal(1);
 
-		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.iniciativa"));
+		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.iniciativa", ((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+				.getNombreSingular()));
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje"));
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha"));
 		tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.responsable"));

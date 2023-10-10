@@ -40,11 +40,13 @@ import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.ElementoPlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.IndicadorEstado;
+import com.visiongc.app.strategos.planes.model.Meta;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.planes.model.PerspectivaEstado;
 import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.planes.model.PlantillaPlanes;
 import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
+import com.visiongc.app.strategos.planes.model.util.MetaAnualParciales;
 import com.visiongc.app.strategos.planes.model.util.TipoIndicadorEstado;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
@@ -83,7 +85,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		if (source.equals("Plan"))
 			return mensajes.getMessage("jsp.reportes.plan.ejecucion.titulo");
 		else
-			return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.detallado.titulo");
+			return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.detallado.titulo",
+					((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombrePlural());
 	}
 
 	@Override
@@ -105,6 +108,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		/* Parametros para el reporte */
 		String source = request.getParameter("source");
+
 		reporte.setPlanId(
 				request.getParameter("planId") != null && !request.getParameter("planId").toString().equals("")
 						? Long.parseLong(request.getParameter("planId"))
@@ -232,8 +236,12 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 		Plan plan = (Plan) strategosPerspectivasService.load(Plan.class, reporte.getPlanId());
 
-		reporte.setPlantillaPlanes((PlantillaPlanes) strategosPerspectivasService.load(PlantillaPlanes.class,
-				new Long(plan.getMetodologiaId())));
+		PlantillaPlanes plantilla = (PlantillaPlanes) strategosPerspectivasService.load(PlantillaPlanes.class,
+				new Long(plan.getMetodologiaId()));
+		plantilla.setNombreIniciativaSingular(
+				((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular());
+
+		reporte.setPlantillaPlanes(plantilla);
 
 		// Raiz del plan
 		lineas = 2;
@@ -369,9 +377,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 					tab.setTamanoFont(VgcFormatoReporte.TAMANO_FUENTE_SUBTITULO);
 					tab.agregarCelda(
 							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto());
+										
 
-					documento.add(lineaEnBlanco(font));
-					documento.add(lineaEnBlanco(font));
 					documento.add(tab.getTabla());
 
 				} else {
@@ -384,7 +391,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 				}
 
-				dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectiva, documento,
+				dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectivaHija, documento,
 						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
 						request);
 
@@ -508,7 +515,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 						// Se asigna el header de la tabla
-						crearTablaTitulo(tabla, mensajes, 1);
+						crearTablaTitulo(tabla, mensajes, 1, request);
 
 						for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
 							Iniciativa iniciativa = iter.next();
@@ -552,7 +559,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 										reporte.getVisualizarIniciativasEjecutado(),
 										reporte.getVisualizarIniciativasMeta(), false, false, false, false,
 										reporte.getVisualizarIniciativasAlerta(), fuente, mensajes,
-										strategosMedicionesService, strategosIndicadoresService, documento, request);
+										strategosMedicionesService, strategosIndicadoresService, documento, request,
+										false);
 							else {
 								documento.add(lineaEnBlanco(fuente));
 
@@ -651,7 +659,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 						// Se asigna el header de la tabla
-						crearTablaTitulo(tabla, mensajes, 1);
+						crearTablaTitulo(tabla, mensajes, 1, request);
 
 						for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
 							Iniciativa iniciativa = iter.next();
@@ -727,7 +735,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 										reporte.getVisualizarIniciativasEjecutado(),
 										reporte.getVisualizarIniciativasMeta(), false, false, false, false,
 										reporte.getVisualizarIniciativasAlerta(), fuente, mensajes,
-										strategosMedicionesService, strategosIndicadoresService, documento, request);
+										strategosMedicionesService, strategosIndicadoresService, documento, request,
+										false);
 							else {
 								documento.add(lineaEnBlanco(fuente));
 
@@ -842,7 +851,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 								tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 								// Se asigna el header de la tabla
-								crearTablaTitulo(tabla, mensajes, 1);
+								crearTablaTitulo(tabla, mensajes, 1, request);
 
 								for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
 									Iniciativa iniciativa = iter2.next();
@@ -924,7 +933,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 												reporte.getVisualizarIniciativasMeta(), false, false, false, false,
 												reporte.getVisualizarIniciativasAlerta(), fuente, mensajes,
 												strategosMedicionesService, strategosIndicadoresService, documento,
-												request);
+												request, false);
 									else {
 										fontTitulos.setColor(0, 0, 255);
 										texto = new Paragraph(mensajes.getMessage(
@@ -985,7 +994,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		TablaPDF tabla = null;
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		// Se asigna el header de la tabla
-		crearTablaTitulo(tabla, mensajes, 2);
+		crearTablaTitulo(tabla, mensajes, 2, request);
 
 		tabla.setAlineacionHorizontal(1);
 
@@ -1006,58 +1015,62 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 						actividad.getIndicadorId());
 
-				LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(
-						((Integer) (Integer.parseInt(reporte.getAnoInicial()))).intValue(),
-						((Integer) (Integer.parseInt(reporte.getAnoFinal()))).intValue(),
-						((Integer) (Integer.parseInt(reporte.getMesInicial()))).intValue(),
-						((Integer) (Integer.parseInt(reporte.getMesFinal()))).intValue(),
-						indicador.getFrecuencia().byteValue());
-				int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
-				int periodoFin = periodoInicio;
-				if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
-					periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
+				if (indicador != null) {
+					LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(
+							((Integer) (Integer.parseInt(reporte.getAnoInicial()))).intValue(),
+							((Integer) (Integer.parseInt(reporte.getAnoFinal()))).intValue(),
+							((Integer) (Integer.parseInt(reporte.getMesInicial()))).intValue(),
+							((Integer) (Integer.parseInt(reporte.getMesFinal()))).intValue(),
+							indicador.getFrecuencia().byteValue());
+					int periodoInicio = lapsoTiempoEnPeriodos.getPeriodoInicio().intValue();
+					int periodoFin = periodoInicio;
+					if (lapsoTiempoEnPeriodos.getPeriodoFin() != null)
+						periodoFin = lapsoTiempoEnPeriodos.getPeriodoFin().intValue();
 
-				List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(
-						indicador.getIndicadorId(), SerieTiempo.getSerieRealId(), new Integer(reporte.getAnoInicial()),
-						new Integer(reporte.getAnoFinal()), periodoInicio, periodoFin);
-				List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
-						indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
-						new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
-						periodoFin);
-				documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
-				texto = new Paragraph(
-						reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : " + iniciativa.getNombre(),
-						fontTitulos);
-				texto.setAlignment(Element.ALIGN_LEFT);
-				texto.setIndentationLeft(16);
-				documento.add(texto);
+					List<Medicion> medicionesEjecutado = strategosMedicionesService.getMedicionesPeriodo(
+							indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
+							new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+							periodoFin);
+					List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
+							indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
+							new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+							periodoFin);
 
-				texto = new Paragraph(
-						reporte.getPlantillaPlanes().getNombreActividadSingular() + " : " + actividad.getNombre(),
-						fontTitulos);
-				texto.setAlignment(Element.ALIGN_LEFT);
-				texto.setIndentationLeft(16);
-				documento.add(texto);
-
-				// Crear tabla del Indicador
-				if (medicionesEjecutado.size() != 0)
-					crearTablaIndicador(indicador, reporte, medicionesEjecutado, medicionesProgramado,
-							new ArrayList<IndicadorEstado>(), new ArrayList<IndicadorEstado>(),
-							reporte.getVisualizarActividadEjecutado(), reporte.getVisualizarActividadMeta(), false,
-							false, false, false, reporte.getVisualizarActividadAlerta(), font, mensajes,
-							strategosMedicionesService, strategosIndicadoresService, documento, request);
-				else {
-					// TODO
-					fontTitulos.setColor(0, 0, 255);
+					documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 					texto = new Paragraph(
-							mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.actividades.nomediciones",
-									reporte.getPlantillaPlanes().getNombreActividadSingular().toLowerCase()),
+							reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : " + iniciativa.getNombre(),
 							fontTitulos);
-					texto.setIndentationLeft(50);
+					texto.setAlignment(Element.ALIGN_LEFT);
+					texto.setIndentationLeft(16);
 					documento.add(texto);
-					fontTitulos.setColor(0, 0, 0);
-					documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
-					documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+
+					texto = new Paragraph(
+							reporte.getPlantillaPlanes().getNombreActividadSingular() + " : " + actividad.getNombre(),
+							fontTitulos);
+					texto.setAlignment(Element.ALIGN_LEFT);
+					texto.setIndentationLeft(16);
+					documento.add(texto);
+
+					// Crear tabla del Indicador
+					if (medicionesEjecutado.size() != 0)
+						crearTablaIndicador(indicador, reporte, medicionesEjecutado, medicionesProgramado,
+								new ArrayList<IndicadorEstado>(), new ArrayList<IndicadorEstado>(),
+								reporte.getVisualizarActividadEjecutado(), reporte.getVisualizarActividadMeta(), false,
+								false, false, false, reporte.getVisualizarActividadAlerta(), font, mensajes,
+								strategosMedicionesService, strategosIndicadoresService, documento, request, true);
+					else {
+						// TODO
+						fontTitulos.setColor(0, 0, 255);
+						texto = new Paragraph(
+								mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.actividades.nomediciones",
+										reporte.getPlantillaPlanes().getNombreActividadSingular().toLowerCase()),
+								fontTitulos);
+						texto.setIndentationLeft(50);
+						documento.add(texto);
+						fontTitulos.setColor(0, 0, 0);
+						documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+						documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
+					}
 				}
 			}
 		} else {
@@ -1172,7 +1185,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.agregarCelda("");
 	}
 
-	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources mensajes, Integer tipo) throws Exception {
+	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources mensajes, Integer tipo,
+			HttpServletRequest request) throws Exception {
 
 		if (tipo == 1) {
 			int[] columnas = new int[7];
@@ -1193,7 +1207,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.setFormatoFont(Font.BOLD);
 			tabla.setAlineacionHorizontal(1);
 
-			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.iniciativa"));
+			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.iniciativa",
+					((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular()));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio"));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.culminacion"));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.avance"));
@@ -1227,7 +1242,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			tabla.setFormatoFont(Font.BOLD);
 			tabla.setAlineacionHorizontal(1);
 
-			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.actividades"));
+			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.actividades",
+					((NavegadorForm) request.getSession().getAttribute("activarIniciativa")).getNombreSingular()));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio"));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.culminacion"));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.peso"));
@@ -1252,8 +1268,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			Boolean showEjecutado, Boolean showMeta, Boolean showEstadoParcial, Boolean showEstadoParcialSuavisado,
 			Boolean showEstadoAnual, Boolean showEstadoAnualSuavisado, Boolean showAlerta, Font font,
 			MessageResources mensajes, StrategosMedicionesService strategosMedicionesService,
-			StrategosIndicadoresService strategosIndicadoresService, Document documento, HttpServletRequest request)
-			throws Exception {
+			StrategosIndicadoresService strategosIndicadoresService, Document documento, HttpServletRequest request,
+			Boolean porEjecutado) throws Exception {
 
 		StrategosVistasDatosService strategosVistasDatosService = StrategosServiceFactory.getInstance()
 				.openStrategosVistasDatosService();
@@ -1326,7 +1342,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				Medicion medicion = iter.next();
 				Double valor = null;
 				for (Iterator<Medicion> iterMeta = medicionesMeta.iterator(); iterMeta.hasNext();) {
-					Medicion meta = iterMeta.next();
+					Medicion meta = iterMeta.next();					
 					if (medicion.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue()
 							&& medicion.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo()
 									.intValue()) {
@@ -1336,6 +1352,28 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 				}
 				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
 			}
+		}
+
+		if (porEjecutado) {
+
+			string = new StringBuilder();
+			string.append("% Ejecutado");
+			tabla.agregarCelda(string.toString());
+			for (Iterator<Medicion> iter = mediciones.iterator(); iter.hasNext();) {
+				Medicion medicion = iter.next();
+				Double valor = null;
+				for (Iterator<Medicion> iterMeta = medicionesMeta.iterator(); iterMeta.hasNext();) {
+					Medicion meta = iterMeta.next();
+					if (medicion.getMedicionId().getAno().intValue() == meta.getMedicionId().getAno().intValue()
+							&& medicion.getMedicionId().getPeriodo().intValue() == meta.getMedicionId().getPeriodo()
+									.intValue()) {
+						valor = (medicion.getValor() / meta.getValor()) * 100;
+						break;
+					}
+				}
+				tabla.agregarCelda((valor != null ? VgcFormatter.formatearNumero(valor) : ""));
+			}
+
 		}
 
 		if (showEstadoParcial) {
@@ -1677,7 +1715,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		return tabla;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void buildReporte(int nivel, ReporteForm reporte, Font font, String source, Perspectiva perspectiva,
 			Plan plan, Document documento, ConfiguracionPlan configuracionPlan,
 			StrategosMedicionesService strategosMedicionesService,
@@ -1762,10 +1799,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 					tab.setFont(Font.BOLD);
 					tab.setTamanoFont(12);
 					tab.agregarCelda(
-							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto());
-
-					documento.add(lineaEnBlanco(font));
-					documento.add(lineaEnBlanco(font));
+							getNombrePerspectiva(reporte, (nivel)) + " : " + perspectivaHija.getNombreCompleto());					
 					documento.add(tab.getTabla());
 				} else {
 					documento.add(lineaEnBlanco(font));
@@ -1777,7 +1811,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 					documento.add(texto);
 				}
 
-				dibujarInformacionPerspectiva(nivel, reporte, font, source, perspectiva, documento,
+				dibujarInformacionPerspectiva(nivel+1
+						, reporte, font, source, perspectivaHija, documento,
 						strategosMedicionesService, strategosIndicadoresService, strategosPerspectivasService, mensajes,
 						request);
 
@@ -1805,10 +1840,31 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 								indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
 								new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
 								periodoFin);
-						List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
-								indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
-								new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
-								periodoFin);
+						List<Medicion> medicionesProgramado = new ArrayList();
+
+						StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance()
+								.openStrategosMetasService();						
+						
+							List<MetaAnualParciales> metasAnualesParciales = strategosMetasService
+									.getMetasAnualesParciales(indicador.getIndicadorId(), plan.getPlanId(),
+											indicador.getFrecuencia(), new Integer(reporte.getAnoInicial()),
+											new Integer(reporte.getAnoFinal()), false);
+
+							for (Iterator<MetaAnualParciales> iter3 = metasAnualesParciales.iterator(); iter3
+									.hasNext();) {
+								MetaAnualParciales metaAnual = iter3.next();
+
+								List<Meta> metasParciales = metaAnual.getMetasParciales();
+								for (Iterator<Meta> iter5 = metasParciales.iterator(); iter5.hasNext();) {
+									Meta metaParcial = iter5.next();
+									Medicion medicionMeta = metaParcial.clonarComoMedicion();
+									medicionesProgramado.add(medicionMeta);
+
+								}
+
+							}
+						
+						strategosMetasService.close();
 
 						List<IndicadorEstado> estadosParciales = strategosPlanesServices.getIndicadorEstados(
 								indicador.getIndicadorId(), plan.getPlanId(), indicador.getFrecuencia(), (byte) 0,
@@ -1836,7 +1892,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 									reporte.getVisualizarIndicadoresEstadoAnual(),
 									reporte.getVisualizarIndicadoresEstadoAnualSuavisado(),
 									reporte.getVisualizarIndicadoresAlerta(), font, mensajes,
-									strategosMedicionesService, strategosIndicadoresService, documento, request);
+									strategosMedicionesService, strategosIndicadoresService, documento, request, false);
 						else {
 							font.setColor(0, 0, 255);
 							texto = new Paragraph(
@@ -1870,7 +1926,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 						// Se asigna el header de la tabla
-						crearTablaTitulo(tabla, mensajes, 1);
+						crearTablaTitulo(tabla, mensajes, 1, request);
 
 						for (Iterator<Iniciativa> iter2 = iniciativas.iterator(); iter2.hasNext();) {
 							Iniciativa iniciativa = iter2.next();
@@ -1891,6 +1947,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 									indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
 									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
 									periodoInicio, periodoFin);
+
 							List<Medicion> medicionesProgramado = strategosMedicionesService.getMedicionesPeriodo(
 									indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
 									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
@@ -1924,7 +1981,6 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 									indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
 									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
 									periodoInicio, periodoFin);
-
 							texto = new Paragraph(reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : "
 									+ iniciativa.getNombre(), font);
 							texto.setAlignment(Element.ALIGN_LEFT);
@@ -1944,7 +2000,8 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 										reporte.getVisualizarIniciativasEjecutado(),
 										reporte.getVisualizarIniciativasMeta(), false, false, false, false,
 										reporte.getVisualizarIniciativasAlerta(), font, mensajes,
-										strategosMedicionesService, strategosIndicadoresService, documento, request);
+										strategosMedicionesService, strategosIndicadoresService, documento, request,
+										false);
 							else {
 								font.setColor(0, 0, 255);
 								texto = new Paragraph(mensajes.getMessage(
@@ -1994,8 +2051,7 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 		Indicador indicador = null;
 		if (perspectiva.getNlParIndicadorId() != null) {
 			indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
-					new Long(perspectiva.getNlParIndicadorId()));
-
+					new Long(perspectiva.getNlParIndicadorId()));			
 			LapsoTiempo lapsoTiempoEnPeriodos = PeriodoUtil.getLapsoTiempoEnPeriodosPorMes(
 					((Integer) (Integer.parseInt(reporte.getAnoInicial()))).intValue(),
 					((Integer) (Integer.parseInt(reporte.getAnoFinal()))).intValue(),
@@ -2128,32 +2184,48 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			string.append(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.columna.alerta.parcial"));
 			string.append("\n");
 			tabla.agregarCelda(string.toString());
+			
+			for(Iterator<PerspectivaEstado> iter = estadosParciales.iterator(); iter.hasNext();) {
+				PerspectivaEstado medicion = iter.next();
+				PerspectivaEstado valorAnual = null;
+				for(Iterator<PerspectivaEstado> iterAnual = estadosAnuales.iterator(); iterAnual.hasNext();) {
+					PerspectivaEstado anual = iterAnual.next();
+					if(medicion.getPk().getAno().intValue() == anual.getPk().getAno().intValue() && medicion.getPk().getPeriodo().intValue() == anual.getPk().getPeriodo()
+							.intValue()) {
+						valorAnual = anual;
+						break;
+					}
+				}				
+				
+				if(valorAnual != null && valorAnual.getEstado() != null && medicion != null && medicion.getEstado() != null) {
+					Double zonaVerde =  null;
+					Double zonaAmarilla = null;
+					
+					zonaVerde = strategosIndicadoresService.zonaVerde(indicador, medicion.getPk().getAno(), medicion.getPk().getPeriodo(), valorAnual.getEstado(), strategosMedicionesService);					
+					zonaAmarilla = strategosIndicadoresService.zonaAmarilla(indicador, medicion.getPk().getAno(), medicion.getPk().getPeriodo(), valorAnual.getEstado(), zonaVerde, strategosMedicionesService);					
+					
+					Byte alerta = new Servicio().calcularAlertaXPeriodos(EjecutarTipo.getEjecucionAlertaXPeriodos(),
+							indicador.getCaracteristica(), zonaVerde, zonaAmarilla, medicion.getEstado(),
+							valorAnual.getEstado(), null, null);										
+					
+					String url = obtenerCadenaRecurso(request);
 
-			for (int i = 0; i < (estadosParciales.size()); i++) {
-				PerspectivaEstado medicion = estadosParciales.get(i);
-				String alerta = strategosVistasDatosService.getValorDimensiones(
-						TipoVariable.getTipoVariableAlerta().toString(),
-						medicion.getPk().getPeriodo() + "_" + medicion.getPk().getAno(),
-						medicion.getPk().getPeriodo() + "_" + medicion.getPk().getAno(),
-						indicador.getIndicadorId().toString(), reporte.getPlanId().toString(), null, false);
-
-				String url = obtenerCadenaRecurso(request);
-
-				if (alerta == null)
+					if (alerta == null)
+						tabla.agregarCelda("");
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
+						tabla.agregarCelda(Image
+								.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
+						tabla.agregarCelda(Image
+								.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
+						tabla.agregarCelda(Image.getInstance(
+								new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+				}
+				else
 					tabla.agregarCelda("");
-				else if (alerta.equals("0"))
-					tabla.agregarCelda(
-							Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-				else if (alerta.equals("2"))
-					tabla.agregarCelda(Image
-							.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-				else if (alerta.equals("3"))
-					tabla.agregarCelda(Image
-							.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
-				else if (alerta.equals("1"))
-					tabla.agregarCelda(Image
-							.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaBlanca.gif")));
 			}
+			
 
 			lineas = getNumeroLinea((lineas + 3), inicioLineas);
 		}

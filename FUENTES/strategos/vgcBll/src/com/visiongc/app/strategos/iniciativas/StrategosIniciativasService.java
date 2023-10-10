@@ -68,4 +68,15 @@ public abstract interface StrategosIniciativasService
   public abstract List<Iniciativa> getIniciativasParaEjecutar(Long paramLong1, Long paramLong2, Long paramLong3, Integer paramInteger1);
   
   public abstract CorreoIniciativa getCorreoIniciativa();
+  
+  public abstract long getUniqueId();
+  
+  public abstract boolean existObject(String paramString, Long paramLong);
+  
+  public abstract List <IndicadorIniciativa> getIndicadoresIniciativa(Long paramLong);
+  
+  public abstract int asociarIndicadorCuentas(Long iniciativaId, Long indicadorId, Usuario usuario);
+  
+  public abstract int asociarIndicadorTipo(Long iniciativaId, Long IndicadorId, Byte Tipo, Usuario usuario);
+    
 }

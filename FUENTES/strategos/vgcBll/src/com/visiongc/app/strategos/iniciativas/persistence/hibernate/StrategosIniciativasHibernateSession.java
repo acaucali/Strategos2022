@@ -1,6 +1,7 @@
 package com.visiongc.app.strategos.iniciativas.persistence.hibernate;
 
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
+import com.visiongc.app.strategos.iniciativas.model.IndicadorIniciativa;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativasPersistenceSession;
 import com.visiongc.app.strategos.persistence.hibernate.StrategosHibernateSession;
@@ -684,4 +685,19 @@ public class StrategosIniciativasHibernateSession
 	  
 	 return query.list();
   }
+
+	@Override
+	public List<IndicadorIniciativa> getIndicadoresIniciativa(Long iniciativaId) {
+		
+		String sql = "select distinct(indicador) from IndicadorIniciativa indicador";
+	    sql = sql + " where indicador.pk.iniciativaId = :iniciativaId";
+	   
+	    
+	    Query query = session.createQuery(sql);
+	    query.setLong("iniciativaId", iniciativaId.longValue());
+	    
+	    return query.list();
+	}
+  
+  
 }

@@ -123,6 +123,10 @@
 					if (selectCargo != null)
 						url = url + '&selectCargo=' + selectCargo.value;
 					
+					var selectUnidad = document.getElementById('selectUnidad');
+					if (selectUnidad != null)
+						url = url + '&selectUnidad=' + selectUnidad.value;
+					
 					window.document.editarIniciativaForm.action = '<html:rewrite action="/iniciativas/guardarIniciativa"/>' + url;
 					return true;
 				} 
@@ -300,6 +304,7 @@
 			<html:hidden property="desdeInstrumento" />
 			<html:hidden property="instrumentoId" />
 			<html:hidden property="cargoId" />
+			<html:hidden property="unidad" />
 			
 			
 			
@@ -477,7 +482,11 @@
     								<html:radio property="tipoMedicion" value="0" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.editariniciativa.ficha.tipomedicion.enperiodo" />
     								&nbsp;&nbsp;
     								<html:radio property="tipoMedicion" value="1" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.editariniciativa.ficha.tipomedicion.alperiodo" />
-    							</td>																								   															
+    							</td>		
+    							<td align="left" colspan="1">Codigo</td>
+    							<td colspan="1">
+    								<html:text property="codigoIniciativa" onkeypress="ejecutarPorDefecto(event)" size="36" maxlength="50" styleClass="cuadroTexto" />
+    							</td>																						   															
 							</tr>
 							
 							<%-- Campo Responsable proy - cargo --%>
@@ -752,7 +761,74 @@
 							<area shape="rect" coords="0,0,14,11" href="#" onmouseover="upAction('botonZonaAmarilla')" onmouseout="normalAction('botonZonaAmarilla')" onmousedown="iniciarConteoContinuo('alertaZonaAmarilla');aumentoConstante()" onmouseup="finalizarConteoContinuo()" />
 							<area shape="rect" coords="0,11,14,20" href="#" onmouseover="downAction('botonZonaAmarilla')" onmouseout="normalAction('botonZonaAmarilla')" onmousedown="iniciarConteoContinuo('alertaZonaAmarilla');decrementoConstante()" onmouseup="finalizarConteoContinuo()" />
 						</map>
-					</vgcinterfaz:panelContenedor>					
+					</vgcinterfaz:panelContenedor>	
+										
+					
+					<logic:equal name="editarIniciativaForm" property="iniciativaId" value="0">
+					
+						<!-- Panel: plan de cuentas -->
+						<bean:define scope="page" id="unidadDisabled" value="false"></bean:define>
+					<vgcinterfaz:panelContenedor anchoPestana="150" nombre="cuentas">
+						<vgcinterfaz:panelContenedorTitulo>
+							cuentas
+						</vgcinterfaz:panelContenedorTitulo>
+						<table class="panelContenedor" cellpadding="3" cellspacing="0" border="0">
+							<tr>
+								<td>
+								<table class="contenedorBotonesSeleccion" width="100%" cellpadding="3" cellspacing="3" border="0">
+									<tr>
+										<td align="left" colspan="1">partidas</td>
+		    							<td>
+		    								<html:radio property="partidas" onclick="toggle(this)" value="0" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.copiarplan.ficha.claseindicador.si" />
+		    								&nbsp;&nbsp;
+		    								<html:radio property="partidas" onclick="toggle(this)" value="1" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/><vgcutil:message key="jsp.copiarplan.ficha.claseindicador.no" />
+		    							</td>
+									</tr>
+										
+									<tr id="partidasPre" style="display:none">
+										<td align="right"><vgcutil:message key="jsp.editarindicador.ficha.unidadmedida" /></td>
+										<td>
+										
+											<select class="cuadroCombinado" name="selectUnidad" id="selectUnidad">
+											<option value="" selected></option>
+												<logic:iterate name="editarIniciativaForm" property="unidadesMedida" id="und">
+													
+													<bean:define id="id" toScope="page"><bean:write name='und' property='unidadId' /></bean:define>								
+													<bean:define id="nombre" toScope="page"><bean:write name='und' property='nombre' /></bean:define>
+													
+													<logic:equal name='editarIniciativaForm' property='unidad' value='<%=id.toString()%>'>
+														<option value="<%=id%>" selected><%=nombre%></option>
+													</logic:equal>
+													<logic:notEqual name='editarIniciativaForm' property='unidad' value='<%=id.toString()%>'>
+														<option value="<%=id%>"><%=nombre%></option>
+													</logic:notEqual>
+													
+												</logic:iterate>
+											</select>
+											
+										
+										</td>
+										
+									</tr>
+								</table>
+								</td>
+							</tr>
+							<tr height="100%">
+								<td colspan="2">&nbsp;</td>
+							</tr>
+						</table>
+
+						<map name="MapControlUpDown1" id="MapControlUpDown1">
+							<area shape="rect" coords="0,0,14,11" href="#" onmouseover="upAction('botonZonaVerde')" onmouseout="normalAction('botonZonaVerde')" onmousedown="iniciarConteoContinuo('alertaZonaVerde');aumentoConstante()" onmouseup="finalizarConteoContinuo()" />
+							<area shape="rect" coords="0,11,14,20" href="#" onmouseover="downAction('botonZonaVerde')" onmouseout="normalAction('botonZonaVerde')" onmousedown="iniciarConteoContinuo('alertaZonaVerde');decrementoConstante()" onmouseup="finalizarConteoContinuo()" />
+						</map>
+						<map name="MapControlUpDown2" id="MapControlUpDown2">
+							<area shape="rect" coords="0,0,14,11" href="#" onmouseover="upAction('botonZonaAmarilla')" onmouseout="normalAction('botonZonaAmarilla')" onmousedown="iniciarConteoContinuo('alertaZonaAmarilla');aumentoConstante()" onmouseup="finalizarConteoContinuo()" />
+							<area shape="rect" coords="0,11,14,20" href="#" onmouseover="downAction('botonZonaAmarilla')" onmouseout="normalAction('botonZonaAmarilla')" onmousedown="iniciarConteoContinuo('alertaZonaAmarilla');decrementoConstante()" onmouseup="finalizarConteoContinuo()" />
+						</map>
+					</vgcinterfaz:panelContenedor>	
+						
+					</logic:equal>
 				</vgcinterfaz:contenedorPaneles>
 
 				<!-- Barra Inferior -->
@@ -780,6 +856,18 @@
 				_tipoMedicion = 0;
 			else if (document.editarIniciativaForm.tipoMedicion[1].checked)
 				_tipoMedicion = 1;
+			
+			function toggle(elemento) {
+		          if(elemento.value=="1") {
+		              document.getElementById("partidasPre").style.display = "none";
+		             
+		           }else{
+		               if(elemento.value=="0"){
+		                   document.getElementById("partidasPre").style.display = "block";
+		                   
+		               }
+		            }
+			}
 		</script>
 	</tiles:put>
 

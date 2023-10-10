@@ -431,6 +431,8 @@
 					parametros = parametros + '&reporteId=' + document.graficoForm.reporteId.value;
 				}
 				
+				if(document.graficoForm.paginaId.value)
+					parametros = parametros + '&paginaId=' + document.graficoForm.paginaId.value; 
 				parametros = parametros + '&claseId=' + document.graficoForm.claseId.value;
 				parametros = parametros + '&planId=' + document.graficoForm.planId.value;
 												

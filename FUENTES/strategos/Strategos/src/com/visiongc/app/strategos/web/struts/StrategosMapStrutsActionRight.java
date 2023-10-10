@@ -941,7 +941,19 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
     	this.mapa.put(actionRight.getActionName(), actionRight);
  	    actionRight = new StrutsActionRight("iniciativas.protegerliberarsalvar", false, true, "PROTEGER_LIBERAR_INICIATIVA");
  	    this.mapa.put("iniciativas.protegerliberarsalvar", actionRight);
-
+ 	    
+ 	    // Importar
+    	actionRight = new StrutsActionRight("iniciativas.importar", false, true, "INICIATIVA_ADD");
+    	this.mapa.put("iniciativas.importar", actionRight);
+    	actionRight = new StrutsActionRight("iniciativas.importarsalvar", true, false, "INICIATIVA_ADD");
+    	this.mapa.put("iniciativas.importarsalvar", actionRight);
+    	/*actionRight = new StrutsActionRight("indicadores.verarchivolog", true, false, "INDICADOR_MEDICION_IMPORTAR");
+    	this.mapa.put("indicadores.verarchivolog", actionRight);
+    	actionRight = new StrutsActionRight("indicadores.listaimportacion", true, false, "INDICADOR_MEDICION_IMPORTAR");
+    	this.mapa.put("indicadores.listaimportacion", actionRight);
+    	actionRight = new StrutsActionRight("indicadores.eliminarimportacion", true, false, "INDICADOR_MEDICION_IMPORTAR");
+    	this.mapa.put("indicadores.eliminarimportacion", actionRight);
+*/
 
 	    // Graficos Iniciativas
 	    actionRight = new StrutsActionRight("iniciativa.grafico.configurar", false, true, "INICIATIVA_EVALUAR_GRAFICO");
@@ -1002,6 +1014,11 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put("planificacionseguimiento.actividades.asociariniciativa", actionRight);
 	    actionRight = new StrutsActionRight("planificacionseguimiento.actividades.enviaremail", true, false, "ACTIVIDAD_EMAIL");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    // Importar
+    	actionRight = new StrutsActionRight("planificacionseguimiento.actividades.importar", false, true, "ACTIVIDAD_ADD");
+    	this.mapa.put("planificacionseguimiento.actividades.importar", actionRight);
+    	actionRight = new StrutsActionRight("planificacionseguimiento.actividades.importarsalvar", true, false, "ACTIVIDAD_ADD");
+    	this.mapa.put("planificacionseguimiento.actividades.importarsalvar", actionRight);
 
 	    actionRight = new StrutsActionRight("planificacionseguimiento.productos.gestionarproductosiniciativa", false, true, "INICIATIVA");
 	    this.mapa.put("planificacionseguimiento.productos.gestionarproductosiniciativa", actionRight);
@@ -1063,6 +1080,10 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("reportes.parametrosreporte", false, true, "ORGANIZACION"); //Permiso General
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 
+	    actionRight = new StrutsActionRight ("reportes.iniciativas.indicador", false, false, "INICIATIVA _EVALUAR _REPORTE DETALLADO");
+	    this.mapa.put(actionRight.getActionName(),actionRight);	    			    	
+	    actionRight = new StrutsActionRight ("reportes.iniciativas.indicadorbjecucion",false, false, "INICIATIVA EVALUAR REPORTE RESUMIDA");
+	    this.mapa.put("reportes.iniciativas.indicadorejecucion",actionRight);
 
 	    actionRight = new StrutsActionRight("reportes.indicadores.reportecomiteejecutivo", true, false, "INDICADOR_EVALUAR_REPORTE_COMITE");
 	    this.mapa.put("reportes.indicadores.reportecomiteejecutivo", actionRight);

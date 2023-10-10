@@ -31,6 +31,7 @@
 			var _setPresupuesto = null;
 			var _setEficacia = null;
 			var _setEficiencia = null;
+			var _setAdministracionPublica = null;
 
 			var _setAnteponerAvance = null;
 			var _setAnteponerPresupuesto = null;
@@ -68,35 +69,27 @@
 					document.editarConfiguracionSistemaForm.iniciativaIndicadorAvanceNombre.focus();
 					return false;
 				}
-				else
-					document.editarConfiguracionSistemaForm.iniciativaIndicadorAvanceNombre.value = '<vgcutil:message key="jsp.configuracion.sistema.iniciativas.indicador.avance.nombre" />';
-				
+							
 				if (_setPresupuesto && document.editarConfiguracionSistemaForm.iniciativaIndicadorPresupuestoNombre.value == "")
 				{
 					alert('<vgcutil:message key="jsp.configuracion.sistema.iniciativas.mensaje.presupuesto.nombre.vacio" /> ');
 					document.editarConfiguracionSistemaForm.iniciativaIndicadorPresupuestoNombre.focus();
 					return false;
 				}
-				else
-					document.editarConfiguracionSistemaForm.iniciativaIndicadorPresupuestoNombre.value = '<vgcutil:message key="jsp.configuracion.sistema.iniciativas.indicador.presupuesto.nombre" />';
-				
+					
 				if (_setEficacia && document.editarConfiguracionSistemaForm.iniciativaIndicadorEficaciaNombre.value == "")
 				{
 					alert('<vgcutil:message key="jsp.configuracion.sistema.iniciativas.mensaje.eficacia.nombre.vacio" /> ');
 					document.editarConfiguracionSistemaForm.iniciativaIndicadorEficaciaNombre.focus();
 					return false;
 				}
-				else
-					document.editarConfiguracionSistemaForm.iniciativaIndicadorEficaciaNombre.value = '<vgcutil:message key="jsp.configuracion.sistema.iniciativas.indicador.eficacia.nombre" />';
-	
+				
 				if (_setEficiencia && document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.value == "")
 				{
 					alert('<vgcutil:message key="jsp.configuracion.sistema.iniciativas.mensaje.eficiencia.nombre.vacio" /> ');
 					document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.focus();
 					return false;
 				}
-				else
-					document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.value = '<vgcutil:message key="jsp.configuracion.sistema.iniciativas.indicador.eficiencia.nombre" />';
 				
 				return true;
 			}
@@ -154,6 +147,15 @@
 						document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.disabled = false;
 					else
 						document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.disabled = true;
+				}
+				
+				if (tipo == 5)
+				{
+					_setAdministracionPublica = value;
+					if (value == true)
+						document.editarConfiguracionSistemaForm.iniciativaAdministracionPublica.disabled = false;
+					else
+						document.editarConfiguracionSistemaForm.iniciativaAdministracionPublica.disabled = true;
 				}
 			}
 			
@@ -444,6 +446,27 @@
 							<tr>
 								<td align="left" valign="top"><vgcutil:message key="jsp.configuracion.sistema.iniciativas.indicador.nombre" /> : </td>
 								<td valign="top" colspan="2"><html:text name="editarConfiguracionSistemaForm" property="iniciativaIndicadorEficienciaNombre" size="35" maxlength="50" styleClass="cuadroTexto" /></td>
+							</tr>
+							
+							<!-- Administracion publica -->
+							<tr>
+								<td colspan="3" valign="top"><hr width="100%"></td>
+							</tr>
+							<tr>
+								<td align="left" colspan="3" valign="top"><b><vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica" /></b></td>
+							</tr>
+							<tr>
+								<td align="left" valign="top"><vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica.ficha" /> : </td>
+								<td valign="top">
+									<html:radio name="editarConfiguracionSistemaForm" property="iniciativaAdministracionPublica" value="false" onclick="mostrar_click(false, 5)">
+										<vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica.ficha.no" />
+									</html:radio>
+								</td>
+								<td valign="top">
+									<html:radio name="editarConfiguracionSistemaForm" property="iniciativaAdministracionPublica" value="true" onclick="mostrar_click(true, 5)">
+										<vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica.ficha.si" />
+									</html:radio>
+								</td>
 							</tr>
 							
 						</table>

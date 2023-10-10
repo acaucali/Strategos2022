@@ -56,7 +56,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 	@Override
 	protected String agregarTitulo(HttpServletRequest request, MessageResources mensajes) throws Exception {
 		String source = request.getParameter("source");
-		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.mediciones.atrasadas");
+		return mensajes.getMessage("jsp.reportes.iniciativa.ejecucion.mediciones.atrasadas", ((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+				.getNombrePlural());
 	}
 
 	@Override
@@ -209,7 +210,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 				// Se asigna el header de la tabla
-				crearTablaTitulo(tabla, mensajes, 1);
+				crearTablaTitulo(tabla, mensajes, 1, request);
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
 					Iniciativa iniciativa = iter.next();
@@ -281,7 +282,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 				fuente.setColor(0, 0, 255);
 				Paragraph texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-						"INICIATIVAS", "ORGANIZACIÓN"), fuente);
+						((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+						.getNombrePlural().toUpperCase(), "ORGANIZACIÓN"), fuente);
 				texto.setIndentationLeft(50);
 				documento.add(texto);
 				fuente.setColor(0, 0, 0);
@@ -348,7 +350,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 				tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 				// Se asigna el header de la tabla
-				crearTablaTitulo(tabla, mensajes, 1);
+				crearTablaTitulo(tabla, mensajes, 1, request);
 
 				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
 					Iniciativa iniciativa = iter.next();
@@ -406,7 +408,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 							periodoFin);
 
 					Paragraph texto = new Paragraph(
-							reporte.getPlantillaPlanes().getNombreIniciativaSingular() + " : " + iniciativa.getNombre(),
+							((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+							.getNombreSingular() + " : " + iniciativa.getNombre(),
 							fontTitulos);
 					texto.setAlignment(Element.ALIGN_LEFT);
 					texto.setIndentationLeft(16);
@@ -420,7 +423,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 				fuente.setColor(0, 0, 255);
 				Paragraph texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-						"INICIATIVAS", "ORGANIZACIÓN"), fuente);
+						((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+						.getNombrePlural().toUpperCase(), "ORGANIZACIÓN"), fuente);
 				texto.setIndentationLeft(50);
 				documento.add(texto);
 				fuente.setColor(0, 0, 0);
@@ -478,7 +482,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 						tabla = new TablaPDF(getConfiguracionPagina(request), request);
 
 						// Se asigna el header de la tabla
-						crearTablaTitulo(tabla, mensajes, 1);
+						crearTablaTitulo(tabla, mensajes, 1, request);
 						for (Iterator<Iniciativa> iter1 = iniciativasSub.iterator(); iter1.hasNext();) {
 							Iniciativa iniciativa = iter1.next();
 							Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
@@ -549,7 +553,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 						fuente.setColor(0, 0, 255);
 						Paragraph texto = new Paragraph(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.noiniciativas",
-								"INICIATIVAS", "ORGANIZACIÓN"), fuente);
+								((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+								.getNombrePlural().toUpperCase(), "ORGANIZACIÓN"), fuente);
 						texto.setIndentationLeft(50);
 						documento.add(texto);
 						fuente.setColor(0, 0, 0);
@@ -666,7 +671,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		TablaPDF tabla = null;
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		// Se asigna el header de la tabla
-		crearTablaTitulo(tabla, mensajes, 2);
+		crearTablaTitulo(tabla, mensajes, 2, request);
 
 		tabla.setAlineacionHorizontal(1);
 
@@ -742,7 +747,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 	}
 
-	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources mensajes, Integer tipo) throws Exception {
+	private TablaPDF crearTablaTitulo(TablaPDF tabla, MessageResources mensajes, Integer tipo, HttpServletRequest request) throws Exception {
 
 		if (tipo == 1) {
 			int[] columnas = new int[7];
@@ -763,7 +768,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			tabla.setFormatoFont(Font.BOLD);
 			tabla.setAlineacionHorizontal(1);
 
-			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.iniciativa"));
+			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.iniciativa", ((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+					.getNombreSingular()));
 			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje"));
 			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.fecha"));
 			tabla.agregarCelda(mensajes.getMessage("jsp.editariniciativa.ficha.frecuencia"));
@@ -796,7 +802,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			tabla.setFormatoFont(Font.BOLD);
 			tabla.setAlineacionHorizontal(1);
 
-			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.actividades"));
+			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.actividades", ((NavegadorForm) request.getSession().getAttribute("activarIniciativa"))
+					.getNombreSingular()));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio"));
 			tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.culminacion"));
 			tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.fecha"));
@@ -842,7 +849,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
-		tabla.setColorFondo(128, 128, 128);
+		tabla.setColorFondo(21, 60, 120);
 		tabla.setColorLetra(255, 255, 255);
 		tabla.setTamanoFont(10);
 		tabla.setFormatoFont(Font.BOLD);

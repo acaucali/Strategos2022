@@ -4,6 +4,8 @@ import com.visiongc.app.strategos.persistence.hibernate.StrategosHibernateSessio
 import com.visiongc.app.strategos.plancuentas.model.Cuenta;
 import com.visiongc.app.strategos.plancuentas.model.MascaraCodigoPlanCuentas;
 import com.visiongc.app.strategos.plancuentas.persistence.StrategosCuentasPersistenceSession;
+
+import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -56,4 +58,23 @@ public class StrategosCuentasHibernateSession
     consulta.setInteger("nivel", nivel.intValue());
     return (String)consulta.uniqueResult();
   }
+
+	@Override
+	public List getCuentas() {
+		String condicionesConsulta = " where ";
+	    boolean hayCondicionesConsulta = false;
+	    
+	    
+	    String ordenConsulta = "";
+	    
+	    
+	    if (hayCondicionesConsulta) {
+	      condicionesConsulta = condicionesConsulta.substring(0, condicionesConsulta.length() - 5);
+	    } else {
+	      condicionesConsulta = "";
+	    }
+	    Query consulta = session.createQuery("select cuentas from Cuenta cuentas" + condicionesConsulta + ordenConsulta);
+	    
+	    return consulta.list();
+	}
 }

@@ -45,6 +45,7 @@ public class ImportacionServiceImpl extends VgcAbstractService
         int resDb = 10000;
         String fieldNames[] = new String[2];
         Object fieldValues[] = new Object[2];
+                
         try
         {
             if(!persistenceSession.isTransactionActive())

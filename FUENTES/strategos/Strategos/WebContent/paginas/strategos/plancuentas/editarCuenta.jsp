@@ -88,7 +88,7 @@
 			<html:hidden name="editarCuentaForm" property="cuentaId" />
 			<html:hidden name="editarCuentaForm" property="padreId" />
 			
-			<vgcinterfaz:contenedorForma width="480px" height="125px">
+			<vgcinterfaz:contenedorForma width="540px" height="125px">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::

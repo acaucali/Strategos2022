@@ -236,4 +236,10 @@ public class StrategosCuentasServiceImpl
     
     return cuenta;
   }
+
+	@Override
+	public List getCuentas() {
+		// TODO Auto-generated method stub
+		return persistenceSession.getCuentas();
+	}
 }

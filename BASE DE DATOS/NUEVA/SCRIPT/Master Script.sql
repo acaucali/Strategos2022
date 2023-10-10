@@ -4707,12 +4707,15 @@ ALTER TABLE cargo
     ADD CONSTRAINT ak1_cargo UNIQUE (nombre);
 
 ALTER TABLE cargo
-    ADD CONSTRAINT pk_cargo PRIMARY KEY (cargo_id);
+	ADD CONSTRAINT pk_cargo PRIMARY KEY (cargo_id);
     
 ALTER TABLE iniciativa ADD COLUMN cargo_id numeric(10);
 
 ALTER TABLE vista 
-    ALTER COLUMN nombre varchar(250);
+	ALTER COLUMN nombre TYPE varchar(250);
+    
+ALTER TABLE iniciativa ADD COLUMN codigo varchar(50);
+ALTER TABLE iniciativa ADD COLUMN unidad_medida numeric(10); 
 -- Completed on 2023-04-27 19:43:20
 
 --

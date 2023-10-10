@@ -300,7 +300,7 @@ function abrirManual()
 // Función que llama a la página (Acerca de ...)
 function acerca() 
 {	
-	abrirVentanaModal('<sslext:rewrite action="acerca"/>', 'acerca', '470', '690');
+	abrirVentanaModal('<sslext:rewrite action="acerca"/>', 'acerca', '520', '650');
 }
 
 function licencia() 

@@ -85,7 +85,7 @@
 						var indicadorId = document.getElementById(nombre);
 						var serieId = '<bean:write name="editarMetasForm" property="serieId" />';
 						var queryString = '?indicadorId=' + indicadorId.value + '&ano=' + ano.value + '&valor=' + valor.value + '&numeroPeriodos=' + numeroPeriodos.value + '&nombreIndicador=' + nombreIndicador.value + '&serieId=' + serieId + '&numeroDecimales=' + numeroDecimales.value + '&tipoCorte=' + tipoCorte.value + '&tipoCargaMedicion=' + tipoCargaMeta.value;
-						abrirVentanaModal('<html:rewrite action="/planes/metas/editarMetasParciales" />' + queryString , 'metas', 315, 570);
+						abrirVentanaModal('<html:rewrite action="/planes/metas/editarMetasParciales" />' + queryString , 'metas', 475, 570);
 					}
 				} 
 				else 

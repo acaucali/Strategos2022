@@ -12,9 +12,17 @@
 
 <tiles:insert definition="doc.modalWindowLayout" flush="true">
 
+	<bean:define id="tituloIniciativas">
+		<bean:write scope="session" name="activarIniciativa" property="nombrePlural" />
+	</bean:define>
+	
+	<bean:define id="tituloIniciativa">
+		<bean:write scope="session" name="activarIniciativa" property="nombreSingular" />
+	</bean:define>
+
 		<%-- Título --%>
 	<tiles:put name="title" type="String">
-		..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" />
+		..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" arg0="<%= tituloIniciativas %>"/>
 	</tiles:put>
 
 	<%-- Cuerpo --%>
@@ -80,8 +88,8 @@
 			<vgcinterfaz:contenedorForma width="460px" height="420px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
 				
 				<%-- Título--%>
-				<vgcinterfaz:contenedorFormaTitulo>..::					
-					<vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" />
+				<vgcinterfaz:contenedorFormaTitulo>					
+					..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" arg0="<%= tituloIniciativas %>"/>
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Paneles --%>

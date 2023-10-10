@@ -78,9 +78,11 @@ public final class WelcomeAction
 
     request.getSession(true);
     
+  
     if (!checkVersion(request)) {
       forward = "sincronizar";
     }
+    /*
     if (!forward.equals("sincronizar"))
     {
       Licencia licencia = new Licencia().getLicencia(request);
@@ -98,7 +100,9 @@ public final class WelcomeAction
         forward = "fullConexion";
       }
     }
+    */
     
+ 
 
 
 

@@ -376,7 +376,6 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		List<Indicador> indicadores = strategosIndicadoresService
 				.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, true).getLista();
 
-
 		Font fontCol = new Font(getConfiguracionPagina(request).getCodigoFuente());
 		fontCol.setSize(10);
 		fontCol.setStyle(Font.BOLD);
@@ -387,7 +386,6 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 				tamanoPagina = lineasxPagina(font);
 				saltarPagina(documento, false, font, null, null, request);
 			}
-
 
 			String[][] columnas = new String[9][2];
 			int contador = 0;
@@ -730,8 +728,6 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 		StringBuilder string;
 		boolean tablaIniciada = false;
 
-
-
 		filtros = new HashMap<String, Object>();
 		filtros.put("perspectivaId", perspectiva.getPerspectivaId().toString());
 		if (reporte.getFiltro().getHistorico() != null
@@ -837,11 +833,10 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 							indicador.getIndicadorId(), SerieTiempo.getSerieRealId(),
 							new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
 							periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(), acumular, acumular);
-					List<Medicion> medicionesProgramadas = strategosMedicionesService
-							.getMedicionesPorFrecuencia(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
-									new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()),
-									periodoInicio, periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(),
-									acumular, acumular);
+					List<Medicion> medicionesProgramadas = strategosMedicionesService.getMedicionesPorFrecuencia(
+							indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(),
+							new Integer(reporte.getAnoInicial()), new Integer(reporte.getAnoFinal()), periodoInicio,
+							periodoFin, indicador.getFrecuencia(), indicador.getFrecuencia(), acumular, acumular);
 
 					Medicion ultimaMedicion = strategosMedicionesService.getUltimaMedicionConValor(mediciones);
 					Medicion ultimaMeta = null;
@@ -951,22 +946,22 @@ public class PlanConsolidadoReportePdfAction extends VgcReporteBasicoAction {
 									indicadorPresupuesto.getIndicadorId(), SerieTiempo.getSerieMaximo().getSerieId(),
 									new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
 							for (Medicion medicion : medicionesReales) {
-if (medicion.getValor() != null && totalPresupuestoReal == null)
-							totalPresupuestoReal = 0D;
-totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
-for (Medicion medicionProgramada : medicionesProgramada) {
-if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
-							.getMedicionId().getAno().intValue()
-							&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
-									.getMedicionId().getPeriodo().intValue()) {
-if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
-							totalPresupuestoProgramado = 0D;
-totalPresupuestoProgramado = totalPresupuestoProgramado
-								+ medicionProgramada.getValor();
-break;
-}
-}
-}
+								if (medicion.getValor() != null && totalPresupuestoReal == null)
+									totalPresupuestoReal = 0D;
+								totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
+								for (Medicion medicionProgramada : medicionesProgramada) {
+									if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
+											.getMedicionId().getAno().intValue()
+											&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
+													.getMedicionId().getPeriodo().intValue()) {
+										if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
+											totalPresupuestoProgramado = 0D;
+										totalPresupuestoProgramado = totalPresupuestoProgramado
+												+ medicionProgramada.getValor();
+										break;
+									}
+								}
+							}
 						} else {
 							totalPresupuestoReal = indicadorPresupuesto.getUltimaMedicion();
 
@@ -980,16 +975,15 @@ break;
 										SerieTiempo.getSerieMaximo().getSerieId(), new Integer(0000), new Integer(9999),
 										new Integer(000), new Integer(999));
 								DecimalFormat nf3 = new DecimalFormat("#000");
-								int anoPeriodoBuscar = Integer.parseInt(
-										indicadorPresupuesto.getFechaUltimaMedicionAno().toString()
-												+ nf3.format(indicadorPresupuesto.getFechaUltimaMedicionPeriodo())
-														.toString());
+								int anoPeriodoBuscar = Integer.parseInt(indicadorPresupuesto.getFechaUltimaMedicionAno()
+										.toString()
+										+ nf3.format(indicadorPresupuesto.getFechaUltimaMedicionPeriodo()).toString());
 								for (Medicion medProgramada : medicionesProgramada) {
-int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
-									+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
-if (anoPeriodo <= anoPeriodoBuscar)
-								totalPresupuestoProgramado = medProgramada.getValor();
-}
+									int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
+											+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
+									if (anoPeriodo <= anoPeriodoBuscar)
+										totalPresupuestoProgramado = medProgramada.getValor();
+								}
 							}
 						}
 					} else {
@@ -1009,22 +1003,22 @@ if (anoPeriodo <= anoPeriodoBuscar)
 									new Integer(0000), Integer.parseInt(reporte.getAnoInicial()), new Integer(000),
 									Integer.parseInt(reporte.getMesInicial()));
 							for (Medicion medicion : medicionesReales) {
-if (medicion.getValor() != null && totalPresupuestoReal == null)
-							totalPresupuestoReal = 0D;
-totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
-for (Medicion medicionProgramada : medicionesProgramada) {
-if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
-							.getMedicionId().getAno().intValue()
-							&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
-									.getMedicionId().getPeriodo().intValue()) {
-if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
-							totalPresupuestoProgramado = 0D;
-totalPresupuestoProgramado = totalPresupuestoProgramado
-								+ medicionProgramada.getValor();
-break;
-}
-}
-}
+								if (medicion.getValor() != null && totalPresupuestoReal == null)
+									totalPresupuestoReal = 0D;
+								totalPresupuestoReal = totalPresupuestoReal + medicion.getValor();
+								for (Medicion medicionProgramada : medicionesProgramada) {
+									if (medicion.getMedicionId().getAno().intValue() == medicionProgramada
+											.getMedicionId().getAno().intValue()
+											&& medicion.getMedicionId().getPeriodo().intValue() == medicionProgramada
+													.getMedicionId().getPeriodo().intValue()) {
+										if (medicionProgramada.getValor() != null && totalPresupuestoProgramado == null)
+											totalPresupuestoProgramado = 0D;
+										totalPresupuestoProgramado = totalPresupuestoProgramado
+												+ medicionProgramada.getValor();
+										break;
+									}
+								}
+							}
 						} else {
 							totalPresupuestoReal = indicadorPresupuesto.getUltimaMedicion();
 
@@ -1040,16 +1034,15 @@ break;
 										Integer.parseInt(reporte.getAnoInicial()), new Integer(000),
 										Integer.parseInt(reporte.getMesInicial()));
 								DecimalFormat nf3 = new DecimalFormat("#000");
-								int anoPeriodoBuscar = Integer.parseInt(
-										indicadorPresupuesto.getFechaUltimaMedicionAno().toString()
-												+ nf3.format(indicadorPresupuesto.getFechaUltimaMedicionPeriodo())
-														.toString());
+								int anoPeriodoBuscar = Integer.parseInt(indicadorPresupuesto.getFechaUltimaMedicionAno()
+										.toString()
+										+ nf3.format(indicadorPresupuesto.getFechaUltimaMedicionPeriodo()).toString());
 								for (Medicion medProgramada : medicionesProgramada) {
-int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
-									+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
-if (anoPeriodo <= anoPeriodoBuscar)
-								totalPresupuestoProgramado = medProgramada.getValor();
-}
+									int anoPeriodo = Integer.parseInt(medProgramada.getMedicionId().getAno().toString()
+											+ nf3.format(medProgramada.getMedicionId().getPeriodo()).toString());
+									if (anoPeriodo <= anoPeriodoBuscar)
+										totalPresupuestoProgramado = medProgramada.getValor();
+								}
 							}
 						}
 					}
@@ -1171,7 +1164,6 @@ if (anoPeriodo <= anoPeriodoBuscar)
 
 			if (reporte.getVisualizarActividad()) {
 
-
 				font.setSize(VgcFormatoReporte.TAMANO_FUENTE_SUBTITULO);
 				font.setStyle(Font.NORMAL);
 				for (Iniciativa iniciativa : iniciativas) {
@@ -1267,7 +1259,6 @@ if (anoPeriodo <= anoPeriodoBuscar)
 		tabla.setTamanoFont(8);
 		tabla.setAlineacionHorizontal(1);
 
-
 		tabla.agregarCelda(reporte.getPlantillaPlanes().getNombreActividadSingular());
 		tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.inicio"));
 		tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.culminacion"));
@@ -1278,7 +1269,6 @@ if (anoPeriodo <= anoPeriodoBuscar)
 		tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.porcentaje.programado"));
 		tabla.agregarCelda(mensajes.getMessage("jsp.reportes.plan.ejecucion.reporte.titulo.responsable"));
 		tabla.agregarCelda(mensajes.getMessage("action.reporte.estatus.iniciativa.nombre.dias.diferencia"));
-
 
 		tabla.setAlineacionHorizontal(1);
 
@@ -1319,11 +1309,11 @@ if (anoPeriodo <= anoPeriodoBuscar)
 					tabla.agregarCelda(
 							Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
 				else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-					tabla.agregarCelda(
-							Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
+					tabla.agregarCelda(Image
+							.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
 				else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-					tabla.agregarCelda(
-							Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+					tabla.agregarCelda(Image
+							.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
 
 				tabla.agregarCelda(
 						actividad.getPorcentajeEjecutado() != null ? actividad.getPorcentajeEjecutadoFormateado() : "");
@@ -1349,14 +1339,9 @@ if (anoPeriodo <= anoPeriodoBuscar)
 
 				tabla.agregarCelda(texto1);
 
-
 			}
 			documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
 			documento.add(tabla.getTabla());
-
-
-
-
 
 		} else {
 			// TODO
@@ -1436,7 +1421,6 @@ if (anoPeriodo <= anoPeriodoBuscar)
 			tabla.setColorFondo(255, 255, 255);
 			tabla.setTamanoFont(7);
 		}
-
 
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		java.awt.Font fontNormal = new java.awt.Font(font.getFamilyname(), font.style(),

@@ -142,8 +142,8 @@ public class GestionarActividadesAction extends VgcAction
 
 		paginaActividades.setTamanoSetPaginas(5);
 
-		request.setAttribute("paginaActividades", paginaActividades);
-
+		request.setAttribute("paginaActividades", paginaActividades);	
+		
 		Iniciativa iniciativa = null;
 		if (gestionarActividadesForm.getIniciativaId() != null)
 			iniciativa = (Iniciativa)strategosPryActividadesService.load(Iniciativa.class, new Long(gestionarActividadesForm.getIniciativaId()));

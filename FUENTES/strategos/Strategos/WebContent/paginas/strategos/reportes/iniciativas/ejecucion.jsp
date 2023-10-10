@@ -11,10 +11,16 @@
 <%-- Creado por: Gustavo Chaparro (01/09/2013) --%>
 
 <tiles:insert definition="doc.modalWindowLayout" flush="true">
-
+	<bean:define id="tituloIniciativas">
+		<bean:write scope="session" name="activarIniciativa" property="nombrePlural" />
+	</bean:define>
+	
+	<bean:define id="tituloIniciativa">
+		<bean:write scope="session" name="activarIniciativa" property="nombreSingular" />
+	</bean:define>
 	<%-- T�tulo --%>
 	<tiles:put name="title" type="String">
-		..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" />
+		..:: <vgcutil:message key="jsp.reportes.iniciativa.ejecucion.titulo" arg0="<%= tituloIniciativas %>"/>
 	</tiles:put>
 
 	<%-- Cuerpo --%>
@@ -213,7 +219,7 @@
 				<%-- T�tulo--%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
 					<vgcutil:message
-						key="jsp.reportes.iniciativa.ejecucion.detallado.titulo" />
+						key="jsp.reportes.iniciativa.ejecucion.detallado.titulo" arg0="<%= tituloIniciativas %>"/>
 				</vgcinterfaz:contenedorFormaTitulo>
 
 				<%-- Paneles --%>
@@ -259,7 +265,7 @@
 										<bean:write name="reporteForm" property="alcanceObjetivo" />
 									</bean:define> <html:radio property="alcance" value="<%=alcanceObjetivo%>">
 										<vgcutil:message
-											key="jsp.reportes.iniciativa.ejecucion.plantilla.selector.objetivo" />
+											key="jsp.reportes.iniciativa.ejecucion.plantilla.selector.objetivo" arg0="<%= tituloIniciativa %>"/>
 									</html:radio></td>
 							</tr>
 
@@ -511,8 +517,7 @@
 											nombre="iniciativas">
 											<%-- T�tulo del Panel: Datos B�sicos --%>
 											<vgcinterfaz:panelContenedorTitulo>
-												<vgcutil:message
-													key="jsp.reportes.iniciativa.ejecucion.plantilla.visualizar.iniciativas" />
+												<%= tituloIniciativas %> 												
 											</vgcinterfaz:panelContenedorTitulo>
 
 											<table class="panelContenedor" cellspacing="3"
@@ -520,8 +525,7 @@
 												<tr>
 													<td colspan="3">&nbsp;&nbsp; <input type="checkbox"
 														name="checkIniciativas" id="checkIniciativas"
-														onclick="eventoOnclickVisualizarIniciativas()"> <vgcutil:message
-															key="jsp.reportes.iniciativa.ejecucion.plantilla.visualizar.iniciativas" />
+														onclick="eventoOnclickVisualizarIniciativas()"> <%= tituloIniciativas %> 
 													</td>
 												</tr>
 												<tr>

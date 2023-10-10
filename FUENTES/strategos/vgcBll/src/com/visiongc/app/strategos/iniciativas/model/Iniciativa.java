@@ -93,6 +93,23 @@ public class Iniciativa
   private String objetivoGeneral;
   private String objetivoEspecificos;
   
+  public Byte getPartidas() {
+	return partidas;
+}
+
+public void setPartidas(Byte partidas) {
+	this.partidas = partidas;
+}
+
+public Long getUnidadId() {
+	return unidadId;
+}
+
+public void setUnidadId(Long unidadId) {
+	this.unidadId = unidadId;
+}
+
+private String codigoIniciativa;
   private Long cargoId;
   
   //estos son campos temporales, no tienen mapeo de base de datos
@@ -100,6 +117,8 @@ public class Iniciativa
   private int dias;
   private String observacion;
   private String organizacionNombre;
+  private Byte partidas;
+  private Long unidadId;
   
   public Iniciativa(Long iniciativaId, Long organizacionId, String nombre, Byte naturaleza, Byte frecuencia)
   {
@@ -947,7 +966,9 @@ public Long getIndicadorId(Byte tipo)
     iniciativaCopia.setObjetivoGeneral(iniciativa.getObjetivoGeneral());
     iniciativaCopia.setObjetivoEspecificos(iniciativa.getObjetivoEspecificos());
     
+    iniciativaCopia.setCodigoIniciativa(iniciativa.getCodigoIniciativa());
     iniciativaCopia.setCargoId(iniciativa.getCargoId());
+    iniciativaCopia.setUnidadId(iniciativa.getUnidadId());
     
     if (iniciativa.getMemoIniciativa() != null)
     {
@@ -1013,5 +1034,13 @@ public Long getCargoId() {
 
 public void setCargoId(Long cargoId) {
 	this.cargoId = cargoId;
+}
+
+public String getCodigoIniciativa() {
+	return codigoIniciativa;
+}
+
+public void setCodigoIniciativa(String codigoIniciativa) {
+	this.codigoIniciativa = codigoIniciativa;
 }  
 }

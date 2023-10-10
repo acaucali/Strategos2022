@@ -54,6 +54,7 @@ public class OrganizacionManager
 		String alertaMinMax = null;
 		String alertaMetaN1 = null;
 		String alertaMetaN2 = null;
+		String enlaceParcial = null;
 		
 		try
 		{
@@ -70,7 +71,8 @@ public class OrganizacionManager
 			sql = sql + "Padre_Id, ";
 			sql = sql + "Alerta_Meta_N1, ";
 			sql = sql + "Alerta_Meta_N2, ";
-			sql = sql + "Alerta_Min_Max ";
+			sql = sql + "Alerta_Min_Max, ";
+			sql = sql + "Enlace_Parcial ";
 			sql = sql + "FROM Organizacion ";
 			sql = sql + "WHERE Organizacion_Id = " + organizacionId;
 			
@@ -82,6 +84,7 @@ public class OrganizacionManager
 				alertaMetaN1 = rs.getString("alerta_meta_n1");
 				alertaMetaN2 = rs.getString("alerta_meta_n2");
 				padreId = rs.getString("Padre_Id");
+				enlaceParcial = rs.getString("enlace_parcial");
 
 				organizacion = new OrganizacionStrategos();
 				organizacion.setOrganizacionId(organizacionId);
@@ -93,6 +96,8 @@ public class OrganizacionManager
 					organizacion.setPorcentajeZonaVerdeMetaIndicadores(Byte.parseByte(alertaMetaN1));
 				if (alertaMetaN2 != null)
 					organizacion.setPorcentajeZonaAmarillaMetaIndicadores(Byte.parseByte(alertaMetaN2));
+				if (enlaceParcial != null)
+					organizacion.setEnlaceParcial(enlaceParcial);
 			}
 			rs.close();
 

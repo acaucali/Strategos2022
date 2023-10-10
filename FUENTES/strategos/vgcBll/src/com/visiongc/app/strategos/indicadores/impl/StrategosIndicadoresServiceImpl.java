@@ -675,7 +675,7 @@ public class StrategosIndicadoresServiceImpl
         else {
           indicador.setIndicadorId(new Long(persistenceSession.getUniqueId()));
           
-          System.out.print("\n\nndicaodr: " + indicador + "\n\n");
+          
           setSeriesIndicadorForSave(indicador);                
           
           if ((indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoNominal())) || (indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoOrdinal())))
@@ -684,7 +684,7 @@ public class StrategosIndicadoresServiceImpl
               CategoriaIndicador categoriaIndicador = (CategoriaIndicador)i.next();
               categoriaIndicador.getPk().setIndicadorId(indicador.getIndicadorId());              
             }
-          }          
+          }                    
           resultado = persistenceSession.insert(indicador, usuario);          
           if ((resultado == 10000) && (indicador.getPlanId() != null) && (indicador.getPerspectivaId() != null))
           {

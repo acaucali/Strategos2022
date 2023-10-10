@@ -168,6 +168,7 @@ public class EditarIndicadorForm extends EditarObjetoForm
 	private Byte tipoSumaMedicion;
 	private OrganizacionStrategos organizacion;
 	private Boolean copiarInsumos;
+	private Boolean desdeIniciativa;
 
 	// Variables para mover indicadores
 	private List<Long> indicadores;
@@ -1724,5 +1725,13 @@ public class EditarIndicadorForm extends EditarObjetoForm
 			this.copiarMediciones = new Boolean(false);
 			this.esIndicadorIniciativa = new Boolean(false);
 		}
+	}
+
+	public Boolean getDesdeIniciativa() {
+		return desdeIniciativa;
+	}
+
+	public void setDesdeIniciativa(Boolean desdeIniciativa) {
+		this.desdeIniciativa = desdeIniciativa;
 	}
 }

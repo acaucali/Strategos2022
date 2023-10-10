@@ -12,11 +12,13 @@
 		<form-bean name="gestionarGanttForm" type="com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.GestionarGanttForm" />
 		<form-bean name="asignarPesosActividadForm" type="com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.AsignarPesosActividadForm" />
 		<form-bean name="seleccionarActividadForm" type="com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.SeleccionarActividadForm" />
+		<form-bean name="importarActividadesForm" type="com.visiongc.app.strategos.web.struts.planificacionseguimiento.forms.ImportarActividadesForm" />
 	</form-beans>
 
 	<!-- Definiciones: Global Forward -->
 	<global-forwards>
 		<forward name="editarActividad" path="/paginas/strategos/planificacionseguimiento/actividades/editarActividad.jsp" />
+		<forward name="asistenteImportarActividades" path="/paginas/strategos/planificacionseguimiento/actividades/importacion/asistenteImportarActividades.jsp" />
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -107,6 +109,12 @@
 		<!-- Mapeo del Action: Enviar Correo -->
 		<action path="/planificacionseguimiento/actividades/enviarEmail" type="com.visiongc.app.strategos.web.struts.email.actions.ValidarEmailAction"></action>
 
+		<!-- Mapeo del Action: Importar Actividades -->
+		<action path="/planificacionseguimiento/actividades/importar" type="com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.ImportarActividadesAction" name="importarActividadesForm" scope="session" input="asistenteImportarActividades" parameter="asistenteImportarActividades"></action>
+		
+		<!-- Mapeo del Action: Importar Actividades -->
+		<action path="/planificacionseguimiento/actividades/importarSalvar" type="com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.ImportarActividadesSalvarAction" name="importarActividadesForm" scope="session" parameter="asistenteImportarActividades"></action>
+		
 	</action-mappings>
 
 </struts-config>

@@ -136,6 +136,13 @@
 							}
 						}
 					}
+					
+					//desdeIniciativa
+					if((document.editarIndicadorForm.iniciativaId.value != null) && (document.editarIndicadorForm.iniciativaId.value != 0)){
+						url = '&desdeIniciativa=true';
+						url = url+ '&iniciativaId='+ document.editarIndicadorForm.iniciativaId.value;
+					}
+					
 					window.document.editarIndicadorForm.action = '<html:rewrite action="/indicadores/guardarIndicador"/>' + '?ts=<%= (new java.util.Date()).getTime() %>';
 					establecerSeriesTiempo();
 		

@@ -32,6 +32,8 @@ import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus.EstatusType;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativasPersistenceSession;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
+import com.visiongc.app.strategos.plancuentas.StrategosCuentasService;
+import com.visiongc.app.strategos.plancuentas.model.Cuenta;
 import com.visiongc.app.strategos.planes.StrategosPerspectivasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.IniciativaPerspectiva;
@@ -96,6 +98,28 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		return persistenceSession.getIniciativasResponsable(pagina, tamanoPagina, orden, tipoOrden, getTotal, filtros);
 	}
 
+	public long getUniqueId() {
+		return new Long(persistenceSession.getUniqueId());
+	}
+
+	public boolean existObject(String nombre, Long organizacionId) {
+		Iniciativa iniciativa = new Iniciativa();
+		String[] fieldNames = new String[2];
+		Object[] fieldValues = new Object[2];
+
+		fieldNames[0] = "nombre";
+		fieldValues[0] = nombre;
+		fieldNames[1] = "organizacionId";
+		fieldValues[1] = organizacionId;
+
+		iniciativa.setNombre(nombre);
+		iniciativa.setOrganizacionId(organizacionId);
+
+		return persistenceSession.existsObject(iniciativa, fieldNames, fieldValues);
+
+	}
+		
+	
 	public int saveIniciativa(Iniciativa iniciativa, Usuario usuario, Boolean actualizarIndicador) {
 		boolean transActiva = false;
 		int resultado = 10000;
@@ -158,24 +182,41 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 						ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
 						resultado = saveIndicadorAutomatico(iniciativa,
 								TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionIniciativa, usuario);
-						if ((resultado == 10000)
+						if ((resultado == 10000 && iniciativa.getPartidas() != 0)
 								&& (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()))
 							resultado = saveIndicadorAutomatico(iniciativa, 
 									TipoFuncionIndicador.getTipoFuncionPresupuesto(), configuracionIniciativa, usuario);
+						
 						if ((resultado == 10000)
 								&& (configuracionIniciativa.getIniciativaIndicadorEficaciaMostrar().booleanValue()))
 							resultado = saveIndicadorAutomatico(iniciativa,
 									TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
-						if ((resultado == 10000)
+						if ((resultado == 10000 && iniciativa.getPartidas() != 0)
 								&& (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
 							resultado = saveIndicadorAutomatico(iniciativa,
 									TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
 						}
+						
 					}
 					if (resultado == 10000) {
 						resultado = persistenceSession.insert(iniciativa, usuario);
 						if (resultado == 10000) {
 							resultado = asociarIndicador(iniciativa, usuario);
+						}
+					}
+					if ((resultado == 10000 && iniciativa.getPartidas() == 0) ) {
+						ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
+						resultado = saveIndicadorAutomaticoCuentas(iniciativa,
+								TipoFuncionIndicador.getTipoFuncionPresupuesto(), iniciativa.getPartidas(),configuracionIniciativa, usuario);
+						if(resultado == 10000 && (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()) ) {
+							resultado = saveIndicadorPresupuestoCuenta(iniciativa, TipoFuncionIndicador.getTipoFuncionPresupuesto(),
+									iniciativa.getPartidas(), configuracionIniciativa, usuario);
+						}
+						if((resultado == 10000) && (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
+							//asociarIndicadorCuentas
+							resultado = saveIndicadorAutomaticoEficacia(iniciativa,
+									TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
+							
 						}
 					}
 					if ((resultado == 10000) && (iniciativa.getIniciativaPerspectivas() != null)
@@ -207,6 +248,49 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 					}
 				}
 			} else {
+				
+				if(iniciativa.getClaseId() == null) {
+					resultado = saveClaseIndicadores(iniciativa, usuario);
+					ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
+					if (resultado == 10000) {
+						resultado = saveIndicadorAutomatico(iniciativa,
+								TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionIniciativa, usuario);
+						if ((resultado == 10000 && (iniciativa.getUnidadId() == 0 || iniciativa.getUnidadId() == null))
+								&& (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()))
+							resultado = saveIndicadorAutomatico(iniciativa,
+									TipoFuncionIndicador.getTipoFuncionPresupuesto(), configuracionIniciativa, usuario);
+						if ((resultado == 10000)
+								&& (configuracionIniciativa.getIniciativaIndicadorEficaciaMostrar().booleanValue()))
+							resultado = saveIndicadorAutomatico(iniciativa,
+									TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
+						if ((resultado == 10000)
+								&& (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
+							resultado = saveIndicadorAutomatico(iniciativa,
+									TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
+						}
+					}
+					if (resultado == 10000) {
+						resultado = persistenceSession.insert(iniciativa, usuario);
+						if (resultado == 10000) {
+							resultado = asociarIndicador(iniciativa, usuario);
+						}
+					}
+					if ((resultado == 10000 && iniciativa.getUnidadId() != 0) ) {						
+						resultado = saveIndicadorAutomaticoCuentas(iniciativa,
+								TipoFuncionIndicador.getTipoFuncionPresupuesto(), iniciativa.getPartidas(),configuracionIniciativa, usuario);
+						if(resultado == 10000 && (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()) ) {
+							resultado = saveIndicadorPresupuestoCuenta(iniciativa, TipoFuncionIndicador.getTipoFuncionPresupuesto(),
+									iniciativa.getPartidas(), configuracionIniciativa, usuario);
+						}
+						if((resultado == 10000) && (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
+							//asociarIndicadorCuentas
+							resultado = saveIndicadorAutomaticoEficacia(iniciativa,
+									TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
+							
+						}
+					}
+				}
+				else { 
 				String[] idFieldNames = new String[1];
 				Object[] idFieldValues = new Object[1];
 
@@ -391,10 +475,44 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 										}
 									}
 								}
+								if (resultado == 10000) {
+									Long indicadorId = iniciativa
+											.getIndicadorId(TipoFuncionIndicador.getTipoFuncionEficiencia());
+									if (indicadorId != null) {
+										indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
+												indicadorId);
+										nombre = "";
+										nombre = configuracionIniciativa.getIniciativaIndicadorEficienciaNombre()
+												+ " - ";
+										nombre = nombre + iniciativa.getNombre();
+										if (nombre.length() > 100)
+											nombre = nombre.substring(0, 100);
+										indicador.setNombre(nombre);
+										if (nombre.length() > 50)
+											nombre = nombre.substring(0, 50);
+										indicador.setNombreCorto(nombre);
+
+										resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
+										if (resultado == 10003) {
+											Map<String, Object> filtros = new HashMap();
+
+											filtros.put("claseId", indicador.getClaseId());
+											filtros.put("nombre", indicador.getNombre());
+											List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0,
+													"nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false))
+													.getLista();
+											if (inds.size() > 0) {
+												indicador = (Indicador) inds.get(0);
+												resultado = 10000;
+											}
+										}
+									}
+								}
+								
 
 								strategosIndicadoresService.close();
 							}
-						}
+						}}
 					}
 					if (resultado == 10000) {
 						resultado = persistenceSession.update(iniciativa, usuario);
@@ -453,6 +571,49 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 					break;
 				}
 			}
+			if (transActiva) {
+				persistenceSession.commitTransaction();
+				transActiva = false;
+			}
+		} catch (Throwable t) {
+			if (transActiva)
+				persistenceSession.rollbackTransaction();
+			throw new ChainedRuntimeException(t.getMessage(), t);
+		}
+
+		return resultado;
+	}
+	
+	public int asociarIndicadorCuentas(Long iniciativaId, Long IndicadorId, Usuario usuario) {
+		boolean transActiva = false;
+		int resultado = 10000;
+		String[] fieldNames = new String[2];
+		Object[] fieldValues = new Object[2];
+		try {
+			if (!persistenceSession.isTransactionActive()) {
+				persistenceSession.beginTransaction();
+				transActiva = true;
+			}			
+			
+				IndicadorIniciativa iniciativaIndicador = new IndicadorIniciativa();
+				IndicadorIniciativaPK pk = new IndicadorIniciativaPK();
+				pk.setIndicadorId(IndicadorId);
+				pk.setIniciativaId(iniciativaId);
+				
+				iniciativaIndicador.setPk(pk);
+				iniciativaIndicador.setTipo((byte) 6);
+				
+				
+				fieldNames[0] = "pk.indicadorId";
+				fieldValues[0] = iniciativaIndicador.getPk().getIndicadorId();
+				fieldNames[1] = "pk.iniciativaId";
+				fieldValues[1] = iniciativaIndicador.getPk().getIniciativaId();				
+				if (!persistenceSession.existsObject(iniciativaIndicador, fieldNames, fieldValues)) {
+					resultado = persistenceSession.insert(iniciativaIndicador, usuario);
+				}
+					
+				
+			
 			if (transActiva) {
 				persistenceSession.commitTransaction();
 				transActiva = false;
@@ -709,7 +870,371 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 
 		return resultado;
 	}
+	
+	private int saveIndicadorAutomaticoEficacia(Iniciativa iniciativa, Byte tipo,
+			ConfiguracionIniciativa configuracionIniciativa, Usuario usuario) {
+		int resultado = 10000;
 
+		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
+				.openStrategosIndicadoresService(this);
+		Indicador indicador = new Indicador();
+		indicador.setOrganizacionId(iniciativa.getOrganizacionId());
+		indicador.setClaseId(iniciativa.getClaseId());
+		String nombre = "";
+		if ((tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionSeguimiento().byteValue())
+				&& (configuracionIniciativa.getIniciativaIndicadorAvanceAnteponer().booleanValue())) {
+			nombre = configuracionIniciativa.getIniciativaIndicadorAvanceNombre() + " - ";
+		} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
+			nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre() + " - ";
+		} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficacia().byteValue()) {
+			nombre = configuracionIniciativa.getIniciativaIndicadorEficaciaNombre() + " - ";
+		} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficiencia().byteValue())
+			nombre = configuracionIniciativa.getIniciativaIndicadorEficienciaNombre() + " - ";
+		nombre = nombre + iniciativa.getNombre();
+		if (nombre.length() > 100)
+			nombre = nombre.substring(0, 100);
+		indicador.setNombre(nombre);
+		if (nombre.length() > 50)
+			nombre = nombre.substring(0, 50);
+		indicador.setNombreCorto(nombre);
+		indicador.setFrecuencia(iniciativa.getFrecuencia());
+		if (tipo.byteValue() != TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
+			StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance()
+					.openStrategosUnidadesService(this);
+			UnidadMedida porcentaje = strategosUnidadesService.getUnidadMedidaPorcentaje();
+			indicador.setUnidadId(porcentaje.getUnidadId());
+			strategosUnidadesService.close();
+		}
+		indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());
+		indicador.setMostrarEnArbol(new Boolean(true));
+		if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
+			indicador.setCaracteristica(Caracteristica.getCaracteristicaCondicionValorMaximo());
+		} else
+			indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
+		indicador.setTipoFuncion(tipo);
+		indicador.setGuia(new Boolean(false));
+		indicador.setValorInicialCero(new Boolean(true));
+		indicador.setResponsableCargarMetaId(iniciativa.getResponsableCargarMetaId());
+		indicador.setResponsableCargarEjecutadoId(iniciativa.getResponsableCargarEjecutadoId());
+		indicador.setResponsableFijarMetaId(iniciativa.getResponsableFijarMetaId());
+		indicador.setResponsableLograrMetaId(iniciativa.getResponsableLograrMetaId());
+		indicador.setResponsableSeguimientoId(iniciativa.getResponsableSeguimientoId());
+		indicador.setNumeroDecimales(new Byte("2"));
+		if (iniciativa.getAlertaZonaVerde() != null)
+			indicador.setAlertaMetaZonaVerde(new Double(iniciativa.getAlertaZonaVerde().doubleValue()));
+		if (iniciativa.getAlertaZonaAmarilla() != null)
+			indicador.setAlertaMetaZonaAmarilla(new Double(iniciativa.getAlertaZonaAmarilla().doubleValue()));
+		indicador.setSeriesIndicador(new HashSet());
+		setSeriesTiempo(indicador);
+		indicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
+		if ((tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficacia().byteValue())
+				|| (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficiencia().byteValue())) {
+			indicador.setCorte(TipoCorte.getTipoCorteTransversal());
+			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionAlPeriodo());
+			if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficacia().byteValue()) {
+				indicador.setNaturaleza(Naturaleza.getNaturalezaFormula());
+				resultado = crearIndicadorFormulaEficacia(iniciativa, indicador);
+			} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficiencia().byteValue()) {
+				indicador.setNaturaleza(Naturaleza.getNaturalezaFormula());
+				resultado = crearIndicadorFormulaEficienciaCuentas(iniciativa, indicador);
+			}
+		} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
+			indicador.setCorte(TipoCorte.getTipoCorteTransversal());
+			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionAlPeriodo());
+		} else {
+			indicador.setCorte(TipoCorte.getTipoCorteLongitudinal());
+			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
+		}
+
+		if (resultado == 10000) {
+			resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
+			if (resultado == 10000) {
+				resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario);
+			}
+		}
+		if (resultado == 10003) {
+			Map<String, Object> filtros = new HashMap();
+
+			filtros.put("claseId", indicador.getClaseId());
+			filtros.put("nombre", indicador.getNombre());
+			List<Indicador> inds = strategosIndicadoresService
+					.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false))
+					.getLista();
+			if (inds.size() > 0) {
+				indicador = (Indicador) inds.get(0);
+				resultado = 10000;
+			}
+		}
+
+		
+		strategosIndicadoresService.close();
+
+		return resultado;
+	}
+	
+	private int saveIndicadorAutomaticoCuentas(Iniciativa iniciativa, Byte tipo, Byte partida,
+			ConfiguracionIniciativa configuracionIniciativa, Usuario usuario) {
+		int resultado = 10000;
+
+		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
+				.openStrategosIndicadoresService(this);
+		StrategosCuentasService strategosCuentasService = StrategosServiceFactory.getInstance()
+				.openStrategosCuentasService(this);
+		
+		List<Cuenta> partidas = strategosCuentasService.getCuentas(); 
+		
+		for (Iterator<Cuenta> iter = partidas.iterator(); iter
+				.hasNext();) {
+			
+			Cuenta cuenta = (Cuenta) iter.next();
+			
+			if(cuenta.getPadreId() != null) {
+				
+				Indicador indicador = new Indicador();
+				indicador.setOrganizacionId(iniciativa.getOrganizacionId());
+				indicador.setClaseId(iniciativa.getClaseId());
+				String nombre = "";
+				nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre() + "  ";
+				// aqui va el codigo de la iniciativa
+				if(iniciativa.getCodigoIniciativa() != null)
+					nombre = nombre +  iniciativa.getCodigoIniciativa() +  "  " ;
+				nombre = nombre + cuenta.getCodigo();
+				if (nombre.length() > 100)
+					nombre = nombre.substring(0, 100);
+				indicador.setNombre(nombre);
+				if (nombre.length() > 50)
+					nombre = nombre.substring(0, 50);
+				indicador.setNombreCorto(nombre);
+				indicador.setFrecuencia(iniciativa.getFrecuencia());
+				indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());
+				indicador.setMostrarEnArbol(new Boolean(true));
+				indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
+				indicador.setValorInicialCero(true);
+				indicador.setTipoFuncion(tipo);
+				indicador.setGuia(new Boolean(false));
+				indicador.setValorInicialCero(new Boolean(true));
+				indicador.setResponsableCargarMetaId(iniciativa.getResponsableCargarMetaId());
+				indicador.setResponsableCargarEjecutadoId(iniciativa.getResponsableCargarEjecutadoId());
+				indicador.setResponsableFijarMetaId(iniciativa.getResponsableFijarMetaId());
+				indicador.setResponsableLograrMetaId(iniciativa.getResponsableLograrMetaId());
+				indicador.setResponsableSeguimientoId(iniciativa.getResponsableSeguimientoId());
+				indicador.setNumeroDecimales(new Byte("2"));
+				if (iniciativa.getAlertaZonaVerde() != null)
+					indicador.setAlertaMetaZonaVerde(new Double(iniciativa.getAlertaZonaVerde().doubleValue()));
+				if (iniciativa.getAlertaZonaAmarilla() != null)
+					indicador.setAlertaMetaZonaAmarilla(new Double(iniciativa.getAlertaZonaAmarilla().doubleValue()));
+				indicador.setSeriesIndicador(new HashSet());
+				setSeriesTiempo(indicador);
+				indicador.setNaturaleza(Naturaleza.getNaturalezaSimple());				
+				if(iniciativa.getUnidadId() != null && iniciativa.getUnidadId() != 0) {
+					indicador.setUnidadId(iniciativa.getUnidadId());
+				}else {
+					StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance()
+							.openStrategosUnidadesService(this);
+					UnidadMedida porcentaje = strategosUnidadesService.getUnidadMedidaPorcentaje();
+					indicador.setUnidadId(porcentaje.getUnidadId());
+					strategosUnidadesService.close();
+				}
+				
+				indicador.setCorte(TipoCorte.getTipoCorteLongitudinal());
+				indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
+				
+				if (resultado == 10000)
+					resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
+					if (resultado == 10000) {
+						resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario);
+					}
+			
+				if (resultado == 10003) {
+					Map<String, Object> filtros = new HashMap();
+
+					filtros.put("claseId", indicador.getClaseId());
+					filtros.put("nombre", indicador.getNombre());
+					List<Indicador> inds = strategosIndicadoresService
+							.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false))
+							.getLista();
+					if (inds.size() > 0) {
+						indicador = (Indicador) inds.get(0);
+						resultado = 10000;
+					}
+				}
+				
+			}
+			
+			
+
+			
+			
+		}
+		
+		
+		strategosIndicadoresService.close();
+		strategosCuentasService.close();
+
+		return resultado;
+	}
+	
+	private int saveIndicadorPresupuestoCuenta(Iniciativa iniciativa, Byte tipo, Byte partida,
+			ConfiguracionIniciativa configuracionIniciativa, Usuario usuario) {
+		
+		int resultado = 10000;
+
+		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
+				.openStrategosIndicadoresService(this);
+		
+		Indicador indicador = new Indicador();
+		indicador.setOrganizacionId(iniciativa.getOrganizacionId());
+		indicador.setClaseId(iniciativa.getClaseId());
+		String nombre = "";
+		nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre() + "  ";
+		if(iniciativa.getCodigoIniciativa() != null)
+			nombre = nombre +  iniciativa.getCodigoIniciativa() +  "  " ;
+		nombre = nombre + iniciativa.getNombre();
+		if (nombre.length() > 100)
+			nombre = nombre.substring(0, 100);
+		indicador.setNombre(nombre);
+		if (nombre.length() > 50)
+			nombre = nombre.substring(0, 50);
+		indicador.setNombreCorto(nombre);
+		indicador.setFrecuencia(iniciativa.getFrecuencia());
+		indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());
+		indicador.setMostrarEnArbol(new Boolean(true));
+		indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
+		indicador.setValorInicialCero(true);
+		indicador.setTipoFuncion(tipo);
+		indicador.setGuia(new Boolean(false));
+		indicador.setValorInicialCero(new Boolean(true));
+		indicador.setResponsableCargarMetaId(iniciativa.getResponsableCargarMetaId());
+		indicador.setResponsableCargarEjecutadoId(iniciativa.getResponsableCargarEjecutadoId());
+		indicador.setResponsableFijarMetaId(iniciativa.getResponsableFijarMetaId());
+		indicador.setResponsableLograrMetaId(iniciativa.getResponsableLograrMetaId());
+		indicador.setResponsableSeguimientoId(iniciativa.getResponsableSeguimientoId());
+		indicador.setNumeroDecimales(new Byte("2"));
+		if (iniciativa.getAlertaZonaVerde() != null)
+			indicador.setAlertaMetaZonaVerde(new Double(iniciativa.getAlertaZonaVerde().doubleValue()));
+		if (iniciativa.getAlertaZonaAmarilla() != null)
+			indicador.setAlertaMetaZonaAmarilla(new Double(iniciativa.getAlertaZonaAmarilla().doubleValue()));
+		
+		indicador.setSeriesIndicador(new HashSet());
+		setSeriesTiempo(indicador);
+		indicador.setNaturaleza(Naturaleza.getNaturalezaFormula());
+		
+		// crear formula presupuesto
+		resultado = crearIndicadorFormulaPresupuesto(iniciativa, indicador);
+		
+		
+		
+		if(iniciativa.getUnidadId() != null && iniciativa.getUnidadId() != 0) {
+			indicador.setUnidadId(iniciativa.getUnidadId());
+		}else {
+			StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance()
+					.openStrategosUnidadesService(this);
+			UnidadMedida porcentaje = strategosUnidadesService.getUnidadMedidaPorcentaje();
+			indicador.setUnidadId(porcentaje.getUnidadId());
+			strategosUnidadesService.close();
+		}
+		
+		indicador.setCorte(TipoCorte.getTipoCorteLongitudinal());
+		indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
+		
+		if (resultado == 10000)
+			resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
+			if (resultado == 10000) {
+				resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario);
+			}
+	
+		if (resultado == 10003) {
+			Map<String, Object> filtros = new HashMap();
+
+			filtros.put("claseId", indicador.getClaseId());
+			filtros.put("nombre", indicador.getNombre());
+			List<Indicador> inds = strategosIndicadoresService
+					.getIndicadores(0, 0, "nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false))
+					.getLista();
+			if (inds.size() > 0) {
+				indicador = (Indicador) inds.get(0);
+				resultado = 10000;
+			}
+		}
+		
+		
+		strategosIndicadoresService.close();
+		
+
+		return resultado;
+
+		
+	}
+
+	private int crearIndicadorFormulaPresupuesto(Iniciativa iniciativa, Indicador indicador) {
+		int resultado = 10000;
+
+		StrategosCuentasService strategosCuentasService = StrategosServiceFactory.getInstance()
+				.openStrategosCuentasService(this);
+		
+		SerieIndicador serieReal = null;
+		Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();
+		for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();) {
+			SerieIndicador serie = (SerieIndicador) i.next();
+			if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue()) {
+				serieReal = serie;
+				break;
+			}
+		}
+
+		Formula formulaIndicador = new Formula();
+		formulaIndicador.setInsumos(new HashSet());
+
+		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
+				.openStrategosIndicadoresService(this);
+		Indicador indicadorInsumo = (Indicador) strategosIndicadoresService.load(Indicador.class,
+				iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
+		strategosIndicadoresService.close();
+		
+		List<IndicadorIniciativa> indicadores = persistenceSession.getIndicadoresIniciativa(iniciativa.getIniciativaId());
+
+		String formula = "";
+		
+		for (Iterator<IndicadorIniciativa> i = indicadores.iterator(); i.hasNext();) {
+			IndicadorIniciativa ind = (IndicadorIniciativa) i.next();
+			
+			if(ind.getTipo() == TipoFuncionIndicador.getTipoFuncionPresupuesto()) {
+				formula += "["+ ind.getPk().getIndicadorId() + ".0]";
+				formula += "+";
+			}
+						
+		}
+		
+		
+		formula = formula.substring(0, formula.length()-1);		
+			
+		
+
+		formulaIndicador.setExpresion(formula);
+		
+		for (Iterator<IndicadorIniciativa> i = indicadores.iterator(); i.hasNext();) {
+			IndicadorIniciativa ind = (IndicadorIniciativa) i.next();
+			
+			if(ind.getTipo() == TipoFuncionIndicador.getTipoFuncionPresupuesto()) {
+				
+				InsumoFormula insumoFormula = new InsumoFormula();
+				insumoFormula.setPk(new InsumoFormulaPK());
+				insumoFormula.getPk().setPadreId(indicador.getIndicadorId());
+				insumoFormula.getPk().setSerieId(new Long("0"));
+				insumoFormula.getPk()
+						.setIndicadorId(ind.getPk().getIndicadorId());
+				insumoFormula.getPk().setInsumoSerieId(new Long("0"));
+				formulaIndicador.getInsumos().add(insumoFormula);
+				
+			}
+			
+		}	
+
+		serieReal.getFormulas().add(formulaIndicador);
+
+		return resultado;
+	}
+	
 	private int crearIndicadorFormulaEficacia(Iniciativa iniciativa, Indicador indicador) {
 		int resultado = 10000;
 
@@ -771,8 +1296,11 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 	}
 
 	private int crearIndicadorFormulaEficiencia(Iniciativa iniciativa, Indicador indicador) {
+		
 		int resultado = 10000;
 
+		//revisar la formula
+		
 		SerieIndicador serieReal = null;
 		Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();
 		for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();) {
@@ -837,6 +1365,112 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		formulaIndicador.getInsumos().add(insumoFormula);
 
 		serieReal.getFormulas().add(formulaIndicador);
+
+		return resultado;
+	}
+	
+	private int crearIndicadorFormulaEficienciaCuentas(Iniciativa iniciativa, Indicador indicador) {
+		
+		int resultado = 10000;
+		
+		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
+				.openStrategosIndicadoresService(this);
+
+		//revisar la formula
+		
+		SerieIndicador serieReal = null;
+		Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();
+		for (Iterator<SerieIndicador> i = seriesIndicador.iterator(); i.hasNext();) {
+			SerieIndicador serie = (SerieIndicador) i.next();
+			if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieReal().getSerieId().byteValue()) {
+				serieReal = serie;
+				break;
+			}
+		}
+
+		Formula formulaIndicador = new Formula();
+		formulaIndicador.setInsumos(new HashSet());
+		
+		List<IndicadorIniciativa> indicadores = persistenceSession.getIndicadoresIniciativa(iniciativa.getIniciativaId());
+		List<IndicadorIniciativa> indicadoresPresupuestpo = new ArrayList();
+		List<Long> ids = new ArrayList<Long>();
+		
+		Long presupuestoId =(long) 0;
+		for (Iterator<IndicadorIniciativa> i = indicadores.iterator(); i.hasNext();) {
+			IndicadorIniciativa ind = (IndicadorIniciativa) i.next();
+			
+			if(ind.getTipo() == TipoFuncionIndicador.getTipoFuncionPresupuesto()) {				
+				ids.add(ind.getPk().getIndicadorId());
+			}
+		}
+		
+		for(Iterator<Long> id = ids.iterator(); id.hasNext();) {
+			
+			Long indicadorId = (Long) id.next();
+			
+			Indicador indicadorFormula = (Indicador) strategosIndicadoresService.load(Indicador.class, indicadorId);
+			
+			if(indicadorFormula != null && indicadorFormula.getNaturaleza().equals(Naturaleza.getNaturalezaFormula())) {
+				presupuestoId = indicadorFormula.getIndicadorId();
+			}
+		}
+		
+		
+		
+
+		String formula = "";
+		if (iniciativa.getTipoMedicion().byteValue() == TipoMedicion.getTipoMedicionAlPeriodo().byteValue()) {
+			formula =
+
+					"([" + iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()).toString() + "."
+							+ SerieTiempo.getSerieReal().getSerieId().byteValue() + "]" + "*" + "["
+							+ presupuestoId.toString()
+							+ "." + SerieTiempo.getSerieMaximo().getSerieId().byteValue() + "])" + "/" + "["
+							+ presupuestoId.toString()
+							+ "." + SerieTiempo.getSerieReal().getSerieId().byteValue() + "]";
+		} else {
+			formula =
+
+					"([" + iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()).toString() + "."
+							+ SerieTiempo.getSerieReal().getSerieId().byteValue() + "]:S" + "*" + "["
+							+ presupuestoId.toString()
+							+ "." + SerieTiempo.getSerieMaximo().getSerieId().byteValue() + "])" + "/" + "["
+							+ presupuestoId.toString()
+							+ "." + SerieTiempo.getSerieReal().getSerieId().byteValue() + "]";
+		}
+
+		formulaIndicador.setExpresion(formula);
+
+		InsumoFormula insumoFormula = new InsumoFormula();
+		insumoFormula.setPk(new InsumoFormulaPK());
+		insumoFormula.getPk().setPadreId(indicador.getIndicadorId());
+		insumoFormula.getPk().setSerieId(SerieTiempo.getSerieReal().getSerieId());
+		insumoFormula.getPk()
+				.setIndicadorId(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
+		insumoFormula.getPk().setInsumoSerieId(SerieTiempo.getSerieReal().getSerieId());
+		formulaIndicador.getInsumos().add(insumoFormula);
+
+		insumoFormula = new InsumoFormula();
+		insumoFormula.setPk(new InsumoFormulaPK());
+		insumoFormula.getPk().setPadreId(indicador.getIndicadorId());
+		insumoFormula.getPk().setSerieId(SerieTiempo.getSerieReal().getSerieId());
+		insumoFormula.getPk()
+				.setIndicadorId(presupuestoId);
+		insumoFormula.getPk().setInsumoSerieId(SerieTiempo.getSerieMaximo().getSerieId());
+		formulaIndicador.getInsumos().add(insumoFormula);
+
+		insumoFormula = new InsumoFormula();
+		insumoFormula.setPk(new InsumoFormulaPK());
+		insumoFormula.getPk().setPadreId(indicador.getIndicadorId());
+		insumoFormula.getPk().setSerieId(SerieTiempo.getSerieReal().getSerieId());
+		insumoFormula.getPk()
+				.setIndicadorId(presupuestoId);
+		insumoFormula.getPk().setInsumoSerieId(SerieTiempo.getSerieReal().getSerieId());
+		formulaIndicador.getInsumos().add(insumoFormula);
+
+		serieReal.getFormulas().add(formulaIndicador);
+		
+		strategosIndicadoresService.close();
 
 		return resultado;
 	}
@@ -910,11 +1544,11 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		indicador.getSeriesIndicador().clear();
 		String[] series = new String[2];
 		series[0] = SerieTiempo.getSerieRealId().toString();
-		if (indicador.getTipoFuncion().byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
-			series[1] = SerieTiempo.getSerieMaximoId().toString();
-		} else {
+		//if (indicador.getTipoFuncion().byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
+		//	series[1] = SerieTiempo.getSerieMaximoId().toString();
+		//} else {
 			series[1] = SerieTiempo.getSerieProgramadoId().toString();
-		}
+		//}
 		for (int i = 0; i < series.length; i++) {
 			String serie = series[i];
 			if ((serie != null) && (!serie.equals(""))) {
@@ -1314,5 +1948,53 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 
 		return correoIniciativa;
 
+	}
+	
+	public int asociarIndicadorTipo(Long iniciativaId, Long IndicadorId, Byte tipo, Usuario usuario) {
+        boolean transActiva = false;
+        int resultado = 10000;
+        String[] fieldNames = new String[2];
+        Object[] fieldValues = new Object[2];
+        try {
+            if (!persistenceSession.isTransactionActive()) {
+                persistenceSession.beginTransaction();
+                transActiva = true;
+            }
+
+                IndicadorIniciativa iniciativaIndicador = new IndicadorIniciativa();
+                IndicadorIniciativaPK pk = new IndicadorIniciativaPK();
+                pk.setIndicadorId(IndicadorId);
+                pk.setIniciativaId(iniciativaId);
+
+                iniciativaIndicador.setPk(pk);
+                iniciativaIndicador.setTipo(tipo);
+
+
+                fieldNames[0] = "pk.indicadorId";
+                fieldValues[0] = iniciativaIndicador.getPk().getIndicadorId();
+                fieldNames[1] = "pk.iniciativaId";
+                fieldValues[1] = iniciativaIndicador.getPk().getIniciativaId();
+                if (!persistenceSession.existsObject(iniciativaIndicador, fieldNames, fieldValues)) {
+                    resultado = persistenceSession.insert(iniciativaIndicador, usuario);
+                }
+
+
+
+            if (transActiva) {
+                persistenceSession.commitTransaction();
+                transActiva = false;
+            }
+        } catch (Throwable t) {
+            if (transActiva)
+                persistenceSession.rollbackTransaction();
+            throw new ChainedRuntimeException(t.getMessage(), t);
+        }
+
+        return resultado;
+    }
+	
+	@Override
+	public List<IndicadorIniciativa> getIndicadoresIniciativa(Long iniciativaId){
+		return persistenceSession.getIndicadoresIniciativa(iniciativaId);
 	}
 }

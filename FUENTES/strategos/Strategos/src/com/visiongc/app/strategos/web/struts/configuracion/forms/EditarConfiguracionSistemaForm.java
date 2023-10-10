@@ -28,6 +28,7 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	private String iniciativaIndicadorEficienciaNombre;
 	private Boolean iniciativaIndicadorEficienciaMostrar;
 	private Boolean iniciativaIndicadorAvanceAnteponer;
+	private Boolean iniciativaAdministracionPublica;
 
 	// Plan
 	private Boolean planObjetivoAlertaAnualMostrar;
@@ -493,6 +494,7 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 		this.iniciativaIndicadorEficienciaNombre = null;
 		this.iniciativaIndicadorEficienciaMostrar = false;
 		this.iniciativaIndicadorAvanceAnteponer = false;
+		this.iniciativaAdministracionPublica = false;
 
 		this.planObjetivoLogroAnualMostrar = true;
 		this.planObjetivoLogroParcialMostrar = true;
@@ -525,6 +527,14 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 
 
 
+	}
+
+	public Boolean getIniciativaAdministracionPublica() {
+		return iniciativaAdministracionPublica;
+	}
+
+	public void setIniciativaAdministracionPublica(Boolean iniciativaAdministracionPublica) {
+		this.iniciativaAdministracionPublica = iniciativaAdministracionPublica;
 	}
 
 	public static class TipoCorreo

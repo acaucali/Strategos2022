@@ -20,4 +20,7 @@ public abstract interface StrategosCuentasService
   public abstract List getMaximoNivelGrupo();
   
   public abstract Cuenta crearCuentaRaiz(Usuario paramUsuario);
+  
+  public abstract List getCuentas();
+  
 }

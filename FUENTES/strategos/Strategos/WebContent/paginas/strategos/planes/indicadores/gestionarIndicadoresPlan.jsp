@@ -297,7 +297,8 @@
 		var funcionCierre = '&funcionCierre=' + 'onAsistenteGrafico()';
 		var parametros = '';
 		var xml = nombreForma + nombreCampoOculto + funcionCierre + parametros + '&funcion=Asistente';
-		abrirVentanaModal('<html:rewrite action="/graficos/asistenteGrafico" />' + xml, 'asistenteGraficos', '620', '440');
+		//abrirVentanaModal('<html:rewrite action="/graficos/asistenteGrafico" />' + xml, 'asistenteGraficos', '620', '440');
+		window.location.href='<html:rewrite action="/graficos/asistenteGrafico" />' + xml;
     }
     
 	function getXml()

@@ -24,7 +24,7 @@
 
 	function nuevaIniciativa() 
 	{		
-		abrirVentanaModal('<html:rewrite action="/iniciativas/crearIniciativa"/>?planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />', "IniciativaAdd", 1080, 800);
+		//abrirVentanaModal('<html:rewrite action="/iniciativas/crearIniciativa"/>?planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />', "IniciativaAdd", 1080, 800);
 		window.location.href = '<html:rewrite action="/iniciativas/crearIniciativa"/>?planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />';
 	}
 

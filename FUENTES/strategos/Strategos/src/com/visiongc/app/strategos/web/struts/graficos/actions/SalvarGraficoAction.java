@@ -112,8 +112,11 @@ public class SalvarGraficoAction extends VgcAction
 	    {
 	    	forward = "grafico";
 	    	status = StatusUtil.getStatusSuccess();
-	    	if (grafico != null)
+	    		    	
+	    	if (grafico != null) {
 	    		graficoId = grafico.getGraficoId();
+	    		request.getSession().setAttribute("graficoId", grafico.getGraficoId());
+	    	}
 	    }
 	    else if (respuesta == 10003)
 	    	status = StatusUtil.getStatusRegistroDuplicado();
@@ -184,8 +187,7 @@ public class SalvarGraficoAction extends VgcAction
 
 
 	    }else {
-	    	*/
-	    
+	    	*/	    
 		    if (graficoId.longValue() != 0)
 		    {
 		    	
@@ -215,9 +217,7 @@ public class SalvarGraficoAction extends VgcAction
 				    grafico.setObjetoId(null);
 				    grafico.setClassName(null);
 				}
-		    }
-
-		    grafico.setGraficoId(graficoId);
+		    }		    
 		    grafico.setNombre(nombre);		    
 
 		    respuesta = strategosGraficosService.saveGrafico(grafico, getUsuarioConectado(request));		    

@@ -40,7 +40,7 @@ public class ReporteInstrumentoDetallePdf extends VgcReporteBasicoAction {
 	@Override
 	protected String agregarTitulo(HttpServletRequest request,	MessageResources mensajes) throws Exception
 	{
-		return mensajes.getMessage("jsp.pagina.instrumentos.reporte.titulo.detalle");
+		return mensajes.getMessage("jsp.pagina.instrumentos.reporte.titulo");
 	}
 
 	@Override

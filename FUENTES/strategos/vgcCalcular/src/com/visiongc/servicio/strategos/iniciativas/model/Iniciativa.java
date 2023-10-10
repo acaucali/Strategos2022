@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.visiongc.app.strategos.iniciativas.model.MemoIniciativa;
 import com.visiongc.servicio.strategos.indicadores.model.Indicador;
 
 /**
@@ -21,20 +22,36 @@ public class Iniciativa implements Serializable
 	private Long indicadorId;
 	private Byte alerta;
 	private Double porcentajeCompletado;
-	private String fechaUltimaMedicion;
+	private String fechaUltimaMedicion;	
 	private Indicador indicador;
 	
+	private Long organizacionId;
+	private String codigoIniciativa;
+	private String nombre;
+	private String memoIniciativa;
+	private Long proyectoId;
+	private String anioFormulacion;
+	private Byte frecuencia;
+	private Byte tipoMedicion;
+	private Double alertaZonaVerde;
+	private Double alertaZonaAmarilla;
+	private Boolean crearCuentas;
+	private Long unidadMedida;
+	
+	
+
 	public Iniciativa()
 	{
 	}
 	
-	public Iniciativa(Long iniciativaId, Byte alerta, Double porcentajeCompletado, String fechaUltimaMedicion, Long indicadorId, Indicador indicador)
+	public Iniciativa(Long iniciativaId, Byte alerta, Double porcentajeCompletado, String fechaUltimaMedicion, Long indicadorId, Indicador indicador, String codigoIniciativa)
 	{
 		this.iniciativaId = iniciativaId;
 		this.alerta = alerta;
 		this.porcentajeCompletado = porcentajeCompletado;
 		this.fechaUltimaMedicion = fechaUltimaMedicion;
 		this.indicadorId = indicadorId;
+		this.codigoIniciativa = codigoIniciativa;
 	}
 	
 	public Long getIniciativaId()
@@ -127,4 +144,100 @@ public class Iniciativa implements Serializable
   			return false;
     	return true;
   	}
+
+	public String getCodigoIniciativa() {
+		return codigoIniciativa;
+	}
+
+	public void setCodigoIniciativa(String codigoIniciativa) {
+		this.codigoIniciativa = codigoIniciativa;
+	}
+	
+	public Long getOrganizacionId() {
+		return organizacionId;
+	}
+
+	public void setOrganizacionId(Long organizacionId) {
+		this.organizacionId = organizacionId;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getMemoIniciativa() {
+		return memoIniciativa;
+	}
+
+	public void setMemoIniciativa(String memoIniciativa) {
+		this.memoIniciativa = memoIniciativa;
+	}
+
+	public Long getProyectoId() {
+		return proyectoId;
+	}
+
+	public void setProyectoId(Long proyectoId) {
+		this.proyectoId = proyectoId;
+	}
+
+	public String getAnioFormulacion() {
+		return anioFormulacion;
+	}
+
+	public void setAnioFormulacion(String anioFormulacion) {
+		this.anioFormulacion = anioFormulacion;
+	}
+
+	public Byte getFrecuencia() {
+		return frecuencia;
+	}
+
+	public void setFrecuencia(Byte frecuencia) {
+		this.frecuencia = frecuencia;
+	}
+
+	public Byte getTipoMedicion() {
+		return tipoMedicion;
+	}
+
+	public void setTipoMedicion(Byte tipoMedicion) {
+		this.tipoMedicion = tipoMedicion;
+	}
+
+	public Double getAlertaZonaVerde() {
+		return alertaZonaVerde;
+	}
+
+	public void setAlertaZonaVerde(Double alertaZonaVerde) {
+		this.alertaZonaVerde = alertaZonaVerde;
+	}
+
+	public Double getAlertaZonaAmarilla() {
+		return alertaZonaAmarilla;
+	}
+
+	public void setAlertaZonaAmarilla(Double alertaZonaAmarilla) {
+		this.alertaZonaAmarilla = alertaZonaAmarilla;
+	}
+	
+	public Boolean getCrearCuentas() {
+		return crearCuentas;
+	}
+
+	public void setCrearCuentas(Boolean crearCuentas) {
+		this.crearCuentas = crearCuentas;
+	}
+
+	public Long getUnidadMedida() {
+		return unidadMedida;
+	}
+
+	public void setUnidadMedida(Long unidadMedida) {
+		this.unidadMedida = unidadMedida;
+	}
 }

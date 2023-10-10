@@ -383,7 +383,7 @@
 					<tr>
 						<logic:equal name="editarExplicacionForm" property="tipo" value="0">
 							<td align="right"><vgcutil:message key="jsp.editarexplicacion.ficha.tipomemo.descripcion" /></td>
-							<td><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="memoDescripcion" rows="3" cols="58" styleClass="cuadroTexto"></html:textarea></td>
+							<td><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="memoDescripcion" rows="5" cols="58" styleClass="cuadroTexto"></html:textarea></td>
 						</logic:equal>
 						<logic:equal name="editarExplicacionForm" property="tipo" value="1">
 							<td valign="top" align="right"><vgcutil:message key="jsp.editarexplicacion.ficha.tipomemo.logros" /></td>
@@ -424,10 +424,10 @@
 							<td align="right"><vgcutil:message key="jsp.editarexplicacion.ficha.tipomemo.perspectivas" /></td>
 							<td><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="memoPerspectivas" rows="3" cols="58" styleClass="cuadroTexto"></html:textarea></td>
 						</tr>
-						<tr>
+						<!--   <tr>
 							<td align="right"><vgcutil:message key="jsp.editarexplicacion.ficha.tipomemo.url" /></td>
 							<td><html:textarea disabled="<%= Boolean.parseBoolean(bloquearForma) %>" property="memoUrl" rows="3" cols="58" styleClass="cuadroTexto"></html:textarea></td>
-						</tr>
+						</tr>-->
 											
 						
 						
