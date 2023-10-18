@@ -18,7 +18,7 @@
 		<!-- Estados de la Iniciativa -->
 		<form-bean name="gestionarIniciativaEstatusForm" type="com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms.GestionarIniciativaEstatusForm" />
 		<form-bean name="editarIniciativaEstatusForm" type="com.visiongc.app.strategos.web.struts.iniciativas.estatus.forms.EditarIniciativaEstatusForm" />
-		<form-bean name="protegerLiberarIniciativasForm" type="com.visiongc.app.strategos.web.struts.iniciativas.forms.ProtegerLiberarIniciativasForm" />
+		<form-bean name="protegerLiberarIniciativasForm" type="com.visiongc.app.strategos.web.struts.iniciativas.forms.ProtegerLiberarIniciativasForm" />		
 	</form-beans>
 
 	<!-- Definiciones: Global Forward -->
@@ -37,7 +37,8 @@
 		<!-- Estados de la Iniciativa -->
 		<forward name="gestionarEstatusIniciativas" path="/paginas/strategos/iniciativas/estatus/gestionarEstatus.jsp" />
 		<forward name="editarIniciativaEstatus" path="/paginas/strategos/iniciativas/estatus/editarEstatus.jsp" />
-		<forward name="protegerLiberarIniciativa" path="/paginas/strategos/iniciativas/protegerLiberarIniciativas.jsp" />
+		<forward name="protegerLiberarIniciativa" path="/paginas/strategos/iniciativas/protegerLiberarIniciativas.jsp" />		
+		
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -159,6 +160,6 @@
 		
 		<!-- Mapeo del Action: Importar Mediciones  -->
 		<action path="/iniciativas/importarSalvar" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.ImportarIniciativasSalvarAction" name="importarIniciativasForm" scope="session" parameter="asistenteImportarIniciativas"></action>
-						
+									
 		</action-mappings>
 </struts-config>

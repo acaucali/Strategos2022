@@ -1390,7 +1390,7 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
     	this.mapa.put(actionRight.getActionName(), actionRight);
     	actionRight = new StrutsActionRight("transacciones.imprimirexceltransaccion", true, false, "INDICADOR_MEDICION_TRANSACCION_REPORTE");
     	this.mapa.put(actionRight.getActionName(), actionRight);
-
+    	    	    	
     	// Tipos Proyecto
     	actionRight = new StrutsActionRight("tiposproyecto.gestionartiposproyecto", false, false, "TIPOS");
 	    this.mapa.put("tiposproyecto.gestionartiposproyecto", actionRight);

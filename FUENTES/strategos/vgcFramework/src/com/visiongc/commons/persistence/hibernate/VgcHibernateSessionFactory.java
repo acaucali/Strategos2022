@@ -12,6 +12,7 @@ import com.visiongc.framework.auditoria.model.AuditoriaMemo;
 import com.visiongc.framework.auditoria.model.AuditoriaString;
 import com.visiongc.framework.auditoria.model.ObjetoAuditable;
 import com.visiongc.framework.auditoria.model.ObjetoAuditableAtributo;
+import com.visiongc.framework.model.AfwLic;
 import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.Error;
@@ -70,7 +71,7 @@ public class VgcHibernateSessionFactory {
 			hibernateSessionFactory = configuration.buildSessionFactory();
 		} catch (Throwable ex) {
 			throw new ChainedRuntimeException(
-					"No se pudo inicializar la fábrica de Servicios de persistencia",
+					"No se pudo inicializar la fï¿½brica de Servicios de persistencia",
 					ex);
 		}
 	}
@@ -80,7 +81,7 @@ public class VgcHibernateSessionFactory {
 			return hibernateSessionFactory;
 		} catch (Throwable ex) {
 			throw new ChainedRuntimeException(
-					"No se pudo inicializar la fábrica de Servicios de hibernate session factory",
+					"No se pudo inicializar la fï¿½brica de Servicios de hibernate session factory",
 					ex);
 		}
 	}
@@ -131,5 +132,6 @@ public class VgcHibernateSessionFactory {
 		configuration.addClass(Importacion.class);
 		configuration.addClass(Transaccion.class);
 		configuration.addClass(ReporteServicio.class);		
+		configuration.addClass(AfwLic.class);
 	}
 }

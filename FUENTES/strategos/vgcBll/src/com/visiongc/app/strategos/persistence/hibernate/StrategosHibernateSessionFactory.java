@@ -27,9 +27,11 @@ import com.visiongc.app.strategos.indicadores.persistence.hibernate.StrategosMed
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativaEstatusPersistenceSession;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativasPersistenceSession;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosTipoProyectoPersistenceSession;
+import com.visiongc.app.strategos.iniciativas.persistence.StrategosFaseProyectoPersistenceSession;
 import com.visiongc.app.strategos.iniciativas.persistence.hibernate.StrategosIniciativaEstatusHibernateSession;
 import com.visiongc.app.strategos.iniciativas.persistence.hibernate.StrategosIniciativasHibernateSession;
 import com.visiongc.app.strategos.iniciativas.persistence.hibernate.StrategosTipoProyectoHibernateSession;
+import com.visiongc.app.strategos.iniciativas.persistence.hibernate.StrategosFaseProyectoHibernateSession;
 import com.visiongc.app.strategos.instrumentos.persistence.StrategosCooperantesPersistenceSession;
 import com.visiongc.app.strategos.instrumentos.persistence.StrategosInstrumentosPersistenceSession;
 import com.visiongc.app.strategos.instrumentos.persistence.StrategosTiposConvenioPersistenceSession;
@@ -171,6 +173,7 @@ public class StrategosHibernateSessionFactory
 		}
 		return persistenceSession;
 	}
+		
 	
 	public StrategosCargosPersistenceSession openCargosPersistenceSession(StrategosPersistenceSession strategosPersistenceSession) {
 		StrategosCargosPersistenceSession persistenceSession = null;
@@ -1368,6 +1371,8 @@ public class StrategosHibernateSessionFactory
 
 		return persistenceSession;
 	}
+	
+	
 
 	public StrategosTipoProyectoPersistenceSession openTipoProyectoPersistenceSession(
 			StrategosPersistenceSession strategosPersistenceSession) {
@@ -1380,6 +1385,38 @@ public class StrategosHibernateSessionFactory
 			try {
 				throw new Exception(
 						"No se pudo crear una sesi�n de persistencia de hibernate de Codigo de Enlace de Strategos", e);
+			} catch (Exception localException1) {
+			}
+		}
+
+		return persistenceSession;
+	}
+	
+	public StrategosFaseProyectoPersistenceSession openFaseProyectoPersistenceSession() {
+		StrategosFaseProyectoPersistenceSession persistenceSession = null;
+		try {
+			persistenceSession = new StrategosFaseProyectoHibernateSession(VgcHibernateSessionFactory.getHibernateSessionFactory().openSession());
+		} catch (Exception e) {
+			try {
+				throw new Exception("No se pudo crear una sesion de persistencia de hibernate de Fase Proyectos de Strategos", 
+						e);
+			} catch (Exception localException1) {				
+			}
+		}
+		
+		return persistenceSession;
+	}
+	
+	public StrategosFaseProyectoPersistenceSession openFaseProyectoPersistenceSession(StrategosPersistenceSession strategosPersistenceSession) {
+		
+		StrategosFaseProyectoPersistenceSession persistenceSession = null;
+		StrategosHibernateSession strategosHibernateSession = (StrategosHibernateSession) strategosPersistenceSession;
+		try {
+			persistenceSession = new StrategosFaseProyectoHibernateSession(strategosHibernateSession);
+		} catch (Exception e) {
+			try {
+				throw new Exception(
+						"No se pudo crear una sesion de persistencia de hibernate de Codigo de Enlace de Strategos", e);
 			} catch (Exception localException1) {
 			}
 		}

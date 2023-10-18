@@ -313,11 +313,20 @@ public class FrameworkHibernateSession extends VgcHibernateSession
 
     public Sistema getSistema(String producto)
     {
+    	
         String sql = "select sistema from Sistema sistema";
         if(producto != null && !producto.equals(""))
             sql = (new StringBuilder(String.valueOf(sql))).append(" where lower(sistema.producto) like '").append(producto.toLowerCase()).append("'").toString();
-        Query consulta = session.createQuery(sql);
+        Query consulta = session.createQuery(sql);        
         return (Sistema)consulta.uniqueResult();
+    }
+    
+    public AfwLic getAfwLic()
+    {
+    	String sql = "select afwLic from AfwLic afwLic";
+    	Query consulta = session.createQuery(sql);    	
+    	return (AfwLic)consulta.uniqueResult();
+
     }
 
     public int deleteDependenciasOrganizacionFramework(Long organizacionId)
@@ -747,5 +756,5 @@ public class FrameworkHibernateSession extends VgcHibernateSession
         if(actualizaciones == 0)
             respuesta = 10001;
         return respuesta;
-    }
+    }    
 }

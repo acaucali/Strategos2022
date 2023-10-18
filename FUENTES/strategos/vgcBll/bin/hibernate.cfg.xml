@@ -101,6 +101,7 @@
 		<mapping resource="com/visiongc/app/strategos/iniciativas/model/IndicadorIniciativa.hbm.xml" />
 		<mapping resource="com/visiongc/app/strategos/iniciativas/model/util/IniciativaEstatus.hbm.xml" />
 		<mapping resource="com/visiongc/app/strategos/iniciativas/model/util/TipoProyecto.hbm.xml" />
+		<mapping resource="com/visiongc/app/strategos/iniciativas/model/util/FaseProyecto.hbm.xml" />
 		
 		<!-- Instrumentos -->
 		<mapping resource="com/visiongc/app/strategos/instrumentos/model/Cooperante.hbm.xml" />

@@ -3,6 +3,7 @@ package com.visiongc.framework;
 import com.visiongc.commons.VgcService;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.framework.configuracion.sistema.ConfiguracionPagina;
+import com.visiongc.framework.model.AfwLic;
 import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.Error;
@@ -124,4 +125,6 @@ public interface FrameworkService
         throws Exception;
 
     public abstract int setSerial(String s, String s1);
+    
+    public abstract AfwLic getAfwLic();
 }

@@ -21,8 +21,8 @@
 	<action-mappings>
 		
 		<!-- Mapeo del Action: Gestionar Cargos -->
-		<action path="/cargos/gestionarCargos" type="com.visiongc.app.strategos.web.struts.cargos.actions.GestionarCargosAction" scope="session" name="gestionarCargosForm" parameter="gestionarCargos">
-			<forward name="gestionarCargos" path="/paginas/strategos/cargos/gestionarCargos.jsp" />
+		<action path="/cargos/gestionarCargos" type="com.visiongc.app.strategos.web.struts.cargos.actions.GestionarCargosAction" scope="session" name="gestionarCargosForm" parameter="gestionarCargoss">
+			<forward name="gestionarCargoss" path="/paginas/strategos/cargos/gestionarCargos.jsp" />
 		</action>
 		
 		<!-- Mapeo del Action: Crear Cargo -->

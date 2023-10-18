@@ -26,12 +26,14 @@ import com.visiongc.app.strategos.indicadores.impl.StrategosIndicadorAsignarInve
 import com.visiongc.app.strategos.indicadores.impl.StrategosIndicadoresServiceImpl;
 import com.visiongc.app.strategos.indicadores.impl.StrategosMedicionesServiceImpl;
 import com.visiongc.app.strategos.indicadores.impl.StrategosMedicionesValoracionServiceImpl;
+import com.visiongc.app.strategos.iniciativas.StrategosFaseProyectoService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.app.strategos.iniciativas.impl.StrategosIniciativaEstatusServiceImpl;
 import com.visiongc.app.strategos.iniciativas.impl.StrategosIniciativasServiceImpl;
 import com.visiongc.app.strategos.iniciativas.impl.StrategosTipoProyectoServiceImpl;
+import com.visiongc.app.strategos.iniciativas.impl.StrategosFaseProyectoServiceImpl;
 import com.visiongc.app.strategos.instrumentos.StrategosCooperantesService;
 import com.visiongc.app.strategos.instrumentos.StrategosInstrumentosService;
 import com.visiongc.app.strategos.instrumentos.StrategosTiposConvenioService;
@@ -138,6 +140,7 @@ public class StrategosServiceFactory extends VgcDefaultServiceFactory implements
   {
 	  return new StrategosCargosServiceImpl(persistenceSessionFactory.openCargosPersistenceSession(), true, this,VgcResourceManager.getMessageResources("Strategos"));
   }
+   
   
   public StrategosCategoriasService openStrategosCategoriasService(StrategosService strategosService) {
     return new StrategosCategoriasServiceImpl(persistenceSessionFactory.openCategoriasPersistenceSession(strategosService.getStrategosPersistenceSession()), false, this, VgcResourceManager.getMessageResources("Strategos"));
@@ -485,6 +488,16 @@ public class StrategosServiceFactory extends VgcDefaultServiceFactory implements
   public StrategosTipoProyectoService openStrategosTipoProyectoService(StrategosService strategosService)
   {
     return new StrategosTipoProyectoServiceImpl(persistenceSessionFactory.openTipoProyectoPersistenceSession(strategosService.getStrategosPersistenceSession()), false, this, VgcResourceManager.getMessageResources("Strategos"));
+  }
+  
+  public StrategosFaseProyectoService openStrategosFaseProyectoService()
+  {
+	  return new StrategosFaseProyectoServiceImpl(persistenceSessionFactory.openFaseProyectoPersistenceSession(), true, this, VgcResourceManager.getMessageResources("Strategos"));
+  }
+  
+  public StrategosFaseProyectoService openStrategosFaseProyectoService(StrategosService strategosService)
+  {
+    return new StrategosFaseProyectoServiceImpl(persistenceSessionFactory.openFaseProyectoPersistenceSession(strategosService.getStrategosPersistenceSession()), false, this, VgcResourceManager.getMessageResources("Strategos"));
   }
   
   public StrategosCooperantesService openStrategosCooperantesService()

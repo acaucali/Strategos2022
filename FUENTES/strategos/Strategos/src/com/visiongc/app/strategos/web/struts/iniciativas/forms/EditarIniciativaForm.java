@@ -1,10 +1,12 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.forms;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.visiongc.app.strategos.cargos.model.Cargos;
 import com.visiongc.app.strategos.indicadores.model.util.TipoMedicion;
+import com.visiongc.app.strategos.iniciativas.model.util.FaseProyecto;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus.EstatusType;
 import com.visiongc.app.strategos.iniciativas.model.util.TipoCalculoEstadoIniciativa;
@@ -14,8 +16,7 @@ import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
-public class EditarIniciativaForm extends EditarObjetoForm
-{
+public class EditarIniciativaForm extends EditarObjetoForm {
 	static final long serialVersionUID = 0L;
 
 	private final String SEPARADOR = "|+|";
@@ -28,39 +29,39 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private List grupoAnos;
 	private String enteEjecutor;
 	private Byte tipoAlerta;
-  	private Double alertaZonaVerde;
-  	private Double alertaZonaAmarilla;
-  	private Long organizacionId;
-  	private Long responsableFijarMetaId;
-  	private Long responsableLograrMetaId;
-  	private Long responsableSeguimientoId;
-  	private Long responsableCargarMetaId;
-  	private Long responsableCargarEjecutadoId;
-  	private String descripcion;
-  	private String resultado;
-  	private String resultadoEspecificoIniciativa;
-  	private Integer ano;
-  	private Boolean visible;
-  	private String responsableFijarMeta;
-  	private String responsableLograrMeta;
-  	private String responsableSeguimiento;
-  	private String responsableCargarMeta;
-  	private String responsableCargarEjecutado;
-  	private Long planId;
-  	private Long perspectivaId;
-  	private Long iniciativaAsociadaPlanId;
-  	private String planNombre;
-  	private String perspectivaNombre;
-  	private String nombreObjetoPerspectiva;
-  	private String nombreObjetoIniciativa;
-  	private String frecuenciaNombre;
-  	private String unidadNombre;
-  	private String seriesIndicador;
-  	private Boolean hayValorPorcentajeAmarillo;
-  	private Boolean hayValorPorcentajeVerde;
-  	private String organizacionNombre;
-  	private Byte tipoMedicion;
-  	private Boolean eliminarMediciones;
+	private Double alertaZonaVerde;
+	private Double alertaZonaAmarilla;
+	private Long organizacionId;
+	private Long responsableFijarMetaId;
+	private Long responsableLograrMetaId;
+	private Long responsableSeguimientoId;
+	private Long responsableCargarMetaId;
+	private Long responsableCargarEjecutadoId;
+	private String descripcion;
+	private String resultado;
+	private String resultadoEspecificoIniciativa;
+	private Integer ano;
+	private Boolean visible;
+	private String responsableFijarMeta;
+	private String responsableLograrMeta;
+	private String responsableSeguimiento;
+	private String responsableCargarMeta;
+	private String responsableCargarEjecutado;
+	private Long planId;
+	private Long perspectivaId;
+	private Long iniciativaAsociadaPlanId;
+	private String planNombre;
+	private String perspectivaNombre;
+	private String nombreObjetoPerspectiva;
+	private String nombreObjetoIniciativa;
+	private String frecuenciaNombre;
+	private String unidadNombre;
+	private String seriesIndicador;
+	private Boolean hayValorPorcentajeAmarillo;
+	private Boolean hayValorPorcentajeVerde;
+	private String organizacionNombre;
+	private Byte tipoMedicion;
+	private Boolean eliminarMediciones;
 	private Long estatusId;
 	private IniciativaEstatus estatus;
 	private List<IniciativaEstatus> estatuses;
@@ -72,7 +73,7 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private Boolean desdeInstrumento;
 	private Long instrumentoId;
 
-	//Campos nuevos
+	// Campos nuevos
 	private String responsableProyecto;
 	private String cargoResponsable;
 	private String organizacionesInvolucradas;
@@ -88,18 +89,70 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	private String alcance;
 	private String objetivoGeneral;
 	private String objetivoEspecificos;
-	
+
 	private String codigoIniciativa;
 	private Long cargoId;
 	private List<Cargos> cargos;
 
+	private Long faseId;
+	private List<FaseProyecto> fases;
+	
+	private String justificacion;
+	private String fechaInicio;
+	private String fechaFin;
+	private String montoTotal;
+	private String montoMonedaExt;
+	private String situacionPresupuestaria;
+	private String hitos;
+	private String sector;
+	private String fechaActaInicio;
+	private String gerenciaGeneralesRes;
+	private String codigoSipe;
+	private String proyectoPresupAso;
+	private String estado;
+	private String municipio;
+	private String parroquia;
+	private String direccionProyecto;
+	private String objetivoHistorico;
+	private String objetivoNacional;
+	private String objetivoEstrategicoPV;
+	private String objetivoGeneralPV;
+	private String objetivoEspecifico;
+	private String programa;
+	private String problemas;
+	private String causas;
+	private String lineasEstrategicas;
+	
+	private String gerenteProyectoNombre;
+	private String gerenteProyectoCedula;
+	private String gerenteProyectoEmail;
+	private String gerenteProyectoTelefono;	
+	private String responsableTecnicoNombre;
+	private String responsableTecnicoCedula;
+	private String responsableTecnicoEmail;
+	private String responsableTecnicoTelefono;	
+	private String responsableRegistradorNombre;
+	private String responsableRegistradorCedula;
+	private String responsableRegistradorEmail;
+	private String responsableRegistradorTelefono;	
+	private String responsableAdministrativoNombre;
+	private String responsableAdministrativoCedula;
+	private String responsableAdministrativoEmail;
+	private String responsableAdministrativoTelefono;	
+	private String responsableAdminContratosNombre;
+	private String responsableAdminContratosCedula;
+	private String responsableAdminContratosEmail;
+	private String responsableAdminContratosTelefono;
+
+	private Boolean mostrarAdministracionPublica;
+	
 	private Byte partidas;
 	private List<Cargos> cuentas;
-	
+
 	private Long unidad;
 	private List<?> unidadesMedida;
 
-    public Byte getPartidas() {
+	public Byte getPartidas() {
 		return partidas;
 	}
 
@@ -155,413 +208,391 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.tipoProyecto = tipoProyecto;
 	}
 
-  public String getNombreIniciativaSingular()
-  {
-    return this.nombreIniciativaSingular;
-  }
-
-  public void setNombreIniciativaSingular(String nombreIniciativaSingular) {
-    this.nombreIniciativaSingular = nombreIniciativaSingular;
-  }
-
-  public String getResponsableFijarMeta() {
-    return this.responsableFijarMeta;
-  }
-
-  public void setResponsableFijarMeta(String responsableFijarMeta) {
-    this.responsableFijarMeta = responsableFijarMeta;
-  }
-
-  public String getResponsableLograrMeta() {
-    return this.responsableLograrMeta;
-  }
-
-  public void setResponsableLograrMeta(String responsableLograrMeta) {
-    this.responsableLograrMeta = responsableLograrMeta;
-  }
-
-  public String getResponsableSeguimiento() {
-    return this.responsableSeguimiento;
-  }
-
-  public void setResponsableSeguimiento(String responsableSeguimiento) {
-    this.responsableSeguimiento = responsableSeguimiento;
-  }
-
-  public String getResponsableCargarMeta() {
-    return this.responsableCargarMeta;
-  }
-
-  public void setResponsableCargarMeta(String responsableCargarMeta) {
-    this.responsableCargarMeta = responsableCargarMeta;
-  }
-
-  public String getResponsableCargarEjecutado() {
-    return this.responsableCargarEjecutado;
-  }
-
-  public void setResponsableCargarEjecutado(String responsableCargarEjecutado) {
-    this.responsableCargarEjecutado = responsableCargarEjecutado;
-  }
-
-  public String getSEPARADOR() {
-    return "|+|";
-  }
-
-  public String getResultadoEspecificoIniciativa() {
-    return this.resultadoEspecificoIniciativa;
-  }
-
-  public void setResultadoEspecificoIniciativa(String resultadoEspecificoIniciativa) {
-    this.resultadoEspecificoIniciativa = resultadoEspecificoIniciativa;
-  }
-
-  public String getResultado() {
-    return this.resultado;
-  }
-
-  public void setResultado(String resultado) {
-    this.resultado = resultado;
-  }
-
-  public String getDescripcion() {
-    return this.descripcion;
-  }
-
-  public void setDescripcion(String descripcion) {
-    this.descripcion = descripcion;
-  }
-
-  public Long getIniciativaId() {
-    return this.iniciativaId;
-  }
-
-  public void setIniciativaId(Long iniciativaId) {
-    this.iniciativaId = iniciativaId;
-  }
-
-  public String getNombre() {
-    return this.nombre;
-  }
-
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
-  }
-
-  public String getAnioFormulacion() {
-	    return this.anioFormulacion;
-  }
-
-  public void setAnioFormulacion(String anioFormulacion) {
-	    this.anioFormulacion = anioFormulacion;
-  }
-
-  public Byte getTipoAlerta() {
-    return this.tipoAlerta;
-  }
-
-  public void setTipoAlerta(Byte tipoAlerta) {
-    this.tipoAlerta = tipoAlerta;
-  }
-
-  public Double getAlertaZonaVerde() {
-    return this.alertaZonaVerde;
-  }
-
-  public void setAlertaZonaVerde(Double alertaZonaVerde) {
-    this.alertaZonaVerde = alertaZonaVerde;
-  }
-
-  public Double getAlertaZonaAmarilla() {
-    return this.alertaZonaAmarilla;
-  }
-
-  public void setAlertaZonaAmarilla(Double alertaZonaAmarilla) {
-    this.alertaZonaAmarilla = alertaZonaAmarilla;
-  }
-
-  public Long getOrganizacionId() {
-    return this.organizacionId;
-  }
-
-  public void setOrganizacionId(Long organizacionId) {
-    this.organizacionId = organizacionId;
-  }
-
-  public Byte getFrecuencia() {
-    return this.frecuencia;
-  }
-
-  public void setFrecuencia(Byte frecuencia) {
-    this.frecuencia = frecuencia;
-  }
-
-  public List getFrecuencias() {
-    return this.frecuencias;
-  }
-
-  public void setFrecuencias(List frecuencias) {
-    this.frecuencias = frecuencias;
-  }
-
-  public List getGrupoAnos() {
-    return this.grupoAnos;
-  }
-
-  public void setGrupoAnos(List grupoAnos) {
-    this.grupoAnos = grupoAnos;
-  }
-
-  public String getNombreLargo() {
-    return this.nombreLargo;
-  }
-
-  public void setNombreLargo(String nombreLargo) {
-    this.nombreLargo = nombreLargo;
-  }
-
-  public String getEnteEjecutor() {
-    return this.enteEjecutor;
-  }
-
-  public void setEnteEjecutor(String enteEjecutor) {
-    this.enteEjecutor = enteEjecutor;
-  }
-
-  public Long getResponsableFijarMetaId() {
-    return this.responsableFijarMetaId;
-  }
-
-  public void setResponsableFijarMetaId(Long responsableFijarMetaId) {
-    this.responsableFijarMetaId = responsableFijarMetaId;
-  }
-
-  public Long getResponsableLograrMetaId() {
-    return this.responsableLograrMetaId;
-  }
-
-  public void setResponsableLograrMetaId(Long responsableLograrMetaId) {
-    this.responsableLograrMetaId = responsableLograrMetaId;
-  }
-
-  public Long getResponsableSeguimientoId() {
-    return this.responsableSeguimientoId;
-  }
-
-  public void setResponsableSeguimientoId(Long responsableSeguimientoId) {
-    this.responsableSeguimientoId = responsableSeguimientoId;
-  }
-
-  public Long getResponsableCargarMetaId() {
-    return this.responsableCargarMetaId;
-  }
-
-  public void setResponsableCargarMetaId(Long responsableCargarMetaId) {
-    this.responsableCargarMetaId = responsableCargarMetaId;
-  }
-
-  public Long getResponsableCargarEjecutadoId() {
-    return this.responsableCargarEjecutadoId;
-  }
-
-  public void setResponsableCargarEjecutadoId(Long responsableCargarEjecutadoId) {
-    this.responsableCargarEjecutadoId = responsableCargarEjecutadoId;
-  }
-
-  public Integer getAno() {
-    return this.ano;
-  }
-
-  public void setAno(Integer ano) {
-    this.ano = ano;
-  }
-
-  public Boolean getVisible() {
-    return this.visible;
-  }
-
-  public void setVisible(Boolean visible) {
-    this.visible = visible;
-  }
-
-  public Long getIniciativaAsociadaPlanId() {
-    return this.iniciativaAsociadaPlanId;
-  }
-
-  public void setIniciativaAsociadaPlanId(Long iniciativaAsociadaPlanId) {
-    this.iniciativaAsociadaPlanId = iniciativaAsociadaPlanId;
-  }
-
-  public Long getPlanId() {
-    return this.planId;
-  }
-
-  public void setPlanId(Long planId) {
-    this.planId = planId;
-  }
-
-  public Long getPerspectivaId() {
-    return this.perspectivaId;
-  }
-
-  public void setPerspectivaId(Long perspectivaId) {
-    this.perspectivaId = perspectivaId;
-  }
-
-  public String getPerspectivaNombre() {
-    return this.perspectivaNombre;
-  }
-
-  public void setPerspectivaNombre(String perspectivaNombre) {
-    this.perspectivaNombre = perspectivaNombre;
-  }
-
-  public String getPlanNombre() {
-    return this.planNombre;
-  }
-
-  public void setPlanNombre(String planNombre) {
-    this.planNombre = planNombre;
-  }
-
-  public String getNombreObjetoPerspectiva() {
-    return this.nombreObjetoPerspectiva;
-  }
-
-  public void setNombreObjetoPerspectiva(String nombreObjetoPerspectiva) {
-    this.nombreObjetoPerspectiva = nombreObjetoPerspectiva;
-  }
-
-  public String getFrecuenciaNombre() {
-    return this.frecuenciaNombre;
-  }
-
-  public void setFrecuenciaNombre(String frecuenciaNombre) {
-    this.frecuenciaNombre = frecuenciaNombre;
-  }
-
-  public String getUnidadNombre() {
-    return this.unidadNombre;
-  }
-
-  public void setUnidadNombre(String unidadNombre) {
-    this.unidadNombre = unidadNombre;
-  }
-
-  public String getNombreObjetoIniciativa() {
-    return this.nombreObjetoIniciativa;
-  }
-
-  public void setNombreObjetoIniciativa(String nombreObjetoIniciativa) {
-    this.nombreObjetoIniciativa = nombreObjetoIniciativa;
-  }
-
-  public String getSeriesIndicador()
-  {
-    return this.seriesIndicador;
-  }
-
-  public void setSeriesIndicador(String seriesIndicador)
-  {
-    this.seriesIndicador = seriesIndicador;
-  }
-
-  public String getSeparadorSeries()
-  {
-    return new EditarIndicadorForm().getSeparadorSeries();
-  }
-
-	public Boolean getHayValorPorcentajeAmarillo()
-	{
-	  return this.hayValorPorcentajeAmarillo;
+	public String getNombreIniciativaSingular() {
+		return this.nombreIniciativaSingular;
 	}
 
-	public void setHayValorPorcentajeAmarillo(Boolean hayValorPorcentajeAmarillo)
-	{
+	public void setNombreIniciativaSingular(String nombreIniciativaSingular) {
+		this.nombreIniciativaSingular = nombreIniciativaSingular;
+	}
+
+	public String getResponsableFijarMeta() {
+		return this.responsableFijarMeta;
+	}
+
+	public void setResponsableFijarMeta(String responsableFijarMeta) {
+		this.responsableFijarMeta = responsableFijarMeta;
+	}
+
+	public String getResponsableLograrMeta() {
+		return this.responsableLograrMeta;
+	}
+
+	public void setResponsableLograrMeta(String responsableLograrMeta) {
+		this.responsableLograrMeta = responsableLograrMeta;
+	}
+
+	public String getResponsableSeguimiento() {
+		return this.responsableSeguimiento;
+	}
+
+	public void setResponsableSeguimiento(String responsableSeguimiento) {
+		this.responsableSeguimiento = responsableSeguimiento;
+	}
+
+	public String getResponsableCargarMeta() {
+		return this.responsableCargarMeta;
+	}
+
+	public void setResponsableCargarMeta(String responsableCargarMeta) {
+		this.responsableCargarMeta = responsableCargarMeta;
+	}
+
+	public String getResponsableCargarEjecutado() {
+		return this.responsableCargarEjecutado;
+	}
+
+	public void setResponsableCargarEjecutado(String responsableCargarEjecutado) {
+		this.responsableCargarEjecutado = responsableCargarEjecutado;
+	}
+
+	public String getSEPARADOR() {
+		return "|+|";
+	}
+
+	public String getResultadoEspecificoIniciativa() {
+		return this.resultadoEspecificoIniciativa;
+	}
+
+	public void setResultadoEspecificoIniciativa(String resultadoEspecificoIniciativa) {
+		this.resultadoEspecificoIniciativa = resultadoEspecificoIniciativa;
+	}
+
+	public String getResultado() {
+		return this.resultado;
+	}
+
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
+	}
+
+	public String getDescripcion() {
+		return this.descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public Long getIniciativaId() {
+		return this.iniciativaId;
+	}
+
+	public void setIniciativaId(Long iniciativaId) {
+		this.iniciativaId = iniciativaId;
+	}
+
+	public String getNombre() {
+		return this.nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getAnioFormulacion() {
+		return this.anioFormulacion;
+	}
+
+	public void setAnioFormulacion(String anioFormulacion) {
+		this.anioFormulacion = anioFormulacion;
+	}
+
+	public Byte getTipoAlerta() {
+		return this.tipoAlerta;
+	}
+
+	public void setTipoAlerta(Byte tipoAlerta) {
+		this.tipoAlerta = tipoAlerta;
+	}
+
+	public Double getAlertaZonaVerde() {
+		return this.alertaZonaVerde;
+	}
+
+	public void setAlertaZonaVerde(Double alertaZonaVerde) {
+		this.alertaZonaVerde = alertaZonaVerde;
+	}
+
+	public Double getAlertaZonaAmarilla() {
+		return this.alertaZonaAmarilla;
+	}
+
+	public void setAlertaZonaAmarilla(Double alertaZonaAmarilla) {
+		this.alertaZonaAmarilla = alertaZonaAmarilla;
+	}
+
+	public Long getOrganizacionId() {
+		return this.organizacionId;
+	}
+
+	public void setOrganizacionId(Long organizacionId) {
+		this.organizacionId = organizacionId;
+	}
+
+	public Byte getFrecuencia() {
+		return this.frecuencia;
+	}
+
+	public void setFrecuencia(Byte frecuencia) {
+		this.frecuencia = frecuencia;
+	}
+
+	public List getFrecuencias() {
+		return this.frecuencias;
+	}
+
+	public void setFrecuencias(List frecuencias) {
+		this.frecuencias = frecuencias;
+	}
+
+	public List getGrupoAnos() {
+		return this.grupoAnos;
+	}
+
+	public void setGrupoAnos(List grupoAnos) {
+		this.grupoAnos = grupoAnos;
+	}
+
+	public String getNombreLargo() {
+		return this.nombreLargo;
+	}
+
+	public void setNombreLargo(String nombreLargo) {
+		this.nombreLargo = nombreLargo;
+	}
+
+	public String getEnteEjecutor() {
+		return this.enteEjecutor;
+	}
+
+	public void setEnteEjecutor(String enteEjecutor) {
+		this.enteEjecutor = enteEjecutor;
+	}
+
+	public Long getResponsableFijarMetaId() {
+		return this.responsableFijarMetaId;
+	}
+
+	public void setResponsableFijarMetaId(Long responsableFijarMetaId) {
+		this.responsableFijarMetaId = responsableFijarMetaId;
+	}
+
+	public Long getResponsableLograrMetaId() {
+		return this.responsableLograrMetaId;
+	}
+
+	public void setResponsableLograrMetaId(Long responsableLograrMetaId) {
+		this.responsableLograrMetaId = responsableLograrMetaId;
+	}
+
+	public Long getResponsableSeguimientoId() {
+		return this.responsableSeguimientoId;
+	}
+
+	public void setResponsableSeguimientoId(Long responsableSeguimientoId) {
+		this.responsableSeguimientoId = responsableSeguimientoId;
+	}
+
+	public Long getResponsableCargarMetaId() {
+		return this.responsableCargarMetaId;
+	}
+
+	public void setResponsableCargarMetaId(Long responsableCargarMetaId) {
+		this.responsableCargarMetaId = responsableCargarMetaId;
+	}
+
+	public Long getResponsableCargarEjecutadoId() {
+		return this.responsableCargarEjecutadoId;
+	}
+
+	public void setResponsableCargarEjecutadoId(Long responsableCargarEjecutadoId) {
+		this.responsableCargarEjecutadoId = responsableCargarEjecutadoId;
+	}
+
+	public Integer getAno() {
+		return this.ano;
+	}
+
+	public void setAno(Integer ano) {
+		this.ano = ano;
+	}
+
+	public Boolean getVisible() {
+		return this.visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+
+	public Long getIniciativaAsociadaPlanId() {
+		return this.iniciativaAsociadaPlanId;
+	}
+
+	public void setIniciativaAsociadaPlanId(Long iniciativaAsociadaPlanId) {
+		this.iniciativaAsociadaPlanId = iniciativaAsociadaPlanId;
+	}
+
+	public Long getPlanId() {
+		return this.planId;
+	}
+
+	public void setPlanId(Long planId) {
+		this.planId = planId;
+	}
+
+	public Long getPerspectivaId() {
+		return this.perspectivaId;
+	}
+
+	public void setPerspectivaId(Long perspectivaId) {
+		this.perspectivaId = perspectivaId;
+	}
+
+	public String getPerspectivaNombre() {
+		return this.perspectivaNombre;
+	}
+
+	public void setPerspectivaNombre(String perspectivaNombre) {
+		this.perspectivaNombre = perspectivaNombre;
+	}
+
+	public String getPlanNombre() {
+		return this.planNombre;
+	}
+
+	public void setPlanNombre(String planNombre) {
+		this.planNombre = planNombre;
+	}
+
+	public String getNombreObjetoPerspectiva() {
+		return this.nombreObjetoPerspectiva;
+	}
+
+	public void setNombreObjetoPerspectiva(String nombreObjetoPerspectiva) {
+		this.nombreObjetoPerspectiva = nombreObjetoPerspectiva;
+	}
+
+	public String getFrecuenciaNombre() {
+		return this.frecuenciaNombre;
+	}
+
+	public void setFrecuenciaNombre(String frecuenciaNombre) {
+		this.frecuenciaNombre = frecuenciaNombre;
+	}
+
+	public String getUnidadNombre() {
+		return this.unidadNombre;
+	}
+
+	public void setUnidadNombre(String unidadNombre) {
+		this.unidadNombre = unidadNombre;
+	}
+
+	public String getNombreObjetoIniciativa() {
+		return this.nombreObjetoIniciativa;
+	}
+
+	public void setNombreObjetoIniciativa(String nombreObjetoIniciativa) {
+		this.nombreObjetoIniciativa = nombreObjetoIniciativa;
+	}
+
+	public String getSeriesIndicador() {
+		return this.seriesIndicador;
+	}
+
+	public void setSeriesIndicador(String seriesIndicador) {
+		this.seriesIndicador = seriesIndicador;
+	}
+
+	public String getSeparadorSeries() {
+		return new EditarIndicadorForm().getSeparadorSeries();
+	}
+
+	public Boolean getHayValorPorcentajeAmarillo() {
+		return this.hayValorPorcentajeAmarillo;
+	}
+
+	public void setHayValorPorcentajeAmarillo(Boolean hayValorPorcentajeAmarillo) {
 		this.hayValorPorcentajeAmarillo = hayValorPorcentajeAmarillo;
 	}
 
-	public Boolean getHayValorPorcentajeVerde()
-	{
-	  return this.hayValorPorcentajeVerde;
+	public Boolean getHayValorPorcentajeVerde() {
+		return this.hayValorPorcentajeVerde;
 	}
 
-	public void setHayValorPorcentajeVerde(Boolean hayValorPorcentajeVerde)
-	{
+	public void setHayValorPorcentajeVerde(Boolean hayValorPorcentajeVerde) {
 		this.hayValorPorcentajeVerde = hayValorPorcentajeVerde;
 	}
 
-  	public String getOrganizacionNombre()
-  	{
-  		return this.organizacionNombre;
-  	}
+	public String getOrganizacionNombre() {
+		return this.organizacionNombre;
+	}
 
-	public void setOrganizacionNombre(String organizacionNombre)
-	{
+	public void setOrganizacionNombre(String organizacionNombre) {
 		this.organizacionNombre = organizacionNombre;
 	}
 
-  	public Byte getTipoMedicion()
-  	{
-	  return this.tipoMedicion;
-  	}
+	public Byte getTipoMedicion() {
+		return this.tipoMedicion;
+	}
 
-  	public void setTipoMedicion(Byte tipoMedicion)
-  	{
-	  this.tipoMedicion = tipoMedicion;
-  	}
+	public void setTipoMedicion(Byte tipoMedicion) {
+		this.tipoMedicion = tipoMedicion;
+	}
 
-  	public Boolean getEliminarMediciones()
-  	{
-  		return this.eliminarMediciones;
-  	}
+	public Boolean getEliminarMediciones() {
+		return this.eliminarMediciones;
+	}
 
-  	public void setEliminarMediciones(Boolean eliminarMediciones)
-  	{
-  		this.eliminarMediciones = eliminarMediciones;
-  	}
+	public void setEliminarMediciones(Boolean eliminarMediciones) {
+		this.eliminarMediciones = eliminarMediciones;
+	}
 
-	public Long getEstatusId()
-	{
+	public Long getEstatusId() {
 		return this.estatusId;
 	}
 
-	public void setEstatusId(Long estatusId)
-	{
+	public void setEstatusId(Long estatusId) {
 		this.estatusId = estatusId;
 	}
 
-	public IniciativaEstatus getEstatus()
-	{
+	public IniciativaEstatus getEstatus() {
 		return this.estatus;
 	}
 
-	public void setEstatus(IniciativaEstatus estatus)
-	{
+	public void setEstatus(IniciativaEstatus estatus) {
 		this.estatus = estatus;
 	}
 
-	public List<IniciativaEstatus> getEstatuses()
-	{
+	public List<IniciativaEstatus> getEstatuses() {
 		return this.estatuses;
 	}
 
-	public void setEstatuses(List<IniciativaEstatus> estatuses)
-	{
+	public void setEstatuses(List<IniciativaEstatus> estatuses) {
 		this.estatuses = estatuses;
 	}
 
-	public Double getPorcentajeCompletado()
-	{
-	    return this.porcentajeCompletado;
+	public Double getPorcentajeCompletado() {
+		return this.porcentajeCompletado;
 	}
 
-	public void setPorcentajeCompletado(Double porcentajeCompletado)
-	{
-	    this.porcentajeCompletado = porcentajeCompletado;
+	public void setPorcentajeCompletado(Double porcentajeCompletado) {
+		this.porcentajeCompletado = porcentajeCompletado;
 	}
 
-  	public Boolean getDesdeInstrumento() {
+	public Boolean getDesdeInstrumento() {
 		return desdeInstrumento;
 	}
 
@@ -689,10 +720,8 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.objetivoEspecificos = objetivoEspecificos;
 	}
 
-
 	@Override
-	public void clear()
-	{
+	public void clear() {
 		Calendar fechaActual = Calendar.getInstance();
 
 		int anoActual = fechaActual.get(1);
@@ -712,15 +741,14 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.tipoAlerta = TipoCalculoEstadoIniciativa.getTipoCalculoEstadoIniciativaPorActividades();
 		this.alertaZonaAmarilla = null;
 		this.alertaZonaVerde = null;
-	    this.hayValorPorcentajeAmarillo = false;
-	    this.hayValorPorcentajeVerde = false;
+		this.hayValorPorcentajeAmarillo = false;
+		this.hayValorPorcentajeVerde = false;
 		this.ano = new Integer(anoActual);
 		this.resultado = null;
 		int anoTemp = anoActual - 5;
 		int anoFinal = anoActual + 5;
 		String resultadosEspecificos = "";
-		while (anoTemp < anoFinal)
-		{
+		while (anoTemp < anoFinal) {
 			resultadosEspecificos = resultadosEspecificos + "|+|";
 			anoTemp++;
 		}
@@ -754,14 +782,68 @@ public class EditarIniciativaForm extends EditarObjetoForm
 		this.objetivoGeneral = null;
 		this.objetivoEspecificos = null;
 		
+		this.justificacion = null;
+		this.fechaInicio = null;
+		this.fechaFin = null;
+		this.montoTotal = null;
+		this.montoMonedaExt = null;
+		this.situacionPresupuestaria =  null;
+		this.hitos = null;
+		this.sector =  null;
+		this.fechaActaInicio =  null;
+		this.gerenciaGeneralesRes = null;
+		this.codigoSipe = null;
+		this.proyectoPresupAso =  null;
+		this.estado = null;
+		this.municipio =  null;
+		this.parroquia = null;
+		this.direccionProyecto = null;
+		this.objetivoHistorico = null;
+		this.objetivoNacional =  null;
+		this.objetivoEstrategicoPV =  null;
+		this.objetivoGeneralPV = null;
+		this.objetivoEspecifico = null;
+		this.programa = null;
+		this.problemas = null;
+		this.causas = null;
+		this.lineasEstrategicas = null;
+
 		this.codigoIniciativa = null;
 		this.cargoId = new Long(0L);
 		this.cargos = null;
+		
+		this.faseId = new Long(0L);
+		this.fases = null;
+		
 		this.partidas = 1;
 		this.unidadesMedida = null;
-		this.unidad =  new Long(0L);
+		this.unidad = new Long(0L);
+		
+		this.gerenteProyectoNombre = null;
+		this.gerenteProyectoCedula = null;
+		this.gerenteProyectoEmail = null;
+		this.gerenteProyectoTelefono = null;
+		this.responsableTecnicoNombre = null;
+		this.responsableTecnicoCedula = null;
+		this.responsableTecnicoEmail = null;
+		this.responsableTecnicoTelefono = null;
+		this.responsableRegistradorNombre = null;
+		this.responsableRegistradorCedula = null;
+		this.responsableRegistradorEmail = null;
+		this.responsableRegistradorTelefono = null;
+		this.responsableAdministrativoNombre = null;
+		this.responsableAdministrativoCedula = null;
+		this.responsableAdministrativoEmail = null;
+		this.responsableAdministrativoTelefono = null;
+		this.responsableAdminContratosNombre = null;
+		this.responsableAdminContratosCedula = null;
+		this.responsableAdminContratosEmail = null;
+		this.responsableAdminContratosTelefono = null;
+		
+		this.mostrarAdministracionPublica = null;
 
-		this.seriesIndicador = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries() + SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();
+		this.seriesIndicador = getSeparadorSeries() + SerieTiempo.getSerieRealId() + getSeparadorSeries()
+				+ SerieTiempo.getSerieProgramadoId() + getSeparadorSeries();
 	}
 
 	public Long getCargoId() {
@@ -779,6 +861,22 @@ public class EditarIniciativaForm extends EditarObjetoForm
 	public void setCargos(List<Cargos> cargos) {
 		this.cargos = cargos;
 	}
+	
+	public Long getFaseId() {
+		return faseId;
+	}
+	
+	public void setFaseId(Long faseId) { 
+		this.faseId = faseId;
+	}
+	
+	public List<?> getFases(){
+		return fases;	
+	}
+	
+	public void setFases(List<FaseProyecto> fases) {
+		this.fases = fases;
+	}
 
 	public String getCodigoIniciativa() {
 		return codigoIniciativa;
@@ -794,5 +892,373 @@ public class EditarIniciativaForm extends EditarObjetoForm
 
 	public void setUnidadesMedida(List<?> unidadesMedida) {
 		this.unidadesMedida = unidadesMedida;
+	}
+
+	public String getJustificacion() {
+		return justificacion;
+	}
+
+	public void setJustificacion(String justificacion) {
+		this.justificacion = justificacion;
+	}
+
+	public String getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(String fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	public String getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(String fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public String getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(String montoTotal) {
+		this.montoTotal = montoTotal;
+	}
+
+	public String getMontoMonedaExt() {
+		return montoMonedaExt;
+	}
+
+	public void setMontoMonedaExt(String montoMonedaExt) {
+		this.montoMonedaExt = montoMonedaExt;
+	}
+
+	public String getSituacionPresupuestaria() {
+		return situacionPresupuestaria;
+	}
+
+	public void setSituacionPresupuestaria(String situacionPresupuestaria) {
+		this.situacionPresupuestaria = situacionPresupuestaria;
+	}
+
+	public String getHitos() {
+		return hitos;
+	}
+
+	public void setHitos(String hitos) {
+		this.hitos = hitos;
+	}
+
+	public String getSector() {
+		return sector;
+	}
+
+	public void setSector(String sector) {
+		this.sector = sector;
+	}
+
+	public String getFechaActaInicio() {
+		return fechaActaInicio;
+	}
+
+	public void setFechaActaInicio(String fechaActaInicio) {
+		this.fechaActaInicio = fechaActaInicio;
+	}
+
+	public String getGerenciaGeneralesRes() {
+		return gerenciaGeneralesRes;
+	}
+
+	public void setGerenciaGeneralesRes(String gerenciaGeneralesRes) {
+		this.gerenciaGeneralesRes = gerenciaGeneralesRes;
+	}
+
+	public String getCodigoSipe() {
+		return codigoSipe;
+	}
+
+	public void setCodigoSipe(String codigoSipe) {
+		this.codigoSipe = codigoSipe;
+	}
+
+	public String getProyectoPresupAso() {
+		return proyectoPresupAso;
+	}
+
+	public void setProyectoPresupAso(String proyectoPresupAso) {
+		this.proyectoPresupAso = proyectoPresupAso;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getMunicipio() {
+		return municipio;
+	}
+
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
+	}
+
+	public String getParroquia() {
+		return parroquia;
+	}
+
+	public void setParroquia(String parroquia) {
+		this.parroquia = parroquia;
+	}
+
+	public String getDireccionProyecto() {
+		return direccionProyecto;
+	}
+
+	public void setDireccionProyecto(String direccionProyecto) {
+		this.direccionProyecto = direccionProyecto;
+	}
+
+	public String getObjetivoHistorico() {
+		return objetivoHistorico;
+	}
+
+	public void setObjetivoHistorico(String objetivoHistorico) {
+		this.objetivoHistorico = objetivoHistorico;
+	}
+
+	public String getObjetivoNacional() {
+		return objetivoNacional;
+	}
+
+	public void setObjetivoNacional(String objetivoNacional) {
+		this.objetivoNacional = objetivoNacional;
+	}
+
+	public String getObjetivoEstrategicoPV() {
+		return objetivoEstrategicoPV;
+	}
+
+	public void setObjetivoEstrategicoPV(String objetivoEstrategicoPV) {
+		this.objetivoEstrategicoPV = objetivoEstrategicoPV;
+	}
+
+	public String getObjetivoGeneralPV() {
+		return objetivoGeneralPV;
+	}
+
+	public void setObjetivoGeneralPV(String objetivoGeneralPV) {
+		this.objetivoGeneralPV = objetivoGeneralPV;
+	}
+
+	public String getObjetivoEspecifico() {
+		return objetivoEspecifico;
+	}
+
+	public void setObjetivoEspecifico(String objetivoEspecifico) {
+		this.objetivoEspecifico = objetivoEspecifico;
+	}
+
+	public String getPrograma() {
+		return programa;
+	}
+
+	public void setPrograma(String programa) {
+		this.programa = programa;
+	}
+
+	public String getProblemas() {
+		return problemas;
+	}
+
+	public void setProblemas(String problemas) {
+		this.problemas = problemas;
+	}
+
+	public String getCausas() {
+		return causas;
+	}
+
+	public void setCausas(String causas) {
+		this.causas = causas;
+	}
+
+	public String getLineasEstrategicas() {
+		return lineasEstrategicas;
+	}
+
+	public void setLineasEstrategicas(String lineasEstrategicas) {
+		this.lineasEstrategicas = lineasEstrategicas;
+	}
+	
+	public String getGerenteProyectoNombre() {
+		return gerenteProyectoNombre;
+	}
+
+	public void setGerenteProyectoNombre(String gerenteProyectoNombre) {
+		this.gerenteProyectoNombre = gerenteProyectoNombre;
+	}
+
+	public String getGerenteProyectoCedula() {
+		return gerenteProyectoCedula;
+	}
+
+	public void setGerenteProyectoCedula(String gerenteProyectoCedula) {
+		this.gerenteProyectoCedula = gerenteProyectoCedula;
+	}
+
+	public String getGerenteProyectoEmail() {
+		return gerenteProyectoEmail;
+	}
+
+	public void setGerenteProyectoEmail(String gerenteProyectoEmail) {
+		this.gerenteProyectoEmail = gerenteProyectoEmail;
+	}
+
+	public String getGerenteProyectoTelefono() {
+		return gerenteProyectoTelefono;
+	}
+
+	public void setGerenteProyectoTelefono(String gerenteProyectoTelefono) {
+		this.gerenteProyectoTelefono = gerenteProyectoTelefono;
+	}
+
+	public String getResponsableTecnicoNombre() {
+		return responsableTecnicoNombre;
+	}
+
+	public void setResponsableTecnicoNombre(String responsableTecnicoNombre) {
+		this.responsableTecnicoNombre = responsableTecnicoNombre;
+	}
+
+	public String getResponsableTecnicoCedula() {
+		return responsableTecnicoCedula;
+	}
+
+	public void setResponsableTecnicoCedula(String responsableTecnicoCedula) {
+		this.responsableTecnicoCedula = responsableTecnicoCedula;
+	}
+
+	public String getResponsableTecnicoEmail() {
+		return responsableTecnicoEmail;
+	}
+
+	public void setResponsableTecnicoEmail(String responsableTecnicoEmail) {
+		this.responsableTecnicoEmail = responsableTecnicoEmail;
+	}
+
+	public String getResponsableTecnicoTelefono() {
+		return responsableTecnicoTelefono;
+	}
+
+	public void setResponsableTecnicoTelefono(String responsableTecnicoTelefono) {
+		this.responsableTecnicoTelefono = responsableTecnicoTelefono;
+	}
+
+	public String getResponsableRegistradorNombre() {
+		return responsableRegistradorNombre;
+	}
+
+	public void setResponsableRegistradorNombre(String responsableRegistradorNombre) {
+		this.responsableRegistradorNombre = responsableRegistradorNombre;
+	}
+
+	public String getResponsableRegistradorCedula() {
+		return responsableRegistradorCedula;
+	}
+
+	public void setResponsableRegistradorCedula(String responsableRegistradorCedula) {
+		this.responsableRegistradorCedula = responsableRegistradorCedula;
+	}
+
+	public String getResponsableRegistradorEmail() {
+		return responsableRegistradorEmail;
+	}
+
+	public void setResponsableRegistradorEmail(String responsableRegistradorEmail) {
+		this.responsableRegistradorEmail = responsableRegistradorEmail;
+	}
+
+	public String getResponsableRegistradorTelefono() {
+		return responsableRegistradorTelefono;
+	}
+
+	public void setResponsableRegistradorTelefono(String responsableRegistradorTelefono) {
+		this.responsableRegistradorTelefono = responsableRegistradorTelefono;
+	}
+
+	public String getResponsableAdministrativoNombre() {
+		return responsableAdministrativoNombre;
+	}
+
+	public void setResponsableAdministrativoNombre(String responsableAdministrativoNombre) {
+		this.responsableAdministrativoNombre = responsableAdministrativoNombre;
+	}
+
+	public String getResponsableAdministrativoCedula() {
+		return responsableAdministrativoCedula;
+	}
+
+	public void setResponsableAdministrativoCedula(String responsableAdministrativoCedula) {
+		this.responsableAdministrativoCedula = responsableAdministrativoCedula;
+	}
+
+	public String getResponsableAdministrativoEmail() {
+		return responsableAdministrativoEmail;
+	}
+
+	public void setResponsableAdministrativoEmail(String responsableAdministrativoEmail) {
+		this.responsableAdministrativoEmail = responsableAdministrativoEmail;
+	}
+
+	public String getResponsableAdministrativoTelefono() {
+		return responsableAdministrativoTelefono;
+	}
+
+	public void setResponsableAdministrativoTelefono(String responsableAdministrativoTelefono) {
+		this.responsableAdministrativoTelefono = responsableAdministrativoTelefono;
+	}
+
+	public String getResponsableAdminContratosNombre() {
+		return responsableAdminContratosNombre;
+	}
+
+	public void setResponsableAdminContratosNombre(String responsableAdminContratosNombre) {
+		this.responsableAdminContratosNombre = responsableAdminContratosNombre;
+	}
+
+	public String getResponsableAdminContratosCedula() {
+		return responsableAdminContratosCedula;
+	}
+
+	public void setResponsableAdminContratosCedula(String responsableAdminContratosCedula) {
+		this.responsableAdminContratosCedula = responsableAdminContratosCedula;
+	}
+
+	public String getResponsableAdminContratosEmail() {
+		return responsableAdminContratosEmail;
+	}
+
+	public void setResponsableAdminContratosEmail(String responsableAdminContratosEmail) {
+		this.responsableAdminContratosEmail = responsableAdminContratosEmail;
+	}
+
+	public String getResponsableAdminContratosTelefono() {
+		return responsableAdminContratosTelefono;
+	}
+
+	public void setResponsableAdminContratosTelefono(String responsableAdminContratosTelefono) {
+		this.responsableAdminContratosTelefono = responsableAdminContratosTelefono;
+	}
+
+	public Boolean getMostrarAdministracionPublica() {
+		return mostrarAdministracionPublica;
+	}
+
+	public void setMostrarAdministracionPublica(Boolean mostrarAdministracionPublica) {
+		this.mostrarAdministracionPublica = mostrarAdministracionPublica;
 	}
 }

@@ -87,4 +87,6 @@ public interface FrameworkPersistenceSession
         throws Exception;
 
     public abstract int setSerial(String s, String s1);
+    
+    public abstract AfwLic getAfwLic();
 }

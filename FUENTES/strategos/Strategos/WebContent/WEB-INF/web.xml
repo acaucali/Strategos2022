@@ -170,7 +170,7 @@
 				/WEB-INF/struts-strategosWeb-unidadesmedida-config.xml,
 				/WEB-INF/struts-strategosWeb-estadosacciones-config.xml,
 				/WEB-INF/struts-strategosWeb-iniciativas-config.xml,
-				/WEB-INF/struts-strategosWeb-tiposproyecto-config.xml,
+				/WEB-INF/struts-strategosWeb-tiposproyecto-config.xml,				
 				/WEB-INF/struts-strategosWeb-organizaciones-config.xml, 
 				/WEB-INF/struts-strategosWeb-plancuentas-config.xml,
 				/WEB-INF/struts-strategosWeb-responsables-config.xml,

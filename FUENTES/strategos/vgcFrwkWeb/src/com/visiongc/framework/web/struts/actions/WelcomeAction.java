@@ -8,6 +8,7 @@ import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.AfwLic;
 import com.visiongc.framework.model.Configuracion;
 import com.visiongc.framework.model.Licencia;
 import com.visiongc.framework.model.Sistema;
@@ -103,7 +104,13 @@ public final class WelcomeAction
     */
     
  
-
+    FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
+	  AfwLic afwLic = frameworkService.getAfwLic();	  	  	 
+	  Licencia licencia = new Licencia().getLicencia(request);
+	  
+	  licencia.setCompanyName(afwLic.getCorporacion());
+	  licencia.setSerial(afwLic.getSerial());
+	  licencia.setTipo(afwLic.getLicenciamiento());
 
 
     if (ExternalAuthenticator.getInstance().isActive()) {
@@ -126,8 +133,7 @@ public final class WelcomeAction
     }
     
     if (forward.equals("ingreso"))
-    {
-      FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
+    {      
       frameworkService.getMasterConfiguracion(request);
       frameworkService.close();
     }
@@ -301,4 +307,5 @@ public final class WelcomeAction
     
     return Boolean.valueOf(esLicenciaDemostracion);
   }
+  
 }

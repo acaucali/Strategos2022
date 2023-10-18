@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-mapping SYSTEM "../../../../hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+	<class name="com.visiongc.framework.model.AfwLic" table="afw_lic">
+		<id name="licId" type="java.lang.Long" column="id">
+			<generator class="assigned" />
+		</id>
+		
+		<property name="corporacion" type="java.lang.String" column="corporacion" length="100" />
+		<property name="serial" type="java.lang.String" column="serial" length="50" />
+		<property name="licenciamiento" type="java.lang.String" column="licenciamiento" length="100" />
+	</class>
+</hibernate-mapping>

@@ -965,6 +965,11 @@ public class FrameworkServiceImpl extends VgcAbstractService
     {
         return persistenceSession.setSerial(cmaxc, producto);
     }
+    
+    public AfwLic getAfwLic()
+    {
+    	return persistenceSession.getAfwLic();
+    }
 
     private FrameworkPersistenceSession persistenceSession;
 }

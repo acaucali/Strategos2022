@@ -147,16 +147,7 @@
 						document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.disabled = false;
 					else
 						document.editarConfiguracionSistemaForm.iniciativaIndicadorEficienciaNombre.disabled = true;
-				}
-				
-				if (tipo == 5)
-				{
-					_setAdministracionPublica = value;
-					if (value == true)
-						document.editarConfiguracionSistemaForm.iniciativaAdministracionPublica.disabled = false;
-					else
-						document.editarConfiguracionSistemaForm.iniciativaAdministracionPublica.disabled = true;
-				}
+				}								
 			}
 			
 			function anteponer_click(value, tipo)
@@ -458,12 +449,12 @@
 							<tr>
 								<td align="left" valign="top"><vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica.ficha" /> : </td>
 								<td valign="top">
-									<html:radio name="editarConfiguracionSistemaForm" property="iniciativaAdministracionPublica" value="false" onclick="mostrar_click(false, 5)">
+									<html:radio name="editarConfiguracionSistemaForm" property="iniciativaAdministracionPublica" value="false">
 										<vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica.ficha.no" />
 									</html:radio>
 								</td>
 								<td valign="top">
-									<html:radio name="editarConfiguracionSistemaForm" property="iniciativaAdministracionPublica" value="true" onclick="mostrar_click(true, 5)">
+									<html:radio name="editarConfiguracionSistemaForm" property="iniciativaAdministracionPublica" value="true" >
 										<vgcutil:message key="jsp.configuracion.sistema.iniciativas.administracion.publica.ficha.si" />
 									</html:radio>
 								</td>

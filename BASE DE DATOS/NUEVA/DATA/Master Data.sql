@@ -1257,3 +1257,11 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 
 UPDATE afw_sistema set actual = '9.01-231005';  
 UPDATE afw_sistema set build = 231005;
+
+insert into fases_proyecto (fase_id, nombre) values (1, 'Planificación');
+insert into fases_proyecto (fase_id, nombre) values (2, 'Ingeniería');
+insert into fases_proyecto (fase_id, nombre) values (3, 'Contratación');
+insert into fases_proyecto (fase_id, nombre) values (4, 'Procura');
+insert into fases_proyecto (fase_id, nombre) values (5, 'Puesta en Marcha');
+
+insert into afw_lic (id, corporacion, serial, licenciamiento) values (1, 'Nombre Corporacion', 'Serial Corporacion', 'Tipo Licenciamiento');

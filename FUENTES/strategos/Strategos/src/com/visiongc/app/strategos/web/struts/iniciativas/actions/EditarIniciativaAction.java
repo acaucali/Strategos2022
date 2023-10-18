@@ -1,5 +1,6 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,21 +10,31 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.visiongc.app.strategos.cargos.StrategosCargosService;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
+import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
+import com.visiongc.app.strategos.iniciativas.StrategosFaseProyectoService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.iniciativas.model.ResultadoEspecificoIniciativa;
+import com.visiongc.app.strategos.iniciativas.model.util.ConfiguracionIniciativa;
+import com.visiongc.app.strategos.iniciativas.model.util.FaseProyecto;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus;
 import com.visiongc.app.strategos.iniciativas.model.util.IniciativaEstatus.EstatusType;
 import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
@@ -33,12 +44,17 @@ import com.visiongc.app.strategos.planes.model.Plan;
 import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
 import com.visiongc.app.strategos.util.PeriodoUtil;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.EditarIniciativaForm;
+import com.visiongc.commons.impl.VgcAbstractService;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.util.VgcFormatter;
+import com.visiongc.commons.util.VgcMessageResources;
+import com.visiongc.commons.util.VgcResourceManager;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.Configuracion;
 
 public class EditarIniciativaAction extends VgcAction {
 
@@ -237,6 +253,78 @@ public class EditarIniciativaAction extends VgcAction {
 				editarIniciativaForm.setCodigoIniciativa(iniciativa.getCodigoIniciativa());
 				editarIniciativaForm.setCargoId(iniciativa.getCargoId());
 				editarIniciativaForm.setUnidad(iniciativa.getUnidadId());
+								
+				editarIniciativaForm.setFaseId(iniciativa.getFaseId());
+				
+				editarIniciativaForm.setJustificacion(iniciativa.getJustificacion());
+				editarIniciativaForm.setMontoTotal(iniciativa.getMontoTotal());
+				editarIniciativaForm.setMontoMonedaExt(iniciativa.getMontoMonedaExt());
+				editarIniciativaForm.setSituacionPresupuestaria(iniciativa.getSituacionPresupuestaria());
+				editarIniciativaForm.setHitos(iniciativa.getHitos());
+				editarIniciativaForm.setSector(iniciativa.getSector());
+				editarIniciativaForm.setGerenciaGeneralesRes(iniciativa.getGerenciaGeneralRes());
+				editarIniciativaForm.setCodigoSipe(iniciativa.getCodigoSipe());
+				editarIniciativaForm.setProyectoPresupAso(iniciativa.getProyectoPresupAso());
+				editarIniciativaForm.setEstado(iniciativa.getEstado());
+				editarIniciativaForm.setMunicipio(iniciativa.getMunicipio());
+				editarIniciativaForm.setParroquia(iniciativa.getParroquia());
+				editarIniciativaForm.setDireccionProyecto(iniciativa.getDireccionProyecto());
+				editarIniciativaForm.setObjetivoHistorico(iniciativa.getObjetivoHistorico());
+				editarIniciativaForm.setObjetivoNacional(iniciativa.getObjetivoNacional());
+				editarIniciativaForm.setObjetivoEstrategicoPV(iniciativa.getObjetivoEstrategicoPV());
+				editarIniciativaForm.setObjetivoGeneralPV(iniciativa.getObjetivoGeneralPV());
+				editarIniciativaForm.setObjetivoEspecifico(iniciativa.getObjetivoEspecifico());
+				editarIniciativaForm.setPrograma(iniciativa.getPrograma());
+				editarIniciativaForm.setProblemas(iniciativa.getProblemas());
+				editarIniciativaForm.setCausas(iniciativa.getCausas());
+				editarIniciativaForm.setLineasEstrategicas(iniciativa.getLineasEstrategicas());
+				
+				editarIniciativaForm.setGerenteProyectoNombre(iniciativa.getGerenteProyectoNombre());
+				editarIniciativaForm.setGerenteProyectoCedula(iniciativa.getGerenteProyectoCedula());
+				editarIniciativaForm.setGerenteProyectoEmail(iniciativa.getGerenteProyectoEmail());
+				editarIniciativaForm.setGerenteProyectoTelefono(iniciativa.getGerenteProyectoTelefono());
+				
+				editarIniciativaForm.setResponsableTecnicoNombre(iniciativa.getResponsableTecnicoNombre());
+				editarIniciativaForm.setResponsableTecnicoCedula(iniciativa.getResponsableTecnicoCedula());
+				editarIniciativaForm.setResponsableTecnicoEmail(iniciativa.getResponsableTecnicoEmail());
+				editarIniciativaForm.setResponsableTecnicoTelefono(iniciativa.getResponsableTecnicoTelefono());
+				
+				editarIniciativaForm.setResponsableRegistradorNombre(iniciativa.getResponsableRegistradorNombre());
+				editarIniciativaForm.setResponsableRegistradorCedula(iniciativa.getResponsableRegistradorCedula());
+				editarIniciativaForm.setResponsableRegistradorEmail(iniciativa.getResponsableRegistradorEmail());
+				editarIniciativaForm.setResponsableRegistradorTelefono(iniciativa.getResponsableRegistradorTelefono());
+				
+				editarIniciativaForm.setResponsableAdministrativoNombre(iniciativa.getResponsableAdministrativoNombre());
+				editarIniciativaForm.setResponsableAdministrativoCedula(iniciativa.getResponsableAdministrativoCedula());
+				editarIniciativaForm.setResponsableAdministrativoEmail(iniciativa.getResponsableAdministrativoEmail());
+				editarIniciativaForm.setResponsableAdministrativoTelefono(iniciativa.getResponsableAdministrativoTelefono());
+
+				editarIniciativaForm.setResponsableAdminContratosNombre(iniciativa.getResponsableAdminContratosNombre());
+				editarIniciativaForm.setResponsableAdminContratosCedula(iniciativa.getResponsableAdminContratosCedula());
+				editarIniciativaForm.setResponsableAdminContratosEmail(iniciativa.getResponsableAdminContratosEmail());
+				editarIniciativaForm.setResponsableAdminContratosTelefono(iniciativa.getResponsableAdminContratosTelefono());
+				
+				ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
+				
+				if (configuracionIniciativa != null)
+				{									
+					editarIniciativaForm.setMostrarAdministracionPublica(configuracionIniciativa.getIniciativaAdministracionPublica());
+				}				
+				
+				if (iniciativa.getFechaInicio() != null)
+		        	editarIniciativaForm.setFechaInicio(VgcFormatter.formatearFecha(iniciativa.getFechaInicio(), "formato.fecha.corta"));
+				else
+					editarIniciativaForm.setFechaInicio(null);
+				
+				if (iniciativa.getFechaFin() != null)
+		        	editarIniciativaForm.setFechaFin(VgcFormatter.formatearFecha(iniciativa.getFechaFin(), "formato.fecha.corta"));
+				else
+					editarIniciativaForm.setFechaFin(null);
+				
+				if (iniciativa.getFechaActaInicio() != null)
+		        	editarIniciativaForm.setFechaActaInicio(VgcFormatter.formatearFecha(iniciativa.getFechaActaInicio(), "formato.fecha.corta"));
+				else
+					editarIniciativaForm.setFechaActaInicio(null);
 
 				estatusId = new com.visiongc.app.strategos.web.struts.planificacionseguimiento.actions.CalcularActividadesAction()
 						.CalcularEstatus(iniciativa.getPorcentajeCompletado());
@@ -279,6 +367,13 @@ public class EditarIniciativaAction extends VgcAction {
 					editarIniciativaForm.setOrganizacionNombre(organizacion.getNombre());
 				}
 			}
+			
+			ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
+			
+			if (configuracionIniciativa != null)
+			{									
+				editarIniciativaForm.setMostrarAdministracionPublica(configuracionIniciativa.getIniciativaAdministracionPublica());
+			}
 		}
 
 		if ((planId != null) && (!planId.equals(""))) {
@@ -295,6 +390,12 @@ public class EditarIniciativaAction extends VgcAction {
 		Map<String, String> filtrosCargos = new HashMap<String, String>();
 		PaginaLista paginaCargos = strategosCargosService.getCargos(0, 0, "id", "asc", true, filtrosCargos);
 		editarIniciativaForm.setCargos(paginaCargos.getLista());
+		
+		StrategosFaseProyectoService strategosFaseProyectoService = StrategosServiceFactory.getInstance().openStrategosFaseProyectoService();
+		Map<String, String> filtrosFases = new HashMap<String, String>();
+		PaginaLista paginaFases = strategosFaseProyectoService.getFasesProyecto(0, 0, "id", "asc", true, filtrosFases);							
+		editarIniciativaForm.setFases(paginaFases.getLista());
+		
 
 		// estatus
 		editarIniciativaForm.setEstatuses(new ArrayList<IniciativaEstatus>());
@@ -367,5 +468,5 @@ public class EditarIniciativaAction extends VgcAction {
 		saveMessages(request, messages);
 
 		return forward;
-	}
+	}	
 }

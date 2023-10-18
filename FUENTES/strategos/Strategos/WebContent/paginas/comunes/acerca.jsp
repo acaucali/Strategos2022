@@ -161,12 +161,11 @@
 						<td align="right"><vgcutil:message key="jsp.acerca.licencia.company" /></td>
 						
 						<!-- 
-						<td colspan="2"><input type="text" class="cuadroTexto" size="40" disabled value="Defensoria del Pueblo" /></td>
-						
-						
-						<td colspan="2"><input type="text" class="cuadroTexto" size="40" disabled value="<bean:write scope='session' name='licencia' property='companyName' />" /></td>
+						<td colspan="2"><input type="text" class="cuadroTexto" size="40" disabled value="Defensoria del Pueblo" /></td>						
 						--> 
-						<td colspan="2"><input type="text" class="cuadroTexto" size="45" disabled value="CORPORACIÓN ELÉCTRICA NACIONAL S.A. (CORPOELEC)" /></td>
+						
+						<td colspan="2"><input type="text" class="cuadroTexto" size="45" disabled value="<bean:write scope='session' name='licencia' property='companyName' />" /></td>
+						
 					</tr>
 					<tr>
 						<td align="right"><vgcutil:message key="jsp.acerca.licencia.serial" /></td>
@@ -175,10 +174,10 @@
 						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="0" /></td>
 						
 						
-						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write scope='session' name='licencia' property='serial' />" /></td>
-						-->
-						
 						<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="202311001" /></td>
+						-->
+						<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<bean:write scope='session' name='licencia' property='serial' />" /></td>
+						
 						
 						
 					</tr>
@@ -195,9 +194,9 @@
 						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="Full Licenciamento" /></td>
 					 	
 					 	
-						<td colspan="2"><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write scope='session' name='licencia' property='tipo' />" /></td>
-						-->
 						<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="Licenciamiento Ilimitado" /></td>
+						-->
+						<td colspan="2"><input type="text" class="cuadroTexto" size="20" disabled value="<bean:write scope='session' name='licencia' property='tipo' />" /></td>
 						
 						
 					</tr>

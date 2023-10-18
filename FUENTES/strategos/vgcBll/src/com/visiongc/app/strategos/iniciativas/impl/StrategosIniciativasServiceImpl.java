@@ -676,6 +676,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 
 				configuracionIniciativa.setIniciativaNombre(VgcAbstractService.getTagValue("nombre", eElement));
 
+				configuracionIniciativa.setIniciativaAdministracionPublica(VgcAbstractService.getTagValue("mostrar", eElement).equals("1"));
 				nList = doc.getElementsByTagName("indicador");
 				if (nList.getLength() > 0) {
 					for (int i = 0; i < nList.getLength(); i++) {

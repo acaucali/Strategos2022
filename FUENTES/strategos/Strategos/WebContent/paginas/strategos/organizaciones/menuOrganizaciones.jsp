@@ -153,7 +153,7 @@
     {
     	window.location.href="<html:rewrite action='/tiposproyecto/gestionarTiposProyecto'/>?defaultLoader=true";    	
     }
-    
+            
     function transformarInventario()
     {
     	var nombreForma = '?nombreForma=' + 'indicadorInventarioForm';
@@ -248,7 +248,7 @@
 			<vgcinterfaz:botonMenu key="menu.ver.estadosacciones" onclick="gestionarEstadosAcciones();" permisoId="ESTATUS" />
 			<vgcinterfaz:botonMenu key="menu.ver.estatusiniciativas" onclick="gestionarEstatusIniciativas();" permisoId="INICIATIVA_ESTATUS" agregarSeparador="true" />
 			<vgcinterfaz:botonMenu key="menu.ver.seriestiempo" onclick="gestionarSeriesTiempo();" permisoId="SERIES_TIEMPO" />
-			<vgcinterfaz:botonMenu key="menu.ver.tipo.proyecto" onclick="gestionarTiposProyecto();" permisoId="TIPOS" />
+			<vgcinterfaz:botonMenu key="menu.ver.tipo.proyecto" onclick="gestionarTiposProyecto();" permisoId="TIPOS" />			
 			<vgcinterfaz:botonMenu key="menu.ver.plancuentas" onclick="gestionarCuentas();" permisoId="IMPUTACION" agregarSeparador="true" /> 
 			<vgcinterfaz:botonMenu key="menu.ver.alertas" onclick="gestionarAlertas();" permisoId="ALERTA" agregarSeparador="true" />			
 			<logic:equal scope="session" name="cliente" value="PGN">

@@ -157,6 +157,13 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			Text text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaNombre()); //Ingresamos la info
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
+					
+		
+					
+			elemento = document.createElement("mostrar");
+			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaAdministracionPublica() ? "1" : "0");
+			elemento.appendChild(text);
+			raiz.appendChild(elemento);
 
 			Element indicadores = document.createElement("indicadores");  // creamos el elemento raiz
 			raiz.appendChild(indicadores);
@@ -240,28 +247,22 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			elemento = document.createElement("crear");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaIndicadorEficienciaMostrar() ? "1" : "0");
 			elemento.appendChild(text);
-			indicadorElement.appendChild(elemento);
-			
-			// Administracion Publica
-			indicadorElement = document.createElement("flag_administracion");
-			indicadores.appendChild(indicadorElement);
-			
-			elemento = document.createElement("crear");
-			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaAdministracionPublica() ? "1" : "0");
-			elemento.appendChild(text);
-			indicadorElement.appendChild(elemento);
+			indicadorElement.appendChild(elemento);			
 
 			Source source = new DOMSource(document);
-
+						
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
+			
+			
 
     		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Iniciativas");
 			configuracion.setValor(writer.toString().trim());
+			
 			if (frameworkService.saveConfiguracion(configuracion, getUsuarioConectado(request)) != VgcReturnCode.DB_OK)
 				respuesta = VgcReturnCode.FORM_READY_ERROR;
 			frameworkService.close();

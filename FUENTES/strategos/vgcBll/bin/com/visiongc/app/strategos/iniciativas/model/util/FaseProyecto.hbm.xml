@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping SYSTEM "../../../../../../hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+	<class name="com.visiongc.app.strategos.iniciativas.model.util.FaseProyecto" table="fases_proyecto">
+		
+		<id name="faseProyectoId" type="java.lang.Long" column="fase_id">
+			<generator class="assigned"/>			
+		</id>
+		
+		<property name="nombre" type="java.lang.String" column="nombre" />
+ 	</class>
+	
+</hibernate-mapping>

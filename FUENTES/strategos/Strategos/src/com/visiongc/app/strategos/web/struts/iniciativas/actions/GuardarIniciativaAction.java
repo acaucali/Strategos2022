@@ -1,6 +1,8 @@
 package com.visiongc.app.strategos.web.struts.iniciativas.actions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -124,8 +126,8 @@ public class GuardarIniciativaAction extends VgcAction {
 
 		iniciativa.setNombre(editarIniciativaForm.getNombre());
 
-		if ((editarIniciativaForm.getNombreLargo() != null) && (!editarIniciativaForm.getNombreLargo().equals("")))
-			iniciativa.setNombreLargo(editarIniciativaForm.getNombreLargo());
+		if ((editarIniciativaForm.getNombre() != null) && (!editarIniciativaForm.getNombre().equals("")))
+			iniciativa.setNombreLargo(editarIniciativaForm.getNombre());
 		else
 			iniciativa.setNombreLargo(null);
 
@@ -250,6 +252,250 @@ public class GuardarIniciativaAction extends VgcAction {
 			iniciativa.setCodigoIniciativa(editarIniciativaForm.getCodigoIniciativa());
 		else
 			iniciativa.setCodigoIniciativa(null);
+				
+		
+		if((editarIniciativaForm.getJustificacion() != null) && (!editarIniciativaForm.getJustificacion().equals("")))
+			iniciativa.setJustificacion(editarIniciativaForm.getJustificacion());
+		else
+			iniciativa.setJustificacion(null);
+		
+		if((editarIniciativaForm.getMontoTotal() != null) && (!editarIniciativaForm.getMontoTotal().equals("")))
+			iniciativa.setMontoTotal(editarIniciativaForm.getMontoTotal());
+		else
+			iniciativa.setMontoTotal(null);
+		
+		if((editarIniciativaForm.getMontoMonedaExt() != null) && (!editarIniciativaForm.getMontoMonedaExt().equals("")))
+			iniciativa.setMontoMonedaExt(editarIniciativaForm.getMontoMonedaExt());
+		else
+			iniciativa.setMontoMonedaExt(null);	
+		
+		if((editarIniciativaForm.getSituacionPresupuestaria() != null) && (!editarIniciativaForm.getSituacionPresupuestaria().equals("")))
+			iniciativa.setSituacionPresupuestaria(editarIniciativaForm.getSituacionPresupuestaria());
+		else
+			iniciativa.setSituacionPresupuestaria(null);	
+		
+		if((editarIniciativaForm.getHitos() != null) && (!editarIniciativaForm.getHitos().equals("")))
+			iniciativa.setHitos(editarIniciativaForm.getHitos());
+		else
+			iniciativa.setHitos(null);
+		
+		if((editarIniciativaForm.getSector() != null) && (!editarIniciativaForm.getSector().equals("")))
+			iniciativa.setSector(editarIniciativaForm.getSector());
+		else
+			iniciativa.setSector(null);
+		
+		if((editarIniciativaForm.getGerenciaGeneralesRes() != null) && (!editarIniciativaForm.getGerenciaGeneralesRes().equals("")))
+			iniciativa.setGerenciaGeneralRes(editarIniciativaForm.getGerenciaGeneralesRes());
+		else
+			iniciativa.setGerenciaGeneralRes(null);
+		
+		if((editarIniciativaForm.getCodigoSipe() != null) && (!editarIniciativaForm.getCodigoSipe().equals("")))
+			iniciativa.setCodigoSipe(editarIniciativaForm.getCodigoSipe());
+		else
+			iniciativa.setCodigoSipe(null);
+		
+		if((editarIniciativaForm.getProyectoPresupAso() != null) && (!editarIniciativaForm.getProyectoPresupAso().equals("")))
+			iniciativa.setProyectoPresupAso(editarIniciativaForm.getProyectoPresupAso());
+		else
+			iniciativa.setProyectoPresupAso(null);
+		
+		if((editarIniciativaForm.getEstado() != null) && (!editarIniciativaForm.getEstado().equals("")))
+			iniciativa.setEstado(editarIniciativaForm.getEstado());
+		else
+			iniciativa.setEstado(null);
+		
+		if((editarIniciativaForm.getMunicipio() != null) && (!editarIniciativaForm.getMunicipio().equals("")))
+			iniciativa.setMunicipio(editarIniciativaForm.getMunicipio());
+		else
+			iniciativa.setMunicipio(null);
+		
+		if((editarIniciativaForm.getParroquia() != null) && (!editarIniciativaForm.getParroquia().equals("")))
+			iniciativa.setParroquia(editarIniciativaForm.getParroquia());
+		else
+			iniciativa.setParroquia(null);
+		
+		if((editarIniciativaForm.getDireccionProyecto() != null) && (!editarIniciativaForm.getDireccionProyecto().equals("")))
+			iniciativa.setDireccionProyecto(editarIniciativaForm.getDireccionProyecto());
+		else
+			iniciativa.setDireccionProyecto(null);
+		
+		if((editarIniciativaForm.getObjetivoHistorico() != null) && (!editarIniciativaForm.getObjetivoHistorico().equals("")))
+			iniciativa.setObjetivoHistorico(editarIniciativaForm.getObjetivoHistorico());
+		else
+			iniciativa.setObjetivoHistorico(null);
+		
+		if((editarIniciativaForm.getObjetivoNacional() != null) && (!editarIniciativaForm.getObjetivoNacional().equals("")))
+			iniciativa.setObjetivoNacional(editarIniciativaForm.getObjetivoNacional());
+		else
+			iniciativa.setObjetivoNacional(null);
+		
+		if((editarIniciativaForm.getObjetivoEstrategicoPV() != null) && (!editarIniciativaForm.getObjetivoEstrategicoPV().equals("")))
+			iniciativa.setObjetivoEstrategicoPV(editarIniciativaForm.getObjetivoEstrategicoPV());
+		else
+			iniciativa.setObjetivoEstrategicoPV(null);
+		
+		if((editarIniciativaForm.getObjetivoGeneralPV() != null) && (!editarIniciativaForm.getObjetivoGeneralPV().equals("")))
+			iniciativa.setObjetivoGeneralPV(editarIniciativaForm.getObjetivoGeneralPV());
+		else
+			iniciativa.setObjetivoGeneralPV(null);
+		
+		if((editarIniciativaForm.getObjetivoEspecifico() != null) && (!editarIniciativaForm.getObjetivoEspecifico().equals("")))
+			iniciativa.setObjetivoEspecifico(editarIniciativaForm.getObjetivoEspecifico());
+		else
+			iniciativa.setObjetivoEspecifico(null);
+		
+		if((editarIniciativaForm.getPrograma() != null) && (!editarIniciativaForm.getPrograma().equals("")))
+			iniciativa.setPrograma(editarIniciativaForm.getPrograma());
+		else
+			iniciativa.setPrograma(null);
+		
+		if((editarIniciativaForm.getProblemas() != null) && (!editarIniciativaForm.getProblemas().equals("")))
+			iniciativa.setProblemas(editarIniciativaForm.getProblemas());
+		else
+			iniciativa.setProblemas(null);
+		
+		if((editarIniciativaForm.getCausas() != null) && (!editarIniciativaForm.getCausas().equals("")))
+			iniciativa.setCausas(editarIniciativaForm.getCausas());
+		else
+			iniciativa.setCausas(null);
+		
+		if((editarIniciativaForm.getLineasEstrategicas() != null) && (!editarIniciativaForm.getLineasEstrategicas().equals("")))
+			iniciativa.setLineasEstrategicas(editarIniciativaForm.getLineasEstrategicas());
+		else
+			iniciativa.setLineasEstrategicas(null);
+		
+		if((editarIniciativaForm.getGerenteProyectoNombre() != null) && (!editarIniciativaForm.getGerenteProyectoNombre().equals("")))
+			iniciativa.setGerenteProyectoNombre(editarIniciativaForm.getGerenteProyectoNombre());
+		else
+			iniciativa.setGerenteProyectoNombre(null);
+
+		if((editarIniciativaForm.getGerenteProyectoCedula() != null) && (!editarIniciativaForm.getGerenteProyectoCedula().equals("")))
+			iniciativa.setGerenteProyectoCedula(editarIniciativaForm.getGerenteProyectoCedula());
+		else
+			iniciativa.setGerenteProyectoCedula(null);
+		
+		if((editarIniciativaForm.getGerenteProyectoEmail() != null) && (!editarIniciativaForm.getGerenteProyectoEmail().equals("")))
+			iniciativa.setGerenteProyectoEmail(editarIniciativaForm.getGerenteProyectoEmail());
+		else
+			iniciativa.setGerenteProyectoEmail(null);
+		
+		if((editarIniciativaForm.getGerenteProyectoTelefono() != null) && (!editarIniciativaForm.getGerenteProyectoTelefono().equals("")))
+			iniciativa.setGerenteProyectoTelefono(editarIniciativaForm.getGerenteProyectoTelefono());
+		else
+			iniciativa.setGerenteProyectoTelefono(null);
+		
+		if((editarIniciativaForm.getResponsableTecnicoNombre() != null) && (!editarIniciativaForm.getResponsableTecnicoNombre().equals("")))
+			iniciativa.setResponsableTecnicoNombre(editarIniciativaForm.getResponsableTecnicoNombre());
+		else
+			iniciativa.setResponsableTecnicoNombre(null);
+		
+		if((editarIniciativaForm.getResponsableTecnicoCedula() != null) && (!editarIniciativaForm.getResponsableTecnicoCedula().equals("")))
+			iniciativa.setResponsableTecnicoCedula(editarIniciativaForm.getResponsableTecnicoCedula());
+		else
+			iniciativa.setResponsableTecnicoCedula(null);
+		
+		if((editarIniciativaForm.getResponsableTecnicoEmail() != null) && (!editarIniciativaForm.getResponsableTecnicoEmail().equals("")))
+			iniciativa.setResponsableTecnicoEmail(editarIniciativaForm.getResponsableTecnicoEmail());
+		else
+			iniciativa.setResponsableTecnicoEmail(null);
+		
+		if((editarIniciativaForm.getResponsableTecnicoTelefono() != null) && (!editarIniciativaForm.getResponsableTecnicoTelefono().equals("")))
+			iniciativa.setResponsableTecnicoTelefono(editarIniciativaForm.getResponsableTecnicoTelefono());
+		else
+			iniciativa.setResponsableTecnicoTelefono(null);
+		
+		if((editarIniciativaForm.getResponsableRegistradorNombre() != null) && (!editarIniciativaForm.getResponsableRegistradorNombre().equals("")))
+			iniciativa.setResponsableRegistradorNombre(editarIniciativaForm.getResponsableRegistradorNombre());
+		else
+			iniciativa.setResponsableRegistradorNombre(null);
+		
+		if((editarIniciativaForm.getResponsableRegistradorCedula() != null) && (!editarIniciativaForm.getResponsableRegistradorCedula().equals("")))
+			iniciativa.setResponsableRegistradorCedula(editarIniciativaForm.getResponsableRegistradorCedula());
+		else
+			iniciativa.setResponsableRegistradorCedula(null);
+		
+		if((editarIniciativaForm.getResponsableRegistradorEmail() != null) && (!editarIniciativaForm.getResponsableRegistradorEmail().equals("")))
+			iniciativa.setResponsableRegistradorEmail(editarIniciativaForm.getResponsableRegistradorEmail());
+		else
+			iniciativa.setResponsableRegistradorEmail(null);
+		
+		if((editarIniciativaForm.getResponsableRegistradorTelefono() != null) && (!editarIniciativaForm.getResponsableRegistradorTelefono().equals("")))
+			iniciativa.setResponsableRegistradorTelefono(editarIniciativaForm.getResponsableRegistradorTelefono());
+		else
+			iniciativa.setResponsableRegistradorTelefono(null);
+		
+		if((editarIniciativaForm.getResponsableAdministrativoNombre() != null) && (!editarIniciativaForm.getResponsableAdministrativoNombre().equals("")))
+			iniciativa.setResponsableAdministrativoNombre(editarIniciativaForm.getResponsableAdministrativoNombre());
+		else
+			iniciativa.setResponsableAdministrativoNombre(null);
+		
+		if((editarIniciativaForm.getResponsableAdministrativoCedula() != null) && (!editarIniciativaForm.getResponsableAdministrativoCedula().equals("")))
+			iniciativa.setResponsableAdministrativoCedula(editarIniciativaForm.getResponsableAdministrativoCedula());
+		else
+			iniciativa.setResponsableAdministrativoCedula(null);
+		
+		if((editarIniciativaForm.getResponsableAdministrativoEmail() != null) && (!editarIniciativaForm.getResponsableAdministrativoEmail().equals("")))
+			iniciativa.setResponsableAdministrativoEmail(editarIniciativaForm.getResponsableAdministrativoEmail());
+		else
+			iniciativa.setResponsableAdministrativoEmail(null);
+		
+		if((editarIniciativaForm.getResponsableAdministrativoTelefono() != null) && (!editarIniciativaForm.getResponsableAdministrativoTelefono().equals("")))
+			iniciativa.setResponsableAdministrativoTelefono(editarIniciativaForm.getResponsableAdministrativoTelefono());
+		else
+			iniciativa.setResponsableAdministrativoTelefono(null);
+		
+		if((editarIniciativaForm.getResponsableAdminContratosNombre() != null) && (!editarIniciativaForm.getResponsableAdminContratosNombre().equals("")))
+			iniciativa.setResponsableAdminContratosNombre(editarIniciativaForm.getResponsableAdminContratosNombre());
+		else
+			iniciativa.setResponsableAdminContratosNombre(null);
+		
+		if((editarIniciativaForm.getResponsableAdminContratosCedula() != null) && (!editarIniciativaForm.getResponsableAdminContratosCedula().equals("")))
+			iniciativa.setResponsableAdminContratosCedula(editarIniciativaForm.getResponsableAdminContratosCedula());
+		else
+			iniciativa.setResponsableAdminContratosCedula(null);
+		
+		if((editarIniciativaForm.getResponsableAdminContratosEmail() != null) && (!editarIniciativaForm.getResponsableAdminContratosEmail().equals("")))
+			iniciativa.setResponsableAdminContratosEmail(editarIniciativaForm.getResponsableAdminContratosEmail());
+		else
+			iniciativa.setResponsableAdminContratosEmail(null);
+		
+		if((editarIniciativaForm.getResponsableAdminContratosTelefono() != null) && (!editarIniciativaForm.getResponsableAdminContratosTelefono().equals("")))
+			iniciativa.setResponsableAdminContratosTelefono(editarIniciativaForm.getResponsableAdminContratosTelefono());
+		else
+			iniciativa.setResponsableAdminContratosTelefono(null);
+		
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		if((editarIniciativaForm.getFechaInicio() != null) && (!editarIniciativaForm.getFechaInicio().equals(""))) {
+			Calendar calFechaInicio = Calendar.getInstance();
+			calFechaInicio.setTime(simpleDateFormat.parse(editarIniciativaForm.getFechaInicio()));
+			calFechaInicio = PeriodoUtil.inicioDelDia(calFechaInicio);
+			iniciativa.setFechaInicio(calFechaInicio.getTime());					
+		}else {
+			iniciativa.setFechaInicio(null);
+		}
+				
+		
+		if((editarIniciativaForm.getFechaFin() != null) && (!editarIniciativaForm.getFechaFin().equals(""))) {
+			Calendar calFechaFin = Calendar.getInstance();
+			calFechaFin.setTime(simpleDateFormat.parse(editarIniciativaForm.getFechaFin()));
+			calFechaFin = PeriodoUtil.inicioDelDia(calFechaFin);
+			iniciativa.setFechaFin(calFechaFin.getTime());
+		}else {
+			iniciativa.setFechaFin(null);
+		}
+		
+		if((editarIniciativaForm.getFechaActaInicio() != null) && (!editarIniciativaForm.getFechaActaInicio().equals(""))) {
+			Calendar calFechaActaInicio = Calendar.getInstance();
+			calFechaActaInicio.setTime(simpleDateFormat.parse(editarIniciativaForm.getFechaActaInicio()));
+			calFechaActaInicio = PeriodoUtil.inicioDelDia(calFechaActaInicio);
+			iniciativa.setFechaActaInicio(calFechaActaInicio.getTime());
+		}else {
+			iniciativa.setFechaActaInicio(null);
+		}
+		
+		
 			
 		if (editarIniciativaForm.getAlertaZonaAmarilla() != null
 				&& editarIniciativaForm.getHayValorPorcentajeAmarillo())
@@ -359,6 +605,14 @@ public class GuardarIniciativaAction extends VgcAction {
 			iniciativa.setUnidadId(Long.parseLong(selectUnidad));
 		}else {
 			iniciativa.setUnidadId(editarIniciativaForm.getUnidad());
+		}
+		
+		String selectFase = request.getParameter("selectFase");
+
+		if (selectFase != null && !selectFase.equals("") && !selectFase.equals("0")){
+			iniciativa.setFaseId(Long.parseLong(selectFase));
+		}else {
+			iniciativa.setFaseId(editarIniciativaForm.getFaseId());
 		}
 		
 

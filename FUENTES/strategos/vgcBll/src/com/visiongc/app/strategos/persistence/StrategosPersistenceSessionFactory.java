@@ -12,6 +12,7 @@ import com.visiongc.app.strategos.indicadores.persistence.StrategosIndicadorAsig
 import com.visiongc.app.strategos.indicadores.persistence.StrategosIndicadoresPersistenceSession;
 import com.visiongc.app.strategos.indicadores.persistence.StrategosMedicionesPersistenceSession;
 import com.visiongc.app.strategos.indicadores.persistence.StrategosMedicionesValoracionPersistenceSession;
+import com.visiongc.app.strategos.iniciativas.persistence.StrategosFaseProyectoPersistenceSession;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativaEstatusPersistenceSession;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativasPersistenceSession;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosTipoProyectoPersistenceSession;
@@ -210,6 +211,10 @@ public abstract interface StrategosPersistenceSessionFactory
   public abstract StrategosTipoProyectoPersistenceSession openTipoProyectoPersistenceSession();
   
   public abstract StrategosTipoProyectoPersistenceSession openTipoProyectoPersistenceSession(StrategosPersistenceSession paramStrategosPersistenceSession);
+  
+  public abstract StrategosFaseProyectoPersistenceSession openFaseProyectoPersistenceSession();
+  
+  public abstract StrategosFaseProyectoPersistenceSession openFaseProyectoPersistenceSession(StrategosPersistenceSession paramStrategosPersistenceSession);
   
   public abstract StrategosCooperantesPersistenceSession openCooperantesPersistenceSession();
   
