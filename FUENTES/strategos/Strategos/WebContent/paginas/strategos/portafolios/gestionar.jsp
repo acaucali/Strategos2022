@@ -419,7 +419,7 @@
 			<vgcinterfaz:columnaVisorLista nombre="nombre" width="300px" onclick="javascript:consultar(document.gestionarPortafoliosForm,'nombre', null)">
 				<vgcutil:message key="jsp.gestionarportafolio.columna.nombre" />
 			</vgcinterfaz:columnaVisorLista>
-			<vgcinterfaz:columnaVisorLista nombre="porcentajeCompletado" width="150px">
+			<vgcinterfaz:columnaVisorLista nombre="porcentajeCompletado" width="50px">
 				<vgcutil:message key="jsp.gestionarportafolio.columna.porcentajecompletado" />
 			</vgcinterfaz:columnaVisorLista>
 			<vgcinterfaz:columnaVisorLista nombre="ultimoPeriodoCalculo" width="130px">

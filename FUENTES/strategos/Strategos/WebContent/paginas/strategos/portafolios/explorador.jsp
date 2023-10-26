@@ -83,7 +83,7 @@
 			</logic:empty>
 		</bean:define>
 
-		<vgcinterfaz:splitterHorizontal anchoPorDefecto="<%= anchoPanel %>" splitterId="splitPortafolios" overflowPanelDerecho="hidden" overflowPanelIzquierdo="hidden">
+		<vgcinterfaz:splitterHorizontal anchoPorDefecto="490px" splitterId="splitPortafolios" overflowPanelDerecho="hidden" overflowPanelIzquierdo="hidden">
 
 			<%-- Panel Izquierdo: Gestionar Portafolio --%>
 			<vgcinterfaz:splitterHorizontalPanelIzquierdo splitterId="splitPortafolios">
@@ -92,21 +92,26 @@
 
 			<%-- Panel Derecho:  --%>
 			<vgcinterfaz:splitterHorizontalPanelDerecho splitterId="splitPortafolios">
-				<table class="fichaDatostablaGeneral" style="border-collapse: collapse; padding: 0px; width: 100%;" onmouseup="splitPortafolioVerticalMouseStatus='up'; setAltoPanel();" onmousemove="splitPortafolioVerticalGetPosicion(event)">
-					<tr style="width: 100%; height: 50%; vertical-align: text-top;">
-						<td id="tdScreenSuperior" class="panelSplit" style="width: 100%; height: <%= altoPanel %>; vertical-align: text-top;" >
-							<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIniciativas.jsp"></jsp:include>
-						</td>
-					</tr>
-					<tr style="width: 100%; height: 2px;">
-						<td onmousedown="splitPortafolioVerticalSetPosicion(event)" id="splitPortafolioVerticalVSplit"></td>
-					</tr>
-					<tr>
-						<td id="tdScreenInferior" class="panelSplit" style="width: 100%; height: 100%; vertical-align: text-top;" >
-							<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIndicadoresIniciativa.jsp"></jsp:include>
-						</td>
-					</tr>
-				</table>
+				
+							
+					<table class="fichaDatostablaGeneral" style="border-collapse: collapse; padding: 0px; width: 100%;" onmouseup="splitPortafolioVerticalMouseStatus='up'; setAltoPanel();" onmousemove="splitPortafolioVerticalGetPosicion(event)">
+						<tr style="width: 100%; height: 50%; vertical-align: text-top;">
+							<td id="tdScreenSuperior" class="panelSplit" style="width: 100%; height: <%= altoPanel %>; vertical-align: text-top;" >
+								<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIniciativas.jsp"></jsp:include>
+							</td>
+						</tr>
+						<tr style="width: 100%; height: 2px;">
+							<td onmousedown="splitPortafolioVerticalSetPosicion(event)" id="splitPortafolioVerticalVSplit"></td>
+						</tr>
+						<tr>
+							<td id="tdScreenInferior" class="panelSplit" style="width: 100%; height: 100%; vertical-align: text-top;" >
+								<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIndicadoresIniciativa.jsp"></jsp:include>
+							</td>
+						</tr>
+					</table>
+							
+						
+			
 			</vgcinterfaz:splitterHorizontalPanelDerecho>
 		</vgcinterfaz:splitterHorizontal>
 	</tiles:put>

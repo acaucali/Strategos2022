@@ -23,6 +23,7 @@ public class GestionarPortafoliosForm  extends VisorListaForm
 	private String anchoPorDefecto;
 	private String altoPorDefecto;
 	private Long organizacionId;
+	private Boolean activarPanel;
 
 	public String getRespuesta()
 	{
@@ -104,7 +105,15 @@ public class GestionarPortafoliosForm  extends VisorListaForm
   		this.organizacionId = organizacionId;
   	}
 
- 	public void clear()
+ 	public Boolean getActivarPanel() {
+		return activarPanel;
+	}
+
+	public void setActivarPanel(Boolean activarPanel) {
+		this.activarPanel = activarPanel;
+	}
+
+	public void clear()
 	{
 		this.respuesta = "";
 		this.seleccionadoId = null;
@@ -114,10 +123,13 @@ public class GestionarPortafoliosForm  extends VisorListaForm
 		this.anchoPorDefecto = null;
 		this.altoPorDefecto = null;
 		this.organizacionId = null;
+		this.activarPanel = false;
 
 		FiltroForm filtro = new FiltroForm();
 		filtro.setCondicion(CondicionType.getFiltroCondicionActivo());
 		filtro.setNombre(null);
 		this.setFiltro(filtro);
 	}
+ 	
+ 	
 }

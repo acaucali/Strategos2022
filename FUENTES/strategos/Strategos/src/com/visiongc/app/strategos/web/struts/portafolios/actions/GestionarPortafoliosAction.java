@@ -134,7 +134,7 @@ public class GestionarPortafoliosAction extends VgcAction
 			pk.setObjeto("Ancho");
 			pk.setUsuarioId(this.getUsuarioConectado(request).getUsuarioId());
 			configuracionUsuario.setPk(pk);
-			configuracionUsuario.setData("500");
+			configuracionUsuario.setData("1000");
 
 			frameworkService.saveConfiguracionUsuario(configuracionUsuario, this.getUsuarioConectado(request));
 		}
