@@ -92,6 +92,8 @@ public class ReporteForm extends EditarObjetoForm
 	private String filtroNombre;
 	private FiltroForm filtro = new FiltroForm();
 	private List<List<DatoCelda>> matrizDatos;
+	private String objetoKey;
+	private String organizacionNombre;
 
 	//Campos para comunicacion
 	private String valoresSeleccionados = null;
@@ -1053,6 +1055,8 @@ public class ReporteForm extends EditarObjetoForm
 		this.tipoReporte = ReporteForm.TipoReportes.TIPO_PDF;
 		this.tipoPeriodo = ReporteForm.PeriodoStatus.PERIODO_PORPERIODO;
 		this.filtroNombre = null;
+		this.objetoKey = null;
+		this.organizacionNombre = null;
 
 		// Campos para JavaScript
 		this.orientacion = ReporteForm.OrientacionTipo.ORIENTACION_PORTRAIT;
@@ -1100,6 +1104,22 @@ public class ReporteForm extends EditarObjetoForm
 
 	public void setAvanceTareas(Boolean avanceTareas) {
 		this.avanceTareas = avanceTareas;
+	}
+
+	public String getObjetoKey() {
+		return objetoKey;
+	}
+
+	public void setObjetoKey(String objetoKey) {
+		this.objetoKey = objetoKey;
+	}
+
+	public String getOrganizacionNombre() {
+		return organizacionNombre;
+	}
+
+	public void setOrganizacionNombre(String organizacionNombre) {
+		this.organizacionNombre = organizacionNombre;
 	}
 
 	public static class ReporteStatus

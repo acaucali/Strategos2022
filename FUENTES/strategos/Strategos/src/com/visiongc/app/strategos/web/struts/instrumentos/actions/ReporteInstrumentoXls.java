@@ -449,15 +449,77 @@ public class ReporteInstrumentoXls extends VgcAction{
 			    if (pagina < 1)
 			    	pagina = 1;
 
-			    if(reporte.getNombre() != null && reporte.getNombre() != "") {
-			    	filtrosInstru.put("nombreCorto", reporte.getNombre());
-			    }else if(reporte.getAno() != null && reporte.getAno() != 0) {
-			    	filtrosInstru.put("anio", reporte.getAno().toString());
-			    }else if(reporte.getCooperanteId() != null && reporte.getCooperanteId() != 0) {
-			    	filtrosInstru.put("cooperanteId", reporte.getCooperanteId().toString());
-			    }else if(reporte.getTipoCooperanteId() != null && reporte.getTipoCooperanteId() != 0) {
-			    	filtrosInstru.put("tiposConvenioId", reporte.getTipoCooperanteId().toString());
-			    }
+			    String nombreAttribute = "";
+				String anioAttribute = "";
+				String estatusStAttribute = "";
+				Long cooperanteIdAttribute = null;
+				Long tiposConvenioIdAttribute = null;
+				String historicoAttribute = "";
+				Boolean isHistorico = false;
+				Byte estatus = 0;
+
+				if (request.getSession().getAttribute("nombreInstrumento") != null)
+					nombreAttribute = (String) request.getSession().getAttribute("nombreInstrumento");
+				else
+					nombreAttribute = "";
+
+				if (request.getSession().getAttribute("anioInstrumento") != null)
+					anioAttribute = (String) request.getSession().getAttribute("anioInstrumento");
+				else
+					anioAttribute = "";
+
+				if (request.getSession().getAttribute("estatusStInstrumento") != null)
+					estatusStAttribute = (String) request.getSession().getAttribute("estatusStInstrumento");
+				else
+					estatusStAttribute = "";
+
+				if (request.getSession().getAttribute("cooperanteIdInstrumento") != null)
+					cooperanteIdAttribute = (Long) request.getSession().getAttribute("cooperanteIdInstrumento");
+				else
+					cooperanteIdAttribute = null;
+
+				if (request.getSession().getAttribute("tiposConvenioIdInstrumento") != null)
+					tiposConvenioIdAttribute = (Long) request.getSession().getAttribute("tiposConvenioIdInstrumento");
+				else
+					tiposConvenioIdAttribute = null;
+				
+				if (request.getSession().getAttribute("historicoInstrumento") != null)
+					historicoAttribute = (String) request.getSession().getAttribute("historicoInstrumento");
+					if(historicoAttribute.equals("true"))
+						isHistorico = true;
+				else
+					historicoAttribute = null;								
+
+				if (estatusStAttribute != null && !estatusStAttribute.equals("")) {
+					estatus = Byte.valueOf(estatusStAttribute);
+				}
+																	
+				if ((nombreAttribute != null) && nombreAttribute != "") {
+					filtros.put("nombreCorto", nombreAttribute);
+				}
+				if ((anioAttribute != null) && anioAttribute != "") {
+					filtros.put("anio", anioAttribute);
+				}
+				if ((estatus != null)) {
+					if ((estatus !=0))
+						filtros.put("estatus", estatus.toString());
+				}
+				if ((tiposConvenioIdAttribute != null)
+						&& tiposConvenioIdAttribute != 0) {
+					filtros.put("tiposConvenioId", tiposConvenioIdAttribute.toString());
+				}
+				if ((cooperanteIdAttribute != null) && (cooperanteIdAttribute != 0)) {
+					filtros.put("cooperanteId", cooperanteIdAttribute.toString());
+				}
+				if((isHistorico != null) && isHistorico == false) {
+					filtros.put("isHistorico", "0");
+				}else if((isHistorico != null) && isHistorico == true)
+					filtros.put("isHistorico", "1");
+				
+				if (request.getParameter("limpiar") != null) {
+					if (request.getParameter("limpiar").equals("1"))
+						filtros.clear();
+				}
 
 
 			    PaginaLista paginaInstrumentos = strategosInstrumentosService.getInstrumentos(pagina, 30, atributoOrden, tipoOrden, true, filtrosInstru);

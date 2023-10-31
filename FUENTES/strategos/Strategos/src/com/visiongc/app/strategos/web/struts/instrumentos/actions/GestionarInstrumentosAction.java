@@ -106,6 +106,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 				&& (!request.getParameter("con").equals("0"))
 						? Long.valueOf(Long.parseLong(request.getParameter("con")))
 						: null;
+		String historico = request.getParameter("historico") != null ? request.getParameter("historico") : "";
+				
 
 		if (!nombreCorto.equals(""))
 			request.getSession().setAttribute("nombreInstrumento", nombreCorto);
@@ -117,6 +119,8 @@ public class GestionarInstrumentosAction extends VgcAction {
 			request.getSession().setAttribute("cooperanteIdInstrumento", cooperanteId);
 		if (tiposConvenioId != null)
 			request.getSession().setAttribute("tiposConvenioIdInstrumento", tiposConvenioId);
+		if (!historico.equals(""))
+			request.getSession().setAttribute("historicoInstrumento", historico);
 
 		if (request.getParameter("limpiar") != null) {
 			if (request.getParameter("limpiar").equals("1")) {
@@ -125,13 +129,17 @@ public class GestionarInstrumentosAction extends VgcAction {
 				request.getSession().setAttribute("estatusStInstrumento", null);
 				request.getSession().setAttribute("cooperanteIdInstrumento", null);
 				request.getSession().setAttribute("tiposConvenioIdInstrumento", null);
+				request.getSession().setAttribute("historicoInstrumento", null);
 			}
 		}
+				
 		String nombreAttribute = "";
 		String anioAttribute = "";
 		String estatusStAttribute = "";
 		Long cooperanteIdAttribute = null;
 		Long tiposConvenioIdAttribute = null;
+		String historicoAttribute = "";
+		Boolean isHistorico = false;
 
 		if (request.getSession().getAttribute("nombreInstrumento") != null)
 			nombreAttribute = (String) request.getSession().getAttribute("nombreInstrumento");
@@ -157,10 +165,18 @@ public class GestionarInstrumentosAction extends VgcAction {
 			tiposConvenioIdAttribute = (Long) request.getSession().getAttribute("tiposConvenioIdInstrumento");
 		else
 			tiposConvenioIdAttribute = null;
+		
+		if (request.getSession().getAttribute("historicoInstrumento") != null)
+			historicoAttribute = (String) request.getSession().getAttribute("historicoInstrumento");
+			if(historicoAttribute.equals("true"))
+				isHistorico = true;
+		else
+			historicoAttribute = null;
 
 		if (estatusStAttribute != null && !estatusStAttribute.equals("")) {
 			estatus = Byte.valueOf(estatusStAttribute);
 		}
+				
 
 		gestionarInstrumentosForm.setFiltro(filtro);
 		gestionarInstrumentosForm.setEstatus(estatus);
@@ -168,6 +184,7 @@ public class GestionarInstrumentosAction extends VgcAction {
 		gestionarInstrumentosForm.setCooperanteId(cooperanteIdAttribute);
 		gestionarInstrumentosForm.setTiposConvenioId(tiposConvenioIdAttribute);
 		gestionarInstrumentosForm.setNombreCorto(nombreAttribute);
+		gestionarInstrumentosForm.setIsHistorico(isHistorico);
 
 		StrategosInstrumentosService strategosInstrumentosService = StrategosServiceFactory.getInstance()
 				.openStrategosInstrumentosService();
@@ -208,11 +225,17 @@ public class GestionarInstrumentosAction extends VgcAction {
 		if ((gestionarInstrumentosForm.getCooperanteId() != null) && gestionarInstrumentosForm.getCooperanteId() != 0) {
 			filtros.put("cooperanteId", gestionarInstrumentosForm.getCooperanteId().toString());
 		}
-
+		
+		if((gestionarInstrumentosForm.getIsHistorico() != null) && gestionarInstrumentosForm.getIsHistorico() == false) {
+			filtros.put("isHistorico", "0");
+		}else if((gestionarInstrumentosForm.getIsHistorico() != null) && gestionarInstrumentosForm.getIsHistorico() == true)
+			filtros.put("isHistorico", "1");
+		
 		if (request.getParameter("limpiar") != null) {
 			if (request.getParameter("limpiar").equals("1"))
 				filtros.clear();
 		}
+				
 
 		PaginaLista paginaInstrumentos = strategosInstrumentosService.getInstrumentos(pagina, 30, atributoOrden,
 				tipoOrden, true, filtros);

@@ -51,6 +51,8 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 	private Long indicadorId;
 	private Long iniciativaId;
 	private String altoForma;
+	
+	private Boolean isHistorico;
 
 	public Byte getAlcance() {
 		return alcance;
@@ -391,6 +393,15 @@ public class EditarInstrumentosForm extends EditarObjetoForm
 		this.observaciones = null;
 		this.cooperante = null;
 		this.tipoConvenio = null;
+		this.isHistorico = new Boolean(false);
+	}
+
+	public Boolean getIsHistorico() {
+		return isHistorico;
+	}
+
+	public void setIsHistorico(Boolean isHistorico) {
+		this.isHistorico = isHistorico;
 	}
 
 

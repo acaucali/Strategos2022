@@ -93,9 +93,9 @@ public class FrameworkServiceImpl extends VgcAbstractService
                     }
                     if(mensaje == null && !hash.equals(pwd))
                     {
-                        if(!pwd.equals(pwdDecriptado) && !Password.decriptJavaScript(hashFailed).equals(pwdDecriptado))                           {
-                        	usuario = null;
-                        }
+//                        if(!pwd.equals(pwdDecriptado) && !Password.decriptJavaScript(hashFailed).equals(pwdDecriptado))                           {
+//                        	usuario = null;
+//                        }
                     } else if(mensaje != null && !mensaje.equals(pwd))
                         usuario = null;
                 }

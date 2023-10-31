@@ -78,6 +78,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
         editarInstrumentosForm.setNombreCorto(instrumentos.getNombreCorto());
         editarInstrumentosForm.setAnio(instrumentos.getAnio());
         editarInstrumentosForm.setAreasCargo(instrumentos.getAreasCargo());
+        editarInstrumentosForm.setIsHistorico(instrumentos.getIsHistorico());
 
         if (instrumentos.getFechaInicio() != null)
         	editarInstrumentosForm.setFechaInicio(VgcFormatter.formatearFecha(instrumentos.getFechaInicio(), "formato.fecha.corta"));

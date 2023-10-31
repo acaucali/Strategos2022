@@ -77,10 +77,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
     }
     else
     {
-    
-    System.out.print("\n\nObjeto Key : " + editarExplicacionForm.getObjetoKey());
-    System.out.print("\n\nObjeto Id : " + editarExplicacionForm.getObjetoId());
-    System.out.print("\n\nTipo : " + editarExplicacionForm.getTipo());
     	
       nuevo = true;
       explicacion = new Explicacion();

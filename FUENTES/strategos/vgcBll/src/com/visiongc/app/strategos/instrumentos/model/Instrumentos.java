@@ -43,6 +43,8 @@ public class Instrumentos implements Serializable {
 	private Long claseId;
 	private Byte tipoMedicion;
 	
+	private Boolean isHistorico;
+	
 	private InstrumentoPeso instrumentoPeso;	
 	
 
@@ -323,6 +325,14 @@ public class Instrumentos implements Serializable {
 
 	public void setInstrumentoPeso(InstrumentoPeso instrumentoPeso) {
 		this.instrumentoPeso = instrumentoPeso;
+	}
+
+	public Boolean getIsHistorico() {
+		return isHistorico;
+	}
+
+	public void setIsHistorico(Boolean isHistorico) {
+		this.isHistorico = isHistorico;
 	}
 
 

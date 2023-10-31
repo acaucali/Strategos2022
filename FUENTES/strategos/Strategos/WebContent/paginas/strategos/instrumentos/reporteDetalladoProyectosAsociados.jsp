@@ -59,7 +59,7 @@
 		<html:hidden property="source" />
 			<html:hidden property="objetoSeleccionadoId" />
 		
-		<vgcinterfaz:contenedorForma width="460px" height="340px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
+		<vgcinterfaz:contenedorForma width="320px" height="300px" bodyAlign="center" bodyValign="middle" bodyCellpadding="20">
 		
 		<%-- Título--%>
 			<vgcinterfaz:contenedorFormaTitulo>..::					
@@ -68,11 +68,11 @@
 			
 			
 					
-						<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">
+						<table class="panelContenedor" cellspacing="3" cellpaddingtop="20" border="0">
 							
-							<tr>			
-								<td align="left"  colspan="2" Valign="top"><b><vgcutil:message key="jsp.editariniciativa.ficha.anioformulacion" /></b></td>						
-								<td colspan="3">
+							<tr cellpaddingtop="20">			
+								<td align="left"  colspan="1" Valign="top"><b><vgcutil:message key="jsp.editariniciativa.ficha.anioformulacion" /></b></td>						
+								<td align="left"  colspan="3" Valign="top">
 									<bean:define id="anoCalculo" toScope="page">
 										<bean:write name="reporteForm" property="ano" />
 									</bean:define> <html:select property="ano" value="<%=anoCalculo%>"
@@ -88,30 +88,21 @@
 										%>
 									</html:select>																										
 								</td>
-																
-							</tr>
-							<tr>
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
+										
+														
+							</tr>						
 							<tr>
 								<%-- Visible --%>
-								<td align="left"  colspan="2" Valign="top"><b><vgcutil:message key="jsp.editariniciativa.ficha.todos.ano" /></b></td>
-								<td colspan="3">																											
+								<td align="left"  colspan="1" Valign="top"><b><vgcutil:message key="jsp.editariniciativa.ficha.todos.ano" /></b></td>
+								<td align="left"  colspan="3" Valign="top">																									
 									<html:checkbox styleClass="botonSeleccionMultiple" property="todosAno" />
 								</td>
 								
 							</tr>		
-							
+														
 							<tr>
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
-							<tr>
-								<td align="left"  colspan="2" Valign="top"><b><vgcutil:message key="jsp.pagina.instrumentos.cooperante" /></b></td>
-								<td width="20%" >
+								<td align="left"  colspan="1" Valign="top"><b><vgcutil:message key="jsp.pagina.instrumentos.cooperante" /></b></td>
+								<td align="left"  colspan="3" Valign="top">
 									<select class="cuadroCombinado" name="reporteForm" id="selectCooperante">
 									<option value="0" selected >Todos</option>
 									<logic:iterate name="reporteForm" property="cooperantes" id="cop">
@@ -128,57 +119,53 @@
 										</logic:iterate>										
 									</select>
 								</td>
-							</tr>
+							</tr>						
 							<tr>
-								<td colspan="3">
-									&nbsp;
+								<td align="left"  colspan="1" Valign="top"><b><vgcutil:message key="jsp.pagina.instrumentos.estatus" /></b></td>
+								<td align="left"  colspan="3" Valign="top">
+									<html:select property="estatus" styleClass="cuadroTexto" size="1">
+										<html:option value="0">
+											Todos
+										</html:option>
+										<html:option value="1">
+											<vgcutil:message key="jsp.pagina.instrumentos.estatus.sinIniciar" />
+										</html:option>
+										<html:option value="2">
+											<vgcutil:message key="jsp.pagina.instrumentos.estatus.ejecucion" />
+										</html:option>
+										<html:option value="3">
+											<vgcutil:message key="jsp.pagina.instrumentos.estatus.cancelado" />
+										</html:option>
+										<html:option value="4">
+											<vgcutil:message key="jsp.pagina.instrumentos.estatus.suspendido" />
+										</html:option>
+										<html:option value="5">
+											<vgcutil:message key="jsp.pagina.instrumentos.estatus.culminado" />
+										</html:option>
+									
+									</html:select>
 								</td>
-							</tr>
-							<tr>
-								<td align="left"  colspan="2" Valign="top"><b><vgcutil:message key="jsp.pagina.instrumentos.estatus" /></b></td>
-								<td><html:select property="estatus" styleClass="cuadroTexto" size="1">
-									<html:option value="0">
-										Todos
-									</html:option>
-									<html:option value="1">
-										<vgcutil:message key="jsp.pagina.instrumentos.estatus.sinIniciar" />
-									</html:option>
-									<html:option value="2">
-										<vgcutil:message key="jsp.pagina.instrumentos.estatus.ejecucion" />
-									</html:option>
-									<html:option value="3">
-										<vgcutil:message key="jsp.pagina.instrumentos.estatus.cancelado" />
-									</html:option>
-									<html:option value="4">
-										<vgcutil:message key="jsp.pagina.instrumentos.estatus.suspendido" />
-									</html:option>
-									<html:option value="5">
-										<vgcutil:message key="jsp.pagina.instrumentos.estatus.culminado" />
-									</html:option>
-								
-								</html:select></td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
+							</tr>							
+						</table>
+						
+						<br>																		
 							
+						<table class="panelContenedor" cellspacing="3" cellpadding="1" border="0">
 							<!-- Encabezado selector de fechas -->
 							<tr>
-								<td align="left"  colspan="2" Valign="top"></td>
-								<td align="left"  colspan="2" Valign="top">
-									<b>Periodo </b>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<b><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.ano" /> </b>
+								<td align="left"  colspan="50%" Valign="top"></td>
 									
+								<td align="center"  colspan="1" Valign="top">
+									<b>Periodo </b>									
+									</td>
+								<td align="center"  colspan="1" Valign="top">
+									<b><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.ano" /> </b>									
 								</td>
 								
-							</tr>
-							
+							</tr>							
 							<tr>		
-								<td align="left"  colspan="2" Valign="top"><b>Desde :</b> </td>
-								<td align="left"  colspan="1" Valign="top">		
+								<td align="left"  colspan="50%" Valign="top"><b>Desde :</b> </td>								
+								<td align="center"  colspan="1" Valign="top">		
 									&nbsp;
 									<select id="fechaInicial"
 										class="cuadroTexto" property="fechaInicial">
@@ -186,9 +173,9 @@
 										<option value=2> 2 </option>
 										<option value=3> 3 </option>
 										<option value=4> 4 </option>
-									</select>			
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									
+									</select>												
+								</td>
+								<td align="center"  colspan="1" Valign="top">
 									<bean:define id="anoCalculoInicial" toScope="page">
 										<bean:write name="reporteForm" property="ano" />
 									</bean:define> 
@@ -206,14 +193,10 @@
 									</html:select>													
 								</td>
 							</tr>
+							
 							<tr>
-								<td colspan="3">
-									&nbsp;
-								</td>
-							</tr>
-							<tr>
-								<td align="left"  colspan="2" Valign="top"><b>Hasta :</b> </td>
-								<td align="left"  colspan="2" Valign="top">	
+								<td align="left"  colspan="50%" Valign="top"><b>Hasta :</b> </td>
+								<td align="center"  colspan="1" Valign="top">	
 									&nbsp;
 									<select id="fechaFinal"
 										class="cuadroTexto" property="fechaFinal">
@@ -222,7 +205,8 @@
 										<option value=3> 3 </option>
 										<option value=4> 4 </option>
 									</select>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</td>
+								<td align="center"  colspan="1" Valign="top">									
 									<bean:define id="anoCalculoFinal" toScope="page">
 										<bean:write name="reporteForm" property="ano" />
 									</bean:define> 

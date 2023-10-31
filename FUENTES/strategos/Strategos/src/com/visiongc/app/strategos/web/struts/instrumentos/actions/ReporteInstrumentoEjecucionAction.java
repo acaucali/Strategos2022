@@ -65,8 +65,8 @@ public class ReporteInstrumentoEjecucionAction extends VgcAction
 		/* Parametros para el reporte */
 
 		Calendar fecha = Calendar.getInstance();
-
-		reporteForm.setId(new Long(instrumentoId));
+		if(instrumentoId!= "") 
+			reporteForm.setId(new Long(instrumentoId));
 		if(anio != "") {
 			reporteForm.setAno(new Integer(anio));
 		}

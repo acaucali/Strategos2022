@@ -81,6 +81,10 @@
 		var cooperativo = document.getElementById('selectCooperante');
 		if (cooperativo != null)
 			cooperativo.value = 0;
+		var historico = document.getElementById('historico');
+		if (historico != null)
+			historico.value=false;
+			
 		window.location.href='<html:rewrite action="/instrumentos/gestionarInstrumentos?limpiar=1" />'
 	}
 	
@@ -104,6 +108,8 @@
 		var cooperativo = document.getElementById('selectCooperante');
 		if (cooperativo != null)
 			url = url + '&cop=' + cooperativo.value;
+		var historico = document.getElementById('historico');
+		url = url + '&historico=' + historico.checked;
 		
 				
 		if (typeof(iniciativaSeleccionadaId) != "undefined")

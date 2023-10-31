@@ -354,7 +354,8 @@ public final class LogonAction
           } else {
             sHoraActual = sHoraActual + " PM";
           }
-          horaActual.setTime(formatoHora.parse(sHoraActual));
+          //horaActual.setTime(formatoHora.parse(sHoraActual));
+          horaActual.setTime(new Date());
           
           boolean accesoPermitido = true;
           switch (dayOfWeek)

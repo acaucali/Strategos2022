@@ -258,13 +258,13 @@
 						</tr>
 						<tr>
 							<td align="right"><vgcutil:message key="jsp.acerca.licencia.company" /></td>
-							<!-- <td><input type="text" class="cuadroTexto" size="40" disabled value="<bean:write scope='session' name='licencia' property='companyName' />" /></td>  -->
-							<td><input type="text" class="cuadroTexto" size="45" disabled value="CORPORACIÓN ELÉCTRICA NACIONAL S.A. (CORPOELEC)" /></td>
+							<td><input type="text" class="cuadroTexto" size="50" disabled value="<bean:write scope='session' name='licencia' property='companyName' />" /></td>  -->
+							
 						</tr>
 						<tr>
 							<td align="right"><vgcutil:message key="jsp.licencia.serial" /></td>
-							<!--   <td><input type="text" class="cuadroTexto" size="45" disabled value="<bean:write scope='session' name='licencia' property='serial' />" /></td> -->
-							<td><input type="text" class="cuadroTexto" size="45" disabled value="202311001" /></td>
+							<td><input type="text" class="cuadroTexto" size="45" disabled value="<bean:write scope='session' name='licencia' property='serial' />" /></td> 
+							
 						</tr>
 						<logic:notEqual scope="session" name="licencia" property="expiracion" value="">
 							<tr>
@@ -278,8 +278,7 @@
 						</logic:notEqual>
 						<tr>
 							<td align="right"><vgcutil:message key="jsp.licencia.tipo" /></td>
-							<!--  <td><input type="text" class="cuadroTexto" size="15" disabled value="<bean:write scope='session' name='licencia' property='tipo' />" /></td> -->
-							<td><input type="text" class="cuadroTexto" size="20" disabled value="Licenciamiento Ilimitado" /></td>
+							  <td><input type="text" class="cuadroTexto" size="25" disabled value="<bean:write scope='session' name='licencia' property='tipo' />" /></td> 							
 						</tr>
 						<logic:notEqual scope="session" name="licencia" property="tipo" value="Full Licenciamiento">
 							<tr>

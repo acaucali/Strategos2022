@@ -630,25 +630,47 @@
 									<vgcinterfaz:botonMenu key="menu.evaluacion.graficos.iniciativa.graficar.porcentajes" permisoId="INICIATIVA_EVALUAR_GRAFICO_PORCENTAJE" aplicaOrganizacion="true" onclick="graficarIniciativa(1);" />
 								</vgcinterfaz:menuAnidado>
 							--%>
-									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
+									<logic:equal name="gestionarIniciativasForm" property="detallado" value="true">								
+										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
+									</logic:equal>
 									<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
 										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 									</logic:equal>
-									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.indicadores" onclick="reporteDetalladoProyectosIndicadores();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+									<logic:equal name="gestionarIniciativasForm" property="resumido" value="true">
+										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+									</logic:equal>
+									<logic:equal name="gestionarIniciativasForm" property="resumidoVigentes" value="true">
+										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+									</logic:equal>
+									<logic:equal name="gestionarIniciativasForm" property="indicadores" value="true">
+										<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.indicadores" onclick="reporteDetalladoProyectosIndicadores();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+									</logic:equal>
 						
 								
 							</logic:notEmpty>
 						 
 							<logic:empty scope="session" name="planActivoId">
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.mediciones.atrasadas" onclick="generarReporteMedicionesAtrasadas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.planes.accion" onclick="reporteDetalladoProyectosAsociados();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
-								<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.indicadores" onclick="reporteDetalladoProyectosIndicadores();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								<logic:notEqual name="gestionarIniciativasForm" property="detallado" value="false">								
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteIniciativas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DETALLADO" />
+								</logic:notEqual>
+								<logic:notEqual name="gestionarIniciativasForm" property="resumido" value="false">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.resumido" onclick="reporteIniciativasResumido();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+								</logic:notEqual>
+								<logic:notEqual name="gestionarIniciativasForm" property="resumidoVigentes" value="false">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado.ejecucion" onclick="reporteIniciativasResumidoEjecucion();" permisoId="INICIATIVA_EVALUAR_REPORTE_RESUMIDO" />
+								</logic:notEqual>
+								<logic:notEqual name="gestionarIniciativasForm" property="datosBasicos" value="false">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.datos.basicos" onclick="generarReporteDatosBasicos();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								</logic:notEqual>
+								<logic:notEqual name="gestionarIniciativasForm" property="medicionesAtrasadas" value="false">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.mediciones.atrasadas" onclick="generarReporteMedicionesAtrasadas();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								</logic:notEqual>
+								<logic:notEqual name="gestionarIniciativasForm" property="detalladoPlanes" value="false">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.planes.accion" onclick="reporteDetalladoProyectosAsociados();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								</logic:notEqual>
+								<logic:notEqual name="gestionarIniciativasForm" property="indicadores" value="false">
+									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.proyectos.indicadores" onclick="reporteDetalladoProyectosIndicadores();" permisoId="INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS" />
+								</logic:notEqual>
 								<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="<%= tipoCalculoEstadoIniciativaPorSeguimientos %>">
 									<vgcinterfaz:botonMenu key="jsp.gestionariniciativas.menu.reportes.detallado" onclick="reporteDetalladoIniciativaPorProductos();" />
 								

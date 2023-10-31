@@ -32,7 +32,8 @@
 		<property name="nombreReposnsableAreas" type="java.lang.String" column="nombre_responsable_areas" length="250"/>
 		<property name="responsableCgi" type="java.lang.String" column="responsable_cgi" length="250"/>
 		<property name="observaciones" type="java.lang.String" column="observaciones" length="2500"/>
-		<property name="claseId" type="java.lang.Long" column="clase_id" />	
+		<property name="claseId" type="java.lang.Long" column="clase_id" />
+		<property name="isHistorico" type="com.visiongc.commons.persistence.hibernate.CustomBooleanType" column="is_historico" />
 		
 		<!-- Asociación uno a uno para InstrumentoPeso -->
 		<one-to-one name="instrumentoPeso" class="com.visiongc.app.strategos.instrumentos.model.InstrumentoPeso" cascade="persist, merge, save-update, delete"></one-to-one>		

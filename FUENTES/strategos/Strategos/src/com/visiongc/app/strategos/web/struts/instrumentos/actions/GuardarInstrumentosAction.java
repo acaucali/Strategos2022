@@ -151,6 +151,8 @@ public class GuardarInstrumentosAction extends VgcAction {
 		instrumento.setRecursosPesos(editarInstrumentosForm.getRecursosPesos());
 		instrumento.setResponsableCgi(editarInstrumentosForm.getResponsableCgi());
 		instrumento.setFrecuencia(Frecuencia.getFrecuenciaTrimestral());
+		
+		instrumento.setIsHistorico(editarInstrumentosForm.getIsHistorico());
 
 		Long organizacionId = new Long(request.getSession().getAttribute("organizacionId").toString());
 		System.out.print("\n\nOrganizacion Id: " + organizacionId + "\n");

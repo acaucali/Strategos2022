@@ -41,7 +41,7 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 	private Double peso;
 	private String indicadorAnioId;
 
-
+	private Boolean isHistorico;
 
 
 
@@ -229,6 +229,8 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 		this.claseId = null;
 		this.indicadorId =  null;
 		this.source = null;
+		
+		this.isHistorico = new Boolean(false);
 
 
 		FiltroForm filtro = new FiltroForm();
@@ -251,5 +253,13 @@ public class GestionarInstrumentosForm  extends VisorListaForm
 
 	public void setIndicadorAnioId(String indicadorAnioId) {
 		this.indicadorAnioId = indicadorAnioId;
+	}
+
+	public Boolean getIsHistorico() {
+		return isHistorico;
+	}
+
+	public void setIsHistorico(Boolean isHistorico) {
+		this.isHistorico = isHistorico;
 	}
 }

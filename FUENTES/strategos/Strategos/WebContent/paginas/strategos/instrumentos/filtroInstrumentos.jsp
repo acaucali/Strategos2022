@@ -129,6 +129,15 @@
 					</td>	
 				</tr>
 				
+				<tr class="barraFiltrosForma" style="height: 20px;">
+					<td style="width: 110px;"><vgcutil:message key="jsp.gestionarinstrumentos.mostrar.historico" /></td>
+					<logic:notEqual name='gestionarInstrumentosForm' property='isHistorico' value='true'>
+						<td ><input type="checkbox" id="historico" ></td>											
+					</logic:notEqual>
+					<logic:equal name='gestionarInstrumentosForm' property='isHistorico' value='true'>
+						<td ><input type="checkbox" id="historico" checked></td>											
+					</logic:equal>
+				</tr>
 			</table>					
 		</td>
 			

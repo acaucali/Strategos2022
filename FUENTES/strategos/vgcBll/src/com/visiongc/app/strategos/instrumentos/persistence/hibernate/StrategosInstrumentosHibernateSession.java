@@ -86,6 +86,11 @@ public class StrategosInstrumentosHibernateSession extends StrategosHibernateSes
 	          condicionesConsulta = condicionesConsulta + "instrumento." + fieldName + getCondicionConsulta(filtros.get(fieldName), "=") + " and ";
 	          hayCondicionesConsulta = true;
 	        }
+	        else if (fieldName.equals("isHistorico"))
+	        {
+	          condicionesConsulta = condicionesConsulta + "instrumento." + fieldName + getCondicionConsulta(filtros.get(fieldName), "=") + " and ";
+	          hayCondicionesConsulta = true;
+	        }
 	        
 	        
 	      }

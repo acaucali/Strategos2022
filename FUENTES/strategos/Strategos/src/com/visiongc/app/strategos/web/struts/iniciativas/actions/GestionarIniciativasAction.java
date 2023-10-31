@@ -101,7 +101,27 @@ public class GestionarIniciativasAction extends VgcAction {
 				request.getSession().setAttribute("GuardarIndicador", "true");
 			}
 		}
-
+		
+		// Permisos Reportes 
+		boolean detallado = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_DETALLADO");
+		boolean resumido = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_RESUMIDO");
+		boolean resumidoVigentes = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_RESUMIDO_VIGENTES");
+		boolean datosBasicos = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS");
+		boolean medicionesAtrasadas = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS");
+		boolean detalladoPlanes = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_DETALLADO_PLANES_ACCION");
+		boolean indicadores = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_INDICADORES");
+								
+		gestionarIniciativasForm.clear();
+		
+		gestionarIniciativasForm.setDetallado(detallado);
+		gestionarIniciativasForm.setResumido(resumido);
+		gestionarIniciativasForm.setResumidoVigentes(resumido);
+		gestionarIniciativasForm.setDatosBasicos(datosBasicos);
+		gestionarIniciativasForm.setMedicionesAtrasadas(medicionesAtrasadas);
+		gestionarIniciativasForm.setDetalladoPlanes(detalladoPlanes);
+		gestionarIniciativasForm.setIndicadores(indicadores);
+				
+		
 		// portafolio
 		Long portafolioId = null;
 		GestionarPortafoliosForm gestionarPortafoliosForm = (GestionarPortafoliosForm) request.getSession()
@@ -148,7 +168,7 @@ public class GestionarIniciativasAction extends VgcAction {
 
 		String filtroAnio = (request.getParameter("filtroAnio") != null) ? request.getParameter("filtroAnio") : "";
 
-		gestionarIniciativasForm.clear();
+		
 
 		String organizacionId = (String) request.getSession().getAttribute("organizacionId");
 		Long iniciativaId = null;

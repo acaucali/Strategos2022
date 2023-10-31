@@ -29,6 +29,16 @@ public class GestionarIniciativasForm
   private List<TipoProyecto> tipos;
   private Long portafolioId;
   private Long instrumentoId;
+  
+  // Permisos Reportes
+  private boolean detallado;
+  private boolean resumido;
+  private boolean resumidoVigentes;
+  private boolean datosBasicos;
+  private boolean medicionesAtrasadas;
+  private boolean detalladoPlanes;
+  private boolean indicadores;
+  
 
   public String getFiltroNombre()
   {
@@ -210,10 +220,74 @@ public void clear()
     this.tipo = null;
     this.tipos = null;
     this.portafolioId = null;
+    
+    this.detallado = true;
+    this.resumido = true;
+    this.detalladoPlanes = true;
+    this.datosBasicos = true;
+    this.medicionesAtrasadas = true;
+    this.indicadores = true;
+    this.resumidoVigentes = true;
 
     FiltroForm filtro = new FiltroForm();
     filtro.setHistorico(Byte.valueOf(HistoricoType.getFiltroHistoricoNoMarcado()));
     filtro.setIncluirTodos(Boolean.valueOf(true));
     setFiltro(filtro);
   }
+
+public boolean isDetallado() {
+	return detallado;
+}
+
+public void setDetallado(boolean detallado) {
+	this.detallado = detallado;
+}
+
+public boolean isResumido() {
+	return resumido;
+}
+
+public void setResumido(boolean resumido) {
+	this.resumido = resumido;
+}
+
+public boolean isResumidoVigentes() {
+	return resumidoVigentes;
+}
+
+public void setResumidoVigentes(boolean resumidoVigentes) {
+	this.resumidoVigentes = resumidoVigentes;
+}
+
+public boolean isDatosBasicos() {
+	return datosBasicos;
+}
+
+public void setDatosBasicos(boolean datosBasicos) {
+	this.datosBasicos = datosBasicos;
+}
+
+public boolean isMedicionesAtrasadas() {
+	return medicionesAtrasadas;
+}
+
+public void setMedicionesAtrasadas(boolean medicionesAtrasadas) {
+	this.medicionesAtrasadas = medicionesAtrasadas;
+}
+
+public boolean isDetalladoPlanes() {
+	return detalladoPlanes;
+}
+
+public void setDetalladoPlanes(boolean detalladoPlanes) {
+	this.detalladoPlanes = detalladoPlanes;
+}
+
+public boolean isIndicadores() {
+	return indicadores;
+}
+
+public void setIndicadores(boolean indicadores) {
+	this.indicadores = indicadores;
+}
 }

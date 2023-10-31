@@ -192,9 +192,30 @@
 					<!-- Campo año formulación -->
 					<tr>
 						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.anio" /></td>
-						<td colspan="3" >
+						<td colspan="1" >
 							<html:text property="anio" size="5" maxlength="4" styleClass="cuadroTexto" />
 						</td>
+						
+						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.estatus" /></td>
+						<td><html:select property="estatus" styleClass="cuadroTexto" size="1">
+								
+								<html:option value="1">
+									<vgcutil:message key="jsp.pagina.instrumentos.estatus.sinIniciar" />
+								</html:option>
+								<html:option value="2">
+									<vgcutil:message key="jsp.pagina.instrumentos.estatus.ejecucion" />
+								</html:option>
+								<html:option value="3">
+									<vgcutil:message key="jsp.pagina.instrumentos.estatus.cancelado" />
+								</html:option>
+								<html:option value="4">
+									<vgcutil:message key="jsp.pagina.instrumentos.estatus.suspendido" />
+								</html:option>
+								<html:option value="5">
+									<vgcutil:message key="jsp.pagina.instrumentos.estatus.culminado" />
+								</html:option>
+								
+							</html:select></td>
 					</tr>
 					
 					<tr>
@@ -265,34 +286,7 @@
 										key="boton.calendario.alt" />">
 								</span>
 						</td>
-																	
-					</tr>
-					
-					<tr>
-						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.estatus" /></td>
-						<td><html:select property="estatus" styleClass="cuadroTexto" size="1">
-								
-								<html:option value="1">
-									<vgcutil:message key="jsp.pagina.instrumentos.estatus.sinIniciar" />
-								</html:option>
-								<html:option value="2">
-									<vgcutil:message key="jsp.pagina.instrumentos.estatus.ejecucion" />
-								</html:option>
-								<html:option value="3">
-									<vgcutil:message key="jsp.pagina.instrumentos.estatus.cancelado" />
-								</html:option>
-								<html:option value="4">
-									<vgcutil:message key="jsp.pagina.instrumentos.estatus.suspendido" />
-								</html:option>
-								<html:option value="5">
-									<vgcutil:message key="jsp.pagina.instrumentos.estatus.culminado" />
-								</html:option>
-								
-							</html:select></td>
-						
-					</tr>
-					
-					
+																			 																					
 					<tr>
 						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.recursos.pesos" /></td>
 						<td><html:text property="recursosPesos" size="20" maxlength="20" styleClass="cuadroTexto" /></td>
@@ -304,22 +298,26 @@
 					<tr>
 						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.nombre.ejecutante" /></td>
 						<td><html:text property="nombreEjecutante" size="45" maxlength="50" styleClass="cuadroTexto" /></td>
+						
+						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.responsable.cgi" /></td>
+						<td><html:text property="responsableCgi" size="45" maxlength="50" styleClass="cuadroTexto" /></td>
 					</tr>
 					
 					<tr>
 						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.responsable" /></td>
 						<td><html:text property="nombreReposnsableAreas" size="45" maxlength="50" styleClass="cuadroTexto" /></td>
-				
-						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.responsable.cgi" /></td>
-						<td><html:text property="responsableCgi" size="45" maxlength="50" styleClass="cuadroTexto" /></td>
+						
+						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.observaciones" /></td>
+						<td><html:textarea property="observaciones" cols="45" rows="3" styleClass="cuadroTexto" /></td>
+						
 					</tr>
 					
 					<tr>
 						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.unidad" /></td>
 						<td><html:textarea property="areasCargo" cols="45" rows="5" styleClass="cuadroTexto" /></td>
 						
-						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.observaciones" /></td>
-						<td><html:textarea property="observaciones" cols="45" rows="5" styleClass="cuadroTexto" /></td>
+						<td align="left"><vgcutil:message key="jsp.pagina.instrumentos.historico" /></td>
+						<td><html:checkbox styleClass="botonSeleccionMultiple" property="isHistorico" ></html:checkbox></td>
 					</tr>
 				
 				</table>

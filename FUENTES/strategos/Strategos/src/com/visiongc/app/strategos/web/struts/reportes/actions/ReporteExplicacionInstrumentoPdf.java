@@ -133,7 +133,7 @@ public class ReporteExplicacionInstrumentoPdf extends VgcReporteBasicoAction {
 	        tabla.agregarCelda(messageResources.getMessage("jsp.editarexplicacion.ficha.publicar"));
 	        tabla.agregarCelda(messageResources.getMessage("jsp.editarexplicacion.ficha.adjuntos"));
 	        tabla.agregarCelda(messageResources.getMessage("jsp.pagina.instrumentos.avance"));
-	        tabla.agregarCelda(messageResources.getMessage("action.reporte.estatus.iniciativa.observacion"));
+	        tabla.agregarCelda("observación");
 
 
 	        tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);

@@ -31,6 +31,7 @@
 		<forward name="reporteIniciativaDatosBasicos" path="/paginas/strategos/reportes/iniciativas/datosBasicos.jsp" />
 		<forward name="reporteIniciativaMedicionesAtrasadas" path="/paginas/strategos/reportes/iniciativas/medicionesAtrasadas.jsp" />
 		<forward name="reporteIniciativaIndicadores" path="/paginas/strategos/reportes/iniciativas/indicadoresProyecto.jsp"/>
+		<forward name="reporteExplicacionesResumido" path="/paginas/strategos/reportes/explicaciones/explicacionesResumido.jsp"/>
 		
 	</global-forwards>
 
@@ -192,6 +193,16 @@
 
 		<!-- Mapeo del Action: Parametro del Reporte -->
 		<action path="/reportes/parametrosReporte"  type="com.visiongc.app.strategos.web.struts.reportes.actions.ParametroReporteAction" name="parametroReporteForm" scope="session" parameter="parametrosReporte"></action>
+		
+		
+		<!-- Mapeo del Action: Pantalla de Reporte Explicaciones -->
+		<action path="/reportes/explicaciones/resumida" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteExplicacionesAction" scope="request" name="reporteForm" parameter="reporteExplicacionesResumido"></action>
+		
+		<!-- Mapeo del Action: Reporte Explicaciones PDF -->
+		<action path="/reportes/explicaciones/resumidaExplicacionPdf" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteExplicacionesPdf"></action>
+		
+		<!-- Mapeo del Action: Reporte Explicaciones XLS -->
+		<action path="/reportes/explicaciones/resumidaExplicacionXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteExplicacionesXls"></action>
 		
 	</action-mappings>
 </struts-config>

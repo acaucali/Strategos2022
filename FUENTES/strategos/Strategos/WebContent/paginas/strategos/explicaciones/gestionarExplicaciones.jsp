@@ -146,6 +146,13 @@
 			{
 				window.location.href='<html:rewrite action="/reportes/explicaciones/instrumentos/ejecucionXls"/>?instrumentoId=' + document.gestionarExplicacionesForm.objetoId.value;	
 			}
+			
+			function generarReporteExplicacionesResumido()
+			{
+				 var url = '?objetoId='+ document.gestionarExplicacionesForm.objetoId.value;
+				 url = url + "&objetoKey=" + document.gestionarExplicacionesForm.tipoObjetoKey.value;
+				 abrirVentanaModal('<html:rewrite action="/reportes/explicaciones/resumida" />' + url, "explicacion", 480, 280);
+			}
 
 		</script>
 
@@ -268,6 +275,13 @@
 								<%-- 
 								<vgcinterfaz:botonMenu key="menu.herramientas.configurar.sistema" onclick="configurarSistema();" permisoId="CONFIGURACION_SISTEMA" />
 								--%>
+							</vgcinterfaz:menuBotones>
+						</vgcinterfaz:contenedorMenuHorizontalItem>
+						
+						<%-- Menú: Evaluacion --%>				
+						<vgcinterfaz:contenedorMenuHorizontalItem>	
+							<vgcinterfaz:menuBotones id="menuEvaluacion" key="menu.evaluacion">
+								<vgcinterfaz:botonMenu key="jsp.reportes.explicaciones.resumido" onclick="generarReporteExplicacionesResumido();" permisoId="EXPLICACION" />								
 							</vgcinterfaz:menuBotones>
 						</vgcinterfaz:contenedorMenuHorizontalItem>
 						
