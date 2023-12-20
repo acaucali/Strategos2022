@@ -4,6 +4,7 @@ import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.AdjuntoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.AdjuntoExplicacionPK;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
+import com.visiongc.app.strategos.explicaciones.model.ExplicacionPGN;
 import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.MemoExplicacionPK;
 import com.visiongc.app.strategos.explicaciones.persistence.StrategosExplicacionesPersistenceSession;
@@ -409,5 +410,122 @@ implements StrategosExplicacionesService
 	  
 	  public List<AdjuntoExplicacion> getAdjuntos(){
 		  return this.persistenceSession.getAdjuntos();
+	  }
+	  
+	  
+	  // Explicaciones PGN
+	  
+	  public PaginaLista getExplicacionesPGN(int pagina, int tamanoPagina, String orden, String tipoOrden, boolean getTotal, Map filtros)
+	  {
+	    PaginaLista explicaciones = this.persistenceSession.getExplicacionesPGN(pagina, tamanoPagina, orden, tipoOrden, getTotal, filtros);	    
+	    return explicaciones;
+	  }
+	  
+	  public int deleteExplicacionPGN(ExplicacionPGN explicacion, Usuario usuario)
+	  {
+	    boolean transActiva = false;
+	    int resultado = 10000;
+	    try
+	    {
+	      if (!this.persistenceSession.isTransactionActive())
+	      {
+	        this.persistenceSession.beginTransaction();
+	        transActiva = true;
+	      }
+	      if (explicacion.getExplicacionId() != null) {
+	        resultado = this.persistenceSession.delete(explicacion, usuario);
+	      }
+	      if (resultado == 10000)
+	      {
+	        if (transActiva)
+	        {
+	          this.persistenceSession.commitTransaction();
+	          transActiva = false;
+	        }
+	      }
+	      else if (transActiva)
+	      {
+	        this.persistenceSession.rollbackTransaction();
+	        transActiva = false;
+	      }
+	    }
+	    catch (Throwable t)
+	    {
+	      if (transActiva)
+	      {
+	        this.persistenceSession.rollbackTransaction();
+	        throw new ChainedRuntimeException(t.getMessage(), t);
+	      }
+	    }
+	    return resultado;
+	  }
+	  
+	  public int saveExplicacionPGN(ExplicacionPGN explicacion, Usuario usuario)
+	  {
+		  boolean transActiva = false;
+		    int resultado = 10000;
+		    String[] fieldNames = new String[3];
+		    Object[] fieldValues = new Object[3];
+		    try
+		    {
+		      if (!this.persistenceSession.isTransactionActive())
+		      {
+		        this.persistenceSession.beginTransaction();
+		        transActiva = true;
+		      }
+		      fieldNames[0] = "titulo";
+		      fieldValues[0] = explicacion.getTitulo();
+		      fieldNames[1] = "objetoId";
+		      fieldValues[1] = explicacion.getObjetoId();
+		      
+		      
+		      if ((explicacion.getExplicacionId() == null) || (explicacion.getExplicacionId().longValue() == 0L))
+		      {
+		        if (this.persistenceSession.existsObject(explicacion, fieldNames, fieldValues))
+		        {
+		          resultado = 10003;
+		        }
+		        else
+		        {
+		          explicacion.setExplicacionId(new Long(this.persistenceSession.getUniqueId()));
+		          
+		          explicacion.setCreado(new Date());
+		          explicacion.setCreadoId(usuario.getUsuarioId());		          
+		          resultado = this.persistenceSession.insert(explicacion, usuario);
+		        }
+		      }
+		      else
+		      {
+		        String[] idFieldNames = new String[1];
+		        Object[] idFieldValues = new Object[1];
+		        
+		        idFieldNames[0] = "explicacionId";
+		        idFieldValues[0] = explicacion.getExplicacionId();
+		        if (this.persistenceSession.existsObject(explicacion, fieldNames, fieldValues, idFieldNames, idFieldValues)) {
+		          resultado = 10003;
+		        } else {
+		          resultado = this.persistenceSession.update(explicacion, usuario);
+		        }
+		      }
+		     		      
+		      
+		      if (transActiva)
+		      {
+		        if (resultado == 10000) {
+		          this.persistenceSession.commitTransaction();
+		        } else {
+		          this.persistenceSession.rollbackTransaction();
+		        }
+		        transActiva = false;
+		      }
+		    }
+		    catch (Throwable t)
+		    {
+		      if (transActiva) {
+		        this.persistenceSession.rollbackTransaction();
+		      }
+		      throw new ChainedRuntimeException(t.getMessage(), t);
+		    }
+		    return resultado;
 	  }
 }

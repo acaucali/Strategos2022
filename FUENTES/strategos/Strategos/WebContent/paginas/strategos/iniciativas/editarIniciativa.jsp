@@ -163,6 +163,11 @@
 			{
 												
 				<vgcinterfaz:mostrarPanelContenedorJs nombrePanel="datosBasicos" nombreContenedor="editarIniciativa"></vgcinterfaz:mostrarPanelContenedorJs>
+				if(document.editarIniciativaForm.nombre.value === "" ){
+					alert("Campo nombre no puede estar vacio")
+				}
+				else{
+					
 				if (validar(document.editarIniciativaForm)) 
 				{
 					if (document.editarIniciativaForm.alertaZonaAmarilla.value != "")
@@ -175,6 +180,7 @@
 					window.document.editarIniciativaForm.submit();
 								
 																				
+				}
 				}
 				
 			}
@@ -425,17 +431,17 @@
 								<td align="left"><vgcutil:message
 										key="jsp.editariniciativa.ficha.nombre" /></td>
 								<td colspan="3"><html:text property="nombre"
-										onkeypress="ejecutarPorDefecto(event)" size="90"
+										 size="90"
 										disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
 										maxlength="250" styleClass="cuadroTexto"
-										onkeyup="sincronizarCamposTexto(document.editarIniciativaForm.nombre, document.editarIniciativaForm.nombreLargo, 250, document.editarIniciativaForm.sincronizarNombres.checked)" /></td>
+										/></td>
 							</tr>
 
 							<%-- Campo descripción --%>
 							<tr>
 								<td align="left"><vgcutil:message
 										key="jsp.editariniciativa.ficha.descripcion" /></td>
-								<td colspan="3"><html:textarea
+								<td colspan="3"><html:textarea 
 										disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
 										property="descripcion" onkeypress="ejecutarPorDefecto(event)"
 										cols="88" rows="3" styleClass="cuadroTexto" /></td>
@@ -623,7 +629,7 @@
 
 								<td colspan="1"><html:text property="responsableProyecto"
 										onkeypress="ejecutarPorDefecto(event)" size="33"
-										maxlength="150" styleClass="cuadroTexto" /> <!-- Cargo -->
+										styleClass="cuadroTexto" /> <!-- Cargo -->
 								<td align="left"><vgcutil:message
 										key="jsp.editariniciativa.ficha.cargo" /></td>
 								<td><select class="cuadroCombinado" name="selectCargo"
@@ -658,7 +664,7 @@
 										key="jsp.editariniciativa.ficha.objetivoestrategico" /></td>
 								<td colspan="3"><html:textarea
 										property="objetivoEstrategico"
-										onkeypress="ejecutarPorDefecto(event)" cols="88" rows="2"
+										onkeypress="ejecutarPorDefecto(event)" cols="88" rows="2"										
 										styleClass="cuadroTexto" /></td>
 							</tr>
 

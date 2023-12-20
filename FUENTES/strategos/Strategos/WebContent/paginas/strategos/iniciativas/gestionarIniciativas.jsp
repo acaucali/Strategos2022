@@ -220,15 +220,17 @@
 	function gestionarAnexosIniciativa(inciativaId) 
 	{
 		var url = '';
+
 		<logic:equal name="gestionarIniciativasForm" property="source" value="instrumentos">
-			url = url+"?desdeInstrumento=true";
-		</logic:equal>	
+			url = url+"&desdeInstrumento=true";
+		</logic:equal>
 		
 		if (verificarElementoUnicoSeleccionMultiple(document.gestionarIniciativasForm.seleccionadoId))
 		{
-			var explicacion = new Explicacion();
-			explicacion.url = '<html:rewrite action="/explicaciones/gestionarExplicaciones"/>' + url;
-			explicacion.ShowList(true, document.gestionarIniciativasForm.seleccionadoId.value, 'Iniciativa', 0);
+			var explicacion = new Explicacion();					
+			explicacion.url = '<html:rewrite action="/explicaciones/gestionarExplicaciones"/>';
+			
+			explicacion.ShowList(true, document.gestionarIniciativasForm.seleccionadoId.value + url, 'Iniciativa', 0);
 		}
 	}
 	

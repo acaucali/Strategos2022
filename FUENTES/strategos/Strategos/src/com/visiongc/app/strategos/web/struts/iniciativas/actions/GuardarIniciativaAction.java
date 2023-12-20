@@ -77,6 +77,7 @@ public class GuardarIniciativaAction extends VgcAction {
 						? Boolean.parseBoolean(request.getParameter("desdeInstrumento"))
 						: null;
 
+		int fallos = 0;
 		if ((ts == null) || (ts.equals("")))
 			cancelar = true;
 		else if ((ultimoTs != null) && (ultimoTs.equals(ts)))
@@ -146,7 +147,20 @@ public class GuardarIniciativaAction extends VgcAction {
 
 		if ((editarIniciativaForm.getResponsableProyecto() != null)
 				&& (editarIniciativaForm.getResponsableProyecto() != ""))
-			iniciativa.setResponsableProyecto(editarIniciativaForm.getResponsableProyecto());
+
+			if (editarIniciativaForm.getResponsableProyecto().length() > 150) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.reponsableproyecto"));
+				iniciativa.setResponsableProyecto(editarIniciativaForm.getResponsableProyecto().substring(0, 150));
+			} else
+				iniciativa.setResponsableProyecto(editarIniciativaForm.getResponsableProyecto());
+
 		else
 			iniciativa.setResponsableProyecto(null);
 
@@ -158,77 +172,232 @@ public class GuardarIniciativaAction extends VgcAction {
 
 		if ((editarIniciativaForm.getOrganizacionesInvolucradas() != null)
 				&& (!editarIniciativaForm.getOrganizacionesInvolucradas().equals("")))
-			iniciativa.setOrganizacionesInvolucradas(editarIniciativaForm.getOrganizacionesInvolucradas());
+			if (editarIniciativaForm.getOrganizacionesInvolucradas().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.organizacionesinvolucradas"));
+				iniciativa.setOrganizacionesInvolucradas(editarIniciativaForm.getOrganizacionesInvolucradas().substring(0, 500));
+			} else
+				iniciativa.setOrganizacionesInvolucradas(editarIniciativaForm.getOrganizacionesInvolucradas());
+
 		else
 			iniciativa.setOrganizacionesInvolucradas(null);
 
 		if ((editarIniciativaForm.getObjetivoEstrategico() != null)
-				&& (!editarIniciativaForm.getObjetivoEstrategico().equals("")))
-			iniciativa.setObjetivoEstrategico(editarIniciativaForm.getObjetivoEstrategico());
-		else
+				&& (!editarIniciativaForm.getObjetivoEstrategico().equals(""))) {
+
+			if (editarIniciativaForm.getObjetivoEstrategico().length() > 250) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivoestrategico"));
+				iniciativa.setObjetivoEstrategico(editarIniciativaForm.getObjetivoEstrategico().substring(0, 250));
+			} else
+				iniciativa.setObjetivoEstrategico(editarIniciativaForm.getObjetivoEstrategico());
+		} else
 			iniciativa.setObjetivoEstrategico(null);
 
 		if ((editarIniciativaForm.getFuenteFinanciacion() != null)
 				&& (!editarIniciativaForm.getFuenteFinanciacion().equals("")))
-			iniciativa.setFuenteFinanciacion(editarIniciativaForm.getFuenteFinanciacion());
+			if (editarIniciativaForm.getFuenteFinanciacion().length() > 50) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.fuentefinanciacion"));
+				iniciativa.setFuenteFinanciacion(editarIniciativaForm.getFuenteFinanciacion().substring(0, 50));
+			} else
+				iniciativa.setFuenteFinanciacion(editarIniciativaForm.getFuenteFinanciacion());
+
 		else
 			iniciativa.setFuenteFinanciacion(null);
 
 		if ((editarIniciativaForm.getMontoFinanciamiento() != null)
 				&& (!editarIniciativaForm.getMontoFinanciamiento().equals("")))
-			iniciativa.setMontoFinanciamiento(editarIniciativaForm.getMontoFinanciamiento());
+			if (editarIniciativaForm.getMontoFinanciamiento().length() > 50) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.monto"));
+				iniciativa.setMontoFinanciamiento(editarIniciativaForm.getMontoFinanciamiento().substring(0, 50));
+			} else
+				iniciativa.setMontoFinanciamiento(editarIniciativaForm.getMontoFinanciamiento());
+
 		else
 			iniciativa.setMontoFinanciamiento(null);
 
 		if ((editarIniciativaForm.getIniciativaEstrategica() != null)
 				&& (!editarIniciativaForm.getIniciativaEstrategica().equals("")))
-			iniciativa.setIniciativaEstrategica(editarIniciativaForm.getIniciativaEstrategica());
+			if (editarIniciativaForm.getIniciativaEstrategica().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.iniciativaestrategica"));
+				iniciativa.setIniciativaEstrategica(editarIniciativaForm.getIniciativaEstrategica().substring(0, 500));
+			} else
+				iniciativa.setIniciativaEstrategica(editarIniciativaForm.getIniciativaEstrategica());
+
 		else
 			iniciativa.setIniciativaEstrategica(null);
 
 		if ((editarIniciativaForm.getLiderIniciativa() != null)
 				&& (!editarIniciativaForm.getLiderIniciativa().equals("")))
-			iniciativa.setLiderIniciativa(editarIniciativaForm.getLiderIniciativa());
+			if (editarIniciativaForm.getLiderIniciativa().length() > 250) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.lideriniciativa"));
+				iniciativa.setLiderIniciativa(editarIniciativaForm.getLiderIniciativa().substring(0, 250));
+			} else
+				iniciativa.setLiderIniciativa(editarIniciativaForm.getLiderIniciativa());
 		else
 			iniciativa.setLiderIniciativa(null);
 
 		if ((editarIniciativaForm.getTipoIniciativa() != null)
 				&& (!editarIniciativaForm.getTipoIniciativa().equals("")))
-			iniciativa.setTipoIniciativa(editarIniciativaForm.getTipoIniciativa());
+			if (editarIniciativaForm.getTipoIniciativa().length() > 250) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.tipoiniciativa"));
+				iniciativa.setTipoIniciativa(editarIniciativaForm.getTipoIniciativa().substring(0, 250));
+			} else
+				iniciativa.setTipoIniciativa(editarIniciativaForm.getTipoIniciativa());
+
 		else
 			iniciativa.setTipoIniciativa(null);
 
 		if ((editarIniciativaForm.getPoblacionBeneficiada() != null)
 				&& (!editarIniciativaForm.getPoblacionBeneficiada().equals("")))
-			iniciativa.setPoblacionBeneficiada(editarIniciativaForm.getPoblacionBeneficiada());
+			if (editarIniciativaForm.getPoblacionBeneficiada().length() > 450) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.poblacionbeneficiada"));
+				iniciativa.setPoblacionBeneficiada(editarIniciativaForm.getPoblacionBeneficiada().substring(0, 450));
+			} else
+				iniciativa.setPoblacionBeneficiada(editarIniciativaForm.getPoblacionBeneficiada());
 		else
 			iniciativa.setPoblacionBeneficiada(null);
 
 		if ((editarIniciativaForm.getContexto() != null) && (!editarIniciativaForm.getContexto().equals("")))
-			iniciativa.setContexto(editarIniciativaForm.getContexto());
+			if (editarIniciativaForm.getContexto().length() > 450) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.contexto"));
+				iniciativa.setContexto(editarIniciativaForm.getContexto().substring(0, 450));
+			} else
+				iniciativa.setContexto(editarIniciativaForm.getContexto());
+
 		else
 			iniciativa.setContexto(null);
 
 		if ((editarIniciativaForm.getDefinicionProblema() != null)
 				&& (!editarIniciativaForm.getDefinicionProblema().equals("")))
-			iniciativa.setDefinicionProblema(editarIniciativaForm.getDefinicionProblema());
+			if (editarIniciativaForm.getDefinicionProblema().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.definicionproblema"));
+				iniciativa.setDefinicionProblema(editarIniciativaForm.getDefinicionProblema().substring(0, 1500));
+			} else
+				iniciativa.setDefinicionProblema(editarIniciativaForm.getDefinicionProblema());
+
 		else
 			iniciativa.setDefinicionProblema(null);
 
 		if ((editarIniciativaForm.getAlcance() != null) && (!editarIniciativaForm.getAlcance().equals("")))
-			iniciativa.setAlcance(editarIniciativaForm.getAlcance());
+			if (editarIniciativaForm.getAlcance().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.alcance"));
+				iniciativa.setAlcance(editarIniciativaForm.getAlcance().substring(0, 1500));
+			} else
+				iniciativa.setAlcance(editarIniciativaForm.getAlcance());
+
 		else
 			iniciativa.setAlcance(null);
 
 		if ((editarIniciativaForm.getObjetivoGeneral() != null)
 				&& (!editarIniciativaForm.getObjetivoGeneral().equals("")))
-			iniciativa.setObjetivoGeneral(editarIniciativaForm.getObjetivoGeneral());
+			if (editarIniciativaForm.getObjetivoGeneral().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivogeneral"));
+				iniciativa.setObjetivoGeneral(editarIniciativaForm.getObjetivoGeneral().substring(0, 1500));
+			} else
+				iniciativa.setObjetivoGeneral(editarIniciativaForm.getObjetivoGeneral());
+
 		else
 			iniciativa.setObjetivoGeneral(null);
 
 		if ((editarIniciativaForm.getObjetivoEspecificos() != null)
 				&& (!editarIniciativaForm.getObjetivoEspecificos().equals("")))
-			iniciativa.setObjetivoEspecificos(editarIniciativaForm.getObjetivoEspecificos());
+			if(editarIniciativaForm.getObjetivoEspecificos().length() > 1500 ) {		
+				if(fallos == 0){
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+				
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("jsp.editariniciativa.ficha.objetivosespecificos"));
+				iniciativa.setObjetivoEspecificos(editarIniciativaForm.getObjetivoEspecificos().substring(0,1500));											
+			}
+			else
+				iniciativa.setObjetivoEspecificos(editarIniciativaForm.getObjetivoEspecificos());
+				
 		else
 			iniciativa.setObjetivoEspecificos(null);
 
@@ -239,7 +408,7 @@ public class GuardarIniciativaAction extends VgcAction {
 		} else {
 			iniciativa.setTipoId(null);
 		}
-		
+
 		String selectCargo = request.getParameter("selectCargo");
 
 		if (selectCargo != null && !selectCargo.equals("") && !selectCargo.equals("0")) {
@@ -248,255 +417,548 @@ public class GuardarIniciativaAction extends VgcAction {
 			iniciativa.setCargoId(null);
 		}
 
-		if((editarIniciativaForm.getCodigoIniciativa() != null) && (!editarIniciativaForm.getCodigoIniciativa().equals("")))
+		if ((editarIniciativaForm.getCodigoIniciativa() != null)
+				&& (!editarIniciativaForm.getCodigoIniciativa().equals("")))
 			iniciativa.setCodigoIniciativa(editarIniciativaForm.getCodigoIniciativa());
 		else
 			iniciativa.setCodigoIniciativa(null);
-				
-		
-		if((editarIniciativaForm.getJustificacion() != null) && (!editarIniciativaForm.getJustificacion().equals("")))
-			iniciativa.setJustificacion(editarIniciativaForm.getJustificacion());
+
+		if ((editarIniciativaForm.getJustificacion() != null) && (!editarIniciativaForm.getJustificacion().equals("")))
+			if (editarIniciativaForm.getJustificacion().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.justificacion"));
+				iniciativa.setJustificacion(editarIniciativaForm.getJustificacion().substring(0, 500));
+			} else
+				iniciativa.setJustificacion(editarIniciativaForm.getJustificacion());
+
 		else
 			iniciativa.setJustificacion(null);
-		
-		if((editarIniciativaForm.getMontoTotal() != null) && (!editarIniciativaForm.getMontoTotal().equals("")))
-			iniciativa.setMontoTotal(editarIniciativaForm.getMontoTotal());
+
+		if ((editarIniciativaForm.getMontoTotal() != null) && (!editarIniciativaForm.getMontoTotal().equals("")))
+			if (editarIniciativaForm.getMontoTotal().length() > 50) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.monto.total"));
+				iniciativa.setMontoTotal(editarIniciativaForm.getMontoTotal().substring(0, 50));
+			} else
+				iniciativa.setMontoTotal(editarIniciativaForm.getMontoTotal());
+				
 		else
 			iniciativa.setMontoTotal(null);
-		
-		if((editarIniciativaForm.getMontoMonedaExt() != null) && (!editarIniciativaForm.getMontoMonedaExt().equals("")))
-			iniciativa.setMontoMonedaExt(editarIniciativaForm.getMontoMonedaExt());
+
+		if ((editarIniciativaForm.getMontoMonedaExt() != null)
+				&& (!editarIniciativaForm.getMontoMonedaExt().equals("")))
+			if (editarIniciativaForm.getMontoMonedaExt().length() > 50) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.monto.moneda.extranjera"));
+				iniciativa.setMontoMonedaExt(editarIniciativaForm.getMontoMonedaExt().substring(0, 50));
+			} else
+				iniciativa.setMontoMonedaExt(editarIniciativaForm.getMontoMonedaExt());
+
 		else
-			iniciativa.setMontoMonedaExt(null);	
-		
-		if((editarIniciativaForm.getSituacionPresupuestaria() != null) && (!editarIniciativaForm.getSituacionPresupuestaria().equals("")))
-			iniciativa.setSituacionPresupuestaria(editarIniciativaForm.getSituacionPresupuestaria());
+			iniciativa.setMontoMonedaExt(null);
+
+		if ((editarIniciativaForm.getSituacionPresupuestaria() != null)
+				&& (!editarIniciativaForm.getSituacionPresupuestaria().equals("")))
+			if (editarIniciativaForm.getSituacionPresupuestaria().length() > 150) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.situacion.presupuestaria"));
+				iniciativa.setSituacionPresupuestaria(editarIniciativaForm.getSituacionPresupuestaria().substring(0, 150));
+			} else
+				iniciativa.setSituacionPresupuestaria(editarIniciativaForm.getSituacionPresupuestaria());				
 		else
-			iniciativa.setSituacionPresupuestaria(null);	
-		
-		if((editarIniciativaForm.getHitos() != null) && (!editarIniciativaForm.getHitos().equals("")))
-			iniciativa.setHitos(editarIniciativaForm.getHitos());
+			iniciativa.setSituacionPresupuestaria(null);
+
+		if ((editarIniciativaForm.getHitos() != null) && (!editarIniciativaForm.getHitos().equals("")))
+			if (editarIniciativaForm.getHitos().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.hitos"));
+				iniciativa.setHitos(editarIniciativaForm.getHitos().substring(0, 500));
+			} else
+				iniciativa.setHitos(editarIniciativaForm.getHitos());
+					
 		else
 			iniciativa.setHitos(null);
-		
-		if((editarIniciativaForm.getSector() != null) && (!editarIniciativaForm.getSector().equals("")))
-			iniciativa.setSector(editarIniciativaForm.getSector());
+
+		if ((editarIniciativaForm.getSector() != null) && (!editarIniciativaForm.getSector().equals("")))
+			if (editarIniciativaForm.getSector().length() > 150) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.sector"));
+				iniciativa.setSector(editarIniciativaForm.getSector().substring(0, 150));
+			} else
+				iniciativa.setSector(editarIniciativaForm.getSector());
+				
 		else
 			iniciativa.setSector(null);
-		
-		if((editarIniciativaForm.getGerenciaGeneralesRes() != null) && (!editarIniciativaForm.getGerenciaGeneralesRes().equals("")))
-			iniciativa.setGerenciaGeneralRes(editarIniciativaForm.getGerenciaGeneralesRes());
+
+		if ((editarIniciativaForm.getGerenciaGeneralesRes() != null)
+				&& (!editarIniciativaForm.getGerenciaGeneralesRes().equals("")))
+			if (editarIniciativaForm.getGerenciaGeneralesRes().length() > 150) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.responsable.gerencia.general"));
+				iniciativa.setGerenciaGeneralRes(editarIniciativaForm.getGerenciaGeneralesRes().substring(0, 150));
+			} else
+				iniciativa.setGerenciaGeneralRes(editarIniciativaForm.getGerenciaGeneralesRes());
+
 		else
 			iniciativa.setGerenciaGeneralRes(null);
-		
-		if((editarIniciativaForm.getCodigoSipe() != null) && (!editarIniciativaForm.getCodigoSipe().equals("")))
-			iniciativa.setCodigoSipe(editarIniciativaForm.getCodigoSipe());
+
+		if ((editarIniciativaForm.getCodigoSipe() != null) && (!editarIniciativaForm.getCodigoSipe().equals("")))
+			if (editarIniciativaForm.getCodigoSipe().length() > 50) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.codigo.sipe"));
+				iniciativa.setCodigoSipe(editarIniciativaForm.getCodigoSipe().substring(0, 50));
+			} else
+				iniciativa.setCodigoSipe(editarIniciativaForm.getCodigoSipe());
+
 		else
 			iniciativa.setCodigoSipe(null);
-		
-		if((editarIniciativaForm.getProyectoPresupAso() != null) && (!editarIniciativaForm.getProyectoPresupAso().equals("")))
-			iniciativa.setProyectoPresupAso(editarIniciativaForm.getProyectoPresupAso());
+
+		if ((editarIniciativaForm.getProyectoPresupAso() != null)
+				&& (!editarIniciativaForm.getProyectoPresupAso().equals("")))
+			if (editarIniciativaForm.getProyectoPresupAso().length() > 300) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.proyecto.presupuestario"));
+				iniciativa.setProyectoPresupAso(editarIniciativaForm.getProyectoPresupAso().substring(0, 300));
+			} else
+				iniciativa.setProyectoPresupAso(editarIniciativaForm.getProyectoPresupAso());
+				
 		else
 			iniciativa.setProyectoPresupAso(null);
-		
-		if((editarIniciativaForm.getEstado() != null) && (!editarIniciativaForm.getEstado().equals("")))
-			iniciativa.setEstado(editarIniciativaForm.getEstado());
+
+		if ((editarIniciativaForm.getEstado() != null) && (!editarIniciativaForm.getEstado().equals("")))
+			if (editarIniciativaForm.getEstado().length() > 100) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.estado"));
+				iniciativa.setEstado(editarIniciativaForm.getEstado().substring(0, 100));
+			} else
+				iniciativa.setEstado(editarIniciativaForm.getEstado());
+
 		else
 			iniciativa.setEstado(null);
-		
-		if((editarIniciativaForm.getMunicipio() != null) && (!editarIniciativaForm.getMunicipio().equals("")))
-			iniciativa.setMunicipio(editarIniciativaForm.getMunicipio());
+
+		if ((editarIniciativaForm.getMunicipio() != null) && (!editarIniciativaForm.getMunicipio().equals("")))
+			if (editarIniciativaForm.getMunicipio().length() > 300) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.municipio"));
+				iniciativa.setMunicipio(editarIniciativaForm.getMunicipio().substring(0, 300));
+			} else
+				iniciativa.setMunicipio(editarIniciativaForm.getMunicipio());
+				
 		else
 			iniciativa.setMunicipio(null);
-		
-		if((editarIniciativaForm.getParroquia() != null) && (!editarIniciativaForm.getParroquia().equals("")))
-			iniciativa.setParroquia(editarIniciativaForm.getParroquia());
+
+		if ((editarIniciativaForm.getParroquia() != null) && (!editarIniciativaForm.getParroquia().equals("")))
+			if (editarIniciativaForm.getParroquia().length() > 300) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.parroquia"));
+				iniciativa.setParroquia(editarIniciativaForm.getParroquia().substring(0, 300));
+			} else
+				iniciativa.setParroquia(editarIniciativaForm.getParroquia());
+
 		else
 			iniciativa.setParroquia(null);
-		
-		if((editarIniciativaForm.getDireccionProyecto() != null) && (!editarIniciativaForm.getDireccionProyecto().equals("")))
-			iniciativa.setDireccionProyecto(editarIniciativaForm.getDireccionProyecto());
+
+		if ((editarIniciativaForm.getDireccionProyecto() != null)
+				&& (!editarIniciativaForm.getDireccionProyecto().equals("")))
+			if (editarIniciativaForm.getDireccionProyecto().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.direccion"));
+				iniciativa.setDireccionProyecto(editarIniciativaForm.getDireccionProyecto().substring(0, 500));
+			} else
+				iniciativa.setDireccionProyecto(editarIniciativaForm.getDireccionProyecto());
+
 		else
 			iniciativa.setDireccionProyecto(null);
-		
-		if((editarIniciativaForm.getObjetivoHistorico() != null) && (!editarIniciativaForm.getObjetivoHistorico().equals("")))
-			iniciativa.setObjetivoHistorico(editarIniciativaForm.getObjetivoHistorico());
+
+		if ((editarIniciativaForm.getObjetivoHistorico() != null)
+				&& (!editarIniciativaForm.getObjetivoHistorico().equals("")))
+			if (editarIniciativaForm.getObjetivoHistorico().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivohistorico"));
+				iniciativa.setObjetivoHistorico(editarIniciativaForm.getObjetivoHistorico().substring(0, 500));
+			} else
+				iniciativa.setObjetivoHistorico(editarIniciativaForm.getObjetivoHistorico());
+
 		else
 			iniciativa.setObjetivoHistorico(null);
-		
-		if((editarIniciativaForm.getObjetivoNacional() != null) && (!editarIniciativaForm.getObjetivoNacional().equals("")))
-			iniciativa.setObjetivoNacional(editarIniciativaForm.getObjetivoNacional());
+
+		if ((editarIniciativaForm.getObjetivoNacional() != null)
+				&& (!editarIniciativaForm.getObjetivoNacional().equals("")))
+			if (editarIniciativaForm.getObjetivoNacional().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivonacional"));
+				iniciativa.setObjetivoNacional(editarIniciativaForm.getObjetivoNacional().substring(0, 1500));
+			} else
+				iniciativa.setObjetivoNacional(editarIniciativaForm.getObjetivoNacional());
+
 		else
 			iniciativa.setObjetivoNacional(null);
-		
-		if((editarIniciativaForm.getObjetivoEstrategicoPV() != null) && (!editarIniciativaForm.getObjetivoEstrategicoPV().equals("")))
-			iniciativa.setObjetivoEstrategicoPV(editarIniciativaForm.getObjetivoEstrategicoPV());
+
+		if ((editarIniciativaForm.getObjetivoEstrategicoPV() != null)
+				&& (!editarIniciativaForm.getObjetivoEstrategicoPV().equals("")))
+			if (editarIniciativaForm.getObjetivoEstrategicoPV().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivoestrategicopv"));
+				iniciativa.setObjetivoEstrategicoPV(editarIniciativaForm.getObjetivoEstrategicoPV().substring(0, 1500));
+			} else
+				iniciativa.setObjetivoEstrategicoPV(editarIniciativaForm.getObjetivoEstrategicoPV());
+				
 		else
 			iniciativa.setObjetivoEstrategicoPV(null);
-		
-		if((editarIniciativaForm.getObjetivoGeneralPV() != null) && (!editarIniciativaForm.getObjetivoGeneralPV().equals("")))
-			iniciativa.setObjetivoGeneralPV(editarIniciativaForm.getObjetivoGeneralPV());
+
+		if ((editarIniciativaForm.getObjetivoGeneralPV() != null)
+				&& (!editarIniciativaForm.getObjetivoGeneralPV().equals("")))
+			if (editarIniciativaForm.getObjetivoGeneralPV().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivogeneralpv"));
+				iniciativa.setObjetivoGeneralPV(editarIniciativaForm.getObjetivoGeneralPV().substring(0, 1500));
+			} else
+				iniciativa.setObjetivoGeneralPV(editarIniciativaForm.getObjetivoGeneralPV());
+				
 		else
 			iniciativa.setObjetivoGeneralPV(null);
-		
-		if((editarIniciativaForm.getObjetivoEspecifico() != null) && (!editarIniciativaForm.getObjetivoEspecifico().equals("")))
-			iniciativa.setObjetivoEspecifico(editarIniciativaForm.getObjetivoEspecifico());
+
+		if ((editarIniciativaForm.getObjetivoEspecifico() != null)
+				&& (!editarIniciativaForm.getObjetivoEspecifico().equals("")))
+			if (editarIniciativaForm.getObjetivoEspecifico().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.objetivoespecifico"));
+				iniciativa.setObjetivoEspecifico(editarIniciativaForm.getObjetivoEspecifico().substring(0, 1500));
+			} else
+				iniciativa.setObjetivoEspecifico(editarIniciativaForm.getObjetivoEspecifico());
+				
 		else
 			iniciativa.setObjetivoEspecifico(null);
-		
-		if((editarIniciativaForm.getPrograma() != null) && (!editarIniciativaForm.getPrograma().equals("")))
-			iniciativa.setPrograma(editarIniciativaForm.getPrograma());
+
+		if ((editarIniciativaForm.getPrograma() != null) && (!editarIniciativaForm.getPrograma().equals("")))
+			if (editarIniciativaForm.getPrograma().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.programa"));
+				iniciativa.setPrograma(editarIniciativaForm.getPrograma().substring(0, 500));
+			} else
+				iniciativa.setPrograma(editarIniciativaForm.getPrograma());
+
 		else
 			iniciativa.setPrograma(null);
-		
-		if((editarIniciativaForm.getProblemas() != null) && (!editarIniciativaForm.getProblemas().equals("")))
-			iniciativa.setProblemas(editarIniciativaForm.getProblemas());
+
+		if ((editarIniciativaForm.getProblemas() != null) && (!editarIniciativaForm.getProblemas().equals("")))
+			if (editarIniciativaForm.getProblemas().length() > 750) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.problemas"));
+				iniciativa.setProblemas(editarIniciativaForm.getProblemas().substring(0, 750));
+			} else
+				iniciativa.setProblemas(editarIniciativaForm.getProblemas());
+
 		else
 			iniciativa.setProblemas(null);
-		
-		if((editarIniciativaForm.getCausas() != null) && (!editarIniciativaForm.getCausas().equals("")))
-			iniciativa.setCausas(editarIniciativaForm.getCausas());
+
+		if ((editarIniciativaForm.getCausas() != null) && (!editarIniciativaForm.getCausas().equals("")))
+			if (editarIniciativaForm.getCausas().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.causas"));
+				iniciativa.setCausas(editarIniciativaForm.getCausas().substring(0, 500));
+			} else
+				iniciativa.setCausas(editarIniciativaForm.getCausas());
+
 		else
 			iniciativa.setCausas(null);
-		
-		if((editarIniciativaForm.getLineasEstrategicas() != null) && (!editarIniciativaForm.getLineasEstrategicas().equals("")))
-			iniciativa.setLineasEstrategicas(editarIniciativaForm.getLineasEstrategicas());
+
+		if ((editarIniciativaForm.getLineasEstrategicas() != null)
+				&& (!editarIniciativaForm.getLineasEstrategicas().equals("")))
+			if (editarIniciativaForm.getLineasEstrategicas().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.lineasestrategicas"));
+				iniciativa.setLineasEstrategicas(editarIniciativaForm.getLineasEstrategicas().substring(0, 500));
+			} else
+				iniciativa.setLineasEstrategicas(editarIniciativaForm.getLineasEstrategicas());
+
 		else
 			iniciativa.setLineasEstrategicas(null);
-		
-		if((editarIniciativaForm.getGerenteProyectoNombre() != null) && (!editarIniciativaForm.getGerenteProyectoNombre().equals("")))
+
+		if ((editarIniciativaForm.getGerenteProyectoNombre() != null)
+				&& (!editarIniciativaForm.getGerenteProyectoNombre().equals("")))
 			iniciativa.setGerenteProyectoNombre(editarIniciativaForm.getGerenteProyectoNombre());
 		else
 			iniciativa.setGerenteProyectoNombre(null);
 
-		if((editarIniciativaForm.getGerenteProyectoCedula() != null) && (!editarIniciativaForm.getGerenteProyectoCedula().equals("")))
+		if ((editarIniciativaForm.getGerenteProyectoCedula() != null)
+				&& (!editarIniciativaForm.getGerenteProyectoCedula().equals("")))
 			iniciativa.setGerenteProyectoCedula(editarIniciativaForm.getGerenteProyectoCedula());
 		else
 			iniciativa.setGerenteProyectoCedula(null);
-		
-		if((editarIniciativaForm.getGerenteProyectoEmail() != null) && (!editarIniciativaForm.getGerenteProyectoEmail().equals("")))
+
+		if ((editarIniciativaForm.getGerenteProyectoEmail() != null)
+				&& (!editarIniciativaForm.getGerenteProyectoEmail().equals("")))
 			iniciativa.setGerenteProyectoEmail(editarIniciativaForm.getGerenteProyectoEmail());
 		else
 			iniciativa.setGerenteProyectoEmail(null);
-		
-		if((editarIniciativaForm.getGerenteProyectoTelefono() != null) && (!editarIniciativaForm.getGerenteProyectoTelefono().equals("")))
+
+		if ((editarIniciativaForm.getGerenteProyectoTelefono() != null)
+				&& (!editarIniciativaForm.getGerenteProyectoTelefono().equals("")))
 			iniciativa.setGerenteProyectoTelefono(editarIniciativaForm.getGerenteProyectoTelefono());
 		else
 			iniciativa.setGerenteProyectoTelefono(null);
-		
-		if((editarIniciativaForm.getResponsableTecnicoNombre() != null) && (!editarIniciativaForm.getResponsableTecnicoNombre().equals("")))
+
+		if ((editarIniciativaForm.getResponsableTecnicoNombre() != null)
+				&& (!editarIniciativaForm.getResponsableTecnicoNombre().equals("")))
 			iniciativa.setResponsableTecnicoNombre(editarIniciativaForm.getResponsableTecnicoNombre());
 		else
 			iniciativa.setResponsableTecnicoNombre(null);
-		
-		if((editarIniciativaForm.getResponsableTecnicoCedula() != null) && (!editarIniciativaForm.getResponsableTecnicoCedula().equals("")))
+
+		if ((editarIniciativaForm.getResponsableTecnicoCedula() != null)
+				&& (!editarIniciativaForm.getResponsableTecnicoCedula().equals("")))
 			iniciativa.setResponsableTecnicoCedula(editarIniciativaForm.getResponsableTecnicoCedula());
 		else
 			iniciativa.setResponsableTecnicoCedula(null);
-		
-		if((editarIniciativaForm.getResponsableTecnicoEmail() != null) && (!editarIniciativaForm.getResponsableTecnicoEmail().equals("")))
+
+		if ((editarIniciativaForm.getResponsableTecnicoEmail() != null)
+				&& (!editarIniciativaForm.getResponsableTecnicoEmail().equals("")))
 			iniciativa.setResponsableTecnicoEmail(editarIniciativaForm.getResponsableTecnicoEmail());
 		else
 			iniciativa.setResponsableTecnicoEmail(null);
-		
-		if((editarIniciativaForm.getResponsableTecnicoTelefono() != null) && (!editarIniciativaForm.getResponsableTecnicoTelefono().equals("")))
+
+		if ((editarIniciativaForm.getResponsableTecnicoTelefono() != null)
+				&& (!editarIniciativaForm.getResponsableTecnicoTelefono().equals("")))
 			iniciativa.setResponsableTecnicoTelefono(editarIniciativaForm.getResponsableTecnicoTelefono());
 		else
 			iniciativa.setResponsableTecnicoTelefono(null);
-		
-		if((editarIniciativaForm.getResponsableRegistradorNombre() != null) && (!editarIniciativaForm.getResponsableRegistradorNombre().equals("")))
+
+		if ((editarIniciativaForm.getResponsableRegistradorNombre() != null)
+				&& (!editarIniciativaForm.getResponsableRegistradorNombre().equals("")))
 			iniciativa.setResponsableRegistradorNombre(editarIniciativaForm.getResponsableRegistradorNombre());
 		else
 			iniciativa.setResponsableRegistradorNombre(null);
-		
-		if((editarIniciativaForm.getResponsableRegistradorCedula() != null) && (!editarIniciativaForm.getResponsableRegistradorCedula().equals("")))
+
+		if ((editarIniciativaForm.getResponsableRegistradorCedula() != null)
+				&& (!editarIniciativaForm.getResponsableRegistradorCedula().equals("")))
 			iniciativa.setResponsableRegistradorCedula(editarIniciativaForm.getResponsableRegistradorCedula());
 		else
 			iniciativa.setResponsableRegistradorCedula(null);
-		
-		if((editarIniciativaForm.getResponsableRegistradorEmail() != null) && (!editarIniciativaForm.getResponsableRegistradorEmail().equals("")))
+
+		if ((editarIniciativaForm.getResponsableRegistradorEmail() != null)
+				&& (!editarIniciativaForm.getResponsableRegistradorEmail().equals("")))
 			iniciativa.setResponsableRegistradorEmail(editarIniciativaForm.getResponsableRegistradorEmail());
 		else
 			iniciativa.setResponsableRegistradorEmail(null);
-		
-		if((editarIniciativaForm.getResponsableRegistradorTelefono() != null) && (!editarIniciativaForm.getResponsableRegistradorTelefono().equals("")))
+
+		if ((editarIniciativaForm.getResponsableRegistradorTelefono() != null)
+				&& (!editarIniciativaForm.getResponsableRegistradorTelefono().equals("")))
 			iniciativa.setResponsableRegistradorTelefono(editarIniciativaForm.getResponsableRegistradorTelefono());
 		else
 			iniciativa.setResponsableRegistradorTelefono(null);
-		
-		if((editarIniciativaForm.getResponsableAdministrativoNombre() != null) && (!editarIniciativaForm.getResponsableAdministrativoNombre().equals("")))
+
+		if ((editarIniciativaForm.getResponsableAdministrativoNombre() != null)
+				&& (!editarIniciativaForm.getResponsableAdministrativoNombre().equals("")))
 			iniciativa.setResponsableAdministrativoNombre(editarIniciativaForm.getResponsableAdministrativoNombre());
 		else
 			iniciativa.setResponsableAdministrativoNombre(null);
-		
-		if((editarIniciativaForm.getResponsableAdministrativoCedula() != null) && (!editarIniciativaForm.getResponsableAdministrativoCedula().equals("")))
+
+		if ((editarIniciativaForm.getResponsableAdministrativoCedula() != null)
+				&& (!editarIniciativaForm.getResponsableAdministrativoCedula().equals("")))
 			iniciativa.setResponsableAdministrativoCedula(editarIniciativaForm.getResponsableAdministrativoCedula());
 		else
 			iniciativa.setResponsableAdministrativoCedula(null);
-		
-		if((editarIniciativaForm.getResponsableAdministrativoEmail() != null) && (!editarIniciativaForm.getResponsableAdministrativoEmail().equals("")))
+
+		if ((editarIniciativaForm.getResponsableAdministrativoEmail() != null)
+				&& (!editarIniciativaForm.getResponsableAdministrativoEmail().equals("")))
 			iniciativa.setResponsableAdministrativoEmail(editarIniciativaForm.getResponsableAdministrativoEmail());
 		else
 			iniciativa.setResponsableAdministrativoEmail(null);
-		
-		if((editarIniciativaForm.getResponsableAdministrativoTelefono() != null) && (!editarIniciativaForm.getResponsableAdministrativoTelefono().equals("")))
-			iniciativa.setResponsableAdministrativoTelefono(editarIniciativaForm.getResponsableAdministrativoTelefono());
+
+		if ((editarIniciativaForm.getResponsableAdministrativoTelefono() != null)
+				&& (!editarIniciativaForm.getResponsableAdministrativoTelefono().equals("")))
+			iniciativa
+					.setResponsableAdministrativoTelefono(editarIniciativaForm.getResponsableAdministrativoTelefono());
 		else
 			iniciativa.setResponsableAdministrativoTelefono(null);
-		
-		if((editarIniciativaForm.getResponsableAdminContratosNombre() != null) && (!editarIniciativaForm.getResponsableAdminContratosNombre().equals("")))
+
+		if ((editarIniciativaForm.getResponsableAdminContratosNombre() != null)
+				&& (!editarIniciativaForm.getResponsableAdminContratosNombre().equals("")))
 			iniciativa.setResponsableAdminContratosNombre(editarIniciativaForm.getResponsableAdminContratosNombre());
 		else
 			iniciativa.setResponsableAdminContratosNombre(null);
-		
-		if((editarIniciativaForm.getResponsableAdminContratosCedula() != null) && (!editarIniciativaForm.getResponsableAdminContratosCedula().equals("")))
+
+		if ((editarIniciativaForm.getResponsableAdminContratosCedula() != null)
+				&& (!editarIniciativaForm.getResponsableAdminContratosCedula().equals("")))
 			iniciativa.setResponsableAdminContratosCedula(editarIniciativaForm.getResponsableAdminContratosCedula());
 		else
 			iniciativa.setResponsableAdminContratosCedula(null);
-		
-		if((editarIniciativaForm.getResponsableAdminContratosEmail() != null) && (!editarIniciativaForm.getResponsableAdminContratosEmail().equals("")))
+
+		if ((editarIniciativaForm.getResponsableAdminContratosEmail() != null)
+				&& (!editarIniciativaForm.getResponsableAdminContratosEmail().equals("")))
 			iniciativa.setResponsableAdminContratosEmail(editarIniciativaForm.getResponsableAdminContratosEmail());
 		else
 			iniciativa.setResponsableAdminContratosEmail(null);
-		
-		if((editarIniciativaForm.getResponsableAdminContratosTelefono() != null) && (!editarIniciativaForm.getResponsableAdminContratosTelefono().equals("")))
-			iniciativa.setResponsableAdminContratosTelefono(editarIniciativaForm.getResponsableAdminContratosTelefono());
+
+		if ((editarIniciativaForm.getResponsableAdminContratosTelefono() != null)
+				&& (!editarIniciativaForm.getResponsableAdminContratosTelefono().equals("")))
+			iniciativa
+					.setResponsableAdminContratosTelefono(editarIniciativaForm.getResponsableAdminContratosTelefono());
 		else
 			iniciativa.setResponsableAdminContratosTelefono(null);
-		
-		
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		
-		if((editarIniciativaForm.getFechaInicio() != null) && (!editarIniciativaForm.getFechaInicio().equals(""))) {
+
+		if ((editarIniciativaForm.getFechaInicio() != null) && (!editarIniciativaForm.getFechaInicio().equals(""))) {
 			Calendar calFechaInicio = Calendar.getInstance();
 			calFechaInicio.setTime(simpleDateFormat.parse(editarIniciativaForm.getFechaInicio()));
 			calFechaInicio = PeriodoUtil.inicioDelDia(calFechaInicio);
-			iniciativa.setFechaInicio(calFechaInicio.getTime());					
-		}else {
+			iniciativa.setFechaInicio(calFechaInicio.getTime());
+		} else {
 			iniciativa.setFechaInicio(null);
 		}
-				
-		
-		if((editarIniciativaForm.getFechaFin() != null) && (!editarIniciativaForm.getFechaFin().equals(""))) {
+
+		if ((editarIniciativaForm.getFechaFin() != null) && (!editarIniciativaForm.getFechaFin().equals(""))) {
 			Calendar calFechaFin = Calendar.getInstance();
 			calFechaFin.setTime(simpleDateFormat.parse(editarIniciativaForm.getFechaFin()));
 			calFechaFin = PeriodoUtil.inicioDelDia(calFechaFin);
 			iniciativa.setFechaFin(calFechaFin.getTime());
-		}else {
+		} else {
 			iniciativa.setFechaFin(null);
 		}
-		
-		if((editarIniciativaForm.getFechaActaInicio() != null) && (!editarIniciativaForm.getFechaActaInicio().equals(""))) {
+
+		if ((editarIniciativaForm.getFechaActaInicio() != null)
+				&& (!editarIniciativaForm.getFechaActaInicio().equals(""))) {
 			Calendar calFechaActaInicio = Calendar.getInstance();
 			calFechaActaInicio.setTime(simpleDateFormat.parse(editarIniciativaForm.getFechaActaInicio()));
 			calFechaActaInicio = PeriodoUtil.inicioDelDia(calFechaActaInicio);
 			iniciativa.setFechaActaInicio(calFechaActaInicio.getTime());
-		}else {
+		} else {
 			iniciativa.setFechaActaInicio(null);
 		}
-		
-		
-			
+
 		if (editarIniciativaForm.getAlertaZonaAmarilla() != null
 				&& editarIniciativaForm.getHayValorPorcentajeAmarillo())
 			iniciativa.setAlertaZonaAmarilla(editarIniciativaForm.getAlertaZonaAmarilla());
@@ -545,12 +1007,36 @@ public class GuardarIniciativaAction extends VgcAction {
 		iniciativa.setTipoAlerta((byte) 0); // Calculo por alerta
 
 		if ((editarIniciativaForm.getDescripcion() != null) && (!editarIniciativaForm.getDescripcion().equals("")))
-			iniciativa.getMemoIniciativa().setDescripcion(editarIniciativaForm.getDescripcion());
+			if (editarIniciativaForm.getDescripcion().length() > 1500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.descripcion"));
+				iniciativa.getMemoIniciativa().setDescripcion(editarIniciativaForm.getDescripcion().substring(0, 1500));				
+			} else
+				iniciativa.getMemoIniciativa().setDescripcion(editarIniciativaForm.getDescripcion());
+				
 		else if (iniciativa.getMemoIniciativa() != null)
 			iniciativa.getMemoIniciativa().setDescripcion(null);
 
 		if ((editarIniciativaForm.getResultado() != null) && (!editarIniciativaForm.getResultado().equals("")))
-			iniciativa.getMemoIniciativa().setResultado(editarIniciativaForm.getResultado());
+			if (editarIniciativaForm.getSituacionPresupuestaria().length() > 150) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.situacion.presupuestaria"));
+				iniciativa.getMemoIniciativa().setResultado(editarIniciativaForm.getResultado().substring(0, 150));				
+			} else
+				iniciativa.getMemoIniciativa().setResultado(editarIniciativaForm.getResultado());
+	
 		else if (iniciativa.getMemoIniciativa() != null)
 			iniciativa.getMemoIniciativa().setResultado(null);
 
@@ -598,23 +1084,22 @@ public class GuardarIniciativaAction extends VgcAction {
 		}
 		iniciativa.setTipoMedicion(editarIniciativaForm.getTipoMedicion());
 		iniciativa.setPartidas(editarIniciativaForm.getPartidas());
-		
+
 		String selectUnidad = request.getParameter("selectUnidad");
 
-		if (selectUnidad != null && !selectUnidad.equals("") && !selectUnidad.equals("0")){
+		if (selectUnidad != null && !selectUnidad.equals("") && !selectUnidad.equals("0")) {
 			iniciativa.setUnidadId(Long.parseLong(selectUnidad));
-		}else {
+		} else {
 			iniciativa.setUnidadId(editarIniciativaForm.getUnidad());
 		}
-		
+
 		String selectFase = request.getParameter("selectFase");
 
-		if (selectFase != null && !selectFase.equals("") && !selectFase.equals("0")){
+		if (selectFase != null && !selectFase.equals("") && !selectFase.equals("0")) {
 			iniciativa.setFaseId(Long.parseLong(selectFase));
-		}else {
+		} else {
 			iniciativa.setFaseId(editarIniciativaForm.getFaseId());
 		}
-		
 
 		String selectEstatusType = request.getParameter("selectEstatusType");
 
@@ -694,8 +1179,6 @@ public class GuardarIniciativaAction extends VgcAction {
 			forward = "crearIniciativa";
 			messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
 					new ActionMessage("action.guardarregistro.modificar.no.ok"));
-			messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
-					new ActionMessage("action.guardarregistro.organizacion.no.ok"));
 		}
 
 		strategosIniciativasService.close();
@@ -726,7 +1209,6 @@ public class GuardarIniciativaAction extends VgcAction {
 	public int actualizarActividades(Boolean cambioFrecuencia, Iniciativa iniciativa, Usuario usuario,
 			StrategosIniciativasService strategosIniciativasService) {
 		int respuesta = VgcReturnCode.DB_OK;
-
 
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance()
 				.openStrategosPryActividadesService(strategosIniciativasService);

@@ -59,7 +59,7 @@ public class IndicadorPortafolioPK
   {
     if (this == other)
       return true;
-    if (!(other instanceof PortafolioIniciativaPK))
+    if (!(other instanceof IndicadorPortafolioPK))
       return false;
     IndicadorPortafolioPK castOther = (IndicadorPortafolioPK)other;
     return new EqualsBuilder().append(getIndicadorId(), castOther.getIndicadorId()).append(getPortafolioId(), castOther.getPortafolioId()).isEquals();

@@ -70,6 +70,7 @@ public class ReporteIniciativaDatosBasicosAction extends VgcAction {
 		reporteForm.setMesFinal(""+mes);
 		reporteForm.setAno(ano);
 		reporteForm.setAnoInicial(""+anoIn);
+		if(portafolioId != null && !portafolioId.equals(""))
 		reporteForm.setPortafolioId(Long.parseLong(portafolioId));
 		reporteForm.setSource(source);
 

@@ -9,11 +9,14 @@
 	<form-beans>
 		<form-bean name="gestionarExplicacionesForm" type="com.visiongc.app.strategos.web.struts.explicaciones.forms.GestionarExplicacionesForm" />
 		<form-bean name="editarExplicacionForm" type="com.visiongc.app.strategos.web.struts.explicaciones.forms.EditarExplicacionForm" />
+		<form-bean name="gestionarExplicacionesPGNForm" type="com.visiongc.app.strategos.web.struts.explicaciones.forms.GestionarExplicacionesPGNForm" />
+		<form-bean name="editarExplicacionPGNForm" type="com.visiongc.app.strategos.web.struts.explicaciones.forms.EditarExplicacionesPGNForm" />
 	</form-beans>
 
 	<!-- Definiciones: Global Forward -->
 	<global-forwards>
 		<forward name="editarExplicacion" path="/paginas/strategos/explicaciones/editarExplicacion.jsp" />		
+		<forward name="editarExplicacionPGN" path="/paginas/strategos/explicaciones/editarExplicacionPGN.jsp" />				
 	</global-forwards>
 
 	<!-- Definiciones: Action Mapping -->
@@ -67,6 +70,32 @@
 
 		<!-- Mapeo del Action: Para modificar los adjuntos ya registrados-->
 		<action path="/explicaciones/modificarAdjuntos" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.ModificarAdjuntosAction"></action>
+		
+		
+		
+		<!-- Explicaciones PGN -->
+		
+		<!-- Mapeo del Action: Gestionar Explicaciones PGN -->
+		<action path="/explicaciones/gestionarExplicacionesPGN" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.GestionarExplicacionesPGNAction" scope="session" name="gestionarExplicacionesPGNForm" parameter="gestionarExplicacionesPGN">
+			<forward name="gestionarExplicacionesPGN" path="/paginas/strategos/explicaciones/gestionarExplicacionesPGN.jsp" />
+		</action>
+		
+				<!-- Mapeo del Action: Crear Explicación PGN -->
+		<action path="/explicaciones/crearExplicacionPGN" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.EditarExplicacionPGNAction" scope="session" name="editarExplicacionPGNForm" parameter="editarExplicacionPGN"></action>
+
+		<!-- Mapeo del Action: Modificar Explicación PGN -->
+		<action path="/explicaciones/modificarExplicacionPGN" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.EditarExplicacionPGNAction" scope="session" name="editarExplicacionPGNForm" parameter="editarExplicacionPGN"></action>
+		
+		<!-- Mapeo del Action: Guardar Explicación PGN -->
+		<action path="/explicaciones/guardarExplicacionPGN" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.GuardarExplicacionesPGNAction" name="editarExplicacionPGNForm" scope="session" input="editarExplicacionPGN" validate="true" parameter="editarExplicacionPGN">
+			<forward name="crearExplicacionPGN" path="/explicaciones/crearExplicacionPGN.action" />
+		</action>
+		
+		<!-- Mapeo del Action: Cancelar Guardar Explicación -->
+		<action path="/explicaciones/cancelarGuardarExplicacionPGN" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.GuardarExplicacionesPGNAction" name="editarExplicacionPGNForm" scope="session" parameter="editarExplicacionPGN"></action>
+		
+		<!-- Mapeo del Action: Eliminar Explicación -->
+		<action path="/explicaciones/eliminarExplicacionPGN" type="com.visiongc.app.strategos.web.struts.explicaciones.actions.EliminarExplicacionPGNAction"></action>
 	</action-mappings>
 
 </struts-config>

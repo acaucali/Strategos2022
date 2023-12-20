@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping SYSTEM "../../../../../../hibernate-mapping-3.0.dtd" >
+
+<!-- Descripci��n: Mapeo de un objeto Explicacion PGN de la Base de Datos -->
+<!-- Modificado por: Andres Martinez (07/11/2023) -->
+
+<hibernate-mapping>
+	<class name="com.visiongc.app.strategos.explicaciones.model.ExplicacionPGN" table="explicacion_pgn">
+		
+		<!-- Atributo clave de ExplicacionesPGN -->
+		<id name="explicacionId" type="java.lang.Long" column="explicacion_id">
+			<generator class="assigned" />
+		</id>
+		
+		<!-- Atributos del objeto conceptual para ExplicacionesPGN -->
+		<property name="titulo" type="java.lang.String" column="titulo" />
+		<property name="fecha" type="java.util.Date" column="fecha" />
+		<property name="creado" type="java.util.Date" column="creado" />
+		<property name="creadoId" type="java.lang.Long" column="creado_id" />
+		<property name="objetoId" type="java.lang.Long" column="objeto_id" />
+		<property name="cumplimiendoFechas" type="com.visiongc.commons.persistence.hibernate.CustomBooleanType" column="is_fechas" />
+		<property name="explicacionFechas" type="java.lang.String" column="explicacion_fechas" length="500"/>
+		<property name="recibido" type="com.visiongc.commons.persistence.hibernate.CustomBooleanType" column="is_recibido" />
+		<property name="explicacionRecibido" type="java.lang.String" column="explicacion_recibido" length="500"/>
+		
+		<!-- Asociaci��n uno a uno hacia Usuario -->
+		<many-to-one name="usuarioCreado" class="com.visiongc.framework.model.Usuario" column="creado_id" unique="true" insert="false" update="false" lazy="false"></many-to-one>
+		
+	</class>	
+</hibernate-mapping>

@@ -1,5 +1,6 @@
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
+import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,24 +16,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
 import com.visiongc.app.strategos.indicadores.model.util.AlertaIndicador;
+import com.visiongc.app.strategos.indicadores.model.util.TipoCorte;
 import com.visiongc.app.strategos.indicadores.model.util.TipoFuncionIndicador;
+import com.visiongc.app.strategos.indicadores.model.util.TipoMedicion;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
@@ -132,22 +138,23 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 		        MessageResources messageResources = getResources(request);
 
-		        Object[][] data = new Object[iniciativas.size()+1][12];
+		        Object[][] data = new Object[iniciativas.size()+1][13];
 
+		        
 
-
-		    	data[0][0]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre");
-		    	data[0][1]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.frecuencia");
-		    	data[0][2]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.ejecutado");
-		    	data[0][3]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.programado");
-		    	data[0][4]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion");
-		    	data[0][5]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada");
-		    	data[0][6]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias");
-		    	data[0][7]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus");
-		    	data[0][8]=messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto");
-		    	data[0][9]=messageResources.getMessage("jsp.editariniciativa.ficha.anioformulacion");
-		    	data[0][10]=messageResources.getMessage("action.reporte.estatus.iniciativa.responsable");
-		    	data[0][11]=messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr");
+		        data[0][0]=messageResources.getMessage("jsp.mostrargestioniniciativa.alerta");
+		    	data[0][1]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre");
+		    	data[0][2]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.frecuencia");
+		    	data[0][3]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.ejecutado");
+		    	data[0][4]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.programado");
+		    	data[0][5]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion");
+		    	data[0][6]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada");
+		    	data[0][7]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias");
+		    	data[0][8]=messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus");
+		    	data[0][9]=messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto");
+		    	data[0][10]=messageResources.getMessage("jsp.editariniciativa.ficha.anioformulacion");
+		    	data[0][11]=messageResources.getMessage("action.reporte.estatus.iniciativa.responsable");
+		    	data[0][12]=messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr");
 
 
 
@@ -174,28 +181,70 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 						}
 
 						if(estatusId == 8) {
-
-							data[x][0]=iniciativa.getNombre();
+							
+							Byte alerta = null;
+							
+								String url = obtenerCadenaRecurso(request);
+								alerta = iniciativa.getAlerta();
+								if (alerta == null)
+									data[x][0]="";
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
+									data[x][0]="Roja";
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
+									data[x][0]="Verde";
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
+									data[x][0]= "Amarilla";	
+								
+							data[x][1]=iniciativa.getNombre();
 
 							if(iniciativa.getFrecuenciaNombre() != null) {
-								data[x][1]=iniciativa.getFrecuenciaNombre();
-							}else {
-								data[x][1]=("");
-							}
-
-							if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-								data[x][2]=iniciativa.getPorcentajeCompletadoFormateado();
-								data[x][3]=iniciativa.getPorcentajeCompletadoFormateado();
+								data[x][2]=iniciativa.getFrecuenciaNombre();
 							}else {
 								data[x][2]=("");
-								data[x][3]=("");
+							}
+
+							if (iniciativa.getPorcentajeCompletado() != null) {								
+								if (indicador != null) {
+									boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+											.byteValue()
+											&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+													.byteValue());
+
+									Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+											indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+											indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+									if (medicionReal != null) {
+										data[x][3]=medicionReal.getValor().toString();
+
+										List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+												indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+												medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+										Double programado = null;
+										for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+											Medicion medicion = iter2.next();
+											if (medicion.getValor() != null && programado == null)
+												programado = medicion.getValor();
+											else if (medicion.getValor() != null && programado != null && acumular)
+												programado = programado + medicion.getValor();
+											else if (medicion.getValor() != null && programado != null && !acumular)
+												programado = medicion.getValor();
+										}
+
+										if (programado != null)
+											data[x][4]= programado.toString();
+										else 
+											data[x][4]=("");
+									}
+									else
+										data[x][3]=("");
+								}
 							}
 
 							if(iniciativa.getFechaUltimaMedicion() != null){
-								data[x][4]=iniciativa.getFechaUltimaMedicion();
+								data[x][5]=iniciativa.getFechaUltimaMedicion();
 							}
 							else{
-								data[x][4]=("");
+								data[x][5]=("");
 							}
 
 
@@ -209,7 +258,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 								SimpleDateFormat objSDF = new SimpleDateFormat("MM/yyyy");
 
-								data[x][5]=objSDF.format(fechaAh);
+								data[x][6]=objSDF.format(fechaAh);
 
 								int milisecondsByDay = 86400000;
 
@@ -217,11 +266,11 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 								int diasposi = dias * -1;
 
-								data[x][6]=""+diasposi;
+								data[x][7]=""+diasposi;
 
 							}else {
-								data[x][5]="";
 								data[x][6]="";
+								data[x][7]="";
 							}
 
 
@@ -229,65 +278,65 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 							//estatus
 							if (medicionesProgramadas.size() == 0) {
 								//EstatusIniciar
-								data[x][7]=messageResources.getMessage("estado.sin.iniciar");
+								data[x][8]=messageResources.getMessage("estado.sin.iniciar");
 							}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 								//EstatusIniciardesfasado
-								data[x][7]=messageResources.getMessage("estado.sin.iniciar.desfasada");
+								data[x][8]=messageResources.getMessage("estado.sin.iniciar.desfasada");
 							}
 							else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 								//EnEjecucionSinRetrasos
-								data[x][7]=messageResources.getMessage("estado.en.ejecucion.sin.retrasos");
+								data[x][8]=messageResources.getMessage("estado.en.ejecucion.sin.retrasos");
 							}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 								//EnEjecucionConRetrasosSuperables
-								data[x][7]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables");
+								data[x][8]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables");
 							}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 								//EnEjecucionConRetrasosSignificativos
-								data[x][7]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos");
+								data[x][8]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos");
 							}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 								//EstatusConcluidas
-								data[x][7]=messageResources.getMessage("estado.concluidas");
+								data[x][8]=messageResources.getMessage("estado.concluidas");
 							}
 							else if(iniciativa.getEstatusId() == 3) {
 								//EstatusCancelado
-								data[x][7]="Cancelado";
+								data[x][8]="Cancelado";
 							}
 							else if(iniciativa.getEstatusId() == 4) {
 								//EstatusSuspendido
-								data[x][7]="Suspendido";
+								data[x][8]="Suspendido";
 							}else {
 								//EstatusIniciar
-								data[x][7]=messageResources.getMessage("estado.sin.iniciar");
+								data[x][8]=messageResources.getMessage("estado.sin.iniciar");
 							}
 
 							if(iniciativa.getTipoProyecto()==null){
-								data[x][8]="";
+								data[x][9]="";
 							}else {
-								data[x][8]=iniciativa.getTipoProyecto().getNombre();
+								data[x][9]=iniciativa.getTipoProyecto().getNombre();
 							}
 
 							if(iniciativa.getAnioFormulacion() == null) {
-								data[x][9]="";
+								data[x][10]="";
 							}else {
-								data[x][9]=iniciativa.getAnioFormulacion();
+								data[x][10]=iniciativa.getAnioFormulacion();
 							}
 
 
 							//responsable ejecutar
 
 							if(iniciativa.getResponsableCargarEjecutado() ==null){
-								data[x][10]="";
+								data[x][11]="";
 							}
 							else{
-								data[x][10]=iniciativa.getResponsableCargarEjecutado().getNombre();
+								data[x][11]=iniciativa.getResponsableCargarEjecutado().getNombre();
 							}
 
 							//responsable lograr meta
 
 							if(iniciativa.getResponsableLograrMeta() ==null){
-								data[x][11]="";
+								data[x][12]="";
 							}
 							else{
-								data[x][11]=iniciativa.getResponsableLograrMeta().getNombre();
+								data[x][12]=iniciativa.getResponsableLograrMeta().getNombre();
 							}
 
 							x=x+1;
@@ -296,27 +345,69 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 							if(est) {
 
-								data[x][0]=iniciativa.getNombre();
+								Byte alerta = null;
+								
+								String url = obtenerCadenaRecurso(request);
+								alerta = iniciativa.getAlerta();
+								if (alerta == null)
+									data[x][0]="";
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
+									data[x][0]="Roja";
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
+									data[x][0]="Verde";
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
+									data[x][0]= "Amarilla";
+								
+								data[x][1]=iniciativa.getNombre();
 
 								if(iniciativa.getFrecuenciaNombre() != null) {
-									data[x][1]=iniciativa.getFrecuenciaNombre();
-								}else {
-									data[x][1]=("");
-								}
-
-								if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-									data[x][2]=iniciativa.getPorcentajeCompletadoFormateado();
-									data[x][3]=iniciativa.getPorcentajeCompletadoFormateado();
+									data[x][2]=iniciativa.getFrecuenciaNombre();
 								}else {
 									data[x][2]=("");
-									data[x][3]=("");
+								}
+
+								if (iniciativa.getPorcentajeCompletado() != null) {								
+									if (indicador != null) {
+										boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+												.byteValue()
+												&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+														.byteValue());
+
+										Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+												indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+												indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+										if (medicionReal != null) {
+											data[x][3]=medicionReal.getValor().toString();
+
+											List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+													indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+													medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+											Double programado = null;
+											for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+												Medicion medicion = iter2.next();
+												if (medicion.getValor() != null && programado == null)
+													programado = medicion.getValor();
+												else if (medicion.getValor() != null && programado != null && acumular)
+													programado = programado + medicion.getValor();
+												else if (medicion.getValor() != null && programado != null && !acumular)
+													programado = medicion.getValor();
+											}
+
+											if (programado != null)
+												data[x][4]= programado.toString();
+											else 
+												data[x][4]=("");
+										}
+										else
+											data[x][3]=("");
+									}
 								}
 
 								if(iniciativa.getFechaUltimaMedicion() != null){
-									data[x][4]=iniciativa.getFechaUltimaMedicion();
+									data[x][5]=iniciativa.getFechaUltimaMedicion();
 								}
 								else{
-									data[x][4]=("");
+									data[x][5]=("");
 								}
 
 
@@ -330,7 +421,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 									SimpleDateFormat objSDF = new SimpleDateFormat("MM/yyyy");
 
-									data[x][5]=objSDF.format(fechaAh);
+									data[x][6]=objSDF.format(fechaAh);
 
 									int milisecondsByDay = 86400000;
 
@@ -338,11 +429,11 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 									int diasposi = dias * -1;
 
-									data[x][6]=""+diasposi;
+									data[x][7]=""+diasposi;
 
 								}else {
-									data[x][5]="";
 									data[x][6]="";
+									data[x][7]="";
 								}
 
 
@@ -350,65 +441,65 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 								//estatus
 								if (medicionesProgramadas.size() == 0) {
 									//EstatusIniciar
-									data[x][7]=messageResources.getMessage("estado.sin.iniciar");
+									data[x][8]=messageResources.getMessage("estado.sin.iniciar");
 								}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 									//EstatusIniciardesfasado
-									data[x][7]=messageResources.getMessage("estado.sin.iniciar.desfasada");
+									data[x][8]=messageResources.getMessage("estado.sin.iniciar.desfasada");
 								}
 								else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 									//EnEjecucionSinRetrasos
-									data[x][7]=messageResources.getMessage("estado.en.ejecucion.sin.retrasos");
+									data[x][8]=messageResources.getMessage("estado.en.ejecucion.sin.retrasos");
 								}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 									//EnEjecucionConRetrasosSuperables
-									data[x][7]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables");
+									data[x][8]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables");
 								}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 									//EnEjecucionConRetrasosSignificativos
-									data[x][7]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos");
+									data[x][8]=messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos");
 								}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 									//EstatusConcluidas
-									data[x][7]=messageResources.getMessage("estado.concluidas");
+									data[x][8]=messageResources.getMessage("estado.concluidas");
 								}
 								else if(iniciativa.getEstatusId() == 3) {
 									//EstatusCancelado
-									data[x][7]="Cancelado";
+									data[x][8]="Cancelado";
 								}
 								else if(iniciativa.getEstatusId() == 4) {
 									//EstatusSuspendido
-									data[x][7]="Suspendido";
+									data[x][8]="Suspendido";
 								}else {
 									//EstatusIniciar
-									data[x][7]=messageResources.getMessage("estado.sin.iniciar");
+									data[x][8]=messageResources.getMessage("estado.sin.iniciar");
 								}
 
 								if(iniciativa.getTipoProyecto()==null){
-									data[x][8]="";
+									data[x][9]="";
 								}else {
-									data[x][8]=iniciativa.getTipoProyecto().getNombre();
+									data[x][9]=iniciativa.getTipoProyecto().getNombre();
 								}
 
 								if(iniciativa.getAnioFormulacion() == null) {
-									data[x][9]="";
+									data[x][10]="";
 								}else {
-									data[x][9]=iniciativa.getAnioFormulacion();
+									data[x][10]=iniciativa.getAnioFormulacion();
 								}
 
 
 								//responsable ejecutar
 
 								if(iniciativa.getResponsableCargarEjecutado() ==null){
-									data[x][10]="";
+									data[x][11]="";
 								}
 								else{
-									data[x][10]=iniciativa.getResponsableCargarEjecutado().getNombre();
+									data[x][11]=iniciativa.getResponsableCargarEjecutado().getNombre();
 								}
 
 								//responsable lograr meta
 
 								if(iniciativa.getResponsableLograrMeta() ==null){
-									data[x][11]="";
+									data[x][12]="";
 								}
 								else{
-									data[x][11]=iniciativa.getResponsableLograrMeta().getNombre();
+									data[x][12]=iniciativa.getResponsableLograrMeta().getNombre();
 								}
 
 								x=x+1;
@@ -433,6 +524,21 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 		        CellStyle style = workbook.createCellStyle();
 		        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
 		        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleRoja = workbook.createCellStyle();
+		        styleRoja.setFillBackgroundColor(IndexedColors.RED.index);
+		        styleRoja.setFillForegroundColor(IndexedColors.RED.index);
+		        styleRoja.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleVerde = workbook.createCellStyle();
+		        styleVerde.setFillBackgroundColor(IndexedColors.GREEN.index);
+		        styleVerde.setFillForegroundColor(IndexedColors.GREEN.index);
+		        styleVerde.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleAmarillo = workbook.createCellStyle();
+		        styleAmarillo. setFillBackgroundColor(IndexedColors.YELLOW.index);
+		        styleAmarillo.setFillForegroundColor(IndexedColors.YELLOW.index);
+		        styleAmarillo.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		        HSSFRow headerRow = sheet.createRow(0);
 
@@ -458,33 +564,46 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 		        for (Object[] d : data) {
 		            HSSFRow dataRow = sheet.createRow(numeroCelda +1);
 
-		            String iniciativaName = (String) d[0];
-		            String frecuencia = (String) d[1];
-		            String ejecutado=(String)d[2];
-		            String programado = (String) d[3];
-		            String actualizacion = (String) d[4];
-		            String actesperada =(String) d[5];
-		            String dias = (String) d[6];
-		            String estatusIn = (String) d[7];
-		            String tipoIn = (String) d[8];
-		            String anio = (String) d[9];
-		            String responsable = (String) d[10];
-		            String resplograr = (String) d[11];
+		            String alerta = (String) d[0];
+		            String iniciativaName = (String) d[1];
+		            String frecuencia = (String) d[2];
+		            String ejecutado=(String)d[3];
+		            String programado = (String) d[4];
+		            String actualizacion = (String) d[5];
+		            String actesperada =(String) d[6];
+		            String dias = (String) d[7];
+		            String estatusIn = (String) d[8];
+		            String tipoIn = (String) d[9];
+		            String anio = (String) d[10];
+		            String responsable = (String) d[11];
+		            String resplograr = (String) d[12];
 
-
-
-		            dataRow.createCell(0).setCellValue(iniciativaName);
-		            dataRow.createCell(1).setCellValue(frecuencia);
-		            dataRow.createCell(2).setCellValue(ejecutado);
-		            dataRow.createCell(3).setCellValue(programado);
-		            dataRow.createCell(4).setCellValue(actualizacion);
-		            dataRow.createCell(5).setCellValue(actesperada);
-		            dataRow.createCell(6).setCellValue(dias);
-		            dataRow.createCell(7).setCellValue(estatusIn);
-		            dataRow.createCell(8).setCellValue(tipoIn);
-		            dataRow.createCell(9).setCellValue(anio);
-		            dataRow.createCell(10).setCellValue(responsable);
-		            dataRow.createCell(11).setCellValue(resplograr);
+		            
+		            if(alerta.equals("Alerta"))
+						dataRow.createCell(0).setCellValue(alerta);
+		            else if(alerta.equals("Roja")) {
+		            	dataRow.createCell(0).setCellValue("");
+		            	dataRow.createCell(0).setCellStyle(styleRoja);
+		            }else if(alerta.equals("Verde")) {
+		            	dataRow.createCell(0).setCellValue("");
+		            	dataRow.createCell(0).setCellStyle(styleVerde);
+		            }else if(alerta.equals("Amarilla")) {
+		            	dataRow.createCell(0).setCellValue("");
+		            	dataRow.createCell(0).setCellStyle(styleAmarillo);
+		            }
+		            	
+		            dataRow.createCell(1).setCellValue(iniciativaName);
+		            dataRow.createCell(2).setCellValue(frecuencia);
+		            dataRow.createCell(3).setCellValue(ejecutado);
+		            dataRow.createCell(4).setCellValue(programado);
+		            dataRow.createCell(5).setCellValue(actualizacion);
+		            dataRow.createCell(6).setCellValue(actesperada);
+		            dataRow.createCell(7).setCellValue(dias);
+		            dataRow.createCell(8).setCellValue(estatusIn);
+		            dataRow.createCell(9).setCellValue(tipoIn);
+		            dataRow.createCell(10).setCellValue(anio);
+		            dataRow.createCell(11).setCellValue(responsable);
+		            dataRow.createCell(12).setCellValue(resplograr);
 
 		            numeroCelda=numeroCelda+1;
 		        }
@@ -543,7 +662,22 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 		        CellStyle style = workbook.createCellStyle();
 		        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
 		        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-
+		        
+		        CellStyle styleRoja = workbook.createCellStyle();
+		        styleRoja.setFillBackgroundColor(IndexedColors.RED.index);
+		        styleRoja.setFillForegroundColor(IndexedColors.RED.index);
+		        styleRoja.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleVerde = workbook.createCellStyle();
+		        styleVerde.setFillBackgroundColor(IndexedColors.GREEN.index);
+		        styleVerde.setFillForegroundColor(IndexedColors.GREEN.index);
+		        styleVerde.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleAmarillo = workbook.createCellStyle();
+		        styleAmarillo. setFillBackgroundColor(IndexedColors.YELLOW.index);
+		        styleAmarillo.setFillForegroundColor(IndexedColors.YELLOW.index);
+		        styleAmarillo.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
 		        HSSFRow headerRow = sheet.createRow(0);
 
 		        String header = "Reporte Iniciativas Resumido";
@@ -577,18 +711,19 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 		        HSSFRow dataRow = sheet.createRow(1);
 				dataRow.createCell(0).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.entidad"));
-	            dataRow.createCell(1).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre"));
-	            dataRow.createCell(2).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.frecuencia"));
-	            dataRow.createCell(3).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.ejecutado"));
-	            dataRow.createCell(4).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.programado"));
-	            dataRow.createCell(5).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion"));
-	            dataRow.createCell(6).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada"));
-	            dataRow.createCell(7).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias"));
-	            dataRow.createCell(8).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus"));
-	            dataRow.createCell(9).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto"));
-	            dataRow.createCell(10).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.anioformulacion"));
-	            dataRow.createCell(11).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable"));
-	            dataRow.createCell(12).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr"));
+				dataRow.createCell(1).setCellValue(messageResources.getMessage("jsp.mostrargestioniniciativa.alerta"));
+	            dataRow.createCell(2).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre"));
+	            dataRow.createCell(3).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.frecuencia"));
+	            dataRow.createCell(4).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.ejecutado"));
+	            dataRow.createCell(5).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.programado"));
+	            dataRow.createCell(6).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion"));
+	            dataRow.createCell(7).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada"));
+	            dataRow.createCell(8).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias"));
+	            dataRow.createCell(9).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus"));
+	            dataRow.createCell(10).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto"));
+	            dataRow.createCell(11).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.anioformulacion"));
+	            dataRow.createCell(12).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable"));
+	            dataRow.createCell(13).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr"));
 	            int x=1;
 
 			        if (iniciativas.size() > 0)
@@ -621,30 +756,79 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 
 								dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());
-					            dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
+								Byte alerta = null;
+																
+								alerta = iniciativa.getAlerta();
+								if (alerta == null)
+									dataRow1.createCell(1).setCellValue("");
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+									dataRow1.createCell(1).setCellValue("");
+									dataRow1.createCell(1).setCellStyle(styleRoja);
+								}
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+									dataRow1.createCell(1).setCellValue("");
+									dataRow1.createCell(1).setCellStyle(styleVerde);
+								}
+								else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()){
+									dataRow1.createCell(1).setCellValue("");
+									dataRow1.createCell(1).setCellStyle(styleAmarillo);
+								}
+									
+								
+					            dataRow1.createCell(2).setCellValue(iniciativa.getNombre());
 
 					            if(iniciativa.getFrecuenciaNombre() != null) {
-					            	dataRow1.createCell(2).setCellValue(iniciativa.getFrecuenciaNombre());
-								}else {
-									dataRow1.createCell(2).setCellValue("");
-								}
-
-								if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-									dataRow1.createCell(3).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-									dataRow1.createCell(4).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
+					            	dataRow1.createCell(3).setCellValue(iniciativa.getFrecuenciaNombre());
 								}else {
 									dataRow1.createCell(3).setCellValue("");
-									dataRow1.createCell(4).setCellValue("");
 								}
 
+
+
+					            if (iniciativa.getPorcentajeCompletado() != null) {								
+									if (indicador != null) {
+										boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+												.byteValue()
+												&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+														.byteValue());
+
+										Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+												indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+												indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+										if (medicionReal != null) {
+											dataRow1.createCell(4).setCellValue(medicionReal.getValor().toString());
+
+											List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+													indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+													medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+											Double programado = null;
+											for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+												Medicion medicion = iter2.next();
+												if (medicion.getValor() != null && programado == null)
+													programado = medicion.getValor();
+												else if (medicion.getValor() != null && programado != null && acumular)
+													programado = programado + medicion.getValor();
+												else if (medicion.getValor() != null && programado != null && !acumular)
+													programado = medicion.getValor();
+											}
+
+											if (programado != null)
+												dataRow1.createCell(5).setCellValue(programado.toString());
+											else 
+												dataRow1.createCell(5).setCellValue("");
+										}
+										else
+											dataRow1.createCell(4).setCellValue("");
+									}
+								}
 
 
 
 								if(iniciativa.getFechaUltimaMedicion() != null){
-									dataRow1.createCell(5).setCellValue(iniciativa.getFechaUltimaMedicion());
+									dataRow1.createCell(6).setCellValue(iniciativa.getFechaUltimaMedicion());
 								}
 								else{
-									dataRow1.createCell(5).setCellValue("");
+									dataRow1.createCell(6).setCellValue("");
 								}
 
 
@@ -660,7 +844,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 									String fechaTemp =objSDF.format(fechaAh);
 
 
-									dataRow1.createCell(6).setCellValue(fechaTemp);
+									dataRow1.createCell(7).setCellValue(fechaTemp);
 
 									int milisecondsByDay = 86400000;
 
@@ -668,10 +852,10 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 									int diasposi = dias * -1;
 
-									dataRow1.createCell(7).setCellValue(""+diasposi);
+									dataRow1.createCell(8).setCellValue(""+diasposi);
 								}else {
-									dataRow1.createCell(6).setCellValue("");
 									dataRow1.createCell(7).setCellValue("");
+									dataRow1.createCell(8).setCellValue("");
 								}
 
 
@@ -679,64 +863,64 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 								//estatus
 								if (medicionesProgramadas.size() == 0) {
 									//EstatusIniciar
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 								}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 									//EstatusIniciardesfasado
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
 								}
 								else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 									//EnEjecucionSinRetrasos
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
 								}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 									//EnEjecucionConRetrasosSuperables
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
 								}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 									//EnEjecucionConRetrasosSignificativos
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
 								}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 									//EstatusConcluidas
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.concluidas"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.concluidas"));
 								}
 								else if(iniciativa.getEstatusId() == 3) {
 									//EstatusCancelado
-									dataRow1.createCell(8).setCellValue("Cancelado");
+									dataRow1.createCell(9).setCellValue("Cancelado");
 								}
 								else if(iniciativa.getEstatusId() == 4) {
 									//EstatusSuspendido
-									dataRow1.createCell(8).setCellValue("Suspendido");
+									dataRow1.createCell(9).setCellValue("Suspendido");
 								}else {
 									//EstatusIniciar
-									dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+									dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 								}
 
 								if(iniciativa.getTipoProyecto()==null){
-									dataRow1.createCell(9).setCellValue("");
+									dataRow1.createCell(10).setCellValue("");
 								}else {
-									dataRow1.createCell(9).setCellValue(iniciativa.getTipoProyecto().getNombre());
+									dataRow1.createCell(10).setCellValue(iniciativa.getTipoProyecto().getNombre());
 								}
 
 								if(iniciativa.getAnioFormulacion() == null) {
-									dataRow1.createCell(10).setCellValue("");
+									dataRow1.createCell(11).setCellValue("");
 								}else {
-									dataRow1.createCell(10).setCellValue(iniciativa.getAnioFormulacion());
+									dataRow1.createCell(11).setCellValue(iniciativa.getAnioFormulacion());
 								}
 
 								//responsable ejecutar
 
 								if(iniciativa.getResponsableCargarEjecutado() ==null){
-									dataRow1.createCell(11).setCellValue("");
+									dataRow1.createCell(12).setCellValue("");
 								}
 								else{
-									dataRow1.createCell(11).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
+									dataRow1.createCell(12).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
 								}
 
 								//responsable lograr meta
 
 								if(iniciativa.getResponsableLograrMeta() ==null){
-									dataRow1.createCell(12).setCellValue("");
+									dataRow1.createCell(13).setCellValue("");
 								}
 								else{
-									dataRow1.createCell(12).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
+									dataRow1.createCell(13).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
 								}
 
 
@@ -753,30 +937,77 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 
 									dataRow1.createCell(0).setCellValue(iniciativa.getOrganizacion().getNombre());
-						            dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
+									
+									Byte alerta = null;
+									
+									alerta = iniciativa.getAlerta();
+									if (alerta == null)
+										dataRow1.createCell(1).setCellValue("");
+									else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+										dataRow1.createCell(1).setCellValue("");
+										dataRow1.createCell(1).setCellStyle(styleRoja);
+									}
+									else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+										dataRow1.createCell(1).setCellValue("");
+										dataRow1.createCell(1).setCellStyle(styleVerde);
+									}
+									else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()){
+										dataRow1.createCell(1).setCellValue("");
+										dataRow1.createCell(1).setCellStyle(styleAmarillo);
+									}
+									
+						            dataRow1.createCell(2).setCellValue(iniciativa.getNombre());
 
 						            if(iniciativa.getFrecuenciaNombre() != null) {
-						            	dataRow1.createCell(2).setCellValue(iniciativa.getFrecuenciaNombre());
-									}else {
-										dataRow1.createCell(2).setCellValue("");
-									}
-
-									if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-										dataRow1.createCell(3).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-										dataRow1.createCell(4).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
+						            	dataRow1.createCell(3).setCellValue(iniciativa.getFrecuenciaNombre());
 									}else {
 										dataRow1.createCell(3).setCellValue("");
-										dataRow1.createCell(4).setCellValue("");
 									}
 
+						            if (iniciativa.getPorcentajeCompletado() != null) {								
+										if (indicador != null) {
+											boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+													.byteValue()
+													&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+															.byteValue());
+
+											Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+													indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+													indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+											if (medicionReal != null) {
+												dataRow1.createCell(4).setCellValue(medicionReal.getValor().toString());
+
+												List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+														indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+														medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+												Double programado = null;
+												for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+													Medicion medicion = iter2.next();
+													if (medicion.getValor() != null && programado == null)
+														programado = medicion.getValor();
+													else if (medicion.getValor() != null && programado != null && acumular)
+														programado = programado + medicion.getValor();
+													else if (medicion.getValor() != null && programado != null && !acumular)
+														programado = medicion.getValor();
+												}
+
+												if (programado != null)
+													dataRow1.createCell(5).setCellValue(programado.toString());
+												else 
+													dataRow1.createCell(5).setCellValue("");
+											}
+											else
+												dataRow1.createCell(4).setCellValue("");
+										}
+									}
 
 
 
 									if(iniciativa.getFechaUltimaMedicion() != null){
-										dataRow1.createCell(5).setCellValue(iniciativa.getFechaUltimaMedicion());
+										dataRow1.createCell(6).setCellValue(iniciativa.getFechaUltimaMedicion());
 									}
 									else{
-										dataRow1.createCell(5).setCellValue("");
+										dataRow1.createCell(6).setCellValue("");
 									}
 
 
@@ -792,7 +1023,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 										String fechaTemp =objSDF.format(fechaAh);
 
 
-										dataRow1.createCell(6).setCellValue(fechaTemp);
+										dataRow1.createCell(7).setCellValue(fechaTemp);
 
 										int milisecondsByDay = 86400000;
 
@@ -800,10 +1031,10 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 										int diasposi = dias * -1;
 
-										dataRow1.createCell(7).setCellValue(""+diasposi);
+										dataRow1.createCell(8).setCellValue(""+diasposi);
 									}else {
-										dataRow1.createCell(6).setCellValue("");
 										dataRow1.createCell(7).setCellValue("");
+										dataRow1.createCell(8).setCellValue("");
 									}
 
 
@@ -811,64 +1042,64 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 									//estatus
 									if (medicionesProgramadas.size() == 0) {
 										//EstatusIniciar
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 									}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 										//EstatusIniciardesfasado
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
 									}
 									else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 										//EnEjecucionSinRetrasos
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
 									}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 										//EnEjecucionConRetrasosSuperables
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
 									}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 										//EnEjecucionConRetrasosSignificativos
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
 									}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 										//EstatusConcluidas
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.concluidas"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.concluidas"));
 									}
 									else if(iniciativa.getEstatusId() == 3) {
 										//EstatusCancelado
-										dataRow1.createCell(8).setCellValue("Cancelado");
+										dataRow1.createCell(9).setCellValue("Cancelado");
 									}
 									else if(iniciativa.getEstatusId() == 4) {
 										//EstatusSuspendido
-										dataRow1.createCell(8).setCellValue("Suspendido");
+										dataRow1.createCell(9).setCellValue("Suspendido");
 									}else {
 										//EstatusIniciar
-										dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+										dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 									}
 
 									if(iniciativa.getTipoProyecto()==null){
-										dataRow1.createCell(9).setCellValue("");
+										dataRow1.createCell(10).setCellValue("");
 									}else {
-										dataRow1.createCell(9).setCellValue(iniciativa.getTipoProyecto().getNombre());
+										dataRow1.createCell(10).setCellValue(iniciativa.getTipoProyecto().getNombre());
 									}
 
 									if(iniciativa.getAnioFormulacion() == null) {
-										dataRow1.createCell(10).setCellValue("");
+										dataRow1.createCell(11).setCellValue("");
 									}else {
-										dataRow1.createCell(10).setCellValue(iniciativa.getAnioFormulacion());
+										dataRow1.createCell(11).setCellValue(iniciativa.getAnioFormulacion());
 									}
 
 									//responsable ejecutar
 
 									if(iniciativa.getResponsableCargarEjecutado() ==null){
-										dataRow1.createCell(11).setCellValue("");
+										dataRow1.createCell(12).setCellValue("");
 									}
 									else{
-										dataRow1.createCell(11).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
+										dataRow1.createCell(12).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
 									}
 
 									//responsable lograr meta
 
 									if(iniciativa.getResponsableLograrMeta() ==null){
-										dataRow1.createCell(12).setCellValue("");
+										dataRow1.createCell(13).setCellValue("");
 									}
 									else{
-										dataRow1.createCell(12).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
+										dataRow1.createCell(13).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
 									}
 
 
@@ -954,30 +1185,75 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 
 											dataRow1.createCell(0).setCellValue(ruta);
-								            dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
-
-								            if(iniciativa.getFrecuenciaNombre() != null) {
-								            	dataRow1.createCell(2).setCellValue(iniciativa.getFrecuenciaNombre());
-											}else {
-												dataRow1.createCell(2).setCellValue("");
+											Byte alerta = null;
+											
+											alerta = iniciativa.getAlerta();
+											if (alerta == null)
+												dataRow1.createCell(1).setCellValue("");
+											else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+												dataRow1.createCell(1).setCellValue("");
+												dataRow1.createCell(1).setCellStyle(styleRoja);
+											}
+											else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+												dataRow1.createCell(1).setCellValue("");
+												dataRow1.createCell(1).setCellStyle(styleVerde);
+											}
+											else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()){
+												dataRow1.createCell(1).setCellValue("");
+												dataRow1.createCell(1).setCellStyle(styleAmarillo);
 											}
 
-											if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-												dataRow1.createCell(3).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-												dataRow1.createCell(4).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
+								            if(iniciativa.getFrecuenciaNombre() != null) {
+								            	dataRow1.createCell(3).setCellValue(iniciativa.getFrecuenciaNombre());
 											}else {
 												dataRow1.createCell(3).setCellValue("");
-												dataRow1.createCell(4).setCellValue("");
+											}
+
+								            if (iniciativa.getPorcentajeCompletado() != null) {								
+												if (indicador != null) {
+													boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+															.byteValue()
+															&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+																	.byteValue());
+
+													Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+															indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+															indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+													if (medicionReal != null) {
+														dataRow1.createCell(4).setCellValue(medicionReal.getValor().toString());
+
+														List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+																indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+																medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+														Double programado = null;
+														for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+															Medicion medicion = iter2.next();
+															if (medicion.getValor() != null && programado == null)
+																programado = medicion.getValor();
+															else if (medicion.getValor() != null && programado != null && acumular)
+																programado = programado + medicion.getValor();
+															else if (medicion.getValor() != null && programado != null && !acumular)
+																programado = medicion.getValor();
+														}
+
+														if (programado != null)
+															dataRow1.createCell(5).setCellValue(programado.toString());
+														else 
+															dataRow1.createCell(5).setCellValue("");
+													}
+													else
+														dataRow1.createCell(4).setCellValue("");
+												}
 											}
 
 
 
 
 											if(iniciativa.getFechaUltimaMedicion() != null){
-												dataRow1.createCell(5).setCellValue(iniciativa.getFechaUltimaMedicion());
+												dataRow1.createCell(6).setCellValue(iniciativa.getFechaUltimaMedicion());
 											}
 											else{
-												dataRow1.createCell(5).setCellValue("");
+												dataRow1.createCell(6).setCellValue("");
 											}
 
 
@@ -993,7 +1269,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 												String fechaTemp =objSDF.format(fechaAh);
 
 
-												dataRow1.createCell(6).setCellValue(fechaTemp);
+												dataRow1.createCell(7).setCellValue(fechaTemp);
 
 												int milisecondsByDay = 86400000;
 
@@ -1001,10 +1277,10 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 												int diasposi = dias * -1;
 
-												dataRow1.createCell(7).setCellValue(""+diasposi);
+												dataRow1.createCell(8).setCellValue(""+diasposi);
 											}else {
-												dataRow1.createCell(6).setCellValue("");
 												dataRow1.createCell(7).setCellValue("");
+												dataRow1.createCell(8).setCellValue("");
 											}
 
 
@@ -1012,64 +1288,64 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 											//estatus
 											if (medicionesProgramadas.size() == 0) {
 												//EstatusIniciar
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 											}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 												//EstatusIniciardesfasado
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
 											}
 											else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 												//EnEjecucionSinRetrasos
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
 											}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 												//EnEjecucionConRetrasosSuperables
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
 											}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 												//EnEjecucionConRetrasosSignificativos
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
 											}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 												//EstatusConcluidas
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.concluidas"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.concluidas"));
 											}
 											else if(iniciativa.getEstatusId() == 3) {
 												//EstatusCancelado
-												dataRow1.createCell(8).setCellValue("Cancelado");
+												dataRow1.createCell(9).setCellValue("Cancelado");
 											}
 											else if(iniciativa.getEstatusId() == 4) {
 												//EstatusSuspendido
-												dataRow1.createCell(8).setCellValue("Suspendido");
+												dataRow1.createCell(9).setCellValue("Suspendido");
 											}else {
 												//EstatusIniciar
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 											}
 
 											if(iniciativa.getTipoProyecto()==null){
-												dataRow1.createCell(9).setCellValue("");
+												dataRow1.createCell(10).setCellValue("");
 											}else {
-												dataRow1.createCell(9).setCellValue(iniciativa.getTipoProyecto().getNombre());
+												dataRow1.createCell(10).setCellValue(iniciativa.getTipoProyecto().getNombre());
 											}
 
 											if(iniciativa.getAnioFormulacion() == null) {
-												dataRow1.createCell(10).setCellValue("");
+												dataRow1.createCell(11).setCellValue("");
 											}else {
-												dataRow1.createCell(10).setCellValue(iniciativa.getAnioFormulacion());
+												dataRow1.createCell(11).setCellValue(iniciativa.getAnioFormulacion());
 											}
 
 											//responsable ejecutar
 
 											if(iniciativa.getResponsableCargarEjecutado() ==null){
-												dataRow1.createCell(11).setCellValue("");
+												dataRow1.createCell(12).setCellValue("");
 											}
 											else{
-												dataRow1.createCell(11).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
+												dataRow1.createCell(12).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
 											}
 
 											//responsable lograr meta
 
 											if(iniciativa.getResponsableLograrMeta() ==null){
-												dataRow1.createCell(12).setCellValue("");
+												dataRow1.createCell(13).setCellValue("");
 											}
 											else{
-												dataRow1.createCell(12).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
+												dataRow1.createCell(13).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
 											}
 
 
@@ -1097,30 +1373,77 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 
 												dataRow1.createCell(0).setCellValue(ruta);
-									            dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
+												Byte alerta = null;
+												
+												alerta = iniciativa.getAlerta();
+												if (alerta == null)
+													dataRow1.createCell(1).setCellValue("");
+												else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+													dataRow1.createCell(1).setCellValue("");
+													dataRow1.createCell(1).setCellStyle(styleRoja);
+												}
+												else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+													dataRow1.createCell(1).setCellValue("");
+													dataRow1.createCell(1).setCellStyle(styleVerde);
+												}
+												else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()){
+													dataRow1.createCell(1).setCellValue("");
+													dataRow1.createCell(1).setCellStyle(styleAmarillo);
+												}
+												
+									            dataRow1.createCell(2).setCellValue(iniciativa.getNombre());
 
 									            if(iniciativa.getFrecuenciaNombre() != null) {
-									            	dataRow1.createCell(2).setCellValue(iniciativa.getFrecuenciaNombre());
-												}else {
-													dataRow1.createCell(2).setCellValue("");
-												}
-
-												if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-													dataRow1.createCell(3).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-													dataRow1.createCell(4).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
+									            	dataRow1.createCell(3).setCellValue(iniciativa.getFrecuenciaNombre());
 												}else {
 													dataRow1.createCell(3).setCellValue("");
-													dataRow1.createCell(4).setCellValue("");
+												}
+
+									            if (iniciativa.getPorcentajeCompletado() != null) {								
+													if (indicador != null) {
+														boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+																.byteValue()
+																&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+																		.byteValue());
+
+														Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+																indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+																indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+														if (medicionReal != null) {
+															dataRow1.createCell(4).setCellValue(medicionReal.getValor().toString());
+
+															List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+																	indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+																	medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+															Double programado = null;
+															for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+																Medicion medicion = iter2.next();
+																if (medicion.getValor() != null && programado == null)
+																	programado = medicion.getValor();
+																else if (medicion.getValor() != null && programado != null && acumular)
+																	programado = programado + medicion.getValor();
+																else if (medicion.getValor() != null && programado != null && !acumular)
+																	programado = medicion.getValor();
+															}
+
+															if (programado != null)
+																dataRow1.createCell(5).setCellValue(programado.toString());
+															else 
+																dataRow1.createCell(5).setCellValue("");
+														}
+														else
+															dataRow1.createCell(4).setCellValue("");
+													}
 												}
 
 
 
 
 												if(iniciativa.getFechaUltimaMedicion() != null){
-													dataRow1.createCell(5).setCellValue(iniciativa.getFechaUltimaMedicion());
+													dataRow1.createCell(6).setCellValue(iniciativa.getFechaUltimaMedicion());
 												}
 												else{
-													dataRow1.createCell(5).setCellValue("");
+													dataRow1.createCell(6).setCellValue("");
 												}
 
 
@@ -1136,7 +1459,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 													String fechaTemp =objSDF.format(fechaAh);
 
 
-													dataRow1.createCell(6).setCellValue(fechaTemp);
+													dataRow1.createCell(7).setCellValue(fechaTemp);
 
 													int milisecondsByDay = 86400000;
 
@@ -1144,10 +1467,10 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 													int diasposi = dias * -1;
 
-													dataRow1.createCell(7).setCellValue(""+diasposi);
+													dataRow1.createCell(8).setCellValue(""+diasposi);
 												}else {
-													dataRow1.createCell(6).setCellValue("");
 													dataRow1.createCell(7).setCellValue("");
+													dataRow1.createCell(8).setCellValue("");
 												}
 
 
@@ -1155,64 +1478,64 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 												//estatus
 												if (medicionesProgramadas.size() == 0) {
 													//EstatusIniciar
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 												}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 													//EstatusIniciardesfasado
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
 												}
 												else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 													//EnEjecucionSinRetrasos
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
 												}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 													//EnEjecucionConRetrasosSuperables
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
 												}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 													//EnEjecucionConRetrasosSignificativos
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
 												}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 													//EstatusConcluidas
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.concluidas"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.concluidas"));
 												}
 												else if(iniciativa.getEstatusId() == 3) {
 													//EstatusCancelado
-													dataRow1.createCell(8).setCellValue("Cancelado");
+													dataRow1.createCell(9).setCellValue("Cancelado");
 												}
 												else if(iniciativa.getEstatusId() == 4) {
 													//EstatusSuspendido
-													dataRow1.createCell(8).setCellValue("Suspendido");
+													dataRow1.createCell(9).setCellValue("Suspendido");
 												}else {
 													//EstatusIniciar
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 												}
 
 												if(iniciativa.getTipoProyecto()==null){
-													dataRow1.createCell(9).setCellValue("");
+													dataRow1.createCell(10).setCellValue("");
 												}else {
-													dataRow1.createCell(9).setCellValue(iniciativa.getTipoProyecto().getNombre());
+													dataRow1.createCell(10).setCellValue(iniciativa.getTipoProyecto().getNombre());
 												}
 
 												if(iniciativa.getAnioFormulacion() == null) {
-													dataRow1.createCell(10).setCellValue("");
+													dataRow1.createCell(11).setCellValue("");
 												}else {
-													dataRow1.createCell(10).setCellValue(iniciativa.getAnioFormulacion());
+													dataRow1.createCell(11).setCellValue(iniciativa.getAnioFormulacion());
 												}
 
 												//responsable ejecutar
 
 												if(iniciativa.getResponsableCargarEjecutado() ==null){
-													dataRow1.createCell(11).setCellValue("");
+													dataRow1.createCell(12).setCellValue("");
 												}
 												else{
-													dataRow1.createCell(11).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
+													dataRow1.createCell(12).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
 												}
 
 												//responsable lograr meta
 
 												if(iniciativa.getResponsableLograrMeta() ==null){
-													dataRow1.createCell(12).setCellValue("");
+													dataRow1.createCell(13).setCellValue("");
 												}
 												else{
-													dataRow1.createCell(12).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
+													dataRow1.createCell(13).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
 												}
 
 
@@ -1279,6 +1602,21 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 		        CellStyle style = workbook.createCellStyle();
 		        style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
 		        style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleRoja = workbook.createCellStyle();
+		        styleRoja.setFillBackgroundColor(IndexedColors.RED.index);
+		        styleRoja.setFillForegroundColor(IndexedColors.RED.index);
+		        styleRoja.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleVerde = workbook.createCellStyle();
+		        styleVerde.setFillBackgroundColor(IndexedColors.GREEN.index);
+		        styleVerde.setFillForegroundColor(IndexedColors.GREEN.index);
+		        styleVerde.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		        
+		        CellStyle styleAmarillo = workbook.createCellStyle();
+		        styleAmarillo. setFillBackgroundColor(IndexedColors.YELLOW.index);
+		        styleAmarillo.setFillForegroundColor(IndexedColors.YELLOW.index);
+		        styleAmarillo.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		        HSSFRow headerRow = sheet.createRow(0);
 
@@ -1297,18 +1635,19 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 				        HSSFRow dataRow = sheet.createRow(1);
 						dataRow.createCell(0).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.entidad"));
-			            dataRow.createCell(1).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre"));
-			            dataRow.createCell(2).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.frecuencia"));
-			            dataRow.createCell(3).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.ejecutado"));
-			            dataRow.createCell(4).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.programado"));
-			            dataRow.createCell(5).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion"));
-			            dataRow.createCell(6).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada"));
-			            dataRow.createCell(7).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias"));
-			            dataRow.createCell(8).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus"));
-			            dataRow.createCell(9).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto"));
-			            dataRow.createCell(10).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.anioformulacion"));
-			            dataRow.createCell(11).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable"));
-			            dataRow.createCell(12).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr"));
+						dataRow.createCell(1).setCellValue(messageResources.getMessage("jsp.mostrargestioniniciativa.alerta"));
+			            dataRow.createCell(2).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre"));
+			            dataRow.createCell(3).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.frecuencia"));
+			            dataRow.createCell(4).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.ejecutado"));
+			            dataRow.createCell(5).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.porcentaje.programado"));
+			            dataRow.createCell(6).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion"));
+			            dataRow.createCell(7).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.fecha.actualizacion.esperada"));
+			            dataRow.createCell(8).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.dias"));
+			            dataRow.createCell(9).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.nombre.estatus"));
+			            dataRow.createCell(10).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.tipoproyecto"));
+			            dataRow.createCell(11).setCellValue(messageResources.getMessage("jsp.editariniciativa.ficha.anioformulacion"));
+			            dataRow.createCell(12).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable"));
+			            dataRow.createCell(13).setCellValue(messageResources.getMessage("action.reporte.estatus.iniciativa.responsable.lograr"));
 			            int x=1;
 
 			    	 for (Iterator<OrganizacionStrategos> iter = organizaciones.iterator(); iter.hasNext();)
@@ -1378,30 +1717,77 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 
 											dataRow1.createCell(0).setCellValue(ruta);
-								            dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
+											Byte alerta = null;
+											
+											alerta = iniciativa.getAlerta();
+											if (alerta == null)
+												dataRow1.createCell(1).setCellValue("");
+											else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+												dataRow1.createCell(1).setCellValue("");
+												dataRow1.createCell(1).setCellStyle(styleRoja);
+											}
+											else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+												dataRow1.createCell(1).setCellValue("");
+												dataRow1.createCell(1).setCellStyle(styleVerde);
+											}
+											else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()){
+												dataRow1.createCell(1).setCellValue("");
+												dataRow1.createCell(1).setCellStyle(styleAmarillo);
+											}
+											
+								            dataRow1.createCell(2).setCellValue(iniciativa.getNombre());
 
 								            if(iniciativa.getFrecuenciaNombre() != null) {
-								            	dataRow1.createCell(2).setCellValue(iniciativa.getFrecuenciaNombre());
-											}else {
-												dataRow1.createCell(2).setCellValue("");
-											}
-
-											if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-												dataRow1.createCell(3).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-												dataRow1.createCell(4).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
+								            	dataRow1.createCell(3).setCellValue(iniciativa.getFrecuenciaNombre());
 											}else {
 												dataRow1.createCell(3).setCellValue("");
-												dataRow1.createCell(4).setCellValue("");
+											}
+
+								            if (iniciativa.getPorcentajeCompletado() != null) {								
+												if (indicador != null) {
+													boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+															.byteValue()
+															&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+																	.byteValue());
+
+													Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+															indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+															indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+													if (medicionReal != null) {
+														dataRow1.createCell(4).setCellValue(medicionReal.getValor().toString());
+
+														List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+																indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+																medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+														Double programado = null;
+														for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+															Medicion medicion = iter2.next();
+															if (medicion.getValor() != null && programado == null)
+																programado = medicion.getValor();
+															else if (medicion.getValor() != null && programado != null && acumular)
+																programado = programado + medicion.getValor();
+															else if (medicion.getValor() != null && programado != null && !acumular)
+																programado = medicion.getValor();
+														}
+
+														if (programado != null)
+															dataRow1.createCell(5).setCellValue(programado.toString());
+														else 
+															dataRow1.createCell(5).setCellValue("");
+													}
+													else
+														dataRow1.createCell(4).setCellValue("");
+												}
 											}
 
 
 
 
 											if(iniciativa.getFechaUltimaMedicion() != null){
-												dataRow1.createCell(5).setCellValue(iniciativa.getFechaUltimaMedicion());
+												dataRow1.createCell(6).setCellValue(iniciativa.getFechaUltimaMedicion());
 											}
 											else{
-												dataRow1.createCell(5).setCellValue("");
+												dataRow1.createCell(6).setCellValue("");
 											}
 
 
@@ -1417,7 +1803,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 												String fechaTemp =objSDF.format(fechaAh);
 
 
-												dataRow1.createCell(6).setCellValue(fechaTemp);
+												dataRow1.createCell(7).setCellValue(fechaTemp);
 
 												int milisecondsByDay = 86400000;
 
@@ -1425,10 +1811,10 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 												int diasposi = dias * -1;
 
-												dataRow1.createCell(7).setCellValue(""+diasposi);
+												dataRow1.createCell(8).setCellValue(""+diasposi);
 											}else {
-												dataRow1.createCell(6).setCellValue("");
 												dataRow1.createCell(7).setCellValue("");
+												dataRow1.createCell(8).setCellValue("");
 											}
 
 
@@ -1436,64 +1822,64 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 											//estatus
 											if (medicionesProgramadas.size() == 0) {
 												//EstatusIniciar
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 											}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 												//EstatusIniciardesfasado
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
 											}
 											else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 												//EnEjecucionSinRetrasos
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
 											}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 												//EnEjecucionConRetrasosSuperables
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
 											}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 												//EnEjecucionConRetrasosSignificativos
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
 											}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 												//EstatusConcluidas
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.concluidas"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.concluidas"));
 											}
 											else if(iniciativa.getEstatusId() == 3) {
 												//EstatusCancelado
-												dataRow1.createCell(8).setCellValue("Cancelado");
+												dataRow1.createCell(9).setCellValue("Cancelado");
 											}
 											else if(iniciativa.getEstatusId() == 4) {
 												//EstatusSuspendido
-												dataRow1.createCell(8).setCellValue("Suspendido");
+												dataRow1.createCell(9).setCellValue("Suspendido");
 											}else {
 												//EstatusIniciar
-												dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+												dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 											}
 
 											if(iniciativa.getTipoProyecto()==null){
-												dataRow1.createCell(9).setCellValue("");
+												dataRow1.createCell(10).setCellValue("");
 											}else {
-												dataRow1.createCell(9).setCellValue(iniciativa.getTipoProyecto().getNombre());
+												dataRow1.createCell(10).setCellValue(iniciativa.getTipoProyecto().getNombre());
 											}
 
 											if(iniciativa.getAnioFormulacion() == null) {
-												dataRow1.createCell(10).setCellValue("");
+												dataRow1.createCell(11).setCellValue("");
 											}else {
-												dataRow1.createCell(10).setCellValue(iniciativa.getAnioFormulacion());
+												dataRow1.createCell(11).setCellValue(iniciativa.getAnioFormulacion());
 											}
 
 											//responsable ejecutar
 
 											if(iniciativa.getResponsableCargarEjecutado() ==null){
-												dataRow1.createCell(11).setCellValue("");
+												dataRow1.createCell(12).setCellValue("");
 											}
 											else{
-												dataRow1.createCell(11).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
+												dataRow1.createCell(12).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
 											}
 
 											//responsable lograr meta
 
 											if(iniciativa.getResponsableLograrMeta() ==null){
-												dataRow1.createCell(12).setCellValue("");
+												dataRow1.createCell(13).setCellValue("");
 											}
 											else{
-												dataRow1.createCell(12).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
+												dataRow1.createCell(13).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
 											}
 
 
@@ -1521,30 +1907,77 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 
 												dataRow1.createCell(0).setCellValue(ruta);
-									            dataRow1.createCell(1).setCellValue(iniciativa.getNombre());
+												Byte alerta = null;
+												
+												alerta = iniciativa.getAlerta();
+												if (alerta == null)
+													dataRow1.createCell(1).setCellValue("");
+												else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+													dataRow1.createCell(1).setCellValue("");
+													dataRow1.createCell(1).setCellStyle(styleRoja);
+												}
+												else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+													dataRow1.createCell(1).setCellValue("");
+													dataRow1.createCell(1).setCellStyle(styleVerde);
+												}
+												else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()){
+													dataRow1.createCell(1).setCellValue("");
+													dataRow1.createCell(1).setCellStyle(styleAmarillo);
+												}
+												
+									            dataRow1.createCell(2).setCellValue(iniciativa.getNombre());
 
 									            if(iniciativa.getFrecuenciaNombre() != null) {
-									            	dataRow1.createCell(2).setCellValue(iniciativa.getFrecuenciaNombre());
-												}else {
-													dataRow1.createCell(2).setCellValue("");
-												}
-
-												if(iniciativa.getPorcentajeCompletadoFormateado() != null) {
-													dataRow1.createCell(3).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
-													dataRow1.createCell(4).setCellValue(iniciativa.getPorcentajeCompletadoFormateado());
+									            	dataRow1.createCell(3).setCellValue(iniciativa.getFrecuenciaNombre());
 												}else {
 													dataRow1.createCell(3).setCellValue("");
-													dataRow1.createCell(4).setCellValue("");
+												}
+
+									            if (iniciativa.getPorcentajeCompletado() != null) {								
+													if (indicador != null) {
+														boolean acumular = (indicador.getCorte().byteValue() == TipoCorte.getTipoCorteLongitudinal()
+																.byteValue()
+																&& indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo()
+																		.byteValue());
+
+														Medicion medicionReal = strategosMedicionesService.getUltimaMedicion(indicador.getIndicadorId(),
+																indicador.getFrecuencia(), indicador.getMesCierre(), SerieTiempo.getSerieRealId(),
+																indicador.getValorInicialCero(), indicador.getCorte(), indicador.getTipoCargaMedicion());
+														if (medicionReal != null) {
+															dataRow1.createCell(4).setCellValue(medicionReal.getValor().toString());
+
+															List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(
+																	indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null,
+																	medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
+															Double programado = null;
+															for (Iterator<Medicion> iter2 = mediciones.iterator(); iter2.hasNext();) {
+																Medicion medicion = iter2.next();
+																if (medicion.getValor() != null && programado == null)
+																	programado = medicion.getValor();
+																else if (medicion.getValor() != null && programado != null && acumular)
+																	programado = programado + medicion.getValor();
+																else if (medicion.getValor() != null && programado != null && !acumular)
+																	programado = medicion.getValor();
+															}
+
+															if (programado != null)
+																dataRow1.createCell(5).setCellValue(programado.toString());
+															else 
+																dataRow1.createCell(5).setCellValue("");
+														}
+														else
+															dataRow1.createCell(4).setCellValue("");
+													}
 												}
 
 
 
 
 												if(iniciativa.getFechaUltimaMedicion() != null){
-													dataRow1.createCell(5).setCellValue(iniciativa.getFechaUltimaMedicion());
+													dataRow1.createCell(6).setCellValue(iniciativa.getFechaUltimaMedicion());
 												}
 												else{
-													dataRow1.createCell(5).setCellValue("");
+													dataRow1.createCell(6).setCellValue("");
 												}
 
 
@@ -1560,7 +1993,7 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 													String fechaTemp =objSDF.format(fechaAh);
 
 
-													dataRow1.createCell(6).setCellValue(fechaTemp);
+													dataRow1.createCell(7).setCellValue(fechaTemp);
 
 													int milisecondsByDay = 86400000;
 
@@ -1568,10 +2001,10 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 
 													int diasposi = dias * -1;
 
-													dataRow1.createCell(7).setCellValue(""+diasposi);
+													dataRow1.createCell(8).setCellValue(""+diasposi);
 												}else {
-													dataRow1.createCell(6).setCellValue("");
 													dataRow1.createCell(7).setCellValue("");
+													dataRow1.createCell(8).setCellValue("");
 												}
 
 
@@ -1579,64 +2012,64 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 												//estatus
 												if (medicionesProgramadas.size() == 0) {
 													//EstatusIniciar
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 												}else if(medicionesProgramadas.size() > 0 && medicionesEjecutadas.size() == 0) {
 													//EstatusIniciardesfasado
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar.desfasada"));
 												}
 												else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta() != null && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue() && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() < 100D) {
 													//EnEjecucionSinRetrasos
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.sin.retrasos"));
 												}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
 													//EnEjecucionConRetrasosSuperables
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.superables"));
 												}else if(iniciativa.getEstatusId() == 2 && iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
 													//EnEjecucionConRetrasosSignificativos
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.en.ejecucion.con.retrasos.significativos"));
 												}else if(iniciativa.getEstatusId() == 5 && iniciativa.getPorcentajeCompletado() != null && iniciativa.getPorcentajeCompletado().doubleValue() >= 100D) {
 													//EstatusConcluidas
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.concluidas"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.concluidas"));
 												}
 												else if(iniciativa.getEstatusId() == 3) {
 													//EstatusCancelado
-													dataRow1.createCell(8).setCellValue("Cancelado");
+													dataRow1.createCell(9).setCellValue("Cancelado");
 												}
 												else if(iniciativa.getEstatusId() == 4) {
 													//EstatusSuspendido
-													dataRow1.createCell(8).setCellValue("Suspendido");
+													dataRow1.createCell(9).setCellValue("Suspendido");
 												}else {
 													//EstatusIniciar
-													dataRow1.createCell(8).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
+													dataRow1.createCell(9).setCellValue(messageResources.getMessage("estado.sin.iniciar"));
 												}
 
 												if(iniciativa.getTipoProyecto()==null){
-													dataRow1.createCell(9).setCellValue("");
+													dataRow1.createCell(10).setCellValue("");
 												}else {
-													dataRow1.createCell(9).setCellValue(iniciativa.getTipoProyecto().getNombre());
+													dataRow1.createCell(10).setCellValue(iniciativa.getTipoProyecto().getNombre());
 												}
 
 												if(iniciativa.getAnioFormulacion() == null) {
-													dataRow1.createCell(10).setCellValue("");
+													dataRow1.createCell(11).setCellValue("");
 												}else {
-													dataRow1.createCell(10).setCellValue(iniciativa.getAnioFormulacion());
+													dataRow1.createCell(11).setCellValue(iniciativa.getAnioFormulacion());
 												}
 
 												//responsable ejecutar
 
 												if(iniciativa.getResponsableCargarEjecutado() ==null){
-													dataRow1.createCell(11).setCellValue("");
+													dataRow1.createCell(12).setCellValue("");
 												}
 												else{
-													dataRow1.createCell(11).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
+													dataRow1.createCell(12).setCellValue(iniciativa.getResponsableCargarEjecutado().getNombre().toString());
 												}
 
 												//responsable lograr meta
 
 												if(iniciativa.getResponsableLograrMeta() ==null){
-													dataRow1.createCell(12).setCellValue("");
+													dataRow1.createCell(13).setCellValue("");
 												}
 												else{
-													dataRow1.createCell(12).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
+													dataRow1.createCell(13).setCellValue(iniciativa.getResponsableLograrMeta().getNombre().toString());
 												}
 
 
@@ -1749,4 +2182,15 @@ public class ReporteIniciativaEjecucionXls extends VgcAction{
 		return tiene;
 	}
 
+	private String obtenerCadenaRecurso(HttpServletRequest request) {
+		String result = null;
+		if (request.getServerPort() == 80 && request.getScheme().equals("http")) {
+			result = request.getServerName() + "/" + request.getContextPath();
+			result = "https" + "://" + result.replaceAll("//", "/");
+		} else {
+			result = request.getServerName() + ":" + request.getServerPort() + "/" + request.getContextPath();
+			result = request.getScheme() + "://" + result.replaceAll("//", "/");
+		}
+		return result;
+	}
 }

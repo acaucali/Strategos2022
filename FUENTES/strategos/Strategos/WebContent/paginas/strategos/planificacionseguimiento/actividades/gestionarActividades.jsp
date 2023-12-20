@@ -561,6 +561,14 @@
 				}
 			}
 		    
+		    function gestionarExplicacionesPGN() 
+			{
+				if (verificarElementoUnicoSeleccionMultiple(document.gestionarActividadesForm.seleccionados))
+				{
+					window.location.href='<html:rewrite action="/explicaciones/gestionarExplicacionesPGN?objetoId="/>' + document.gestionarActividadesForm.seleccionados.value;					
+				}
+			}
+		    
 		    function importarActividades()
 			{
 				var nombreForma = '?nombreForma=' + 'gestionarActividadesForm';				
@@ -867,6 +875,16 @@
 							<vgcinterfaz:barraHerramientasBotonTitulo>
 								<vgcutil:message
 									key="jsp.gestionarindicadores.barraherramientas.explicaciones" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+						
+						<vgcinterfaz:barraHerramientasBoton permisoId="EXPLICACION"
+															nombreImagen="modelo"
+															pathImagenes="/componentes/barraHerramientas/"
+															nombre="gestionarAnexosInstrumentos" onclick="javascript:gestionarExplicacionesPGN();">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message
+									key="jsp.gestionarindicadores.barraherramientas.explicaciones.pgn" />
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
 						

@@ -518,6 +518,20 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("explicaciones.generarreporteexplicacionesxls", true, false, "EXPLICACION");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    
+	    // Explicaciones PGN
+	    actionRight = new StrutsActionRight("explicaciones.gestionarexplicacionespgn", false, false, "EXPLICACION");
+	    this.mapa.put("explicaciones.gestionarexplicacionespgn", actionRight);
+	    actionRight = new StrutsActionRight("explicaciones.crearexplicacionpgn", false, false, "EXPLICACION_ADD");
+	    this.mapa.put("explicaciones.crearexplicacionpgn", actionRight);
+	    actionRight = new StrutsActionRight("explicaciones.modificarexplicacionpgn", false, false, "EXPLICACION_EDIT");
+	    this.mapa.put("explicaciones.modificarexplicacionpgn", actionRight);
+	    actionRight = new StrutsActionRight("explicaciones.guardarexplicacionpgn", false, false, "EXPLICACION_ADD");
+	    this.mapa.put("explicaciones.guardarexplicacionpgn", actionRight);
+	    actionRight = new StrutsActionRight("explicaciones.cancelarguardarexplicacionpgn", false, false, "EXPLICACION_ADD");
+	    this.mapa.put("explicaciones.cancelarguardarexplicacionpgn", actionRight);
+	    actionRight = new StrutsActionRight("explicaciones.eliminarexplicacionpgn", false, false, "EXPLICACION_DELETE");
+	    this.mapa.put("explicaciones.eliminarexplicacionpgn", actionRight);
 
 	    actionRight = new StrutsActionRight("foros.gestionarforos", false, false, "FORO");
 	    this.mapa.put("foros.gestionarforos", actionRight);

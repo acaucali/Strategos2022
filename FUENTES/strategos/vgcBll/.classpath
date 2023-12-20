@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="lib/itext-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/JbcParser.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
-	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
@@ -23,5 +22,6 @@
 	<classpathentry kind="lib" path="lib/vgcCalcular.jar" sourcepath="/vgcCalcular"/>
 	<classpathentry kind="lib" path="lib/javax.persistence.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-42.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

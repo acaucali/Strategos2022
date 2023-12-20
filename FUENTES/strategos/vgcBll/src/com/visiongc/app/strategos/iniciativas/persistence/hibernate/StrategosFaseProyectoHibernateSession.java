@@ -44,8 +44,7 @@ public class StrategosFaseProyectoHibernateSession extends StrategosHibernateSes
 					consulta.add(Restrictions.ilike(fieldName, fieldValue, MatchMode.ANYWHERE));
 				}
 			}
-		}
-		System.out.print("\nCOnsulta: " + consulta.toString());
+		}		
 		return executeQuery(consulta, pagina, tamanoPagina, orden, tipoOrden, getTotal);
 	}
 }

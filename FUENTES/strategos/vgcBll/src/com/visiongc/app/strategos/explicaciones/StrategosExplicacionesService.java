@@ -3,6 +3,7 @@ package com.visiongc.app.strategos.explicaciones;
 import com.visiongc.app.strategos.StrategosService;
 import com.visiongc.app.strategos.explicaciones.model.AdjuntoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
+import com.visiongc.app.strategos.explicaciones.model.ExplicacionPGN;
 import com.visiongc.app.strategos.instrumentos.model.InstrumentoIniciativa;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.framework.model.Usuario;
@@ -33,4 +34,13 @@ public abstract interface StrategosExplicacionesService
   public int saveAdjuntoExplicacion(AdjuntoExplicacion paramAdjunto, Long paramLong, Usuario usuario);
   
   public Explicacion getAdjuntosExplicacion(Explicacion explicacion, Usuario paramUsuario);
+  
+  // Explicaciones PGN
+  
+  public abstract PaginaLista getExplicacionesPGN(int paramInt1, int paramInt2, String paramString1, String paramString2, boolean paramBoolean, Map paramMap);
+  
+  public abstract int deleteExplicacionPGN(ExplicacionPGN paramExplicacion, Usuario paramUsuario);
+  
+  public abstract int saveExplicacionPGN(ExplicacionPGN paramExplicacion, Usuario paramUsuario);
+ 
 }

@@ -61,7 +61,7 @@ public class ReporteIniciativaDatosBasicosPdf extends VgcReporteBasicoAction {
 
 		// organizacion seleccionada
 
-		if (desdePortafolio.equals("Iniciativaportafolio")) {
+		if (desdePortafolio != null && desdePortafolio.equals("Iniciativaportafolio")) {
 
 			filtros = new HashMap();
 

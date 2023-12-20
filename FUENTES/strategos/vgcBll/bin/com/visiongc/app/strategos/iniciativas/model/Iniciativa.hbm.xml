@@ -43,19 +43,19 @@
 		<!-- Campos nuevos -->
 		<property name="responsableProyecto" type="java.lang.String" column="responsable_proyecto" length="150" />
 		<property name="cargoResponsable" type="java.lang.String" column="cargo_responsable" length="50" />
-		<property name="organizacionesInvolucradas" type="java.lang.String" column="organizaciones_involucradas" length="250" />
+		<property name="organizacionesInvolucradas" type="java.lang.String" column="organizaciones_involucradas" length="500" />
 		<property name="objetivoEstrategico" type="java.lang.String" column="objetivo_estrategico" length="250" />
 		<property name="fuenteFinanciacion" type="java.lang.String" column="fuente_financiacion" length="50" />
 		<property name="montoFinanciamiento" type="java.lang.String" column="monto_financiamiento" length="50" />
-		<property name="iniciativaEstrategica" type="java.lang.String" column="iniciativa_estrategica" length="150" />
-		<property name="liderIniciativa" type="java.lang.String" column="lider_iniciativa" length="150" />
-		<property name="tipoIniciativa" type="java.lang.String" column="tipo_iniciativa" length="150" />
+		<property name="iniciativaEstrategica" type="java.lang.String" column="iniciativa_estrategica" length="500" />
+		<property name="liderIniciativa" type="java.lang.String" column="lider_iniciativa" length="250" />
+		<property name="tipoIniciativa" type="java.lang.String" column="tipo_iniciativa" length="250" />
 		<property name="poblacionBeneficiada" type="java.lang.String" column="poblacion_beneficiada" length="450" />
 		<property name="contexto" type="java.lang.String" column="contexto" length="450" />
-		<property name="definicionProblema" type="java.lang.String" column="definicion_problema" length="450" />
-		<property name="alcance" type="java.lang.String" column="alcance" length="450" />
-		<property name="objetivoGeneral" type="java.lang.String" column="objetivo_general" length="450" />
-		<property name="objetivoEspecificos" type="java.lang.String" column="objetivos_especificos" length="450" />
+		<property name="definicionProblema" type="java.lang.String" column="definicion_problema" length="1500" />
+		<property name="alcance" type="java.lang.String" column="alcance" length="1500" />
+		<property name="objetivoGeneral" type="java.lang.String" column="objetivo_general" length="1500" />
+		<property name="objetivoEspecificos" type="java.lang.String" column="objetivos_especificos" length="1500" />
 		<property name="cargoId" type="java.lang.Long" column="cargo_id" />
 		<property name="unidadId" type="java.lang.Long" column="unidad_medida" />
 		
@@ -63,52 +63,52 @@
 		<property name="fechaInicio" type="java.util.Date" column="fecha_inicio" />
 		<property name="fechaFin" type="java.util.Date" column="fecha_fin" />
 		<property name="montoTotal" type="java.lang.String" column="monto_total" length="50" />
-		<property name="montoMonedaExt" type="java.lang.String" column="monto_moneda_extranjera" length="50" />
-		<property name="situacionPresupuestaria" type="java.lang.String" column="situacion_presupuestaria" length="150" />
+		<property name="montoMonedaExt" type="java.lang.String" column="monto_moneda_extr" length="50" />
+		<property name="situacionPresupuestaria" type="java.lang.String" column="sit_presupuestaria" length="150" />
 		<property name="hitos" type="java.lang.String" column="hitos_relevantes" length="500" />
 		<property name="sector" type="java.lang.String" column="sector" length="150" />
 		<property name="fechaActaInicio" type="java.util.Date" column="fecha_acta_inicio" />
-		<property name="gerenciaGeneralRes" type="java.lang.String" column="gerencia_general_responsable" length="150" />
+		<property name="gerenciaGeneralRes" type="java.lang.String" column="gerencia_general_resp" length="150" />
 		<property name="codigoSipe" type="java.lang.String" column="codigo_sipe" length="50" />
-		<property name="proyectoPresupAso" type="java.lang.String" column="proyecto_presupuestario_asociado" length="300" />
+		<property name="proyectoPresupAso" type="java.lang.String" column="proyecto_presup_asociado" length="300" />
 		<property name="estado" type="java.lang.String" column="estado" length="100" />
 		<property name="municipio" type="java.lang.String" column="municipio" length="300" />
 		<property name="parroquia" type="java.lang.String" column="parroquia" length="300" />
 		<property name="direccionProyecto" type="java.lang.String" column="direccion_proyecto" length="500" />
-		<property name="objetivoHistorico" type="java.lang.String" column="objetivo_historico" length="500" />
-		<property name="objetivoNacional" type="java.lang.String" column="objetivo_nacional" length="500" />
-		<property name="objetivoEstrategicoPV" type="java.lang.String" column="objetivo_estrategico_v" length="500" />
-		<property name="objetivoGeneralPV" type="java.lang.String" column="objetivo_general_v" length="500" />
-		<property name="objetivoEspecifico" type="java.lang.String" column="objetivo_especifico" length="500" />
+		<property name="objetivoHistorico" type="java.lang.String" column="obj_historico" length="1500" />
+		<property name="objetivoNacional" type="java.lang.String" column="obj_nacional" length="1500" />
+		<property name="objetivoEstrategicoPV" type="java.lang.String" column="obj_estrategico_v" length="1500" />
+		<property name="objetivoGeneralPV" type="java.lang.String" column="obj_general_v" length="1500" />
+		<property name="objetivoEspecifico" type="java.lang.String" column="obj_especifico" length="1500" />
 		<property name="programa" type="java.lang.String" column="programa" length="500" />
-		<property name="problemas" type="java.lang.String" column="problemas" length="500" />
+		<property name="problemas" type="java.lang.String" column="problemas" length="750" />
 		<property name="causas" type="java.lang.String" column="causas" length="500" />
 		<property name="lineasEstrategicas" type="java.lang.String" column="lineas_estrategicas" length="500" />
 		
-		<property name="gerenteProyectoNombre" type="java.lang.String" column="gerente_proyecto_nombre" length="50" />
-		<property name="gerenteProyectoCedula" type="java.lang.String" column="gerente_proyecto_cedula" length="20" />
-		<property name="gerenteProyectoEmail" type="java.lang.String" column="gerente_proyecto_email" length="50" />
-		<property name="gerenteProyectoTelefono" type="java.lang.String" column="gerente_proyecto_telefono" length="50" />
+		<property name="gerenteProyectoNombre" type="java.lang.String" column="gerente_proy_nombre" length="50" />
+		<property name="gerenteProyectoCedula" type="java.lang.String" column="gerente_proy_cedula" length="20" />
+		<property name="gerenteProyectoEmail" type="java.lang.String" column="gerente_proy_email" length="50" />
+		<property name="gerenteProyectoTelefono" type="java.lang.String" column="gerente_proy_telefono" length="50" />
 			
-		<property name="responsableTecnicoNombre" type="java.lang.String" column="responsable_tecnico_nombre" length="50" />
-		<property name="responsableTecnicoCedula" type="java.lang.String" column="responsable_tecnico_cedula" length="20" />
-		<property name="responsableTecnicoEmail" type="java.lang.String" column="responsable_tecnico_email" length="50" />
-		<property name="responsableTecnicoTelefono" type="java.lang.String" column="responsable_tecnico_telefono" length="50" />		
+		<property name="responsableTecnicoNombre" type="java.lang.String" column="resp_tecnico_nombre" length="50" />
+		<property name="responsableTecnicoCedula" type="java.lang.String" column="resp_tecnico_cedula" length="20" />
+		<property name="responsableTecnicoEmail" type="java.lang.String" column="resp_tecnico_email" length="50" />
+		<property name="responsableTecnicoTelefono" type="java.lang.String" column="resp_tecnico_telefono" length="50" />		
 		
-		<property name="responsableRegistradorNombre" type="java.lang.String" column="responsable_registrador_nombre" length="50" />
-		<property name="responsableRegistradorCedula" type="java.lang.String" column="responsable_registrador_cedula" length="20" />
-		<property name="responsableRegistradorEmail" type="java.lang.String" column="responsable_registrador_email" length="50" />
-		<property name="responsableRegistradorTelefono" type="java.lang.String" column="responsable_registrador_telefono" length="50" />		
+		<property name="responsableRegistradorNombre" type="java.lang.String" column="resp_registrador_nombre" length="50" />
+		<property name="responsableRegistradorCedula" type="java.lang.String" column="resp_registrador_cedula" length="20" />
+		<property name="responsableRegistradorEmail" type="java.lang.String" column="resp_registrador_email" length="50" />
+		<property name="responsableRegistradorTelefono" type="java.lang.String" column="resp_registrador_telefono" length="50" />		
 		
-		<property name="responsableAdministrativoNombre" type="java.lang.String" column="responsable_administrativo_nombre" length="50" />
-		<property name="responsableAdministrativoCedula" type="java.lang.String" column="responsable_administrativo_cedula" length="20" />
-		<property name="responsableAdministrativoEmail" type="java.lang.String" column="responsable_administrativo_email" length="50" />
-		<property name="responsableAdministrativoTelefono" type="java.lang.String" column="responsable_administrativo_telefono" length="50" />
+		<property name="responsableAdministrativoNombre" type="java.lang.String" column="resp_administrativo_nombre" length="50" />
+		<property name="responsableAdministrativoCedula" type="java.lang.String" column="resp_administrativo_cedula" length="20" />
+		<property name="responsableAdministrativoEmail" type="java.lang.String" column="resp_administrativo_email" length="50" />
+		<property name="responsableAdministrativoTelefono" type="java.lang.String" column="resp_administrativo_telefono" length="50" />
 		
-		<property name="responsableAdminContratosNombre" type="java.lang.String" column="responsable_admin_contratos_nombre" length="50" />
-		<property name="responsableAdminContratosCedula" type="java.lang.String" column="responsable_admin_contratos_cedula" length="20" />
-		<property name="responsableAdminContratosEmail" type="java.lang.String" column="responsable_admin_contratos_email" length="50" />
-		<property name="responsableAdminContratosTelefono" type="java.lang.String" column="responsable_admin_contratos_telefono" length="50" />
+		<property name="responsableAdminContratosNombre" type="java.lang.String" column="resp_admin_contratos_nombre" length="50" />
+		<property name="responsableAdminContratosCedula" type="java.lang.String" column="resp_admin_contratos_cedula" length="20" />
+		<property name="responsableAdminContratosEmail" type="java.lang.String" column="resp_admin_contratos_email" length="50" />
+		<property name="responsableAdminContratosTelefono" type="java.lang.String" column="resp_admin_contratos_telefono" length="50" />
 		
 		<property name="codigoIniciativa" type="java.lang.String" column="codigo" length="50" />
 

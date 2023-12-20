@@ -4,8 +4,7 @@ CREATE TABLE indicador_asignar_inventario(
 	indicador_insumo_id NUMBER(10) NOT NULL
 );
 
-CREATE UNIQUE INDEX pk_asignar ON 
-(asignar_id   ASC);
+//CREATE UNIQUE INDEX pk_asignar ON (asignar_id   ASC);
 
 ALTER TABLE indicador_asignar_inventario
 	ADD CONSTRAINT  pk_asignar PRIMARY KEY (asignar_id);
@@ -18,7 +17,7 @@ CREATE TABLE tipo_proyecto(
 ALTER TABLE tipo_proyecto
 	ADD CONSTRAINT  pk_tipo_proyecto PRIMARY KEY (tipo_proyecto_id);
 
-CREATE UNIQUE INDEX ak_tipo_proyecto ON tipo_proyecto (tipo_proyecto_id);
+//CREATE UNIQUE INDEX ak_tipo_proyecto ON tipo_proyecto (tipo_proyecto_id);
 
 ALTER TABLE INICIATIVA ADD tipoId NUMBER;
 
@@ -59,11 +58,11 @@ CREATE TABLE auditoria(
 
 CREATE UNIQUE INDEX ak_auditoria ON auditoria (auditoria_id   ASC);
 
-ALTER TABLE indicador ADD resp_notificacion_id [numeric](10, 0);
+ALTER TABLE indicador ADD resp_notificacion_id NUMBER(10);
 
-CREATE INDEX ie_indicador_respnotificacion ON indicador (resp_notificacion_id );
+CREATE INDEX ie_indicador_respnotificacion ON indicador(resp_notificacion_id );
 
-ALTER TABLE indicador ADD CONSTRAINT fk_respnotificacion_indicador FOREIGN KEY (resp_notificacion_id) REFERENCES responsable (responsable_id);
+ALTER TABLE indicador ADD CONSTRAINT fk_respnotificacion_indicador FOREIGN KEY (resp_notificacion_id) REFERENCES responsable(responsable_id);
 
 CREATE TABLE reporte_servicio (
   reporte_id numeric(10, 0) NOT NULL,	
@@ -231,13 +230,19 @@ ALTER TABLE instrumentos ADD clase_id numeric (10,0);
 
 INSERT INTO afw_permiso (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('INICIATIVA_EDIT_COOPERACION', 'Modificacion Otras Organizaciones', 'INICIATIVA', 2, 14, 1, 'Modificacion Otras Organizaciones');
 
-CREATE  INDEX IE_instrumento_peso ON instrumento_peso (instrumento_id   ASC);
+CREATE TABLE instrumento_peso (
+    instrumento_id NUMBER (10) NOT NULL,
+    anio VARCHAR2(4) NOT NULL,
+    peso FLOAT
+);
+
+CREATE  INDEX IE_instrumento_peso ON instrumento_peso(instrumento_id   ASC);
 
 ALTER TABLE instrumento_peso
     ADD CONSTRAINT pk_instrumento_peso PRIMARY KEY (instrumento_id);
     
 ALTER TABLE instrumento_peso
-	ADD CONSTRAINT fk_instrumento_peso FOREIGN KEY (instrumento_id) REFERENCES instrumentos (instrumento_id) ON DELETE CASCADE;
+	ADD CONSTRAINT fk_instrumento_peso FOREIGN KEY (instrumento_id) REFERENCES instrumentos(instrumento_id) ON DELETE CASCADE;
     
 UPDATE afw_permiso set permiso = 'Desasociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_DELETE';
 UPDATE afw_permiso set permiso = 'Asociar' where permiso_id = 'INSTRUMENTOS_INICIATIVA_ADD';
@@ -269,9 +274,230 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 
 ALTER TABLE iniciativa ADD cargo_id numeric(10);
 
-
-UPDATE afw_sistema set actual = '9.01-230727';  
-UPDATE afw_sistema set build = 230727;
-
 ALTER TABLE vista 
     modify nombre varchar(250);
+    
+ALTER TABLE iniciativa ADD codigo VARCHAR2(50);
+ALTER TABLE iniciativa ADD unidad_medida NUMBER(10);
+
+-- Modificar la tabla iniciativa
+ALTER TABLE iniciativa
+  MODIFY nombre VARCHAR2(300);
+
+ALTER TABLE iniciativa
+  ADD justificacion VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD fecha_inicio TIMESTAMP;
+
+ALTER TABLE iniciativa
+  ADD fecha_fin TIMESTAMP;
+
+ALTER TABLE iniciativa
+  ADD monto_total VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD monto_moneda_extr VARCHAR2(50); 
+
+ALTER TABLE iniciativa
+  ADD sit_presupuestaria VARCHAR2(150);
+
+ALTER TABLE iniciativa
+  ADD hitos_relevantes VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD sector VARCHAR2(150);
+
+ALTER TABLE iniciativa
+  ADD fecha_acta_inicio TIMESTAMP;
+
+ALTER TABLE iniciativa
+  ADD gerencia_general_resp VARCHAR2(150); 
+
+ALTER TABLE iniciativa
+  ADD codigo_sipe VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD proyecto_presup_asociado VARCHAR2(300); 
+
+ALTER TABLE iniciativa
+  ADD estado VARCHAR2(100);
+
+ALTER TABLE iniciativa
+  ADD municipio VARCHAR2(300);
+
+ALTER TABLE iniciativa
+  ADD parroquia VARCHAR2(300);
+
+ALTER TABLE iniciativa
+  ADD direccion_proyecto VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD obj_historico VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD obj_nacional VARCHAR2(500); 
+
+ALTER TABLE iniciativa
+  ADD obj_estrategico_v VARCHAR2(500); 
+
+ALTER TABLE iniciativa
+  ADD obj_general_v VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD obj_especifico VARCHAR2(500); 
+
+ALTER TABLE iniciativa
+  ADD programa VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD problemas VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD causas VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD lineas_estrategicas VARCHAR2(500);
+
+ALTER TABLE iniciativa
+  ADD gerente_proy_nombre VARCHAR2(50); 
+
+ALTER TABLE iniciativa
+  ADD gerente_proy_cedula VARCHAR2(20); 
+
+ALTER TABLE iniciativa
+  ADD gerente_proy_email VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD gerente_proy_telefono VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_tecnico_nombre VARCHAR2(50); 
+
+ALTER TABLE iniciativa
+  ADD resp_tecnico_cedula VARCHAR2(20); 
+
+ALTER TABLE iniciativa
+  ADD resp_tecnico_email VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_tecnico_telefono VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_registrador_nombre VARCHAR2(50); 
+
+ALTER TABLE iniciativa
+  ADD resp_registrador_cedula VARCHAR2(20); 
+
+ALTER TABLE iniciativa
+  ADD resp_registrador_email VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_registrador_telefono VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_administrativo_nombre VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_administrativo_cedula VARCHAR2(20); 
+
+ALTER TABLE iniciativa
+  ADD resp_administrativo_email VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_administrativo_telefono VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_admin_contratos_nombre VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_admin_contratos_cedula VARCHAR2(20);
+
+ALTER TABLE iniciativa
+  ADD resp_admin_contratos_email VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD resp_admin_contratos_telefono VARCHAR2(50);
+
+ALTER TABLE iniciativa
+  ADD fase_id NUMBER(10);
+  
+ALTER TABLE iniciativa 
+    ADD anio_form_proy VARCHAR2(4) NULL;
+
+
+CREATE TABLE fases_proyecto (
+    fase_id NUMBER(10) NOT NULL,
+    nombre VARCHAR2(50) NOT NULL
+);
+
+
+ALTER TABLE fases_proyecto
+  ADD CONSTRAINT ak1_fase UNIQUE (nombre);
+
+ALTER TABLE fases_proyecto
+  ADD CONSTRAINT pk_fase PRIMARY KEY (fase_id);
+
+
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (1, 'Planificación');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (2, 'Ingeniería');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (3, 'Contratación');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (4, 'Procura');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (5, 'Puesta en Marcha');
+
+
+CREATE TABLE afw_lic (
+    id NUMBER(10) NOT NULL,
+    corporacion VARCHAR2(100),
+    serial VARCHAR2(50),
+    licenciamiento VARCHAR2(100)
+);
+
+-- Añadir columna a la tabla instrumentos
+ALTER TABLE instrumentos 
+  ADD is_historico NUMBER(1, 0);
+
+-- Insertar datos en la tabla afw_permiso
+INSERT INTO afw_permiso (permiso_id, padre_id, permiso, nivel, grupo, global, descripcion)
+VALUES ('INICIATIVA_EVALUAR_REPORTE_DETALLADO', 'INICIATIVA_EVALUAR_REPORTE', 'Reporte Detallado', 4, 1, 0, 'Reporte Detallado');
+
+INSERT INTO afw_permiso (permiso_id, padre_id, permiso, nivel, grupo, global, descripcion)
+VALUES ('INICIATIVA_EVALUAR_REPORTE_RESUMIDO_VIGENTES', 'INICIATIVA_EVALUAR_REPORTE', 'Reporte Resumido Vigentes', 4, 1, 0, 'Reporte Resumido Vigentes');
+
+INSERT INTO afw_permiso (permiso_id, padre_id, permiso, nivel, grupo, global, descripcion)
+VALUES ('INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS', 'INICIATIVA_EVALUAR_REPORTE', 'Reporte Datos Basicos', 4, 1, 0, 'Reporte Datos Basicos');
+
+INSERT INTO afw_permiso (permiso_id, padre_id, permiso, nivel, grupo, global, descripcion)
+VALUES ('INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS', 'INICIATIVA_EVALUAR_REPORTE', 'Reporte Mediciones Atrasadas', 4, 1, 0, 'Reporte Mediciones Atrasadas');
+
+INSERT INTO afw_permiso (permiso_id, padre_id, permiso, nivel, grupo, global, descripcion)
+VALUES ('INICIATIVA_EVALUAR_REPORTE_DETALLADO_PLANES_ACCION', 'INICIATIVA_EVALUAR_REPORTE', 'Reporte Detallado Planes de Accion', 4, 1, 0, 'Reporte Detallado Planes de Accion');
+
+INSERT INTO afw_permiso (permiso_id, padre_id, permiso, nivel, grupo, global, descripcion)
+VALUES ('INICIATIVA_EVALUAR_REPORTE_INDICADORES', 'INICIATIVA_EVALUAR_REPORTE', 'Reporte Indicadores', 4, 1, 0, 'Reporte Indicadores');
+
+CREATE TABLE explicacion_pgn (
+  explicacion_id NUMBER(10) NOT NULL,
+  objeto_id NUMBER(10) NOT NULL,
+  titulo VARCHAR2(150),
+  fecha TIMESTAMP,
+  creado TIMESTAMP,
+  creado_id NUMBER(10) NOT NULL,
+  is_fechas NUMBER(1,0),
+  explicacion_fechas VARCHAR2(500),
+  is_recibido NUMBER(1,0),
+  explicacion_recibido VARCHAR2(500)
+);
+
+ALTER TABLE explicacion_pgn
+  ADD CONSTRAINT pk_explicacion_pgn PRIMARY KEY (explicacion_id);
+
+ALTER TABLE explicacion_pgn
+  ADD CONSTRAINT fk_usuario_explicacion_pgn FOREIGN KEY (creado_id) REFERENCES afw_usuario (usuario_id) ON DELETE CASCADE;
+
+UPDATE afw_sistema SET actual = '9.01-231121';
+UPDATE afw_sistema SET build = 231121;
+UPDATE afw_sistema set version = '9.01';
+
+
+INSERT INTO afw_lic (id, corporacion, serial, licenciamiento) VALUES (1, 'Nombre Corporacion', 'Serial Corporacion', 'Tipo Licenciamiento');

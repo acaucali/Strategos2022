@@ -14,6 +14,7 @@ import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.arboles.NodoArbol;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -626,6 +627,20 @@ public class Iniciativa implements Serializable, NodoArbol {
 			}
 		}
 		return null;
+	}
+	
+	public List<Long> getIndicadoresId(Byte tipo) {
+		List<Long> indicadoresId = new ArrayList<Long>();
+		for (Iterator<IndicadorIniciativa> iter = this.iniciativaIndicadores.iterator(); iter.hasNext();) {
+			IndicadorIniciativa iniciativaIndicadores = (IndicadorIniciativa) iter.next();
+			if (iniciativaIndicadores.getTipo().byteValue() == tipo.byteValue()) {
+				indicadoresId.add(iniciativaIndicadores.getPk().getIndicadorId());
+				
+				
+			}
+		}
+		
+		return indicadoresId;
 	}
 
 	public void setIndicadorId(Long indicadorId, Byte tipo) {

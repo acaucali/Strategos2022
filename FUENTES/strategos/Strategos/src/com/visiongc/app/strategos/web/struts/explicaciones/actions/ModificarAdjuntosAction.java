@@ -48,7 +48,7 @@ public class ModificarAdjuntosAction  extends VgcAction{
 			for (Iterator<AdjuntoExplicacion> iter = adjuntos.iterator(); iter.hasNext(); )
 			{
 				
-				AdjuntoExplicacion adjunto =  (AdjuntoExplicacion)iter.next();
+				/*AdjuntoExplicacion adjunto =  (AdjuntoExplicacion)iter.next();
 				 try {
 					 FileInputStream archivo = new FileInputStream(adjunto.getRuta());
 					 if (archivo.available() != 0) {
@@ -73,7 +73,7 @@ public class ModificarAdjuntosAction  extends VgcAction{
 					 
 			     }catch (IOException ex) {	 
 			            System.out.println(ex);		        
-			     }
+			     }*/
 			}	
 		
 		messages.add("org.apache.struts.action.GLOBAL_MESSAGE", new ActionMessage("action.modificacion.adjunto.conteo", count, total));

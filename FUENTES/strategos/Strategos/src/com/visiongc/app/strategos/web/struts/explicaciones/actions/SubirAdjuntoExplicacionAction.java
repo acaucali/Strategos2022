@@ -55,7 +55,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 
         	
         	adjunto.setTitulo(archivo.getFileName());
-        	adjunto.setRuta("");
+        	//adjunto.setRuta("");
         	
         	adjunto.setArchivoBytes(archivo.getFileData());
         	adjunto.setArchivo(null);

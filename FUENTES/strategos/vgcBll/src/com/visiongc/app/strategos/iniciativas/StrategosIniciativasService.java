@@ -75,7 +75,7 @@ public abstract interface StrategosIniciativasService
   
   public abstract List <IndicadorIniciativa> getIndicadoresIniciativa(Long paramLong);
   
-  public abstract int asociarIndicadorCuentas(Long iniciativaId, Long indicadorId, Usuario usuario);
+  public abstract int asociarIndicadorCuentas(Long iniciativaId, Long indicadorId, Usuario usuario, Byte paramByte);
   
   public abstract int asociarIndicadorTipo(Long iniciativaId, Long IndicadorId, Byte Tipo, Usuario usuario);
     

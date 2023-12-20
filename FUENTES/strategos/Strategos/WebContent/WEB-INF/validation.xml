@@ -668,6 +668,39 @@
 		<!-- ********** Fin: Explicaciones ************************ -->
 		<!-- ****************************************************** -->
 
+		<!-- ****************************************************** -->
+		<!-- ************ Inicio: Explicacion PGN ********************* -->
+		<!-- ****************************************************** -->
+
+		<!-- Forma que Edita una Explicación -->
+		<form name="editarExplicacionPGNForm">
+			<field property="explicacionFechas" depends="required,maxlength">
+				<arg key="jsp.editarexplicacion.ficha.titulo" position="0" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>250</var-value>
+				</var>
+			</field>
+		</form>
+
+		<!-- Action que guarda una Explicación -->
+		<form name="/explicaciones/guardarExplicacionPGN">
+			<field property="titulo" depends="required,maxlength">
+				<arg key="jsp.editarexplicacion.ficha.titulo" position="0" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>250</var-value>
+				</var>
+			</field>
+		</form>
+
+		<!-- ****************************************************** -->
+		<!-- ********** Fin: Explicaciones PGN ************************ -->
+		<!-- ****************************************************** -->
+
+
 
 		<!-- ****************************************************** -->
 		<!-- ******************* Inicio: Foro ********************* -->
@@ -907,43 +940,50 @@
 		<form name="editarIniciativaForm">
 			<field property="nombre" depends="required,maxlength">
 				<arg key="jsp.editariniciativa.ficha.nombre" position="0" />
-				<arg name="maxlength" key="${var:maxlength}" resource="false" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1" />
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>250</var-value>
 				</var>
 			</field>
-
-			<field property="nombreLargo" depends="maxlength">
-				<arg key="jsp.editariniciativa.ficha.nombrelargo" position="0" />
-				<arg name="maxlength" key="${var:maxlength}" resource="false" />
+			
+			<field property="nombreLargo" depends="required,maxlength">
+				<arg key="jsp.editariniciativa.ficha.nombre" position="0" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>300</var-value>
 				</var>
 			</field>
+			
 
 		</form>
 
 		<!-- Action que guarda una Iniciativa -->
 		<form name="/iniciativa/guardarIniciativa">
+		
 			<field property="nombre" depends="required,maxlength">
 				<arg key="jsp.editariniciativa.ficha.nombre" position="0" />
-				<arg name="maxlength" key="${var:maxlength}" resource="false" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>250</var-value>
 				</var>
 			</field>
-
-			<field property="nombreLargo" depends="maxlength">
-				<arg key="jsp.editariniciativa.ficha.nombrelargo" position="0" />
-				<arg name="maxlength" key="${var:maxlength}" resource="false" />
+			
+			<field property="nombreLargo" depends="required,maxlength">
+				<arg key="jsp.editariniciativa.ficha.nombre" position="0" />
+				<arg name="maxlength" key="${var:maxlength}" resource="false" position="1"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>300</var-value>
 				</var>
 			</field>
+			
+			<field property="objetivoEstrategico" depends="required">
+				<arg key="jsp.editarforo.ficha.comentario" position="0" />
+			</field>
+		
 		</form>
 
 		<!-- ****************************************************** -->

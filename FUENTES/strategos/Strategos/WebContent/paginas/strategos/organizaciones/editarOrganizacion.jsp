@@ -342,7 +342,7 @@
 								<td align="left">
 								
 									<%-- Contenedor de Paneles --%>
-									<vgcinterfaz:contenedorPaneles height="210" width="570" nombre="editMarcoEstrategico">
+									<vgcinterfaz:contenedorPaneles height="300" width="710" nombre="editMarcoEstrategico">
 								
 										<%-- Panel: Misión --%>
 										<vgcinterfaz:panelContenedor anchoPestana="63px" nombre="mision">
@@ -354,7 +354,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="mision" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="mision" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											
@@ -370,7 +370,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="vision" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="vision" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											
@@ -386,7 +386,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="oportunidadesRetos" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="oportunidadesRetos" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											
@@ -402,7 +402,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="lineamientosEstrategicos" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="lineamientosEstrategicos" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											
@@ -418,7 +418,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="factoresClave" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="factoresClave" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											
@@ -434,7 +434,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="politicas" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="politicas" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											
@@ -450,7 +450,7 @@
 											
 											<table class="panelContenedor" cellspacing="3" cellpadding="0" border="0">												
 												<tr>
-													<td><html:textarea property="valores" rows="10" cols="65" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
+													<td><html:textarea property="valores" rows="13" cols="105" styleClass="cuadroTexto" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/></td>
 												</tr>
 											</table>
 											

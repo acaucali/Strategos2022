@@ -54,21 +54,21 @@
 		<action path="/iniciativas/gestionarIndicadoresIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.GestionarIndicadoresIniciativaAction" scope="session" name="gestionarIndicadoresIniciativaForm" parameter="exploradorIniciativas"></action>
 
 		<!-- Mapeo del Action: Crear Iniciativa-->
-		<action path="/iniciativas/crearIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.EditarIniciativaAction" scope="request" name="editarIniciativaForm" parameter="editarIniciativa"></action>
+		<action path="/iniciativas/crearIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.EditarIniciativaAction" scope="session" name="editarIniciativaForm" parameter="editarIniciativa"></action>
 
 		<!-- Mapeo del Action: Modificar Iniciativa-->
-		<action path="/iniciativas/modificarIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.EditarIniciativaAction" scope="request" name="editarIniciativaForm" parameter="editarIniciativa"></action>
+		<action path="/iniciativas/modificarIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.EditarIniciativaAction" scope="session" name="editarIniciativaForm" parameter="editarIniciativa"></action>
 
 		<!-- Mapeo del Action: Ver Iniciativa-->
-		<action path="/iniciativas/verIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.EditarIniciativaAction" scope="request" name="editarIniciativaForm" parameter="editarIniciativa"></action>
+		<action path="/iniciativas/verIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.EditarIniciativaAction" scope="session" name="editarIniciativaForm" parameter="editarIniciativa"></action>
 
 		<!-- Mapeo del Action: Guardar Iniciativa-->
-		<action path="/iniciativas/guardarIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.GuardarIniciativaAction" name="editarIniciativaForm" scope="request" input="editarIniciativa" validate="true" parameter="editarIniciativa">
+		<action path="/iniciativas/guardarIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.GuardarIniciativaAction" name="editarIniciativaForm" scope="session" input="editarIniciativa" validate="true" parameter="editarIniciativa">
 			<forward name="crearIniciativa" path="/iniciativas/crearIniciativa.action" />
 		</action>
 
 		<!-- Mapeo del Action: Cancelar Guardar Iniciativa-->
-		<action path="/iniciativas/cancelarGuardarIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.GuardarIniciativaAction" name="editarIniciativaForm" scope="request" parameter="editarIniciativa"></action>
+		<action path="/iniciativas/cancelarGuardarIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.GuardarIniciativaAction" name="editarIniciativaForm" scope="session" parameter="editarIniciativa"></action>
 
 		<!-- Mapeo del Action: Propiedades Iniciativa-->
 		<action path="/iniciativas/propiedadesIniciativa" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.MostrarPropiedadesIniciativaAction" name="editarIniciativaForm" scope="request" parameter="propiedadesIniciativa"></action>

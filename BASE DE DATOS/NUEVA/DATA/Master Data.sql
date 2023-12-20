@@ -1258,10 +1258,18 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 UPDATE afw_sistema set actual = '9.01-231005';  
 UPDATE afw_sistema set build = 231005;
 
-insert into fases_proyecto (fase_id, nombre) values (1, 'Planificación');
-insert into fases_proyecto (fase_id, nombre) values (2, 'Ingeniería');
-insert into fases_proyecto (fase_id, nombre) values (3, 'Contratación');
-insert into fases_proyecto (fase_id, nombre) values (4, 'Procura');
-insert into fases_proyecto (fase_id, nombre) values (5, 'Puesta en Marcha');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (1, 'Planificación');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (2, 'Ingeniería');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (3, 'Contratación');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (4, 'Procura');
+INSERT INTO fases_proyecto (fase_id, nombre) VALUES (5, 'Puesta en Marcha');
 
-insert into afw_lic (id, corporacion, serial, licenciamiento) values (1, 'Nombre Corporacion', 'Serial Corporacion', 'Tipo Licenciamiento');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_DETALLADO',  'INICIATIVA_EVALUAR_REPORTE',  'Reporte Detallado',  4,   1,   0,  'Reporte Detallado');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_RESUMIDO_VIGENTES',  'INICIATIVA_EVALUAR_REPORTE',  'Reporte Resumido Vigentes',  4,   1,   0,  'Reporte Resumido Vigentes');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_DATOS_BASICOS',  'INICIATIVA_EVALUAR_REPORTE',  'Reporte Datos Basicos',  4,   1,   0,  'Reporte Datos Basicos');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_MEDICIONES_ATRASADAS',  'INICIATIVA_EVALUAR_REPORTE',  'Reporte Mediciones Atrasadas',  4,   1,   0,  'Reporte Mediciones Atrasadas');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_DETALLADO_PLANES_ACCION',  'INICIATIVA_EVALUAR_REPORTE',  'Reporte Detallado Detallado Planes de Accion',  4,   1,   0,  'Reporte Detallado Planes de Accion');
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_INDICADORES',  'INICIATIVA_EVALUAR_REPORTE',  'Reporte Indicadores',  4,   1,   0,  'Reporte Indicadores');
+
+
+INSERT INTO afw_lic (id, corporacion, serial, licenciamiento) VALUES (1, 'Nombre Corporacion', 'Serial Corporacion', 'Tipo Licenciamiento');

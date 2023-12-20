@@ -11,7 +11,7 @@ import java.util.Map;
 public abstract interface StrategosExplicacionesPersistenceSession
   extends StrategosPersistenceSession
 {
-  public abstract PaginaLista getExplicaciones(int paramInt1, int paramInt2, String paramString1, String paramString2, boolean paramBoolean, Map paramMap);
+  public abstract PaginaLista getExplicaciones(int paramInt1, int paramInt2, String paramString1, String paramString2, boolean paramBoolean, Map paramMap);    
   
   public abstract List getAdjuntosIdPorExplicacion(Long paramLong);
   
@@ -24,5 +24,7 @@ public abstract interface StrategosExplicacionesPersistenceSession
   public abstract AdjuntoExplicacion getAdjunto(Long parmaLong);
   
   public abstract List<AdjuntoExplicacion> getAdjuntos();
+  
+  public abstract PaginaLista getExplicacionesPGN(int paramInt1, int paramInt2, String paramString1, String paramString2, boolean paramBoolean, Map paramMap);
 
 }

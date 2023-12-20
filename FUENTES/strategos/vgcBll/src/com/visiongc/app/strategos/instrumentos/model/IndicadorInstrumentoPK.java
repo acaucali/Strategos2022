@@ -49,7 +49,7 @@ public class IndicadorInstrumentoPK implements Serializable {
 		return new EqualsBuilder().append(getInstrumentoId(), castOther.getInstrumentoId()).append(getIndicadorId(), castOther.getIndicadorId()).isEquals();
 	}
 	
-	public int hasCode() {
+	public int hashCode() {
 		return new HashCodeBuilder().append(getInstrumentoId()).append(getIndicadorId()).toHashCode();
 	}
 }

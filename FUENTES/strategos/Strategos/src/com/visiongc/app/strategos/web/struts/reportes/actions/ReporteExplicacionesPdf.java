@@ -89,17 +89,7 @@ public class ReporteExplicacionesPdf extends VgcReporteBasicoAction {
 		if (pagina < 1)
 			pagina = 1;
 
-		Map<String, Comparable> filtros = new HashMap<String, Comparable>();
-
-		Paragraph texto;
-		int columna = 1;
-
-		documento.add(lineaEnBlanco(getConfiguracionPagina(request).getFuente()));
-
-		Font fuente = getConfiguracionPagina(request).getFuente();
-
-		if ((objetoId != null) && (!objetoId.equals("")) && Long.parseLong(objetoId) != 0)
-			filtros.put("objetoId", objetoId);
+		
 
 		StrategosExplicacionesService strategosExplicacionesService = StrategosServiceFactory.getInstance()
 				.openStrategosExplicacionesService();
@@ -153,7 +143,7 @@ public class ReporteExplicacionesPdf extends VgcReporteBasicoAction {
 			
 			strategosInstrumentoService.close();			
 		}
-		else if (objetoKey.equals("Actividad"))
+		else if (objetoKey.equals("pryActividad"))
 		{
 			StrategosPryActividadesService strategosActividadService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 			
@@ -162,6 +152,11 @@ public class ReporteExplicacionesPdf extends VgcReporteBasicoAction {
 			reporte.setSource(actividad.getNombre());
 			
 			strategosActividadService.close();
+		}else if (objetoKey.equals("Organizacion"))
+		{
+			OrganizacionStrategos organizacion = ((OrganizacionStrategos)request.getSession().getAttribute("organizacion"));
+
+			reporte.setSource(organizacion.getNombre());
 		}
 		
 		OrganizacionStrategos organizacion = ((OrganizacionStrategos)request.getSession().getAttribute("organizacion"));
@@ -177,18 +172,27 @@ public class ReporteExplicacionesPdf extends VgcReporteBasicoAction {
 		fontBold.setSize(8);
 		fontBold.setStyle(Font.BOLD);
 
-		documento.add(lineaEnBlanco(font));
-		lineas = getNumeroLinea(lineas, inicioLineas);
+		documento.add(lineaEnBlanco(font));		
 		String subTituloOrg = "Organización" +  " - " +  reporte.getOrganizacionNombre();
 		agregarSubTitulo(documento, getConfiguracionPagina(request), subTituloOrg, true, true, 13.0F);
 		documento.add(lineaEnBlanco(font));
 		
-		String subTitulo = messageResources.getMessage("jsp.reporte.explicacion.objeto") +  " - " + objetoKey + " : " + reporte.getSource();
-		agregarSubTitulo(documento, getConfiguracionPagina(request), subTitulo, true, true, 13.0F);
-		lineas = getNumeroLinea(lineas, inicioLineas);
-
+		String subTitulo = ""; 
+		
+		if(objetoKey.equals("pryActividad")){
+			subTitulo = messageResources.getMessage("jsp.reporte.explicacion.objeto") +  " - Actividad : " + reporte.getSource();
+		}else {
+			subTitulo = messageResources.getMessage("jsp.reporte.explicacion.objeto") +  " - " + objetoKey + " : " + reporte.getSource();
+		}		
+		agregarSubTitulo(documento, getConfiguracionPagina(request), subTitulo, true, true, 13.0F);		
 		documento.add(lineaEnBlanco(font));
-		lineas = getNumeroLinea(lineas, inicioLineas);
+		
+		Map<String, Comparable> filtros = new HashMap<String, Comparable>();
+		
+		
+
+		if ((objetoId != null) && (!objetoId.equals("")) && Long.parseLong(objetoId) != 0)
+			filtros.put("objetoId", objetoId);
 		
 		List<Explicacion> explicaciones = strategosExplicacionesService
 				.getExplicaciones(pagina, 30, "fecha", "DESC", true, filtros).getLista();
@@ -205,9 +209,7 @@ public class ReporteExplicacionesPdf extends VgcReporteBasicoAction {
 				}
 			}
 		}
-
-		fuente.setSize(12);		
-		fuente.setStyle(Font.COURIER);
+		
 		TablaPDF tabla = null;
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		int[] columnas = new int[5];
@@ -272,12 +274,12 @@ public class ReporteExplicacionesPdf extends VgcReporteBasicoAction {
 				tabla.agregarCelda(memoCausas);
 				tabla.agregarCelda(memoCorrectivos);
 
-				documento.add(lineaEnBlanco(fuente));
+				documento.add(lineaEnBlanco(font));
 			}
 		}
 
 		documento.add(tabla.getTabla());
-		documento.add(lineaEnBlanco(fuente));
+		documento.add(lineaEnBlanco(font));
 
 		strategosExplicacionesService.close();
 	}

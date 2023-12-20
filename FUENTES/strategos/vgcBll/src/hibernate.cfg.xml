@@ -141,6 +141,7 @@
 		<mapping resource="com/visiongc/app/strategos/explicaciones/model/Explicacion.hbm.xml" />
 		<mapping resource="com/visiongc/app/strategos/explicaciones/model/MemoExplicacion.hbm.xml" />
 		<mapping resource="com/visiongc/app/strategos/explicaciones/model/AdjuntoExplicacion.hbm.xml" />
+		<mapping resource="com/visiongc/app/strategos/explicaciones/model/ExplicacionPGN.hbm.xml" />
 
 		<!-- Foros -->
 		<mapping resource="com/visiongc/app/strategos/foros/model/Foro.hbm.xml" />

@@ -4784,6 +4784,10 @@ CREATE TABLE afw_lic (
 	licenciamiento character varying(100)	
 );
 
+
+alter table instrumentos 
+	add column is_historico numeric(1,0);
+
 -- Completed on 2023-04-27 19:43:20
 
 --

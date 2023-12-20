@@ -83,11 +83,11 @@ public final class WelcomeAction
     if (!checkVersion(request)) {
       forward = "sincronizar";
     }
-    /*
+    
     if (!forward.equals("sincronizar"))
     {
-      Licencia licencia = new Licencia().getLicencia(request);
-      if (licencia == null) {
+    	    Licencia licencia = new Licencia().getLicencia(request);
+    	    /*  if (licencia == null) {
         forward = "expirado";
       } else if ((licencia != null) && (licencia.getRespuesta() == 10002)) {
         forward = "folderConfiguracionEmpty";
@@ -99,19 +99,18 @@ public final class WelcomeAction
         forward = "expirado";
       } else if ((licencia != null) && (licencia.getNumeroUsuarios() == null)) {
         forward = "fullConexion";
-      }
+      }*/
     }
-    */
+    
     
  
     FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
-	  AfwLic afwLic = frameworkService.getAfwLic();	  	  	 
+   AfwLic afwLic = frameworkService.getAfwLic();	  	  	 
 	  Licencia licencia = new Licencia().getLicencia(request);
 	  
 	  licencia.setCompanyName(afwLic.getCorporacion());
 	  licencia.setSerial(afwLic.getSerial());
 	  licencia.setTipo(afwLic.getLicenciamiento());
-
 
     if (ExternalAuthenticator.getInstance().isActive()) {
       request.getSession().setAttribute("autenticacionExterna", "true");

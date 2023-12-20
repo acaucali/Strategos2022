@@ -376,36 +376,46 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 								}
 
 								if (resultado == 10000) {
-									Long indicadorId = iniciativa
-											.getIndicadorId(TipoFuncionIndicador.getTipoFuncionPresupuesto());
-									if (indicadorId != null) {
-										indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
-												indicadorId);
-										nombre = "";
-										nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre()
-												+ " - ";
-										nombre = nombre + iniciativa.getNombre();
-										if (nombre.length() > 100)
-											nombre = nombre.substring(0, 100);
-										indicador.setNombre(nombre);
-										if (nombre.length() > 50)
-											nombre = nombre.substring(0, 50);
-										indicador.setNombreCorto(nombre);
+									List<Long> indicadoresId = iniciativa
+											.getIndicadoresId((byte) 6);
+									
+									if (indicadoresId.size() > 0) {
+										
+										for (Iterator<Long> iter = indicadoresId.iterator(); iter.hasNext();) {
+											Long indicadorId = (Long) iter.next();
+											indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
+													indicadorId);
+											
+																						
+											if(indicador.getNaturaleza() == Naturaleza.getNaturalezaFormula().byteValue() && indicador.getTipoFuncion() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue() ) {
 
-										resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
-										if (resultado == 10003) {
-											Map<String, Object> filtros = new HashMap();
-
-											filtros.put("claseId", indicador.getClaseId());
-											filtros.put("nombre", indicador.getNombre());
-											List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0,
-													"nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false))
-													.getLista();
-											if (inds.size() > 0) {
-												indicador = (Indicador) inds.get(0);
-												resultado = 10000;
-											}
-										}
+												
+												nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre() + " - ";												
+												nombre = nombre + iniciativa.getNombre();
+												if (nombre.length() > 100)
+													nombre = nombre.substring(0, 100);
+												indicador.setNombre(nombre);
+												if (nombre.length() > 50)
+													nombre = nombre.substring(0, 50);
+																															
+												resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
+												if (resultado == 10003) {
+													
+													
+													Map<String, Object> filtros = new HashMap();
+		
+													filtros.put("claseId", indicador.getClaseId());
+													filtros.put("nombre", indicador.getNombre());
+													List<Indicador> inds = strategosIndicadoresService.getIndicadores(0, 0,
+															"nombre", "ASC", true, filtros, null, null, Boolean.valueOf(false))
+															.getLista();
+													if (inds.size() > 0) {														
+														indicador = (Indicador) inds.get(0);
+														resultado = 10000;
+													}
+												}
+											}																						
+										}										
 									}
 								}
 
@@ -584,7 +594,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		return resultado;
 	}
 	
-	public int asociarIndicadorCuentas(Long iniciativaId, Long IndicadorId, Usuario usuario) {
+	public int asociarIndicadorCuentas(Long iniciativaId, Long IndicadorId, Usuario usuario, Byte tipo) {
 		boolean transActiva = false;
 		int resultado = 10000;
 		String[] fieldNames = new String[2];
@@ -601,7 +611,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 				pk.setIniciativaId(iniciativaId);
 				
 				iniciativaIndicador.setPk(pk);
-				iniciativaIndicador.setTipo((byte) 6);
+				iniciativaIndicador.setTipo(tipo);
 				
 				
 				fieldNames[0] = "pk.indicadorId";
@@ -950,7 +960,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		if (resultado == 10000) {
 			resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
 			if (resultado == 10000) {
-				resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario);
+				resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario, tipo);
 			}
 		}
 		if (resultado == 10003) {
@@ -1043,7 +1053,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 				if (resultado == 10000)
 					resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
 					if (resultado == 10000) {
-						resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario);
+						resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario, tipo);
 					}
 			
 				if (resultado == 10003) {
@@ -1087,7 +1097,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		indicador.setOrganizacionId(iniciativa.getOrganizacionId());
 		indicador.setClaseId(iniciativa.getClaseId());
 		String nombre = "";
-		nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre() + "  ";
+		nombre = configuracionIniciativa.getIniciativaIndicadorPresupuestoNombre() + " - ";
 		if(iniciativa.getCodigoIniciativa() != null)
 			nombre = nombre +  iniciativa.getCodigoIniciativa() +  "  " ;
 		nombre = nombre + iniciativa.getNombre();
@@ -1141,7 +1151,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		if (resultado == 10000)
 			resultado = strategosIndicadoresService.saveIndicador(indicador, usuario);
 			if (resultado == 10000) {
-				resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario);
+				resultado = asociarIndicadorCuentas(iniciativa.getIniciativaId(), indicador.getIndicadorId(), usuario, tipo);
 			}
 	
 		if (resultado == 10003) {

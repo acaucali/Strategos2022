@@ -2,6 +2,7 @@ package com.visiongc.app.strategos.explicaciones.persistence.hibernate;
 
 import com.visiongc.app.strategos.explicaciones.model.AdjuntoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
+import com.visiongc.app.strategos.explicaciones.model.ExplicacionPGN;
 import com.visiongc.app.strategos.explicaciones.persistence.StrategosExplicacionesPersistenceSession;
 import com.visiongc.app.strategos.indicadores.model.IndicadorAsignarInventario;
 import com.visiongc.app.strategos.persistence.hibernate.StrategosHibernateSession;
@@ -15,8 +16,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 
 public class StrategosExplicacionesHibernateSession
   extends StrategosHibernateSession
@@ -72,6 +77,102 @@ public class StrategosExplicacionesHibernateSession
     return paginaLista;
   }
   
+  public PaginaLista getExplicacionesPGN(int pagina, int tamanoPagina, String orden, String tipoOrden, boolean getTotal, Map filtros)
+  {   
+	  String[] ordenArray = new String[1];
+	  String[] tipoOrdenArray = new String[1];
+	  ordenArray[0] = orden;
+	  tipoOrdenArray[0] = tipoOrden;
+	    
+	  Query consulta = prepararQueryPGN(ordenArray, tipoOrdenArray, filtros, false);
+	    
+	  int total = 0;
+	  if (getTotal) {
+	     total = consulta.list().size();
+	  }
+	  if ((tamanoPagina > 0) && (pagina > 0)) {
+		  consulta.setFirstResult(tamanoPagina * pagina - tamanoPagina).setMaxResults(tamanoPagina);
+	  }
+	  List<Explicacion> explicaciones = consulta.list();
+	  if (!getTotal) {
+	      total = explicaciones.size();
+	  }
+	  PaginaLista paginaLista = new PaginaLista();
+	    
+	  paginaLista.setLista(explicaciones);
+	  paginaLista.setNroPagina(pagina);
+	  paginaLista.setTamanoPagina(tamanoPagina);
+	  paginaLista.setTamanoSetPaginas(5);
+	  paginaLista.setTotal(total);
+	  if ((orden != null) && (ordenArray.length > 0))
+	  {
+	      paginaLista.setOrden(ordenArray[0]);
+	      paginaLista.setTipoOrden(tipoOrdenArray[0]);
+	  }
+	  else
+	  {
+	      paginaLista.setOrden("");
+	      paginaLista.setTipoOrden("");
+	  }
+	  return paginaLista;
+  }
+  
+  private Query prepararQueryPGN(String[] orden, String[] tipoOrden, Map filtros, boolean soloContar)
+  {
+	  String tablasConsulta = "";
+	    String condicionesConsulta = " where ";
+	    boolean hayCondicionesConsulta = false;	    
+	    if (filtros != null)
+	    {
+	    	Iterator iter = filtros.keySet().iterator();
+	        String fieldName = null;
+	        while (iter.hasNext())
+	        {
+	          fieldName = (String)iter.next();
+	          if (fieldName.equals("titulo"))
+	          {
+	            condicionesConsulta = condicionesConsulta + "lower(explicacionPGN.titulo)" + getCondicionConsulta(filtros.get(fieldName), "like") + " and ";
+	            hayCondicionesConsulta = true;
+	          }
+	          else if (fieldName.equals("objetoId"))
+	          {
+	            condicionesConsulta = condicionesConsulta + "explicacionPGN.objetoId" + getCondicionConsulta(filtros.get(fieldName), "=") + " and ";
+	            hayCondicionesConsulta = true;
+	          }	          
+	        }
+	    }
+	    String ordenConsulta = "";
+	    if ((orden != null) && (tipoOrden != null)) {
+	      for (int i = 0; (i < orden.length) && (i < tipoOrden.length); i++) {
+	        if ((orden[i] != null) && (!orden.equals(""))) {
+	          if ((tipoOrden[i] == null) || (tipoOrden[i].equals(""))) {
+	            ordenConsulta = ordenConsulta + "explicacionPGN." + orden[i] + " asc, ";
+	          } else if (tipoOrden[i].equalsIgnoreCase("asc")) {
+	            ordenConsulta = ordenConsulta + "explicacionPGN." + orden[i] + " asc, ";
+	          } else {
+	            ordenConsulta = ordenConsulta + "explicacionPGN." + orden[i] + " desc, ";
+	          }
+	        }
+	      }
+	    }
+	    if (ordenConsulta.length() > 0)
+	    {
+	      ordenConsulta = " order by " + ordenConsulta;
+	      ordenConsulta = ordenConsulta.substring(0, ordenConsulta.length() - 2);
+	    }
+	    if (hayCondicionesConsulta) {
+	      condicionesConsulta = condicionesConsulta.substring(0, condicionesConsulta.length() - 5);
+	    } else {
+	      condicionesConsulta = "";
+	    }
+	    String objetoConsulta = "distinct(explicacionPGN)";
+	    if (soloContar) {
+	      objetoConsulta = "count(*)";
+	    }	    
+	    Query consulta = this.session.createQuery("select " + objetoConsulta + " from ExplicacionPGN explicacionPGN" + tablasConsulta + condicionesConsulta + ordenConsulta);
+	    
+	   return consulta;
+  }
   private Query prepararQuery(String[] orden, String[] tipoOrden, Map filtros, boolean soloContar)
   {
     String tablasConsulta = "";
