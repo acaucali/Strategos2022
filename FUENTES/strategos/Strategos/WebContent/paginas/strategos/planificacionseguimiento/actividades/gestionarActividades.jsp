@@ -888,6 +888,29 @@
 							</vgcinterfaz:barraHerramientasBotonTitulo>
 						</vgcinterfaz:barraHerramientasBoton>
 						
+						<vgcinterfaz:barraHerramientasSeparador />
+						<vgcinterfaz:barraHerramientasBoton permisoId="ACTIVIDAD_MEDICION_REAL" aplicaOrganizacion="true" 
+															nombreImagen="mediciones"
+															pathImagenes="/paginas/strategos/indicadores/imagenes/barraHerramientas/"
+															nombre="medicionesIndicadores"
+															onclick="javascript:editarMediciones(document.gestionarActividadesForm.seleccionados.value, 0);">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message
+									key="jsp.gestionarindicadores.barraherramientas.mediciones.real" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+						
+						<vgcinterfaz:barraHerramientasBoton permisoId="ACTIVIDAD_MEDICION_REAL" aplicaOrganizacion="true" 
+															nombreImagen="historicos"
+															pathImagenes="/paginas/strategos/barraHerramientas/"
+															nombre="medicionesIndicadores"
+															onclick="javascript:editarMediciones(document.gestionarActividadesForm.seleccionados.value, 1);">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message
+									key="jsp.gestionarindicadores.barraherramientas.mediciones.programado" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+						
 					</vgcinterfaz:barraHerramientas>
 				</vgcinterfaz:contenedorFormaBarraGenerica>
 

@@ -1,8 +1,11 @@
 package com.visiongc.app.strategos.web.struts.planes.indicadores.forms;
 
+import java.util.List;
+
 import com.visiongc.app.strategos.indicadores.model.util.Naturaleza;
 import com.visiongc.app.strategos.indicadores.model.util.TipoIndicador;
 import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
+import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
 import com.visiongc.framework.web.struts.forms.VisorListaForm;
 
 public class GestionarIndicadoresPlanForm extends VisorListaForm
@@ -15,6 +18,46 @@ public class GestionarIndicadoresPlanForm extends VisorListaForm
 	private Long reporteSeleccionadoId;
 	private Long graficoSeleccionadoId;
 	private ConfiguracionPlan configuracionPlan;
+	
+	private Long frecuencia;
+	private List<?> unidadesMedida;
+	private List<?> frecuencias;
+	private Long unidadId;
+
+	
+
+
+	public Long getFrecuencia() {
+		return frecuencia;
+	}
+
+	public void setFrecuencia(Long frecuencia) {
+		this.frecuencia = frecuencia;
+	}
+
+	public List<?> getUnidadesMedida() {
+		return unidadesMedida;
+	}
+
+	public void setUnidadesMedida(List<?> unidadesMedida) {
+		this.unidadesMedida = unidadesMedida;
+	}
+
+	public List<?> getFrecuencias() {
+		return frecuencias;
+	}
+
+	public void setFrecuencias(List<?> frecuencias) {
+		this.frecuencias = frecuencias;
+	}
+
+	public Long getUnidadId() {
+		return unidadId;
+	}
+
+	public void setUnidadId(Long unidadId) {
+		this.unidadId = unidadId;
+	}
 
 	public Byte getNaturalezaFormula()
 	{

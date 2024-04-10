@@ -39,6 +39,7 @@ public class PryActividad implements Serializable
 	private String fechaUltimaMedicion;
 	private Double alertaZonaAmarilla;
 	private Double alertaZonaVerde;
+	private Double peso;
 	
 	
 	 public PryActividad() {}
@@ -49,7 +50,7 @@ public class PryActividad implements Serializable
 			Integer fila, Integer nivel, Boolean compuesta, Date creado, Date modificado, Long creadoId,
 			Long modificadoId, Byte naturaleza, Long claseId, Byte tipoMedicion, Byte crecimiento,
 			Double porcentajeCompletado, Double porcentajeEjecutado, Double porcentajeEsperado,
-			String fechaUltimaMedicion) {		
+			String fechaUltimaMedicion, Double peso) {		
 		
 		this.actividadId = actividadId;
 		this.proyectoId = proyectoId;
@@ -77,6 +78,7 @@ public class PryActividad implements Serializable
 		this.porcentajeEjecutado = porcentajeEjecutado;
 		this.porcentajeEsperado = porcentajeEsperado;
 		this.fechaUltimaMedicion = fechaUltimaMedicion;
+		this.peso = peso;
 	}
 
 	public Long getActividadId() {
@@ -305,6 +307,16 @@ public class PryActividad implements Serializable
 
 	public void setAlertaZonaVerde(Double alertaZonaVerde) {
 		this.alertaZonaVerde = alertaZonaVerde;
+	}
+
+
+	public Double getPeso() {
+		return peso;
+	}
+
+
+	public void setPeso(Double peso) {
+		this.peso = peso;
 	}
 	
 	

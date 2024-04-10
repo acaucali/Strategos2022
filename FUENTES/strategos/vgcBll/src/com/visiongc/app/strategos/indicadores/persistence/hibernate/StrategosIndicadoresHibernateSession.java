@@ -461,6 +461,11 @@ public class StrategosIndicadoresHibernateSession
           condicionesConsulta = condicionesConsulta + "indicador." + fieldName + getCondicionConsulta(filtros.get(fieldName), "=") + " and ";
           hayCondicionesConsulta = true;
         }
+        else if (fieldName.equals("unidadId"))
+        {
+          condicionesConsulta = condicionesConsulta + "indicador." + fieldName + getCondicionConsulta(filtros.get(fieldName), "=") + " and ";
+          hayCondicionesConsulta = true;
+        }
         else if (fieldName.equals("tipoFuncion"))
         {
           condicionesConsulta = condicionesConsulta + "indicador.tipoFuncion" + getCondicionConsulta(filtros.get(fieldName), "=") + " and ";
@@ -733,6 +738,11 @@ public class StrategosIndicadoresHibernateSession
   public List<InsumoFormula> getInsumosFormula(Long indicadorId, Long serieId)
   {
     return session.createQuery("from InsumoFormula insfor where insfor.pk.padreId=:indicadorId and insfor.pk.serieId=:serieId").setLong("indicadorId", indicadorId.longValue()).setLong("serieId", serieId.longValue()).list();
+  }
+  
+  public List<InsumoFormula> getInsumoFormula(Long indicadorId, Long serieId)
+  {
+    return session.createQuery("from InsumoFormula insfor where insfor.pk.indicadorId=:indicadorId and insfor.pk.serieId=:serieId").setLong("indicadorId", indicadorId.longValue()).setLong("serieId", serieId.longValue()).list();
   }
   
   public Indicador getIndicadorBasico(Long indicadorId)

@@ -17,7 +17,8 @@ public class ConfiguracionIniciativa
   private String iniciativaIndicadorEficienciaNombre;
   private Boolean iniciativaIndicadorEficienciaMostrar;
   private Boolean iniciativaIndicadorAvanceAnteponer;
-  private Boolean IniciativaAdministracionPublica;
+  private Boolean iniciativaAdministracionPublica;
+  private String unidad;
   
   public ConfiguracionIniciativa() {}
   
@@ -121,11 +122,19 @@ public class ConfiguracionIniciativa
     this.iniciativaIndicadorEficienciaMostrar = iniciativaIndicadorEficienciaMostrar;
   }
 
-public Boolean getIniciativaAdministracionPublica() {
-	return IniciativaAdministracionPublica;
-}
+  public Boolean getIniciativaAdministracionPublica() {
+	return iniciativaAdministracionPublica;
+  }
 
-public void setIniciativaAdministracionPublica(Boolean iniciativaAdministracionPublica) {
-	IniciativaAdministracionPublica = iniciativaAdministracionPublica;
-}
+  public void setIniciativaAdministracionPublica(Boolean iniciativaAdministracionPublica) {
+	this.iniciativaAdministracionPublica = iniciativaAdministracionPublica;
+  }
+  
+  public String getUnidad() {
+	 return unidad;
+  }
+  
+  public void setUnidad(String unidad) {
+	 this.unidad = unidad;
+  }
 }

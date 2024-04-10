@@ -85,6 +85,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+				
 		super.execute(mapping, form, request, response);
 
 		String forward = mapping.getParameter();
@@ -179,7 +180,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	}
 
 	private void Importar(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm) throws Exception
-	{
+	{		
 	    StringBuffer log = new StringBuffer();
 
 	    VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
@@ -214,7 +215,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 
 	private void BuscarDatosTxt(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
-	{
+	{		
 	    int indice;
 	    String campo = "";
 	    int posicionCodigo = 0;
@@ -374,7 +375,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	}
 
 	private void BuscarDatosExcel2003(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
-	{
+	{		
 	    String campo = "";
 	    int posicionCodigo = 0;
 	    int posicionAno = 0;
@@ -507,7 +508,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	}
 
 	private void BuscarDatosExcel2010(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
-	{
+	{		
 	    String campo = "";
 	    Integer posicionCodigo = null;
 	    Integer posicionAno = null;
@@ -661,6 +662,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void BuscarDatosBd(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
+				
 		ActionMessages messages = getMessages(request);
 
 	    Connection cn;
@@ -777,6 +779,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private String getValue(XSSFCell hssfCell)
 	{
+				
 		String value = "";
 
 		if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING)
@@ -800,7 +803,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 	}
 
 	private String getValue(Cell celda)
-	{
+	{		
 		String value = "";
 
 		if (celda.getType() == CellType.LABEL)
@@ -826,6 +829,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void Importar(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, String[][] datos, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
+				
     	ActionMessages messages = getMessages(request);
 		if (datos.length == 0)
 		{
@@ -897,8 +901,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 					if (!todosOrganizacion)
 						servicioForm.setProperty("organizacionId", (String)request.getSession().getAttribute("organizacionId"));
 
-					StringBuffer logBefore = log;
-					System.out.print("\nAntes de ir a calcular");
+					StringBuffer logBefore = log;					
 					boolean respuesta = new com.visiongc.servicio.strategos.importar.ImportarManager(servicioForm.Get(), log, com.visiongc.servicio.web.importar.util.VgcMessageResources.getVgcMessageResources("StrategosWeb")).Ejecutar(datos);
 					log = logBefore;
 					String res = "";
@@ -951,6 +954,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void Verificar(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
+				
 	    if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypePlano().byteValue())
 	    	VerificarTxt(request, importarMedicionesForm);
 	    else if (importarMedicionesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeExcel().byteValue() && importarMedicionesForm.getExcelTipo().byteValue() == 0)
@@ -965,6 +969,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void ObtenerTablasBd(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
+				
 		String tablas = null;
 		ActionMessages messages = getMessages(request);
 
@@ -1077,6 +1082,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void VerificarTxt(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
+				
 	    String separador = importarMedicionesForm.getSeparador();
 	    int indice;
 	    String campo = "";
@@ -1151,6 +1157,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void VerificarExcel2007(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
+				
 	    String res;
 	    String campo;
 
@@ -1211,6 +1218,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private void VerificarExcel2010(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm)
 	{
+				
 	    String res;
 	    String campo;
 
@@ -1270,6 +1278,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private int Salvar(HttpServletRequest request, ImportarMedicionesForm importarMedicionesForm) throws Exception
 	{
+				
 		int respuesta = 10000;
 
 		ActionMessages messages = getMessages(request);
@@ -1329,6 +1338,7 @@ public class ImportarMedicionesSalvarAction extends VgcAction
 
 	private int Eliminar(Long id, HttpServletRequest request)
 	{
+				
 		int result = 10000;
 
 		ActionMessages messages = getMessages(request);

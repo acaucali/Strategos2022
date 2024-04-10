@@ -13,6 +13,9 @@ import org.apache.struts.action.ActionMapping;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
+import com.visiongc.app.strategos.model.util.Frecuencia;
+import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
+import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorForm;
 import com.visiongc.app.strategos.web.struts.indicadores.forms.GestionarIndicadoresForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
@@ -50,6 +53,8 @@ public class GestionarIndicadoresAction extends VgcAction
 				request.getSession().removeAttribute("GuardarIndicador");
 		}
 
+		
+						
 		if (claseId != null && claseId != 0L && gestionarIndicadoresForm != null && gestionarIndicadoresForm.getClaseId() != null && claseId.longValue() != gestionarIndicadoresForm.getClaseId().longValue())
 			gestionarIndicadoresForm.setPagina(1);
 		gestionarIndicadoresForm.setClaseId(claseId);
@@ -78,6 +83,43 @@ public class GestionarIndicadoresAction extends VgcAction
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
+		
+		Long selectFrecuencia = (request.getParameter("frecuencia") != null && request.getParameter("frecuencia") != "" && !request.getParameter("frecuencia").equals("0")) ? Long.parseLong(request.getParameter("frecuencia")) : null;
+		Long selectUnidadMedida = (request.getParameter("unidadMedida") != null && request.getParameter("unidadMedida") != "" && !request.getParameter("unidadMedida").equals("0")) ? Long.parseLong(request.getParameter("unidadMedida")) : null;		
+			
+		if(selectFrecuencia != null) {
+			if(selectFrecuencia == 1000)
+				selectFrecuencia = null;
+		}
+		
+		if (selectFrecuencia != null)
+			request.getSession().setAttribute("selectFrecuenciaIndicador", selectFrecuencia);
+		if (selectUnidadMedida != null)
+			request.getSession().setAttribute("selectUnidadMedidaIndicador", selectUnidadMedida);
+		
+		if (request.getParameter("limpiarFiltros") != null) {						
+			request.getSession().setAttribute("selectFrecuenciaIndicador", null);
+			request.getSession().setAttribute("selectUnidadMedidaIndicador", null);								
+		}
+		
+		Long selectFrecuenciaAttribute = null;
+		Long selectUnidadMedidaAttribute = null;
+		
+		if (request.getSession().getAttribute("selectFrecuenciaIndicador") != null)
+			selectFrecuenciaAttribute = (Long) request.getSession().getAttribute("selectFrecuenciaIndicador");
+		else 			
+			selectFrecuenciaAttribute = null;		
+		if (request.getSession().getAttribute("selectUnidadMedidaIndicador") != null)
+			selectUnidadMedidaAttribute = (Long) request.getSession().getAttribute("selectUnidadMedidaIndicador");
+		else 			
+			selectUnidadMedidaAttribute = null;
+		
+		gestionarIndicadoresForm.setFrecuencia( selectFrecuenciaAttribute);
+		gestionarIndicadoresForm.setUnidadId(selectUnidadMedidaAttribute);
+		
+		gestionarIndicadoresForm.setFrecuencias(Frecuencia.getFrecuencias());
+		setUnidadesMedida(gestionarIndicadoresForm, strategosIndicadoresService);
+		
 		Map<String, Object> filtros = new HashMap<String, Object>();
 
 		filtros.put("organizacionId", Long.toString(organizacionId));
@@ -86,6 +128,12 @@ public class GestionarIndicadoresAction extends VgcAction
 			filtros.put("nombre", gestionarIndicadoresForm.getFiltroNombre());
 		if (!mostrarTodas)
 			filtros.put("visible", true);
+		if (gestionarIndicadoresForm.getFrecuencia() != null)
+			filtros.put("frecuencia", gestionarIndicadoresForm.getFrecuencia().toString());		
+		if (gestionarIndicadoresForm.getUnidadId() != null)
+			filtros.put("unidadId", gestionarIndicadoresForm.getUnidadId().toString());
+		
+		
 
 		Integer totalPaginas = 29;
 		if (paginaIndicadores != null && paginaIndicadores.getFiltros() != null)
@@ -130,5 +178,14 @@ public class GestionarIndicadoresAction extends VgcAction
 		}
 
 		return mapping.findForward(forward);
+	
 	}
+	
+	 private void setUnidadesMedida(GestionarIndicadoresForm gestionarIndicadoresForm, StrategosIndicadoresService strategosIndicadoresService) {
+		    StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService(strategosIndicadoresService);
+
+		    gestionarIndicadoresForm.setUnidadesMedida(strategosUnidadesService.getUnidadesMedida(0, 0, "nombre", "asc", false, null).getLista());
+
+		    strategosUnidadesService.close();
+		  }
 }

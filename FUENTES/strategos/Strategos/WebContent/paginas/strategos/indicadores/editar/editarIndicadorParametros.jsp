@@ -150,7 +150,8 @@
 			<logic:equal name="editarIndicadorForm" property="desdeIniciativasPlanes" scope="session" value="true">
 				<bean:define scope="page" id="valorInicialCeroDisabled" value="true"></bean:define>
 			</logic:equal>
-			<html:checkbox disabled="<%= ((new Boolean(iniciativaDisabled)).booleanValue() || (new Boolean(valorInicialCeroDisabled)).booleanValue() || Boolean.parseBoolean(bloquearForma)) %>" styleClass="botonSeleccionMultiple" property="valorInicialCero">
+			<!--  || (new Boolean(valorInicialCeroDisabled)).booleanValue()  -->
+			<html:checkbox disabled="<%= ((new Boolean(iniciativaDisabled)).booleanValue() || Boolean.parseBoolean(bloquearForma)) %>" styleClass="botonSeleccionMultiple" property="valorInicialCero">
 			</html:checkbox><vgcutil:message key="jsp.editarindicador.ficha.asignarcerovalorinicialcomienzoejercicio" />
 		</td>
 	</tr>

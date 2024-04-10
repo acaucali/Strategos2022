@@ -70,7 +70,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	private boolean hayAlertaAmarilla = false;
 	private boolean hayUnidadMedida = false;
 	private boolean hayNumeroActividad = false;
-	
+	private boolean hayCodigoEnlace = false;
+	private boolean hayPeso = false; 
 
 	@Override
 	public void updateNavigationBar(NavigationBar arg0, String arg1, String arg2) {
@@ -80,7 +81,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		super.execute(mapping, form, request, response);
-
+		
 		String forward = mapping.getParameter();
 
 		ImportarActividadesForm importarActividadesForm = (ImportarActividadesForm) form;
@@ -98,6 +99,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 				hayAlertaAmarilla = false;
 				hayUnidadMedida = false;
 				hayNumeroActividad = false;
+				hayCodigoEnlace = false;
+				hayPeso = false;
 
 				Verificar(request, importarActividadesForm);
 
@@ -164,7 +167,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	}
 
 	private void Importar(HttpServletRequest request, ImportarActividadesForm importarActividadesForm)
-			throws Exception {
+			throws Exception {		
 		StringBuffer log = new StringBuffer();
 
 		VgcMessageResources messageResources = VgcResourceManager.getMessageResources("StrategosWeb");
@@ -197,6 +200,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 
 	private void BuscarDatosExcel2003(HttpServletRequest request, StringBuffer log,
 			VgcMessageResources messageResources, ImportarActividadesForm importarActividadesForm) throws Exception {
+				
 		String campo = "";
 		int posicionCodigoIni = 0;
 		int posicionNombre = 0;
@@ -207,6 +211,9 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 		int posicionAlertaAmarilla = 0;
 		int posicionUnidadMedida = 0;
 		int posicionNumeroActividad = 0;
+		int posicionCodigoEnlace = 0;
+		int posicionPeso = 0;
+		
 		int filas = 0;
 
 		String res = "";
@@ -245,16 +252,20 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						posicionUnidadMedida = j + 1;
 					else if (campo.equalsIgnoreCase("NUMERO ACTIVIDAD"))
 						posicionNumeroActividad = j + 1;
+					else if (campo.equalsIgnoreCase("CODIGO DE ENLACE"))
+						posicionNumeroActividad = j + 1;
+					else if (campo.equalsIgnoreCase("PESO"))
+						posicionNumeroActividad = j + 1;
 
 					if (posicionCodigoIni != 0 && posicionNombre != 0 && posicionDescripcion != 0
 							&& posicionFechaInicio != 0 && posicionFechaCulminacion != 0 && posicionAlertaVerde != 0
-							&& posicionAlertaAmarilla != 0 && posicionUnidadMedida != 0 && posicionNumeroActividad != 0)
+							&& posicionAlertaAmarilla != 0 && posicionUnidadMedida != 0 && posicionNumeroActividad != 0 && posicionCodigoEnlace != 0 && posicionPeso != 0)
 						break;
 				}
 
 				if (posicionCodigoIni != 0 && posicionNombre != 0 && posicionDescripcion != 0
 						&& posicionFechaInicio != 0 && posicionFechaCulminacion != 0 && posicionAlertaVerde != 0
-						&& posicionAlertaAmarilla != 0 && posicionUnidadMedida != 0 && posicionNumeroActividad != 0)
+						&& posicionAlertaAmarilla != 0 && posicionUnidadMedida != 0 && posicionNumeroActividad != 0 && posicionCodigoEnlace != 0 && posicionPeso != 0)
 					break;
 			}
 
@@ -262,7 +273,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 
 			if (posicionCodigoIni != 0 && posicionNombre != 0 && posicionDescripcion != 0 && posicionFechaInicio != 0
 					&& posicionFechaCulminacion != 0 && posicionAlertaVerde != 0 && posicionAlertaAmarilla != 0 && posicionUnidadMedida != 0 && posicionNumeroActividad != 0) {
-				String[][] datos = new String[filas][9];
+				String[][] datos = new String[filas][11];
 
 				String codigoIniArchivo = "";
 				String nombreArchivo = "";
@@ -273,6 +284,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 				String alertaAmarillaArchivo = "";
 				String unidadMedidaArchivo = "";
 				String numeroActividadArchivo = "";
+				String codigoEnlaceArchivo = "" ;
+				String pesoArchivo = "";
 
 				// Lo primero es leer un workbook que representa todo el documento XLS
 				workbook = Workbook.getWorkbook(archivo.getInputStream());
@@ -293,6 +306,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 					alertaAmarillaArchivo = "";
 					unidadMedidaArchivo = "";
 					numeroActividadArchivo = "";
+					codigoEnlaceArchivo = "";
+					pesoArchivo = "";
 
 					for (int j = 0, k = sheet.getColumns(); j < k; j++) {
 						celda = sheet.getCell(j, r);
@@ -315,18 +330,22 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						else if ((j + 1) == posicionUnidadMedida)
 							unidadMedidaArchivo = campo;
 						else if ((j + 1) == posicionNumeroActividad)
-							numeroActividadArchivo = campo;						
+							numeroActividadArchivo = campo;		
+						else if ((j + 1) == posicionCodigoEnlace)
+							codigoEnlaceArchivo = campo;
+						else if ((j + 1) == posicionPeso)
+							pesoArchivo = campo;
 
 						if (!codigoIniArchivo.equals("") && !nombreArchivo.equals("") && !descripcionArchivo.equals("")
 								&& !fechaInicioArchivo.equals("") && !fechaCulminacionArchivo.equals("")
-								&& !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && numeroActividadArchivo.equals(""))
+								&& !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && numeroActividadArchivo.equals("") && codigoEnlaceArchivo.equals("") && pesoArchivo.equals(""))
 							break;
 					}
 
 					if (!codigoIniArchivo.equals("CODIGO PROYECTO") && !nombreArchivo.equals("")
 							&& !descripcionArchivo.equals("") && !fechaInicioArchivo.equals("")
 							&& !fechaCulminacionArchivo.equals("") && !alertaVerdeArchivo.equals("")
-							&& !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && numeroActividadArchivo.equals("")) {
+							&& !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && numeroActividadArchivo.equals("") && codigoEnlaceArchivo.equals("") && pesoArchivo.equals("")) {
 
 						datos[filas][0] = codigoIniArchivo;
 						datos[filas][1] = nombreArchivo;
@@ -337,6 +356,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						datos[filas][6] = alertaAmarillaArchivo;
 						datos[filas][7] = unidadMedidaArchivo;
 						datos[filas][8] = numeroActividadArchivo;
+						datos[filas][9] = codigoEnlaceArchivo;
+						datos[filas][10] = pesoArchivo;
 						
 						
 
@@ -375,8 +396,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	}
 	
 	private void BuscarDatosExcel2010(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources, ImportarActividadesForm importarActividadesForm) throws Exception
-	{
-    	    	
+	{		
 	    String campo = "";
 	    
 	    Integer posicionCodigoIni = null;
@@ -388,6 +408,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	    Integer posicionAlertaAmarilla = null;
 	    Integer posicionUnidadMedida = null;
 	    Integer posicionNumeroActividad = null;
+	    Integer posicionCodigoEnlace = null;
+	    Integer posicionPeso = null;
 	    
 	    Integer filas = 0;
 	    Integer filaError = null;
@@ -430,19 +452,23 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						posicionUnidadMedida = hssfCell.getColumnIndex();
 					else if (campo.equalsIgnoreCase("NUMERO ACTIVIDAD"))
 						posicionNumeroActividad = hssfCell.getColumnIndex();
+					else if (campo.equalsIgnoreCase("CODIGO DE ENLACE"))
+						posicionCodigoEnlace = hssfCell.getColumnIndex();
+					else if (campo.equalsIgnoreCase("PESO"))
+						posicionPeso = hssfCell.getColumnIndex();
 					
 
-					if ( posicionCodigoIni != null && posicionNombre != null && posicionDescripcion != null && posicionFechaInicio != null && posicionFechaCulminacion != null && posicionAlertaVerde != null && posicionAlertaAmarilla != null && posicionUnidadMedida != null && posicionNumeroActividad != null )
+					if ( posicionCodigoIni != null && posicionNombre != null && posicionDescripcion != null && posicionFechaInicio != null && posicionFechaCulminacion != null && posicionAlertaVerde != null && posicionAlertaAmarilla != null && posicionUnidadMedida != null && posicionNumeroActividad != null && posicionCodigoEnlace != null && posicionPeso != null)
 						break;
             	}
-            	if ( posicionCodigoIni != null && posicionNombre != null && posicionDescripcion != null && posicionFechaInicio != null && posicionFechaCulminacion != null && posicionAlertaVerde != null && posicionAlertaAmarilla != null && posicionUnidadMedida != null && posicionNumeroActividad != null )
+            	if ( posicionCodigoIni != null && posicionNombre != null && posicionDescripcion != null && posicionFechaInicio != null && posicionFechaCulminacion != null && posicionAlertaVerde != null && posicionAlertaAmarilla != null && posicionUnidadMedida != null && posicionNumeroActividad != null && posicionCodigoEnlace != null && posicionPeso != null)
 					break;
             }	    		    
 	    	
-	    	if ( posicionCodigoIni != null && posicionNombre != null && posicionDescripcion != null && posicionFechaInicio != null && posicionFechaCulminacion != null && posicionAlertaVerde != null && posicionAlertaAmarilla != null && posicionUnidadMedida != null && posicionNumeroActividad != null )
+	    	if ( posicionCodigoIni != null && posicionNombre != null && posicionDescripcion != null && posicionFechaInicio != null && posicionFechaCulminacion != null && posicionAlertaVerde != null && posicionAlertaAmarilla != null && posicionUnidadMedida != null && posicionNumeroActividad != null && posicionCodigoEnlace != null && posicionPeso != null)
 	    	{
 	    			    		
-	    		String[][] datos = new String[filas][9];
+	    		String[][] datos = new String[filas][11];
 		    	
 		    	String codigoIniArchivo = "";
 		    	String nombreArchivo = "";
@@ -453,6 +479,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 		    	String alertaAmarillaArchivo = "";
 		    	String unidadMedidaArchivo = "";
 		    	String numeroActividadArchivo = "";
+		    	String codigoEnlaceArchivo = "";
+		    	String pesoArchivo = "";
 		    	
 
 		    	// Lo primero es leer un workbook que representa todo el documento XLS
@@ -474,6 +502,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 		    		alertaAmarillaArchivo = "";	
 		    		unidadMedidaArchivo = "";
 		    		numeroActividadArchivo = "";
+		    		codigoEnlaceArchivo = "";
+		    		pesoArchivo = "";
 		    		
 			    	filaError = hssfRow.getRowNum();
 			    	for (Iterator<org.apache.poi.ss.usermodel.Cell> j = hssfRow.cellIterator(); j.hasNext(); )
@@ -536,12 +566,21 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 							else if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC)
 								numeroActividadArchivo = ((Integer) ((int) hssfCell.getNumericCellValue())).toString();
 						}	
+						else if (hssfCell.getColumnIndex() == posicionCodigoEnlace)													{
+							codigoEnlaceArchivo = hssfCell.toString();	
+						}
+						else if (hssfCell.getColumnIndex() == posicionPeso) {
+							if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING)
+								pesoArchivo = hssfCell.toString();
+							else if (hssfCell.getCellType() == org.apache.poi.ss.usermodel.Cell.CELL_TYPE_NUMERIC)
+								pesoArchivo = ((Integer) ((int) hssfCell.getNumericCellValue())).toString();
+						}
 														
-						if (!codigoIniArchivo.equals("") && !nombreArchivo.equals("") && !descripcionArchivo.equals("") && !fechaInicioArchivo.equals("") && !fechaCulminacionArchivo.equals("") && !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && !numeroActividadArchivo.equals(""))
+						if (!codigoIniArchivo.equals("") && !nombreArchivo.equals("") && !descripcionArchivo.equals("") && !fechaInicioArchivo.equals("") && !fechaCulminacionArchivo.equals("") && !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && !numeroActividadArchivo.equals("") && !codigoEnlaceArchivo.equals("") && !pesoArchivo.equals(""))
 							break;
 					}			    	
 			    	
-			    	if (!codigoIniArchivo.equals("CODIGO PROYECTO") && !nombreArchivo.equals("") && !descripcionArchivo.equals("") && !fechaInicioArchivo.equals("") && !fechaCulminacionArchivo.equals("") && !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && !numeroActividadArchivo.equals(""))
+			    	if (!codigoIniArchivo.equals("CODIGO PROYECTO") && !nombreArchivo.equals("") && !descripcionArchivo.equals("") && !fechaInicioArchivo.equals("") && !fechaCulminacionArchivo.equals("") && !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("") && !unidadMedidaArchivo.equals("") && !numeroActividadArchivo.equals("") && !codigoEnlaceArchivo.equals("") && !pesoArchivo.equals(""))
 					{													    	
 							
 						datos[fila][0] = codigoIniArchivo;
@@ -553,6 +592,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						datos[fila][6] = alertaAmarillaArchivo;
 						datos[fila][7] = unidadMedidaArchivo;
 						datos[fila][8] = numeroActividadArchivo;
+						datos[fila][9] = codigoEnlaceArchivo;
+						datos[fila][10] = pesoArchivo;
 												
   						fila++;
 					}
@@ -605,6 +646,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	}
 
 	private String getValue(Cell celda) {
+		
+		
 		String value = "";
 
 		if (celda.getType() == CellType.LABEL) {
@@ -624,7 +667,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	}
 
 	private int Salvar(HttpServletRequest request, ImportarActividadesForm importarActividadesForm) throws Exception
-	{
+	{		
     	int respuesta = 10000;
     	
     	ActionMessages messages = getMessages(request);
@@ -678,7 +721,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	
 	private void Importar(HttpServletRequest request, StringBuffer log, VgcMessageResources messageResources,
 			String[][] datos, ImportarActividadesForm importarActividadesForm) throws Exception {
-
+		
 		ActionMessages messages = getMessages(request);
 		if (datos.length == 0) {
 			String res = "jsp.asistente.importacion.fin.importar.archivo.empthy";
@@ -760,7 +803,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 					servicioForm.setProperty("tomarPeriodosSinMedicionConValorCero", ((Boolean) (false)).toString());
 					servicioForm.setProperty("activarSheduler", ((Boolean) (true)).toString());
 					servicioForm.setProperty("unidadTiempo", ((Integer) (3)).toString());
-					servicioForm.setProperty("numeroEjecucion", ((Integer) (1)).toString());
+					servicioForm.setProperty("numeroEjecucion", ((Integer) (1)).toString());					
 					servicioForm.setProperty("usuarioId", usuario.getUsuarioId().toString());
 					if (!todosOrganizacion)
 						servicioForm.setProperty("organizacionId",
@@ -770,7 +813,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 					boolean respuesta = new com.visiongc.servicio.strategos.importar.ImportarManager(servicioForm.Get(),
 							log, com.visiongc.servicio.web.importar.util.VgcMessageResources
 									.getVgcMessageResources("StrategosWeb"))
-							.EjecutarIniciativa(datos, usuario);
+							.EjecutarActividad(datos, usuario);
 					log = logBefore;
 					String res = "";
 
@@ -809,7 +852,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	}
 
 	private void Verificar(HttpServletRequest request, ImportarActividadesForm importarActividadesForm) {
-
+		
 		if (importarActividadesForm.getTipoFuente().byteValue() == ImportacionType.getImportacionTypeExcel().byteValue()
 				&& importarActividadesForm.getExcelTipo().byteValue() == 0)
 			VerificarExcel2007(request, importarActividadesForm);
@@ -820,7 +863,7 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 
 	private void VerificarExcel2007(HttpServletRequest request, ImportarActividadesForm importarActividadesForm) {
 		String res;
-		String campo;
+		String campo;		
 
 		try {
 			// Lo primero es leer un workbook que representa todo el documento XLS
@@ -858,14 +901,18 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						hayUnidadMedida = true;
 					else if (!hayNumeroActividad && campo.equalsIgnoreCase("NUMERO ACTIVIDAD"))
 						hayNumeroActividad = true;
+					else if (!hayCodigoEnlace && campo.equalsIgnoreCase("CODIGO DE ENLACE"))
+						hayCodigoEnlace = true;
+					else if (!hayPeso && campo.equalsIgnoreCase("PESO"))
+						hayPeso = true;
 
 					if (hayCodigoIniciativa && hayNombre && hayDescripcion && hayFechaInicio && hayFechaCulminacion
-							&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad)
+							&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad && hayCodigoEnlace && hayPeso)
 						break;
 				}
 
 				if (hayCodigoIniciativa && hayNombre && hayDescripcion && hayFechaInicio && hayFechaCulminacion
-						&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad)
+						&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad && hayCodigoEnlace && hayPeso)
 					break;
 			}
 
@@ -880,6 +927,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 			res = res + "ALERTA VERDE=" + (hayAlertaVerde ? "true" : "false") + ",";
 			res = res + "ALERTA AMARILLA=" + (hayAlertaAmarilla ? "true" : "false") + ",";
 			res = res + "UNIDAD MEDIDA=" + (hayUnidadMedida ? "true" : "false") + ",";
+			res = res + "CODIGO DE ENLACE=" + (hayCodigoEnlace ? "true" : "false") + ",";
+			res = res + "PESO=" + (hayPeso ? "true" : "false") + ",";
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -893,7 +942,6 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 	private void VerificarExcel2010(HttpServletRequest request, ImportarActividadesForm importarActividadesForm) {
 		String res;
 		String campo;
-
 		try {
 			// Lo primero es leer un workbook que representa todo el documento XLS
 			FormFile archivo = (FormFile) importarActividadesForm.getMultipartRequestHandler().getFileElements()
@@ -932,14 +980,18 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 						hayUnidadMedida = true;
 					else if (!hayNumeroActividad && campo.equalsIgnoreCase("NUMERO ACTIVIDAD"))
 						hayNumeroActividad = true;
+					else if (!hayCodigoEnlace && campo.equalsIgnoreCase("CODIGO DE ENLACE"))
+						hayCodigoEnlace = true;
+					else if (!hayPeso && campo.equalsIgnoreCase("PESO"))
+						hayPeso = true;
 
 					if (hayCodigoIniciativa && hayNombre && hayDescripcion && hayFechaInicio && hayFechaCulminacion
-							&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad)
+							&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad && hayCodigoEnlace && hayPeso)
 						break;
 				}
 
 				if (hayCodigoIniciativa && hayNombre && hayDescripcion && hayFechaInicio && hayFechaCulminacion
-						&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad)
+						&& hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayNumeroActividad && hayCodigoEnlace && hayPeso)
 					break;
 			}
 
@@ -952,6 +1004,8 @@ public class ImportarActividadesSalvarAction extends VgcAction {
 			res = res + "ALERTA VERDE=" + (hayAlertaVerde ? "true" : "false") + ",";
 			res = res + "ALERTA AMARILLA=" + (hayAlertaAmarilla ? "true" : "false") + ",";
 			res = res + "UNIDAD MEDIDA=" + (hayUnidadMedida ? "true" : "false") + ",";
+			res = res + "CODIGO DE ENLACE=" + (hayCodigoEnlace ? "true" : "false") + ",";
+			res = res + "PESO=" + (hayPeso ? "true" : "false") + ",";
 
 		} catch (Exception e) {
 			e.printStackTrace();

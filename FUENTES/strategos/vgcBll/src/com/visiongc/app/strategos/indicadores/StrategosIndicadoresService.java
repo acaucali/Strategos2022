@@ -112,5 +112,5 @@ public abstract interface StrategosIndicadoresService
   
   public abstract Formula getFormulaIndicador(Long paramLong1, Long parmLong2);
   
-  
+  public abstract List<InsumoFormula> getInsumoFormula(Long indicadorId);
 }

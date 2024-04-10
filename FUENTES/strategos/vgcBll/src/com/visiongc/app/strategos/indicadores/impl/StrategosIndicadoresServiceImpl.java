@@ -802,6 +802,13 @@ public class StrategosIndicadoresServiceImpl
     return resultado;
   }
   
+  public List<InsumoFormula>  getInsumoFormula(Long indicadorId) {
+	  
+	  List<InsumoFormula> insumos = persistenceSession.getInsumoFormula(indicadorId, 0L);
+	  
+	  return insumos;
+  }
+  
   private InsumoFormula getPrimeraReferenciaCircular(Long indicadorId, Long serieId)
   {
     List<InsumoFormula> insumos = persistenceSession.getInsumosFormula(indicadorId, serieId);
@@ -825,6 +832,7 @@ public class StrategosIndicadoresServiceImpl
   private InsumoFormula getPrimeraReferenciaCircularAuxiliar(Long formulaIndicadorId, InsumoFormula insumoFormula)
   {
     List insumos = persistenceSession.getInsumosFormula(insumoFormula.getPk().getIndicadorId(), insumoFormula.getPk().getSerieId());
+        
     
     for (Iterator i = insumos.iterator(); i.hasNext();)
     {

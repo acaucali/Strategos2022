@@ -20,6 +20,43 @@ public class GestionarIndicadoresForm extends VisorListaForm
 	private Boolean hayTransacciones;
 	private List<Transaccion> transacciones;
 	private Long claseId;
+	private Long frecuencia;
+	private List<?> unidadesMedida;
+	private List<?> frecuencias;
+	private Long unidadId;
+
+
+	public Long getFrecuencia() {
+		return frecuencia;
+	}
+
+	public void setFrecuencia(Long frecuencia) {
+		this.frecuencia = frecuencia;
+	}
+
+	public List<?> getUnidadesMedida() {
+		return unidadesMedida;
+	}
+
+	public void setUnidadesMedida(List<?> unidadesMedida) {
+		this.unidadesMedida = unidadesMedida;
+	}
+
+	public List<?> getFrecuencias() {
+		return frecuencias;
+	}
+
+	public void setFrecuencias(List<?> frecuencias) {
+		this.frecuencias = frecuencias;
+	}
+
+	public Long getUnidadId() {
+		return unidadId;
+	}
+
+	public void setUnidadId(Long unidadId) {
+		this.unidadId = unidadId;
+	}
 
 	public String getFiltroNombre()
 	{

@@ -14,6 +14,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -27,6 +31,7 @@ import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Formula;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.IndicadorAsignarInventario;
+import com.visiongc.app.strategos.indicadores.model.InsumoFormula;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
 import com.visiongc.app.strategos.indicadores.model.MedicionPK;
 import com.visiongc.app.strategos.indicadores.model.SerieIndicador;
@@ -91,7 +96,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
       return getForwardBack(request, 1, true);
     }
     List<Indicador> indicadores = new ArrayList<Indicador>();
-    List<Medicion> medicionesEditadas = new ArrayList();
+    List<Medicion> medicionesEditadas = new ArrayList();    
+    List<Long> indicadoresPadre = new ArrayList();
+    List<Integer> periodos = new ArrayList();
     Map<?, ?> mapaParametros = request.getParameterMap();
 
     List<PryActividad> actividades = new ArrayList();
@@ -104,7 +111,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
     Integer periodoMaximo = Integer.valueOf(0);
     String serieId = null;
     String indicadorId = null;
-    Indicador indicador = null;
+    Indicador indicador = null;    
+    int ano = 0;
+    int periodo = 0;
     for (Iterator<?> iter = mapaParametros.keySet().iterator(); iter.hasNext();)
     {
       String nombreParametro = (String)iter.next();
@@ -130,8 +139,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
           serieId = nombreParametro.substring(indice1, indice2).trim();
           indice1 = indice2 + 7;
           indice2 = nombreParametro.indexOf("ano");
-          int periodo = Integer.parseInt(nombreParametro.substring(indice1, indice2).trim());
-          int ano = Integer.parseInt(nombreParametro.substring(indice2 + 3).trim());
+          periodo = Integer.parseInt(nombreParametro.substring(indice1, indice2).trim());
+          ano = Integer.parseInt(nombreParametro.substring(indice2 + 3).trim());
           if (ano > anoMaximo.intValue()) {
             anoMaximo = ano;
           }
@@ -149,22 +158,36 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
               fechaFinal = null;
             }
           }
-          Double valor = null;
+          Double valor = null;          
           indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(indicadorId));
-
+                             
           if (!indicadores.contains(indicador)) {
 		       indicadores.add(indicador);
 		  }
-
-
 
           if (((!valorNuevo.equals("")) && (!indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoNominal()))) || (indicador.getNaturaleza().equals(Naturaleza.getNaturalezaCualitativoOrdinal()))) {
             valor = new Double(VgcFormatter.parsearNumeroFormateado(valorNuevo));
           } else if ((valorNuevo != null) && (!valorNuevo.equals(""))) {
             valor = Double.valueOf(Double.parseDouble(valorNuevo));
           }
-          Medicion medicionEditada = new Medicion(new MedicionPK(new Long(indicadorId), new Integer(ano), new Integer(periodo), new Long(serieId)), valor, new Boolean(false));
+
+          if(strategosIndicadoresService.esInsumo(new Long(indicadorId))) {          
+        	  List<InsumoFormula> insumos = strategosIndicadoresService.getInsumoFormula(new Long(indicadorId));  	    
+        	  	for (Iterator<InsumoFormula> i = insumos.iterator(); i.hasNext();)
+        	  	{
+        	  		InsumoFormula insumo = (InsumoFormula)i.next();  	              	  	        	          	  	
+        	  		if(!indicadoresPadre.contains(insumo.getPk().getPadreId())) {
+        	  			indicadoresPadre.add(insumo.getPk().getPadreId());
+        	  		}        	  		
+        	  	}                            	  	
+          }
+          
+          if(!periodos.contains(periodo)) {
+	  			periodos.add(periodo);	  		
+          }             
+          Medicion medicionEditada = new Medicion(new MedicionPK(new Long(indicadorId), new Integer(ano), new Integer(periodo), new Long(serieId)), valor, new Boolean(false));          
           medicionesEditadas.add(medicionEditada);
+                              
         }
         if ((desdePlanificacion) && (serieId != null) && (indicadorId != null))
         {
@@ -256,7 +279,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
     }
     if ((respuesta == 10000) && (medicionesEditadas.size() > 0)) {
     	registrarAuditoriaMedicion(indicadores, strategosMedicionesService, strategosIndicadoresService, editarMedicionesForm, getUsuarioConectado(request), medicionesEditadas, request);
-    	respuesta = strategosMedicionesService.saveMediciones(medicionesEditadas, editarMedicionesForm.getPlanId(), getUsuarioConectado(request), new Boolean(true), new Boolean(true));
+    	respuesta = strategosMedicionesService.saveMediciones(medicionesEditadas, editarMedicionesForm.getPlanId(), getUsuarioConectado(request), new Boolean(true), new Boolean(true));    	
 
     }
     if ((respuesta == 10000) && (medicionesEditadas.size() > 0)) {
@@ -488,6 +511,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 
     if(medicionesEditadas.size() >0){
     	validarInventarioNegativo(indicadores, strategosInsumoService, strategosMedicionesService, strategosIndicadoresService, messages,  getUsuarioConectado(request), medicionesEditadas, request, editarMedicionesForm);
+    	if(indicadoresPadre.size() >0)
+    		calcularTotal(indicadoresPadre, periodos, ano, editarMedicionesForm.getPlanId(), getUsuarioConectado(request));
     }
     saveMessages(request, messages);
     if (forward.equals("exito"))
@@ -498,6 +523,54 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
       return getForwardBack(request, 1, true);
     }
     return mapping.findForward(forward);
+  }
+  
+  public void calcularTotal(List<Long> indicadorId, List<Integer> periodos,int ano, Long planId, Usuario usuario) {
+	  	  	  
+	  Double sumatoria = 0.0;
+	  List<Medicion> medicionesEditadas = new ArrayList();  
+	  StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
+	  StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
+	  
+	  
+	  for (Iterator<Long> iter = indicadorId.iterator(); iter.hasNext();)
+      {
+        Long padreId = iter.next();
+        Indicador indicador = strategosIndicadoresService.getIndicador(padreId);   
+              
+        Set<SerieIndicador> seriesIndicador = indicador.getSeriesIndicador();        
+        for (Iterator<?> i = seriesIndicador.iterator(); i.hasNext();)
+        {
+          SerieIndicador serie = (SerieIndicador)i.next();
+          if (serie.getPk().getSerieId().byteValue() == SerieTiempo.getSerieProgramadoId())
+          {        	          	 
+        	  Formula formula = strategosIndicadoresService.getFormulaIndicador(padreId, 0L);       
+		      for (Integer periodo : periodos)
+		      {
+		    	  sumatoria = 0.0;
+		    	  for (Iterator<InsumoFormula> iterInsumos = formula.getInsumos().iterator(); iterInsumos.hasNext();)
+		          {
+		    		  InsumoFormula insumo = iterInsumos.next();              
+		    		  List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(insumo.getPk().getIndicadorId(), SerieTiempo.getSerieProgramadoId(), ano, ano, periodo, periodo);
+		              
+		    		  if(mediciones.size() > 0 ) {
+		    			  Medicion medicion = mediciones.get(0);
+		        			
+		    			  if(sumatoria != 0.0)
+		    				  sumatoria = sumatoria + medicion.getValor();
+		    			  else
+		    				  sumatoria = medicion.getValor();              
+		        		}		              
+		           }		    
+		    	  if(sumatoria != 0.0) {
+		    	  	Medicion medicionEditada = new Medicion(new MedicionPK(padreId, new Integer(ano), new Integer(periodo), SerieTiempo.getSerieProgramadoId()), sumatoria, new Boolean(false));          
+		            medicionesEditadas.add(medicionEditada);
+		    	  }
+		        }            
+            }
+        }
+      }	  
+	  strategosMedicionesService.saveMediciones(medicionesEditadas, planId, usuario, new Boolean(true), new Boolean(true));
   }
 
   public void validarInventarioNegativo(List<Indicador> indicadores, StrategosIndicadorAsignarInventarioService strategosInsumoService, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService , ActionMessages messages,Usuario usuario, List<Medicion> medicionesEditadas, HttpServletRequest request,EditarMedicionesForm editarMedicionesform) throws Exception{

@@ -728,11 +728,12 @@ public class StrategosPryActividadesServiceImpl extends StrategosServiceImpl
 	}
 
 	public long crearClaseIndicador(long proyectoId, String nombre, Usuario usuario) {
-
+		
 		StrategosIniciativasService strategosIniciativaService = StrategosServiceFactory.getInstance()
 				.openStrategosIniciativasService();
 
 		Iniciativa iniciativa = strategosIniciativaService.getIniciativaByProyecto(proyectoId);
+				
 
 		ClaseIndicadores claseActvidad = new ClaseIndicadores();
 		claseActvidad.setClaseId(new Long(0L));
@@ -751,7 +752,7 @@ public class StrategosPryActividadesServiceImpl extends StrategosServiceImpl
 	}
 
 	public long crearIndicador(long proyectoId, long claseId, String nombre, long unidadId, Double zonaVerde,
-			Double zonaAmarilla, Usuario usuario) {
+			Double zonaAmarilla, String codigoEnlace, Usuario usuario) {
 
 		Indicador indicador = new Indicador();
 
@@ -784,7 +785,7 @@ public class StrategosPryActividadesServiceImpl extends StrategosServiceImpl
 		indicador.setNaturaleza((byte) 0);
 		indicador.setFrecuencia(iniciativa.getFrecuencia());
 		indicador.setTipoCargaMedicion((byte) 0);
-		indicador.setCodigoEnlace("");
+		indicador.setCodigoEnlace(codigoEnlace);
 		indicador.setEnlaceParcial("");
 
 		indicador.setUnidadId(unidadId);

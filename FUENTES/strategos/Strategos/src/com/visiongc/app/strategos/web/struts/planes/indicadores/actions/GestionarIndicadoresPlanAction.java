@@ -16,6 +16,7 @@ import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
+import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.planes.StrategosMetasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.IndicadorEstado;
@@ -30,12 +31,16 @@ import com.visiongc.app.strategos.planes.model.util.TipoIndicadorEstado;
 import com.visiongc.app.strategos.planes.model.util.TipoMeta;
 import com.visiongc.app.strategos.servicio.Servicio;
 import com.visiongc.app.strategos.servicio.Servicio.EjecutarTipo;
+import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
+import com.visiongc.app.strategos.web.struts.indicadores.forms.GestionarIndicadoresForm;
 import com.visiongc.app.strategos.web.struts.planes.forms.GestionarPlanForm;
 import com.visiongc.app.strategos.web.struts.planes.indicadores.forms.GestionarIndicadoresPlanForm;
 import com.visiongc.app.strategos.web.struts.planes.perspectivas.forms.GestionarPerspectivasForm;
 import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 public class GestionarIndicadoresPlanAction extends VgcAction
 {
@@ -50,13 +55,52 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.execute(mapping, form, request, response);
-		String forward = mapping.getParameter();
+		String forward = mapping.getParameter();				
 
 		GestionarIndicadoresPlanForm gestionarIndicadoresPlanForm = (GestionarIndicadoresPlanForm)form;
 		GestionarPlanForm gestionarPlanForm = (GestionarPlanForm)request.getSession().getAttribute("gestionarPlanForm");
 		GestionarPerspectivasForm gestionarPerspectivasForm = (GestionarPerspectivasForm)request.getSession().getAttribute("gestionarPerspectivasForm");
+		
+		StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService();
+		Map<String, String> filtrosUnidades = new HashMap();
+		PaginaLista paginaUnidades = strategosUnidadesService.getUnidadesMedida(0, 0, "unidadId", "asc", true, filtrosUnidades);
+		strategosUnidadesService.close();
+		
+		
+				
+		Long selectFrecuencia = (request.getParameter("frecuencia") != null && request.getParameter("frecuencia") != "" && !request.getParameter("frecuencia").equals("0")) ? Long.parseLong(request.getParameter("frecuencia")) : null;
+		Long selectUnidadMedida = (request.getParameter("unidadMedida") != null && request.getParameter("unidadMedida") != "" && !request.getParameter("unidadMedida").equals("0")) ? Long.parseLong(request.getParameter("unidadMedida")) : null;		
+								
+		
+		if (selectFrecuencia != null)
+			request.getSession().setAttribute("selectFrecuenciaIndicador", selectFrecuencia);
+		if (selectUnidadMedida != null)
+			request.getSession().setAttribute("selectUnidadMedidaIndicador", selectUnidadMedida);
+		
+		if (request.getParameter("limpiarFiltros") != null) {						
+			request.getSession().setAttribute("selectFrecuenciaIndicador", null);
+			request.getSession().setAttribute("selectUnidadMedidaIndicador", null);								
+		}
+		
+		Long selectFrecuenciaAttribute = null;
+		Long selectUnidadMedidaAttribute = null;
+		
+		if (request.getSession().getAttribute("selectFrecuenciaIndicador") != null)
+			selectFrecuenciaAttribute = (Long) request.getSession().getAttribute("selectFrecuenciaIndicador");
+		else 		
+			selectFrecuenciaAttribute = null;		
+		if (request.getSession().getAttribute("selectUnidadMedidaIndicador") != null)
+			selectUnidadMedidaAttribute = (Long) request.getSession().getAttribute("selectUnidadMedidaIndicador");
+		else 	
+			selectUnidadMedidaAttribute = null;
+		
+				
+		gestionarIndicadoresPlanForm.setFrecuencia( selectFrecuenciaAttribute);
+		gestionarIndicadoresPlanForm.setUnidadId(selectUnidadMedidaAttribute);
+						
 		gestionarIndicadoresPlanForm.setVerForma(getPermisologiaUsuario(request).tienePermiso("INDICADOR_VIEWALL"));
-		gestionarIndicadoresPlanForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("INDICADOR_EDIT"));
+		gestionarIndicadoresPlanForm.setEditarForma(getPermisologiaUsuario(request).tienePermiso("INDICADOR_EDIT"));							
+		
 		Boolean actualizarForma = request.getSession().getAttribute("actualizarForma") != null ? Boolean.parseBoolean((String)request.getSession().getAttribute("actualizarForma")) : false;
 		if (!actualizarForma)
 		{
@@ -78,9 +122,12 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		}
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
-
+		Map<String, String> filtrosInd = new HashMap<String, String>();
 		Perspectiva perspectiva = (Perspectiva)strategosIndicadoresService.load(Perspectiva.class, gestionarPlanForm.getPerspectivaId());
 
+		
+		gestionarIndicadoresPlanForm.setFrecuencias(Frecuencia.getFrecuencias());
+		setUnidadesMedida(gestionarIndicadoresPlanForm, strategosIndicadoresService);
 		if (perspectiva != null)
 		{
 			gestionarIndicadoresPlanForm.setNombreIndicadorPlural(perspectiva.getPlan().getMetodologia().getNombreIndicadorPlural());
@@ -107,6 +154,8 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 			pagina = 1;
 
 		Map<String, Object> filtros = new HashMap<String, Object>();
+		
+		
 		if (perspectiva.getPadreId() != null)
 			filtros.put("perspectivaId", gestionarPlanForm.getPerspectivaId().toString());
 		else if (perspectiva.getPadreId() == null)
@@ -116,6 +165,14 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 			else
 				filtros.put("indicadoresLogroPerspectivasPrincipalesPlanId", gestionarPlanForm.getPlanId().toString());
 		}
+		if (gestionarIndicadoresPlanForm.getFiltro().getHistorico() != null && gestionarIndicadoresPlanForm.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoNoMarcado())
+			filtros.put("historicoDate", "IS NULL");
+		else if (gestionarIndicadoresPlanForm.getFiltro().getHistorico() != null && gestionarIndicadoresPlanForm.getFiltro().getHistorico().byteValue() == HistoricoType.getFiltroHistoricoMarcado())
+			filtros.put("historicoDate", "IS NOT NULL");
+		if (gestionarIndicadoresPlanForm.getFrecuencia() != null)
+			filtros.put("frecuencia", gestionarIndicadoresPlanForm.getFrecuencia().toString());
+		if (gestionarIndicadoresPlanForm.getUnidadId() != null)
+			filtros.put("unidadId", gestionarIndicadoresPlanForm.getUnidadId().toString());				
 
 		Integer totalPaginas = 0;
 		pagina = 0;
@@ -129,7 +186,10 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 			paginaIndicadores = null;
 			request.getSession().removeAttribute("actualizarForma");
 		}
-
+				
+		
+		
+		
 		boolean actualizarIndicadores = false;
 		if (paginaIndicadores == null)
 		{
@@ -253,4 +313,12 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 
 		return mapping.findForward(forward);
 	}
+	
+	 private void setUnidadesMedida(GestionarIndicadoresPlanForm gestionarIndicadoresPlanForm, StrategosIndicadoresService strategosIndicadoresService) {
+		    StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService(strategosIndicadoresService);
+
+		    gestionarIndicadoresPlanForm.setUnidadesMedida(strategosUnidadesService.getUnidadesMedida(0, 0, "nombre", "asc", false, null).getLista());
+
+		    strategosUnidadesService.close();
+		  }
 }

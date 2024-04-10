@@ -700,6 +700,7 @@ public class IniciativaManager {
 		Statement stm = null;
 		boolean ConexAbierta = false;
 		String sql = "";
+		String sqlObj = "";
 		int resultado = 10000;	
 		
 		try {
@@ -784,17 +785,19 @@ public class IniciativaManager {
 
 					sql = sql + 0 + ", ";
 
-					sql = sql + 1 + ");\n";
+					sql = sql + 1 + ")";
 					
-					sql = sql + "INSERT INTO INICIATIVA_OBJETO ";
+					sqlObj = "INSERT INTO INICIATIVA_OBJETO ";
 					
-					sql = sql + "(iniciativa_id, objeto) ";
+					sqlObj = sqlObj + "(iniciativa_id, objeto) ";
 					
-					sql = sql + "VALUES (" + iniciativa.getIniciativaId() + ", '";
+					sqlObj = sqlObj + "VALUES (" + iniciativa.getIniciativaId() + ", '";
 					
-					sql = sql + iniciativa.getMemoIniciativa() + "')";					
+					sqlObj = sqlObj + iniciativa.getMemoIniciativa() + "')";					
 					
-					respuesta = stm.executeUpdate(sql);													
+					respuesta = stm.executeUpdate(sql);		
+					if (respuesta == 1)
+						respuesta = stm.executeUpdate(sqlObj);	
 
 				}
 				if (respuesta == 0)

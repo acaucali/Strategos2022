@@ -624,36 +624,38 @@ public class GuardarActividadAction extends VgcAction
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
 		Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento())));
-		if (indicador != null && actividad.getTipoMedicion().byteValue() != indicador.getTipoCargaMedicion().byteValue())
-		{
-    		boolean updateIndicador = true;
-    		if (tipoMedicionDiferente && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue())
-    			updateIndicador = false;
-
-			if (tipoMedicionDiferente)
-    			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
-    		else
-    			indicador.setTipoCargaMedicion(actividad.getTipoMedicion());
-
-			respuesta = strategosIndicadoresService.saveIndicador(indicador, usuario);
-
-			if (updateIndicador && respuesta == VgcReturnCode.DB_OK)
+		if(indicador.getTipoCargaMedicion() != null) {					
+			if (indicador != null && actividad.getTipoMedicion().byteValue() != indicador.getTipoCargaMedicion().byteValue())
 			{
-				StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-				//Eliminamos todas las mediciones ya que van a ser recalculadas
-				respuesta = strategosMedicionesService.deleteMediciones(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionEficacia()));
-				if (respuesta == VgcReturnCode.DB_OK)
-					respuesta = strategosMedicionesService.deleteMediciones(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionEficiencia()));
-				strategosMedicionesService.close();
-
-				StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
-
-				ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
-				if (respuesta == VgcReturnCode.DB_OK)
-					respuesta = strategosIniciativasService.updateIndicadorAutomatico(iniciativa, TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
-				if (respuesta == VgcReturnCode.DB_OK)
-					respuesta = strategosIniciativasService.updateIndicadorAutomatico(iniciativa, TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
-				strategosIniciativasService.close();
+	    		boolean updateIndicador = true;
+	    		if (tipoMedicionDiferente && indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue())
+	    			updateIndicador = false;
+	
+				if (tipoMedicionDiferente)
+	    			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
+	    		else
+	    			indicador.setTipoCargaMedicion(actividad.getTipoMedicion());
+	
+				respuesta = strategosIndicadoresService.saveIndicador(indicador, usuario);
+	
+				if (updateIndicador && respuesta == VgcReturnCode.DB_OK)
+				{
+					StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
+					//Eliminamos todas las mediciones ya que van a ser recalculadas
+					respuesta = strategosMedicionesService.deleteMediciones(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionEficacia()));
+					if (respuesta == VgcReturnCode.DB_OK)
+						respuesta = strategosMedicionesService.deleteMediciones(iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionEficiencia()));
+					strategosMedicionesService.close();
+	
+					StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
+	
+					ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
+					if (respuesta == VgcReturnCode.DB_OK)
+						respuesta = strategosIniciativasService.updateIndicadorAutomatico(iniciativa, TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
+					if (respuesta == VgcReturnCode.DB_OK)
+						respuesta = strategosIniciativasService.updateIndicadorAutomatico(iniciativa, TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
+					strategosIniciativasService.close();
+				}
 			}
 		}
 		strategosIndicadoresService.close();

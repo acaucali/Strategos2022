@@ -127,7 +127,7 @@ public class ImportarManager {
 	}
 
 	public boolean EjecutarIniciativa(String[][] datos, Usuario usuario) {
-
+				
 		boolean respuesta = false;
 		byte tipoImportacion = Byte.parseByte(pm.getProperty("tipoImportacion", "1"));
 		respuesta = (new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio,
@@ -201,9 +201,11 @@ public class ImportarManager {
 	}
 
 	public boolean EjecutarActividad(String[][] datos, Usuario usuario) {
+				
 
 		boolean respuesta = false;
 		byte tipoImportacion = Byte.parseByte(pm.getProperty("tipoImportacion", "1"));
+				
 		respuesta = (new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio,
 				null) == 10000 ? true : false);
 
@@ -267,7 +269,7 @@ public class ImportarManager {
 			Calendar nowDuracion = Calendar.getInstance();
 			nowDuracion.setTimeInMillis(duracion);
 
-			t1.programarIniciativa(duracion, terminar, (terminar == 0), timeUnit, this.log, this.messageResources,
+			t1.programarActividad(duracion, terminar, (terminar == 0), timeUnit, this.log, this.messageResources,
 					this.pm, datos, this.servicio, usuario);
 		}
 
@@ -1050,7 +1052,7 @@ public class ImportarManager {
 		boolean logMediciones = Boolean.parseBoolean(pm.getProperty("logMediciones", "false"));
 		boolean logErrores = Boolean.parseBoolean(pm.getProperty("logErrores", "false"));
 
-		String[] argsReemplazo = new String[10];
+		String[] argsReemplazo = new String[12];
 
 		List<PryActividad> actividades = new ArrayList<PryActividad>();
 
@@ -1072,7 +1074,8 @@ public class ImportarManager {
 
 			Long iniciativaSeleccionadaId = Long.parseLong(pm.getProperty("iniciativaId", "0"));
 			int totalDatos = datos.length;
-			iniciativas = new IniciativaManager(pm, log, messageResources).getIniciativas(null, stm);
+			Map<String, String> filtros = new HashMap<String, String>();
+			iniciativas = new IniciativaManager(pm, log, messageResources).getIniciativas(filtros, stm);
 
 			if (iniciativas.size() > 0) {
 				String codigoIniArchivo = "";
@@ -1084,8 +1087,10 @@ public class ImportarManager {
 				String alertaAmarillaArchivo = "";
 				String unidadMedidaArchivo = "";
 				String numeroActividadArchivo = "";
+				String codigoEnlaceArchivo = "";
+				String pesoArchivo = "";
 
-				for (int f = 0; f < datos.length; f++) {
+				for (int f = 0; f < datos.length; f++) {									
 
 					codigoIniArchivo = datos[f][0] != null ? datos[f][0] : "";
 					nombreArchivo = datos[f][1] != null ? datos[f][1] : "";
@@ -1096,21 +1101,25 @@ public class ImportarManager {
 					alertaAmarillaArchivo = datos[f][6] != null ? datos[f][6] : "";
 					unidadMedidaArchivo = datos[f][7] != null ? datos[f][7] : "";
 					numeroActividadArchivo = datos[f][8] != null ? datos[f][8] : "";
+					codigoEnlaceArchivo = datos[f][9] != null ? datos[f][9] : "";
+					pesoArchivo = datos[f][10] != null ? datos[f][10] : "";
 
 					SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 					PryCalendario calendario = new PryCalendario();
-
+					
 					if (!codigoIniArchivo.equals("") && !nombreArchivo.equals("") && !descripcionArchivo.equals("")
 							&& !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("")
 							&& !unidadMedidaArchivo.equals("") && !fechaCulminacionArchivo.equals("")
-							&& !fechaInicioArchivo.equals("") && !numeroActividadArchivo.equals("")) {
+							&& !fechaInicioArchivo.equals("") && !numeroActividadArchivo.equals("") && !codigoEnlaceArchivo.equals("") && !pesoArchivo.equals("")) {
+																	
 						hayIniciativa = false;
 
 						for (Iterator<?> iter = iniciativas.iterator(); iter.hasNext();) {
-							iniciativa = (Iniciativa) iter.next();
-
+							iniciativa = (Iniciativa) iter.next();							
+							
 							if (iniciativa.getCodigoIniciativa() != null
 									&& iniciativa.getCodigoIniciativa().equalsIgnoreCase(codigoIniArchivo)) {
+																
 								num++;
 
 								if (this.logConsolaDetallado)
@@ -1134,12 +1143,9 @@ public class ImportarManager {
 																
 								StrategosPryActividadesService strategosActividadesService = StrategosServiceFactory
 										.getInstance().openStrategosPryActividadesService();
-								
-								
-								Long claseId = strategosActividadesService.crearClaseIndicador(iniciativa.getProyectoId(), nombreArchivo, usuario);														
-			
-								Long indicadorId = strategosActividadesService.crearIndicador(iniciativa.getProyectoId(), claseId, nombreArchivo, Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo), Double.parseDouble(alertaAmarillaArchivo), usuario);																
-								
+																							
+								Long claseId = strategosActividadesService.crearClaseIndicador(iniciativa.getProyectoId(), nombreArchivo, usuario);								
+								Long indicadorId = strategosActividadesService.crearIndicador(iniciativa.getProyectoId(), claseId, nombreArchivo, Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo), Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario);								
 								PryActividad actividad = new PryActividad();
 								
 								actividad.setActividadId(strategosActividadesService.getUniqueId());
@@ -1164,8 +1170,11 @@ public class ImportarManager {
 								actividad.setCrecimiento((byte) 3);							
 								actividad.setAlertaZonaAmarilla(Double.parseDouble(alertaAmarillaArchivo));
 								actividad.setAlertaZonaVerde(Double.parseDouble(alertaVerdeArchivo));
+								actividad.setPeso(Double.parseDouble(pesoArchivo));
+								
 
 								actividades.add(actividad);
+																
 
 								argsReemplazo[0] = iniciativa.getCodigoIniciativa();
 								argsReemplazo[1] = nombreArchivo;
@@ -1176,14 +1185,17 @@ public class ImportarManager {
 								argsReemplazo[6] = alertaAmarillaArchivo;
 								argsReemplazo[7] = unidadMedidaArchivo;
 								argsReemplazo[8] = numeroActividadArchivo;
-								argsReemplazo[9] = "";
+								argsReemplazo[9] = codigoEnlaceArchivo;
+								argsReemplazo[10] = pesoArchivo;
+								argsReemplazo[11] = "";
+								
 
 								if (logMediciones)
 									log.append(messageResources.getResource(
 											"jsp.asistente.importacion.log.indicador.success", argsReemplazo) + "\n");
 							}
 
-						}
+						}												
 						if (!hayIniciativa && logErrores) {
 							argsReemplazo[0] = codigoIniArchivo;
 							argsReemplazo[1] = "";
@@ -1195,6 +1207,7 @@ public class ImportarManager {
 							argsReemplazo[7] = "";
 							argsReemplazo[8] = "";
 							argsReemplazo[9] = "";
+							argsReemplazo[10] = "";							
 							log.append(messageResources.getResource(
 									"jsp.asistente.importacion.log.error.nohaycodigoenlace", argsReemplazo) + "\n");
 						}
@@ -1264,6 +1277,8 @@ public class ImportarManager {
 			argsReemplazo[7] = "";
 			argsReemplazo[8] = "";
 			argsReemplazo[9] = "";
+			argsReemplazo[10] = "";
+			argsReemplazo[11] = "";
 
 			log.append(
 					messageResources.getResource("jsp.asistente.importacion.log.medicion.general.error", argsReemplazo)
@@ -1868,6 +1883,7 @@ class Tarea implements Runnable {
 	public void programarActividad(long duracion, int terminar, boolean infinito, TimeUnit timeUnit, StringBuffer log,
 			VgcMessageResources messageResources, PropertyCalcularManager pm, String[][] datos, Servicio servicio,
 			Usuario usuario) {
+				
 		this.terminar = terminar;
 		this.infinito = infinito;
 		this.log = log;
@@ -1947,11 +1963,9 @@ class Tarea implements Runnable {
 		if (tipoImportacion == 7)
 			respuesta = new ImportarManager(this.pm, this.log, this.messageResources, this.servicio)
 					.ImportarIniciativa(this.datos, usuario);
-		else if (tipoImportacion == 8) {
-			System.out.print(
-					"\nllega a el programar, previo a importar actividad, tipo Importacion : " + tipoImportacion);
+		else if (tipoImportacion == 8) {						
 			respuesta = new ImportarManager(this.pm, this.log, this.messageResources, this.servicio)
-					.ImportarActividad(this.datos, usuario);
+					.ImportarActividad(this.datos, usuario);			
 		} else
 			respuesta = new ImportarManager(this.pm, this.log, this.messageResources, this.servicio)
 					.Importar(this.datos);

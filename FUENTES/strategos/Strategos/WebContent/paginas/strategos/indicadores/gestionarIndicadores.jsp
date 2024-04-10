@@ -19,7 +19,10 @@
 <script type="text/javascript"
 	src="<html:rewrite  page='/paginas/strategos/duppont/Duppont.js'/>"></script>
 <script type="text/javascript">
+	var _showFiltroInd = false;
 
+	
+	
 	function nuevoIndicador() 
 	{		
 		//abrirVentanaModal('<html:rewrite action="/indicadores/crearIndicador"/>?inicializar=true', 'IndicadoresAdd', 900, 680);
@@ -464,6 +467,65 @@
 		window.location.href = "<html:rewrite action='/indicadores/clasesindicadores/gestionarClasesIndicadores' />" + url;
 	}
 	
+	function limpiarFiltrosIndicadores() 
+	{		
+		gestionarIniciativasForm.submit();
+	}
+	
+	function showFiltro()
+	{
+		var tblFiltroInd = document.getElementById('tblFiltroInd');
+		var trFilterTopInd = document.getElementById('trFilterTopInd');
+		var trFilterBottomInd = document.getElementById('trFilterBottomInd');
+		if (tblFiltroInd != null)
+		{
+			if (_showFiltroInd)
+			{
+				_showFiltroInd = false;
+				tblFiltroInd.style.display = "none";
+				resizeAltoForma(230);
+			}
+			else
+			{
+				_showFiltroInd = true;
+				tblFiltroInd.style.display = "";
+				resizeAltoForma(332);
+			}
+			if (trFilterTopInd != null)
+				trFilterTopInd.style.display = tblFiltroInd.style.display;
+			if (trFilterBottomInd != null)
+				trFilterBottomInd.style.display = tblFiltroInd.style.display;
+		}
+	}
+	
+	function resizeAltoForma(alto)
+	{
+		if (typeof(alto) == "undefined")
+			alto = 230;
+			
+		resizeAlto(document.getElementById('body-iniciativas'), alto);
+	}
+	
+	function refrescarInd(){		
+		var selectFrecuencia = document.getElementById('selectFrecuencia');
+		if (selectFrecuencia != null)
+			var url =  '?frecuencia=' + selectFrecuencia.value;
+		var selectUnidadMedida = document.getElementById('selectUnidad');
+		if (selectUnidadMedida != null)
+			url = url + '&unidadMedida=' + selectUnidadMedida.value;
+		
+			window.location.href= '<html:rewrite action="/indicadores/clasesindicadores/gestionarClasesIndicadores"/>' + url;
+	}
+	
+	function limpiarFiltrosInd()
+	{
+		var url = '?limpiarFiltros=true';		
+		window.location.href= '<html:rewrite action="/indicadores/clasesindicadores/gestionarClasesIndicadores"/>' + url;	
+		
+		actualizar(true);	
+		
+	}
+	
 </script>
 <script type="text/javascript"
 	src="<html:rewrite  page='/paginas/strategos/calculos/calculosJs/Calculo.js'/>"></script>
@@ -847,8 +909,27 @@
 						<vgcutil:message key="menu.edicion.email" />
 					</vgcinterfaz:barraHerramientasBotonTitulo>
 				</vgcinterfaz:barraHerramientasBoton>
+				<vgcinterfaz:barraHerramientasSeparador />
+				<vgcinterfaz:barraHerramientasBoton nombreImagen="filtrar" 
+					pathImagenes="/componentes/barraHerramientas/" 
+					nombre="filtrar" onclick="javascript:showFiltro();">
+						<vgcinterfaz:barraHerramientasBotonTitulo>
+							<vgcutil:message key="menu.ver.filtro" />
+						</vgcinterfaz:barraHerramientasBotonTitulo>
+					</vgcinterfaz:barraHerramientasBoton>
 
 			</vgcinterfaz:barraHerramientas>
+			
+			<%-- Filtro --%>
+			<table class="tablaSpacing0Padding0Width100Collapse">
+				<tr id="trFilterTop" style="display:none;"><td colspan="2" valign="top"><hr style="width: 100%;"></td></tr>
+				<tr class="barraFiltrosForma">
+					<td style="width: 420px;">
+						<jsp:include flush="true" page="/paginas/strategos/indicadores/filtroIndicadores.jsp"></jsp:include>
+					</td>
+				</tr>
+				<tr id="trFilterBottom" style="display:none;"><td colspan="2" valign="top"><hr style="width: 100%;"></td></tr>
+			</table>
 
 		</vgcinterfaz:contenedorFormaBarraGenerica>
 

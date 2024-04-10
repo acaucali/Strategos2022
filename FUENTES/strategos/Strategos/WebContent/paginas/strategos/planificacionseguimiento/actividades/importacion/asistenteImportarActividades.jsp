@@ -328,6 +328,8 @@
 				var hayAlertaAmarilla = false;
 				var hayUnidadMedida = false;
 				var hayNumeroActividad = false;
+				var hayCodigoEnlace = false;
+				var hayPeso = false;
 				
 									
 				for (var i = 0; i < insumos.length; i++) 
@@ -390,6 +392,16 @@
 							hayUnidadMedida = true;
 							imagen = "Si.png";
 						}
+						if (valores[0].toUpperCase() == "CODIGO DE ENLACE" && valores[1] == "true")
+						{
+							hayCodigoEnlace = true;
+							imagen = "Si.png";
+						}
+						if (valores[0].toUpperCase() == "PESO" && valores[1] == "true")
+						{
+							hayPeso = true;
+							imagen = "Si.png";
+						}
 						
 							
 						td1.innerHTML = "<img src=\"<html:rewrite page='/paginas/strategos/indicadores/importacion/imagenes/" + imagen +"'/>\" border=\"0\" width=\"16\" height=\"16\" />";
@@ -406,7 +418,7 @@
 				if (fileName != null)
 					fileName.value = document.importarActividadesForm.fuenteSeleccion.value;
 				
-				if (hayCodigoIniciativa && hayNombre && hayDescripcion && hayFechaInicio && hayFechaCulminacion && hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida)
+				if (hayCodigoIniciativa && hayNombre && hayDescripcion && hayFechaInicio && hayFechaCulminacion && hayAlertaVerde && hayAlertaAmarilla && hayUnidadMedida && hayCodigoEnlace && hayPeso)
 					_archivoVerificado = true;
 				else
 					alert('<vgcutil:message key="jsp.asistente.importacion.medicion.seleccion.seleccionar.verificar.archivo.invalido" /> ');

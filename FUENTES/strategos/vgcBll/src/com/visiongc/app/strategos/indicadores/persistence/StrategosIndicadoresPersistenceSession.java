@@ -26,6 +26,8 @@ public abstract interface StrategosIndicadoresPersistenceSession
   
   public abstract List<InsumoFormula> getInsumosFormula(Long paramLong1, Long paramLong2);
   
+  public abstract List<InsumoFormula> getInsumoFormula(Long paramLong1, Long paramLong2);
+  
   public abstract Indicador getIndicadorBasico(Long paramLong);
   
   public abstract ListaMap getDependenciasIndicador(Indicador paramIndicador);

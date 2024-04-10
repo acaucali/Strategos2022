@@ -18,6 +18,55 @@
 <script type="text/javascript" src="<html:rewrite  page='/paginas/strategos/duppont/Duppont.js'/>"></script>
 <script type="text/javascript">
 
+	var _showFiltroInd = false;
+	
+	function showFiltroInd()
+	{
+		var tblFiltroInd = document.getElementById('tblFiltroInd');
+		var trFilterTopInd = document.getElementById('trFilterTopInd');
+		var trFilterBottomInd = document.getElementById('trFilterBottomInd');
+		if (tblFiltroInd != null)
+		{
+			if (_showFiltroInd)
+			{
+				_showFiltroInd = false;
+				tblFiltroInd.style.display = "none";
+				resizePanelIndicadores(0);
+			}
+			else
+			{
+				_showFiltroInd = true;
+				tblFiltroInd.style.display = "";
+				resizePanelIndicadores(102);
+			}
+			if (trFilterTopInd != null)
+				trFilterTopInd.style.display = tblFiltroInd.style.display;
+			if (trFilterBottomInd != null)
+				trFilterBottomInd.style.display = tblFiltroInd.style.display;
+		}
+	}
+	
+	function resizePanelIndicadores(altoPrefijo)
+	{
+		if (typeof(altoPrefijo) == "undefined")
+			altoPrefijo = 0;
+		var tamanoToolbarMenu = 0;
+		<logic:empty name="perspectiva" property="padreId" scope="session">
+			tamanoToolbarMenu = 63;
+		</logic:empty>
+		var height = (parseInt(_myHeight) - (182)) + tamanoToolbarMenu;
+		var spliter = document.getElementById('splitPlanVerticalPanelSuperior');
+		if (spliter != null)
+			height = height - parseInt(spliter.style.height.replace("px", ""));
+		else
+			height = (parseInt(_myHeight) - 480);
+
+		height = (parseInt(height) - altoPrefijo);
+		var objeto = document.getElementById('body-iniciativas-plan');
+		if (objeto != null)
+			objeto.style.height = height + "px";
+	}
+	
 	function nuevoIndicador() 
 	{		
 		//abrirVentanaModal('<html:rewrite action="/indicadores/crearIndicador" />?inicializar=true&planId=<bean:write name="gestionarPlanForm" property="planId" />&perspectivaId=<bean:write name="gestionarPlanForm" property="perspectivaId" />',"IndicadorAdd", 880, 670);
@@ -534,6 +583,25 @@
 		window.location.href= "<html:rewrite action='/planes/perspectivas/gestionarPerspectivas' />" + url;
 	}
 	
+	function refrescarInd(){		
+		var selectFrecuencia = document.getElementById('selectFrecuencia');
+		if (selectFrecuencia != null)
+			var url =  '?frecuencia=' + selectFrecuencia.value;
+		var selectUnidadMedida = document.getElementById('selectUnidad');
+		if (selectUnidadMedida != null)
+			url = url + '&unidadMedida=' + selectUnidadMedida.value;
+		
+			window.location.href= '<html:rewrite action="/planes/indicadores/gestionarIndicadoresPlan"/>' + url;
+	}
+	
+	function limpiarFiltrosInd()
+	{
+		var url = '?limpiarFiltros=true';		
+		window.location.href= '<html:rewrite action="/planes/indicadores/gestionarIndicadoresPlan"/>' + url;	
+		
+		actualizar(true);
+	}
+	
 </script>
 <script type="text/javascript" src="<html:rewrite  page='/paginas/strategos/calculos/calculosJs/Calculo.js'/>"></script>
 
@@ -818,9 +886,27 @@
 							<vgcutil:message key="menu.edicion.email" />
 						</vgcinterfaz:barraHerramientasBotonTitulo>
 					</vgcinterfaz:barraHerramientasBoton>
+					
+					<vgcinterfaz:barraHerramientasSeparador />
+						<vgcinterfaz:barraHerramientasBoton nombreImagen="filtrar" pathImagenes="/componentes/barraHerramientas/" nombre="filtrar" onclick="javascript:showFiltroInd();">
+							<vgcinterfaz:barraHerramientasBotonTitulo>
+								<vgcutil:message key="menu.ver.filtro" />
+							</vgcinterfaz:barraHerramientasBotonTitulo>
+						</vgcinterfaz:barraHerramientasBoton>
+											
 
 				</vgcinterfaz:barraHerramientas>
 
+			<%-- Filtro --%>
+			<table class="tablaSpacing0Padding0Width100Collapse">
+				<tr id="trFilterTopInd" style="display:none;"><td colspan="2" valign="top"><hr style="width: 100%;"></td></tr>
+				<tr class="barraFiltrosForma">
+					<td style="width: 420px;">
+						<jsp:include flush="true" page="/paginas/strategos/indicadores/filtroIndicadores.jsp"></jsp:include>
+					</td>
+				</tr>
+				<tr id="trFilterBottomInd" style="display:none;"><td colspan="2" valign="top"><hr style="width: 100%;"></td></tr>
+			</table>
 			</vgcinterfaz:contenedorFormaBarraGenerica>
 
 		<%-- </logic:notEmpty> --%>
@@ -966,3 +1052,6 @@
 	</script>
 
 </html:form>
+<script type="text/javascript">
+	resizePanelIndicadores();
+</script>

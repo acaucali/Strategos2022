@@ -38,6 +38,7 @@ public class PryActividadManager {
 		Statement stm = null;
 		boolean ConexAbierta = false;
 		String sql = "";
+		String sqlIA = "";
 		int resultado = 10000;		
 		try {
 			if (stmExt != null)
@@ -91,15 +92,15 @@ public class PryActividadManager {
 					
 					sql = sql + actividad.getNombre() + "', '";
 					
-					sql = sql + actividad.getDescripcion() + "', '";
+					sql = sql + actividad.getDescripcion() + "', TO_DATE('";
 					
-					sql = sql + formato.format(actividad.getComienzoPlan()) + "', '";
+					sql = sql + formato.format(actividad.getComienzoPlan()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
 					
-					sql = sql + formato.format(actividad.getComienzoReal()) + "', '";
+					sql = sql + formato.format(actividad.getComienzoReal()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
 					
-					sql = sql + formato.format(actividad.getFinPlan()) + "', '";
+					sql = sql + formato.format(actividad.getFinPlan()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
 					
-					sql = sql + formato.format(actividad.getFinReal()) + "', ";
+					sql = sql + formato.format(actividad.getFinReal()) + "', 'YYYY-MM-DD HH24:MI:SS'), ";
 					
 					sql = sql + actividad.getDuracionPlan() + ", ";
 					
@@ -109,9 +110,9 @@ public class PryActividadManager {
 					
 					sql = sql + actividad.getNivel() + ", ";
 									
-					sql = sql + 0 + ", '";
+					sql = sql + 0 + ", TO_DATE('";
 					
-					sql = sql + formato.format(actividad.getCreado()) + "', ";
+					sql = sql + formato.format(actividad.getCreado()) + "', 'YYYY-MM-DD HH24:MI:SS'), ";
 					
 					sql = sql + actividad.getCreadoId() + ", ";
 					
@@ -125,19 +126,23 @@ public class PryActividadManager {
 					
 					sql = sql + actividad.getPorcentajeEsperado() + ", ";
 
-					sql = sql + actividad.getPorcentajeEjecutado() + ");\n";
+					sql = sql + actividad.getPorcentajeEjecutado() + ")";
 					
-					sql = sql + "INSERT INTO INC_ACTIVIDAD ";
+					sqlIA = "INSERT INTO INC_ACTIVIDAD ";
 					
-					sql = sql + "(actividad_id, alerta_za, alerta_zv) ";
+					sqlIA = sqlIA + "(actividad_id, alerta_za, alerta_zv, peso) ";
 					
-					sql = sql + "VALUES (" + actividad.getActividadId() + ", ";
+					sqlIA = sqlIA + "VALUES (" + actividad.getActividadId() + ", ";
 					
-					sql = sql + actividad.getAlertaZonaAmarilla() + ", ";
+					sqlIA = sqlIA + actividad.getAlertaZonaAmarilla() + ", ";
 					
-					sql = sql + actividad.getAlertaZonaVerde() + ");";
-										
-					respuesta = stm.executeUpdate(sql);	
+					sqlIA = sqlIA + actividad.getAlertaZonaVerde() + ", ";
+					
+					sqlIA = sqlIA + actividad.getPeso() + ")";
+															
+					respuesta = stm.executeUpdate(sql);
+					if(respuesta == 1)
+						respuesta = stm.executeUpdate(sqlIA);					
 					
 				}
 				if (respuesta == 0)

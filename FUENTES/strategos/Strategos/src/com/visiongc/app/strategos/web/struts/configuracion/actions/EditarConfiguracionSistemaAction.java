@@ -40,6 +40,7 @@ import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.util.ConfiguracionPlan;
 import com.visiongc.app.strategos.responsables.StrategosResponsablesService;
 import com.visiongc.app.strategos.responsables.model.util.ConfiguracionResponsable;
+import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
 import com.visiongc.app.strategos.web.struts.configuracion.forms.EditarConfiguracionSistemaForm;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
@@ -113,8 +114,8 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 		    		else
 		    			editarConfiguracionSistemaForm.setStatus(VgcReturnCode.FORM_SAVE_ERROR);
 	    		}
-
-	    		return mapping.findForward(forward);
+	    			    		
+	    		//return mapping.findForward(forward);
 	    	}
 		}
 
@@ -130,6 +131,12 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			getConfiguracionCorreoIniciativa(editarConfiguracionSistemaForm);
 		if (respuesta == VgcReturnCode.DB_OK)
 			getConfiguracionIndicador(editarConfiguracionSistemaForm);
+		
+		StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService();
+		
+		editarConfiguracionSistemaForm.setUnidadesMedida(strategosUnidadesService.getUnidadesMedida(0, 0, "nombre", "asc", false, null).getLista());
+
+	    strategosUnidadesService.close();
 
 		return mapping.findForward(forward);
 	}
@@ -162,6 +169,11 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 					
 			elemento = document.createElement("mostrar");
 			text = document.createTextNode(editarConfiguracionSistemaForm.getIniciativaAdministracionPublica() ? "1" : "0");
+			elemento.appendChild(text);
+			raiz.appendChild(elemento);
+									
+			elemento = document.createElement("unidad");
+			text = document.createTextNode(editarConfiguracionSistemaForm.getUnidad());
 			elemento.appendChild(text);
 			raiz.appendChild(elemento);
 
@@ -250,14 +262,14 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			indicadorElement.appendChild(elemento);			
 
 			Source source = new DOMSource(document);
+			
 						
 			StringWriter writer = new StringWriter();
 			Result result = new StreamResult(writer);
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
-			
-			
+									
 
     		configuracion = new Configuracion();
 			configuracion.setParametro("Strategos.Configuracion.Iniciativas");
@@ -347,7 +359,7 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 			strategosIniciativasService.close();
 
 			if (configuracionIniciativa != null)
-			{
+			{								
 				editarConfiguracionSistemaForm.setIniciativaNombre(configuracionIniciativa.getIniciativaNombre());
 
 				editarConfiguracionSistemaForm.setIniciativaIndicadorAvanceNombre(configuracionIniciativa.getIniciativaIndicadorAvanceNombre());
@@ -363,7 +375,8 @@ public class EditarConfiguracionSistemaAction extends VgcAction
 				editarConfiguracionSistemaForm.setIniciativaIndicadorEficienciaNombre(configuracionIniciativa.getIniciativaIndicadorEficienciaNombre());
 				editarConfiguracionSistemaForm.setIniciativaIndicadorEficienciaMostrar(configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar());
 				
-				editarConfiguracionSistemaForm.setIniciativaAdministracionPublica(configuracionIniciativa.getIniciativaAdministracionPublica());
+				editarConfiguracionSistemaForm.setIniciativaAdministracionPublica(configuracionIniciativa.getIniciativaAdministracionPublica());								
+				editarConfiguracionSistemaForm.setUnidad(configuracionIniciativa.getUnidad());
 			}
 		}
 		catch (Exception e)

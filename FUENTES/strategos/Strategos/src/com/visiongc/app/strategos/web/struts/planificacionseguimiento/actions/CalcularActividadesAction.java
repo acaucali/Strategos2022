@@ -197,8 +197,11 @@ public final class CalcularActividadesAction extends VgcAction
 				            	  else
 				            		  periodo = periodo - 1;
 				            	  valorPeriodo = valor;
-				            	  if (indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue() && act.getTipoMedicion().byteValue() == TipoMedicion.getTipoMedicionAlPeriodo().byteValue())
-				            		  valor = valor - periodoAnterior;
+				            	  				            	  
+				            	  if(indicador.getTipoCargaMedicion() != null) {	
+				            		  if (indicador.getTipoCargaMedicion().byteValue() == TipoMedicion.getTipoMedicionEnPeriodo().byteValue() && act.getTipoMedicion().byteValue() == TipoMedicion.getTipoMedicionAlPeriodo().byteValue())
+				            		  	valor = valor - periodoAnterior;
+				            	  }
 				            	  periodoAnterior = valorPeriodo;
 				            	  for (Iterator<?> iter3 = medicionesCompletas.iterator(); iter3.hasNext(); )
 				            	  {

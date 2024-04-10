@@ -51,6 +51,7 @@ import com.visiongc.app.strategos.web.struts.reportes.forms.ReporteForm;
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
+import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
@@ -403,6 +404,15 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 			        	
 			        
 			        }
+			        HSSFCell cellCabp1 = CabPRow.createCell(num);
+		        	cellCabp1.setCellStyle(style);
+		        	cellCabp1.setCellValue("Total Ejecutado");
+		        	num++;
+		        	
+		        	HSSFCell cellCabp2 = CabPRow.createCell(num);
+		        	cellCabp2.setCellStyle(style);
+		        	cellCabp2.setCellValue("Total Programado");
+		        	num++;
 		        	
 		        }else if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaMensual())) {
 		        	
@@ -446,7 +456,17 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 			        	cellCabp3.setCellValue("% Eficacia");
 			        	num++;
 			        
-			        }
+			        }	
+			        
+			        HSSFCell cellCabp1 = CabPRow.createCell(num);
+		        	cellCabp1.setCellStyle(style);
+		        	cellCabp1.setCellValue("Total Ejecutado");
+		        	num++;
+		        	
+		        	HSSFCell cellCabp2 = CabPRow.createCell(num);
+		        	cellCabp2.setCellStyle(style);
+		        	cellCabp2.setCellValue("Total Programado");
+		        	num++;
 		        	
 		        }
 		        
@@ -489,6 +509,8 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 		        		cellInd1.setCellValue(unidad);
 		        		cel++;
 		        		
+		        		Double sumReal=0.0;
+	        			Double sumMeta=0.0;
 		        		for(int y= mesI; y<=mesF; y++) {
 		        	    	
 		        			//obtener mediciones
@@ -496,6 +518,7 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 		        			Double real=0.0;
 		        			Double meta=0.0;
 		        			Double porcentaje =0.0;
+		        			
 		        			
 		        			
 		        			if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaMensual())) {
@@ -520,8 +543,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 				        		
 				        		HSSFCell cellInd4 = Row.createCell(cel);
 				        		cellInd4.setCellStyle(style1);
-				        		cellInd4.setCellValue(porcentaje);
+				        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 				        		cel++;
+				        		
+				        		sumReal = sumReal + real;
+				        		sumMeta = sumMeta + meta;
 			        					  
 		        				
 		        			}else  if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaTrimestral())) {
@@ -548,8 +574,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
 		        				}else if(y == 6) {
 		        					
@@ -573,8 +602,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
 		        				}else if(y == 9) {
 		        					
@@ -598,9 +630,12 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
 		        					
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        				}else if(y == 12) {
 		        					
 		        					real = obtenerMedicion(4, new Integer(anio), indicador.getIndicadorId(), SerieTiempo.getSerieRealId());
@@ -623,10 +658,13 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
-		        				}
+		        				}		        						        				
 		        				
 		        			}
 		        			
@@ -634,6 +672,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 		        			      					        			        	
 				        		        	
 				        }
+		        		
+		        		HSSFCell cellInd2 = Row.createCell(cel);
+		        		cellInd2.setCellStyle(style1);
+		        		cellInd2.setCellValue(sumReal);
+		        		cel++;		        				        		
+		        		
+		        		HSSFCell cellInd3 = Row.createCell(cel);
+		        		cellInd3.setCellStyle(style1);
+		        		cellInd3.setCellValue(sumMeta);
+		        		cel++;
 		        	}        
 			        
 			        row++;
@@ -781,6 +829,15 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 			        	
 			        
 			        }
+			        HSSFCell cellCabp1 = CabP1Row.createCell(num1);
+		        	cellCabp1.setCellStyle(style);
+		        	cellCabp1.setCellValue("Total Ejecutado");
+		        	num1++;
+		        	
+		        	HSSFCell cellCabp2 = CabP1Row.createCell(num1);
+		        	cellCabp2.setCellStyle(style);
+		        	cellCabp2.setCellValue("Total Programado");
+		        	num1++;
 			        
 			        row++;
 		        	
@@ -831,6 +888,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 			        
 			        }
 			        
+			        HSSFCell cellCabp1 = CabP1Row.createCell(num1);
+		        	cellCabp1.setCellStyle(style);
+		        	cellCabp1.setCellValue("Total Ejecutado");
+		        	num1++;
+		        	
+		        	HSSFCell cellCabp2 = CabP1Row.createCell(num1);
+		        	cellCabp2.setCellStyle(style);
+		        	cellCabp2.setCellValue("Total Programado");
+		        	num1++;
+			        
 			        row++;
 		        	
 		        }
@@ -866,6 +933,8 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 		        		cellInd1.setCellStyle(style1);		        		
 		        		cellInd1.setCellValue(unidad);
 		        		cel++;
+		        		Double sumReal=0.0;
+	        			Double sumMeta=0.0;
 		        		
 		        		for(int y= mesI; y<=mesF; y++) {
 		        	    	
@@ -873,12 +942,13 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 		        			
 		        			Double real=0.0;
 		        			Double meta=0.0;
-		        			Double porcentaje =0.0;
+		        			Double porcentaje =0.0;		        			
 		        			
 		        			
 		        			if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaMensual())) {
 		        				
 		        				real = obtenerMedicion(y, new Integer(anio), indicador.getIndicadorId(), SerieTiempo.getSerieRealId());
+		        				
 			        			
 			        			HSSFCell cellInd2 = Row.createCell(cel);
 				        		cellInd2.setCellStyle(style1);
@@ -898,8 +968,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 				        		
 				        		HSSFCell cellInd4 = Row.createCell(cel);
 				        		cellInd4.setCellStyle(style1);
-				        		cellInd4.setCellValue(porcentaje);
+				        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 				        		cel++;
+				        		
+				        		sumReal = sumReal + real;
+				        		sumMeta = sumMeta + meta;
 			        					  
 		        				
 		        			}else  if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaTrimestral())) {
@@ -926,8 +999,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
 		        				}else if(y == 6) {
 		        					
@@ -951,8 +1027,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
 		        				}else if(y == 9) {
 		        					
@@ -976,8 +1055,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
 		        				}else if(y == 12) {
 		        					
@@ -1001,8 +1083,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		
 					        		HSSFCell cellInd4 = Row.createCell(cel);
 					        		cellInd4.setCellStyle(style1);
-					        		cellInd4.setCellValue(porcentaje);
+					        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 					        		cel++;
+					        		
+					        		sumReal = sumReal + real;
+					        		sumMeta = sumMeta + meta;
 		        					
 		        				}
 		        				
@@ -1012,6 +1097,17 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 		        			      					        			        	
 				        		        	
 				        }
+		        				        			        			
+	        			HSSFCell cellInd2 = Row.createCell(cel);
+		        		cellInd2.setCellStyle(style1);
+		        		cellInd2.setCellValue(sumReal);
+		        		cel++;
+		        				        		
+		        		
+		        		HSSFCell cellInd3 = Row.createCell(cel);
+		        		cellInd3.setCellStyle(style1);
+		        		cellInd3.setCellValue(sumMeta);
+		        		cel++;
 		        	}        
 			        
 			        row++;
@@ -1216,6 +1312,7 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        	num2++;
 					        
 					        }
+					        
 				        	
 				        }
 				        
@@ -1294,7 +1391,7 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 						        		
 						        		HSSFCell cellInd4 = Row.createCell(cel);
 						        		cellInd4.setCellStyle(style1);
-						        		cellInd4.setCellValue(porcentaje);
+						        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 						        		cel++;
 					        			        	
 							        		        	
@@ -1663,6 +1760,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 						        
 						        }
 						        
+						        HSSFCell cellCabp1 = CabPRow.createCell(num);
+					        	cellCabp1.setCellStyle(style);
+					        	cellCabp1.setCellValue("Total Ejecutado");
+					        	num++;
+					        	
+					        	HSSFCell cellCabp2 = CabPRow.createCell(num);
+					        	cellCabp2.setCellStyle(style);
+					        	cellCabp2.setCellValue("Total Programado");
+					        	num++;
+						        
 						        numero++;
 					        	
 					        }else if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaMensual())) {
@@ -1710,6 +1817,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 						        	num++;
 						        
 						        }
+						        
+						        HSSFCell cellCabp1 = CabPRow.createCell(num);
+					        	cellCabp1.setCellStyle(style);
+					        	cellCabp1.setCellValue("Total Ejecutado");
+					        	num++;
+					        	
+					        	HSSFCell cellCabp2 = CabPRow.createCell(num);
+					        	cellCabp2.setCellStyle(style);
+					        	cellCabp2.setCellValue("Total Programado");
+					        	num++;
 					        	
 						        numero++;
 					        }
@@ -1752,6 +1869,9 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		cellInd1.setCellValue(unidad);
 					        		cel++;
 					        		
+					        		Double sumReal=0.0;
+				        			Double sumMeta=0.0;
+					        		
 					        		for(int y= mesI; y<=mesF; y++) {
 					        	    	
 					        			//obtener mediciones
@@ -1783,9 +1903,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 							        		
 							        		HSSFCell cellInd4 = Row.createCell(cel);
 							        		cellInd4.setCellStyle(style1);
-							        		cellInd4.setCellValue(porcentaje);
+							        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 							        		cel++;
 						        					  
+							        		sumReal = sumReal + real;
+							        		sumMeta = sumMeta + meta;
 					        				
 					        			}else if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaTrimestral())) {
 					        				
@@ -1811,8 +1933,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
+								        		
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        					
 					        				}else if(y == 6) {
 					        					
@@ -1836,8 +1961,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
+								        		
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        					
 					        				}else if(y == 9) {
 					        					
@@ -1861,8 +1989,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
+								        		
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        					
 					        				}else if(y == 12) {
 					        					
@@ -1886,8 +2017,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
+								        		
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        					
 					        				}
 					        				
@@ -1897,6 +2031,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        			      					        			        	
 							        		        	
 							        }
+					        		
+					        		HSSFCell cellInd2 = Row.createCell(cel);
+					        		cellInd2.setCellStyle(style1);
+					        		cellInd2.setCellValue(sumReal);
+					        		cel++;		        				        		
+					        		
+					        		HSSFCell cellInd3 = Row.createCell(cel);
+					        		cellInd3.setCellStyle(style1);
+					        		cellInd3.setCellValue(sumMeta);
+					        		cel++;
 					        	}        
 						        
 					        	numero++;
@@ -2045,6 +2189,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 						        
 						        }
 						        
+						        HSSFCell cellCabp1 = CabP1Row.createCell(num1);
+					        	cellCabp1.setCellStyle(style);
+					        	cellCabp1.setCellValue("Total Ejecutado");
+					        	num1++;
+					        	
+					        	HSSFCell cellCabp2 = CabP1Row.createCell(num1);
+					        	cellCabp2.setCellStyle(style);
+					        	cellCabp2.setCellValue("Total Programado");
+					        	num1++;
+						        
 						        numero++;
 					        	
 					        }else if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaMensual())) {
@@ -2094,6 +2248,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 						        
 						        }
 						        
+						        HSSFCell cellCabp1 = CabP1Row.createCell(num1);
+					        	cellCabp1.setCellStyle(style);
+					        	cellCabp1.setCellValue("Total Ejecutado");
+					        	num1++;
+					        	
+					        	HSSFCell cellCabp2 = CabP1Row.createCell(num1);
+					        	cellCabp2.setCellStyle(style);
+					        	cellCabp2.setCellValue("Total Programado");
+					        	num1++;
+						        
 						        numero++;
 					        	
 					        }
@@ -2130,6 +2294,9 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        		cellInd1.setCellValue(unidad);
 					        		cel++;
 					        		
+					        		Double sumReal=0.0;
+				        			Double sumMeta=0.0;
+					        		
 					        		for(int y= mesI; y<=mesF; y++) {
 					        	    	
 					        			//obtener mediciones
@@ -2161,9 +2328,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 							        		
 							        		HSSFCell cellInd4 = Row.createCell(cel);
 							        		cellInd4.setCellStyle(style1);
-							        		cellInd4.setCellValue(porcentaje);
+							        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 							        		cel++;
 						        					  
+							        		sumReal = sumReal + real;
+							        		sumMeta = sumMeta + meta;
 					        				
 					        			}else  if(iniciativa.getFrecuencia().equals(Frecuencia.getFrecuenciaTrimestral())) {
 					        				
@@ -2189,8 +2358,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
+								        		
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        					
 					        				}else if(y == 6) {
 					        					
@@ -2214,8 +2386,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
+								        		
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        					
 					        				}else if(y == 9) {
 					        					
@@ -2239,7 +2414,7 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
 					        					
 					        				}else if(y == 12) {
@@ -2264,9 +2439,11 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 								        		
 								        		HSSFCell cellInd4 = Row.createCell(cel);
 								        		cellInd4.setCellStyle(style1);
-								        		cellInd4.setCellValue(porcentaje);
+								        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 								        		cel++;
 					        					
+								        		sumReal = sumReal + real;
+								        		sumMeta = sumMeta + meta;
 					        				}
 					        				
 					        			}
@@ -2275,6 +2452,16 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 					        			      					        			        	
 							        		        	
 							        }
+					        		
+					        		HSSFCell cellInd2 = Row.createCell(cel);
+					        		cellInd2.setCellStyle(style1);
+					        		cellInd2.setCellValue(sumReal);
+					        		cel++;		        				        		
+					        		
+					        		HSSFCell cellInd3 = Row.createCell(cel);
+					        		cellInd3.setCellStyle(style1);
+					        		cellInd3.setCellValue(sumMeta);
+					        		cel++;
 					        	}        
 						        
 					        	numero++;
@@ -2557,7 +2744,7 @@ public class ReporteIniciativaIndicadorEjecucion extends VgcAction {
 									        		
 									        		HSSFCell cellInd4 = Row.createCell(cel);
 									        		cellInd4.setCellStyle(style1);
-									        		cellInd4.setCellValue(porcentaje);
+									        		cellInd4.setCellValue(VgcFormatter.formatearNumero(porcentaje));
 									        		cel++;
 								        			        	
 										        		        	

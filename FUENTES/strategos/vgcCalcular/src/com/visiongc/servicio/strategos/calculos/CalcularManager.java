@@ -496,7 +496,7 @@ class Tarea implements Runnable
     	boolean respuesta = new CalcularManager(this.pm, this.log, this.messageResources, this.servicio).Calcular();
     	
     	if (respuesta)
-    		log.append("\n\nEjecución [Thread " + Thread.currentThread().getName() + "] " + counter + " Ejecución=" + sdf.format(now.getTime()) + " proxima Ejecución=" + sdf.format(nowNext.getTime()) + "\n");
+    		log.append("\n\nEjecuciï¿½n [Thread " + Thread.currentThread().getName() + "] " + counter + " Ejecuciï¿½n=" + sdf.format(now.getTime()) + " proxima Ejecuciï¿½n=" + sdf.format(nowNext.getTime()) + "\n");
     	else
     		this.detener();
 	        

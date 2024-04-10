@@ -234,8 +234,8 @@ public class MedicionManager
 		    		    sql = sql + medicion.getMedicionId().getPeriodo() + ", ";
 		    		    sql = sql + medicion.getValor().doubleValue() + ", ";
 		    		    sql = sql + (medicion.getProtegido() ? "1" : "0") + ")";
-
-		    		    respuesta = stm.executeUpdate(sql);
+		    		    		    		    
+		    		    respuesta = stm.executeUpdate(sql);		    		    
 	    			}
 	    		}
 

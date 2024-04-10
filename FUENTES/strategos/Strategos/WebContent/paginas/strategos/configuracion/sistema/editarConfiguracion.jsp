@@ -32,6 +32,7 @@
 			var _setEficacia = null;
 			var _setEficiencia = null;
 			var _setAdministracionPublica = null;
+			var _setUnidadMedida = null;
 
 			var _setAnteponerAvance = null;
 			var _setAnteponerPresupuesto = null;
@@ -50,6 +51,7 @@
 				
 				activarBloqueoEspera();
 	
+				
 				document.editarConfiguracionSistemaForm.action = '<html:rewrite action="/configuracion/sistema/editar"/>?funcion=salvar';
 				document.editarConfiguracionSistemaForm.submit();
 			}
@@ -460,6 +462,21 @@
 								</td>
 							</tr>
 							
+							<!-- Unidad de medida -->
+							<tr>
+								<td colspan="3" valign="top"><hr width="100%"></td>
+							</tr>
+							<tr>
+								<td align="left" valign="top"><vgcutil:message key="jsp.configuracion.sistema.iniciativas.unidad.medida" /></td>
+								
+								<td>								
+									<html:select property="unidad" styleClass="cuadroTexto" size="1" onclick="onclickUnidadId(this)" >
+										<html:option value=""></html:option>
+										<html:optionsCollection property="unidadesMedida" value="unidadId" label="nombre" />
+									</html:select>																	
+								</td>
+							</tr>
+																				
 						</table>
 					</vgcinterfaz:panelContenedor>
 					

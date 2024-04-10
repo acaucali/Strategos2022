@@ -516,6 +516,9 @@ public class GuardarIndicadorAction extends VgcAction
 
   		Formula formulaIndicador = new Formula();
   		formulaIndicador.setInsumos(new HashSet<Object>());
+  		
+  		System.out.print("\n\nFormula : " + editarIndicadorForm.getFormula());
+  		System.out.print("\nInsumos : " + editarIndicadorForm.getInsumosFormula());
 
   		formulaIndicador.setExpresion(IndicadorValidator.reemplazarCorrelativosFormula(editarIndicadorForm.getFormula(), editarIndicadorForm.getInsumosFormula()));
 

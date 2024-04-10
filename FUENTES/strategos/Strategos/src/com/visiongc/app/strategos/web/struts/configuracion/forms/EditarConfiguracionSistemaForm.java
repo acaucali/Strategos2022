@@ -3,6 +3,8 @@
  */
 package com.visiongc.app.strategos.web.struts.configuracion.forms;
 
+import java.util.List;
+
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
@@ -29,6 +31,8 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	private Boolean iniciativaIndicadorEficienciaMostrar;
 	private Boolean iniciativaIndicadorAvanceAnteponer;
 	private Boolean iniciativaAdministracionPublica;
+	private String unidad;
+	private List<?> unidadesMedida;
 
 	// Plan
 	private Boolean planObjetivoAlertaAnualMostrar;
@@ -184,7 +188,7 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 	{
 		this.iniciativaIndicadorAvanceAnteponer = iniciativaIndicadorAvanceAnteponer;
 	}
-
+		
 	public Boolean getPlanObjetivoLogroAnualMostrar()
 	{
 		return this.planObjetivoLogroAnualMostrar;
@@ -495,6 +499,8 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 		this.iniciativaIndicadorEficienciaMostrar = false;
 		this.iniciativaIndicadorAvanceAnteponer = false;
 		this.iniciativaAdministracionPublica = false;
+		this.unidadesMedida = null;
+		this.unidad = null;
 
 		this.planObjetivoLogroAnualMostrar = true;
 		this.planObjetivoLogroParcialMostrar = true;
@@ -535,6 +541,22 @@ public class EditarConfiguracionSistemaForm extends EditarObjetoForm
 
 	public void setIniciativaAdministracionPublica(Boolean iniciativaAdministracionPublica) {
 		this.iniciativaAdministracionPublica = iniciativaAdministracionPublica;
+	}
+	
+	public String getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(String unidad) {
+		this.unidad = unidad;
+	}
+	
+	public List<?> getUnidadesMedida() {
+		return unidadesMedida;
+	}
+
+	public void setUnidadesMedida(List<?> unidadesMedida) {
+		this.unidadesMedida = unidadesMedida;
 	}
 
 	public static class TipoCorreo

@@ -687,6 +687,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 				configuracionIniciativa.setIniciativaNombre(VgcAbstractService.getTagValue("nombre", eElement));
 
 				configuracionIniciativa.setIniciativaAdministracionPublica(VgcAbstractService.getTagValue("mostrar", eElement).equals("1"));
+				configuracionIniciativa.setUnidad(VgcAbstractService.getTagValue("unidad", eElement));
 				nList = doc.getElementsByTagName("indicador");
 				if (nList.getLength() > 0) {
 					for (int i = 0; i < nList.getLength(); i++) {
@@ -820,9 +821,8 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		indicador.setPrioridad(PrioridadIndicador.getPrioridadIndicadorBaja());
 		indicador.setMostrarEnArbol(new Boolean(true));
 		if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
-			indicador.setCaracteristica(Caracteristica.getCaracteristicaCondicionValorMaximo());
-		} else
 			indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
+		} 
 		indicador.setTipoFuncion(tipo);
 		indicador.setGuia(new Boolean(false));
 		indicador.setValorInicialCero(new Boolean(true));
@@ -839,6 +839,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		indicador.setSeriesIndicador(new HashSet());
 		setSeriesTiempo(indicador);
 		indicador.setNaturaleza(Naturaleza.getNaturalezaSimple());
+				
 		if ((tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficacia().byteValue())
 				|| (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionEficiencia().byteValue())) {
 			indicador.setCorte(TipoCorte.getTipoCorteTransversal());
@@ -850,12 +851,15 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 				indicador.setNaturaleza(Naturaleza.getNaturalezaFormula());
 				resultado = crearIndicadorFormulaEficiencia(iniciativa, indicador);
 			}
-		} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
-			indicador.setCorte(TipoCorte.getTipoCorteTransversal());
-			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionAlPeriodo());
-		} else {
+		} else if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {					
 			indicador.setCorte(TipoCorte.getTipoCorteLongitudinal());
 			indicador.setTipoCargaMedicion(TipoMedicion.getTipoMedicionEnPeriodo());
+			indicador.setUnidadId(Long.parseLong(configuracionIniciativa.getUnidad()));
+		}else {
+			indicador.setCorte(TipoCorte.getTipoCorteLongitudinal());
+			indicador.setTipoCargaMedicion(iniciativa.getTipoMedicion());
+			indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
+			
 		}
 
 		if (resultado == 10000)
