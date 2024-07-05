@@ -18,6 +18,7 @@ public class SerieUtil
   private Long serieId;
   private Long indicadorId;
   private Double valor;
+  private Double acumulado;
   private Boolean serieAnoAnterior;
   
   public SerieUtil() {}
@@ -80,6 +81,30 @@ public class SerieUtil
     
     if (this.valor != null) {
       valor = decimalformat.format(this.valor);
+    } else {
+      valor = null;
+    }
+    return valor;
+  }
+
+  public Double getAcumulado() {
+	return acumulado;
+  }
+
+  public void setAcumulado(Double acumulado) {
+	this.acumulado = acumulado;
+  }
+  
+  public String getAcumuladoFormateado(String format)
+  {
+    String valor = null;
+    Locale currentLocale = new Locale("en", "US");
+    NumberFormat numberFormatter = NumberFormat.getNumberInstance(currentLocale);
+    DecimalFormat decimalformat = (DecimalFormat)numberFormatter;
+    decimalformat.applyPattern(format);
+    
+    if (this.acumulado != null) {
+      valor = decimalformat.format(this.acumulado);
     } else {
       valor = null;
     }

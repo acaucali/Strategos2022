@@ -70,30 +70,33 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 				
 		Long selectFrecuencia = (request.getParameter("frecuencia") != null && request.getParameter("frecuencia") != "" && !request.getParameter("frecuencia").equals("0")) ? Long.parseLong(request.getParameter("frecuencia")) : null;
 		Long selectUnidadMedida = (request.getParameter("unidadMedida") != null && request.getParameter("unidadMedida") != "" && !request.getParameter("unidadMedida").equals("0")) ? Long.parseLong(request.getParameter("unidadMedida")) : null;		
-								
+												
+		if(selectFrecuencia != null) {
+			if(selectFrecuencia == 1000)
+				selectFrecuencia = null;
+		}
 		
 		if (selectFrecuencia != null)
-			request.getSession().setAttribute("selectFrecuenciaIndicador", selectFrecuencia);
+			request.getSession().setAttribute("selectFrecuenciaIndicadorPlan", selectFrecuencia);
 		if (selectUnidadMedida != null)
-			request.getSession().setAttribute("selectUnidadMedidaIndicador", selectUnidadMedida);
+			request.getSession().setAttribute("selectUnidadMedidaIndicadorPlan", selectUnidadMedida);
 		
 		if (request.getParameter("limpiarFiltros") != null) {						
-			request.getSession().setAttribute("selectFrecuenciaIndicador", null);
-			request.getSession().setAttribute("selectUnidadMedidaIndicador", null);								
+			request.getSession().setAttribute("selectFrecuenciaIndicadorPlan", null);
+			request.getSession().setAttribute("selectUnidadMedidaIndicadorPlan", null);								
 		}
 		
 		Long selectFrecuenciaAttribute = null;
 		Long selectUnidadMedidaAttribute = null;
 		
-		if (request.getSession().getAttribute("selectFrecuenciaIndicador") != null)
-			selectFrecuenciaAttribute = (Long) request.getSession().getAttribute("selectFrecuenciaIndicador");
+		if (request.getSession().getAttribute("selectFrecuenciaIndicadorPlan") != null)
+			selectFrecuenciaAttribute = (Long) request.getSession().getAttribute("selectFrecuenciaIndicadorPlan");
 		else 		
 			selectFrecuenciaAttribute = null;		
-		if (request.getSession().getAttribute("selectUnidadMedidaIndicador") != null)
-			selectUnidadMedidaAttribute = (Long) request.getSession().getAttribute("selectUnidadMedidaIndicador");
+		if (request.getSession().getAttribute("selectUnidadMedidaIndicadorPlan") != null)
+			selectUnidadMedidaAttribute = (Long) request.getSession().getAttribute("selectUnidadMedidaIndicadorPlan");
 		else 	
-			selectUnidadMedidaAttribute = null;
-		
+			selectUnidadMedidaAttribute = null;		
 				
 		gestionarIndicadoresPlanForm.setFrecuencia( selectFrecuenciaAttribute);
 		gestionarIndicadoresPlanForm.setUnidadId(selectUnidadMedidaAttribute);

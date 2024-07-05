@@ -822,7 +822,9 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		indicador.setMostrarEnArbol(new Boolean(true));
 		if (tipo.byteValue() == TipoFuncionIndicador.getTipoFuncionPresupuesto().byteValue()) {
 			indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
-		} 
+		} else {
+			indicador.setCaracteristica(Caracteristica.getCaracteristicaRetoAumento());
+		}
 		indicador.setTipoFuncion(tipo);
 		indicador.setGuia(new Boolean(false));
 		indicador.setValorInicialCero(new Boolean(true));

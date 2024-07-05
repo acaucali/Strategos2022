@@ -137,13 +137,14 @@
 									<html:text property="nombre" size="65" maxlength="150" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
-							<!-- Rif -->
+							<!-- Rif 
 							<tr>
 								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.rif" /></td>
 								<td colspan="2">
 									<html:text property="rif" size="15" maxlength="15" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
+							-->
 							<!-- Campos de la ficha-->
 							 <tr>
 								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.telefonos" /></td>
@@ -172,6 +173,13 @@
 								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.codigoparcialdeenlace" /></td>
 								<td colspan="2">
 									<html:text property="enlaceParcial" size="50" maxlength="50" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
+								</td>
+							</tr>
+							<!-- Administrador -->
+							 <tr>
+								<td align="left"><vgcutil:message key="jsp.editarorganizacion.pestana.datosbasicos.administrador" /></td>
+								<td colspan="2">
+									<html:text property="administrador" size="65" maxlength="150" styleClass="cuadroTexto" onkeypress="ejecutarPorDefecto(event)" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"/>
 								</td>
 							</tr>
 							<!-- Mes de Cierre -->

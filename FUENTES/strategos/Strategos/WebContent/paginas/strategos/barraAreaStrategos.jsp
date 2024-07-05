@@ -94,14 +94,13 @@
 	}
 
 	function gestionarRiesgo() {
-
-		window.location.href = '<html:rewrite action="/problemas/clasesproblemas/gestionarClasesProblemas" />?defaultLoader=true&tipo=1';
-
-		/* nuevo modulo riesgos para pgn */
-
 		/*
+		window.location.href = '<html:rewrite action="/problemas/clasesproblemas/gestionarClasesProblemas" />?defaultLoader=true&tipo=1';
+		*/
+		
+		/* nuevo modulo riesgos para pgn */		
 		window.location.href="http://localhost:4200" ;
-		 */
+		 
 	}
 
 	function gestionarAdministracion() {
@@ -376,7 +375,7 @@
 		</vgcinterfaz:botonBarraAreas>
      	-->
 
-    	<!-- 	Riesgo 
+    	<!-- 	Riesgo -->
 		<logic:notEmpty scope="session" name="activarRiesgo">
 			<logic:notEmpty scope="session" name="activarRiesgo"
 				property="objeto">
@@ -390,7 +389,7 @@
 				</logic:equal>
 			</logic:notEmpty>
 		</logic:notEmpty>
-    	-->
+    	
 
     <!-- Plan -->
 		<logic:empty scope="session" name="activarPlan">

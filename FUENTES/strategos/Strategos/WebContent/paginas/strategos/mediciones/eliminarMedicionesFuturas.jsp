@@ -26,17 +26,20 @@
 			var _setCloseParent = false;
 			var errMsRango = '<vgcutil:message key="jsp.asistente.grafico.rango.alerta.invalido" />';
 
+			var desdeAno = '<bean:write name="editarMedicionesForm" property="anoDesde" ignore="true"/>';
 			var hastaAno = '<bean:write name="editarMedicionesForm" property="anoHasta" ignore="true"/>';
+			var desdeMes = 1;
 			var hastaMes = 12;
 
 			function init() {
 				eventoCambioFrecuencia();
 				inicializarSeriesTiempo();
 				<logic:equal name="editarMedicionesForm" property="desdePlanificacion" value="true">
-
-				document.getElementById('selectPeriodoFinal').value = document.editarMedicionesForm.periodoHasta.value;
-				document.getElementById('selectDefecto').value = document.editarMedicionesForm.periodoHasta.value;
-				validarRango(document.editarMedicionesForm.anoDesde,
+					document.getElementById('selectPeriodoInicial').value = document.editarMedicionesForm.periodoDesde.value;
+					document.getElementById('selectPeriodoFinal').value = document.editarMedicionesForm.periodoHasta.value;
+					document.getElementById('selectDefecto').value = document.editarMedicionesForm.periodoHasta.value;
+					document.getElementById('selectPeriodoInicial').disabled = true;
+					validarRango(document.editarMedicionesForm.anoDesde,
 						document.editarMedicionesForm.anoHasta, document
 								.getElementById('selectPeriodoInicial'),
 						document.getElementById('selectPeriodoFinal'),
@@ -202,6 +205,82 @@
 				combo.options[idxElemento].text = texto; //Este es el texto que verás en la combo
 				combo.options[idxElemento].value = valor; //Este es el valor que se enviará cuando hagas un submit del
 			}
+			
+			function validarRango(desdeAnoObj, hastaAnoObj, desdeMesObj, hastaMesObj, errmsg)
+		  	{
+		  		desde = parseInt(desdeAnoObj.value + "" + (desdeMesObj.value.length == 1 ? (document.editarMedicionesForm.frecuencia.value == "0" ? "00" : "0") : "") + desdeMesObj.value);
+				hasta = parseInt(hastaAnoObj.value + "" + (hastaMesObj.value.length == 1 ? (document.editarMedicionesForm.frecuencia.value == "0" ? "00" : "0") : "") + hastaMesObj.value);
+
+				if (hasta<desde) 
+				{
+					alert(errmsg);
+					hastaAnoObj.value = hastaAno;
+					hastaMesObj.value = hastaMes;				
+					desdeAnoObj.value = desdeAno;
+					desdeMesObj.value = desdeMes;
+					return false;
+				} 
+				else 
+				{
+					var fecha = new Date(); 
+					var ano = fecha.getFullYear();
+					var mes = obtenerPeriodoActual(document.editarMedicionesForm.frecuencia.value) + 1;
+					
+					var desdeIniciativa = document.editarMedicionesForm.desdePlanificacion.value;
+						
+					
+					desdeAno = desdeAnoObj.value;
+					hastaAno = hastaAnoObj.value;
+					desdeMes = desdeMesObj.value;
+					hastaMes = hastaMesObj.value;
+					
+					
+					<logic:equal name="editarMedicionesForm" property="desdePlanificacion" value="true">
+						<logic:equal name="editarMedicionesForm" property="desdeReal" value="true">
+							<logic:notEqual name="editarMedicionesForm" property="esAdmin" value="true">
+						
+								if(hastaAno == ano){
+									
+									if(hastaMes > mes){
+										
+										alert('<vgcutil:message key="jsp.asistente.grafico.rango.alerta.invalido.superior" />');
+										hastaAnoObj.value = hastaAno;
+										hastaMesObj.value = hastaMes;				
+										desdeAnoObj.value = desdeAno;
+										desdeMesObj.value = desdeMes;
+										return false;
+									}
+									
+								}
+								if(hastaAno > ano){
+									alert('<vgcutil:message key="jsp.asistente.grafico.rango.alerta.invalido.superior" />');
+									hastaAnoObj.value = hastaAno;
+									hastaMesObj.value = hastaMes;				
+									desdeAnoObj.value = desdeAno;
+									desdeMesObj.value = desdeMes;
+									return false;
+								}
+							</logic:notEqual>
+						</logic:equal>
+					</logic:equal>
+					
+					
+				}
+				
+				document.editarMedicionesForm.periodoDesde.value = desdeMesObj.value;
+				document.editarMedicionesForm.periodoHasta.value = hastaMesObj.value;
+				return true;
+			}
+			
+			function seleccionarFechaDesde() 
+			{
+				mostrarCalendario('document.editarMedicionesForm.fechaDesde' , document.editarMedicionesForm.fechaDesde.value, '<vgcutil:message key="formato.fecha.corta" />');
+			}
+		
+			function seleccionarFechaHasta() 
+			{
+				mostrarCalendario('document.editarMedicionesForm.fechaHasta' , document.editarMedicionesForm.fechaHasta.value, '<vgcutil:message key="formato.fecha.corta" />');
+			}
 
 			function eventoCambioFrecuencia() {
 				document.getElementById("trPeriodoFinal").style.display = "";
@@ -313,12 +392,15 @@
 			function editarMediciones() {
 
 				document.editarMedicionesForm.periodoHasta.value = document
-						.getElementById('selectPeriodoFinal').value;				
+						.getElementById('selectPeriodoFinal').value;
 
 				var xml = '&funcion=eliminar';
 				activarBloqueoEspera();
-				document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/eliminarMedicionesFuturas"/>?anio=' + document.editarMedicionesForm.anoHasta.value
-						+ xml + '&source=' + document.editarMedicionesForm.sourceScreen.value;
+				document.editarMedicionesForm.action = '<html:rewrite action="/mediciones/eliminarMedicionesFuturas"/>?anio='
+						+ document.editarMedicionesForm.anoHasta.value
+						+ xml
+						+ '&source='
+						+ document.editarMedicionesForm.sourceScreen.value;
 				document.editarMedicionesForm.submit();
 			}
 
@@ -380,7 +462,7 @@
 			<logic:equal name="editarMedicionesForm"
 				property="desdePlanificacion" value="true">
 				<bean:define id="mostrarSeleccion" value="false"></bean:define>
-				<bean:define id="altoContenedor" value="260px"></bean:define>
+				<bean:define id="altoContenedor" value="240px"></bean:define>
 			</logic:equal>
 			<logic:notEqual name="editarMedicionesForm"
 				property="desdePlanificacion" value="true">
@@ -399,7 +481,7 @@
 				</logic:notEqual>
 			</bean:define>
 
-			<vgcinterfaz:contenedorForma width="400px" height="380"
+			<vgcinterfaz:contenedorForma width="400px" height="<%=altoContenedor %>" 
 				bodyAlign="center" bodyValign="middle" marginTop="10px"
 				scrolling="hidden">
 
@@ -411,7 +493,7 @@
 				<table class="bordeFichaDatos">
 					<%-- Organización --%>
 					<tr>
-						<td align="right" valign="top"><b><vgcutil:message
+						<td align="left" valign="top"><b><vgcutil:message
 									key="jsp.configuraredicionmediciones.ficha.organizacion" /></b></td>
 						<td colspan="3"><bean:write name="editarMedicionesForm"
 								property="organizacion" />&nbsp;</td>
@@ -420,7 +502,7 @@
 						property="perspectivaId">
 						<%-- Plan --%>
 						<tr>
-							<td align="right" valign="top"><b><bean:write
+							<td align="left" valign="top"><b><bean:write
 										name="editarMedicionesForm" property="nombreObjetoPerspectiva" /></b></td>
 							<td colspan="3"><bean:write name="editarMedicionesForm"
 									property="perspectivaNombre" />&nbsp;</td>
@@ -430,7 +512,7 @@
 						value="true">
 						<%-- Clase de Indicadores --%>
 						<tr>
-							<td align="right"><b><vgcutil:message
+							<td align="left"><b><vgcutil:message
 										key="jsp.configuraredicionmediciones.ficha.clase" /></b></td>
 							<td colspan="3"><bean:write name="editarMedicionesForm"
 									property="clase" />&nbsp;</td>
@@ -440,14 +522,14 @@
 						property="desdePlanificacion" value="true">
 						<%-- Actividades --%>
 						<tr>
-							<td align="right"><b><vgcutil:message
+							<td align="left"><b><vgcutil:message
 										key="jsp.configuraredicionmediciones.ficha.iniciativa" /></b></td>
 							<td colspan="3"><bean:write name="editarMedicionesForm"
 									property="iniciativa" />&nbsp;</td>
 						</tr>
 					</logic:equal>
 					<tr>
-						<td align="right"><b><vgcutil:message
+						<td align="left"><b><vgcutil:message
 									key="jsp.configuraredicionmediciones.ficha.frecuencia" /></b></td>
 						<td align="left"><html:select property="frecuencia"
 								styleClass="cuadroTexto" onchange="eventoCambioFrecuencia();"
@@ -459,7 +541,7 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 					</tr>
-					
+
 					<tr>
 						<td colspan="4">&nbsp;</td>
 					</tr>

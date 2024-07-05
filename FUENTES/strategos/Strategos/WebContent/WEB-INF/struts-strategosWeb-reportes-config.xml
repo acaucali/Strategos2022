@@ -32,6 +32,8 @@
 		<forward name="reporteIniciativaMedicionesAtrasadas" path="/paginas/strategos/reportes/iniciativas/medicionesAtrasadas.jsp" />
 		<forward name="reporteIniciativaIndicadores" path="/paginas/strategos/reportes/iniciativas/indicadoresProyecto.jsp"/>
 		<forward name="reporteExplicacionesResumido" path="/paginas/strategos/reportes/explicaciones/explicacionesResumido.jsp"/>
+		<forward name="reporteCumplimiento" path="/paginas/strategos/reportes/reporteCumplimiento.jsp"/>
+		<forward name="reporteDependenciasOmisivas" path="/paginas/strategos/reportes/reporteDependenciasOmisivas.jsp"/>
 		
 	</global-forwards>
 
@@ -203,6 +205,22 @@
 		
 		<!-- Mapeo del Action: Reporte Explicaciones XLS -->
 		<action path="/reportes/explicaciones/resumidaExplicacionXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteExplicacionesXls"></action>
+		
+		
+		<!-- Mapeo del Action: Pantalla de Reporte de Cumplimiento -->
+		<action path="/reportes/reporteCumplimiento" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteCumplimientoAction" scope="request" name="reporteForm" parameter="reporteCumplimiento"></action>
+		
+		<!-- Mapeo del Action: Reporte de Cumplimiento PDF -->
+		<action path="/reportes/reporteCumplimientoPdf" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteCumplimientoPdf"></action>
+		
+		<!-- Mapeo del Action: Reporte de Cumplimiento Xls -->
+		<action path="/reportes/reporteCumplimientoXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteCumplimientoXls"></action>
+		
+		<!-- Mapeo del Action: Pantalla de Reporte de Dependencias Omisivas -->
+		<action path="/reportes/reporteDependenciasOmisivas" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteDependenciasOmisivasAction" scope="request" name="reporteForm" parameter="reporteDependenciasOmisivas"></action>
+		
+		<!-- Mapeo del Action: Reporte de Dependencias Omisivas Xls -->
+		<action path="/reportes/reporteDependenciasOmisivasXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteDependenciasOmisivasXls"></action>
 		
 	</action-mappings>
 </struts-config>

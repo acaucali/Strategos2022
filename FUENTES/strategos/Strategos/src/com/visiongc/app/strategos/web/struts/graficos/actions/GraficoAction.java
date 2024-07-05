@@ -681,6 +681,8 @@ public class GraficoAction extends VgcAction
 		SerieUtil serieGrafico = new SerieUtil();
 		Long indicadorId = 0L;
 		graficoForm.setMostrarCondicion(true);
+		graficoForm.setMostrarAcumulado(true);		
+		Integer numIndicadores = 0;
 		for (Iterator<DatosSerie> i = graficoForm.getSeries().iterator(); i.hasNext(); )
 		{
 			DatosSerie serie = i.next();
@@ -701,15 +703,15 @@ public class GraficoAction extends VgcAction
 
 			if (indicador != null)
 			{
-				if (graficoForm.getIndicadores() != null && !graficoForm.getIndicadores().contains(indicador))
-					graficoForm.getIndicadores().add(indicador);
+				if (graficoForm.getIndicadores() != null && !graficoForm.getIndicadores().contains(indicador)) 					
+					graficoForm.getIndicadores().add(indicador);									
 				else
 				{
 					graficoForm.setIndicadores(new ArrayList<Indicador>());
 					graficoForm.getIndicadores().add(indicador);
+					numIndicadores++;
 				}
-			}
-
+			}			
 			if (hayIndicador && indicadorId.longValue() != serie.getIndicador().getIndicadorId().longValue())
 			{
 				graficoForm.setMostrarCondicion(false);
@@ -782,8 +784,9 @@ public class GraficoAction extends VgcAction
 			meta = new Meta();
 			metaAnualParciales = new MetaAnualParciales();
 			Double valor = null;
+			Double acumulado = 0.0;
 			for (int index = 0; index < graficoForm.getAnosPeriodos().size(); index++)
-			{
+			{				
 				periodo = graficoForm.getAnosPeriodos().get(index);
 				valor = null;
 				totalValor = 0;
@@ -822,11 +825,24 @@ public class GraficoAction extends VgcAction
 				if (serie.getVisualizar())
 				{
 					if (includeValorSerie && hayIndicador)
-					{
+					{						
 						serieGrafico = new SerieUtil();
 						serieGrafico.setSerieId(serie.getSerieIndicador().getPk().getSerieId());
 						serieGrafico.setIndicadorId(serie.getIndicador().getIndicadorId());
 						serieGrafico.setValor(valor);
+						if(valor != null)
+						{														
+							if(!indicador.getUnidad().getNombre().equals("%")) {
+								if(((indicador.getCorte() != 0) || (indicador.getTipoCargaMedicion() != 0))) {									
+									acumulado = acumulado+valor;
+									serieGrafico.setAcumulado(acumulado);
+								}
+								else
+									graficoForm.setBloqueoAcumulado(true);
+							}
+							else
+								graficoForm.setBloqueoAcumulado(true);							
+						}						
 						serieGrafico.setSerieAnoAnterior(serie.getSerieAnoAnterior());
 
 						periodo.getSeries().add(serieGrafico);
@@ -1011,11 +1027,15 @@ public class GraficoAction extends VgcAction
 
 			id = id + 1L;
 			serie.setId(id);
+		}			
+						
+		if (numIndicadores-1 > 1) {
+			graficoForm.setBloqueoAcumulado(true);
+			graficoForm.setBloqueoIndicadores(true);
 		}
-
 		if (graficoForm.getIndicadores() != null && graficoForm.getIndicadores().size() == 1)
 			graficoForm.setIndicadores(null);
-
+		
 		graficoForm.setUltimoPeriodo(ultimoPeriodo);
 		strategosIndicadoresService.close();
 		strategosMedicionesService.close();
@@ -1268,6 +1288,17 @@ public class GraficoAction extends VgcAction
 						graficoForm.setCondicion(valor.getNodeValue() == "1" || Integer.parseInt(valor.getNodeValue()) == 1 ? true : false);
 					else
 						graficoForm.setCondicion(false);
+				}
+				
+				if (elemento.getElementsByTagName("acumulado").getLength() > 0)
+				{
+					nodeLista = elemento.getElementsByTagName("acumulado").item(0).getChildNodes();
+					valor = nodeLista.item(0);
+
+					if (valor != null && !valor.getNodeValue().equals(""))
+						graficoForm.setAcumulado(valor.getNodeValue() == "1" || Integer.parseInt(valor.getNodeValue()) == 1 ? true : false);
+					else
+						graficoForm.setAcumulado(false);
 				}
 
 				if (elemento.getElementsByTagName("verTituloImprimir").getLength() > 0)
@@ -1930,7 +1961,8 @@ public class GraficoAction extends VgcAction
 		String tituloEjeX = "";
 		Byte frecuencia = 3;
 		Byte frecuenciaAgrupada = 3;
-		String condicion = "0";
+		String condicion = "1";
+		String acumulado = "0";
 		String verTituloImprimir = "1";
 		String ajustarEscala = "1";
 		String titulo = "";
@@ -2182,7 +2214,7 @@ public class GraficoAction extends VgcAction
 					tituloEjeX = celda.getTituloEjeX();
 				frecuencia = celda.getFrecuencia();
 				frecuenciaAgrupada = celda.getFrecuenciaAgrupada();
-				condicion = celda.getCondicion();
+				condicion = celda.getCondicion();				
 				verTituloImprimir = celda.getVerTituloImprimir();
 				ajustarEscala = celda.getAjustarEscala();
 				series = celda.getDatosSeries();
@@ -2372,6 +2404,11 @@ public class GraficoAction extends VgcAction
 
 		elemento = document.createElement("condicion");
 		text = document.createTextNode(condicion);
+		elemento.appendChild(text);
+		raiz.appendChild(elemento);
+		
+		elemento = document.createElement("acumulado");
+		text = document.createTextNode(acumulado);
 		elemento.appendChild(text);
 		raiz.appendChild(elemento);
 

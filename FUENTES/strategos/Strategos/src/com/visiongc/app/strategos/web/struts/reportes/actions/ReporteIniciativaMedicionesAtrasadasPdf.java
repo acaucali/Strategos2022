@@ -83,10 +83,12 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 		 * reporte.setAnoInicial(request.getParameter("anoInicial"));
 		 * reporte.setAnoFinal(request.getParameter("anoFinal"));
 		 */
+		Integer fecha = new Date().getYear();
+		String anio = fecha.toString();
 		reporte.setMesInicial("1");
 		reporte.setMesFinal("12");
-		reporte.setAnoInicial("2023");
-		reporte.setAnoFinal("2023");
+		reporte.setAnoInicial(anio);
+		reporte.setAnoFinal(anio);
 		reporte.setAlcance(request.getParameter("alcance") != null ? Byte.parseByte(request.getParameter("alcance"))
 				: reporte.getAlcancePlan());
 		reporte.setAno(Integer.parseInt(ano));
@@ -574,8 +576,8 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 		Date fechaUltimaMedicion;
 		Integer periodo = obtenerFecha(iniciativa.getFrecuencia());
-		String fecha = String.valueOf(periodo) + "/" + String.valueOf(new Date().getYear() + 1900);
-		SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
+		String fecha = String.valueOf((periodo-1)) + "/" + String.valueOf(new Date().getYear() + 1900);
+		SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");		
 		Date fechaActualDate = date.parse(fecha);
 		String ultimaMedicion = iniciativa.getFechaUltimaMedicion();
 		String frecuencia = obtenerFrecuencia(iniciativa.getFrecuencia());
@@ -639,7 +641,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 			tabla.agregarCelda("\n" + iniciativa.getAnioFormulacion());
 		}
 		if (iniciativa.getFechaUltimaMedicion() != null) {
-			fechaUltimaMedicion = date.parse(ultimaMedicion);
+			fechaUltimaMedicion = date.parse(ultimaMedicion);			
 			if (fechaUltimaMedicion.before(fechaActualDate)) {
 				tabla.agregarCelda("\n" + "Sí");
 			} else {
@@ -713,7 +715,7 @@ public class ReporteIniciativaMedicionesAtrasadasPdf extends VgcReporteBasicoAct
 
 		Date fechaUltimaMedicion;
 		Integer periodo = obtenerFecha(iniciativa.getFrecuencia());
-		String fecha = String.valueOf(periodo) + "/" + String.valueOf(new Date().getYear() + 1900);
+		String fecha = String.valueOf((periodo-1)) + "/" + String.valueOf(new Date().getYear() + 1900);
 		SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
 		Date fechaActualDate = date.parse(fecha);
 		String ultimaMedicion = actividad.getFechaUltimaMedicion();

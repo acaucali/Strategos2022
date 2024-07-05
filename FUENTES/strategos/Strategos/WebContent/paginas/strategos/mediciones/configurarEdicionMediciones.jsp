@@ -539,7 +539,7 @@
 			}
 			
 			function alerta(){
-				var alerta = confirm('Esta intentando cargar mediciones a futuro');
+				var alerta = confirm('ESTA INTENTANDO CARGAR MEDICIONES A FUTURO');
 		 		if(alerta){
 		 			var confirmacion = confirm('¿ESTA SEGURO DE REALIZAR ESTA ACCCION?');
 		 			if(confirmacion){
@@ -591,7 +591,7 @@
 			<bean:define id="altoContenedor" value="400px"></bean:define>
 			<logic:equal name="editarMedicionesForm" property="desdePlanificacion" value="true">
 				<bean:define id="mostrarSeleccion" value="false"></bean:define>
-				<bean:define id="altoContenedor" value="260px"></bean:define>
+				<bean:define id="altoContenedor" value="280px"></bean:define>
 			</logic:equal>
 			<logic:notEqual name="editarMedicionesForm" property="desdePlanificacion" value="true">
 				<logic:equal name="mostrarSeleccion" value="true">
@@ -605,9 +605,9 @@
 				<logic:notEqual name="editarMedicionesForm" property="desdePlanificacion" value="true">
 					false
 				</logic:notEqual>
-			</bean:define>
+			</bean:define>		
 
-			<vgcinterfaz:contenedorForma width="400px" height="<%=altoContenedor %>" bodyAlign="center" bodyValign="middle" marginTop="10px" scrolling="hidden">
+			<vgcinterfaz:contenedorForma width="460px" height="<%=altoContenedor %>" bodyAlign="center" bodyValign="middle" marginTop="10px" scrolling="hidden">
 
 				<%-- Título --%>
 				<vgcinterfaz:contenedorFormaTitulo>..::					
@@ -685,10 +685,19 @@
 								<tr id="trPeriodoInicial">
 									<td><span id="tdPeriodoInicial"></span></td>
 									<td>
-										<select id="selectPeriodoInicial"
-											class="cuadroTexto">
-											<option selected id="selectDefecto"></option>
-										</select>
+										<logic:notEqual name="editarMedicionesForm" property="desdePlanificacion" value="true">
+											<select id="selectPeriodoInicial"										
+												class="cuadroTexto">
+												<option selected id="selectDefecto"></option>
+											</select>
+										</logic:notEqual>
+										<logic:equal name="editarMedicionesForm" property="desdePlanificacion" value="true">
+											<select id="selectPeriodoInicial"
+												disabled										
+												class="cuadroTexto">
+												<option selected id="selectDefecto"></option>
+											</select>
+										</logic:equal>
 									</td>
 								</tr>
 								<tr id="trPeriodoInicialDate">
@@ -745,7 +754,7 @@
 						<tr>
 							<td colspan="4">
 								<bean:define id="paginaSeries" name="editarMedicionesForm" property="paginaSeriesTiempo" scope="session" toScope="request"></bean:define>
-								<div style="position: relative; overflow: auto; height: 100px; border-style: solid; border-width: 1px; border-color: #666666;">
+								<div style="position: relative; overflow: auto; height: 160px; border-style: solid; border-width: 1px; border-color: #666666;">
 									<vgcinterfaz:visorLista nombreConfiguracionBase="com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguracionesBase" namePaginaLista="paginaSeries" messageKeyNoElementos="jsp.gestionarindicadores.noregistros" nombre="visorSeriesTiempo" scopePaginaLista="request">
 								
 										<%-- Selección múltiple --%>

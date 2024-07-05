@@ -495,6 +495,7 @@
 	            writer.WriteElementString("frecuenciaAgrupada", document.getElementById("selectFrecuenciasCompatibles").value);
 	            writer.WriteElementString("nombre", CodificarString(document.graficoForm.titulo.value, codificar));
 	            writer.WriteElementString("condicion", (document.graficoForm.condicion != null ? document.graficoForm.condicion.checked ? "1" : "0" : "0"));
+	            writer.WriteElementString("acumulado", (document.graficoForm.acumulado != null ? document.graficoForm.acumulado.checked ? "1" : "0" : "0"));
 	            writer.WriteElementString("verTituloImprimir", (document.graficoForm.verTituloImprimir != null ? document.graficoForm.verTituloImprimir.checked ? "1" : "0" : "0"));
 	            writer.WriteElementString("ajustarEscala", (document.graficoForm.ajustarEscala != null ? document.graficoForm.ajustarEscala.checked ? "1" : "0" : "0"));
 	            writer.WriteElementString("acumular", (document.graficoForm.acumular != null ? document.graficoForm.acumular.checked ? "1" : "0" : "0"));

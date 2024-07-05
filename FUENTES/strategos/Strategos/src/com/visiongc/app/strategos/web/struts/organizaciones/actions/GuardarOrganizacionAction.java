@@ -145,7 +145,12 @@ public class GuardarOrganizacionAction extends VgcAction
 			organizacionStrategos.setPorcentajeZonaAmarillaIniciativas(editarOrganizacionForm.getPorcentajeZonaAmarillaIniciativas());
 		else
 			organizacionStrategos.setPorcentajeZonaAmarillaIniciativas(null);
-
+		
+		if(editarOrganizacionForm.getAdministrador() != null)
+			organizacionStrategos.setAdministrador(editarOrganizacionForm.getAdministrador());
+		else
+			organizacionStrategos.setAdministrador(null);
+		
 		organizacionStrategos.setMesCierre(editarOrganizacionForm.getMesCierre());
 		organizacionStrategos.setVisible(editarOrganizacionForm.getVisible());
 

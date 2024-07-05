@@ -1357,10 +1357,22 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.explicaciones.resumidaexplicacionpdf", false, false, "EXPLICACIONES_VISTA");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
-	    actionRight = new StrutsActionRight("reportes.explicaciones.resumidaexplicacionxls", false, false, "EXPLICACIONES_VISTA");
+	    actionRight = new StrutsActionRight("reportes.explicaciones.resumidaexplicacionxls", false, false, "EXPLICACIONES_VISTA");	   	   
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    
-
+	    // Reporte Cumplimiento 
+	    actionRight = new StrutsActionRight("reportes.reportecumplimiento", false, false, "REPORTE_CUMPLIMIENTO");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.reportecumplimientopdf", false, false, "REPORTE_CUMPLIMIENTO");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.reportecumplimientoxls", false, false, "REPORTE_CUMPLIMIENTO");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    // Reporte Dependencias Omisivas
+	    actionRight = new StrutsActionRight("reportes.reportedependenciasomisivas", false, false, "REPORTE_DEPENDENCIAS_OMISIVAS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.reportedependenciasomisivasxls", false, false, "REPORTE_DEPENDENCIAS_OMISIVAS");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    
 	    // Grafico
 	    actionRight = new StrutsActionRight("graficos.cancelarasistentegrafico", false, true, "INDICADOR_EVALUAR_GRAFICO");
 	    this.mapa.put("graficos.cancelarasistentegrafico", actionRight);

@@ -27,16 +27,12 @@ public class ReporteExplicacionesAction extends VgcAction{
 
 		String objetoId = (request.getParameter("objetoId"));
 		String objetoKey = (request.getParameter("objetoKey"));
-		
-		System.out.print(objetoKey);
-		
+						
 		ReporteForm reporteForm = (ReporteForm)form;
 		reporteForm.clear();
 		
 		reporteForm.setObjetoSeleccionadoId(new Long(objetoId));
-		reporteForm.setObjetoKey(new String (objetoKey));
-		
-		System.out.print(reporteForm.getObjetoKey());
+		reporteForm.setObjetoKey(new String (objetoKey));				
 		
 		Usuario user = getUsuarioConectado(request);
 

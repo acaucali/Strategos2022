@@ -4787,6 +4787,9 @@ CREATE TABLE afw_lic (
 
 alter table instrumentos 
 	add column is_historico numeric(1,0);
+    
+ALTER TABLE organizacion 
+ADD COLUMN administrador VARCHAR(500);
 
 -- Completed on 2023-04-27 19:43:20
 

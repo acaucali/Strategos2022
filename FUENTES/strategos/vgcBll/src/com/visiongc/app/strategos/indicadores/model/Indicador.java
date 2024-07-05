@@ -122,6 +122,7 @@ public class Indicador
   private String fechaesperado;
   private String observacion;
   private String organizacionNombre;
+  private String perspectivaNombre;
   
   public Indicador() {}
   
@@ -1529,4 +1530,12 @@ public int compareTo(Object o)
       this.alertaTipoZonaAmarilla, this.alertaValorVariableZonaVerde, this.alertaValorVariableZonaAmarilla, this.parametroSuperiorIndicadorId, 
       this.parametroInferiorIndicadorId, this.parametroSuperiorValorFijo, this.parametroInferiorValorFijo, this.tipoFuncion, this.asignarInventario, this.unidadId);
   }
+
+public String getPerspectivaNombre() {
+	return perspectivaNombre;
+}
+
+public void setPerspectivaNombre(String perspectivaNombre) {
+	this.perspectivaNombre = perspectivaNombre;
+}
 }

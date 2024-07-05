@@ -110,6 +110,16 @@
 		abrirVentanaModal('<html:rewrite action="/graficos/asistenteGrafico" />' + xml, 'asistenteGraficos', '620', '440');
     }
     
+    function reporteCumplimiento()
+    {
+    	abrirVentanaModal('<html:rewrite action="/reportes/reporteCumplimiento" />', "reporteCumplimiento", 520, 370);
+    }
+    
+    function reporteDependenciasOmisivas()
+    {
+    	abrirVentanaModal('<html:rewrite action="/reportes/reporteDependenciasOmisivas" />', "reporteDependenciasOmisivas", 520, 370);
+    }
+    
     function onAsistenteGrafico()
     {
 		var grafico = new Grafico();
@@ -270,6 +280,8 @@
 				<vgcinterfaz:botonMenu permisoId="INDICADOR_EVALUAR_GRAFICO_PLANTILLA" key="menu.evaluacion.graficos.plantillas" onclick="listaGrafico();" />
 				<vgcinterfaz:botonMenu permisoId="INDICADOR_EVALUAR_GRAFICO_ASISTENTE" key="menu.evaluacion.graficos.asistente" onclick="asistenteGrafico();" />
 			</vgcinterfaz:menuAnidado>
+			<vgcinterfaz:botonMenu permisoId="REPORTE_CUMPLIMIENTO" key="menu.evaluacion.reportes.cumplimiento" onclick="reporteCumplimiento();" />
+			<vgcinterfaz:botonMenu permisoId="REPORTE_DEPENDENCIAS_OMISIVAS" key="menu.evaluacion.reportes.dependencias.omisivas" onclick="reporteDependenciasOmisivas();" />
 		</vgcinterfaz:menuBotones>
 	</vgcinterfaz:contenedorMenuHorizontalItem>
 

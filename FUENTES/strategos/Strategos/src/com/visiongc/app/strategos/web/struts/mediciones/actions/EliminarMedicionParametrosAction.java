@@ -24,6 +24,7 @@ import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
+import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
 import com.visiongc.app.strategos.model.util.Frecuencia;
 import com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos;
@@ -67,6 +68,8 @@ public class EliminarMedicionParametrosAction extends VgcAction{
 		boolean noExistenIndicadores = false;
 		editarMedicionesForm.setDesdeClase(Boolean.parseBoolean(request.getParameter("desdeClases")));
 		editarMedicionesForm.setDesdeIndicadorOrg(false);
+		boolean transformarSourceActividad = false;
+		String acti = "";
 
 		Byte source = Byte.parseByte(request.getParameter("source"));
 		if (source.byteValue() == TipoSource.SOURCE_CLASE) {
@@ -74,13 +77,34 @@ public class EliminarMedicionParametrosAction extends VgcAction{
 		}
 		else if (source.byteValue() == TipoSource.SOURCE_PLAN)
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_PLAN);
-		else if (source.byteValue() == TipoSource.SOURCE_INICIATIVA)
+		else if (source.byteValue() == TipoSource.SOURCE_INICIATIVA) {
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_INICIATIVA);
+			
+			StrategosPryActividadesService strategosPryActividadService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
+			StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
+			String iniciativaId = request.getParameter("iniciativaId");
+			Iniciativa iniciativa = (Iniciativa) strategosIniciativasService.load(Iniciativa.class,
+					new Long(iniciativaId));			
+			List<PryActividad> actividades = strategosPryActividadService.getActividades(iniciativa.getProyectoId());			
+			
+			for (int i = 0; i < actividades.size(); i++) {
+			    PryActividad act = actividades.get(i);
+			    acti = acti + act.getActividadId().toString();
+			    if (i < actividades.size() - 1) {
+			        acti = acti + ",";
+			    }
+			}						
+			transformarSourceActividad= true;
+			editarMedicionesForm.setDesdePlanificacion(true);
+		}
 		else if (source.byteValue() == TipoSource.SOURCE_INDICADOR) {
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_CLASE);
 			editarMedicionesForm.setDesdeIndicadorOrg(true);
 		}
 		else
+			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_ACTIVIDAD);
+		
+		if(transformarSourceActividad)
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_ACTIVIDAD);
 
 		if (request.getQueryString().indexOf("cambioFrecuencia=") > -1)
@@ -99,7 +123,7 @@ public class EliminarMedicionParametrosAction extends VgcAction{
 		editarMedicionesForm.setSoloSeleccionados(false);
 		if (editarMedicionesForm.getSourceScreen() == TipoSource.SOURCE_ACTIVIDAD)
 		{
-			setup(editarMedicionesForm, request);
+			setup(editarMedicionesForm, transformarSourceActividad, acti, request);
 			editarMedicionesForm.setDesdeIndicador(false);
 		}
 		if (request.getQueryString().indexOf("claseId=") > -1)
@@ -393,7 +417,7 @@ public class EliminarMedicionParametrosAction extends VgcAction{
 		return mapping.findForward(forward);
 	}
 
-	private String[] setup(EditarMedicionesForm editarMedicionesForm, HttpServletRequest request)
+	private String[] setup(EditarMedicionesForm editarMedicionesForm, boolean act, String acti, HttpServletRequest request)
 	{
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService(strategosPryActividadesService);
@@ -415,15 +439,19 @@ public class EliminarMedicionParametrosAction extends VgcAction{
 		PaginaLista paginaSeries = strategosSeriesTiempoService.getSeriesTiempoByList(0, 0, "serieId", "asc", true, null, series, getUsuarioConectado(request));
 		strategosSeriesTiempoService.close();
 
-		editarMedicionesForm.setPaginaSeriesTiempo(paginaSeries);
+		editarMedicionesForm.setPaginaSeriesTiempo(paginaSeries);		
 
 		Date fechaIni = null;
 		Date fechaFin = null;
 		Integer ano = null;
-		Integer periodo = null;
-		if (request.getQueryString().indexOf("actividadId=") > -1)
+		Integer periodo = null;								
+		if (request.getQueryString().indexOf("actividadId=") > -1 || act)
 		{
-			String strActividadId = request.getParameter("actividadId");
+			String strActividadId = "";
+			if(act)
+				strActividadId = acti;
+			else
+				strActividadId = request.getParameter("actividadId");
 			if (((strActividadId != null ? 1 : 0) & (strActividadId.equals("") ? 0 : 1)) != 0)
 			{
 				String[] ids = strActividadId.split(",");
@@ -570,17 +598,12 @@ public class EliminarMedicionParametrosAction extends VgcAction{
 		strategosPryActividadesService.close();
 
 		String[] serie = null;
-		if (tipo == SerieTiempo.getSerieReal().getSerieId().longValue())
-		{
+		
 			serie = new String[2];
 			serie[0] = SerieTiempo.getSerieReal().getSerieId().toString();
 			serie[1] = SerieTiempo.getSerieProgramado().getSerieId().toString();
-		}
-		else
-		{
-			serie = new String[1];
-			serie[0] = Long.toString(tipo);
-		}
+		
+		
 
 		return serie;
 	}

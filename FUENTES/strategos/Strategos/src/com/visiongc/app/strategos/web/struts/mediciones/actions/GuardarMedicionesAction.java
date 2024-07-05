@@ -511,8 +511,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 
     if(medicionesEditadas.size() >0){
     	validarInventarioNegativo(indicadores, strategosInsumoService, strategosMedicionesService, strategosIndicadoresService, messages,  getUsuarioConectado(request), medicionesEditadas, request, editarMedicionesForm);
-    	if(indicadoresPadre.size() >0)
-    		calcularTotal(indicadoresPadre, periodos, ano, editarMedicionesForm.getPlanId(), getUsuarioConectado(request));
+    	if(indicadoresPadre.size() > 0 && request.getSession().getAttribute("medicionDesdeIniciativa") != null) {
+    		if((boolean) request.getSession().getAttribute("medicionDesdeIniciativa"))
+    			calcularTotal(indicadoresPadre, periodos, ano, editarMedicionesForm.getPlanId(), getUsuarioConectado(request), request);
+    	}	
     }
     saveMessages(request, messages);
     if (forward.equals("exito"))
@@ -525,7 +527,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
     return mapping.findForward(forward);
   }
   
-  public void calcularTotal(List<Long> indicadorId, List<Integer> periodos,int ano, Long planId, Usuario usuario) {
+  public void calcularTotal(List<Long> indicadorId, List<Integer> periodos,int ano, Long planId, Usuario usuario, HttpServletRequest request) {
 	  	  	  
 	  Double sumatoria = 0.0;
 	  List<Medicion> medicionesEditadas = new ArrayList();  
@@ -571,6 +573,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
         }
       }	  
 	  strategosMedicionesService.saveMediciones(medicionesEditadas, planId, usuario, new Boolean(true), new Boolean(true));
+	  request.getSession().setAttribute("medicionDesdeIniciativa", null);
   }
 
   public void validarInventarioNegativo(List<Indicador> indicadores, StrategosIndicadorAsignarInventarioService strategosInsumoService, StrategosMedicionesService strategosMedicionesService, StrategosIndicadoresService strategosIndicadoresService , ActionMessages messages,Usuario usuario, List<Medicion> medicionesEditadas, HttpServletRequest request,EditarMedicionesForm editarMedicionesform) throws Exception{

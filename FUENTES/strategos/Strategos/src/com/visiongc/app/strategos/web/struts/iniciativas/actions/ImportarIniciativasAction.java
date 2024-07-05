@@ -50,7 +50,7 @@ public class ImportarIniciativasAction extends VgcAction{
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		Configuracion configuracion = frameworkService.getConfiguracion("Strategos.Servicios.Configuracion");
 		
-		
+		System.out.print("\n\nConfiguracion : " + configuracion);		
 		ConfiguracionUsuario presentacion = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Wizar.Importar.ShowPresentacion", "ShowPresentacion");
 		if (presentacion != null && presentacion.getData() != null)
 			importarIniciativasForm.setShowPresentacion(presentacion.getData().equals("1") ? true : false);

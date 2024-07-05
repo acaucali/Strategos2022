@@ -16,6 +16,15 @@
 	</logic:empty>
 </bean:define>
 
+<bean:define id="bloquearAcumulado" toScope="page">
+	<logic:notEmpty name="graficoForm" property="bloqueoAcumulado">
+		<bean:write name="graficoForm" property="bloqueoAcumulado" />
+	</logic:notEmpty>
+	<logic:empty name="graficoForm" property="bloqueoAcumulado">
+		false
+	</logic:empty>
+</bean:define>
+
 <bean:define id="listaTiposSerie" toScope="page" name="graficoForm" property="tiposSerie" />
 <div id="modal1" class="modalmask">
 	<div class="modalbox movedown" style="width:700px;padding: 0px;">
@@ -745,10 +754,41 @@
 											<td><html:checkbox property="condicion" disabled="<%= Boolean.parseBoolean(bloquearForma) %>"
 													styleClass="botonSeleccionMultiple">
 													<vgcutil:message key="jsp.grafico.editor.condicion" />
+												</html:checkbox>
+										</tr>
+									</logic:equal>																		
+									<logic:equal name="graficoForm"
+										property="mostrarAcumulado" value="true">
+										<tr>
+											<logic:equal name="graficoForm"
+												property="bloqueoAcumulado" value="true">		
+													<td><html:checkbox property="acumulado" disabled="<%= Boolean.parseBoolean(bloquearAcumulado) %>"
+															styleClass="botonSeleccionMultiple">
+															<vgcutil:message key="jsp.grafico.editor.acumulado" />  
+														</html:checkbox><br>
+														&nbsp;
+														&nbsp;					
+														<logic:equal name="graficoForm"
+															property="bloqueoIndicadores" value="true">
+															<b><vgcutil:message key="jsp.grafico.editor.acumulado.no.disponible.indicadores" /></b> 										
+														</logic:equal>			
+														<logic:notEqual name="graficoForm"
+															property="bloqueoIndicadores" value="true">		
+															<b><vgcutil:message key="jsp.grafico.editor.acumulado.no.disponible" /></b> 
+														</logic:notEqual>
+														<br> <br> <br> <br></td>
+											</logic:equal>
+											
+											<logic:notEqual name="graficoForm"
+												property="bloqueoAcumulado" value="true">	
+													<td><html:checkbox property="acumulado" disabled="<%= Boolean.parseBoolean(bloquearAcumulado) %>"
+													styleClass="botonSeleccionMultiple">
+													<vgcutil:message key="jsp.grafico.editor.acumulado" />
 												</html:checkbox><br> <br> <br> <br> <br> <br></td>
+											</logic:notEqual>											
 										</tr>
 									</logic:equal>
-									<logic:equal name="graficoForm" property="mostrarCondicion" value="false">
+									<logic:equal name="graficoForm" property="mostrarAcumulado" value="false">
 										<tr>
 											<td>
 												<br><br><br><br><br><br><br>

@@ -59,7 +59,7 @@
 			var url = '&indicadorId=' + document.gestionarIndicadoresForm.seleccionados.value + '&claseId=<bean:write name="claseIndicadores" property="claseId" scope="session" />' + "&source=0&desdeClases=true";
 			var ultimaMedicion
 
-			abrirVentanaModal('<html:rewrite action="/mediciones/configurarEdicionMediciones" />' + nombreForma + funcionCierre + nombreCampoOculto + url, 'cargarMediciones', '440', '520');
+			abrirVentanaModal('<html:rewrite action="/mediciones/configurarEdicionMediciones" />' + nombreForma + funcionCierre + nombreCampoOculto + url, 'cargarMediciones', '500', '520');
 		}
 	}
 	

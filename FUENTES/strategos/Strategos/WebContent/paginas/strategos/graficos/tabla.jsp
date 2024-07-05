@@ -34,6 +34,18 @@
 								<logic:equal name="graficoForm" property="condicion" value="true">
 									<th scope="col" style="color: #666666;"><vgcutil:message key="jsp.grafico.editor.alerta" /></th>
 								</logic:equal>
+								<logic:equal name="graficoForm" property="acumulado"
+										value="true">
+									<logic:iterate name="graficoForm" property="series" id="serie">
+										<logic:equal name="serie" property="visualizar" value="true">
+											<th scope="col" style="color: #666666;">
+												( Acumulado ) 
+												&nbsp;
+												<bean:write name='serie' property='pathClase' />
+											</th>
+										</logic:equal>
+									</logic:iterate>
+								</logic:equal>
 							</tr>
 						</thead>
 						<tfoot>
@@ -67,6 +79,17 @@
 											</logic:notEmpty> <logic:empty property="alerta" name="anoPeriodo">
 												&nbsp;
 											</logic:empty></td>
+									</logic:equal>
+									<logic:equal name="graficoForm" property="acumulado"
+										value="true">
+										<logic:iterate name="anoPeriodo" property="series" id="serie">
+											<td class="body"><logic:empty property="acumulado"
+													name="serie">
+													&nbsp;
+												</logic:empty><logic:notEmpty property="acumulado" name="serie">
+													<bean:write name="serie" property="acumulado" format="#,##0.00" />
+												</logic:notEmpty></td>
+										</logic:iterate>
 									</logic:equal>
 								</tr>
 							</logic:iterate>

@@ -364,7 +364,24 @@
 			{
 				actualizar();					
 			}
-						
+			
+			function eliminarMediciones(actividadId, tipo){
+				
+				if (tipo == undefined)
+					tipo = 0;
+				
+				if ((actividadId != null) && (actividadId != '') && (actividadId != 0))
+				{
+					var url = '?actividadId=' + actividadId + '&iniciativaId=<bean:write name="gestionarActividadesForm" property="iniciativaId" />' + '&organizacionId=<bean:write name="gestionarActividadesForm" property="organizacionId" />' + '&source=3';
+					document.gestionarActividadesForm.respuesta.value = "";
+	    			url = url + '&tipo=0';
+	    			var nombreForma = '&nombreForma=' + 'gestionarActividadesForm';
+	    			var funcionCierre = '&funcionCierre=' + 'onEditarMediciones()';
+	    			var nombreCampoOculto = '&nombreCampoOculto=' + 'respuesta'; 				    				    			
+				 					 			
+				 	abrirVentanaModal('<html:rewrite action="/mediciones/eliminarMedicionParametros" />' + url + nombreForma + funcionCierre + nombreCampoOculto, 'eliminarMedicionesFuturas', '510', '280');				 		    				    			 
+				}
+			}
 
 			function editarMediciones(actividadId, tipo) 
 			{
@@ -387,7 +404,7 @@
 		    			var funcionCierre = '&funcionCierre=' + 'onEditarMediciones()';
 		    			var nombreCampoOculto = '&nombreCampoOculto=' + 'respuesta';
 
-		    			abrirVentanaModal('<html:rewrite action="/mediciones/configurarEdicionMediciones" />' + url + nombreForma + funcionCierre + nombreCampoOculto, 'cargarMediciones', '470', '290');
+		    			abrirVentanaModal('<html:rewrite action="/mediciones/configurarEdicionMediciones" />' + url + nombreForma + funcionCierre + nombreCampoOculto, 'cargarMediciones', '520', '320');
 	    			}
 				}
 			}
@@ -574,6 +591,7 @@
 				var nombreForma = '?nombreForma=' + 'gestionarActividadesForm';				
 				abrirVentanaModal('<html:rewrite action="/planificacionseguimiento/actividades/importar" />' + nombreForma , 'importarActividades', '590', '470');
 			}
+		    		    
 		    
 		</script>
 
@@ -736,7 +754,7 @@
 								
 								<logic:notEqual name="gestionarActividadesForm" property="bloqueado" value="true">
 									<vgcinterfaz:botonMenu key="menu.mediciones.importar" onclick="importarMediciones();" permisoId="ACTIVIDAD_IMPORTAR" />
-									
+									<vgcinterfaz:botonMenu key="menu.mediciones.eliminar" onclick="eliminarMediciones(document.gestionarActividadesForm.seleccionados.value);" permisoId="INDICADOR_MEDICION" />
 									<vgcinterfaz:botonMenu key="menu.mediciones.calcular" onclick="calcularIndicadores();" permisoId="ACTIVIDAD_CALCULAR" agregarSeparador="true" />
 									<vgcinterfaz:menuAnidado key="menu.mediciones.proteccion">
 										<vgcinterfaz:botonMenu key="menu.mediciones.proteccion.liberar" onclick="protegerLiberarMediciones(document.gestionarActividadesForm.seleccionados.value, false);" permisoId="ACTIVIDAD_PROTEGER_LIBERAR" aplicaOrganizacion="true" />

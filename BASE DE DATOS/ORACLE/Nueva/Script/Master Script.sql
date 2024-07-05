@@ -3605,6 +3605,7 @@ ALTER TABLE medicion
 ALTER TABLE pry_calendario
 	ADD (CONSTRAINT FK_PRY_PROYECTO_CALENDARIO FOREIGN KEY (proyecto_id) REFERENCES pry_proyecto (proyecto_id) ON DELETE CASCADE);
 
-
+ALTER TABLE organizacion 
+    ADD administrador VARCHAR2(500);
 	
 COMMIT;

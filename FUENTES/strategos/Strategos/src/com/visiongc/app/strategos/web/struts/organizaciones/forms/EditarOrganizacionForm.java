@@ -46,6 +46,7 @@ public class EditarOrganizacionForm extends ValidatorActionForm
   	private Boolean soloLectura;
   	private Byte status;
   	private Long rootId;
+  	private String administrador;
 
   	// Variables para copiar organizacion
   	private Boolean copiarIndicadores;
@@ -712,5 +713,13 @@ public class EditarOrganizacionForm extends ValidatorActionForm
     	this.nuevoNombre = "";
 
     	this.concatenarCodigos = new Boolean(false);
+	}
+
+	public String getAdministrador() {
+		return administrador;
+	}
+
+	public void setAdministrador(String administrador) {
+		this.administrador = administrador;
 	}
 }

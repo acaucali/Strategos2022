@@ -120,7 +120,8 @@ public final class EditarOrganizacionAction extends VgcAction
 				editarOrganizacionForm.setPorcentajeZonaAmarillaIniciativas(organizacionStrategos.getPorcentajeZonaAmarillaIniciativas());
 				editarOrganizacionForm.setMesCierre(organizacionStrategos.getMesCierre());
 				editarOrganizacionForm.setVisible(organizacionStrategos.getVisible());
-
+				editarOrganizacionForm.setAdministrador(organizacionStrategos.getAdministrador());
+				
 				for (Iterator<?> i = organizacionStrategos.getMemos().iterator(); i.hasNext(); )
 				{
 					MemoOrganizacion oMemo = (MemoOrganizacion)i.next();

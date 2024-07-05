@@ -78,8 +78,7 @@ public class UsuariosHibernateSession
           hayCondicionesConsulta = true;
         }
         else if (fieldName.equals("organizacionId"))
-        {
-          tablasConsulta = tablasConsulta + ", UsuarioGrupo ug";
+        {          
           condicionesConsulta = condicionesConsulta + "usuario.usuarioId = ug.pk.usuarioId and ug.pk." + fieldName + " = " + fieldValue + " and ";
           hayCondicionesConsulta = true;
         }

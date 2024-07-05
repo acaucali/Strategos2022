@@ -17,6 +17,7 @@ import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
 import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
+import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 
 public class ReporteTiposProyectoAction extends VgcReporteBasicoAction
@@ -40,11 +41,12 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
 
     StrategosTipoProyectoService strategosTipoProyectoService = StrategosServiceFactory.getInstance().openStrategosTipoProyectoService();
 
-
-    TablaBasicaPDF tabla = null;
-    tabla = new TablaBasicaPDF(getConfiguracionPagina(request), request);
-    int[] columnas = new int[1];
-    columnas[0] = 80;
+    documento.add(lineaEnBlanco(font));
+    TablaPDF tabla = null;
+    tabla = new TablaPDF(getConfiguracionPagina(request), request);
+    int[] columnas = new int[2];
+    columnas[0] = 20;
+    columnas[1] = 80;
     tabla.setAmplitudTabla(100);
     tabla.crearTabla(columnas);
 
@@ -52,14 +54,21 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
 
     tabla.setFormatoFont(font.style());
     tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
-
+    tabla.setColorFondo(21, 60, 120);
+	tabla.setColorLetra(255, 255, 255);
+	tabla.setTamanoFont(10);
+	tabla.setFormatoFont(Font.NORMAL);
+	
+	tabla.agregarCelda(mensajes.getMessage("action.reportetipoproyecto.id"));
     tabla.agregarCelda(mensajes.getMessage("action.reportetipoproyecto.nombre"));
-
-    tabla.setDefaultAlineacionHorizontal();
+    
+    tabla.setColorFondo(255, 255, 255);
+	tabla.setColorLetra(0, 0, 0);
+	
     if ((proyecto != null) && (proyecto.size() > 0)) {
       for (Iterator<?> iter = proyecto.iterator(); iter.hasNext(); ) {
         TipoProyecto tipo = (TipoProyecto)iter.next();
-
+        tabla.agregarCelda(tipo.getTipoProyectoId().toString());
         tabla.agregarCelda(tipo.getNombre());
       }
 
@@ -73,9 +82,7 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
       texto.setAlignment(0);
       documento.add(texto);
     }
-
-    documento.newPage();
-
+    
     strategosTipoProyectoService.close();
   }
 }

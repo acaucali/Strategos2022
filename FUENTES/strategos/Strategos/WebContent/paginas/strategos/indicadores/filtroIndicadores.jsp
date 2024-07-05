@@ -57,7 +57,7 @@
 							
 							<logic:empty name="gestionarIndicadoresForm">
 								<logic:notEmpty name="gestionarIndicadoresPlanForm">
-									<logic:iterate id="filtrosFrec" name="gestionarIndicadoresForm" property="frecuencias">
+									<logic:iterate id="filtrosFrec" name="gestionarIndicadoresPlanForm" property="frecuencias">
 										<bean:define id="frecuenciaId" toScope="page" name="filtrosFrec" property="frecuenciaId" type="Byte"></bean:define>
 										<bean:define id="nombre" toScope="page"><bean:write name="filtrosFrec" property="nombre" /></bean:define>
 										<logic:equal name="filtrosFrec" property="frecuenciaId" value="<%=filtroFrecuenciaValue%>">
@@ -114,7 +114,7 @@
 							
 							<logic:empty name="gestionarIndicadoresForm">
 								<logic:notEmpty name="gestionarIndicadoresPlanForm">
-									<logic:iterate id="filtrosUni" name="gestionarIndicadoresForm" property="unidadesMedida">
+									<logic:iterate id="filtrosUni" name="gestionarIndicadoresPlanForm" property="unidadesMedida">
 										<bean:define id="unidadId" toScope="page" name="filtrosUni" property="unidadId" type="Long"></bean:define>
 										<bean:define id="nombre" toScope="page"><bean:write name="filtrosUni" property="nombre" /></bean:define>
 										<logic:equal name="filtrosUni" property="unidadId" value="<%=filtroUnidadValue%>">

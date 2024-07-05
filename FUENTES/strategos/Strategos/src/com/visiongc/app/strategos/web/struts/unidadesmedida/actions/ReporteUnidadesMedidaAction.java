@@ -17,6 +17,7 @@ import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
 import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
 import com.visiongc.commons.report.Tabla;
 import com.visiongc.commons.report.TablaBasicaPDF;
+import com.visiongc.commons.report.TablaPDF;
 import com.visiongc.commons.struts.action.VgcReporteBasicoAction;
 
 public class ReporteUnidadesMedidaAction extends VgcReporteBasicoAction
@@ -41,11 +42,13 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
 
     StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService();
 
-    TablaBasicaPDF tabla = null;
-    tabla = new TablaBasicaPDF(getConfiguracionPagina(request), request);
-    int[] columnas = new int[2];
-    columnas[0] = 80;
-    columnas[1] = 20;
+    documento.add(lineaEnBlanco(font));
+    TablaPDF tabla = null;
+    tabla = new TablaPDF(getConfiguracionPagina(request), request);
+    int[] columnas = new int[3];
+    columnas[0] = 20;
+    columnas[1] = 60;
+    columnas[2] = 20;
     tabla.setAmplitudTabla(100);
     tabla.crearTabla(columnas);
 
@@ -53,15 +56,23 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
 
     tabla.setFormatoFont(font.style());
     tabla.setAlineacionHorizontal(Tabla.H_ALINEACION_CENTER);
+    tabla.setColorFondo(21, 60, 120);
+	tabla.setColorLetra(255, 255, 255);
+	tabla.setTamanoFont(10);
+	tabla.setFormatoFont(Font.NORMAL);
 
+	tabla.agregarCelda(mensajes.getMessage("action.reporteunidadesmedida.id"));
     tabla.agregarCelda(mensajes.getMessage("action.reporteunidadesmedida.nombre"));
     tabla.agregarCelda(mensajes.getMessage("action.reporteunidadesmedida.monetaria"));
 
-    tabla.setDefaultAlineacionHorizontal();
+    tabla.setColorFondo(255, 255, 255);
+	tabla.setColorLetra(0, 0, 0);
+    
     if ((unidadesMedida != null) && (unidadesMedida.size() > 0)) {
       for (Iterator iter = unidadesMedida.iterator(); iter.hasNext(); ) {
         UnidadMedida unidad = (UnidadMedida)iter.next();
 
+        tabla.agregarCelda(unidad.getUnidadId().toString());
         tabla.setDefaultAlineacionHorizontal();
         tabla.agregarCelda(unidad.getNombre());
 
@@ -70,10 +81,9 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
           tabla.agregarCelda(mensajes.getMessage("comunes.si"));
         else if ((unidad.getTipo() != null) && (!unidad.getTipo().equals("true"))) {
           tabla.agregarCelda(mensajes.getMessage("comunes.no"));
-        }
-
+        }        
       }
-
+            
       documento.add(tabla.getTabla());
     }
     else
@@ -83,9 +93,7 @@ protected void construirReporte(ActionForm form, HttpServletRequest request, Htt
       Paragraph texto = new Paragraph(mensajes.getMessage("action.reporteunidadesmedida.nounidades"), font);
       texto.setAlignment(0);
       documento.add(texto);
-    }
-
-    documento.newPage();
+    }    
 
     strategosUnidadesService.close();
   }

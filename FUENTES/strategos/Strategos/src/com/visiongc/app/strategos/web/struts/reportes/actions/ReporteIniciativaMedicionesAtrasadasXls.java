@@ -156,7 +156,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 
 					Date fechaUltimaMedicion;
 					Integer periodo = obtenerFecha(iniciativa.getFrecuencia());
-					String fecha = String.valueOf(periodo) + "/" + String.valueOf(new Date().getYear() + 1900);
+					String fecha = String.valueOf((periodo-1)) + "/" + String.valueOf(new Date().getYear() + 1900);
 					SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
 					Date fechaActualDate = date.parse(fecha);
 					String ultimaMedicion = iniciativa.getFechaUltimaMedicion();
@@ -242,7 +242,7 @@ public class ReporteIniciativaMedicionesAtrasadasXls extends VgcAction {
 
 							Date fechaUltimaMedicionActividad;
 							Integer periodoActividad = obtenerFecha(iniciativa.getFrecuencia());
-							String fecha = String.valueOf(periodoActividad) + "/"
+							String fecha = String.valueOf((periodoActividad-1)) + "/"
 									+ String.valueOf(new Date().getYear() + 1900);
 							SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
 							Date fechaActualDate = date.parse(fecha);

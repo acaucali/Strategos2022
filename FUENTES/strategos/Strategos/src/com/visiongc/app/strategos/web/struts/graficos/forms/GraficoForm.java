@@ -75,6 +75,10 @@ public class GraficoForm extends EditarObjetoForm
 	private List<?> tiposSerie;
 	private Boolean condicion;
 	private Boolean mostrarCondicion;
+	private Boolean acumulado;
+	private Boolean mostrarAcumulado;
+	private Boolean bloqueoAcumulado;
+	private Boolean bloqueoIndicadores;
 	private String source;
 	private Long objetoId;
 	private String className;
@@ -1112,6 +1116,38 @@ public class GraficoForm extends EditarObjetoForm
 
 	public void setDesdeInstrumento(Boolean desdeInstrumento) {
 		this.desdeInstrumento = desdeInstrumento;
+	}
+
+	public Boolean getMostrarAcumulado() {
+		return mostrarAcumulado;
+	}
+
+	public void setMostrarAcumulado(Boolean mostrarAcumulado) {
+		this.mostrarAcumulado = mostrarAcumulado;
+	}
+
+	public Boolean getAcumulado() {
+		return acumulado;
+	}
+
+	public void setAcumulado(Boolean acumulado) {
+		this.acumulado = acumulado;
+	}
+
+	public Boolean getBloqueoAcumulado() {
+		return bloqueoAcumulado;
+	}
+
+	public void setBloqueoAcumulado(Boolean bloqueoAcumulado) {
+		this.bloqueoAcumulado = bloqueoAcumulado;
+	}
+
+	public Boolean getBloqueoIndicadores() {
+		return bloqueoIndicadores;
+	}
+
+	public void setBloqueoIndicadores(Boolean bloqueoIndicadores) {
+		this.bloqueoIndicadores = bloqueoIndicadores;
 	}
 
 	public static class GraficoTipo

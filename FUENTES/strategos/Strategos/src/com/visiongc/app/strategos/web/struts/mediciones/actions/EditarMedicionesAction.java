@@ -133,8 +133,10 @@ public final class EditarMedicionesAction extends VgcAction
 
 		String[] serieId = request.getParameterValues("serieId");
 		Long inciativaId = null;
-		if (request.getParameter("inciativaId") != null)
+		if (request.getParameter("inciativaId") != null) {
 			inciativaId = new Long(request.getParameter("inciativaId"));
+			request.getSession().setAttribute("medicionDesdeIniciativa", true);
+		}
 
 		if (serieId == null)
 			serieId = editarMedicionesForm.getSerieId();
@@ -502,6 +504,12 @@ public final class EditarMedicionesAction extends VgcAction
 
 						if (editarMedicionesForm.getSourceScreen() == TipoSource.SOURCE_ACTIVIDAD && indicador.getActividadId() != null)
 						{
+							mediciones = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(), SerieTiempo.getSerieReal().getSerieId(), new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
+							if (mediciones.size() > 0)
+							{
+								if(((Medicion) mediciones.get(mediciones.size() -1)).getValor() == 100.0)
+									indicador.setEstaBloqueado(new Boolean(true));
+							}							
 							indicador.setIsPocentaje(true);
 					    	if (unidad != null && indicador.getUnidadId().longValue() != unidad.getUnidadId().longValue())
 					    		indicador.setIsPocentaje(false);
@@ -516,6 +524,13 @@ public final class EditarMedicionesAction extends VgcAction
 						    	else if (actividad.getFinPlan() != null)
 						    		indicador.setFechaFinal(VgcFormatter.formatearFecha(actividad.getFinPlan(), "formato.fecha.corta"));
 					    	}
+						}
+						
+						if(actividad != null ) {
+							if (actividad.getPorcentajeEjecutado() != null) {
+								if(actividad.getPorcentajeEjecutado() == 100.0 )
+									indicador.setEstaBloqueado(new Boolean(true));
+							}
 						}
 
 						Set<Medicion> medicionesAux = new LinkedHashSet<Medicion>();

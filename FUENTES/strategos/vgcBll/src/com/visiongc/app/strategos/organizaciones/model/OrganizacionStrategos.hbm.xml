@@ -21,6 +21,7 @@
 		<property name="porcentajeZonaAmarillaIniciativas" type="java.lang.Integer" column="alerta_iniciativa_za" />
 		<property name="visible" type="com.visiongc.commons.persistence.hibernate.CustomBooleanType" column="visible" />
 		<property name="soloLectura" type="com.visiongc.commons.persistence.hibernate.CustomBooleanType" column="read_only" />
+		<property name="administrador" type="java.lang.String" column="administrador" />
 
 		<!-- Asociación uno a muchos para Organizacion -->
 		<set name="hijos" lazy="true" order-by="nombre">

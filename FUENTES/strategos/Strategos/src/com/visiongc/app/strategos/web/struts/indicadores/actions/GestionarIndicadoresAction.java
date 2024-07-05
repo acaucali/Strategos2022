@@ -91,7 +91,7 @@ public class GestionarIndicadoresAction extends VgcAction
 			if(selectFrecuencia == 1000)
 				selectFrecuencia = null;
 		}
-		
+						
 		if (selectFrecuencia != null)
 			request.getSession().setAttribute("selectFrecuenciaIndicador", selectFrecuencia);
 		if (selectUnidadMedida != null)
@@ -113,7 +113,7 @@ public class GestionarIndicadoresAction extends VgcAction
 			selectUnidadMedidaAttribute = (Long) request.getSession().getAttribute("selectUnidadMedidaIndicador");
 		else 			
 			selectUnidadMedidaAttribute = null;
-		
+						
 		gestionarIndicadoresForm.setFrecuencia( selectFrecuenciaAttribute);
 		gestionarIndicadoresForm.setUnidadId(selectUnidadMedidaAttribute);
 		
