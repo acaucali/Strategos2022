@@ -304,6 +304,15 @@ public class EditarIniciativaAction extends VgcAction {
 				editarIniciativaForm.setResponsableAdminContratosEmail(iniciativa.getResponsableAdminContratosEmail());
 				editarIniciativaForm.setResponsableAdminContratosTelefono(iniciativa.getResponsableAdminContratosTelefono());
 				
+				editarIniciativaForm.setAlineacionODS(iniciativa.getAlineacionODS());
+				editarIniciativaForm.setAlineacionPDMP(iniciativa.getAlineacionPDMP());
+				editarIniciativaForm.setCoberturaGeografica(iniciativa.getCoberturaGeografica());
+				editarIniciativaForm.setImpactoCiudadania(iniciativa.getImpactoCiudadania());
+				editarIniciativaForm.setImplementadorRecursos(iniciativa.getImplementadorRecursos());
+				editarIniciativaForm.setDependenciaResponsable(iniciativa.getDependenciaResponsable());
+				editarIniciativaForm.setSostenibilidad(iniciativa.getSostenibilidad());
+				editarIniciativaForm.setDependenciasCompetentes(iniciativa.getDependenciasCompetentes());
+				
 				ConfiguracionIniciativa configuracionIniciativa = strategosIniciativasService.getConfiguracionIniciativa();
 				
 				if (configuracionIniciativa != null)

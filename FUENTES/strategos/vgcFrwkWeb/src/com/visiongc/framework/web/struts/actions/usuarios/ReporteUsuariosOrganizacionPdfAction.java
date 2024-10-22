@@ -100,7 +100,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 				fuente.setSize(10);
 				fuente.setStyle(Font.BOLD);
 								
-				texto = new Paragraph("Organización: "+ org.getNombre(), fuente);
+				texto = new Paragraph("Organizaciï¿½n: "+ org.getNombre(), fuente);
 				texto.setAlignment(Element.ALIGN_LEFT);
 				texto.setIndentationLeft(16);
 				documento.add(texto);
@@ -113,7 +113,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 					 
 					 fuente.setSize(8);
 					 fuente.setStyle(Font.NORMAL);
-					 texto = new Paragraph("No existen usuarios asociados a la Organización", fuente);
+					 texto = new Paragraph("No existen usuarios asociados a la Organizaciï¿½n", fuente);
 					 texto.setAlignment(Element.ALIGN_LEFT);
 					 texto.setIndentationLeft(16);
 					 documento.add(texto);
@@ -184,8 +184,11 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 							    	tabla.agregarCelda("No");
 							    }
 							    	
-							    tabla.agregarCelda("");
-							 				
+							    Set<UsuarioGrupo> ug = (Set<UsuarioGrupo>) usuario.getUsuarioGrupos();							    
+							    if(ug.iterator().next().getGrupo().getGrupo() != null || !ug.iterator().next().getGrupo().getGrupo().equals("") )
+							    	tabla.agregarCelda(ug.iterator().next().getGrupo().getGrupo());
+							    else
+							    	tabla.agregarCelda("");							 				
 								
 						 }
 						 
@@ -213,7 +216,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 				fuente.setSize(10);
 				fuente.setStyle(Font.BOLD);
 								
-				texto = new Paragraph("Organización: "+ organizacion.getNombre(), fuente);
+				texto = new Paragraph("Organizaciï¿½n: "+ organizacion.getNombre(), fuente);
 				texto.setAlignment(Element.ALIGN_LEFT);
 				texto.setIndentationLeft(16);
 				documento.add(texto);
@@ -226,7 +229,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 					 
 					 fuente.setSize(8);
 					 fuente.setStyle(Font.NORMAL);
-					 texto = new Paragraph("No existen usuarios asociados a la Organización", fuente);
+					 texto = new Paragraph("No existen usuarios asociados a la Organizaciï¿½n", fuente);
 					 texto.setAlignment(Element.ALIGN_LEFT);
 					 texto.setIndentationLeft(16);
 					 documento.add(texto);
@@ -325,7 +328,7 @@ public class ReporteUsuariosOrganizacionPdfAction extends VgcReporteBasicoAction
 	  if(user.getUsuarioGrupos() != null) {
 		  usuariosGrupo = (List<UsuarioGrupo>) user.getUsuarioGrupos();
 		  
-		  //añade los ids de los grupos
+		  //aï¿½ade los ids de los grupos
 		  for(Iterator<UsuarioGrupo> iterUsuario = usuariosGrupo.iterator(); iterUsuario.hasNext(); ){	
 			  UsuarioGrupo usuarioGrupo = iterUsuario.next();
 			  

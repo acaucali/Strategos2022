@@ -56,8 +56,8 @@ public class ReporteIniciativaEjecucionAction extends VgcAction
 
 		boolean isAdmin=false;
 		if(user.getIsAdmin()){
-
 			isAdmin=true;
+			reporteForm.setIsAdmin(true);
 		}
 
 		request.getSession().setAttribute("isAdmin", isAdmin);

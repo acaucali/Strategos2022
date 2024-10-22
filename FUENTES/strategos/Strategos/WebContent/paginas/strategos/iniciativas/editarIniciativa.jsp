@@ -714,6 +714,82 @@
 
 					</vgcinterfaz:panelContenedor>
 
+					<logic:equal name="editarIniciativaForm"
+						property="desdeInstrumento" value="true">
+						
+						<!-- Panel: Cooperacion -->
+						<vgcinterfaz:panelContenedor anchoPestana="105"
+							nombre="cooperacion">						
+							<vgcinterfaz:panelContenedorTitulo>
+								<vgcutil:message
+									key="jsp.editariniciativa.pestana.cooperacion" />
+							</vgcinterfaz:panelContenedorTitulo>
+							
+							<table class="bordeFichaDatos" cellpadding="5" cellspacing="4"
+								border="0">
+								<%-- Alineación con el Plan Decenal del Ministerio Público --%>
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.alineacionpdmp" /></td>
+									<td colspan="3"><html:textarea property="alineacionPDMP"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>								
+								<%-- Alineación con los Objetivos de Desarrollo Sostenible --%>
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.alineacionods" /></td>
+									<td colspan="3"><html:textarea property="alineacionODS"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>								
+								<%-- Cobertura Geográfica --%>
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.coberturageografica" /></td>
+									<td colspan="3"><html:textarea property="coberturaGeografica"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>								
+								<%-- Impacto frente a la ciudadanía --%>
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.impactociudadania" /></td>
+									<td colspan="3"><html:textarea property="impactoCiudadania"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>								
+								<%-- Implementador de los Recursos --%>
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.implementadorrecursos" /></td>
+									<td colspan="3"><html:textarea property="implementadorRecursos"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>
+								<%-- Sostenibilidad --%>								
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.sostenibilidad" /></td>
+									<td colspan="3"><html:textarea property="sostenibilidad"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>
+								<%-- Dependencia Responsable --%>								
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.dependenciaresponsable" /></td>
+									<td colspan="3"><html:textarea property="dependenciaResponsable"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>
+								
+								<%-- Dependencias Competentes --%>								
+								<tr>
+									<td align="left" colspan="1"><vgcutil:message
+											key="jsp.editariniciativa.ficha.dependenciascompetentes" /></td>
+									<td colspan="3"><html:textarea property="dependenciasCompetentes"
+											onkeypress="" cols="85" rows="4" styleClass="cuadroTexto" /></td>
+								</tr>
+														
+							</table>
+						</vgcinterfaz:panelContenedor>
+					</logic:equal>
+					
+					
 					<!-- Panel: Parte II -->
 					<vgcinterfaz:panelContenedor anchoPestana="105"
 						nombre="datosBasicosII">

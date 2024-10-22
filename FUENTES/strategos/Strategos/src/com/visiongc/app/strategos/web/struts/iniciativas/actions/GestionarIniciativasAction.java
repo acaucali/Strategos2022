@@ -40,6 +40,7 @@ import com.visiongc.app.strategos.planes.model.IniciativaPerspectiva;
 import com.visiongc.app.strategos.planes.model.IniciativaPlan;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.planes.model.Plan;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.iniciativas.forms.GestionarIniciativasForm;
 import com.visiongc.app.strategos.web.struts.instrumentos.forms.GestionarInstrumentosForm;
@@ -53,6 +54,7 @@ import com.visiongc.framework.impl.FrameworkServiceFactory;
 import com.visiongc.framework.model.ConfiguracionUsuario;
 import com.visiongc.framework.model.ConfiguracionUsuarioPK;
 import com.visiongc.framework.model.Modulo;
+import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.web.controles.SplitControl;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
@@ -101,6 +103,40 @@ public class GestionarIniciativasAction extends VgcAction {
 				request.getSession().setAttribute("GuardarIndicador", "true");
 			}
 		}
+		
+		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
+		ConfiguracionUsuario configuracionUsuarioPanel = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Panel.Iniciativa", "Ancho");
+		if (configuracionUsuarioPanel == null)
+		{
+			configuracionUsuarioPanel = new ConfiguracionUsuario();
+			ConfiguracionUsuarioPK pk = new ConfiguracionUsuarioPK();
+			pk.setConfiguracionBase("Strategos.Panel.Iniciativa");
+			pk.setObjeto("Ancho");
+			pk.setUsuarioId(this.getUsuarioConectado(request).getUsuarioId());
+			configuracionUsuarioPanel.setPk(pk);
+			configuracionUsuarioPanel.setData("400");
+
+			frameworkService.saveConfiguracionUsuario(configuracionUsuarioPanel, this.getUsuarioConectado(request));
+		}
+		gestionarIniciativasForm.setAnchoPorDefecto(configuracionUsuarioPanel.getData());
+		
+		configuracionUsuarioPanel = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Panel.Iniciativa", "Alto");
+		if (configuracionUsuarioPanel == null)
+		{
+			configuracionUsuarioPanel = new ConfiguracionUsuario();
+			ConfiguracionUsuarioPK pk = new ConfiguracionUsuarioPK();
+			pk.setConfiguracionBase("Strategos.Panel.Iniciativa");
+			pk.setObjeto("Alto");
+			pk.setUsuarioId(this.getUsuarioConectado(request).getUsuarioId());
+			configuracionUsuarioPanel.setPk(pk);
+			configuracionUsuarioPanel.setData("400");
+
+			frameworkService.saveConfiguracionUsuario(configuracionUsuarioPanel, this.getUsuarioConectado(request));
+		}
+		gestionarIniciativasForm.setAltoPorDefecto(configuracionUsuarioPanel.getData());
+		
+		Boolean crearProyectos = (request.getParameter("crearProyectos") != null && request.getParameter("crearProyectos") != "") ? Boolean.valueOf(request.getParameter("crearProyectos")) : null;
+		
 		
 		// Permisos Reportes 
 		boolean detallado = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_DETALLADO");
@@ -272,7 +308,8 @@ public class GestionarIniciativasAction extends VgcAction {
 		// estatus
 
 		StrategosIniciativaEstatusService strategosIniciativaEstatusService = StrategosServiceFactory.getInstance()
-				.openStrategosIniciativaEstatusService();
+				.openStrategosIniciativaEstatusService();				
+		
 		Map<String, String> filtros = new HashMap();
 		PaginaLista paginaIniciativaEstatus = strategosIniciativaEstatusService.getIniciativaEstatus(0, 0, "id", "asc",
 				true, filtros);
@@ -293,6 +330,19 @@ public class GestionarIniciativasAction extends VgcAction {
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance()
 				.openStrategosIniciativasService();
 
+		if(crearProyectos != null ) {
+			Map<String, String> filtros1 = new HashMap();				
+			PaginaLista iniciativasVerificar = strategosIniciativasService.getIniciativas(0, 30,
+					"nombre", "ASC", true, filtros1);
+			List<Iniciativa> iniciativaas = iniciativasVerificar.getLista(); 
+			StrategosPryProyectosService strategosPryProyectoService = StrategosServiceFactory.getInstance().openStrategosPryProyectosService();
+			Usuario usuario = getUsuarioConectado(request);
+			for(Iniciativa ini : iniciativaas) {		
+				strategosIniciativasService.crearIndicadores(ini.getIniciativaId(), false, usuario);
+				//strategosPryProyectoService.verificarProyectoIniciativa(new Long(ini.getIniciativaId()), getUsuarioConectado(request));							
+			}
+		}
+		
 		gestionarIniciativasForm
 				.setVerForma(Boolean.valueOf(getPermisologiaUsuario(request).tienePermiso("INICIATIVA_VIEWALL")));
 		gestionarIniciativasForm
@@ -433,8 +483,7 @@ public class GestionarIniciativasAction extends VgcAction {
 		paginaPlanes.setTamanoPagina(listaPlanes.size());
 		paginaPlanes.setTamanoSetPaginas(1);
 		paginaPlanes.setTotal(listaPlanes.size());
-		if (paginaIniciativas.getLista().size() > 0) {
-			FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
+		if (paginaIniciativas.getLista().size() > 0) {			
 			ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(
 					getUsuarioConectado(request).getUsuarioId(), "Strategos.Foco.Iniciativa.Lista", "InicitivaId");
 			Long iniciativaIdFocus = null;

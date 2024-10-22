@@ -179,6 +179,11 @@
    		abrirVentanaModal('<html:rewrite action="/reportes/planes/explicaciones" />?source=Plan&perspectivaId=<bean:write name="perspectiva" property="perspectivaId" scope="session" />&planId=<bean:write name="gestionarPlanForm" property="planId" />', "ExplicacionesPlan", 480, 350);
 	}
     
+    function reporteIndicadoresPlan()
+	{
+   		abrirVentanaModal('<html:rewrite action="/reportes/planes/indicadoresPlanXls" />?source=Plan&planId=<bean:write name="gestionarPlanForm" property="planId" />', "IndicadoresPlan", 480, 350);
+	}
+    
     function reporteExplicaciones(url)
 	{
 		abrirReporte('<html:rewrite action="/reportes/planes/explicacionReportePlan" />' + url);
@@ -420,7 +425,8 @@
 						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.consolidado" onclick="reporteConsolidadoPlan()" permisoId="PLAN_REPORTE" agregarSeparador="true" />
 						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.objetivos" onclick="reporteEjecucionPlan()" permisoId="PLAN_REPORTE" agregarSeparador="true" />
 						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.meta" onclick="reporteMetaPlan()" permisoId="PLAN_REPORTE" agregarSeparador="true" />
-						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.explicaciones" onclick="reporteExplicacionesPlan()" permisoId="PLAN_REPORTE" />
+						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.explicaciones" onclick="reporteExplicacionesPlan()" permisoId="PLAN_REPORTE" agregarSeparador="true" />
+						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.indicadores" onclick="reporteIndicadoresPlan()" permisoId="PLAN_REPORTE" />
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 				

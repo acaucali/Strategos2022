@@ -98,7 +98,7 @@ public class ReporteUsuarioGrupoPdfAction extends VgcReporteBasicoAction
 		 documento.add(texto);
 			
 		 documento.add(lineaEnBlanco(fuente));
-		 
+		 		 
 		 usuarios= usuariosService.getUsuarios(0, atributoOrden, tipoOrden, true, filtros).getLista();
 		 
 		 if(usuarios == null || usuarios.size() == 0) {

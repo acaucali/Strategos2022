@@ -16,6 +16,7 @@ import java.util.Map;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.servicio.strategos.indicadores.model.ClaseIndicadores;
 import com.visiongc.servicio.strategos.indicadores.model.Formula;
@@ -274,6 +275,8 @@ public class IniciativaManager {
 		String fechaUltimaMedicion = null;
 		String codigoIniciativa = null;
 		String proyectoId = null;
+		String organizacionId = null;
+		String nombre = null;
 
 		try {
 			if (stmExt != null)
@@ -294,6 +297,8 @@ public class IniciativaManager {
 				fechaUltimaMedicion = rs.getString("fecha_ultima_medicion");
 				codigoIniciativa = rs.getString("codigo");
 				proyectoId = rs.getString("proyecto_id");
+				organizacionId = rs.getString("organizacion_id");
+				nombre = rs.getString("nombre");
 
 				if (iniId != null) {
 					iniciativa = new Iniciativa();
@@ -312,6 +317,10 @@ public class IniciativaManager {
 						iniciativa.setCodigoIniciativa(codigoIniciativa);
 					if(proyectoId != null)
 						iniciativa.setProyectoId(Long.parseLong(proyectoId));
+					if(organizacionId != null)
+						iniciativa.setOrganizacionId(Long.parseLong(organizacionId));
+					if(nombre != null)
+						iniciativa.setNombre(nombre);
 
 					iniciativas.add(iniciativa);
 				}
@@ -689,7 +698,7 @@ public class IniciativaManager {
 	}
 		
 	
-	public int saveIniciativas(List<Iniciativa> iniciativas, Statement stmExt) {
+	public int saveIniciativas(List<Iniciativa> iniciativas, Statement stmExt, Usuario usuario) {
 		String CLASS_METHOD = "IniciativaManager.saveIniciativas";		
 		
 		if (this.logConsolaMetodos)
@@ -702,6 +711,7 @@ public class IniciativaManager {
 		String sql = "";
 		String sqlObj = "";
 		int resultado = 10000;	
+		String rdbmsid = new ConnectionManager(pm).getRdbmsid();
 		
 		try {
 			if (stmExt != null)
@@ -797,8 +807,8 @@ public class IniciativaManager {
 					
 					respuesta = stm.executeUpdate(sql);		
 					if (respuesta == 1)
-						respuesta = stm.executeUpdate(sqlObj);	
-
+						respuesta = stm.executeUpdate(sqlObj);						
+					
 				}
 				if (respuesta == 0)
 					break;

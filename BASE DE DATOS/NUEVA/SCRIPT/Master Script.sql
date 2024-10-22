@@ -4791,8 +4791,19 @@ alter table instrumentos
 ALTER TABLE organizacion 
 ADD COLUMN administrador VARCHAR(500);
 
+ALTER TABLE iniciativa
+ADD
+    alineacion_pdmp VARCHAR(500),
+    alineacion_ods VARCHAR(500),
+    cobertura_geografica VARCHAR(500),
+    impacto_ciudadania VARCHAR(500),
+    implementador_recursos VARCHAR(500),
+    dependencia_responsable VARCHAR(500),
+    sostenibilidad VARCHAR(500),
+    dependencias_competentes VARCHAR(500);
 -- Completed on 2023-04-27 19:43:20
 
 --
 -- PostgreSQL database dump complete
 --
+

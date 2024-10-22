@@ -16,55 +16,103 @@
 
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
+	
+		<script type="text/javascript">
+			var splitIniciativaVerticalAltoActual=0;
+			var splitIniciativaVerticalPosicionActual=0;
+			var splitIniciativaVerticalPosicionNueva=0;
+			var splitIniciativaVerticalAltoPanelSuperior='400';
+			var splitIniciativaVerticalMouseStatus='up';
+			var anchoPagina = screen.width;
+			var altoPagina = screen.height;
+			var startVertical = false;
+			
+			function splitIniciativaVerticalSetPosicion(e) 
+			{
+				eventoActual = (typeof event == 'undefined'? e: event);
+				splitIniciativaVerticalMouseStatus = 'down';
+				splitIniciativaVerticalPosicionActual = eventoActual.clientY;
+				altoTemp = document.getElementById('splitIniciativaVerticalPanelSuperior').style.height;
+				arregloAlto = altoTemp.split('p');
+				splitIniciativaVerticalAltoActual = parseInt(arregloAlto[0]);
+				startVertical = true;
+			}
+			
+			function splitIniciativaVerticalGetPosicion(e) 
+			{
+				if (splitIniciativaVerticalMouseStatus == 'down') 
+				{
+					eventoActual = (typeof event == 'undefined'? e: event);
+					splitIniciativaVerticalPosicionNueva = eventoActual.clientY;
+					var movimientoPx = parseInt(splitIniciativaVerticalPosicionNueva - splitIniciativaVerticalPosicionActual);
+					var altoNuevo = parseInt(splitIniciativaVerticalAltoActual + movimientoPx);
+					altoNuevo = (altoNuevo < 70 ? 70 : altoNuevo > (altoPagina - 250) ? (altoPagina - 250) : altoNuevo);
+					document.getElementById('splitIniciativaVerticalPanelSuperior').style.height = altoNuevo + 'px';
+					splitIniciativaVerticalAltoPanelSuperior = altoNuevo + 'px';
+					
+					if (typeof (resizePanelIniciativa) == "function")
+						resizePanelIndicadores();
+				}
+			}
+			
+		</script>	
+		
+		<style type=text/css>
+			#splitIniciativaVerticalVSplit 
+			{
+				cursor: s-resize; 
+				width: 100px; 
+				padding-bottom: 3px; 
+				padding-top: 3px; 
+				padding-left: 3px; 
+				padding-right: 3px; 
+				background-color: #c0c0c0; 				
+			}
+		</style>
 
-		<vgcinterfaz:splitterHorizontal anchoPorDefecto="500px" splitterId="splitIniciativas" overflowPanelDerecho="hidden" overflowPanelIzquierdo="hidden">
+		<%-- Split --%>
+		<bean:define id="anchoPanel" toScope="page">
+			<logic:notEmpty name="gestionarIniciativasForm" property="anchoPorDefecto">
+				<bean:write name="gestionarIniciativasForm" property="anchoPorDefecto" />px
+			</logic:notEmpty>
+			<logic:empty name="gestionarIniciativasForm" property="anchoPorDefecto">
+				400px
+			</logic:empty>
+		</bean:define>
+		<bean:define id="altoPanel" toScope="page">
+			<logic:notEmpty name="gestionarIniciativasForm" property="altoPorDefecto">
+				<bean:write name="gestionarIniciativasForm" property="altoPorDefecto" />px
+			</logic:notEmpty>
+			<logic:empty name="gestionarIniciativasForm" property="altoPorDefecto">
+				400px
+			</logic:empty>
+		</bean:define>
+		
+		<vgcinterfaz:splitterHorizontal anchoPorDefecto="<%= anchoPanel %>" splitterId="splitIniciativas" overflowPanelDerecho="hidden" overflowPanelIzquierdo="hidden">
 
 			<vgcinterfaz:splitterHorizontalPanelIzquierdo splitterId="splitIniciativas">
-				<table class="fichaDatostablaGeneral" style="border-collapse: collapse; padding: 0px; width: 100%;">
-					<tr style="width: 100%; height: 100%; vertical-align: text-top;">
-						<td style="width: 100%; height: 100%; vertical-align: text-top;">
-							<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIniciativas.jsp"></jsp:include>
-						</td>
-					</tr>
-				</table>						
+				<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIniciativas.jsp"></jsp:include>
 			</vgcinterfaz:splitterHorizontalPanelIzquierdo>
 
 			<vgcinterfaz:splitterHorizontalPanelDerecho splitterId="splitIniciativas">
-				<table class="fichaDatostablaGeneral" style="border-collapse: collapse; padding: 0px; width: 100%;">
-					<tr style="width: 100%; height: 400px; vertical-align: text-top;">
-						<td style="width: 100%; height: 400px; vertical-align: text-top;" id="splitPlanVerticalPanelSuperior" class="panelSplit">
+				<table height="100%" width="100%" border="0" cellpadding="0" cellspacing="0" onmouseup="splitIniciativaVerticalMouseStatus='up'; setAltoPanel();" onmousemove="splitIniciativaVerticalGetPosicion(event)">
+					<tr height="50%">
+						<td valign="top" id="splitIniciativaVerticalPanelSuperior" class="panelSplit" style="height: <%= altoPanel %>">
 							<jsp:include flush="true" page="/paginas/strategos/iniciativas/gestionarIndicadoresIniciativa.jsp"></jsp:include>
 						</td>
 					</tr>
-					<tr style="width: 100%; height: 2px;">
-						<td onmousedown="splitPlanVerticalSetPosicion(event)" id="splitPlanVerticalVSplit"></td>
+					<tr height="2px">
+						<td onmousedown="splitIniciativaVerticalSetPosicion(event)" id="splitIniciativaVerticalVSplit"></td>
 					</tr>
-					<tr style="width: 100%; height: 100%; vertical-align: text-top;">
-						<td style="width: 100%; height: 100%; vertical-align: text-top;" class="panelSplit">
+					<tr >
+						<td valign="top" class="panelSplit" style="height: 100%">
 							<jsp:include flush="true" page="/paginas/strategos/iniciativas/mostrarPlanesAsociadosIniciativa.jsp"></jsp:include>
 						</td>
-					</tr>
-					<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="1">
-						<tr>
-							<td style="vertical-align: text-top;">
-								<%-- Iniciativa por Actividad --%>
-								<%--  
-								<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="0">
-									<jsp:include flush="true" page="/paginas/strategos/iniciativas/mostrarGestionIniciativa.jsp"></jsp:include>
-								</logic:equal> 
-								 --%>
-								<%-- Iniciativa por Producto --%>
-								<logic:equal name="gestionarIniciativasForm" property="tipoAlerta" value="1">
-									<jsp:include flush="true" page="/paginas/strategos/planificacionseguimiento/productos/gestionarProductos.jsp"></jsp:include>
-								</logic:equal>
-							</td>
-						</tr>
-					</logic:equal>
+					</tr>					
 				</table>
 			</vgcinterfaz:splitterHorizontalPanelDerecho>
 
-		</vgcinterfaz:splitterHorizontal>
-		
+		</vgcinterfaz:splitterHorizontal>		
 	</tiles:put>
 
 </tiles:insert>

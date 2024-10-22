@@ -529,6 +529,37 @@
 			 	abrirVentanaModal('<html:rewrite action="/mediciones/eliminarMedicionParametros" />' + url + nombreForma + funcionCierre + nombreCampoOculto, 'eliminarMedicionesFuturas', '490', '280');				 		    				    			 
 			}
 		}
+	 
+	 function crearProyectos() {
+		 var url = '?crearProyectos=true'
+		window.location.href = '<html:rewrite action="/iniciativas/gestionarIniciativas" />' + url;
+	 }
+	 
+	 function setAnchoPanel()
+	{
+		if (startHorizontal && splitPlanPosicionNueva != 0 && splitPlanPosicionActual != splitPlanPosicionNueva)
+		{
+			startHorizontal = false;
+			var tipo = "Ancho";
+			var panel = "Strategos.Panel.Iniciativa";
+			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativas/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPlanPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+		}
+	}
+		
+	function setAltoPanel()
+	{
+		if (startVertical && splitIniciativaVerticalPosicionNueva != 0 && splitIniciativaVerticalPosicionActual != splitIniciativaVerticalPosicionNueva)
+		{
+			startVertical = false;
+			var tipo = "Alto";
+			var panel = "Strategos.Panel.Iniciativa";
+			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativas/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitIniciativaVerticalPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+		}
+	}
+	
+	function onSetPanel()
+	{
+	}
 	
 </script>
 <%-- Representaci�n de la Forma --%>
@@ -709,6 +740,7 @@
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 							<vgcinterfaz:botonMenu key="menu.edicion.importar.iniciativa" onclick="importarIniciativas();" permisoId="INICIATIVA_ADD" />
 						</logic:notEqual>		
+						<vgcinterfaz:botonMenu key="menu.edicion.verificar.proyectos" onclick="crearProyectos();" permisoId="ACTIVIDAD_ADD" />
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 									<vgcinterfaz:botonMenu key="menu.edicion.importar.actividades" onclick="importarActividades();" permisoId="ACTIVIDAD_ADD" />
 						</logic:notEqual>

@@ -24,7 +24,8 @@ public class GestionarIndicadoresForm extends VisorListaForm
 	private List<?> unidadesMedida;
 	private List<?> frecuencias;
 	private Long unidadId;
-
+	private String anchoPorDefecto;
+	private String altoPorDefecto;
 
 	public Long getFrecuencia() {
 		return frecuencia;
@@ -161,5 +162,25 @@ public class GestionarIndicadoresForm extends VisorListaForm
 	public void setClaseId(Long claseId)
 	{
 		this.claseId = claseId;
+	}
+	
+	public String getAnchoPorDefecto()
+	{
+		return this.anchoPorDefecto;
+	}
+
+	public void setAnchoPorDefecto(String anchoPorDefecto)
+	{
+		this.anchoPorDefecto = anchoPorDefecto;
+	}
+
+	public String getAltoPorDefecto()
+	{
+		return this.altoPorDefecto;
+	}
+
+	public void setAltoPorDefecto(String altoPorDefecto)
+	{
+		this.altoPorDefecto = altoPorDefecto;
 	}
 }

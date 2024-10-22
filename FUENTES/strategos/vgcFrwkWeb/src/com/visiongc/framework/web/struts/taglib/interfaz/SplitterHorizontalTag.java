@@ -144,7 +144,7 @@ public class SplitterHorizontalTag
     resultado.append("    cursor: w-resize;\n");
     resultado.append("    background-color: #C0C0C0;\n");
     resultado.append("    height: 100%;\n");
-    resultado.append("    padding: 0px;\n");
+    resultado.append("    padding: 4px;\n");
     resultado.append("    width: 1px;\n");
     resultado.append("}\n");
     resultado.append("</style>\n");

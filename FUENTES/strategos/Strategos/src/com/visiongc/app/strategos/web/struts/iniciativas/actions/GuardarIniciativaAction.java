@@ -1039,6 +1039,148 @@ public class GuardarIniciativaAction extends VgcAction {
 	
 		else if (iniciativa.getMemoIniciativa() != null)
 			iniciativa.getMemoIniciativa().setResultado(null);
+		
+		
+		
+		if ((editarIniciativaForm.getAlineacionPDMP() != null)
+				&& (!editarIniciativaForm.getAlineacionPDMP().equals("")))
+			if (editarIniciativaForm.getAlineacionPDMP().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.alineacionpdmp"));
+				iniciativa.setAlineacionPDMP(editarIniciativaForm.getAlineacionPDMP().substring(0, 500));
+			} else
+				iniciativa.setAlineacionPDMP(editarIniciativaForm.getAlineacionPDMP());
+		else
+			iniciativa.setAlineacionPDMP(null);
+		
+		
+		
+		if ((editarIniciativaForm.getAlineacionODS() != null)
+				&& (!editarIniciativaForm.getAlineacionODS().equals("")))
+			if (editarIniciativaForm.getAlineacionODS().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.alineacionods"));
+				iniciativa.setAlineacionODS(editarIniciativaForm.getAlineacionODS().substring(0, 500));
+			} else
+				iniciativa.setAlineacionODS(editarIniciativaForm.getAlineacionODS());
+		else
+			iniciativa.setAlineacionODS(null);
+		
+		if ((editarIniciativaForm.getImpactoCiudadania() != null)
+				&& (!editarIniciativaForm.getImpactoCiudadania().equals("")))
+			if (editarIniciativaForm.getImpactoCiudadania().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.impactociudadania"));
+				iniciativa.setImpactoCiudadania(editarIniciativaForm.getImpactoCiudadania().substring(0, 500));
+			} else
+				iniciativa.setImpactoCiudadania(editarIniciativaForm.getImpactoCiudadania());
+		else
+			iniciativa.setImpactoCiudadania(null);
+		
+		if ((editarIniciativaForm.getImplementadorRecursos() != null)
+				&& (!editarIniciativaForm.getImplementadorRecursos().equals("")))
+			if (editarIniciativaForm.getImplementadorRecursos().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.implementadorrecursos"));
+				iniciativa.setImplementadorRecursos(editarIniciativaForm.getImplementadorRecursos().substring(0, 500));
+			} else
+				iniciativa.setImplementadorRecursos(editarIniciativaForm.getImplementadorRecursos());
+		else
+			iniciativa.setImplementadorRecursos(null);
+		
+		if ((editarIniciativaForm.getCoberturaGeografica() != null)
+				&& (!editarIniciativaForm.getCoberturaGeografica().equals("")))
+			if (editarIniciativaForm.getCoberturaGeografica().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.coberturageografica"));
+				iniciativa.setCoberturaGeografica(editarIniciativaForm.getCoberturaGeografica().substring(0, 500));
+			} else
+				iniciativa.setCoberturaGeografica(editarIniciativaForm.getCoberturaGeografica());
+		else
+			iniciativa.setCoberturaGeografica(null);
+		
+		if ((editarIniciativaForm.getDependenciaResponsable() != null)
+				&& (!editarIniciativaForm.getDependenciaResponsable().equals("")))
+			if (editarIniciativaForm.getDependenciaResponsable().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.dependenciaresponsable"));
+				iniciativa.setDependenciaResponsable(editarIniciativaForm.getDependenciaResponsable().substring(0, 500));
+			} else
+				iniciativa.setDependenciaResponsable(editarIniciativaForm.getDependenciaResponsable());
+		else
+			iniciativa.setDependenciaResponsable(null);
+		
+		
+		if ((editarIniciativaForm.getDependenciasCompetentes() != null)
+				&& (!editarIniciativaForm.getDependenciasCompetentes().equals("")))
+			if (editarIniciativaForm.getDependenciasCompetentes().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.dependenciascompetentes"));
+				iniciativa.setDependenciasCompetentes(editarIniciativaForm.getDependenciasCompetentes().substring(0, 500));
+			} else
+				iniciativa.setDependenciasCompetentes(editarIniciativaForm.getDependenciasCompetentes());
+		else
+			iniciativa.setDependenciasCompetentes(null);
+		
+		if ((editarIniciativaForm.getSostenibilidad() != null)
+				&& (!editarIniciativaForm.getSostenibilidad().equals("")))
+			if (editarIniciativaForm.getSostenibilidad().length() > 500) {
+				if (fallos == 0) {
+					messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+							new ActionMessage("campos.maximo.ajustado"));
+				}
+				fallos++;
+
+				messages.add("org.apache.struts.action.GLOBAL_MESSAGE",
+						new ActionMessage("jsp.editariniciativa.ficha.sostenibilidad"));
+				iniciativa.setSostenibilidad(editarIniciativaForm.getSostenibilidad().substring(0, 500));
+			} else
+				iniciativa.setSostenibilidad(editarIniciativaForm.getSostenibilidad());
+		else
+			iniciativa.setSostenibilidad(null);
+		
 
 		iniciativa.getResultadosEspecificosIniciativa().clear();
 

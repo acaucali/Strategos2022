@@ -211,13 +211,14 @@ public class ReporteCumplimientoXls extends VgcAction {
 
 			if ((org.getOrganizacionId() != null))
 				filtros.put("organizacionId", org.getOrganizacionId().toString());
+			filtros.put("organizacionId", org.getOrganizacionId().toString());
 
 			PaginaLista paginaPlanes = strategosPlanesService.getPlanes(1, 30, "nombre", "ASC", true, filtros);
 			List<Plan> planes = paginaPlanes.getLista();
 			// 1.0 Indicadores Planes
 			if (planes.size() > 0) {
 				for (Plan plan : planes) {
-					if (plan.getActivo()) {
+					if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
 						row = dibujarIndicadoresPlan(row, sheet, style, style1, style2, styleRoja, styleVerde,
 								styleAmarillo, plan, strategosPlanesService);
 					}
@@ -288,7 +289,7 @@ public class ReporteCumplimientoXls extends VgcAction {
 			// 1.0 Indicadores Planes
 			if (planes.size() > 0) {
 				for (Plan plan : planes) {
-					if (plan.getActivo()) {
+					if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
 						row = dibujarIndicadoresPlan(row, sheet, style, style1, style2, styleRoja, styleVerde,
 								styleAmarillo, plan, strategosPlanesService);
 					}
@@ -350,7 +351,7 @@ public class ReporteCumplimientoXls extends VgcAction {
 					// 1.0 Indicadores Planes
 					if (planes.size() > 0) {
 						for (Plan plan : planes) {
-							if (plan.getActivo()) {
+							if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
 								row = dibujarIndicadoresPlan(row, sheet, style, style1, style2, styleRoja, styleVerde,
 										styleAmarillo, plan, strategosPlanesService);
 							}
@@ -420,7 +421,7 @@ public class ReporteCumplimientoXls extends VgcAction {
 					// 1.0 Indicadores Planes
 					if (planes.size() > 0) {
 						for (Plan plan : planes) {
-							if (plan.getActivo()) {
+							if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
 								row = dibujarIndicadoresPlan(row, sheet, style, style1, style2, styleRoja, styleVerde,
 										styleAmarillo, plan, strategosPlanesService);
 							}
@@ -636,9 +637,9 @@ public class ReporteCumplimientoXls extends VgcAction {
 	private List<PryActividad> obtenerActividades(List<PryActividad> actividades, Iniciativa iniciativa)
 			throws ParseException {
 		List<PryActividad> actAtrasadas = new ArrayList();
-		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().
-				openStrategosMedicionesService();
-		
+		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance()
+				.openStrategosMedicionesService();
+
 		for (PryActividad actividad : actividades) {
 			Date fechaUltimaMedicion;
 			Integer periodo = obtenerFecha(iniciativa.getFrecuencia());
@@ -647,17 +648,17 @@ public class ReporteCumplimientoXls extends VgcAction {
 			SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
 			Date fechaActualDate = date.parse(fecha);
 			String ultimaMedicion = actividad.getFechaUltimaMedicion();
-			
+
 			if (actividad.getFechaUltimaMedicion() != null) {
 				fechaUltimaMedicion = date.parse(ultimaMedicion);
-				if (fechaUltimaMedicion.before(fechaActualDate)) {
+				List<Medicion> medicion = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(),
+						1L, anio, anio, periodo - 1, periodo - 1);
+				if (fechaUltimaMedicion.before(fechaActualDate) && !actividad.getPorcentajeCompletado().equals(100.0)
+						&& medicion.size() > 0) {
 					actAtrasadas.add(actividad);
 				}
-			}else {				
-				List<Medicion> medicion = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(), 1L, anio, anio, periodo-1, periodo-1);
-				if(medicion.size() > 0)
-					actAtrasadas.add(actividad);				
 			}
+
 		}
 		return actAtrasadas;
 	}
@@ -724,8 +725,8 @@ public class ReporteCumplimientoXls extends VgcAction {
 
 						HSSFCell cellInfo2 = Row.createCell(cel);
 						cellInfo2.setCellStyle(style1);
-						cellInfo2.setCellValue(iniciativa.getPorcentajeCompletadoFormateado() != null
-								? iniciativa.getPorcentajeCompletadoFormateado()
+						cellInfo2.setCellValue(actividad.getPorcentajeCompletadoFormateado() != null
+								? actividad.getPorcentajeCompletadoFormateado()
 								: "");
 						cel++;
 
@@ -786,8 +787,8 @@ public class ReporteCumplimientoXls extends VgcAction {
 
 				if (actividades.size() > 0) {
 					List<PryActividad> actAtrasadas = new ArrayList();
-					actAtrasadas = obtenerActividades(actividades, iniciativa);										
-					if (actAtrasadas.size() > 0) {						
+					actAtrasadas = obtenerActividades(actividades, iniciativa);
+					if (actAtrasadas.size() > 0 && !iniciativa.getEstatusId().equals(new Long(1))) {
 						iniAtrasados.add(iniciativa);
 					}
 				}

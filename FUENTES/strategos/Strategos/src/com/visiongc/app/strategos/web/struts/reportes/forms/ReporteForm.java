@@ -94,6 +94,7 @@ public class ReporteForm extends EditarObjetoForm
 	private List<List<DatoCelda>> matrizDatos;
 	private String objetoKey;
 	private String organizacionNombre;
+	private Boolean isAdmin;
 
 	//Campos para comunicacion
 	private String valoresSeleccionados = null;
@@ -111,6 +112,7 @@ public class ReporteForm extends EditarObjetoForm
 	private Long tipo;
 	private List<TipoProyecto> tipos;
 	private String estatus;
+	private String estatus2;
 	private Boolean todosAno;
 	private Boolean acumularTrimestre;
 	private Boolean avanceTareas;	
@@ -1120,6 +1122,22 @@ public class ReporteForm extends EditarObjetoForm
 
 	public void setOrganizacionNombre(String organizacionNombre) {
 		this.organizacionNombre = organizacionNombre;
+	}
+
+	public String getEstatus2() {
+		return estatus2;
+	}
+
+	public void setEstatus2(String estatus2) {
+		this.estatus2 = estatus2;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 	public static class ReporteStatus

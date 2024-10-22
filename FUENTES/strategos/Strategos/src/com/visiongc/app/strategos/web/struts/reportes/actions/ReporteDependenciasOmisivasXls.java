@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +32,10 @@ import org.apache.struts.util.MessageResources;
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
+import com.visiongc.app.strategos.indicadores.model.ClaseIndicadores;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.indicadores.model.Medicion;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
@@ -50,6 +53,7 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.Organizacion;
 import com.visiongc.framework.model.Usuario;
 import com.visiongc.framework.usuarios.UsuariosService;
 
@@ -58,7 +62,7 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 	public void updateNavigationBar(NavigationBar navBar, String url, String nombre) {
 		navBar.agregarUrl(url, nombre);
 	}
-
+	int row = 5;
 	@SuppressWarnings("unlikely-arg-type")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -111,9 +115,9 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		styleDep.setLeftBorderColor(IndexedColors.BLACK.getIndex());
 		styleDep.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		styleDep.setTopBorderColor(IndexedColors.BLACK.getIndex());
-		styleDep.setFont(font2);
-		styleDep.setFillForegroundColor(IndexedColors.BROWN.index);
-		styleDep.setFillBackgroundColor(IndexedColors.LIGHT_BLUE.index);
+		styleDep.setFont(fontOk);
+		styleDep.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
+		styleDep.setFillBackgroundColor(IndexedColors.PALE_BLUE.index);
 		styleDep.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		CellStyle styleOrg = workbook.createCellStyle();
@@ -128,8 +132,8 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		styleOrg.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		styleOrg.setTopBorderColor(IndexedColors.BLACK.getIndex());
 		styleOrg.setFont(font2);
-		styleOrg.setFillForegroundColor(IndexedColors.LIGHT_BLUE.index);
-		styleOrg.setFillBackgroundColor(IndexedColors.LIGHT_BLUE.index);
+		styleOrg.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+		styleOrg.setFillBackgroundColor(IndexedColors.GREY_50_PERCENT.index);
 		styleOrg.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		CellStyle styleTitulo = workbook.createCellStyle();
@@ -144,8 +148,8 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		styleTitulo.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		styleTitulo.setTopBorderColor(IndexedColors.BLACK.getIndex());
 		styleTitulo.setFont(font2);
-		styleTitulo.setFillForegroundColor(IndexedColors.DARK_BLUE.index);
-		styleTitulo.setFillBackgroundColor(IndexedColors.DARK_BLUE.index);
+		styleTitulo.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+		styleTitulo.setFillBackgroundColor(IndexedColors.GREY_50_PERCENT.index);
 		styleTitulo.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		CellStyle styleOk = workbook.createCellStyle();
@@ -160,9 +164,23 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		styleOk.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		styleOk.setTopBorderColor(IndexedColors.BLACK.getIndex());
 		styleOk.setFont(fontOk);
-		styleOk.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
-		styleOk.setFillBackgroundColor(IndexedColors.PALE_BLUE.index);
+		styleOk.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+		styleOk.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.index);
 		styleOk.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+		CellStyle styleOkAdm = workbook.createCellStyle();
+		styleOkAdm.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		styleOkAdm.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		styleOkAdm.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		styleOkAdm.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		styleOkAdm.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		styleOkAdm.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		styleOkAdm.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		styleOkAdm.setTopBorderColor(IndexedColors.BLACK.getIndex());
+		styleOkAdm.setFont(fontOk);
+		styleOkAdm.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+		styleOkAdm.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.index);
+		styleOkAdm.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		CellStyle styleNotOk = workbook.createCellStyle();
 		styleNotOk.setAlignment(HSSFCellStyle.ALIGN_CENTER);
@@ -176,8 +194,8 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		styleNotOk.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		styleNotOk.setTopBorderColor(IndexedColors.BLACK.getIndex());
 		styleNotOk.setFont(fontNotOk);
-		styleNotOk.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
-		styleNotOk.setFillBackgroundColor(IndexedColors.PALE_BLUE.index);
+		styleNotOk.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+		styleNotOk.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.index);
 		styleNotOk.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
 		CellStyle style1 = workbook.createCellStyle();
@@ -200,34 +218,22 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		cell.setCellValue(header);
 		Date fechaActual = new Date();
 		String trimestre = obtenerTrimestre(fechaActual);
-		
+
 		HSSFRow triRow = sheet.createRow(2);
 		HSSFCell cellTri = triRow.createCell(0);
-		cellTri.setCellStyle(styleOrg);
+		cellTri.setCellStyle(styleDep);
 		cellTri.setCellValue("Trimestre");
-		
+
 		HSSFCell cellTri1 = triRow.createCell(1);
 		cellTri1.setCellStyle(style1);
 		cellTri1.setCellValue(trimestre);
-		
+
 		HSSFRow nivelRow = sheet.createRow(4);
-		HSSFCell cellNivel = nivelRow.createCell(0);
-		cellNivel.setCellStyle(styleDep);
-		cellNivel.setCellValue("DEPENDENCIAS");
+		HSSFCell cellOrg = nivelRow.createCell(0);
+		cellOrg.setCellStyle(styleTitulo);
+		cellOrg.setCellValue("DEPENDENCIAS");
 
-		HSSFRow nivelRow1 = sheet.createRow(5);
-		HSSFCell cellNivel1 = nivelRow1.createCell(0);
-		cellNivel1.setCellStyle(styleOrg);
-		cellNivel1.setCellValue("NIVEL CENTRAL - DELEGADAS");
-
-		sheet.addMergedRegion(new CellRangeAddress(4, 5, 1, 1));
-		sheet.addMergedRegion(new CellRangeAddress(4, 5, 2, 2));
-		sheet.addMergedRegion(new CellRangeAddress(4, 5, 3, 3));
-		sheet.addMergedRegion(new CellRangeAddress(4, 5, 4, 4));
-		sheet.addMergedRegion(new CellRangeAddress(4, 5, 5, 5));
-
-		
-		HSSFCell cellOrg = nivelRow.createCell(1);
+		cellOrg = nivelRow.createCell(1);
 		cellOrg.setCellStyle(styleTitulo);
 		cellOrg.setCellValue("AVANCE INICIATIVAS");
 
@@ -246,53 +252,53 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		cellOrg = nivelRow.createCell(5);
 		cellOrg.setCellStyle(styleTitulo);
 		cellOrg.setCellValue("ADMINISTRADOR");
-		
+
 		// suborganizaciones
 		if (request.getParameter("alcance").equals("4")) {
 			filtros = new HashMap<String, Object>();
-			int row = 6;
+			
 			List<OrganizacionStrategos> organizacionesSub = organizacionservice.getOrganizacionHijas(
 					((OrganizacionStrategos) request.getSession().getAttribute("organizacion")).getOrganizacionId(),
 					true);
 
 			UsuariosService usuarioService = FrameworkServiceFactory.getInstance().openUsuariosService();
-			
-			 
+
 			OrganizacionStrategos organizacion = ((OrganizacionStrategos) request.getSession()
-					.getAttribute("organizacion"));		
+					.getAttribute("organizacion"));
 			Map<String, Object> filtrosAdmin = new HashMap<String, Object>();
 			filtrosAdmin.put("grupoId", 4776);
-			filtrosAdmin.put("estatus", 0);
-			filtrosAdmin.put("organizacionId", organizacion.getOrganizacionId());
-			PaginaLista paginaUsuarios = usuarioService.getUsuarios(3, "fullName", "ASC", true, filtrosAdmin);			
+			filtrosAdmin.put("estatus", 0);						
+			filtrosAdmin.put("organizacionId", organizacion.getOrganizacionId().toString());
+			PaginaLista paginaUsuarios = usuarioService.getUsuarios(1, "fullName", "ASC", true, filtrosAdmin);
 			List<Usuario> uss = paginaUsuarios.getLista();
-			
+
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < uss.size(); i++) {
-			    Usuario us = uss.get(i);
-			    sb.append(us.getFullName()); // Asumiendo que el método toString() de Usuario devuelve la representación deseada
-			    
-			    if (i < uss.size() - 1) {
-			        sb.append(" - ");
-			    }
+				Usuario us = uss.get(i);
+				sb.append(us.getFullName()); // Asumiendo que el método toString() de Usuario devuelve la representación
+												// deseada
+
+				if (i < uss.size() - 1) {
+					sb.append(" - ");
+				}
 			}
-			
-			String administradores = sb.toString();			
+
+			String administradores = sb.toString();
 			reporte.setOrganizacionNombre(organizacion.getNombre());
-			
+
 			filtros.clear();
 
-			HSSFRow OrgRow1 = sheet.createRow(row);
+			HSSFRow OrgRow1 = sheet.createRow(this.row);
 			String nombre = organizacion.getNombre();
 			HSSFCell cellOrg1 = OrgRow1.createCell(0);
 			cellOrg1.setCellStyle(style1);
 			cellOrg1.setCellValue(nombre);
-			
+
 			if ((organizacion.getOrganizacionId() != null))
 				filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 			filtros.put("anio", anio);
-			PaginaLista paginaIniciativas = strategosIniciativasService.getIniciativas(1, 30, "nombre", "ASC",
-					true, filtros);
+			PaginaLista paginaIniciativas = strategosIniciativasService.getIniciativas(1, 30, "nombre", "ASC", true,
+					filtros);
 			List<Iniciativa> iniciativas = paginaIniciativas.getLista();
 			if (iniciativas.size() > 0) {
 				List<Iniciativa> iniAtrasados = new ArrayList();
@@ -302,13 +308,13 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 					cellOrg1 = OrgRow1.createCell(1);
 					cellOrg1.setCellStyle(styleNotOk);
 					cellOrg1.setCellValue("X");
-				}else {
+				} else {
 					cellOrg1 = OrgRow1.createCell(1);
 					cellOrg1.setCellStyle(styleOk);
-					cellOrg1.setCellValue("ok");
+					cellOrg1.setCellValue("                  ok                   ");
 				}
-				
-			}else {
+
+			} else {
 				cellOrg1 = OrgRow1.createCell(1);
 				cellOrg1.setCellStyle(styleOk);
 				cellOrg1.setCellValue("No tiene Iniciativas");
@@ -317,14 +323,18 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 			Integer periodo = obtenerFecha((byte) 5);
 			String fecha = String.valueOf((periodo - 1)) + "/" + String.valueOf(new Date().getYear() + 1900);
 			SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
-			Date fechaActualDate = date.parse(fecha);					
+			Date fechaActualDate = date.parse(fecha);
 
-			verificarEventos(row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
+			verificarEventos(this.row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
 					organizacion.getOrganizacionId());
-			verificarInformes(row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
+			verificarInformes(this.row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
 					organizacion.getOrganizacionId());
 
 			filtros = new HashMap<String, Object>();
+
+			boolean indAtrasadosOrg = false;
+			boolean indAtrasadosPlan = false;
+			indAtrasadosOrg = obtenerIndicadoresOrg(organizacion.getOrganizacionId());
 			if ((organizacion.getOrganizacionId() != null))
 				filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 			PaginaLista paginaPlanes = strategosPlanesService.getPlanes(1, 30, "nombre", "ASC", true, filtros);
@@ -332,59 +342,61 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 			// 1.0 Indicadores Planes
 			if (planes.size() > 0) {
 				for (Plan plan : planes) {
-					if (plan.getActivo()) {
-
-						dibujarIndicadores(row, sheet, OrgRow1, styleNotOk, styleOk, plan, strategosPlanesService);
-					} else {
-						cellOrg1 = OrgRow1.createCell(4);
-						cellOrg1.setCellStyle(styleOk);
-						cellOrg1.setCellValue("No tiene planes activos");
+					if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
+						dibujarIndicadores(plan, strategosPlanesService);
 					}
 				}
+			}
+
+			if (indAtrasadosPlan || indAtrasadosOrg) {
+				cellOrg1 = OrgRow1.createCell(4);
+				cellOrg1.setCellStyle(styleNotOk);
+				cellOrg1.setCellValue("X");
 			} else {
 				cellOrg1 = OrgRow1.createCell(4);
 				cellOrg1.setCellStyle(styleOk);
-				cellOrg1.setCellValue("No tiene planes");
+				cellOrg1.setCellValue("ok");
 			}
 
 			cellOrg1 = OrgRow1.createCell(5);
-			cellOrg1.setCellStyle(style1);
+			cellOrg1.setCellStyle(styleOkAdm);
 			cellOrg1.setCellValue(administradores);
-			
 
+			
 			// suborganizaciones
 			if (organizacionesSub.size() > 0 || organizacionesSub != null) {
 				for (Iterator<OrganizacionStrategos> iter = organizacionesSub.iterator(); iter.hasNext();) {
-					OrganizacionStrategos org = iter.next();
-					row++;
-					HSSFRow OrgRow2 = sheet.createRow(row);
+					OrganizacionStrategos org = iter.next();			
+					
+					this.row++;
+					HSSFRow OrgRow2 = sheet.createRow(this.row);
 					HSSFCell cellOrg2 = OrgRow2.createCell(0);
 					cellOrg2.setCellStyle(style1);
 					nombre = org.getNombre();
 					cellOrg2.setCellValue(nombre);
-										
+
 					filtrosAdmin.put("organizacionId", org.getOrganizacionId().toString());
-					
+
 					paginaUsuarios = usuarioService.getUsuarios(1, "fullName", "ASC", true, filtrosAdmin);
 					uss = paginaUsuarios.getLista();
 					sb = new StringBuilder();
 					for (int i = 0; i < uss.size(); i++) {
-					    Usuario us = uss.get(i);
-					    sb.append(us.getFullName()); 
-					    
-					    if (i < uss.size() - 1) {
-					        sb.append(" - ");
-					    }
+						Usuario us = uss.get(i);
+						sb.append(us.getFullName());
+
+						if (i < uss.size() - 1) {
+							sb.append(" - ");
+						}
 					}
-					
-					administradores = sb.toString();		
-					
+
+					administradores = sb.toString();
+
 					filtros = new HashMap<String, Object>();
 					if ((org.getOrganizacionId() != null))
 						filtros.put("organizacionId", org.getOrganizacionId().toString());
 					filtros.put("anio", anio);
-					paginaIniciativas = strategosIniciativasService.getIniciativas(1, 30, "nombre", "ASC",
-							true, filtros);
+					paginaIniciativas = strategosIniciativasService.getIniciativas(1, 30, "nombre", "ASC", true,
+							filtros);
 					iniciativas = paginaIniciativas.getLista();
 					if (iniciativas.size() > 0) {
 						List<Iniciativa> iniAtrasados = new ArrayList();
@@ -393,24 +405,25 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 						if (iniAtrasados.size() > 0) {
 							cellOrg2 = OrgRow2.createCell(1);
 							cellOrg2.setCellStyle(styleNotOk);
-							cellOrg2.setCellValue("X");
-						}else {
+							cellOrg2.setCellValue("                 X                 ");
+						} else {
 							cellOrg2 = OrgRow2.createCell(1);
 							cellOrg2.setCellStyle(styleOk);
-							cellOrg2.setCellValue("ok");
+							cellOrg2.setCellValue("                 ok                ");
 						}
-						
-					}else {
+
+					} else {
 						cellOrg2 = OrgRow2.createCell(1);
-						cellOrg2.setCellStyle(styleNotOk);
+						cellOrg2.setCellStyle(styleOk);
 						cellOrg2.setCellValue("No tiene Iniciativas Formuladas");
 					}
 
-					verificarEventos(row, sheet, OrgRow2, styleNotOk, styleOk, date, fechaActualDate,
+					verificarEventos(this.row, sheet, OrgRow2, styleNotOk, styleOk, date, fechaActualDate,
 							org.getOrganizacionId());
-					verificarInformes(row, sheet, OrgRow2, styleNotOk, styleOk, date, fechaActualDate,
+					verificarInformes(this.row, sheet, OrgRow2, styleNotOk, styleOk, date, fechaActualDate,
 							org.getOrganizacionId());
 
+					indAtrasadosOrg = obtenerIndicadoresOrg(org.getOrganizacionId());
 					filtros = new HashMap<String, Object>();
 					if ((organizacion.getOrganizacionId() != null))
 						filtros.put("organizacionId", org.getOrganizacionId().toString());
@@ -419,27 +432,36 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 					// 1.0 Indicadores Planes
 					if (planes.size() > 0) {
 						for (Plan plan : planes) {
-							if (plan.getActivo()) {
+							if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
 
-								dibujarIndicadores(row, sheet, OrgRow2, styleNotOk, styleOk, plan,
-										strategosPlanesService);
-							} else {
-								cellOrg2 = OrgRow2.createCell(4);
-								cellOrg2.setCellStyle(styleOk);
-								cellOrg2.setCellValue("No tiene planes activos");
+								indAtrasadosPlan = dibujarIndicadores(plan, strategosPlanesService);
 							}
 						}
+					}
+					if (indAtrasadosPlan || indAtrasadosOrg) {
+						cellOrg2 = OrgRow2.createCell(4);
+						cellOrg2.setCellStyle(styleNotOk);
+						cellOrg2.setCellValue("                 X                 ");
 					} else {
 						cellOrg2 = OrgRow2.createCell(4);
 						cellOrg2.setCellStyle(styleOk);
-						cellOrg2.setCellValue("No tiene planes");
+						cellOrg2.setCellValue("                 ok                 ");
 					}
 
 					cellOrg2 = OrgRow2.createCell(5);
-					cellOrg2.setCellStyle(style1);
-					cellOrg2.setCellValue(administradores);					
-				}
+					cellOrg2.setCellStyle(styleOkAdm);
+					cellOrg2.setCellValue(administradores);
+					
+					List<OrganizacionStrategos> organizacionesHijas = organizacionservice
+							.getOrganizacionHijas(org.getOrganizacionId(), true);					
+					if (organizacionesHijas.size() > 0 ) {
+						obtenerHijos(anio ,sheet ,style1 ,styleOkAdm ,styleNotOk ,styleOk ,organizacionesHijas, organizacionservice, strategosIniciativasService, strategosPlanesService);
+						//row = row + organizacionesHijas.size();
+					}
+				}																		
 			}
+			
+			
 
 		} else {
 			// todas las organizaciones
@@ -457,21 +479,22 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 					filtrosAdmin.put("grupoId", 4776);
 					filtrosAdmin.put("estatus", 0);
 					filtrosAdmin.put("organizacionId", organizacion.getOrganizacionId());
-					PaginaLista paginaUsuarios = usuarioService.getUsuarios(3, "fullName", "ASC", true, filtrosAdmin);			
+					PaginaLista paginaUsuarios = usuarioService.getUsuarios(3, "fullName", "ASC", true, filtrosAdmin);
 					List<Usuario> uss = paginaUsuarios.getLista();
-					
+
 					StringBuilder sb = new StringBuilder();
 					for (int i = 0; i < uss.size(); i++) {
-					    Usuario us = uss.get(i);
-					    sb.append(us.getFullName()); // Asumiendo que el método toString() de Usuario devuelve la representación deseada
-					    
-					    if (i < uss.size() - 1) {
-					        sb.append(" - ");
-					    }
+						Usuario us = uss.get(i);
+						sb.append(us.getFullName()); // Asumiendo que el método toString() de Usuario devuelve la
+														// representación deseada
+
+						if (i < uss.size() - 1) {
+							sb.append(" - ");
+						}
 					}
-					
-					String administradores = sb.toString();		
-					
+
+					String administradores = sb.toString();
+
 					if ((organizacion.getOrganizacionId() != null))
 						filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					filtros.put("anio", anio);
@@ -485,14 +508,14 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 						if (iniAtrasados.size() > 0) {
 							cellOrg1 = OrgRow1.createCell(1);
 							cellOrg1.setCellStyle(styleNotOk);
-							cellOrg1.setCellValue("X");
-						}else {
+							cellOrg1.setCellValue("            X            ");
+						} else {
 							cellOrg1 = OrgRow1.createCell(1);
 							cellOrg1.setCellStyle(styleOk);
-							cellOrg1.setCellValue("ok");
+							cellOrg1.setCellValue("            ok            ");
 						}
-						
-					}else {
+
+					} else {
 						cellOrg1 = OrgRow1.createCell(1);
 						cellOrg1.setCellStyle(styleOk);
 						cellOrg1.setCellValue("No tiene Iniciativas");
@@ -501,7 +524,7 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 					Integer periodo = obtenerFecha((byte) 5);
 					String fecha = String.valueOf((periodo - 1)) + "/" + String.valueOf(new Date().getYear() + 1900);
 					SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
-					Date fechaActualDate = date.parse(fecha);					
+					Date fechaActualDate = date.parse(fecha);
 
 					verificarEventos(row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
 							organizacion.getOrganizacionId());
@@ -509,6 +532,9 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 							organizacion.getOrganizacionId());
 
 					filtros = new HashMap<String, Object>();
+					boolean indAtrasadosOrg = false;
+					boolean indAtrasadosPlan = false;
+					indAtrasadosOrg = obtenerIndicadoresOrg(organizacion.getOrganizacionId());
 					if ((organizacion.getOrganizacionId() != null))
 						filtros.put("organizacionId", organizacion.getOrganizacionId().toString());
 					PaginaLista paginaPlanes = strategosPlanesService.getPlanes(1, 30, "nombre", "ASC", true, filtros);
@@ -516,23 +542,24 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 					// 1.0 Indicadores Planes
 					if (planes.size() > 0) {
 						for (Plan plan : planes) {
-							if (plan.getActivo()) {
-
-								dibujarIndicadores(row, sheet, OrgRow1, styleNotOk, styleOk, plan, strategosPlanesService);
-							} else {
-								cellOrg1 = OrgRow1.createCell(4);
-								cellOrg1.setCellStyle(styleOk);
-								cellOrg1.setCellValue("No tiene planes activos");
+							if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
+								indAtrasadosPlan = dibujarIndicadores(plan, strategosPlanesService);
 							}
 						}
+					}
+
+					if (indAtrasadosPlan || indAtrasadosOrg) {
+						cellOrg1 = OrgRow1.createCell(4);
+						cellOrg1.setCellStyle(styleNotOk);
+						cellOrg1.setCellValue("            X            ");
 					} else {
 						cellOrg1 = OrgRow1.createCell(4);
 						cellOrg1.setCellStyle(styleOk);
-						cellOrg1.setCellValue("No tiene planes");
+						cellOrg1.setCellValue("            ok            ");
 					}
 
 					cellOrg1 = OrgRow1.createCell(5);
-					cellOrg1.setCellStyle(style1);
+					cellOrg1.setCellStyle(styleOkAdm);
 					cellOrg1.setCellValue(administradores);
 					row++;
 				}
@@ -564,12 +591,123 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		return mapping.findForward(forward);
 	}
 	
+	private void obtenerHijos(String anio, HSSFSheet sheet, CellStyle style1 , CellStyle styleOkAdm ,CellStyle styleNotOk, CellStyle styleOk, List<OrganizacionStrategos> hijos,StrategosOrganizacionesService organizacionService, StrategosIniciativasService strategosIniciativasService, StrategosPlanesService strategosPlanesService) throws Exception {
+		
+		Map<String, Object> filtros = new HashMap<String, Object>();
+		for (Iterator<OrganizacionStrategos> iter = hijos.iterator(); iter.hasNext();) {
+			OrganizacionStrategos org = iter.next();	
+			UsuariosService usuarioService = FrameworkServiceFactory.getInstance().openUsuariosService();
+			
+			Map<String, Object> filtrosAdmin = new HashMap<String, Object>();
+			filtrosAdmin.put("grupoId", 4776);
+			filtrosAdmin.put("estatus", 0);
+			filtrosAdmin.put("organizacionId", org.getOrganizacionId().toString());
+			PaginaLista paginaUsuarios = usuarioService.getUsuarios(1, "fullName", "ASC", true, filtrosAdmin);
+			List<Usuario> uss = paginaUsuarios.getLista();
+
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < uss.size(); i++) {
+				Usuario us = uss.get(i);
+				sb.append(us.getFullName()); // Asumiendo que el método toString() de Usuario devuelve la representación
+												// deseada
+
+				if (i < uss.size() - 1) {
+					sb.append(" - ");
+				}
+			}
+
+			String administradores = sb.toString();			
+			this.row++;
+			HSSFRow OrgRow1 = sheet.createRow(this.row);
+			String nombre = org.getNombre();
+			HSSFCell cellOrg1 = OrgRow1.createCell(0);
+			cellOrg1.setCellStyle(style1);
+			cellOrg1.setCellValue(nombre);								
+
+			if ((org.getOrganizacionId() != null))
+				filtros.put("organizacionId", org.getOrganizacionId().toString());
+			filtros.put("anio", anio);
+			PaginaLista paginaIniciativas = strategosIniciativasService.getIniciativas(1, 30, "nombre", "ASC", true,
+					filtros);
+			List<Iniciativa> iniciativas = paginaIniciativas.getLista();
+			if (iniciativas.size() > 0) {
+				List<Iniciativa> iniAtrasados = new ArrayList();
+				iniAtrasados = obtenerIniciativas(iniciativas);
+
+				if (iniAtrasados.size() > 0) {
+					cellOrg1 = OrgRow1.createCell(1);
+					cellOrg1.setCellStyle(styleNotOk);
+					cellOrg1.setCellValue("X");
+				} else {
+					cellOrg1 = OrgRow1.createCell(1);
+					cellOrg1.setCellStyle(styleOk);
+					cellOrg1.setCellValue("                  ok                   ");
+				}
+
+			} else {
+				cellOrg1 = OrgRow1.createCell(1);
+				cellOrg1.setCellStyle(styleOk);
+				cellOrg1.setCellValue("No tiene Iniciativas");
+			}
+
+			Integer periodo = obtenerFecha((byte) 5);
+			String fecha = String.valueOf((periodo - 1)) + "/" + String.valueOf(new Date().getYear() + 1900);
+			SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
+			Date fechaActualDate = date.parse(fecha);
+
+			verificarEventos(this.row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
+					org.getOrganizacionId());
+			verificarInformes(this.row, sheet, OrgRow1, styleNotOk, styleOk, date, fechaActualDate,
+					org.getOrganizacionId());
+
+			filtros = new HashMap<String, Object>();
+
+			boolean indAtrasadosOrg = false;
+			boolean indAtrasadosPlan = false;
+			indAtrasadosOrg = obtenerIndicadoresOrg(org.getOrganizacionId());
+			if ((org.getOrganizacionId() != null))
+				filtros.put("organizacionId", org.getOrganizacionId().toString());
+			PaginaLista paginaPlanes = strategosPlanesService.getPlanes(1, 30, "nombre", "ASC", true, filtros);
+			List<Plan> planes = paginaPlanes.getLista();
+			// 1.0 Indicadores Planes
+			if (planes.size() > 0) {
+				for (Plan plan : planes) {
+					if (plan.getActivo() && (plan.getAnoInicial() == Integer.getInteger(anio))) {
+						dibujarIndicadores(plan, strategosPlanesService);
+					}
+				}
+			}
+
+			if (indAtrasadosPlan || indAtrasadosOrg) {
+				cellOrg1 = OrgRow1.createCell(4);
+				cellOrg1.setCellStyle(styleNotOk);
+				cellOrg1.setCellValue("X");
+			} else {
+				cellOrg1 = OrgRow1.createCell(4);
+				cellOrg1.setCellStyle(styleOk);
+				cellOrg1.setCellValue("ok");
+			}
+
+			cellOrg1 = OrgRow1.createCell(5);
+			cellOrg1.setCellStyle(styleOkAdm);
+			cellOrg1.setCellValue(administradores);
+			
+			List<OrganizacionStrategos> organizacionesHijas = organizacionService
+					.getOrganizacionHijas(org.getOrganizacionId(), true);
+			
+			if (organizacionesHijas.size() > 0 ) {
+				obtenerHijos(anio ,sheet ,style1 ,styleOkAdm ,styleNotOk ,styleOk ,organizacionesHijas, organizacionService, strategosIniciativasService, strategosPlanesService);
+				//row = row + organizacionesHijas.size();
+			}
+		}				
+	}
+
 	private List<PryActividad> obtenerActividades(List<PryActividad> actividades, Iniciativa iniciativa)
 			throws ParseException {
 		List<PryActividad> actAtrasadas = new ArrayList();
-		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().
-				openStrategosMedicionesService();
-		
+		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance()
+				.openStrategosMedicionesService();
+
 		for (PryActividad actividad : actividades) {
 			Date fechaUltimaMedicion;
 			Integer periodo = obtenerFecha(iniciativa.getFrecuencia());
@@ -578,21 +716,21 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 			SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
 			Date fechaActualDate = date.parse(fecha);
 			String ultimaMedicion = actividad.getFechaUltimaMedicion();
-			
+
 			if (actividad.getFechaUltimaMedicion() != null) {
 				fechaUltimaMedicion = date.parse(ultimaMedicion);
-				if (fechaUltimaMedicion.before(fechaActualDate)) {
+				List<Medicion> medicion = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(),
+						1L, anio, anio, periodo - 1, periodo - 1);
+				if (fechaUltimaMedicion.before(fechaActualDate) && !actividad.getPorcentajeCompletado().equals(100.0)
+						&& medicion.size() > 0) {
 					actAtrasadas.add(actividad);
 				}
-			}else {				
-				List<Medicion> medicion = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(), 1L, anio, anio, periodo-1, periodo-1);
-				if(medicion.size() > 0)
-					actAtrasadas.add(actividad);				
 			}
+
 		}
 		return actAtrasadas;
 	}
-	
+
 	private List<Iniciativa> obtenerIniciativas(List<Iniciativa> iniciativas) throws Exception {
 		List<Iniciativa> iniAtrasados = new ArrayList();
 		for (Iniciativa iniciativa : iniciativas) {
@@ -608,8 +746,8 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 
 				if (actividades.size() > 0) {
 					List<PryActividad> actAtrasadas = new ArrayList();
-					actAtrasadas = obtenerActividades(actividades, iniciativa);										
-					if (actAtrasadas.size() > 0) {						
+					actAtrasadas = obtenerActividades(actividades, iniciativa);
+					if (actAtrasadas.size() > 0 && !iniciativa.getEstatusId().equals(new Long(1))) {
 						iniAtrasados.add(iniciativa);
 					}
 				}
@@ -632,10 +770,24 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 
 		List<Explicacion> explicaciones = paginaExplicaciones.getLista();
 		if (explicaciones.size() > 0) {
-			Explicacion explicacionUltima = explicaciones.get(0);
-			String ultimaCarga = obtenerTrimestre(explicacionUltima.getFecha());
-			Date fechaUltimaCarga = date.parse(ultimaCarga);
-			if (fechaUltimaCarga.before(fechaActualDate) || explicacionUltima.getAdjuntosExplicacion().size() == 0) {
+			Explicacion explicacionUltima = explicaciones.get(0);	
+			Date fechaActual =  new Date();			
+			int trimestreActual = obtenerTrimestreActual(fechaActual);
+			Date explicacionFecha = explicacionUltima.getCreado();
+			String tope = "";
+			if(trimestreActual == 1) {
+				tope = (fechaActual.getYear() + 1900) + "-01-30";				
+			} else if (trimestreActual == 2) {
+				tope = (fechaActual.getYear() + 1900) + "-04-30";
+			} else if (trimestreActual == 3) {
+				tope = (fechaActual.getYear() + 1900) + "-07-30";
+			} else if (trimestreActual == 4) {
+				tope = (fechaActual.getYear() + 1900) + "-10-30";
+			}
+
+			SimpleDateFormat date2 = new SimpleDateFormat("yyyy-MM-dd");	
+			Date topeFormateado = date2.parse(tope);			
+			if (explicacionFecha.after(topeFormateado) || explicacionUltima.getAdjuntosExplicacion().size() == 0) {
 				HSSFCell cellOrg1 = OrgRow1.createCell(3);
 				cellOrg1.setCellStyle(styleNotOk);
 				cellOrg1.setCellValue("X");
@@ -664,10 +816,24 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 
 		List<Explicacion> explicaciones = paginaExplicaciones.getLista();
 		if (explicaciones.size() > 0) {
-			Explicacion explicacionUltima = explicaciones.get(0);
-			String ultimaCarga = obtenerTrimestre(explicacionUltima.getFecha());
-			Date fechaUltimaCarga = date.parse(ultimaCarga);
-			if (fechaUltimaCarga.before(fechaActualDate) || explicacionUltima.getAdjuntosExplicacion().size() == 0) {
+			Explicacion explicacionUltima = explicaciones.get(0);	
+			Date fechaActual =  new Date();			
+			int trimestreActual = obtenerTrimestreActual(fechaActual);
+			Date explicacionFecha = explicacionUltima.getCreado();
+			String tope = "";
+			if(trimestreActual == 1) {
+				tope = (fechaActual.getYear() + 1900) + "-01-30";				
+			} else if (trimestreActual == 2) {
+				tope = (fechaActual.getYear() + 1900) + "-04-30";
+			} else if (trimestreActual == 3) {
+				tope = (fechaActual.getYear() + 1900) + "-07-30";
+			} else if (trimestreActual == 4) {
+				tope = (fechaActual.getYear() + 1900) + "-10-30";
+			}
+
+			SimpleDateFormat date2 = new SimpleDateFormat("yyyy-MM-dd");	
+			Date topeFormateado = date2.parse(tope);			
+			if (explicacionFecha.after(topeFormateado) || explicacionUltima.getAdjuntosExplicacion().size() == 0) {
 				HSSFCell cellOrg1 = OrgRow1.createCell(2);
 				cellOrg1.setCellStyle(styleNotOk);
 				cellOrg1.setCellValue("X");
@@ -683,13 +849,12 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		}
 	}
 
-	private void dibujarIndicadores(int row, HSSFSheet sheet, HSSFRow OrgRow2, CellStyle styleNotOk, CellStyle styleOk,
-			Plan plan, StrategosPlanesService strategosPlanesService) throws Exception {
+	private boolean dibujarIndicadores(Plan plan, StrategosPlanesService strategosPlanesService) throws Exception {
 		StrategosPerspectivasService strategosPerspectivasService = StrategosServiceFactory.getInstance()
 				.openStrategosPerspectivasService();
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
 				.openStrategosIndicadoresService();
-
+		boolean indAtrasados = false;
 		Map<String, Object> filtros = new HashMap<String, Object>();
 		Perspectiva perspectiva = strategosPerspectivasService.getPerspectivaRaiz(plan.getPlanId());
 		filtros.clear();
@@ -706,19 +871,11 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 				nivel = 0;
 			else
 				nivel++;
-			boolean indAtrasados = obtenerIndicadores(nivel, perspectivas, plan, strategosIndicadoresService,
+			indAtrasados = obtenerIndicadores(nivel, perspectivas, plan, strategosIndicadoresService,
 					strategosPerspectivasService, strategosPlanesService);
-
-			if (indAtrasados) {
-				HSSFCell cellOrg2 = OrgRow2.createCell(4);
-				cellOrg2.setCellStyle(styleNotOk);
-				cellOrg2.setCellValue("x");
-			} else {
-				HSSFCell cellOrg2 = OrgRow2.createCell(4);
-				cellOrg2.setCellStyle(styleOk);
-				cellOrg2.setCellValue("ok");
-			}
 		}
+
+		return indAtrasados;
 	}
 
 	private boolean obtenerIndicadores(Integer nivel, List<Perspectiva> perspectivasPlan, Plan plan,
@@ -767,6 +924,56 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 				}
 			}
 		}
+		return indAtrasados;
+	}
+
+	private boolean obtenerIndicadoresOrg(Long organizacionId) throws Exception {
+		boolean indAtrasados = false;
+		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance()
+				.openStrategosIndicadoresService();
+		StrategosClasesIndicadoresService strategosClasesService = StrategosServiceFactory.getInstance()
+				.openStrategosClasesIndicadoresService();
+
+		Map<String, Object> filtros = new HashMap<String, Object>();
+
+		filtros.put("organizacionId", organizacionId);
+		filtros.put("nombre", "01. GERENCIALES");
+		String[] orden = new String[1];
+		String[] tipoOrden = new String[1];
+		orden[0] = "nombre";
+		tipoOrden[0] = "asc";
+		List<ClaseIndicadores> clases = strategosClasesService.getClases(filtros);
+		if (clases.size() > 0) {
+			ClaseIndicadores clasePadre = clases.get(0);
+
+			Set hijas = clasePadre.getHijos();
+			for (Iterator<Set> iter = hijas.iterator(); iter.hasNext();) {
+				ClaseIndicadores clss = (ClaseIndicadores) iter.next();
+				if (clss.getVisible()) {
+					for (Iterator<Set> iter2 = clss.getIndicadores().iterator(); iter2.hasNext();) {
+						Indicador indicador = (Indicador) iter2.next();
+
+						if (indicador.getNaturaleza() == 0) {
+							Date fechaUltimaMedicion;
+							Integer periodo = obtenerFecha(indicador.getFrecuencia());
+							String fecha = String.valueOf((periodo - 1)) + "/"
+									+ String.valueOf(new Date().getYear() + 1900);
+							SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
+							Date fechaActualDate = date.parse(fecha);
+							String ultimaMedicion = indicador.getFechaUltimaMedicion();
+							if (indicador.getFechaUltimaMedicion() != null) {
+								fechaUltimaMedicion = date.parse(ultimaMedicion);
+								if (fechaUltimaMedicion.before(fechaActualDate)) {
+									indAtrasados = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		return indAtrasados;
 	}
 
@@ -880,6 +1087,25 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 			trimestre = 4;
 		}
 
-		return trimestre-1 + "/" + ano;
+		return trimestre - 1 + "/" + ano;
+	}
+	
+	private int obtenerTrimestreActual(Date fecha) {
+		Calendar calendario = Calendar.getInstance();
+		calendario.setTime(fecha);
+		int mes = calendario.get(Calendar.MONTH) + 1; // Sumamos 1 porque enero es 0		
+
+		int trimestre;
+		if (mes >= 1 && mes <= 3) {
+			trimestre = 1;
+		} else if (mes >= 4 && mes <= 6) {
+			trimestre = 2;
+		} else if (mes >= 7 && mes <= 9) {
+			trimestre = 3;
+		} else {
+			trimestre = 4;
+		}
+
+		return trimestre;
 	}
 }

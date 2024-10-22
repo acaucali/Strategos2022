@@ -1255,9 +1255,6 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS_EDIT', 'Modificar', 'CARGOS', 1, 2, 1, 'Modificar');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('CARGOS_DELETE', 'Eliminar', 'CARGOS', 1, 3, 1, 'Eliminar');
 
-UPDATE afw_sistema set actual = '9.01-231005';  
-UPDATE afw_sistema set build = 231005;
-
 INSERT INTO fases_proyecto (fase_id, nombre) VALUES (1, 'Planificación');
 INSERT INTO fases_proyecto (fase_id, nombre) VALUES (2, 'Ingeniería');
 INSERT INTO fases_proyecto (fase_id, nombre) VALUES (3, 'Contratación');
@@ -1284,3 +1281,6 @@ INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, de
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('REPORTES_ORGANIZACION', 'Reportes Organizacion', 'ORGANIZACION', 1, 16, 0, 'Reportes Organizacion');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('REPORTE_CUMPLIMIENTO', 'Reporte Cumplimiento', 'REPORTES_ORGANIZACION', 2, 1, 0, 'Reporte Cumplimiento');
 INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('REPORTE_DEPENDENCIAS_OMISIVAS', 'Reporte Dependencias Omisivas', 'REPORTES_ORGANIZACION', 1, 2, 0, 'Reporte Dependencias Omisivas');
+
+UPDATE afw_sistema set actual = '10.01-240725';  
+UPDATE afw_sistema set build = 240725;

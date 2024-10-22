@@ -60,10 +60,10 @@ public class PlanEjecucionAction extends VgcAction
 
 		boolean isAdmin=false;
 		if(user.getIsAdmin()){
-
 			isAdmin=true;
+			reporteForm.setIsAdmin(true);
 		}
-
+				
 		/* Parametros para el reporte */
 		String planId = request.getParameter("planId");
 		String source = request.getParameter("source");

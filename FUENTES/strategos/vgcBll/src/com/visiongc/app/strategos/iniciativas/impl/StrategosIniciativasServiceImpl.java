@@ -102,6 +102,56 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		return new Long(persistenceSession.getUniqueId());
 	}
 
+	
+	public void crearIndicadores(Long iniciativaId , boolean crearCuentas, Usuario usuario) {				
+		Iniciativa iniciativa = (Iniciativa)load(Iniciativa.class, iniciativaId);
+		int resultado = 10000;
+		if(iniciativa.getClaseId() == null) {
+			resultado = saveClaseIndicadores(iniciativa, usuario);			
+			if (resultado == 10000) {
+				ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
+				resultado = saveIndicadorAutomatico(iniciativa,
+						TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionIniciativa, usuario);
+				if ((resultado == 10000 && !crearCuentas)
+						&& (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()))
+					resultado = saveIndicadorAutomatico(iniciativa, 
+							TipoFuncionIndicador.getTipoFuncionPresupuesto(), configuracionIniciativa, usuario);
+				
+				if ((resultado == 10000)
+						&& (configuracionIniciativa.getIniciativaIndicadorEficaciaMostrar().booleanValue()))
+					resultado = saveIndicadorAutomatico(iniciativa,
+							TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
+				if ((resultado == 10000 && !crearCuentas)
+						&& (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
+					resultado = saveIndicadorAutomatico(iniciativa,
+							TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
+				}
+				
+			}
+			if (resultado == 10000) {
+				resultado = persistenceSession.insert(iniciativa, usuario);
+				if (resultado == 10000) {
+					resultado = asociarIndicador(iniciativa, usuario);
+				}
+			}
+			if ((resultado == 10000 && crearCuentas) ) {
+				ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
+				resultado = saveIndicadorAutomaticoCuentas(iniciativa,
+						TipoFuncionIndicador.getTipoFuncionPresupuesto(),configuracionIniciativa, usuario);
+				if(resultado == 10000 && (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()) ) {
+					resultado = saveIndicadorPresupuestoCuenta(iniciativa, TipoFuncionIndicador.getTipoFuncionPresupuesto(),
+							 configuracionIniciativa, usuario);
+				}
+				if((resultado == 10000) && (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
+					//asociarIndicadorCuentas
+					resultado = saveIndicadorAutomaticoEficacia(iniciativa,
+							TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
+					
+				}
+			}
+		}
+	}
+	
 	public boolean existObject(String nombre, Long organizacionId) {
 		Iniciativa iniciativa = new Iniciativa();
 		String[] fieldNames = new String[2];
@@ -176,7 +226,8 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 
 					if (iniciativa.getNaturaleza() == null) {
 						iniciativa.setNaturaleza(new Byte((byte) 0));
-					}
+					}										
+										
 					resultado = saveClaseIndicadores(iniciativa, usuario);
 					if (resultado == 10000) {
 						ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
@@ -207,10 +258,10 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 					if ((resultado == 10000 && iniciativa.getPartidas() == 0) ) {
 						ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
 						resultado = saveIndicadorAutomaticoCuentas(iniciativa,
-								TipoFuncionIndicador.getTipoFuncionPresupuesto(), iniciativa.getPartidas(),configuracionIniciativa, usuario);
+								TipoFuncionIndicador.getTipoFuncionPresupuesto(),configuracionIniciativa, usuario);
 						if(resultado == 10000 && (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()) ) {
 							resultado = saveIndicadorPresupuestoCuenta(iniciativa, TipoFuncionIndicador.getTipoFuncionPresupuesto(),
-									iniciativa.getPartidas(), configuracionIniciativa, usuario);
+									 configuracionIniciativa, usuario);
 						}
 						if((resultado == 10000) && (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
 							//asociarIndicadorCuentas
@@ -248,49 +299,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 					}
 				}
 			} else {
-				
-				if(iniciativa.getClaseId() == null) {
-					resultado = saveClaseIndicadores(iniciativa, usuario);
-					ConfiguracionIniciativa configuracionIniciativa = getConfiguracionIniciativa();
-					if (resultado == 10000) {
-						resultado = saveIndicadorAutomatico(iniciativa,
-								TipoFuncionIndicador.getTipoFuncionSeguimiento(), configuracionIniciativa, usuario);
-						if ((resultado == 10000 && (iniciativa.getUnidadId() == 0 || iniciativa.getUnidadId() == null))
-								&& (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()))
-							resultado = saveIndicadorAutomatico(iniciativa,
-									TipoFuncionIndicador.getTipoFuncionPresupuesto(), configuracionIniciativa, usuario);
-						if ((resultado == 10000)
-								&& (configuracionIniciativa.getIniciativaIndicadorEficaciaMostrar().booleanValue()))
-							resultado = saveIndicadorAutomatico(iniciativa,
-									TipoFuncionIndicador.getTipoFuncionEficacia(), configuracionIniciativa, usuario);
-						if ((resultado == 10000)
-								&& (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
-							resultado = saveIndicadorAutomatico(iniciativa,
-									TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
-						}
-					}
-					if (resultado == 10000) {
-						resultado = persistenceSession.insert(iniciativa, usuario);
-						if (resultado == 10000) {
-							resultado = asociarIndicador(iniciativa, usuario);
-						}
-					}
-					if ((resultado == 10000 && iniciativa.getUnidadId() != 0) ) {						
-						resultado = saveIndicadorAutomaticoCuentas(iniciativa,
-								TipoFuncionIndicador.getTipoFuncionPresupuesto(), iniciativa.getPartidas(),configuracionIniciativa, usuario);
-						if(resultado == 10000 && (configuracionIniciativa.getIniciativaIndicadorPresupuestoMostrar().booleanValue()) ) {
-							resultado = saveIndicadorPresupuestoCuenta(iniciativa, TipoFuncionIndicador.getTipoFuncionPresupuesto(),
-									iniciativa.getPartidas(), configuracionIniciativa, usuario);
-						}
-						if((resultado == 10000) && (configuracionIniciativa.getIniciativaIndicadorEficienciaMostrar().booleanValue())) {
-							//asociarIndicadorCuentas
-							resultado = saveIndicadorAutomaticoEficacia(iniciativa,
-									TipoFuncionIndicador.getTipoFuncionEficiencia(), configuracionIniciativa, usuario);
-							
-						}
-					}
-				}
-				else { 
+												
 				String[] idFieldNames = new String[1];
 				Object[] idFieldValues = new Object[1];
 
@@ -526,8 +535,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 					}
 					if (resultado == 10000) {
 						resultado = persistenceSession.update(iniciativa, usuario);
-					}
-				}
+					}				
 			}
 			String valorEnteEjecutorVacio = "-";
 			if ((iniciativa.getEnteEjecutor() == "") || (iniciativa.getEnteEjecutor() == null)) {
@@ -989,7 +997,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		return resultado;
 	}
 	
-	private int saveIndicadorAutomaticoCuentas(Iniciativa iniciativa, Byte tipo, Byte partida,
+	private int saveIndicadorAutomaticoCuentas(Iniciativa iniciativa, Byte tipo, 
 			ConfiguracionIniciativa configuracionIniciativa, Usuario usuario) {
 		int resultado = 10000;
 
@@ -1091,7 +1099,7 @@ public class StrategosIniciativasServiceImpl extends StrategosServiceImpl implem
 		return resultado;
 	}
 	
-	private int saveIndicadorPresupuestoCuenta(Iniciativa iniciativa, Byte tipo, Byte partida,
+	private int saveIndicadorPresupuestoCuenta(Iniciativa iniciativa, Byte tipo,
 			ConfiguracionIniciativa configuracionIniciativa, Usuario usuario) {
 		
 		int resultado = 10000;
