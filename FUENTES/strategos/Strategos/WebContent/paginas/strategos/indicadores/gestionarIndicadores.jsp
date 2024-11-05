@@ -526,26 +526,7 @@
 		
 	}
 	
-	function resizePanelIndicadores(altoPrefijo)
-	{
-		if (typeof(altoPrefijo) == "undefined")
-			altoPrefijo = 0;
-		var tamanoToolbarMenu = 0;
-		<logic:empty name="iniciativa" property="iniciativaId" scope="session">
-			tamanoToolbarMenu = 63;
-		</logic:empty>
-		var height = (parseInt(_myHeight) - (182)) + tamanoToolbarMenu;
-		var spliter = document.getElementById('splitIniciativaVerticalPanelSuperior');
-		if (spliter != null)
-			height = height - parseInt(spliter.style.height.replace("px", ""));
-		else
-			height = (parseInt(_myHeight) - 480);
-
-		height = (parseInt(height) - altoPrefijo);
-		var objeto = document.getElementById('body-indicadores');
-		if (objeto != null)
-			objeto.style.height = height + "px";
-	}
+	
 	
 </script>
 <script type="text/javascript"
