@@ -1,0 +1,2 @@
+INSERT INTO afw_permiso( permiso_id,  padre_id,  permiso,  nivel,  grupo,  global,  descripcion) VALUES ('INICIATIVA_EVALUAR_REPORTE_TODAS_ORGANIZACIONES',  'INICIATIVA_EVALUAR_REPORTE',  'Generar Todas las Organizaciones',  4,   1,   0,  'Generar Todas las Organizaciones');
+INSERT INTO AFW_PERMISO (permiso_id, permiso, padre_id, nivel, grupo, global, descripcion) VALUES ('REPORTE_TODAS_ORGANIZACIONES', 'Generar Todas las Organizaciones', 'REPORTES_ORGANIZACION', 2, 1, 0, 'Generar Todas las Organizaciones');

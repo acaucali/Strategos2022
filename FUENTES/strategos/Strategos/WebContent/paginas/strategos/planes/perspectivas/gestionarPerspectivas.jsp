@@ -10,7 +10,7 @@
 
 <%-- Modificado por: Kerwin Arias (13/10/2012) --%>
 
-<%-- Funciones JavaScript locales de la página Jsp --%>
+<%-- Funciones JavaScript locales de la pï¿½gina Jsp --%>
 <script type="text/javascript">
 
 	function seleccionarNodo(nodoId, marcadorAncla) 
@@ -227,7 +227,7 @@
 	}
 	
 	function setAnchoPanel()
-	{
+	{		
 		if (startHorizontal && splitPlanPosicionNueva != 0 && splitPlanPosicionActual != splitPlanPosicionNueva)
 		{
 			startHorizontal = false;
@@ -239,7 +239,7 @@
 	
 	function setAltoPanel()
 	{
-		if (startVertical && splitPlanVerticalPosicionNueva != 0 && splitPlanVerticalPosicionActual != splitPlanVerticalPosicionNueva)
+		if (startVertical && splitVerticalPosicionNueva != 0 && splitPlanVerticalPosicionActual != splitPlanVerticalPosicionNueva)
 		{
 			startVertical = false;
 			var tipo = "Alto";
@@ -265,8 +265,7 @@
 		
 		abrirVentanaModal('<html:rewrite action="/planes/perspectivas/trasladarMetas" />' + nombreForma + parametros, 'trasladarMetas', '560', '230');
 
-	}
-
+	}	
 </script>
 <script type="text/javascript" src="<html:rewrite  page='/paginas/strategos/calculos/calculosJs/Calculo.js'/>"></script>
 
@@ -293,22 +292,22 @@
 		<bean:define id="mostrarBarraSuperior" type="String" value="true"></bean:define>
 	</vgcutil:valorPropertyIgual>
 
-	<%-- Representación de la Forma --%>
+	<%-- Representaciï¿½n de la Forma --%>
 	<vgcinterfaz:contenedorForma idContenedor="body-perspectiva" mostrarBarraSuperior="<%= mostrarBarraSuperior %>" >
 
-		<%-- Título --%>
+		<%-- Tï¿½tulo --%>
 		<vgcinterfaz:contenedorFormaTitulo>..:: <vgcutil:message key="jsp.gestionarperspectivas.titulo" />
 		</vgcinterfaz:contenedorFormaTitulo>
 		
 		
 
-		<%-- Menú --%>
+		<%-- Menï¿½ --%>
 		<vgcinterfaz:contenedorFormaBarraMenus>
 
-			<%-- Inicio del Menú --%>
+			<%-- Inicio del Menï¿½ --%>
 			<vgcinterfaz:contenedorMenuHorizontal>
 
-				<%-- Menú: Archivo --%>
+				<%-- Menï¿½: Archivo --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuArchivo" key="menu.archivo">
 						<vgcinterfaz:botonMenu key="menu.archivo.prepararpagina" onclick="prepararPagina();" />
@@ -317,18 +316,18 @@
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 
-				<%-- Menú: Edición --%>
+				<%-- Menï¿½: Ediciï¿½n --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuEdicion" key="menu.edicion">
 
-						<%-- Validación: solo se puede crear Perspectiva si hay un elemento en la Plantilla de Planes --%>
+						<%-- Validaciï¿½n: solo se puede crear Perspectiva si hay un elemento en la Plantilla de Planes --%>
 						<logic:notEmpty name="gestionarPerspectivasForm" property="elementoPlantillaPlanes">
 							<vgcinterfaz:botonMenu onclick="nuevaPerspectiva();" permisoId="PLAN_PERSPECTIVA_ADD">
 								<vgcutil:message key="menu.edicion.nuevo" />: <bean:write name="gestionarPerspectivasForm" property="elementoPlantillaPlanes.nombre" />
 							</vgcinterfaz:botonMenu>
 						</logic:notEmpty>
 
-						<%-- Validación: si la Perspectiva seleccionada NO es Raíz, entonces se modifica la Perspectiva  --%>
+						<%-- Validaciï¿½n: si la Perspectiva seleccionada NO es Raï¿½z, entonces se modifica la Perspectiva  --%>
 						<logic:notEmpty name="perspectiva" property="padreId" scope="session">
 							<logic:equal scope="session" name="editarPerspectiva" value="true">
 								<vgcinterfaz:botonMenu key="menu.edicion.modificar" onclick="modificarPerspectiva();" />
@@ -341,7 +340,7 @@
 							<vgcinterfaz:botonMenu key="menu.edicion.copiar" onclick="copiarPerspectiva();" permisoId="PLAN_PERSPECTIVA_COPY" />
 						</logic:notEmpty>
 
-						<%-- Validación: si la Perspectiva seleccionada SI es Raíz, entonces se modifica el Plan --%>
+						<%-- Validaciï¿½n: si la Perspectiva seleccionada SI es Raï¿½z, entonces se modifica el Plan --%>
 						<logic:empty name="perspectiva" property="padreId" scope="session">
 							<logic:equal scope="session" name="editarPlan" value="true">
 								<vgcinterfaz:botonMenu key="menu.edicion.modificar" onclick="modificarPlan();" />
@@ -353,7 +352,7 @@
 							</logic:notEqual>
 						</logic:empty>
 
-						<%-- Validación: si la Perspectiva seleccionada NO es Raíz, entonces se permite Eliminar y Propiedades de la Perspectiva  --%>
+						<%-- Validaciï¿½n: si la Perspectiva seleccionada NO es Raï¿½z, entonces se permite Eliminar y Propiedades de la Perspectiva  --%>
 						<logic:notEmpty name="perspectiva" property="padreId" scope="session">
 							<vgcinterfaz:botonMenu key="menu.edicion.eliminar" onclick="eliminarPerspectiva();" permisoId="PLAN_PERSPECTIVA_DELETE" agregarSeparador="true" />
 							<vgcinterfaz:botonMenu key="menu.edicion.propiedades" onclick="propiedadesPerspectiva();" permisoId="PLAN_PERSPECTIVA" />
@@ -374,21 +373,21 @@
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 
-				<%-- Menú: Ver --%>
+				<%-- Menï¿½: Ver --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuVer" key="menu.ver">
 						<vgcinterfaz:botonMenu onclick="gestionarIniciativasDePlan();" permisoId="INICIATIVA" agregarSeparador="true">
 							<bean:write name="gestionarPlanForm" property="plantillaPlanes.nombreIniciativaPlural" />
 						</vgcinterfaz:botonMenu>
 						<%--<vgcinterfaz:botonMenu key="menu.ver.modelo.causaefecto" onclick="gestionarModelo()" permisoId="PLAN_MODELO_VER" />
-						<vgcinterfaz:botonMenu key="menu.ver.diseño.causaefecto" onclick="gestionarModeloCausaEfecto()" permisoId="PLAN_MODELO_DISENO" agregarSeparador="true" /> --%>
+						<vgcinterfaz:botonMenu key="menu.ver.diseï¿½o.causaefecto" onclick="gestionarModeloCausaEfecto()" permisoId="PLAN_MODELO_DISENO" agregarSeparador="true" /> --%>
 						<vgcinterfaz:botonMenu key="menu.ver.visualizarplan" onclick="visualizarPlan()" permisoId="PLAN_EJECUTIVO" agregarSeparador="true" />
 						<%-- 
-						<vgcinterfaz:botonMenu key="menu.ver.indicadoresasociadosproblemas" onclick="alert('Función no disponible')" permisoId="PROBLEMA" />
-						<vgcinterfaz:botonMenu key="menu.ver.planesrelacionados" onclick="alert('Función no disponible')" permisoId="PLAN" agregarSeparador="true" />
+						<vgcinterfaz:botonMenu key="menu.ver.indicadoresasociadosproblemas" onclick="alert('Funciï¿½n no disponible')" permisoId="PROBLEMA" />
+						<vgcinterfaz:botonMenu key="menu.ver.planesrelacionados" onclick="alert('Funciï¿½n no disponible')" permisoId="PLAN" agregarSeparador="true" />
 						 --%>
 
-						<%-- Validación: Se muestran los Indicadores de Logro del Plan --%>
+						<%-- Validaciï¿½n: Se muestran los Indicadores de Logro del Plan --%>
 						<logic:equal name="gestionarPerspectivasForm" property="verIndicadoresLogroPlan" value="true">
 							<vgcinterfaz:botonMenu key="menu.ver.indicadores.plan" icon="/componentes/menu/activo.gif" onclick="" permisoId="INDICADOR" />
 						</logic:equal>
@@ -396,7 +395,7 @@
 							<vgcinterfaz:botonMenu key="menu.ver.indicadores.plan" onclick="gestionarPerspectivas(true);" permisoId="INDICADOR" />
 						</logic:notEqual>
 
-						<%-- Validación: Se muestran los Indicadores de Logro de los Hijos del Plan --%>
+						<%-- Validaciï¿½n: Se muestran los Indicadores de Logro de los Hijos del Plan --%>
 						<logic:equal name="gestionarPerspectivasForm" property="verIndicadoresLogroPlan" value="true">
 							<logic:notEmpty name="perspectiva" property="padreId" scope="session">
 								<vgcinterfaz:botonMenu key="menu.ver.plan" onclick="gestionarPerspectivas(false);" permisoId="PLAN" agregarSeparador="true" />
@@ -419,7 +418,7 @@
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 
-				<%-- Menú: Reportes --%>
+				<%-- Menï¿½: Reportes --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuReportes" key="menu.reportes">
 						<vgcinterfaz:botonMenu key="menu.reportes.informe.plan.consolidado" onclick="reporteConsolidadoPlan()" permisoId="PLAN_REPORTE" agregarSeparador="true" />
@@ -430,14 +429,14 @@
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 				
-				<%-- Menú: Mediciones --%>
+				<%-- Menï¿½: Mediciones --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuMediciones" key="menu.mediciones">
 						<vgcinterfaz:botonMenu key="menu.mediciones.calcular" onclick="calcularPlan()" permisoId="INDICADOR_MEDICION_CALCULAR" />
 					</vgcinterfaz:menuBotones>
 				</vgcinterfaz:contenedorMenuHorizontalItem>
 				
-				<%-- Menú: Plan --%>
+				<%-- Menï¿½: Plan --%>
 				<vgcinterfaz:contenedorMenuHorizontalItem>
 					<vgcinterfaz:menuBotones id="menuPlan" key="menu.herramientas">
 						<vgcinterfaz:botonMenu key="menu.mediciones.copiar.metas" onclick="trasladarMetas()" permisoId="INDICADOR_MEDICION_CALCULAR" />
@@ -448,13 +447,13 @@
 
 		</vgcinterfaz:contenedorFormaBarraMenus>
 
-		<%-- Barra Genérica --%>
+		<%-- Barra Genï¿½rica --%>
 		<vgcinterfaz:contenedorFormaBarraGenerica height="20px">
 
 			<%-- Barra de Herramientas --%>
 			<vgcinterfaz:barraHerramientas nombre="barraGestionarPerspectivas">
 
-				<%-- Validación: solo se puede crear Perspectiva si hay un elemento en la Plantilla de Planes --%>
+				<%-- Validaciï¿½n: solo se puede crear Perspectiva si hay un elemento en la Plantilla de Planes --%>
 				<logic:notEmpty name="gestionarPerspectivasForm" property="elementoPlantillaPlanes">
 					<vgcinterfaz:barraHerramientasBoton permisoId="PLAN_PERSPECTIVA_ADD" nombreImagen="nuevo" pathImagenes="/componentes/barraHerramientas/" nombre="nuevo" onclick="javascript:nuevaPerspectiva();">
 						<vgcinterfaz:barraHerramientasBotonTitulo>
@@ -463,7 +462,7 @@
 					</vgcinterfaz:barraHerramientasBoton>
 				</logic:notEmpty>
 
-				<%-- Validación: si la Perspectiva seleccionada NO es Raíz, entonces se modifica la Perspectiva  --%>
+				<%-- Validaciï¿½n: si la Perspectiva seleccionada NO es Raï¿½z, entonces se modifica la Perspectiva  --%>
 				<logic:notEmpty name="perspectiva" property="padreId" scope="session">
 					<logic:equal scope="session" name="editarPerspectiva" value="true">
 						<vgcinterfaz:barraHerramientasBoton nombreImagen="modificar" pathImagenes="/componentes/barraHerramientas/" nombre="modificar" onclick="javascript:modificarPerspectiva();">
@@ -483,7 +482,7 @@
 					</logic:notEqual>
 				</logic:notEmpty>
 
-				<%-- Validación: si la Perspectiva seleccionada SI es Raíz, entonces se modifica el Plan --%>
+				<%-- Validaciï¿½n: si la Perspectiva seleccionada SI es Raï¿½z, entonces se modifica el Plan --%>
 				<logic:empty name="perspectiva" property="padreId" scope="session">
 					<logic:equal scope="session" name="editarPlan" value="true">
 						<vgcinterfaz:barraHerramientasBoton nombreImagen="modificar" pathImagenes="/componentes/barraHerramientas/" nombre="modificar" onclick="javascript:modificarPlan();">
@@ -503,7 +502,7 @@
 					</logic:notEqual>
 				</logic:empty>
 
-				<%-- Validación: si la Perspectiva seleccionada NO es Raíz, entonces se permite Eliminar y Propiedades de la Perspectiva  --%>
+				<%-- Validaciï¿½n: si la Perspectiva seleccionada NO es Raï¿½z, entonces se permite Eliminar y Propiedades de la Perspectiva  --%>
 				<logic:notEmpty name="perspectiva" property="padreId" scope="session">
 					<vgcinterfaz:barraHerramientasBoton permisoId="PLAN_PERSPECTIVA_DELETE" nombreImagen="eliminar" pathImagenes="/componentes/barraHerramientas/" nombre="eliminar" onclick="javascript:eliminarPerspectiva();">
 						<vgcinterfaz:barraHerramientasBotonTitulo>
@@ -601,7 +600,7 @@
 </script>
 <vgcutil:valorPropertyIgual nombre="com.visiongc.app.strategos.web.configuracion.StrategosWebConfiguration" property="jsp.planes.perspectivas.gestionarperspectivas.barrainferior.mostrar" valor="true">
 <script>
-	<%-- Arma la descripción al final del árbol --%>
+	<%-- Arma la descripciï¿½n al final del ï¿½rbol --%>
     var variable = document.getElementById('barraInferior');
     var nombrePerspectiva = '<bean:write name="perspectiva" property="nombre" />';
     variable.innerHTML = "<b><vgcutil:message key='jsp.gestionararbol.nodoseleccionado' /></b>: [" + nombrePerspectiva.toLowerCase() + "]";

@@ -86,14 +86,22 @@
 								</td>
 							</tr>
 							
-							<tr>
+							<tr>																
 								<td colspan="3">
 									<bean:define id="alcanceOrganizacion" toScope="page">
 										<bean:write name="reporteForm" property="alcanceOrganizacion" />
 									</bean:define>
-									<html:radio property="alcance" value="<%= alcanceOrganizacion %>">
-										<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
-									</html:radio>
+									<logic:equal name="reporteForm" value="true" property="todasOrganizaciones">
+										 <html:radio property="alcance"
+											value="<%=alcanceOrganizacion%>" > 
+											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
+										</html:radio>
+									</logic:equal>
+									<logic:notEqual name="reporteForm" value="true" property="todasOrganizaciones">
+										<html:radio property="alcance" value="<%=alcanceObjetivo%>" disabled="true">
+											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
+										</html:radio>
+									</logic:notEqual>
 								</td>
 							</tr>
 							

@@ -29,13 +29,10 @@ public class ReporteDependenciasOmisivasAction extends VgcAction{
 		
 		Usuario user = getUsuarioConectado(request);
 
-		boolean isAdmin=false;
-		if(user.getIsAdmin()){
-
-			isAdmin=true;
-		}
-		
-		request.getSession().setAttribute("isAdmin", isAdmin);
+		boolean todasOrganizaciones = getPermisologiaUsuario(request).tienePermiso("REPORTE_TODAS_ORGANIZACIONES");
+		if(todasOrganizaciones){			
+			reporteForm.setTodasOrganizaciones(true);
+		}				
 		
 		return mapping.findForward(forward);
 	}

@@ -374,15 +374,17 @@ public class VgcHibernateSession implements VgcPersistenceSession
 			if (objeto instanceof Collection) 
 			{
 				Iterator iter = ((Collection) objeto).iterator();
-				while (iter.hasNext()) 
+				while (iter.hasNext()) {					
 					update(iter.next(), usuario);
+				}
 			} 
 			else 
-			{
-				if (session.contains(objeto)) 
+			{				
+				if (session.contains(objeto)) {							
 					session.merge(objeto);
+				}
 				else 
-					session.update(objeto);
+					session.update(objeto);								
 			}
 			session.flush();
 		} 

@@ -16,47 +16,7 @@
 
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
-	
-		<script type="text/javascript">
-			var splitPlanVerticalAltoActual=0;
-			var splitPlanVerticalPosicionActual=0;
-			var splitPlanVerticalPosicionNueva=0;
-			var splitPlanVerticalAltoPanelSuperior='400';
-			var splitPlanVerticalMouseStatus='up';
-			var anchoPagina = screen.width;
-			var altoPagina = screen.height;
-			var startVertical = false;
-			
-			function splitPlanVerticalSetPosicion(e) 
-			{
-				eventoActual = (typeof event == 'undefined'? e: event);
-				splitPlanVerticalMouseStatus = 'down';
-				splitPlanVerticalPosicionActual = eventoActual.clientY;
-				altoTemp = document.getElementById('splitPlanVerticalPanelSuperior').style.height;
-				arregloAlto = altoTemp.split('p');
-				splitPlanVerticalAltoActual = parseInt(arregloAlto[0]);
-				startVertical = true;
-			}
-			
-			function splitPlanVerticalGetPosicion(e) 
-			{
-				if (splitPlanVerticalMouseStatus == 'down') 
-				{
-					eventoActual = (typeof event == 'undefined'? e: event);
-					splitPlanVerticalPosicionNueva = eventoActual.clientY;
-					var movimientoPx = parseInt(splitPlanVerticalPosicionNueva - splitPlanVerticalPosicionActual);
-					var altoNuevo = parseInt(splitPlanVerticalAltoActual + movimientoPx);
-					altoNuevo = (altoNuevo < 70 ? 70 : altoNuevo > (altoPagina - 250) ? (altoPagina - 250) : altoNuevo);
-					document.getElementById('splitPlanVerticalPanelSuperior').style.height = altoNuevo + 'px';
-					splitPlanVerticalAltoPanelSuperior = altoNuevo + 'px';
-					
-					if (typeof (resizePanelIniciativa) == "function")
-						resizePanelIniciativa();
-				}
-			}
-			
-		</script>
-		
+				
 		<%-- Split --%>
 		<bean:define id="anchoPanel" toScope="page">
 			<logic:notEmpty name="gestionarIndicadoresForm" property="anchoPorDefecto">

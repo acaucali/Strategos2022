@@ -291,13 +291,13 @@
 										toScope="page">
 										<bean:write name="reporteForm" property="alcanceOrganizacion" />
 									</bean:define>
-									<logic:equal name="reporteForm" value="true" property="isAdmin">
+									<logic:equal name="reporteForm" value="true" property="todasOrganizaciones">
 										 <html:radio property="alcance"
 											value="<%=alcanceOrganizacion%>" > 
 											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
 										</html:radio>
 									</logic:equal>
-									<logic:notEqual name="reporteForm" value="true" property="isAdmin">
+									<logic:notEqual name="reporteForm" value="true" property="todasOrganizaciones">
 										<html:radio property="alcance" value="<%=alcanceObjetivo%>" disabled="true">
 											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
 										</html:radio>

@@ -44,9 +44,7 @@
 			
 			function generarReporte() 
 			{
-			 	 if(!<%= session.getAttribute("isAdmin") %> && document.reporteForm.alcance.value == 3 ){
-			 		 alert ('Este reporte  solo puede ser ejecutado desde una cuenta Administrador');
-			 	 }else{
+			 	
 					var url = '&alcance=' + document.reporteForm.alcance.value;	
 					url = url + '&filtroNombre=' + document.reporteForm.filtroNombre.value;
 					url = url + '&selectHitoricoType=' + document.reporteForm.selectHitoricoType.value;
@@ -67,7 +65,7 @@
 		    	 	
 					else if (document.reporteForm.tipoReporte[1].checked)
 						abrirReporte('<html:rewrite action="/reportes/iniciativas/reporteIniciativaXls"/>?'+url+'&organizacionId=<bean:write name="organizacionId" scope="session" />');
-			 	 }
+			 	 
 				cancelar();
 				
 	    	 	
@@ -151,13 +149,13 @@
 										toScope="page">
 										<bean:write name="reporteForm" property="alcanceOrganizacion" />
 									</bean:define>
-									<logic:equal name="reporteForm" value="true" property="isAdmin">
+									<logic:equal name="reporteForm" value="true" property="todasOrganizaciones">
 										 <html:radio property="alcance"
 											value="<%=alcanceOrganizacion%>" > 
 											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
 										</html:radio>
 									</logic:equal>
-									<logic:notEqual name="reporteForm" value="true" property="isAdmin">
+									<logic:notEqual name="reporteForm" value="true" property="todasOrganizaciones">
 										<html:radio property="alcance" value="<%=alcanceObjetivo%>" disabled="true">
 											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
 										</html:radio>

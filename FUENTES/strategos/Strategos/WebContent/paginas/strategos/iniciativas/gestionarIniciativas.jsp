@@ -536,14 +536,24 @@
 	 }
 	 
 	 function setAnchoPanel()
-	{
-		if (startHorizontal && splitPlanPosicionNueva != 0 && splitPlanPosicionActual != splitPlanPosicionNueva)
-		{
-			startHorizontal = false;
-			var tipo = "Ancho";
-			var panel = "Strategos.Panel.Iniciativa";
-			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativas/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPlanPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
-		}
+	{		 		 		 
+		 if(document.gestionarIniciativasForm.source.value == 'portafolio') {
+			if (startHorizontal && splitPortafoliosPosicionNueva != 0 && splitPortafoliosPosicionActual != splitPortafoliosPosicionNueva)
+			{
+				startHorizontal = false;
+				var tipo = "Ancho";
+				var panel = "Strategos.Panel.Portafolio";
+				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/portafolios/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPortafoliosPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+			}
+		 } else {			 			  
+			if (startHorizontal && splitIniciativasPosicionNueva != 0 && splitIniciativasPosicionActual != splitIniciativasPosicionNueva)
+			{
+				startHorizontal = false;
+				var tipo = "Ancho";
+				var panel = "Strategos.Panel.Iniciativa";
+				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativas/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitIniciativasPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+			}
+		 }
 	}
 		
 	function setAltoPanel()
@@ -739,8 +749,7 @@
 						<vgcinterfaz:botonMenu key="menu.mediciones.eliminar" onclick="eliminarMediciones(document.gestionarIniciativasForm.seleccionadoId.value );" permisoId="INDICADOR_MEDICION" />
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 							<vgcinterfaz:botonMenu key="menu.edicion.importar.iniciativa" onclick="importarIniciativas();" permisoId="INICIATIVA_ADD" />
-						</logic:notEqual>		
-						<vgcinterfaz:botonMenu key="menu.edicion.verificar.proyectos" onclick="crearProyectos();" permisoId="ACTIVIDAD_ADD" />
+						</logic:notEqual>								
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 									<vgcinterfaz:botonMenu key="menu.edicion.importar.actividades" onclick="importarActividades();" permisoId="ACTIVIDAD_ADD" />
 						</logic:notEqual>

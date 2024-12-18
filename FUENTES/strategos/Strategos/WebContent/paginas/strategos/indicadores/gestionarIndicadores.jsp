@@ -526,7 +526,20 @@
 		
 	}
 	
+	function setAnchoPanel()
+	{							
+		if (startHorizontal && splitIndicadoresPosicionNueva != 0 && splitIndicadoresPosicionActual != splitIndicadoresPosicionNueva)
+		{
+			startHorizontal = false;
+			var tipo = "Ancho";
+			var panel = "Strategos.Panel.Indicadores";
+			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/indicadores/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitIndicadoresPosicionNueva, document.gestionarIndicadoresForm.respuesta, 'onSetPanel()');
+		}
+	}
 	
+	function onSetPanel()
+	{
+	}
 	
 </script>
 <script type="text/javascript"

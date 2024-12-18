@@ -920,7 +920,7 @@
 			</vgcinterfaz:columnaVisorLista>
 			<vgcinterfaz:columnaVisorLista nombre="nombre" width="450px" onclick="javascript:consultar(gestionarIndicadoresPlanForm, 'nombre', null);">
 				<bean:write name="gestionarIndicadoresPlanForm" property="nombreIndicadorPlural" />
-			</vgcinterfaz:columnaVisorLista>
+			</vgcinterfaz:columnaVisorLista>			
 			<vgcinterfaz:columnaVisorLista nombre="unidad" width="120px">
 				<vgcutil:message key="jsp.gestionarindicadores.columna.unidad" />
 			</vgcinterfaz:columnaVisorLista>
@@ -964,6 +964,10 @@
 			<vgcinterfaz:columnaVisorLista nombre="tipo" width="100px">
 				<vgcutil:message key="jsp.gestionarindicadoresplan.columna.tipo" />
 			</vgcinterfaz:columnaVisorLista>
+			
+			<vgcinterfaz:columnaVisorLista nombre="nombreOrganizacion" width="200px">
+				<vgcutil:message key="jsp.gestionariniciativasplan.columna.nombreOrganizacion" />
+			</vgcinterfaz:columnaVisorLista>
 
 			<%-- Filas del Visor Lista --%>
 			<vgcinterfaz:filasVisorLista nombreObjeto="indicador">
@@ -981,7 +985,7 @@
 				</vgcinterfaz:valorFilaColumnaVisorLista>
 				<vgcinterfaz:valorFilaColumnaVisorLista nombre="nombre">
 					<bean:write name="indicador" property="nombre" />
-				</vgcinterfaz:valorFilaColumnaVisorLista>
+				</vgcinterfaz:valorFilaColumnaVisorLista>				
 				<vgcinterfaz:valorFilaColumnaVisorLista nombre="unidad">
 					<logic:notEmpty name="indicador" property="unidad">
 						<bean:write name="indicador" property="unidad.nombre" />
@@ -1033,6 +1037,10 @@
 					<logic:equal name="indicador" property="guia" value="false">
 						<bean:write name="gestionarIndicadoresPlanForm" property="nombreIndicadorTipoResultado" />
 					</logic:equal>
+				</vgcinterfaz:valorFilaColumnaVisorLista>
+				
+				<vgcinterfaz:valorFilaColumnaVisorLista nombre="nombreOrganizacion" align="center">
+					<bean:write name="indicador" property="organizacionNombre" />
 				</vgcinterfaz:valorFilaColumnaVisorLista>
 
 			</vgcinterfaz:filasVisorLista>

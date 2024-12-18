@@ -752,10 +752,7 @@ public class ImportarManager {
 
 	@SuppressWarnings("resource")
 	public boolean ImportarIniciativa(String[][] datos, Usuario usuario) {
-		boolean respuesta = false;
-
-		boolean logMediciones = Boolean.parseBoolean(pm.getProperty("logMediciones", "false"));
-		boolean logErrores = Boolean.parseBoolean(pm.getProperty("logErrores", "false"));
+		boolean respuesta = false;		
 
 		String[] argsReemplazo = new String[13];
 
@@ -763,8 +760,7 @@ public class ImportarManager {
 
 		Connection cn = null;
 		Statement stm = null;
-		boolean transActiva = false;
-		boolean existe = false;
+		boolean transActiva = false;		
 
 		try {
 			cn = new ConnectionManager(pm).getConnection();
@@ -773,12 +769,10 @@ public class ImportarManager {
 			transActiva = true;
 
 			List<OrganizacionStrategos> organizaciones = new ArrayList<OrganizacionStrategos>();
-			OrganizacionStrategos organizacion = new OrganizacionStrategos();
-			boolean hayOrganizacion = false;
+			OrganizacionStrategos organizacion = new OrganizacionStrategos();			
 			long num = 0L;
 
-			Long organizacionSeleccionadaId = Long.parseLong(pm.getProperty("organizacionId", "0"));
-			int totalDatos = datos.length;
+			Long organizacionSeleccionadaId = Long.parseLong(pm.getProperty("organizacionId", "0"));			
 			organizaciones = new OrganizacionManager(pm, log, messageResources)
 					.getArbolCompletoOrganizaciones(organizacionSeleccionadaId, stm);
 						
@@ -815,8 +809,7 @@ public class ImportarManager {
 							&& !anioArchivo.equals("") && !frecuenciaArchivo.equals("")
 							&& !tipoMedicionArchivo.equals("") && !alertaVerdeArchivo.equals("")
 							&& !alertaAmarillaArchivo.equals("") && !crearCuentasArchivo.equals("")
-							&& !unidadMedidaArchivo.equals("")) {
-						hayOrganizacion = false;						
+							&& !unidadMedidaArchivo.equals("")) {										
 						for (Iterator<?> iter = organizaciones.iterator(); iter.hasNext();) {
 							organizacion = (OrganizacionStrategos) iter.next();																				
 							
@@ -844,11 +837,9 @@ public class ImportarManager {
 								iniciativa.setOrganizacionId(organizacion.getOrganizacionId());
 								iniciativa.setCodigoIniciativa(codigoIniArchivo);								
 								
-								if(nombreArchivo.length() > 240)
-									nombreArchivo = nombreArchivo.substring(0, 240);
+								nombreArchivo = nombreArchivo.length() > 240 ? nombreArchivo.substring(0, 240) : nombreArchivo;
 								
-								if(descripcionArchivo.length() > 1000)
-									descripcionArchivo = descripcionArchivo.substring(0, 1000);
+								descripcionArchivo = descripcionArchivo.length() > 1000 ? descripcionArchivo.substring(0, 1000) : descripcionArchivo;
 																															
 
 								TipoProyecto proyecto = (TipoProyecto) strategosTipoProyectoService
@@ -998,8 +989,8 @@ public class ImportarManager {
 				}
 			} catch (Exception localException9) {
 			}
-		}
-
+			System.out.print("Finalizada la importacion");
+		}		
 		return respuesta;
 	}
 
@@ -1106,9 +1097,8 @@ public class ImportarManager {
 																
 								UnidadMedida unidad = (UnidadMedida) strategosUnidadesService.load(UnidadMedida.class,
 										new Long(unidadMedidaArchivo));
-																																	
-								if(nombreArchivo.length() > 150)
-									nombreArchivo = nombreArchivo.substring(0, 150);
+																																									
+								nombreArchivo = nombreArchivo.length() > 140 ? nombreArchivo.substring(0, 140) : nombreArchivo;
 																								
 								
 								if (unidad == null)
@@ -1129,26 +1119,13 @@ public class ImportarManager {
 								
 								PryActividad actividad = new PryActividad();
 
-								Long claseId = clase.get(0).getClaseId();		
-								Long indicadorId = 0L;							
-								if(nombreArchivo.length() > 120) {
-									actividad.setIndicadorId(strategosActividadesService.crearIndicador(
-											iniciativa.getProyectoId(), claseId, nombreArchivo.substring(0, 120),
-											Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo),
-											Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario));
-									 	
-								} else {
-									actividad.setIndicadorId(strategosActividadesService.crearIndicador(
-											iniciativa.getProyectoId(), claseId, nombreArchivo,
-											Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo),
-											Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario));
-									indicadorId = strategosActividadesService.crearIndicador(
-											iniciativa.getProyectoId(), claseId, nombreArchivo,
-											Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo),
-											Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario);	
-								}
-																																							
-																					
+								Long claseId = clase.get(0).getClaseId();																					
+								
+								actividad.setIndicadorId(strategosActividadesService.crearIndicador(
+									iniciativa.getProyectoId(), claseId, nombreArchivo,
+									Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo),
+									Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario));																	
+																																																											
 								actividad.setActividadId(strategosActividadesService.getUniqueId());								
 								actividad.setProyectoId(iniciativa.getProyectoId());								
 								actividad.setNombre(nombreArchivo);								
@@ -1255,7 +1232,7 @@ public class ImportarManager {
 			new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 			message.setMensaje(messageResources.getResource("importar.no.success"));
 			new MessageManager(this.pm, this.log, this.messageResources).saveMessage(message, null);
-
+			System.out.print(e.getMessage());
 		}finally {
 			try {
 				if (transActiva)
@@ -1271,8 +1248,8 @@ public class ImportarManager {
 				}
 			} catch (Exception localException9) {
 			}
+			System.out.print("Finalizada la importacion");
 		}		
-
 		return respuesta;
 	}
 

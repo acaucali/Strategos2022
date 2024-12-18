@@ -128,23 +128,24 @@
 	
 	function setAnchoPanel()
 	{
-		if (startHorizontal && splitPortafolioPosicionNueva != 0 && splitPortafolioPosicionActual != splitPortafolioPosicionNueva)
+		console.log("entra a portafolios");
+		if (startHorizontal && splitPortafoliosPosicionNueva != 0 && splitPortafoliosPosicionActual != splitPortafoliosPosicionNueva)
 		{
 			startHorizontal = false;
 			var tipo = "Ancho";
 			var panel = "Strategos.Panel.Portafolio";
-			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/planes/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPortafolioPosicionNueva, document.gestionarPortafoliosForm.respuesta, 'onSetPanel()');
+			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/portafolio/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPortafoliosPosicionNueva, document.gestionarPortafoliosForm.respuesta, 'onSetPanel()');
 		}
 	}
 	
 	function setAltoPanel()
 	{
-		if (startVertical && splitPortafolioVerticalPosicionNueva != 0 && splitPortafolioVerticalPosicionActual != splitPortafolioVerticalPosicionNueva)
+		if (startVertical && splitPortafoliosVerticalPosicionNueva != 0 && splitPortafolioVerticalPosicionActual != splitPortafolioVerticalPosicionNueva)
 		{
 			startVertical = false;
 			var tipo = "Alto";
 			var panel = "Strategos.Panel.Portafolio";
-			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/planes/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPortafolioVerticalPosicionNueva, document.gestionarPortafoliosForm.respuesta, 'onSetPanel()');
+			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativa/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPortafolioVerticalPosicionNueva, document.gestionarPortafoliosForm.respuesta, 'onSetPanel()');
 		}
 	}
 	

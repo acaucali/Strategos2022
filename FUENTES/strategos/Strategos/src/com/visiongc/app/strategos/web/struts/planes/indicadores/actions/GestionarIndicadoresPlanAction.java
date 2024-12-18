@@ -17,6 +17,7 @@ import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosMedicionesService;
 import com.visiongc.app.strategos.indicadores.model.Indicador;
 import com.visiongc.app.strategos.model.util.Frecuencia;
+import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.planes.StrategosMetasService;
 import com.visiongc.app.strategos.planes.StrategosPlanesService;
 import com.visiongc.app.strategos.planes.model.IndicadorEstado;
@@ -40,6 +41,7 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.model.Organizacion;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 public class GestionarIndicadoresPlanAction extends VgcAction
@@ -64,9 +66,7 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory.getInstance().openStrategosUnidadesService();
 		Map<String, String> filtrosUnidades = new HashMap();
 		PaginaLista paginaUnidades = strategosUnidadesService.getUnidadesMedida(0, 0, "unidadId", "asc", true, filtrosUnidades);
-		strategosUnidadesService.close();
-		
-		
+		strategosUnidadesService.close();				
 				
 		Long selectFrecuencia = (request.getParameter("frecuencia") != null && request.getParameter("frecuencia") != "" && !request.getParameter("frecuencia").equals("0")) ? Long.parseLong(request.getParameter("frecuencia")) : null;
 		Long selectUnidadMedida = (request.getParameter("unidadMedida") != null && request.getParameter("unidadMedida") != "" && !request.getParameter("unidadMedida").equals("0")) ? Long.parseLong(request.getParameter("unidadMedida")) : null;		
@@ -81,7 +81,8 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		if (selectUnidadMedida != null)
 			request.getSession().setAttribute("selectUnidadMedidaIndicadorPlan", selectUnidadMedida);
 		
-		if (request.getParameter("limpiarFiltros") != null) {						
+		if (request.getParameter("limpiarFiltros") != null) {	
+			gestionarIndicadoresPlanForm.setUnidadId(null);
 			request.getSession().setAttribute("selectFrecuenciaIndicadorPlan", null);
 			request.getSession().setAttribute("selectUnidadMedidaIndicadorPlan", null);								
 		}
@@ -244,7 +245,8 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		StrategosMetasService strategosMetasService = StrategosServiceFactory.getInstance().openStrategosMetasService();
 		StrategosPlanesService strategosPlanesService = StrategosServiceFactory.getInstance().openStrategosPlanesService(strategosMetasService);
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
-
+		StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
+		
 		ConfiguracionPlan configuracionPlan = strategosPlanesService.getConfiguracionPlan();
 		gestionarIndicadoresPlanForm.setConfiguracionPlan(configuracionPlan);
 
@@ -253,6 +255,9 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 			for (Iterator<?> iter = paginaIndicadores.getLista().iterator(); iter.hasNext(); )
 			{
 				Indicador indicador = (Indicador)iter.next();
+				
+				Organizacion org = (Organizacion) strategosOrganizacionesService.load(Organizacion.class, indicador.getOrganizacionId());			
+				indicador.setOrganizacionNombre(org.getNombre());
 				if (indicador.getFechaUltimaMedicion() != null)
 				{
 					List<?> metas = strategosMetasService.getMetasAnuales(indicador.getIndicadorId(), gestionarPlanForm.getPlanId(), indicador.getFechaUltimaMedicionAno(), indicador.getFechaUltimaMedicionAno(), false);
@@ -298,6 +303,7 @@ public class GestionarIndicadoresPlanAction extends VgcAction
 		strategosPlanesService.close();
 		strategosMetasService.close();
 		strategosMedicionesService.close();
+		strategosOrganizacionesService.close();
 
 		paginaIndicadores.setTotal(paginaIndicadores.getLista().size());
 		paginaIndicadores.setTamanoSetPaginas(5);

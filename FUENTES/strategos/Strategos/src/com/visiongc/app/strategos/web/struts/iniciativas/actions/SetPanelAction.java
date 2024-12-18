@@ -40,7 +40,7 @@ public class SetPanelAction extends VgcAction {
 			int valor = (panel.indexOf("Portafolio") == -1) ? (Integer.parseInt(tamano) - 70) : (Integer.parseInt(tamano));
 			tamano = valor + "";
 		}
-		
+					
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		ConfiguracionUsuario configuracionUsuario = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), panel, tipo);
 		if (configuracionUsuario == null)

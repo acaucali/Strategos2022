@@ -942,30 +942,33 @@ public class ReporteDependenciasOmisivasXls extends VgcAction {
 		String[] tipoOrden = new String[1];
 		orden[0] = "nombre";
 		tipoOrden[0] = "asc";
-		List<ClaseIndicadores> clases = strategosClasesService.getClases(filtros);
+		List<ClaseIndicadores> clases = strategosClasesService.getClases(filtros);		
 		if (clases.size() > 0) {
-			ClaseIndicadores clasePadre = clases.get(0);
-
-			Set hijas = clasePadre.getHijos();
-			for (Iterator<Set> iter = hijas.iterator(); iter.hasNext();) {
-				ClaseIndicadores clss = (ClaseIndicadores) iter.next();
-				if (clss.getVisible()) {
-					for (Iterator<Set> iter2 = clss.getIndicadores().iterator(); iter2.hasNext();) {
-						Indicador indicador = (Indicador) iter2.next();
-
-						if (indicador.getNaturaleza() == 0) {
-							Date fechaUltimaMedicion;
-							Integer periodo = obtenerFecha(indicador.getFrecuencia());
-							String fecha = String.valueOf((periodo - 1)) + "/"
-									+ String.valueOf(new Date().getYear() + 1900);
-							SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
-							Date fechaActualDate = date.parse(fecha);
-							String ultimaMedicion = indicador.getFechaUltimaMedicion();
-							if (indicador.getFechaUltimaMedicion() != null) {
-								fechaUltimaMedicion = date.parse(ultimaMedicion);
-								if (fechaUltimaMedicion.before(fechaActualDate)) {
-									indAtrasados = true;
-									break;
+			ClaseIndicadores clasePadre = clases.get(0);			
+			Set hijas = clasePadre.getHijos();			
+			if (hijas.size() > 0) {				
+				for (Iterator<Set> iter = hijas.iterator(); iter.hasNext();) {
+					ClaseIndicadores clss = (ClaseIndicadores) iter.next();
+					if (clss.getIndicadores().size() > 0 ) {						
+						if (clss.getVisible()) {
+							for (Iterator<Set> iter2 = clss.getIndicadores().iterator(); iter2.hasNext();) {
+								Indicador indicador = (Indicador) iter2.next();
+								
+								if (indicador.getNaturaleza() == 0) {
+									Date fechaUltimaMedicion;
+									Integer periodo = obtenerFecha(indicador.getFrecuencia());
+									String fecha = String.valueOf((periodo - 1)) + "/"
+											+ String.valueOf(new Date().getYear() + 1900);
+									SimpleDateFormat date = new SimpleDateFormat("MM/yyyy");
+									Date fechaActualDate = date.parse(fecha);
+									String ultimaMedicion = indicador.getFechaUltimaMedicion();
+									if (indicador.getFechaUltimaMedicion() != null) {
+										fechaUltimaMedicion = date.parse(ultimaMedicion);
+										if (fechaUltimaMedicion.before(fechaActualDate)) {
+											indAtrasados = true;
+											break;
+										}
+									}
 								}
 							}
 						}

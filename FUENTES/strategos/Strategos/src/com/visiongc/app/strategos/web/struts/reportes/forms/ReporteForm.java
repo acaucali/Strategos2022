@@ -95,6 +95,7 @@ public class ReporteForm extends EditarObjetoForm
 	private String objetoKey;
 	private String organizacionNombre;
 	private Boolean isAdmin;
+	private Boolean todasOrganizaciones;
 
 	//Campos para comunicacion
 	private String valoresSeleccionados = null;
@@ -1059,6 +1060,7 @@ public class ReporteForm extends EditarObjetoForm
 		this.filtroNombre = null;
 		this.objetoKey = null;
 		this.organizacionNombre = null;
+		this.todasOrganizaciones = false;
 
 		// Campos para JavaScript
 		this.orientacion = ReporteForm.OrientacionTipo.ORIENTACION_PORTRAIT;
@@ -1138,6 +1140,14 @@ public class ReporteForm extends EditarObjetoForm
 
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public Boolean getTodasOrganizaciones() {
+		return todasOrganizaciones;
+	}
+
+	public void setTodasOrganizaciones(Boolean todasOrganizaciones) {
+		this.todasOrganizaciones = todasOrganizaciones;
 	}
 
 	public static class ReporteStatus

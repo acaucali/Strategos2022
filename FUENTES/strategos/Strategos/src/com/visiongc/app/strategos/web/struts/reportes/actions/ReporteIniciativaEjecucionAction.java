@@ -54,13 +54,10 @@ public class ReporteIniciativaEjecucionAction extends VgcAction
 		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
 		Usuario user = getUsuarioConectado(request);
 
-		boolean isAdmin=false;
-		if(user.getIsAdmin()){
-			isAdmin=true;
-			reporteForm.setIsAdmin(true);
-		}
-
-		request.getSession().setAttribute("isAdmin", isAdmin);
+		boolean todasOrganizaciones = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_TODAS_ORGANIZACIONES");
+		if(todasOrganizaciones){			
+			reporteForm.setTodasOrganizaciones(true);
+		}		
 
 		/* Parametros para el reporte */
 

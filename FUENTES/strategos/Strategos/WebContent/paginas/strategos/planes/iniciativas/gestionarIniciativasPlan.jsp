@@ -482,7 +482,7 @@
 			</vgcinterfaz:columnaVisorLista>
 			<vgcinterfaz:columnaVisorLista nombre="nombre" width="300px" onclick="javascript:obtenerLista('nombre')">
 				<bean:write name="gestionarIniciativasPlanForm" property="nombreIniciativaPlural" />
-			</vgcinterfaz:columnaVisorLista>
+			</vgcinterfaz:columnaVisorLista>			
 			<vgcinterfaz:columnaVisorLista nombre="porcentajeCompletado" width="70px">
 				<vgcutil:message key="jsp.gestionariniciativasplan.columna.porcentajecompletado" />
 			</vgcinterfaz:columnaVisorLista>
@@ -511,6 +511,9 @@
 				<vgcutil:message key="jsp.gestionariniciativasplan.columna.responsableLograrMeta" />
 			</vgcinterfaz:columnaVisorLista>
 
+			<vgcinterfaz:columnaVisorLista nombre="nombreOrganizacion" width="200px">
+				<vgcutil:message key="jsp.gestionariniciativasplan.columna.nombreOrganizacion" />
+			</vgcinterfaz:columnaVisorLista>
 			<%-- Filas del Visor Lista --%>
 			<vgcinterfaz:filasVisorLista nombreObjeto="iniciativa">
 
@@ -525,8 +528,9 @@
 				<vgcinterfaz:valorFilaColumnaVisorLista nombre="alerta" align="center">
 					<vgcst:imagenAlertaIniciativa name="iniciativa" property="alerta" />
 				</vgcinterfaz:valorFilaColumnaVisorLista>
-				<vgcinterfaz:valorFilaColumnaVisorLista nombre="nombre">
-					<bean:write name="iniciativa" property="nombre" />
+				
+				<vgcinterfaz:valorFilaColumnaVisorLista nombre="nombreOrganizacion" align="center">
+					<bean:write name="iniciativa" property="organizacionNombre" />
 				</vgcinterfaz:valorFilaColumnaVisorLista>
 				<vgcinterfaz:valorFilaColumnaVisorLista nombre="porcentajeCompletado" align="center">
 					<bean:write name="iniciativa" property="porcentajeCompletadoFormateado" />
@@ -560,6 +564,9 @@
 					</logic:notEmpty>&nbsp;
 				</vgcinterfaz:valorFilaColumnaVisorLista>
 
+				<vgcinterfaz:valorFilaColumnaVisorLista nombre="nombre">
+					<bean:write name="iniciativa" property="nombre" />
+				</vgcinterfaz:valorFilaColumnaVisorLista>
 			</vgcinterfaz:filasVisorLista>
 		</vgcinterfaz:visorLista>
 
