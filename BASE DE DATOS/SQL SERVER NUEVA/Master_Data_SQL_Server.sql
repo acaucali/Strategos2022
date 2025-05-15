@@ -1,4 +1,4 @@
-/************************************************/
+******************************************/
 /*            Configuraci�n B�sica              */
 /************************************************/
 INSERT INTO AFW_USUARIO (USUARIO_ID, FULL_NAME, U_ID, PWD, IS_ADMIN, IS_CONNECTED, ESTATUS, BLOQUEADO, IS_SYSTEM) VALUES (1, 'Administrador', 'admin', '&H07056D763639BF0585A18A0E5BAB9343CBA302B251758A1953191E03342B', 1, 0, 0, 0, 1);

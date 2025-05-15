@@ -67,7 +67,7 @@ public final class GestionarOrganizacionesAction extends VgcAction
 		strategosResponsablesService.close();
 
 		NavegadorForm problema = new com.visiongc.app.strategos.web.struts.general.actions.EditarGeneralActions().getModulo(ModuloType.Problema.Problema, true);
-		NavegadorForm riesgo = new com.visiongc.app.strategos.web.struts.general.actions.EditarGeneralActions().getModulo(ModuloType.Riesgo.Riesgo, false);
+		NavegadorForm riesgo = new com.visiongc.app.strategos.web.struts.general.actions.EditarGeneralActions().getModulo(ModuloType.Riesgo.Riesgo, true);
 		NavegadorForm plan = new com.visiongc.app.strategos.web.struts.general.actions.EditarGeneralActions().getModulo(ModuloType.Plan.Plan, true);
 		NavegadorForm iniciativas = new com.visiongc.app.strategos.web.struts.general.actions.EditarGeneralActions().getModulo(ModuloType.Iniciativas.Iniciativas, true);
 		NavegadorForm presentacionEjecutiva = new com.visiongc.app.strategos.web.struts.general.actions.EditarGeneralActions().getModulo(ModuloType.PresentacionEjecutiva.PresentacionEjecutiva, false);

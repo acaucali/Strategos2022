@@ -1,6 +1,7 @@
 package com.visiongc.app.strategos.web.struts.explicaciones.actions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -66,6 +67,9 @@ public class EditarExplicacionAction extends VgcAction
 		Boolean verForm = null;
 		Boolean editarForm = null;
 		Boolean publicar = null;
+		
+		Calendar fecha = Calendar.getInstance();
+        int ano = fecha.get(Calendar.YEAR);        
 		
 		if (tipo.intValue() == TipoExplicacion.getTipoExplicacion().intValue())
 		{
@@ -139,6 +143,9 @@ public class EditarExplicacionAction extends VgcAction
 				editarExplicacionForm.setNombreTipoObjetoKey(TipoObjetoExplicacion.getTipoExplicacion(explicacion.getObjetoKey().byteValue()));
 				editarExplicacionForm.setTipo(explicacion.getTipo());
 				editarExplicacionForm.setPublico(explicacion.getPublico());
+				editarExplicacionForm.setAnio(explicacion.getAnio());				
+				editarExplicacionForm.setPeriodo(explicacion.getPeriodo());
+				editarExplicacionForm.setAnioSelect(explicacion.getAnio() != null ? explicacion.getAnio() : ano);
 
 				if (explicacion.getFecha() != null)
 					editarExplicacionForm.setFecha(VgcFormatter.formatearFecha(explicacion.getFecha(), "formato.fecha.corta"));
@@ -272,6 +279,7 @@ public class EditarExplicacionAction extends VgcAction
 			editarExplicacionForm.setModificadoId(((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId());
 			editarExplicacionForm.setFechaModificado(VgcFormatter.formatearFecha(new Date(), "formato.fecha.corta"));
 			editarExplicacionForm.setTipo(tipo);
+			editarExplicacionForm.setAnioSelect(ano);			
 
 			if (publicar == null && usuario.getIsAdmin())
 				editarExplicacionForm.setPublico(true);

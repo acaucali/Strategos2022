@@ -1,5 +1,7 @@
 package com.visiongc.app.strategos.web.struts.reportes.actions;
 
+import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +30,11 @@ public class ReporteDependenciasOmisivasAction extends VgcAction{
 		reporteForm.clear();
 		
 		Usuario user = getUsuarioConectado(request);
+		
+		Calendar fecha = Calendar.getInstance();
+        int ano = fecha.get(Calendar.YEAR);                        			
+		reporteForm.setAno(ano);
+		
 
 		boolean todasOrganizaciones = getPermisologiaUsuario(request).tienePermiso("REPORTE_TODAS_ORGANIZACIONES");
 		if(todasOrganizaciones){			

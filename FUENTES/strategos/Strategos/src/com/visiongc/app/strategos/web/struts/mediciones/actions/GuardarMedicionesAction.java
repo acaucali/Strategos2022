@@ -510,8 +510,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 
 
     if(medicionesEditadas.size() >0){
-    	validarInventarioNegativo(indicadores, strategosInsumoService, strategosMedicionesService, strategosIndicadoresService, messages,  getUsuarioConectado(request), medicionesEditadas, request, editarMedicionesForm);
-    	System.out.print("\n\nMeidicon desde incitavia : " +  request.getSession().getAttribute("medicionDesdeIniciativa") );
+    	validarInventarioNegativo(indicadores, strategosInsumoService, strategosMedicionesService, strategosIndicadoresService, messages,  getUsuarioConectado(request), medicionesEditadas, request, editarMedicionesForm);    	
     	if(indicadoresPadre.size() > 0 && request.getSession().getAttribute("medicionDesdeIniciativa") != null) {    		
     		if((boolean) request.getSession().getAttribute("medicionDesdeIniciativa")) {    			
     			calcularTotal(indicadoresPadre, periodos, ano, editarMedicionesForm.getPlanId(), getUsuarioConectado(request), request);

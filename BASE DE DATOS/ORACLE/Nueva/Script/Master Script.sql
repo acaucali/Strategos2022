@@ -1,4 +1,3 @@
-
 CREATE TABLE accion
 (
 	accion_id            NUMBER(10) NOT NULL ,
@@ -16,7 +15,7 @@ CREATE TABLE accion
 	modificado           TIMESTAMP NULL ,
 	creado_id            NUMBER(10) NULL ,
 	modificado_id        NUMBER(10) NULL ,
-	descripcion          LONG VARCHAR NULL ,
+	descripcion          VARCHAR(500) NULL ,
 	read_only            NUMBER(1) NULL 
 );
 
