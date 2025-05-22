@@ -146,6 +146,80 @@ public class EditarIniciativaForm extends EditarObjetoForm {
 
 	private Boolean mostrarAdministracionPublica;
 	
+	private String alineacionPDMP;
+	private String alineacionODS;
+	private String coberturaGeografica;
+	private String impactoCiudadania;	
+	private String implementadorRecursos;
+	private String dependenciaResponsable;
+	private String sostenibilidad;
+	private String dependenciasCompetentes;
+
+	
+	public String getSostenibilidad() {
+		return sostenibilidad;
+	}
+
+	public void setSostenibilidad(String sostenibilidad) {
+		this.sostenibilidad = sostenibilidad;
+	}
+
+	public String getDependenciasCompetentes() {
+		return dependenciasCompetentes;
+	}
+
+	public void setDependenciasCompetentes(String dependenciasCompetentes) {
+		this.dependenciasCompetentes = dependenciasCompetentes;
+	}
+
+	public String getAlineacionPDMP() {
+		return alineacionPDMP;
+	}
+
+	public void setAlineacionPDMP(String alineacionPDMP) {
+		this.alineacionPDMP = alineacionPDMP;
+	}
+
+	public String getAlineacionODS() {
+		return alineacionODS;
+	}
+
+	public void setAlineacionODS(String alineacionODS) {
+		this.alineacionODS = alineacionODS;
+	}
+
+	public String getCoberturaGeografica() {
+		return coberturaGeografica;
+	}
+
+	public void setCoberturaGeografica(String coberturaGeografica) {
+		this.coberturaGeografica = coberturaGeografica;
+	}
+
+	public String getImpactoCiudadania() {
+		return impactoCiudadania;
+	}
+
+	public void setImpactoCiudadania(String impactoCiudadania) {
+		this.impactoCiudadania = impactoCiudadania;
+	}
+
+	public String getImplementadorRecursos() {
+		return implementadorRecursos;
+	}
+
+	public void setImplementadorRecursos(String implementadorRecursos) {
+		this.implementadorRecursos = implementadorRecursos;
+	}
+
+	public String getDependenciaResponsable() {
+		return dependenciaResponsable;
+	}
+
+	public void setDependenciaResponsable(String dependenciaResponsable) {
+		this.dependenciaResponsable = dependenciaResponsable;
+	}
+
 	private Byte partidas;
 	private List<Cargos> cuentas;
 

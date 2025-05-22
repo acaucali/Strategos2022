@@ -529,6 +529,47 @@
 			 	abrirVentanaModal('<html:rewrite action="/mediciones/eliminarMedicionParametros" />' + url + nombreForma + funcionCierre + nombreCampoOculto, 'eliminarMedicionesFuturas', '490', '280');				 		    				    			 
 			}
 		}
+	 
+	 function crearProyectos() {
+		 var url = '?crearProyectos=true'
+		window.location.href = '<html:rewrite action="/iniciativas/gestionarIniciativas" />' + url;
+	 }
+	 
+	 function setAnchoPanel()
+	{		 		 		 
+		 if(document.gestionarIniciativasForm.source.value == 'portafolio') {
+			if (startHorizontal && splitPortafoliosPosicionNueva != 0 && splitPortafoliosPosicionActual != splitPortafoliosPosicionNueva)
+			{
+				startHorizontal = false;
+				var tipo = "Ancho";
+				var panel = "Strategos.Panel.Portafolio";
+				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/portafolios/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitPortafoliosPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+			}
+		 } else {			 			  
+			if (startHorizontal && splitIniciativasPosicionNueva != 0 && splitIniciativasPosicionActual != splitIniciativasPosicionNueva)
+			{
+				startHorizontal = false;
+				var tipo = "Ancho";
+				var panel = "Strategos.Panel.Iniciativa";
+				ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativas/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitIniciativasPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+			}
+		 }
+	}
+		
+	function setAltoPanel()
+	{
+		if (startVertical && splitIniciativaVerticalPosicionNueva != 0 && splitIniciativaVerticalPosicionActual != splitIniciativaVerticalPosicionNueva)
+		{
+			startVertical = false;
+			var tipo = "Alto";
+			var panel = "Strategos.Panel.Iniciativa";
+			ajaxSendRequestReceiveInputSincronica('GET', '<html:rewrite action="/iniciativas/setPanel" />?panel=' + panel + '&tipo=' + tipo + '&tamano=' + splitIniciativaVerticalPosicionNueva, document.gestionarIniciativasForm.respuesta, 'onSetPanel()');
+		}
+	}
+	
+	function onSetPanel()
+	{
+	}
 	
 </script>
 <%-- Representaci�n de la Forma --%>
@@ -708,7 +749,7 @@
 						<vgcinterfaz:botonMenu key="menu.mediciones.eliminar" onclick="eliminarMediciones(document.gestionarIniciativasForm.seleccionadoId.value );" permisoId="INDICADOR_MEDICION" />
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 							<vgcinterfaz:botonMenu key="menu.edicion.importar.iniciativa" onclick="importarIniciativas();" permisoId="INICIATIVA_ADD" />
-						</logic:notEqual>		
+						</logic:notEqual>								
 						<logic:notEqual name="gestionarIniciativasForm" property="source" value="portafolio">
 									<vgcinterfaz:botonMenu key="menu.edicion.importar.actividades" onclick="importarActividades();" permisoId="ACTIVIDAD_ADD" />
 						</logic:notEqual>

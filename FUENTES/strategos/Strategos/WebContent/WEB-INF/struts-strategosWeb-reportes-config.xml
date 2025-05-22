@@ -63,6 +63,9 @@
 		
 		<!-- Mapeo del Action: Cancelar Lista Reporte -->
 		<action path="/reportes/cancelarListaReporte" type="com.visiongc.app.strategos.web.struts.reportes.actions.SeleccionarReporteAction" name="seleccionarReporteForm" scope="request" parameter="listaReporte"></action>
+		
+		
+		<!-- PLANES -->
 
 		<!-- Mapeo del Action: Pantalla de Objetivos -->
 		<action path="/reportes/planes/ejecucion" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanEjecucionAction" scope="request" name="reporteForm" parameter="ejecucion"></action>
@@ -104,7 +107,13 @@
 		<action path="/reportes/planes/visualizarPlanpdf" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanVisualizarPlanReportePdfAction"></action>
 		
 		<!-- Mapeo del Action: Generar Reporte Visualizar Plan Detallado en XLS -->
-		<action path="/reportes/planes/visualizarPlanXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanVisualizarPlanReporteXlsAction"></action>
+		<action path="/reportes/planes/visualizarPlanXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanVisualizarPlanReporteXlsAction"></action>				
+		
+		<!-- Mapeo del Action: Pantalla de Reporte de Indicadores del Plan -->
+		<action path="/reportes/planes/indicadoresPlanXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanIndicadoresXlsAction"></action>
+		
+		
+		<!-- INICIATIVAS -->
 		
 		<!-- Mapeo del Action: Pantalla de Iniciativas -->
 		<action path="/reportes/iniciativas/ejecucion" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanEjecucionAction" scope="request" name="reporteForm" parameter="ejecucionIniciativa"></action>
@@ -127,7 +136,6 @@
 		
 		<!-- Mapeo del Action: Generar Reporte de Resumido Xls de la Iniciativa Ejecucion-->
 		<action path="/reportes/iniciativas/reporteIniciativaXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaEjecucionXls"></action>
-		
 				
 		<!-- Mapeo del Action: Generar Reporte Ejecucion de la Iniciativa-->
 		<action path="/reportes/iniciativas/ejecucionReporte" type="com.visiongc.app.strategos.web.struts.reportes.actions.PlanEjecucionReporteAction"></action>
@@ -149,8 +157,7 @@
 		
 		<!-- Mapeo del Action: Generar Reporte Mediciones Atrasadas Xls de la Iniciativa-->
 		<action path="/reportes/iniciativas/medicionesAtrasadasXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaMedicionesAtrasadasXls"></action>
-		
-		
+				
 		
 		<!-- Mapeo del Action: Pantalla de Iniciativas -->
 		<action path="/reportes/iniciativas/indicador" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaIndicadorAction" scope="request" name="reporteForm" parameter="reporteIniciativaIndicadores"></action>
@@ -159,6 +166,7 @@
 		<action path="/reportes/iniciativas/indicadorEjecucion" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteIniciativaIndicadorEjecucion"></action>
 		
 		
+		<!-- PORTAFOLIOS -->
 		
 		<!-- Mapeo del Action: Pantalla de Iniciativas -->
 		<action path="/reportes/portafolios/detalle" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReportePortafolioDetalle" scope="request" name="reporteForm" parameter="reportePortafolioDetallado"></action>
@@ -178,6 +186,8 @@
 		<!-- Mapeo del Action: Pantalla de Iniciativas Resumida-->
 		<action path="/reportes/portafolios/resumidaEjecucionXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReportePortafolioResumidoXls"></action>
 		
+		
+		<!-- INSTRUMENTOS -->
 		
 		<!-- Ejecucion reporte explicaciones instrumento pdf-->
 		<action path="/reportes/explicaciones/instrumentos/ejecucionPdf" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteExplicacionInstrumentoPdf"></action>
@@ -206,6 +216,8 @@
 		<!-- Mapeo del Action: Reporte Explicaciones XLS -->
 		<action path="/reportes/explicaciones/resumidaExplicacionXls" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteExplicacionesXls"></action>
 		
+		
+		<!-- ORGANIZACIONES -->
 		
 		<!-- Mapeo del Action: Pantalla de Reporte de Cumplimiento -->
 		<action path="/reportes/reporteCumplimiento" type="com.visiongc.app.strategos.web.struts.reportes.actions.ReporteCumplimientoAction" scope="request" name="reporteForm" parameter="reporteCumplimiento"></action>

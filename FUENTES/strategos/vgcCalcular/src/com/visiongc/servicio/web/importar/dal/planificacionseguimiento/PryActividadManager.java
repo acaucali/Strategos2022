@@ -33,6 +33,7 @@ public class PryActividadManager {
 		if (this.logConsolaMetodos)
 			System.out.println(CLASS_METHOD);
 
+		String rdbmsid = new ConnectionManager(pm).getRdbmsid();
 		boolean transActiva = false;
 		Connection cn = null;
 		Statement stm = null;
@@ -78,55 +79,95 @@ public class PryActividadManager {
 				
 				if (respuesta == 0) {
 					
-					sql = "INSERT INTO PRY_ACTIVIDAD ";
-					
-					sql = sql + "(actividad_id, proyecto_id, indicador_id, clase_id, nombre, descripcion, comienzo_plan, comienzo_real, fin_plan, fin_real, duracion_plan, unidad_id, fila, nivel, compuesta, creado, creado_id, naturaleza, tipo_medicion, crecimiento, porcentaje_completado, porcentaje_esperado, porcentaje_ejecutado) ";
-					
-					sql = sql + "VALUES (" + actividad.getActividadId() + ", ";
-					
-					sql = sql + actividad.getProyectoId() + ", ";
-					
-					sql = sql + actividad.getIndicadorId() + ", ";
-					
-					sql = sql + actividad.getClaseId() + ", '";
-					
-					sql = sql + actividad.getNombre() + "', '";
-					
-					sql = sql + actividad.getDescripcion() + "', TO_DATE('";
-					
-					sql = sql + formato.format(actividad.getComienzoPlan()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
-					
-					sql = sql + formato.format(actividad.getComienzoReal()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
-					
-					sql = sql + formato.format(actividad.getFinPlan()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
-					
-					sql = sql + formato.format(actividad.getFinReal()) + "', 'YYYY-MM-DD HH24:MI:SS'), ";
-					
-					sql = sql + actividad.getDuracionPlan() + ", ";
-					
-					sql = sql + actividad.getUnidadId() + ", ";
-					
-					sql = sql + actividad.getFila() + ", ";
-					
-					sql = sql + actividad.getNivel() + ", ";
-									
-					sql = sql + 0 + ", TO_DATE('";
-					
-					sql = sql + formato.format(actividad.getCreado()) + "', 'YYYY-MM-DD HH24:MI:SS'), ";
-					
-					sql = sql + actividad.getCreadoId() + ", ";
-					
-					sql = sql + actividad.getNaturaleza() + ", ";
-					
-					sql = sql + actividad.getTipoMedicion() + ", ";
-					
-					sql = sql + actividad.getCrecimiento() + ", ";
-					
-					sql = sql + actividad.getPorcentajeCompletado() + ", ";
-					
-					sql = sql + actividad.getPorcentajeEsperado() + ", ";
+					if (rdbmsid.equals("SQL_SERVER") || rdbmsid.equals("POSTGRESQL")) {
+						sql = "INSERT INTO PRY_ACTIVIDAD ";
 
-					sql = sql + actividad.getPorcentajeEjecutado() + ")";
+						sql = sql + "(actividad_id, proyecto_id, indicador_id, clase_id, nombre, descripcion, comienzo_plan, comienzo_real, fin_plan, fin_real, duracion_plan, unidad_id, fila, nivel, compuesta, creado, creado_id, naturaleza, tipo_medicion) ";
+
+						sql = sql + "VALUES (" + actividad.getActividadId() + ", ";										
+
+						sql = sql + actividad.getProyectoId() + ", ";												
+
+						sql = sql + actividad.getIndicadorId() + ", ";
+
+						sql = sql + actividad.getClaseId() + ", '";
+
+						sql = sql + actividad.getNombre() + "', '";
+
+						sql = sql + actividad.getDescripcion() + "', '";
+
+						sql = sql + formato.format(actividad.getComienzoPlan()) + "', '";
+
+						sql = sql + formato.format(actividad.getComienzoReal()) + "', '";
+
+						sql = sql + formato.format(actividad.getFinPlan()) + "', '";
+
+						sql = sql + formato.format(actividad.getFinReal()) + "', ";
+
+						sql = sql + actividad.getDuracionPlan() + ", ";
+
+						sql = sql + actividad.getUnidadId() + ", ";
+
+						sql = sql + actividad.getFila() + ", ";
+
+						sql = sql + actividad.getNivel() + ", ";
+
+						sql = sql + 0 + ", '";
+
+						sql = sql + formato.format(actividad.getCreado()) + "', ";
+
+						sql = sql + actividad.getCreadoId() + ", ";
+
+						sql = sql + actividad.getNaturaleza() + ", ";
+
+						sql = sql + actividad.getTipoMedicion() + ");";
+
+						
+					} else if(rdbmsid.equals("ORACLE")) {
+						sql = "INSERT INTO PRY_ACTIVIDAD ";
+						
+						sql = sql + "(actividad_id, proyecto_id, indicador_id, clase_id, nombre, descripcion, comienzo_plan, comienzo_real, fin_plan, fin_real, duracion_plan, unidad_id, fila, nivel, compuesta, creado, creado_id, naturaleza, tipo_medicion, crecimiento) ";
+						
+						sql = sql + "VALUES (" + actividad.getActividadId() + ", ";
+						
+						sql = sql + actividad.getProyectoId() + ", ";
+						
+						sql = sql + actividad.getIndicadorId() + ", ";
+						
+						sql = sql + actividad.getClaseId() + ", '";
+						
+						sql = sql + actividad.getNombre() + "', '";
+						
+						sql = sql + actividad.getDescripcion() + "', TO_DATE('";
+						
+						sql = sql + formato.format(actividad.getComienzoPlan()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
+						
+						sql = sql + formato.format(actividad.getComienzoReal()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
+						
+						sql = sql + formato.format(actividad.getFinPlan()) + "', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('";
+						
+						sql = sql + formato.format(actividad.getFinReal()) + "', 'YYYY-MM-DD HH24:MI:SS'), ";
+						
+						sql = sql + actividad.getDuracionPlan() + ", ";
+						
+						sql = sql + actividad.getUnidadId() + ", ";
+						
+						sql = sql + actividad.getFila() + ", ";
+						
+						sql = sql + actividad.getNivel() + ", ";
+										
+						sql = sql + 0 + ", TO_DATE('";
+						
+						sql = sql + formato.format(actividad.getCreado()) + "', 'YYYY-MM-DD HH24:MI:SS'), ";
+						
+						sql = sql + actividad.getCreadoId() + ", ";
+						
+						sql = sql + actividad.getNaturaleza() + ", ";
+						
+						sql = sql + actividad.getTipoMedicion() + ", ";
+						
+						sql = sql + actividad.getCrecimiento() + ")";
+					}																								
 					
 					sqlIA = "INSERT INTO INC_ACTIVIDAD ";
 					
@@ -138,7 +179,7 @@ public class PryActividadManager {
 					
 					sqlIA = sqlIA + actividad.getAlertaZonaVerde() + ", ";
 					
-					sqlIA = sqlIA + actividad.getPeso() + ")";
+					sqlIA = sqlIA + actividad.getPeso() + ")";					
 															
 					respuesta = stm.executeUpdate(sql);
 					if(respuesta == 1)

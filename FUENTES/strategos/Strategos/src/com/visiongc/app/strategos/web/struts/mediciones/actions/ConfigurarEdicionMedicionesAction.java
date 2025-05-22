@@ -71,6 +71,11 @@ public class ConfigurarEdicionMedicionesAction extends VgcAction
 		editarMedicionesForm.setDesdeIndicadorOrg(false);
 
 		Byte source = Byte.parseByte(request.getParameter("source"));
+		String nombreForma= request.getParameter("nombreForma");
+		
+		if(nombreForma.equals("gestionarIndicadoresIniciativaForm")) 
+			request.getSession().setAttribute("medicionDesdeIniciativa", true);
+		
 		if (source.byteValue() == TipoSource.SOURCE_CLASE) {
 			editarMedicionesForm.setSourceScreen(TipoSource.SOURCE_CLASE);
 		}

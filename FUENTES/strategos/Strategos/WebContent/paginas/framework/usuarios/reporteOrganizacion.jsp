@@ -10,7 +10,7 @@
 <%-- Creado por: Kerwin Arias (12/05/2012) --%>
 
 <tiles:insert definition="doc.modalWindowLayout" flush="true">
-
+	
 	<%-- Título --%>
 	<tiles:put name="title" type="String">
 		<vgcutil:message key="reporte.framework.usuarios.organizacion.titulo" />
@@ -19,6 +19,9 @@
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
 
+		<%-- Función JavaScript externa --%>
+		<jsp:include page="/componentes/fichaDatos/fichaDatosJs.jsp"></jsp:include>
+		
 		<%-- Funciones JavaScript locales de la página Jsp --%>
 		<script language="Javascript1.1">
 		
@@ -28,7 +31,13 @@
 			
 			function seleccionarOrganizaciones() 
 		    {
-				abrirSelectorOrganizaciones('reporteUsuariosForm', 'organizacionNombre', 'organizacionId', null);
+				abrirSelectorOrganizaciones('reporteUsuariosForm', 'organizacionNombre', 'organizacionId', null, null, "actualizarContenido()");				
+			}
+			
+			function actualizarContenido() {			    
+			    var nuevoNombre = document.reporteUsuariosForm.organizacionNombre.value;			    			    
+			    var celda = document.getElementById('organizacionNombreCelda'); // Asegúrate de que esta celda tenga un ID
+			    celda.innerHTML = nuevoNombre;
 			}
 			
 			function generarReporte(){
@@ -42,14 +51,14 @@
 				else if (document.reporteUsuariosForm.tipoReporte[1].checked)
 					abrirReporte('<html:rewrite action="/framework/usuarios/reporteUsuariosOrganizacionExcel"/>?'+url);
 				window.close();
-			}
-
+			}			
 		</script>
 	
 		<jsp:include flush="true" page="/paginas/strategos/organizaciones/organizacionesJs.jsp"></jsp:include>
 		<%-- Forma asociada al Action - Jsp --%>
 		<html:form action="/framework/usuarios/reporteUsuariosOrganizacion" styleClass="formaHtmlCompleta">
-		
+		<%-- Funciones JavaScript externas de la página Jsp --%>
+		<jsp:include flush="true" page="/componentes/ajax/ajaxJs.jsp"></jsp:include>
 		
 		<html:hidden property="organizacionId"/>
 		<html:hidden property="organizacionNombre"/>
@@ -78,7 +87,7 @@
 
 						<table class="panelContenedor panelContenedorTabla">
 							
-							</tr>
+							<tr>
 							
 								<td colspan="3">
 									&nbsp;
@@ -87,36 +96,49 @@
 							
 							<!-- Organizacion Seleccionada-->
 							<tr >
-								<td><vgcutil:message key="reporte.framework.usuarios.detallado.organizacion" /></td>
-								<td align="left"><input  type="button" style="width:80%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();"></td>
-						</tr>
-							
+								<td><vgcutil:message key="reporte.framework.usuarios.detallado.organizacion" /></td>																    								
+								
+								<td id="organizacionNombreCelda" align="left">
+									<logic:equal name="reporteUsuariosForm" property="organizacionNombre" value="">
+									 	<input type="button" style="width:80%" class="cuadroTexto" value="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />" onclick="seleccionarOrganizaciones();">
+									</logic:equal>
+								    <logic:notEqual name="reporteUsuariosForm" property="organizacionNombre" value="">
+								        <bean:write name="reporteUsuariosForm" property="organizacionNombre" />
+								        &nbsp;<img style="cursor: pointer"
+											onclick="seleccionarOrganizaciones();"
+											src="<html:rewrite page='/componentes/fichaDatos/selector.gif'/>"
+											border="0" width="11" height="11"
+											title="<vgcutil:message key="jsp.seleccionarindicador.seleccionarorganizacion" />">
+									</logic:notEqual>
+								</td>
+								
 							</tr>
 							
+							<tr>
 								<td colspan="3">
 									&nbsp;
 								</td>
-							</tr>
+								
+							</tr>							
 							
 							<tr >
-							<td><vgcutil:message key="reporte.framework.usuarios.resumido.estatus" /></td>
-							<td align="left">
-								<html:select property="estatus" styleClass="cuadroTexto" size="1">
-									<html:option value="2">
-										<vgcutil:message key="jsp.framework.gestionarauditorias.filtro.todos" />
-									</html:option>
-									<html:option value="0">
-										<vgcutil:message key="jsp.framework.editarusuario.label.estatus.activo" />
-									</html:option>
-									<html:option value="1">
-										<vgcutil:message key="jsp.framework.seleccionarusuarios.columna.inactivo" />
-									</html:option>
-									
-									
-								</html:select></td>
-							</td>							
+								<td><vgcutil:message key="reporte.framework.usuarios.resumido.estatus" /></td>
+								<td align="left">
+									<html:select property="estatus" styleClass="cuadroTexto" size="1">
+										<html:option value="2">
+											<vgcutil:message key="jsp.framework.gestionarauditorias.filtro.todos" />
+										</html:option>
+										<html:option value="0">
+											<vgcutil:message key="jsp.framework.editarusuario.label.estatus.activo" />
+										</html:option>
+										<html:option value="1">
+											<vgcutil:message key="jsp.framework.seleccionarusuarios.columna.inactivo" />
+										</html:option>
+																		
+									</html:select>
+								</td>							
 							</tr>
-							
+							<tr>
 								<td colspan="3">
 									&nbsp;
 								</td>
@@ -215,6 +237,16 @@
 			</vgcinterfaz:contenedorForma>
 
 		</html:form>
-
+		<script>
+			function actualizarContenido() {
+			    // Aquí puedes obtener el nuevo valor de organizacionNombre
+			    var nuevoNombre = document.reporteUsuariosForm.organizacionNombre.value;
+	
+			    console.log(nuevoNombre);
+			    // Actualiza el contenido de la celda correspondiente
+			    var celda = document.getElementById('organizacionNombreCelda'); // Asegúrate de que esta celda tenga un ID
+			    celda.innerHTML = nuevoNombre;
+			}
+		</script>
 	</tiles:put>
 </tiles:insert>

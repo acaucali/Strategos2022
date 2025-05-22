@@ -1,6 +1,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/tags/vgc-util" prefix="vgcutil"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
+<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
 <%@ taglib uri="/tags/vgc-interfaz" prefix="vgcinterfaz"%>
 <%@ page errorPage="/paginas/comunes/errorJsp.jsp"%>
 
@@ -15,7 +16,18 @@
 
 	<%-- Cuerpo --%>
 	<tiles:put name="body" type="String">
-		<vgcinterfaz:splitterHorizontal anchoPorDefecto="500px" splitterId="splitIndicadores" overflowPanelDerecho="hidden" overflowPanelIzquierdo="hidden">
+				
+		<%-- Split --%>
+		<bean:define id="anchoPanel" toScope="page">
+			<logic:notEmpty name="gestionarIndicadoresForm" property="anchoPorDefecto">
+				<bean:write name="gestionarIndicadoresForm" property="anchoPorDefecto" />px
+			</logic:notEmpty>
+			<logic:empty name="gestionarIndicadoresForm" property="anchoPorDefecto">
+				400px
+			</logic:empty>
+		</bean:define>		
+		
+		<vgcinterfaz:splitterHorizontal anchoPorDefecto="<%= anchoPanel %>" splitterId="splitIndicadores" overflowPanelDerecho="hidden" overflowPanelIzquierdo="hidden">
 			<vgcinterfaz:splitterHorizontalPanelIzquierdo splitterId="splitIndicadores">
 				<jsp:include flush="true" page="/paginas/strategos/indicadores/clasesindicadores/gestionarClasesIndicadores.jsp"></jsp:include>
 			</vgcinterfaz:splitterHorizontalPanelIzquierdo>

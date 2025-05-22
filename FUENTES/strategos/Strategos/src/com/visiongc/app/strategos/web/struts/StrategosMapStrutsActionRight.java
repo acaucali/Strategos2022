@@ -338,6 +338,9 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 
 	    actionRight = new StrutsActionRight("indicadores.enviaremailindicador", false, false, "INDICADOR_EMAIL");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    
+	    actionRight = new StrutsActionRight("indicadores.setpanel", true, false, "INDICADOR");
+	    this.mapa.put("indicadores.setpanel", actionRight);
 
 	    //instrumentos
 
@@ -969,6 +972,9 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
     	this.mapa.put("indicadores.eliminarimportacion", actionRight);
 */
 
+    	actionRight = new StrutsActionRight("iniciativas.setpanel", false, false, "INICIATIVA");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    
 	    // Graficos Iniciativas
 	    actionRight = new StrutsActionRight("iniciativa.grafico.configurar", false, true, "INICIATIVA_EVALUAR_GRAFICO");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
@@ -1268,6 +1274,8 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("portafolios.asignarpesos", false, false, "PORTAFOLIO_ASIGNARPESOS");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("portafolios.setpanel", false, false, "PORTAFOLIO");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
 
 	    // Reportes del Plan
 	    actionRight = new StrutsActionRight("reportes.planes.ejecucion", false, false, "PLAN_REPORTE");
@@ -1295,6 +1303,8 @@ public class StrategosMapStrutsActionRight implements MapStrutsActionRight
 	    actionRight = new StrutsActionRight("reportes.planes.visualizarplanpdf", false, false, "PLAN_REPORTE");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    actionRight = new StrutsActionRight("reportes.planes.visualizarplanxls", false, false, "PLAN_REPORTE");
+	    this.mapa.put(actionRight.getActionName(), actionRight);
+	    actionRight = new StrutsActionRight("reportes.planes.indicadoresplanxls", false, false, "PLAN_REPORTE");
 	    this.mapa.put(actionRight.getActionName(), actionRight);
 	    
 

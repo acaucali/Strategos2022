@@ -26,6 +26,7 @@ import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.visiongc.app.strategos.explicaciones.StrategosExplicacionesService;
 import com.visiongc.app.strategos.explicaciones.model.Explicacion;
+import com.visiongc.app.strategos.explicaciones.model.ExplicacionPGN;
 import com.visiongc.app.strategos.explicaciones.model.MemoExplicacion;
 import com.visiongc.app.strategos.explicaciones.model.util.TipoMemoExplicacion;
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
@@ -95,18 +96,19 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		String todos = request.getParameter("todos") != null ? request.getParameter("todos") : "";
 		String desdeIniciativas = request.getParameter("desdeIniciativas") != null ? request.getParameter("desdeIniciativas") : "";
 		String iniciativaId = request.getParameter("iniciativaId") != null ? request.getParameter("iniciativaId") : "";
+		String estatusIniciativa = request.getParameter("estatusIniciativa") != null ? request.getParameter("estatusIniciativa") : "";
 	
 		reporte.setAno(new Integer(anio));
 		reporte.setAnoFinal(anioFinal);
 		reporte.setMesFinal(perFinal);
 		reporte.setAnoInicial(anioInicial);
 		reporte.setMesInicial(perInicial);
-		
+		reporte.setEstatus2(estatusIniciativa);		
 		reporte.setCooperanteId(request.getParameter("cop") != null && !request.getParameter("cop").toString().equals("") ? Long.parseLong(request.getParameter("cop")) : null);
 		reporte.setEstatus(estatus);
 		
 		if(desdeIniciativas.equals("true"))
-			ejecucionDesdeIniciativas(reporte,documento,request,mensajes, iniciativaId);
+			ejecucionDesdeIniciativas(reporte,documento,request,mensajes, iniciativaId, null, true);
 		else
 			ejecucionInstrumento(reporte,documento,request,mensajes,todos);
 	}
@@ -185,6 +187,7 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 	    			
 	    			filtros = new HashMap();
 		    		filtros.put("instrumentoId", instrumento.getInstrumentoId().toString());
+		    		filtros.put("estatusId", reporte.getEstatus2().toString());
 		    		
 		    		PaginaLista paginaIniciativas = strategosIniciativasService.getIniciativas(pagina, 30, atributoOrden, tipoOrden, true, filtros);
 		    		List<Iniciativa> iniciativas = paginaIniciativas.getLista();
@@ -195,7 +198,7 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 			    			if(cont1 != 0)
 			    				documento.newPage();
 			    			documento.add(lineaEnBlanco(font));
-			    			ejecucionDesdeIniciativas(reporte,documento,request,mensajes, iniciativa.getIniciativaId().toString());		
+			    			ejecucionDesdeIniciativas(reporte,documento,request,mensajes, iniciativa.getIniciativaId().toString(), instrumento, false);		
 			    			cont1++;
 			    			
 			    		}
@@ -239,7 +242,7 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		}
 	}
 
-	private void ejecucionDesdeIniciativas(ReporteForm reporte, Document documento, HttpServletRequest request, MessageResources mensajes, String iniciativaId) throws Exception {		
+	private void ejecucionDesdeIniciativas(ReporteForm reporte, Document documento, HttpServletRequest request, MessageResources mensajes, String iniciativaId, Instrumentos instrumento, Boolean desdeIniciativas) throws Exception {		
 		StrategosIniciativasService strategosIniciativasService = StrategosServiceFactory.getInstance().openStrategosIniciativasService();
 	    StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 	    StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
@@ -279,7 +282,7 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 	    documento.add(lineaEnBlanco(font));
 	    String titulo = "INFORMACIÓN DEL PROYECTO";
 		dibujarEncabezado(mensajes, request, documento, titulo, false);		    			
-		dibujarIniciativa(mensajes, request, documento, iniciativa);
+		dibujarIniciativa(mensajes, request, documento, iniciativa, instrumento, desdeIniciativas);
 		
 		Indicador indicador = (Indicador) strategosIndicadoresService.load(Indicador.class,
 				iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
@@ -355,23 +358,23 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 				dibujarAvances(mensajes, request, documento, iter1, medicionesEjecutadoAct, medicionesProgramadoAct );	
 				
 			}
-			List<Explicacion> explicacionesPrimer = new ArrayList<Explicacion>();				    						
-			List<Explicacion> explicacionesSegundo = new ArrayList<Explicacion>();
-			List<Explicacion> explicacionesTercer = new ArrayList<Explicacion>();
-			List<Explicacion> explicacionesCuarto = new ArrayList<Explicacion>();	
+			List<ExplicacionPGN> explicacionesPrimer = new ArrayList<ExplicacionPGN>();				    						
+			List<ExplicacionPGN> explicacionesSegundo = new ArrayList<ExplicacionPGN>();
+			List<ExplicacionPGN> explicacionesTercer = new ArrayList<ExplicacionPGN>();
+			List<ExplicacionPGN> explicacionesCuarto = new ArrayList<ExplicacionPGN>();	
 			for (PryActividad iter1 : actividades) {				    								    				
 				Map<String, Comparable> filtrosExp = new HashMap<String, Comparable>();				    				
 				if ((iter1.getActividadId() != null) && (!iter1.getActividadId().equals("")) && iter1.getActividadId() != 0)
 					filtros.put("objetoId", iter1.getActividadId().toString());
 				
-				PaginaLista paginaExplicaciones = strategosExplicacionesService.getExplicaciones(pagina, 30, atributoOrden, tipoOrden, true, filtros);				    				
+				PaginaLista paginaExplicaciones = strategosExplicacionesService.getExplicacionesPGN(pagina, 30, atributoOrden, tipoOrden, true, filtros);				    				
 				if(paginaExplicaciones != null) {
-					List<Explicacion> explicaciones = paginaExplicaciones.getLista();
+					List<ExplicacionPGN> explicaciones = paginaExplicaciones.getLista();
 					if(explicaciones.size() >0) {
 						documento.add(lineaEnBlanco(font));
 						Integer periodo = 0;
 										
-						for(Explicacion explicacion : explicaciones) {															
+						for(ExplicacionPGN explicacion : explicaciones) {															
 							periodo = obtenerPeriodo(explicacion.getFecha().getMonth()+1);
 							if(periodo == 1)
 								explicacionesPrimer.add(explicacion);
@@ -388,42 +391,32 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 			}
 			if(explicacionesPrimer.size() > 0  && explicacionesPrimer != null ) {
 				dibujarTituloExplicaciones(mensajes, request, documento, 1);
-				for (Explicacion explicacion1 : explicacionesPrimer) {
+				for (ExplicacionPGN explicacion1 : explicacionesPrimer) {
 					dibujarSubtituloExplicaciones(mensajes, request, documento, explicacion1);
-					for(Iterator <?> i1 = explicacion1.getMemosExplicacion().iterator(); i1.hasNext();) {
-						MemoExplicacion memoExplicacion = (MemoExplicacion)i1.next();
-						dibujarExplicaciones(mensajes, request, documento, memoExplicacion);
-					}
+					dibujarExplicaciones(mensajes, request, documento, explicacion1);					
 				}
 			}
 			if(explicacionesSegundo.size() > 0 && explicacionesSegundo != null  ) {
 				dibujarTituloExplicaciones(mensajes, request, documento, 2);
-				for (Explicacion explicacion2 : explicacionesSegundo) {
+				for (ExplicacionPGN explicacion2 : explicacionesSegundo) {
 					dibujarSubtituloExplicaciones(mensajes, request, documento, explicacion2);
-					for(Iterator <?> i1 = explicacion2.getMemosExplicacion().iterator(); i1.hasNext();) {
-						MemoExplicacion memoExplicacion = (MemoExplicacion)i1.next();
-						dibujarExplicaciones(mensajes, request, documento, memoExplicacion);
-					}
+					dibujarExplicaciones(mensajes, request, documento, explicacion2);
+					
 				}
 			}
 			if(explicacionesTercer.size() > 0 && explicacionesTercer != null ) {
 				dibujarTituloExplicaciones(mensajes, request, documento, 3);
-				for (Explicacion explicacion3 : explicacionesTercer) {
-					dibujarSubtituloExplicaciones(mensajes, request, documento, explicacion3);
-					for(Iterator <?> i1 = explicacion3.getMemosExplicacion().iterator(); i1.hasNext();) {
-						MemoExplicacion memoExplicacion = (MemoExplicacion)i1.next();
-						dibujarExplicaciones(mensajes, request, documento, memoExplicacion);
-					}
+				for (ExplicacionPGN explicacion3 : explicacionesTercer) {
+					dibujarSubtituloExplicaciones(mensajes, request, documento, explicacion3);					
+					dibujarExplicaciones(mensajes, request, documento, explicacion3);
+					
 				}
 			}
 			if(explicacionesCuarto.size() > 0 && explicacionesCuarto != null ) {
 				dibujarTituloExplicaciones(mensajes, request, documento, 4);
-				for (Explicacion explicacion4 : explicacionesCuarto) {
+				for (ExplicacionPGN explicacion4 : explicacionesCuarto) {
 					dibujarSubtituloExplicaciones(mensajes, request, documento, explicacion4);
-					for(Iterator <?> i1 = explicacion4.getMemosExplicacion().iterator(); i1.hasNext();) {
-						MemoExplicacion memoExplicacion = (MemoExplicacion)i1.next();
-						dibujarExplicaciones(mensajes, request, documento, memoExplicacion);
-					}
+					dibujarExplicaciones(mensajes, request, documento, explicacion4);					
 				}
 			}				
 		}else {
@@ -503,7 +496,7 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		documento.add(tabla.getTabla());
 	}
 
-	public void dibujarIniciativa(MessageResources mensajes, HttpServletRequest request, Document documento, Iniciativa iniciativa) throws Exception{
+	public void dibujarIniciativa(MessageResources mensajes, HttpServletRequest request, Document documento, Iniciativa iniciativa, Instrumentos instrumento,  Boolean desdeIniciativa) throws Exception{
 		TablaPDF tabla = null;
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		int[] columnas = new int[3];
@@ -538,10 +531,59 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		tabla.setFormatoFont(Font.NORMAL);
 		tabla.agregarCelda(iniciativa.getIniciativaEstrategica());
 		
+		if(!desdeIniciativa) {
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nAlineación con el Plan Decenal del Ministerio Público (PDMP)\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getAlineacionPDMP());
+			
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nAlineación con los Objetivos de Desarrollo Sostenible (ODS)\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getAlineacionODS());
+		}
+		
 		tabla.setFormatoFont(Font.BOLD);
-		tabla.agregarCelda("\nPoblacion objetivo\n");
+		tabla.agregarCelda("\nPoblación objetivo\n");
 		tabla.setFormatoFont(Font.NORMAL);
-		tabla.agregarCelda(iniciativa.getPoblacionBeneficiada());			
+		tabla.agregarCelda(iniciativa.getPoblacionBeneficiada());		
+		
+		if(!desdeIniciativa) {
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nCobertura Geográfica\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getCoberturaGeografica());	
+			
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nImpacto frente a la ciudadanía\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getImpactoCiudadania());	
+			
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nSostenibilidad\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getSostenibilidad());		
+		
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nCooperante\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(instrumento.getCooperante().getNombre());
+			
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nDependencia responsable\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getDependenciaResponsable());		
+		
+			tabla.setFormatoFont(Font.BOLD);
+			tabla.agregarCelda("\nOtras dependencias competentes\n");
+			tabla.setFormatoFont(Font.NORMAL);
+			tabla.agregarCelda(iniciativa.getDependenciasCompetentes());
+		}
+		
+		tabla.setFormatoFont(Font.BOLD);
+		tabla.agregarCelda("\nCoordinador del proyecto\n");
+		tabla.setFormatoFont(Font.NORMAL);
+		tabla.agregarCelda(iniciativa.getResponsableProyecto());
 		
 		documento.add(tabla.getTabla());
 	}
@@ -984,7 +1026,7 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		documento.add(tabla.getTabla());
 	}
 	
-	public void dibujarSubtituloExplicaciones(MessageResources mensajes, HttpServletRequest request, Document documento, Explicacion explicacion) throws Exception{
+	public void dibujarSubtituloExplicaciones(MessageResources mensajes, HttpServletRequest request, Document documento, ExplicacionPGN explicacion) throws Exception{
 		StrategosPryActividadesService strategosPryActividadesService = StrategosServiceFactory.getInstance().openStrategosPryActividadesService();
 		TablaPDF tabla = null;
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
@@ -1004,10 +1046,16 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		documento.add(tabla.getTabla());
 	}
 	
-	public void dibujarExplicaciones(MessageResources mensajes, HttpServletRequest request, Document documento, MemoExplicacion memoExplicacion) throws Exception{
+	public void dibujarExplicaciones(MessageResources mensajes, HttpServletRequest request, Document documento, ExplicacionPGN memoExplicacion) throws Exception{
 		TablaPDF tabla = null;
 		tabla = new TablaPDF(getConfiguracionPagina(request), request);
 		int[] columnas = new int[2];
+		
+		String recuadro = "☐";
+        String recuadroMarcado = "☑";
+        
+        String siTexto = memoExplicacion.getCumplimiendoFechas() ? recuadroMarcado : recuadro;
+        String noTexto = memoExplicacion.getCumplimiendoFechas() ? recuadroMarcado : recuadro;
 		
 		columnas = new int[1];
 
@@ -1016,9 +1064,24 @@ public class ReporteDetalladoProyectosAsociadosPdf extends VgcReporteBasicoActio
 		tabla.setAmplitudTabla(100);
 		tabla.crearTabla(columnas);
 		tabla.setAlineacionHorizontal(0);		
-		tabla.setFormatoFont(Font.NORMAL);
-		tabla.agregarCelda(memoExplicacion.getMemo());
-
+		tabla.setFormatoFont(Font.NORMAL);				
+		if(memoExplicacion.getCumplimiendoFechas())
+			tabla.agregarCelda("¿Se estan cumpliendo las fechas en el plan de trabajo?     Si: X     No: "
+					+ "\n\nPor favor explique los retos o inconvenientes que se han presentado en el desarrollo del producto durante el trimestre de reporte. \n" 
+					+ memoExplicacion.getExplicacionFechas());
+		else
+			tabla.agregarCelda("¿Se estan cumpliendo las fechas en el plan de trabajo?     Si:       No: X "
+					+ "\n\nPor favor explique los retos o inconvenientes que se han presentado en el desarrollo del producto durante el trimestre de reporte. \n" 
+					+ memoExplicacion.getExplicacionFechas());
+		
+		if(memoExplicacion.getRecibido())
+			tabla.agregarCelda("¿Se recibio el producto?     Si: X     No: "
+					+ "\n\nEn caso de haberlo recibido, explique para que sirve y como va a usar este producto en el desarrollo de sus funciones. \n"
+					+ memoExplicacion.getExplicacionRecibido());
+		else
+			tabla.agregarCelda("¿Se recibio el producto?     Si:       No: X"
+					+ "\n\nEn caso de haberlo recibido, explique para que sirve y como va a usar este producto en el desarrollo de sus funciones. \n"
+					+ memoExplicacion.getExplicacionRecibido());
 		
 		documento.add(tabla.getTabla());
 	}

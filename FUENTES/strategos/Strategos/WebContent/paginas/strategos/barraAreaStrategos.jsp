@@ -99,7 +99,7 @@
 		*/
 		
 		/* nuevo modulo riesgos para pgn */		
-		window.location.href="http://localhost:4200" ;
+		window.location.href="http://104.251.223.189:8089" ;
 		 
 	}
 

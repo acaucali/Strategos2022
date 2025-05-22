@@ -7,8 +7,7 @@ import java.util.List;
 import com.visiongc.commons.util.VgcFormatter;
 import com.visiongc.framework.web.struts.forms.EditarObjetoForm;
 
-public class EditarExplicacionForm extends EditarObjetoForm
-{
+public class EditarExplicacionForm extends EditarObjetoForm {
 	static final long serialVersionUID = 0L;
 
 	private Long explicacionId;
@@ -44,323 +43,314 @@ public class EditarExplicacionForm extends EditarObjetoForm
 	private Boolean publico;
 	private Boolean addPublico;
 	private Boolean creador;
+	private Integer anio;
+	private Integer periodo;
+	private Integer anioSelect;
 
-	public Long getExplicacionId()
-	{
+	public Long getExplicacionId() {
 		return this.explicacionId;
 	}
 
-  public void setExplicacionId(Long explicacionId) {
-    this.explicacionId = explicacionId;
-  }
+	public void setExplicacionId(Long explicacionId) {
+		this.explicacionId = explicacionId;
+	}
 
-  public String getFecha() {
-    return this.fecha;
-  }
+	public String getFecha() {
+		return this.fecha;
+	}
 
-  public void setFecha(String fecha) {
-    this.fecha = fecha;
-  }
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
 
-  public Long getCreadoId() {
-    return this.creadoId;
-  }
+	public Long getCreadoId() {
+		return this.creadoId;
+	}
 
-  public void setCreadoId(Long creadoId) {
-    this.creadoId = creadoId;
-  }
+	public void setCreadoId(Long creadoId) {
+		this.creadoId = creadoId;
+	}
 
-  public Long getModificadoId() {
-    return this.modificadoId;
-  }
+	public Long getModificadoId() {
+		return this.modificadoId;
+	}
 
-  public void setModificadoId(Long modificadoId) {
-    this.modificadoId = modificadoId;
-  }
+	public void setModificadoId(Long modificadoId) {
+		this.modificadoId = modificadoId;
+	}
 
-  public Byte getObjetoKey() {
-    return this.objetoKey;
-  }
+	public Byte getObjetoKey() {
+		return this.objetoKey;
+	}
 
-  public void setObjetoKey(Byte objetoKey) {
-    this.objetoKey = objetoKey;
-  }
+	public void setObjetoKey(Byte objetoKey) {
+		this.objetoKey = objetoKey;
+	}
 
-  public Long getObjetoId() {
-    return this.objetoId;
-  }
+	public Long getObjetoId() {
+		return this.objetoId;
+	}
 
-  public void setObjetoId(Long objetoId) {
-    this.objetoId = objetoId;
-  }
+	public void setObjetoId(Long objetoId) {
+		this.objetoId = objetoId;
+	}
 
-  public String getTitulo() {
-    return this.titulo;
-  }
+	public String getTitulo() {
+		return this.titulo;
+	}
 
-  public void setTitulo(String titulo) {
-    this.titulo = titulo;
-  }
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
 
-  public String getNombreUsuarioCreado() {
-    return this.nombreUsuarioCreado;
-  }
+	public String getNombreUsuarioCreado() {
+		return this.nombreUsuarioCreado;
+	}
 
-  public void setNombreUsuarioCreado(String nombreUsuarioCreado) {
-    this.nombreUsuarioCreado = nombreUsuarioCreado;
-  }
+	public void setNombreUsuarioCreado(String nombreUsuarioCreado) {
+		this.nombreUsuarioCreado = nombreUsuarioCreado;
+	}
 
-  public String getNombreUsuarioModificado() {
-    return this.nombreUsuarioModificado;
-  }
+	public String getNombreUsuarioModificado() {
+		return this.nombreUsuarioModificado;
+	}
 
-  public void setNombreUsuarioModificado(String nombreUsuarioModificado) {
-    this.nombreUsuarioModificado = nombreUsuarioModificado;
-  }
+	public void setNombreUsuarioModificado(String nombreUsuarioModificado) {
+		this.nombreUsuarioModificado = nombreUsuarioModificado;
+	}
 
-  public String getFechaCreado() {
-    return this.fechaCreado;
-  }
+	public String getFechaCreado() {
+		return this.fechaCreado;
+	}
 
-  public void setFechaCreado(String fechaCreado) {
-    this.fechaCreado = fechaCreado;
-  }
+	public void setFechaCreado(String fechaCreado) {
+		this.fechaCreado = fechaCreado;
+	}
 
-  public String getFechaModificado() {
-    return this.fechaModificado;
-  }
+	public String getFechaModificado() {
+		return this.fechaModificado;
+	}
 
-  public void setFechaModificado(String fechaModificado) {
-    this.fechaModificado = fechaModificado;
-  }
+	public void setFechaModificado(String fechaModificado) {
+		this.fechaModificado = fechaModificado;
+	}
 
-  public Long getNumeroAdjuntos() {
-    return this.numeroAdjuntos;
-  }
+	public Long getNumeroAdjuntos() {
+		return this.numeroAdjuntos;
+	}
 
-  public void setNumeroAdjuntos(Long numeroAdjuntos) {
-    this.numeroAdjuntos = numeroAdjuntos;
-  }
+	public void setNumeroAdjuntos(Long numeroAdjuntos) {
+		this.numeroAdjuntos = numeroAdjuntos;
+	}
 
-  public String getNombreObjetoKey() {
-    return this.nombreObjetoKey;
-  }
+	public String getNombreObjetoKey() {
+		return this.nombreObjetoKey;
+	}
 
-  public void setNombreObjetoKey(String nombreObjetoKey) {
-    this.nombreObjetoKey = nombreObjetoKey;
-  }
+	public void setNombreObjetoKey(String nombreObjetoKey) {
+		this.nombreObjetoKey = nombreObjetoKey;
+	}
 
-  public String getNombreOrganizacion() {
-    return this.nombreOrganizacion;
-  }
+	public String getNombreOrganizacion() {
+		return this.nombreOrganizacion;
+	}
 
-  public void setNombreOrganizacion(String nombreOrganizacion) {
-    this.nombreOrganizacion = nombreOrganizacion;
-  }
+	public void setNombreOrganizacion(String nombreOrganizacion) {
+		this.nombreOrganizacion = nombreOrganizacion;
+	}
 
-  public String getNombreTipoObjetoKey() {
-    return this.nombreTipoObjetoKey;
-  }
+	public String getNombreTipoObjetoKey() {
+		return this.nombreTipoObjetoKey;
+	}
 
-  public void setNombreTipoObjetoKey(String nombreTipoObjetoKey) {
-    this.nombreTipoObjetoKey = nombreTipoObjetoKey;
-  }
+	public void setNombreTipoObjetoKey(String nombreTipoObjetoKey) {
+		this.nombreTipoObjetoKey = nombreTipoObjetoKey;
+	}
 
-  public String getMemoDescripcion() {
-    return this.memoDescripcion;
-  }
+	public String getMemoDescripcion() {
+		return this.memoDescripcion;
+	}
 
-  public void setMemoDescripcion(String memoDescripcion) {
-    if ((memoDescripcion == null) || (memoDescripcion.trim().equals("")))
-      this.memoDescripcion = null;
-    else
-      this.memoDescripcion = memoDescripcion.trim();
-  }
+	public void setMemoDescripcion(String memoDescripcion) {
+		if ((memoDescripcion == null) || (memoDescripcion.trim().equals("")))
+			this.memoDescripcion = null;
+		else
+			this.memoDescripcion = memoDescripcion.trim();
+	}
 
-  public String getMemoCausas()
-  {
-    return this.memoCausas;
-  }
+	public String getMemoCausas() {
+		return this.memoCausas;
+	}
 
-  public void setMemoCausas(String memoCausas) {
-    if ((memoCausas == null) || (memoCausas.trim().equals("")))
-      this.memoCausas = null;
-    else
-      this.memoCausas = memoCausas.trim();
-  }
+	public void setMemoCausas(String memoCausas) {
+		if ((memoCausas == null) || (memoCausas.trim().equals("")))
+			this.memoCausas = null;
+		else
+			this.memoCausas = memoCausas.trim();
+	}
 
-  public String getMemoCorrectivos()
-  {
-    return this.memoCorrectivos;
-  }
+	public String getMemoCorrectivos() {
+		return this.memoCorrectivos;
+	}
 
-  public void setMemoCorrectivos(String memoCorrectivos) {
-    if ((memoCorrectivos == null) || (memoCorrectivos.trim().equals("")))
-      this.memoCorrectivos = null;
-    else
-      this.memoCorrectivos = memoCorrectivos.trim();
-  }
+	public void setMemoCorrectivos(String memoCorrectivos) {
+		if ((memoCorrectivos == null) || (memoCorrectivos.trim().equals("")))
+			this.memoCorrectivos = null;
+		else
+			this.memoCorrectivos = memoCorrectivos.trim();
+	}
 
-  public String getMemoImpactos()
-  {
-    return this.memoImpactos;
-  }
+	public String getMemoImpactos() {
+		return this.memoImpactos;
+	}
 
-  public void setMemoImpactos(String memoImpactos) {
-    if ((memoImpactos == null) || (memoImpactos.trim().equals("")))
-      this.memoImpactos = null;
-    else
-      this.memoImpactos = memoImpactos.trim();
-  }
+	public void setMemoImpactos(String memoImpactos) {
+		if ((memoImpactos == null) || (memoImpactos.trim().equals("")))
+			this.memoImpactos = null;
+		else
+			this.memoImpactos = memoImpactos.trim();
+	}
 
-  public String getMemoPerspectivas()
-  {
-    return this.memoPerspectivas;
-  }
+	public String getMemoPerspectivas() {
+		return this.memoPerspectivas;
+	}
 
-  public void setMemoPerspectivas(String memoPerspectivas) {
-    if ((memoPerspectivas == null) || (memoPerspectivas.trim().equals("")))
-      this.memoPerspectivas = null;
-    else
-      this.memoPerspectivas = memoPerspectivas.trim();
-  }
+	public void setMemoPerspectivas(String memoPerspectivas) {
+		if ((memoPerspectivas == null) || (memoPerspectivas.trim().equals("")))
+			this.memoPerspectivas = null;
+		else
+			this.memoPerspectivas = memoPerspectivas.trim();
+	}
 
-  public String getMemoUrl()
-  {
-    return this.memoUrl;
-  }
+	public String getMemoUrl() {
+		return this.memoUrl;
+	}
 
-  public void setMemoUrl(String memoUrl) {
-    if ((memoUrl == null) || (memoUrl.trim().equals("")))
-      this.memoUrl = null;
-    else
-      this.memoUrl = memoUrl.trim();
-  }
+	public void setMemoUrl(String memoUrl) {
+		if ((memoUrl == null) || (memoUrl.trim().equals("")))
+			this.memoUrl = null;
+		else
+			this.memoUrl = memoUrl.trim();
+	}
 
-  public List getAdjuntosExplicacion()
-  {
-    return this.adjuntosExplicacion;
-  }
+	public List getAdjuntosExplicacion() {
+		return this.adjuntosExplicacion;
+	}
 
-  public void setAdjuntosExplicacion(List adjuntosExplicacion) {
-    this.adjuntosExplicacion = adjuntosExplicacion;
-  }
+	public void setAdjuntosExplicacion(List adjuntosExplicacion) {
+		this.adjuntosExplicacion = adjuntosExplicacion;
+	}
 
-  public Integer getTipo()
-  {
-    return this.tipo;
-  }
+	public Integer getTipo() {
+		return this.tipo;
+	}
 
-  public void setTipo(Integer tipo)
-  {
-    this.tipo = tipo;
-  }
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
+	}
 
-	public String getFechaCompromiso()
-	{
+	public String getFechaCompromiso() {
 		return this.fechaCompromiso;
 	}
 
-	public void setFechaCompromiso(String fechaCompromiso)
-	{
+	public void setFechaCompromiso(String fechaCompromiso) {
 		this.fechaCompromiso = fechaCompromiso;
 	}
 
-	public String getFechaReal()
-	{
+	public String getFechaReal() {
 		return this.fechaReal;
 	}
 
-	public void setFechaReal(String fechaReal)
-	{
+	public void setFechaReal(String fechaReal) {
 		this.fechaReal = fechaReal;
 	}
 
-	public String getLogro1()
-	{
+	public String getLogro1() {
 		return this.logro1;
 	}
 
-	public void setLogro1(String logro1)
-	{
+	public void setLogro1(String logro1) {
 		if ((logro1 == null) || (logro1.trim().equals("")))
 			this.logro1 = null;
-	    else
-	    	this.logro1 = logro1.trim();
+		else
+			this.logro1 = logro1.trim();
 	}
 
-	public String getLogro2()
-	{
+	public String getLogro2() {
 		return this.logro2;
 	}
 
-	public void setLogro2(String logro2)
-	{
+	public void setLogro2(String logro2) {
 		if ((logro2 == null) || (logro2.trim().equals("")))
 			this.logro2 = null;
-	    else
-	    	this.logro2 = logro2.trim();
+		else
+			this.logro2 = logro2.trim();
 	}
 
-	public String getLogro3()
-	{
+	public String getLogro3() {
 		return this.logro3;
 	}
 
-	public void setLogro3(String logro3)
-	{
+	public void setLogro3(String logro3) {
 		if ((logro3 == null) || (logro3.trim().equals("")))
 			this.logro3 = null;
-	    else
-	    	this.logro3 = logro3.trim();
+		else
+			this.logro3 = logro3.trim();
 	}
 
-	public String getLogro4()
-	{
+	public String getLogro4() {
 		return this.logro4;
 	}
 
-	public void setLogro4(String logro4)
-	{
+	public void setLogro4(String logro4) {
 		if ((logro4 == null) || (logro4.trim().equals("")))
 			this.logro4 = null;
-	    else
-	    	this.logro4 = logro4.trim();
+		else
+			this.logro4 = logro4.trim();
 	}
 
-	public Boolean getOnlyView()
-	{
+	public Boolean getOnlyView() {
 		return this.onlyView;
 	}
 
-	public void setOnlyView(Boolean onlyView)
-	{
-    	this.onlyView = onlyView;
+	public void setOnlyView(Boolean onlyView) {
+		this.onlyView = onlyView;
 	}
 
-	public Boolean getPublico()
-	{
+	public Boolean getPublico() {
 		return this.publico;
 	}
 
-	public void setPublico(Boolean publico)
-	{
-    	this.publico = publico;
+	public void setPublico(Boolean publico) {
+		this.publico = publico;
 	}
 
-	public Boolean getAddPublico()
-	{
+	public Boolean getAddPublico() {
 		return this.addPublico;
 	}
 
-	public void setAddPublico(Boolean addPublico)
-	{
-    	this.addPublico = addPublico;
+	public void setAddPublico(Boolean addPublico) {
+		this.addPublico = addPublico;
+	}
+	
+	public Integer getAnio() {
+		return anio;
+	}
+
+	public void setAnio(Integer anio) {
+		this.anio = anio;
+	}
+
+	public Integer getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(Integer periodo) {
+		this.periodo = periodo;
 	}
 
 	@Override
-	public void clear()
-	{
+	public void clear() {
 		this.explicacionId = new Long(0L);
 		this.fecha = null;
 		this.creadoId = new Long(0L);
@@ -385,7 +375,7 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		this.adjuntosExplicacion = new ArrayList();
 		this.tipo = null;
 		this.fechaCompromiso = null;
-    	Date ahora = new Date();
+		Date ahora = new Date();
 		this.fechaReal = VgcFormatter.formatearFecha(ahora, "formato.fecha.corta");
 		this.logro1 = null;
 		this.logro2 = null;
@@ -395,6 +385,9 @@ public class EditarExplicacionForm extends EditarObjetoForm
 		this.publico = null;
 		this.addPublico = null;
 		this.creador = null;
+		this.anio = null;
+		this.periodo = null;
+		this.anioSelect = null;
 		setBloqueado(new Boolean(false));
 	}
 
@@ -404,5 +397,13 @@ public class EditarExplicacionForm extends EditarObjetoForm
 
 	public void setCreador(Boolean creador) {
 		this.creador = creador;
+	}
+
+	public Integer getAnioSelect() {
+		return anioSelect;
+	}
+
+	public void setAnioSelect(Integer anioSelect) {
+		this.anioSelect = anioSelect;
 	}
 }

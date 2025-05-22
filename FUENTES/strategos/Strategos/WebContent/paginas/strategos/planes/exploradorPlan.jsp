@@ -61,13 +61,12 @@
 			#splitPlanVerticalVSplit 
 			{
 				cursor: s-resize; 
-				width: 1px; 
-				padding-bottom: 0px; 
-				padding-top: 0px; 
-				padding-left: 0px; 
-				padding-right: 0px; 
-				background-color: #c0c0c0; 
-				witdth: 100%;
+				width: 100px; 
+				padding-bottom: 3px; 
+				padding-top: 3px; 
+				padding-left: 3px; 
+				padding-right: 3px; 
+				background-color: #c0c0c0; 				
 			}
 		</style>
 

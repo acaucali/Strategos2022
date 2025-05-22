@@ -24,6 +24,7 @@ import com.visiongc.app.strategos.iniciativas.StrategosIniciativaEstatusService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.app.strategos.iniciativas.model.Iniciativa;
+import com.visiongc.app.strategos.organizaciones.StrategosOrganizacionesService;
 import com.visiongc.app.strategos.planes.model.Perspectiva;
 import com.visiongc.app.strategos.seriestiempo.model.SerieTiempo;
 import com.visiongc.app.strategos.web.struts.planes.forms.GestionarPlanForm;
@@ -32,6 +33,7 @@ import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.HistoricoType;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.model.Organizacion;
 import com.visiongc.framework.web.struts.forms.FiltroForm;
 
 public class GestionarIniciativasPlanAction extends VgcAction
@@ -136,10 +138,15 @@ public class GestionarIniciativasPlanAction extends VgcAction
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 		StrategosMedicionesService strategosMedicionesService = StrategosServiceFactory.getInstance().openStrategosMedicionesService();
+		StrategosOrganizacionesService strategosOrganizacionesService = StrategosServiceFactory.getInstance().openStrategosOrganizacionesService();
 
 		for (Iterator<Iniciativa> iter = paginaIniciativasPlan.getLista().iterator(); iter.hasNext(); )
 		{
 			Iniciativa iniciativa = iter.next();
+			
+			Organizacion org = (Organizacion) strategosOrganizacionesService.load(Organizacion.class, iniciativa.getOrganizacionId());			
+			iniciativa.setOrganizacionNombre(org.getNombre());
+			
 			if (iniciativa.getPorcentajeCompletado() != null)
 			{
 				Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, iniciativa.getIndicadorId(TipoFuncionIndicador.getTipoFuncionSeguimiento()));
@@ -151,6 +158,8 @@ public class GestionarIniciativasPlanAction extends VgcAction
 					if (medicionReal != null)
 					{
 						iniciativa.setUltimaMedicion(medicionReal.getValor());
+						
+						
 
 						List<Medicion> mediciones = strategosMedicionesService.getMedicionesPeriodo(indicador.getIndicadorId(), SerieTiempo.getSerieProgramadoId(), null, medicionReal.getMedicionId().getAno(), null, medicionReal.getMedicionId().getPeriodo());
 						Double programado = null;
@@ -173,6 +182,7 @@ public class GestionarIniciativasPlanAction extends VgcAction
 		}
 		strategosIndicadoresService.close();
 		strategosMedicionesService.close();
+		strategosOrganizacionesService.close();
 
 		request.setAttribute("paginaIniciativasPlan", paginaIniciativasPlan);
 

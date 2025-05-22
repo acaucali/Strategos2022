@@ -22,6 +22,8 @@
 		<property name="tipo" type="java.lang.Integer" column="tipo" />
 		<property name="fechaCompromiso" type="java.util.Date" column="fecha_compromiso" />
 		<property name="fechaReal" type="java.util.Date" column="fecha_real" />
+		<property name="anio" type="java.lang.Integer" column="ano" />
+		<property name="periodo" type="java.lang.Integer" column="periodo" />
 		<property name="publico" type="com.visiongc.commons.persistence.hibernate.CustomBooleanType" column="publico" />
 
 		<!-- Asociaci��n uno a uno hacia Usuario -->

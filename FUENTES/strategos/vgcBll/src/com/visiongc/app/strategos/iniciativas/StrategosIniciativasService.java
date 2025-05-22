@@ -78,5 +78,7 @@ public abstract interface StrategosIniciativasService
   public abstract int asociarIndicadorCuentas(Long iniciativaId, Long indicadorId, Usuario usuario, Byte paramByte);
   
   public abstract int asociarIndicadorTipo(Long iniciativaId, Long IndicadorId, Byte Tipo, Usuario usuario);
+  
+  public abstract void crearIndicadores(Long iniciativaId , boolean paramBoolean, Usuario usuario);
     
 }

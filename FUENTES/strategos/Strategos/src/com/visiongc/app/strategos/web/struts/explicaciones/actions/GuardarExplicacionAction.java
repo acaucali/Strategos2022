@@ -87,7 +87,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
       explicacion.setCreadoId(((Usuario)request.getSession().getAttribute("usuario")).getUsuarioId());
       explicacion.setObjetoKey(editarExplicacionForm.getObjetoKey());
       explicacion.setObjetoId(editarExplicacionForm.getObjetoId());
-      explicacion.setTipo(editarExplicacionForm.getTipo());
+      explicacion.setTipo(editarExplicacionForm.getTipo());      
       if (((String)request.getSession().getAttribute("objetoKey")).equals("Indicador"))
       {
         explicacion.setObjetoKey(Explicacion.ObjetivoKey.getKeyIndicador());
@@ -122,6 +122,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
     explicacion.setTitulo(editarExplicacionForm.getTitulo());
     explicacion.setPublico(WebUtil.getValorInputCheck(request, "publico"));
     explicacion.setFecha(FechaUtil.convertirStringToDate(editarExplicacionForm.getFecha(), VgcResourceManager.getResourceApp("formato.fecha.corta")));
+    explicacion.setAnio(editarExplicacionForm.getAnio());    
+    explicacion.setPeriodo(editarExplicacionForm.getPeriodo());
     if (editarExplicacionForm.getFechaCompromiso() != null) {
       explicacion.setFechaCompromiso(FechaUtil.convertirStringToDate(editarExplicacionForm.getFechaCompromiso(), VgcResourceManager.getResourceApp("formato.fecha.corta")));
     }

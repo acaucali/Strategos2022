@@ -28,6 +28,7 @@
 			function generarReporte() {
 				var url = 'alcance=' + document.reporteForm.alcance.value;
 				url = url + '&anio=' + document.reporteForm.ano.value;
+				url = url + '&trimestre=' + document.reporteForm.periodoInicial.value;
 
 				abrirReporte('<html:rewrite action="/reportes/reporteDependenciasOmisivasXls"/>?'
 						+ url
@@ -74,9 +75,17 @@
 									<bean:define id="alcanceOrganizacion" toScope="page">
 										<bean:write name="reporteForm" property="alcanceOrganizacion" />
 									</bean:define>
-									<html:radio property="alcance" value="<%= alcanceOrganizacion %>">
-										<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
-									</html:radio>
+									<logic:equal name="reporteForm" value="true" property="todasOrganizaciones">
+										 <html:radio property="alcance"
+											value="<%=alcanceOrganizacion%>" > 
+											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
+										</html:radio>
+									</logic:equal>
+									<logic:notEqual name="reporteForm" value="true" property="todasOrganizaciones">
+										<html:radio property="alcance" value="4" disabled="true">
+											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
+										</html:radio>
+									</logic:notEqual>
 								</td>
 							</tr>
 							
@@ -87,8 +96,9 @@
 							</tr>			
 							
 							<tr>
-								<td colspan="3">&nbsp; Año
-									&nbsp;&nbsp; <bean:define id="anoCalculo" toScope="page">
+								<td colspan="3" align="left">Año
+ 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 									 <bean:define id="anoCalculo" toScope="page">
 										<bean:write name="reporteForm" property="ano" />
 									</bean:define> <html:select property="ano" value="<%=anoCalculo%>"
 										styleClass="cuadroTexto">
@@ -102,8 +112,21 @@
 										}
 										%>
 									</html:select>
+									
+									
 								</td>
-							</tr>		
+							</tr>	
+							<tr>
+								<td colspan="3">
+									Trimestre&nbsp;&nbsp;								
+									<html:select property="periodoInicial" styleClass="cuadroTexto" size="1">
+										<html:option value="1"> 1 </html:option>
+										<html:option value="2"> 2 </html:option>
+										<html:option value="3"> 3 </html:option>
+										<html:option value="4"> 4 </html:option>
+									</html:select>	
+								</td>
+							</tr>	
 							
 						</table>
 					</vgcinterfaz:panelContenedor>					

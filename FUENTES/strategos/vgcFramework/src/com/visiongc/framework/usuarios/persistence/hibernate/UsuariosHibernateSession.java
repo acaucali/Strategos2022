@@ -37,6 +37,7 @@ public class UsuariosHibernateSession
     String tablasConsulta = "";
     String condicionesConsulta = " where ";
     boolean hayCondicionesConsulta = false;
+    boolean isUG = false;
     if (filtros != null)
     {
       Iterator<String> iter = filtros.keySet().iterator();
@@ -77,17 +78,19 @@ public class UsuariosHibernateSession
           condicionesConsulta = condicionesConsulta + "usuario." + fieldName + " = " + fieldValue + " and ";
           hayCondicionesConsulta = true;
         }
-        else if (fieldName.equals("organizacionId"))
-        {          
-          condicionesConsulta = condicionesConsulta + "usuario.usuarioId = ug.pk.usuarioId and ug.pk." + fieldName + " = " + fieldValue + " and ";
+        else if (fieldName.equals("organizacionId") || fieldName.equals("grupoId"))
+        {       
+          if(!isUG) {        	  
+        	  tablasConsulta = tablasConsulta + ", UsuarioGrupo ug ";
+        	  condicionesConsulta = condicionesConsulta + "usuario.usuarioId = ug.pk.usuarioId and ";
+          }
+          if (fieldName.equals("organizacionId"))         	  
+        	  condicionesConsulta = condicionesConsulta + " ug.pk." + fieldName + " = " + fieldValue + " and ";        	            
+          if (fieldName.equals("grupoId")) 
+        	  condicionesConsulta = condicionesConsulta + " ug.pk." + fieldName + " = " + fieldValue + " and ";          
           hayCondicionesConsulta = true;
-        }
-        else if (fieldName.equals("grupoId"))
-        {
-          tablasConsulta = tablasConsulta + ", UsuarioGrupo ug";
-          condicionesConsulta = condicionesConsulta + "usuario.usuarioId = ug.pk.usuarioId and ug.pk." + fieldName + " = " + fieldValue + " and ";
-          hayCondicionesConsulta = true;
-        }
+          isUG = true;
+        }        
         else if (fieldName.equals("isConnected"))
         {
           condicionesConsulta = condicionesConsulta + "usuario." + fieldName + " = " + fieldValue + " and ";
@@ -104,12 +107,12 @@ public class UsuariosHibernateSession
       } else {
         ordenConsulta = " order by usuario." + orden + " desc";
       }
-    }
+    }    
     if (hayCondicionesConsulta) {
       condicionesConsulta = condicionesConsulta.substring(0, condicionesConsulta.length() - 5);
     } else {
       condicionesConsulta = "";
-    }
+    }    
     Query consulta = this.session.createQuery("select distinct(usuario) from Usuario usuario" + tablasConsulta + condicionesConsulta + ordenConsulta);
     if (getTotal) {
       total = consulta.list().size();

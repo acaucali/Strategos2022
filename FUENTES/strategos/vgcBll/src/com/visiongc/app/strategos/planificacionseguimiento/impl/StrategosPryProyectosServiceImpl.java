@@ -211,7 +211,7 @@ public class StrategosPryProyectosServiceImpl
       }
       
       PryProyecto proyecto = new PryProyecto();
-      
+            
       proyecto.setNombre(nombre);
       proyecto.setComienzo(new Date());
       proyecto.setComienzoPlan(new Date());
@@ -267,7 +267,10 @@ public class StrategosPryProyectosServiceImpl
         transActiva = true;
       }
       
-      proyectoId = crearProyecto(nombre, usuario);
+      if( nombre.length() > 200)
+    	  proyectoId = crearProyecto(nombre.substring(0, 200), usuario);    	  
+      else      
+    	  proyectoId = crearProyecto(nombre, usuario);
       
       if (proyectoId != null)
       {
@@ -310,14 +313,15 @@ public class StrategosPryProyectosServiceImpl
       }
       
       if (iniciativaId != null)
-      {
+      {    	 
         iniciativa = (Iniciativa)load(Iniciativa.class, iniciativaId);
         
         if (iniciativa != null)
-        {
+        {        	
           if ((iniciativa.getProyectoId() == null) || (iniciativa.getProyectoId().longValue() == 0L))
-          {
+          {        	  
             iniciativa.setProyectoId(crearProyectoIniciativa(iniciativa.getNombre(), iniciativa.getIniciativaId(), usuario));
+            
           }
         }
       }

@@ -94,6 +94,8 @@ public class ReporteForm extends EditarObjetoForm
 	private List<List<DatoCelda>> matrizDatos;
 	private String objetoKey;
 	private String organizacionNombre;
+	private Boolean isAdmin;
+	private Boolean todasOrganizaciones;
 
 	//Campos para comunicacion
 	private String valoresSeleccionados = null;
@@ -111,6 +113,7 @@ public class ReporteForm extends EditarObjetoForm
 	private Long tipo;
 	private List<TipoProyecto> tipos;
 	private String estatus;
+	private String estatus2;
 	private Boolean todosAno;
 	private Boolean acumularTrimestre;
 	private Boolean avanceTareas;	
@@ -1057,6 +1060,7 @@ public class ReporteForm extends EditarObjetoForm
 		this.filtroNombre = null;
 		this.objetoKey = null;
 		this.organizacionNombre = null;
+		this.todasOrganizaciones = false;
 
 		// Campos para JavaScript
 		this.orientacion = ReporteForm.OrientacionTipo.ORIENTACION_PORTRAIT;
@@ -1120,6 +1124,30 @@ public class ReporteForm extends EditarObjetoForm
 
 	public void setOrganizacionNombre(String organizacionNombre) {
 		this.organizacionNombre = organizacionNombre;
+	}
+
+	public String getEstatus2() {
+		return estatus2;
+	}
+
+	public void setEstatus2(String estatus2) {
+		this.estatus2 = estatus2;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public Boolean getTodasOrganizaciones() {
+		return todasOrganizaciones;
+	}
+
+	public void setTodasOrganizaciones(Boolean todasOrganizaciones) {
+		this.todasOrganizaciones = todasOrganizaciones;
 	}
 
 	public static class ReporteStatus

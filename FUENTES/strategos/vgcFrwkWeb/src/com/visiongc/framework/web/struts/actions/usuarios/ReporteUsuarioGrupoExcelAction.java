@@ -118,13 +118,13 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 			HSSFWorkbook objWB = new HSSFWorkbook();
 
 			// Creamos la celda, aplicamos el estilo y definimos
-			// el tipo de dato que contendrá la celda
+			// el tipo de dato que contendrï¿½ la celda
 			HSSFCell celda = null;
 
 			// Creo la hoja
 			HSSFSheet hoja1 = objWB.createSheet("Usuario Grupo");
 
-			// Proceso la información y genero el xls.
+			// Proceso la informaciï¿½n y genero el xls.
 			int numeroFila = 1;
 			int numeroCelda = 1;
 			HSSFRow fila = hoja1.createRow(numeroFila++); 
@@ -164,9 +164,8 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 			fila = hoja1.createRow(numeroFila++);
 			celda = fila.createCell(numeroCelda);
 			celda.setCellValue("");
-			
-			
-			usuarios= usuariosService.getUsuarios(1, atributoOrden, tipoOrden, true, filtros).getLista();
+									
+			usuarios= usuariosService.getUsuarios(0, atributoOrden, tipoOrden, true, filtros).getLista();			
 					
 			if(usuarios == null || usuarios.size() == 0) {
 				
@@ -183,7 +182,7 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 										 
 			 }else {
 				// Creamos la celda, aplicamos el estilo y definimos
-					// el tipo de dato que contendrá la celda
+					// el tipo de dato que contendrï¿½ la celda
 					
 				numeroCelda = 1;
 				fila = hoja1.createRow(numeroFila++);
@@ -291,13 +290,13 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 			 HSSFWorkbook objWB = new HSSFWorkbook();
 
 				// Creamos la celda, aplicamos el estilo y definimos
-				// el tipo de dato que contendrá la celda
+				// el tipo de dato que contendrï¿½ la celda
 				HSSFCell celda = null;
 
 				// Creo la hoja
 				HSSFSheet hoja1 = objWB.createSheet("Usuario Grupo");
 
-				// Proceso la información y genero el xls.
+				// Proceso la informaciï¿½n y genero el xls.
 				int numeroFila = 1;
 				int numeroCelda = 1;
 				HSSFRow fila = hoja1.createRow(numeroFila++); 
@@ -368,7 +367,7 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 					 }else {
 						 
 						// Creamos la celda, aplicamos el estilo y definimos
-							// el tipo de dato que contendrá la celda
+							// el tipo de dato que contendrï¿½ la celda
 							
 						numeroCelda = 1;
 						fila = hoja1.createRow(numeroFila++);
@@ -476,7 +475,7 @@ public class ReporteUsuarioGrupoExcelAction extends VgcAction {
 		forward="exito";
 		 
 		
-		/** Código de lógica de Negocio del action	*/
+		/** Cï¿½digo de lï¿½gica de Negocio del action	*/
 
 		/** Otherwise, return "success" */
 		return mapping.findForward(forward);  

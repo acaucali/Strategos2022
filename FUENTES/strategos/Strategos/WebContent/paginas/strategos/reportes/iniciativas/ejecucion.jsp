@@ -261,13 +261,17 @@
 
 							<tr>
 								<td colspan="3"><bean:define id="alcanceObjetivo"
-										toScope="page">
-										<bean:write name="reporteForm" property="alcanceObjetivo" />
-									</bean:define> <html:radio property="alcance" value="<%=alcanceObjetivo%>">
+									toScope="page">
+									<bean:write name="reporteForm" property="alcanceObjetivo" />
+									</bean:define>
+																								
+								 	<html:radio property="alcance" value="<%=alcanceObjetivo%>" >
 										<vgcutil:message
 											key="jsp.reportes.iniciativa.ejecucion.plantilla.selector.objetivo" arg0="<%= tituloIniciativa %>"/>
-									</html:radio></td>
+									</html:radio>																										
+								</td>
 							</tr>
+							
 
 							<tr>
 								<td colspan="3"><bean:define
@@ -286,11 +290,19 @@
 								<td colspan="3"><bean:define id="alcanceOrganizacion"
 										toScope="page">
 										<bean:write name="reporteForm" property="alcanceOrganizacion" />
-									</bean:define> <html:radio property="alcance"
-										value="<%=alcanceOrganizacion%>">
-										<vgcutil:message
-											key="jsp.reportes.iniciativa.ejecucion.plantilla.selector.organizacion" />
-									</html:radio></td>
+									</bean:define>
+									<logic:equal name="reporteForm" value="true" property="todasOrganizaciones">
+										 <html:radio property="alcance"
+											value="<%=alcanceOrganizacion%>" > 
+											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
+										</html:radio>
+									</logic:equal>
+									<logic:notEqual name="reporteForm" value="true" property="todasOrganizaciones">
+										<html:radio property="alcance" value="<%=alcanceObjetivo%>" disabled="true">
+											<vgcutil:message key="jsp.protegerliberar.pororganizaciontodas" />
+										</html:radio>
+									</logic:notEqual>
+								</td>
 							</tr>
 
 							<tr>

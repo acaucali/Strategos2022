@@ -59,11 +59,11 @@ public class PlanEjecucionAction extends VgcAction
 		Usuario user = getUsuarioConectado(request);
 
 		boolean isAdmin=false;
-		if(user.getIsAdmin()){
-
-			isAdmin=true;
+		boolean todasOrganizaciones = getPermisologiaUsuario(request).tienePermiso("INICIATIVA_EVALUAR_REPORTE_TODAS_ORGANIZACIONES");
+		if(todasOrganizaciones){			
+			reporteForm.setTodasOrganizaciones(true);
 		}
-
+				
 		/* Parametros para el reporte */
 		String planId = request.getParameter("planId");
 		String source = request.getParameter("source");

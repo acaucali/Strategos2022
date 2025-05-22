@@ -344,34 +344,14 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 					if (configuracionPlan.getPlanObjetivoAlertaAnualMostrar()) {
 						String url = obtenerCadenaRecurso(request);
-						alerta = perspectivaHija.getAlertaAnual();
-						if (alerta == null)
-							tab.agregarCelda("");
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+						alerta = perspectivaHija.getAlertaAnual();						
+						tab.agregarCelda("");							
 					}
 
 					if (configuracionPlan.getPlanObjetivoAlertaParcialMostrar()) {
 						String url = obtenerCadenaRecurso(request);
-						alerta = perspectivaHija.getAlertaParcial();
-						if (alerta == null)
-							tab.agregarCelda("");
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+						alerta = perspectivaHija.getAlertaParcial();						
+						tab.agregarCelda("");												
 					}
 					tab.setFont(Font.BOLD);
 					tab.setTamanoFont(VgcFormatoReporte.TAMANO_FUENTE_SUBTITULO);
@@ -1136,15 +1116,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			String url = obtenerCadenaRecurso(request);
 			if (iniciativa.getAlerta() == null)
 				tabla.agregarCelda("");
-			else if (iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-				tabla.agregarCelda(
-						Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-			else if (iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-				tabla.agregarCelda(
-						Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-			else if (iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-				tabla.agregarCelda(
-						Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+			else if (iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+				tabla.setColorFondo(211, 5, 5);
+				tabla.agregarCelda(" ");
+				tabla.setColorFondo(255, 255, 255);	
+			}				
+			else if (iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+				tabla.setColorFondo(4, 153, 10);
+				tabla.agregarCelda(" ");
+				tabla.setColorFondo(255, 255, 255);
+			}
+			else if (iniciativa.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
+				tabla.setColorFondo(238, 238, 26);
+				tabla.agregarCelda(" ");
+				tabla.setColorFondo(255, 255, 255);
+			}
+				
 		}
 		if (iniciativa.getResponsableSeguimiento() != null)
 			tabla.agregarCelda(iniciativa.getResponsableSeguimiento().getNombre());
@@ -1164,15 +1151,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 			String url = obtenerCadenaRecurso(request);
 			if (actividad.getAlerta() == null)
 				tabla.agregarCelda("");
-			else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-				tabla.agregarCelda(
-						Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-			else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-				tabla.agregarCelda(
-						Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
+			else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+				tabla.setColorFondo(211, 5, 5);
+				tabla.agregarCelda(" ");
+				tabla.setColorFondo(255, 255, 255);
+			}				
+			else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+				tabla.setColorFondo(4, 153, 10);
+				tabla.agregarCelda(" ");
+				tabla.setColorFondo(255, 255, 255);
+			}
 			else if (actividad.getAlerta().byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-				tabla.agregarCelda(
-						Image.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+			{
+				tabla.setColorFondo(238, 238, 26);
+				tabla.agregarCelda(" ");
+				tabla.setColorFondo(255, 255, 255);
+			}			
 		}
 
 		tabla.agregarCelda(
@@ -1469,15 +1463,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 					if (alerta == null)
 						tabla.agregarCelda("");
-					else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-						tabla.agregarCelda(Image
-								.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-					else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-						tabla.agregarCelda(Image
-								.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-					else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-						tabla.agregarCelda(Image.getInstance(
-								new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+						tabla.setColorFondo(211, 5, 5);
+						tabla.agregarCelda(" ");
+						tabla.setColorFondo(255, 255, 255);
+					}			
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+						tabla.setColorFondo(4, 153, 10);
+						tabla.agregarCelda(" ");
+						tabla.setColorFondo(255, 255, 255);
+					}
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
+						tabla.setColorFondo(238, 238, 26);
+						tabla.agregarCelda(" ");
+						tabla.setColorFondo(255, 255, 255);
+					}
+						
 				} else
 					tabla.agregarCelda("");
 			}
@@ -1768,15 +1769,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 						if (alerta == null)
 							tab.agregarCelda("");
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+						else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+							tab.setColorFondo(211, 5, 5);
+							tab.agregarCelda(" ");
+							tab.setColorFondo(255, 255, 255);
+						}							
+						else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+							tab.setColorFondo(4, 153, 10);
+							tab.agregarCelda(" ");
+							tab.setColorFondo(255, 255, 255);
+						}
+						else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
+							tab.setColorFondo(238, 238, 26);
+							tab.agregarCelda(" ");
+							tab.setColorFondo(255, 255, 255);
+						}
+							
 					}
 
 					if (configuracionPlan.getPlanObjetivoAlertaParcialMostrar()) {
@@ -1786,15 +1794,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 						if (alerta == null)
 							tab.agregarCelda("");
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-						else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-							tab.agregarCelda(Image.getInstance(
-									new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+						else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+							tab.setColorFondo(211, 5, 5);
+							tab.agregarCelda(" ");
+							tab.setColorFondo(255, 255, 255);
+						}							
+						else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+							tab.setColorFondo(4, 153, 10);
+							tab.agregarCelda(" ");
+							tab.setColorFondo(255, 255, 255);
+						}
+						else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
+							tab.setColorFondo(238, 238, 26);
+							tab.agregarCelda(" ");
+							tab.setColorFondo(255, 255, 255);
+						}
+							
 					}
 					tab.setFont(Font.BOLD);
 					tab.setTamanoFont(12);
@@ -2212,15 +2227,22 @@ public class PlanEjecucionReporteAction extends VgcReporteBasicoAction {
 
 					if (alerta == null)
 						tabla.agregarCelda("");
-					else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue())
-						tabla.agregarCelda(Image
-								.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaRoja.gif")));
-					else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue())
-						tabla.agregarCelda(Image
-								.getInstance(new URL(url + "/paginas/strategos/indicadores/imagenes/alertaVerde.gif")));
-					else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue())
-						tabla.agregarCelda(Image.getInstance(
-								new URL(url + "/paginas/strategos/indicadores/imagenes/alertaAmarilla.gif")));
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaRoja().byteValue()) {
+						tabla.setColorFondo(211, 5, 5);
+						tabla.agregarCelda(" ");
+						tabla.setColorFondo(255, 255, 255);
+					}					
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaVerde().byteValue()) {
+						tabla.setColorFondo(4, 153, 10);
+						tabla.agregarCelda(" ");
+						tabla.setColorFondo(255, 255, 255);
+					}
+					else if (alerta.byteValue() == AlertaIndicador.getAlertaAmarilla().byteValue()) {
+						tabla.setColorFondo(238, 238, 26);
+						tabla.agregarCelda(" ");
+						tabla.setColorFondo(255, 255, 255);
+					}
+						
 				}
 				else
 					tabla.agregarCelda("");

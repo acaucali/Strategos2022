@@ -20,7 +20,10 @@ import com.visiongc.app.strategos.web.struts.indicadores.forms.GestionarIndicado
 import com.visiongc.commons.struts.action.VgcAction;
 import com.visiongc.commons.util.PaginaLista;
 import com.visiongc.commons.web.NavigationBar;
+import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
+import com.visiongc.framework.model.ConfiguracionUsuario;
+import com.visiongc.framework.model.ConfiguracionUsuarioPK;
 import com.visiongc.framework.model.Modulo;
 import com.visiongc.framework.model.Modulo.ModuloType;
 import com.visiongc.framework.model.Transaccion;
@@ -83,6 +86,21 @@ public class GestionarIndicadoresAction extends VgcAction
 
 		StrategosIndicadoresService strategosIndicadoresService = StrategosServiceFactory.getInstance().openStrategosIndicadoresService();
 
+		FrameworkService frameworkService = FrameworkServiceFactory.getInstance().openFrameworkService();
+		ConfiguracionUsuario configuracionUsuarioPanel = frameworkService.getConfiguracionUsuario(this.getUsuarioConectado(request).getUsuarioId(), "Strategos.Panel.Indicadores", "Ancho");
+		if (configuracionUsuarioPanel == null)
+		{
+			configuracionUsuarioPanel = new ConfiguracionUsuario();
+			ConfiguracionUsuarioPK pk = new ConfiguracionUsuarioPK();
+			pk.setConfiguracionBase("Strategos.Panel.Indicadores");
+			pk.setObjeto("Ancho");
+			pk.setUsuarioId(this.getUsuarioConectado(request).getUsuarioId());
+			configuracionUsuarioPanel.setPk(pk);
+			configuracionUsuarioPanel.setData("400");
+
+			frameworkService.saveConfiguracionUsuario(configuracionUsuarioPanel, this.getUsuarioConectado(request));
+		}
+		gestionarIndicadoresForm.setAnchoPorDefecto(configuracionUsuarioPanel.getData());
 		
 		Long selectFrecuencia = (request.getParameter("frecuencia") != null && request.getParameter("frecuencia") != "" && !request.getParameter("frecuencia").equals("0")) ? Long.parseLong(request.getParameter("frecuencia")) : null;
 		Long selectUnidadMedida = (request.getParameter("unidadMedida") != null && request.getParameter("unidadMedida") != "" && !request.getParameter("unidadMedida").equals("0")) ? Long.parseLong(request.getParameter("unidadMedida")) : null;		
@@ -97,7 +115,8 @@ public class GestionarIndicadoresAction extends VgcAction
 		if (selectUnidadMedida != null)
 			request.getSession().setAttribute("selectUnidadMedidaIndicador", selectUnidadMedida);
 		
-		if (request.getParameter("limpiarFiltros") != null) {						
+		if (request.getParameter("limpiarFiltros") != null) {	
+			gestionarIndicadoresForm.setUnidadId(null);
 			request.getSession().setAttribute("selectFrecuenciaIndicador", null);
 			request.getSession().setAttribute("selectUnidadMedidaIndicador", null);								
 		}

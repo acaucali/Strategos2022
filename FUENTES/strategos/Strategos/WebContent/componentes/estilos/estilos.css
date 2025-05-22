@@ -1,9 +1,9 @@
 /**
-* Descripción: Hoja de Estilo de Strategos Plus v.1.0 
+* Descripciï¿½n: Hoja de Estilo de Strategos Plus v.1.0 
 * Modificado por: Kerwin Arias 01/10/2008
 */
 
-/* Autor: Kerwin Arias | F. creación: 10/09/2007 | Categoría: Comunes */
+/* Autor: Kerwin Arias | F. creaciï¿½n: 10/09/2007 | Categorï¿½a: Comunes */
 /* =========================================================================== */
 .tabla {
 	border-spacing:3px;				/* 'cellspacing' equivalente */
@@ -111,7 +111,7 @@
 	width: 100%;
 }
 
-.cuerpo { /* Todos los body de las páginas */
+.cuerpo { /* Todos los body de las pï¿½ginas */
 	background: #ffffff;
 	margin-bottom:0px;
 	margin-left:0px;
@@ -126,10 +126,10 @@
 	scrollbar-shadow-color:#F3F3F3;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/09/2007 | Categoría: Bienvenida */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/09/2007 | Categorï¿½a: Bienvenida */
 /* ============================================================================== */
 
-.contenedorBienvenida { /* Tabla principal de la página de bienvenida */
+.contenedorBienvenida { /* Tabla principal de la pï¿½gina de bienvenida */
 	width:100%;
 	height:100%;
 	border-style:solid;
@@ -142,21 +142,21 @@
 	text-align:center;
 }
 
-.mouseEncimaBienvenida { /* Evento over de la página de bienvenida*/
+.mouseEncimaBienvenida { /* Evento over de la pï¿½gina de bienvenida*/
 	font-size:11px;
 	color:#000000;
 	font-family:Verdana;
 	text-decoration:underline;
 }
 
-.mouseFueraBienvenida { /* Evento out de la página de bienvenida */
+.mouseFueraBienvenida { /* Evento out de la pï¿½gina de bienvenida */
 	font-size:11px;
 	color:#666666;
 	font-family:Verdana;
 	text-decoration:none;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/09/2007 | Categoría: Contenedor Principal */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/09/2007 | Categorï¿½a: Contenedor Principal */
 /* ======================================================================================== */
 
 .contenedorPrincipal { /* Contenedor principal */
@@ -186,7 +186,7 @@
 }
 
 
-.barraAplicacionPrincipal { /* Barra de aplicación del contenedor principal */
+.barraAplicacionPrincipal { /* Barra de aplicaciï¿½n del contenedor principal */
 	height:30px;
 	border-style:solid;
 	border-width:1px;
@@ -194,21 +194,21 @@
 	background-color:#FFCC33;
 }
 
-.mouseEncimaBarraAplicacionPrincipal { /* Evento over de la barra de aplicación del contenedor principal */
+.mouseEncimaBarraAplicacionPrincipal { /* Evento over de la barra de aplicaciï¿½n del contenedor principal */
 	font-size:11px;
 	color:#000000;
 	font-family:Verdana;
 	text-decoration:underline;
 }
 
-.mouseFueraBarraAplicacionPrincipal { /* Evento out de la barra de aplicación del contenedor principal */
+.mouseFueraBarraAplicacionPrincipal { /* Evento out de la barra de aplicaciï¿½n del contenedor principal */
 	font-size:11px;
 	color:#666666;
 	font-family:Verdana;
 	text-decoration:none;
 }
 
-.barraNavegacionPrincipal { /* Barra de navegación del contenedor principal  */
+.barraNavegacionPrincipal { /* Barra de navegaciï¿½n del contenedor principal  */
 	height:20px;
 	border-style:solid;
 	border-width:1px;
@@ -222,14 +222,14 @@
 	text-align:right;
 }
 
-.mouseEncimaBarraNavegacionPrincipal { /* Evento over de la barra de navegación del contenedor principal */
+.mouseEncimaBarraNavegacionPrincipal { /* Evento over de la barra de navegaciï¿½n del contenedor principal */
 	font-size:11px;
 	color:#FFFFFF;
 	font-family:Verdana;
 	text-decoration:underline;
 }
 
-.mouseFueraBarraNavegacionPrincipal { /* Evento out de la barra de navegación del contenedor principal */
+.mouseFueraBarraNavegacionPrincipal { /* Evento out de la barra de navegaciï¿½n del contenedor principal */
 	font-size:11px;
 	color:#FFFFFF;
 	font-family:Verdana;
@@ -281,7 +281,7 @@
 	text-decoration:none;
 }
 
-/* Autor: Kerwin Arias        | F. creación: 09/04/2008 | Categoría: Objetos HTML          */
+/* Autor: Kerwin Arias        | F. creaciï¿½n: 09/04/2008 | Categorï¿½a: Objetos HTML          */
 /* ========================================================================================= */
 .formaHtml{ 
 	width:100%;
@@ -299,7 +299,7 @@
 }
 
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/09/2007 | Categoría: Contenedor Formulario */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/09/2007 | Categorï¿½a: Contenedor Formulario */
 /* ========================================================================================= */
 
 .bordeContenedorForma{ /* Borde del formulario o forma */
@@ -345,19 +345,19 @@
 	text-decoration:none;
 }
 
-.barraMenusForma { /* Barra de menús de la forma */
+.barraMenusForma { /* Barra de menï¿½s de la forma */
 	height:20px;
 	background-color:#666666;
 }
 
-.mouseEncimaBarraMenusForma { /* Evento over de la barra de menús de la forma */
+.mouseEncimaBarraMenusForma { /* Evento over de la barra de menï¿½s de la forma */
 	font-size:11px;
 	color:#FFFFFF;
 	font-family:Verdana;
 	text-decoration:underline;
 }
 
-.mouseFueraBarraMenusForma { /* Evento over de la barra de menús de la forma */
+.mouseFueraBarraMenusForma { /* Evento over de la barra de menï¿½s de la forma */
 	font-size:11px;
 	color:#FFFFFF;
 	font-family:Verdana;
@@ -395,7 +395,7 @@
 	text-decoration:none;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/09/2007 | Categoría: List View */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/09/2007 | Categorï¿½a: List View */
 /* ============================================================================= */
 
 .listView { /* List view */	
@@ -458,7 +458,7 @@
 	color:#666666;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/09/2007 | Categoría: Tree View */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/09/2007 | Categorï¿½a: Tree View */
 /* ============================================================================= */
 
 .treeViewContenedor {
@@ -504,7 +504,7 @@
 	text-decoration:none;	
 }
 
-/* Autor: Kerwin Arias        | F. creación: 07/05/2008 | Categoría: Calendario     */
+/* Autor: Kerwin Arias        | F. creaciï¿½n: 07/05/2008 | Categorï¿½a: Calendario     */
 /* ================================================================================== */
 
 .tablaCalendario {
@@ -556,7 +556,7 @@
 	font-family:Verdana;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 18/09/2007 | Categoría: Ficha de Datos */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 18/09/2007 | Categorï¿½a: Ficha de Datos */
 /* ================================================================================== */
 
 .bordeFichaDatos
@@ -624,7 +624,7 @@
 	border-color:#CCCCCC;
 }
 
-.contenedorBotonesSeleccion { /* Contenedores de los botones de selección multiple y simple */	
+.contenedorBotonesSeleccion { /* Contenedores de los botones de selecciï¿½n multiple y simple */	
 	border-style:solid;
 	border-width:1px;
 	border-color:#666666;
@@ -634,22 +634,22 @@
 	text-decoration:none;
 }
 
-.contenedorTextoSeleccion { /* Contenedores de los botones de selección multiple y simple */	
+.contenedorTextoSeleccion { /* Contenedores de los botones de selecciï¿½n multiple y simple */	
 	font-family:Verdana;
 	font-size:11;
 	color:#666666;
 	text-decoration:none;
 }
 
-.botonSeleccionSimple { /* Botones de radio o selección simple */
+.botonSeleccionSimple { /* Botones de radio o selecciï¿½n simple */
 	border-color:#CCCCCC;
 }
 
-.botonSeleccionMultiple { /* Botones de selección múltiple */
+.botonSeleccionMultiple { /* Botones de selecciï¿½n mï¿½ltiple */
 	border-color:#CCCCCC;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 05/11/2007 | Categoría: Paginador */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 05/11/2007 | Categorï¿½a: Paginador */
 /* ============================================================================= */
 
 .paginador{ /* Paginador */	
@@ -659,7 +659,7 @@
 	text-decoration:none;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 16/04/2007 | Categoría: Generico */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 16/04/2007 | Categorï¿½a: Generico */
 /* ============================================================================ */
 
 .barraTituloGenerica  {
@@ -670,7 +670,7 @@
 	text-decoration: none;	
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 22/04/2008 | Categoría: Pestañas */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 22/04/2008 | Categorï¿½a: Pestaï¿½as */
 /* ============================================================================ */
 
 
@@ -748,7 +748,7 @@
 	border-spacing: 0;
     border-collapse: collapse;	
 }
-/* Autor: Kerwin Arias        | F. creación: 30/04/2008 | Categoría: Splits   */
+/* Autor: Kerwin Arias        | F. creaciï¿½n: 30/04/2008 | Categorï¿½a: Splits   */
 /* ============================================================================ */
 
 .panelSplit {
@@ -758,10 +758,10 @@
 } 
 
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 07/11/2007 | Categoría: Menús */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 07/11/2007 | Categorï¿½a: Menï¿½s */
 /* ========================================================================= */
 
-.botonMenu { /* Menú desplegable */
+.botonMenu { /* Menï¿½ desplegable */
 	border-right-style: solid;
 	border-right-width: 1px;
 	border-right-color: #F3F3F3;
@@ -784,7 +784,7 @@
 	height:30px;
 }
 
-.botonMenuOver { /** Evento over sobre los menús */
+.botonMenuOver { /** Evento over sobre los menï¿½s */
 	border-right-style: solid;
 	border-right-width: 1px;
 	border-right-color: #F3F3F3;
@@ -807,7 +807,7 @@
 	height:30px;
 }
 
-.botonMenuClick { /** Evento clic sobre los menús */
+.botonMenuClick { /** Evento clic sobre los menï¿½s */
 	border-right-style: solid;
 	border-right-width: 1px;
 	border-right-color: #F3F3F3;
@@ -852,7 +852,7 @@
 	height:0px;	
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/12/2007 | Categoría: Mensaje de la aplicción */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/12/2007 | Categorï¿½a: Mensaje de la aplicciï¿½n */
 /* =========================================================================================== */
 
 .mensajeInformativo { /* Mensaje Informativo */	
@@ -877,7 +877,7 @@
 	text-decoration:none;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 10/12/2007 | Categoría: Calendario */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 10/12/2007 | Categorï¿½a: Calendario */
 /* ============================================================================== */
 
 .barraMeses { /*  */
@@ -886,7 +886,7 @@
 .barraAnos { /*  */
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 13/05/2008 | Categoría: Foro */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 13/05/2008 | Categorï¿½a: Foro */
 /* ======================================================================== */
 
 .foro { /* Foro */	
@@ -898,7 +898,7 @@
 	border-color:#666666;	
 }
 
-.categoriaForo { /* Categoría o Separador */
+.categoriaForo { /* Categorï¿½a o Separador */
 	font-family:Verdana;
 	font-size:11;	
 	color:#000000;
@@ -949,7 +949,7 @@
 }
 
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 04/02/2009 | Categoría: Mediciones */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 04/02/2009 | Categorï¿½a: Mediciones */
 /* ============================================================================== */
 
 .celdaMediciones { /* Evento over del cuerpo del list view */
@@ -985,7 +985,7 @@
 	border-color:#CCCCCC;
 }
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 04/02/2009 | Categoría: Metas */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 04/02/2009 | Categorï¿½a: Metas */
 /* ========================================================================= */
 
 .celdaMetas { /* Estilo a utilizar para las Metas */
@@ -995,7 +995,7 @@
 	color:#666666;
 }
 
-.metaProtegida { /* Estilo a utilizar cuando las Metas están Protegidas */
+.metaProtegida { /* Estilo a utilizar cuando las Metas estï¿½n Protegidas */
 	font-weight:normal;
 	font-size:11px;
 	color:#666666;
@@ -1008,7 +1008,7 @@
 }
 
 
-/* Autor: Genaro A. Bermúdez B. | F. creación: 15/10/2008 | Categoría: Gantt */
+/* Autor: Genaro A. Bermï¿½dez B. | F. creaciï¿½n: 15/10/2008 | Categorï¿½a: Gantt */
 /* ======================================================================== */
 
 .bordeEncabezadoGantt{ /* Borde de la tabla del encabezado del Gantt */

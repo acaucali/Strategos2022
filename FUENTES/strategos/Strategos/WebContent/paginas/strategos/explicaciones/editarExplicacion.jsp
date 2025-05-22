@@ -334,6 +334,40 @@
 					</tr>
 					<%-- Publicar --%>
 					<tr>
+						<td align="right"><vgcutil:message key="jsp.reportes.plan.ejecucion.plantilla.ano" /></td>
+						<td>					
+							<bean:define id="anioExp" toScope="page">
+								<bean:write name="editarExplicacionForm" property="anioSelect" />
+							</bean:define> 
+							<html:select property="anio" value="<%=anioExp%>"
+										styleClass="cuadroTexto">
+										<%
+											for (int i = 1900; i <= 2050; i++) {
+										%>
+										<html:option value="<%=String.valueOf(i)%>">
+											<%=i%>
+										</html:option>
+										<%
+											}
+										%>
+									</html:select>	
+						</td>
+					</tr>
+					
+					<tr>
+						<td align="right">Trimestre </td>
+						<td>							
+							<html:select property="periodo" styleClass="cuadroTexto" size="1">
+										<html:option value="1"> 1 </html:option>
+										<html:option value="2"> 2 </html:option>
+										<html:option value="3"> 3 </html:option>
+										<html:option value="4"> 4 </html:option>
+							</html:select>	
+						</td>
+					</tr>
+					
+					<%-- Publicar --%>
+					<tr>
 						<bean:define scope="page" id="publicarDisabled" value="true"></bean:define>
 						<logic:equal name="editarExplicacionForm" property="addPublico" scope="session" value="true">
 							<bean:define scope="page" id="publicarDisabled" value="false"></bean:define>

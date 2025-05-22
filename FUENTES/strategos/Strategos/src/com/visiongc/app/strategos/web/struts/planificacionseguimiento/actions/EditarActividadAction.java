@@ -197,8 +197,10 @@ public class EditarActividadAction extends VgcAction
 	    			Indicador indicador = (Indicador)strategosIndicadoresService.load(Indicador.class, new Long(pryActividad.getIndicadorId()));
 	    			strategosIndicadoresService.close();
 
-	    			editarActividadForm.setCodigoEnlace(indicador.getCodigoEnlace());
-	    			editarActividadForm.setEnlaceParcial(indicador.getEnlaceParcial());
+	    			if(indicador.getCodigoEnlace() != null) 	    				
+	    				editarActividadForm.setCodigoEnlace(indicador.getCodigoEnlace());
+	    			if(indicador.getEnlaceParcial() != null)
+	    				editarActividadForm.setEnlaceParcial(indicador.getEnlaceParcial());
 	    		}
 
 	    	    Map<String, Object> filtros = new HashMap<String, Object>();

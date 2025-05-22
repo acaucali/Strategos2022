@@ -24,20 +24,25 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.HashSet;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Session;
 
 import com.visiongc.app.strategos.impl.StrategosServiceFactory;
+import com.visiongc.app.strategos.indicadores.StrategosClasesIndicadoresService;
 import com.visiongc.app.strategos.indicadores.StrategosIndicadoresService;
 import com.visiongc.app.strategos.iniciativas.StrategosIniciativasService;
 import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.app.strategos.iniciativas.model.util.TipoProyecto;
 import com.visiongc.app.strategos.iniciativas.persistence.StrategosIniciativasPersistenceSession;
 import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryActividadesService;
+import com.visiongc.app.strategos.planificacionseguimiento.StrategosPryProyectosService;
 import com.visiongc.app.strategos.planificacionseguimiento.model.PryCalendario;
 import com.visiongc.app.strategos.planificacionseguimiento.util.PryCalendarioUtil;
+import com.visiongc.app.strategos.unidadesmedida.StrategosUnidadesService;
+import com.visiongc.app.strategos.unidadesmedida.model.UnidadMedida;
+import com.visiongc.app.strategos.indicadores.model.*;
+import com.visiongc.app.strategos.iniciativas.StrategosTipoProyectoService;
 import com.visiongc.commons.util.FechaUtil;
 import com.visiongc.commons.util.ObjetoClaveValor;
 import com.visiongc.commons.util.PaginaLista;
@@ -51,6 +56,7 @@ import com.visiongc.servicio.strategos.indicadores.model.Medicion;
 import com.visiongc.servicio.strategos.indicadores.model.MedicionPK;
 import com.visiongc.servicio.strategos.indicadores.model.SerieIndicador;
 import com.visiongc.servicio.strategos.iniciativas.model.Iniciativa;
+import com.visiongc.servicio.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.servicio.strategos.planificacionseguimiento.model.PryActividad;
 import com.visiongc.servicio.strategos.organizaciones.model.OrganizacionStrategos;
 import com.visiongc.servicio.strategos.message.model.Message;
@@ -127,151 +133,97 @@ public class ImportarManager {
 	}
 
 	public boolean EjecutarIniciativa(String[][] datos, Usuario usuario) {
-				
+
 		boolean respuesta = false;
-		byte tipoImportacion = Byte.parseByte(pm.getProperty("tipoImportacion", "1"));
+
 		respuesta = (new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio,
 				null) == 10000 ? true : false);
 
-		boolean activarSheduler = Boolean.parseBoolean(this.pm.getProperty("activarSheduler", "false"));
-		if (!activarSheduler) {
-			respuesta = Importar(datos);
+		int terminar = Integer.parseInt(this.pm.getProperty("numeroEjecucion", "1"));
+		int unidadTiempo = Integer.parseInt(this.pm.getProperty("unidadTiempo", "3"));
 
-			String[] argsReemplazo = new String[2];
-			Calendar ahora = Calendar.getInstance();
+		Calendar inicio = Calendar.getInstance();
+		String[] fecha = this.servicio.getFecha().split("-");
 
-			argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
-			argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
+		int dia = Integer.parseInt(fecha[2].substring(0, 2));
+		int mes = Integer.parseInt(fecha[1]);
+		int ano = Integer.parseInt(fecha[0]);
 
-			log.append("\n\n");
-			log.append(messageResources.getResource("jsp.asistente.importacion.log.fechafincalculo", argsReemplazo)
-					+ "\n\n");
-			if (!respuesta) {
-				argsReemplazo[0] = messageResources.getResource("jsp.asistente.importacion.log.error.inesperado");
-				argsReemplazo[1] = "";
+		if (unidadTiempo != 0)
+			inicio.set(ano, mes - 1, dia);
+		else
+			inicio.set(ano, mes - 1, dia, 8, 0, 0);
 
-				log.append(messageResources.getResource("jsp.asistente.importacion.log.error", argsReemplazo) + "\n\n");
-				this.servicio.setMensaje(
-						this.messageResources.getResource("jsp.asistente.importacion.log.error", argsReemplazo));
-			}
-			this.servicio.setLog(this.log.toString());
-
-			new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
+		Tarea t1 = new Tarea();
+		TimeUnit timeUnit;
+		long duracion;
+		if (unidadTiempo == 0) {
+			timeUnit = TimeUnit.DAYS;
+			duracion = 1000 * 60 * 60 * 24 + (inicio.getTimeInMillis());
+		} else if (unidadTiempo == 1) {
+			timeUnit = TimeUnit.HOURS;
+			duracion = 1000 * 60 * 60 + (inicio.getTimeInMillis());
+		} else if (unidadTiempo == 2) {
+			timeUnit = TimeUnit.MINUTES;
+			duracion = 1000 * 60 + (inicio.getTimeInMillis());
 		} else {
-			int terminar = Integer.parseInt(this.pm.getProperty("numeroEjecucion", "1"));
-			int unidadTiempo = Integer.parseInt(this.pm.getProperty("unidadTiempo", "3"));
-
-			Calendar inicio = Calendar.getInstance();
-			String[] fecha = this.servicio.getFecha().split("-");
-
-			int dia = Integer.parseInt(fecha[2].substring(0, 2));
-			int mes = Integer.parseInt(fecha[1]);
-			int ano = Integer.parseInt(fecha[0]);
-
-			if (unidadTiempo != 0)
-				inicio.set(ano, mes - 1, dia);
-			else
-				inicio.set(ano, mes - 1, dia, 8, 0, 0);
-
-			Tarea t1 = new Tarea();
-			TimeUnit timeUnit;
-			long duracion;
-			if (unidadTiempo == 0) {
-				timeUnit = TimeUnit.DAYS;
-				duracion = 1000 * 60 * 60 * 24 + (inicio.getTimeInMillis());
-			} else if (unidadTiempo == 1) {
-				timeUnit = TimeUnit.HOURS;
-				duracion = 1000 * 60 * 60 + (inicio.getTimeInMillis());
-			} else if (unidadTiempo == 2) {
-				timeUnit = TimeUnit.MINUTES;
-				duracion = 1000 * 60 + (inicio.getTimeInMillis());
-			} else {
-				timeUnit = TimeUnit.SECONDS;
-				duracion = 1000 + (inicio.getTimeInMillis());
-			}
-
-			Calendar nowDuracion = Calendar.getInstance();
-			nowDuracion.setTimeInMillis(duracion);
-
-			t1.programarIniciativa(duracion, terminar, (terminar == 0), timeUnit, this.log, this.messageResources,
-					this.pm, datos, this.servicio, usuario);
+			timeUnit = TimeUnit.SECONDS;
+			duracion = 1000 + (inicio.getTimeInMillis());
 		}
+
+		Calendar nowDuracion = Calendar.getInstance();
+		nowDuracion.setTimeInMillis(duracion);
+
+		t1.programarIniciativa(duracion, terminar, (terminar == 0), timeUnit, this.log, this.messageResources, this.pm,
+				datos, this.servicio, usuario);
 
 		return respuesta;
 	}
 
 	public boolean EjecutarActividad(String[][] datos, Usuario usuario) {
-				
 
 		boolean respuesta = false;
-		byte tipoImportacion = Byte.parseByte(pm.getProperty("tipoImportacion", "1"));
-				
+
 		respuesta = (new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio,
 				null) == 10000 ? true : false);
 
-		boolean activarSheduler = Boolean.parseBoolean(this.pm.getProperty("activarSheduler", "false"));
-		if (!activarSheduler) {
-			respuesta = Importar(datos);
+		int terminar = Integer.parseInt(this.pm.getProperty("numeroEjecucion", "1"));
+		int unidadTiempo = Integer.parseInt(this.pm.getProperty("unidadTiempo", "3"));
 
-			String[] argsReemplazo = new String[2];
-			Calendar ahora = Calendar.getInstance();
+		Calendar inicio = Calendar.getInstance();
+		String[] fecha = this.servicio.getFecha().split("-");
 
-			argsReemplazo[0] = VgcFormatter.formatearFecha(ahora.getTime(), "dd/MM/yyyy");
-			argsReemplazo[1] = VgcFormatter.formatearFecha(ahora.getTime(), "hh:mm:ss a");
+		int dia = Integer.parseInt(fecha[2].substring(0, 2));
+		int mes = Integer.parseInt(fecha[1]);
+		int ano = Integer.parseInt(fecha[0]);
 
-			log.append("\n\n");
-			log.append(messageResources.getResource("jsp.asistente.importacion.log.fechafincalculo", argsReemplazo)
-					+ "\n\n");
-			if (!respuesta) {
-				argsReemplazo[0] = messageResources.getResource("jsp.asistente.importacion.log.error.inesperado");
-				argsReemplazo[1] = "";
+		if (unidadTiempo != 0)
+			inicio.set(ano, mes - 1, dia);
+		else
+			inicio.set(ano, mes - 1, dia, 8, 0, 0);
 
-				log.append(messageResources.getResource("jsp.asistente.importacion.log.error", argsReemplazo) + "\n\n");
-				this.servicio.setMensaje(
-						this.messageResources.getResource("jsp.asistente.importacion.log.error", argsReemplazo));
-			}
-			this.servicio.setLog(this.log.toString());
-
-			new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
+		Tarea t1 = new Tarea();
+		TimeUnit timeUnit;
+		long duracion;
+		if (unidadTiempo == 0) {
+			timeUnit = TimeUnit.DAYS;
+			duracion = 1000 * 60 * 60 * 24 + (inicio.getTimeInMillis());
+		} else if (unidadTiempo == 1) {
+			timeUnit = TimeUnit.HOURS;
+			duracion = 1000 * 60 * 60 + (inicio.getTimeInMillis());
+		} else if (unidadTiempo == 2) {
+			timeUnit = TimeUnit.MINUTES;
+			duracion = 1000 * 60 + (inicio.getTimeInMillis());
 		} else {
-			int terminar = Integer.parseInt(this.pm.getProperty("numeroEjecucion", "1"));
-			int unidadTiempo = Integer.parseInt(this.pm.getProperty("unidadTiempo", "3"));
-
-			Calendar inicio = Calendar.getInstance();
-			String[] fecha = this.servicio.getFecha().split("-");
-
-			int dia = Integer.parseInt(fecha[2].substring(0, 2));
-			int mes = Integer.parseInt(fecha[1]);
-			int ano = Integer.parseInt(fecha[0]);
-
-			if (unidadTiempo != 0)
-				inicio.set(ano, mes - 1, dia);
-			else
-				inicio.set(ano, mes - 1, dia, 8, 0, 0);
-
-			Tarea t1 = new Tarea();
-			TimeUnit timeUnit;
-			long duracion;
-			if (unidadTiempo == 0) {
-				timeUnit = TimeUnit.DAYS;
-				duracion = 1000 * 60 * 60 * 24 + (inicio.getTimeInMillis());
-			} else if (unidadTiempo == 1) {
-				timeUnit = TimeUnit.HOURS;
-				duracion = 1000 * 60 * 60 + (inicio.getTimeInMillis());
-			} else if (unidadTiempo == 2) {
-				timeUnit = TimeUnit.MINUTES;
-				duracion = 1000 * 60 + (inicio.getTimeInMillis());
-			} else {
-				timeUnit = TimeUnit.SECONDS;
-				duracion = 1000 + (inicio.getTimeInMillis());
-			}
-
-			Calendar nowDuracion = Calendar.getInstance();
-			nowDuracion.setTimeInMillis(duracion);
-
-			t1.programarActividad(duracion, terminar, (terminar == 0), timeUnit, this.log, this.messageResources,
-					this.pm, datos, this.servicio, usuario);
+			timeUnit = TimeUnit.SECONDS;
+			duracion = 1000 + (inicio.getTimeInMillis());
 		}
+
+		Calendar nowDuracion = Calendar.getInstance();
+		nowDuracion.setTimeInMillis(duracion);
+
+		t1.programarActividad(duracion, terminar, (terminar == 0), timeUnit, this.log, this.messageResources, this.pm,
+				datos, this.servicio, usuario);
 
 		return respuesta;
 	}
@@ -798,11 +750,9 @@ public class ImportarManager {
 		return respuesta;
 	}
 
+	@SuppressWarnings("resource")
 	public boolean ImportarIniciativa(String[][] datos, Usuario usuario) {
-		boolean respuesta = false;
-
-		boolean logMediciones = Boolean.parseBoolean(pm.getProperty("logMediciones", "false"));
-		boolean logErrores = Boolean.parseBoolean(pm.getProperty("logErrores", "false"));
+		boolean respuesta = false;		
 
 		String[] argsReemplazo = new String[13];
 
@@ -810,8 +760,7 @@ public class ImportarManager {
 
 		Connection cn = null;
 		Statement stm = null;
-		boolean transActiva = false;
-		boolean existe = false;
+		boolean transActiva = false;		
 
 		try {
 			cn = new ConnectionManager(pm).getConnection();
@@ -820,15 +769,13 @@ public class ImportarManager {
 			transActiva = true;
 
 			List<OrganizacionStrategos> organizaciones = new ArrayList<OrganizacionStrategos>();
-			OrganizacionStrategos organizacion = new OrganizacionStrategos();
-			boolean hayOrganizacion = false;
+			OrganizacionStrategos organizacion = new OrganizacionStrategos();			
 			long num = 0L;
 
-			Long organizacionSeleccionadaId = Long.parseLong(pm.getProperty("organizacionId", "0"));
-			int totalDatos = datos.length;
+			Long organizacionSeleccionadaId = Long.parseLong(pm.getProperty("organizacionId", "0"));			
 			organizaciones = new OrganizacionManager(pm, log, messageResources)
 					.getArbolCompletoOrganizaciones(organizacionSeleccionadaId, stm);
-
+						
 			if (organizaciones.size() > 0) {
 				String codigoOrgArchivo = "";
 				String codigoIniArchivo = "";
@@ -842,7 +789,7 @@ public class ImportarManager {
 				String alertaAmarillaArchivo = "";
 				String crearCuentasArchivo = "";
 				String unidadMedidaArchivo = "";
-
+								
 				for (int f = 0; f < datos.length; f++) {
 					codigoOrgArchivo = datos[f][0] != null ? datos[f][0] : "";
 					codigoIniArchivo = datos[f][1] != null ? datos[f][1] : "";
@@ -855,26 +802,23 @@ public class ImportarManager {
 					alertaVerdeArchivo = datos[f][8] != null ? datos[f][8] : "";
 					alertaAmarillaArchivo = datos[f][9] != null ? datos[f][9] : "";
 					crearCuentasArchivo = datos[f][10] != null ? datos[f][10] : "";
-					unidadMedidaArchivo = datos[f][11] != null ? datos[f][11] : "";
+					unidadMedidaArchivo = datos[f][11] != null ? datos[f][11] : "";								
 
 					if (!codigoOrgArchivo.equals("") && !codigoIniArchivo.equals("") && !nombreArchivo.equals("")
 							&& !descripcionArchivo.equals("") && !tipoIniciativaArchivo.equals("")
 							&& !anioArchivo.equals("") && !frecuenciaArchivo.equals("")
 							&& !tipoMedicionArchivo.equals("") && !alertaVerdeArchivo.equals("")
 							&& !alertaAmarillaArchivo.equals("") && !crearCuentasArchivo.equals("")
-							&& !unidadMedidaArchivo.equals("")) {
-						hayOrganizacion = false;
+							&& !unidadMedidaArchivo.equals("")) {										
 						for (Iterator<?> iter = organizaciones.iterator(); iter.hasNext();) {
-							organizacion = (OrganizacionStrategos) iter.next();
+							organizacion = (OrganizacionStrategos) iter.next();																				
+							
 							if (organizacion.getEnlaceParcial() != null
 									&& organizacion.getEnlaceParcial().equalsIgnoreCase(codigoOrgArchivo)) {
 								num++;
-								if (this.logConsolaDetallado)
-									System.out.println("Leyendo indicador numero: " + num + " de " + totalDatos
-											+ "--> codigo enlace: " + organizacion.getEnlaceParcial());
 
 								this.servicio.setEstatus(ServicioStatus.getServicioStatusEnProceso());
-								this.servicio.setMensaje("Leyendo indicador numero: " + num + " --> codigo enlace: "
+								this.servicio.setMensaje("Leyendo proyecto numero: " + num + " --> codigo enlace: "
 										+ organizacion.getEnlaceParcial());
 								this.servicio.setLog(log.toString());
 								new ServicioManager(this.pm, this.log, this.messageResources)
@@ -882,11 +826,29 @@ public class ImportarManager {
 
 								StrategosIniciativasService strategosIniciativaService = StrategosServiceFactory
 										.getInstance().openStrategosIniciativasService();
+								StrategosTipoProyectoService strategosTipoProyectoService = StrategosServiceFactory
+										.getInstance().openStrategosTipoProyectoService();
+								StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory
+										.getInstance().openStrategosUnidadesService();
+								 
 
 								Iniciativa iniciativa = new Iniciativa();
 								iniciativa.setIniciativaId(strategosIniciativaService.getUniqueId());
 								iniciativa.setOrganizacionId(organizacion.getOrganizacionId());
-								iniciativa.setCodigoIniciativa(codigoIniArchivo);
+								iniciativa.setCodigoIniciativa(codigoIniArchivo);								
+								
+								nombreArchivo = nombreArchivo.length() > 240 ? nombreArchivo.substring(0, 240) : nombreArchivo;
+								
+								descripcionArchivo = descripcionArchivo.length() > 1000 ? descripcionArchivo.substring(0, 1000) : descripcionArchivo;
+																															
+
+								TipoProyecto proyecto = (TipoProyecto) strategosTipoProyectoService
+										.load(TipoProyecto.class, new Long(tipoIniciativaArchivo));								
+
+								if (proyecto == null)
+									throw new IllegalArgumentException(
+											"No existe el tipo de proyecto con ID " + tipoIniciativaArchivo
+													+ " registrado en la iniciativa con codigo " + codigoIniArchivo);								
 
 								iniciativa.setNombre(nombreArchivo);
 								iniciativa.setAlertaZonaVerde(Double.valueOf(alertaVerdeArchivo));
@@ -916,57 +878,39 @@ public class ImportarManager {
 								else if (frecuenciaArchivo.equals("ANUAL"))
 									iniciativa.setFrecuencia(Byte.valueOf((byte) 8));
 
-								if (crearCuentasArchivo.equals("SI"))
-									iniciativa.setUnidadMedida(Long.parseLong(unidadMedidaArchivo));
+								if (crearCuentasArchivo.equals("SI")) {
+									iniciativa.setCrearCuentas(true);
+									UnidadMedida unidad = (UnidadMedida) strategosUnidadesService.load(UnidadMedida.class,
+											new Long(unidadMedidaArchivo));
+									
+									if (unidad == null)
+										throw new IllegalArgumentException(
+												"No existe la unidad de medida con ID " + unidadMedidaArchivo
+														+ " registrado en la iniciativa con codigo " + codigoIniArchivo);
+									else
+										iniciativa.setUnidadMedida(unidad.getUnidadId());
+								}else {
+									iniciativa.setCrearCuentas(false);
+								}
+								
 
-								iniciativas.add(iniciativa);
-								argsReemplazo[0] = organizacion.getEnlaceParcial();
-								argsReemplazo[1] = codigoIniArchivo;
-								argsReemplazo[2] = nombreArchivo;
-								argsReemplazo[3] = descripcionArchivo;
-								argsReemplazo[4] = tipoIniciativaArchivo;
-								argsReemplazo[5] = anioArchivo;
-								argsReemplazo[6] = frecuenciaArchivo;
-								argsReemplazo[7] = tipoMedicionArchivo;
-								argsReemplazo[8] = alertaVerdeArchivo;
-								argsReemplazo[9] = alertaAmarillaArchivo;
-								argsReemplazo[10] = crearCuentasArchivo;
-								argsReemplazo[11] = unidadMedidaArchivo;
-								argsReemplazo[12] = "";
-
-								if (logMediciones)
-									log.append(messageResources.getResource(
-											"jsp.asistente.importacion.log.indicador.success", argsReemplazo) + "\n");
-
+								iniciativas.add(iniciativa);								
+								argsReemplazo[0] = nombreArchivo;
+								argsReemplazo[1] = organizacion.getEnlaceParcial();
+								argsReemplazo[2] = "";
+																
 							}
 							break;
-						}
-						if (!hayOrganizacion && logErrores) {
-							argsReemplazo[0] = codigoOrgArchivo;
-							argsReemplazo[1] = "";
-							argsReemplazo[2] = "";
-							argsReemplazo[3] = "";
-							argsReemplazo[4] = "";
-							argsReemplazo[5] = "";
-							argsReemplazo[6] = "";
-							argsReemplazo[7] = "";
-							argsReemplazo[8] = "";
-							argsReemplazo[9] = "";
-							argsReemplazo[10] = "";
-							argsReemplazo[11] = "";
-							argsReemplazo[12] = "";
-							log.append(messageResources.getResource(
-									"jsp.asistente.importacion.log.error.nohaycodigoenlace", argsReemplazo) + "\n");
-						}
+						}						
 					}
 				}
-			} else if (logErrores)
-				log.append(messageResources.getResource("jsp.asistente.importacion.log.nohayindicadores") + "\n");
+			}
 
 			int totalIniciativas = 0;
 			if (iniciativas.size() > 0)
 				totalIniciativas = iniciativas.size();
-
+				
+			
 			if (totalIniciativas > 0) {
 				this.servicio.setEstatus(ServicioStatus.getServicioStatusEnProceso());
 				this.servicio.setMensaje("Salvando iniciativas, total de iniciativas a salvar: " + totalIniciativas);
@@ -976,7 +920,7 @@ public class ImportarManager {
 
 			int res = 10000;
 			if (iniciativas.size() > 0) {
-				res = new IniciativaManager(pm, log, messageResources).saveIniciativas(iniciativas, stm);
+				res = new IniciativaManager(pm, log, messageResources).saveIniciativas(iniciativas, stm, usuario);
 			}
 
 			if (res == 10000) {
@@ -990,43 +934,46 @@ public class ImportarManager {
 			cn.close();
 			cn = null;
 			transActiva = false;
+			
+			if(res == 10000) {
+				StrategosPryProyectosService strategosPryProyectoService = StrategosServiceFactory.getInstance().openStrategosPryProyectosService();
+				StrategosIniciativasService strategosIniciativaService = StrategosServiceFactory
+						.getInstance().openStrategosIniciativasService();
+				for (Iterator<Iniciativa> iter = iniciativas.iterator(); iter.hasNext();) {
+					Iniciativa iniciativa = (Iniciativa) iter.next();					
+					strategosIniciativaService.crearIndicadores(iniciativa.getIniciativaId(), iniciativa.getCrearCuentas(), usuario);
+					strategosPryProyectoService.verificarProyectoIniciativa(iniciativa.getIniciativaId(), usuario);
+				}
+			}
 
 			Message message = new Message(this.servicio.getUsuarioId(), this.servicio.getFecha(),
 					MessageStatus.getStatusPendiente(), "", MessageType.getTypeAlerta(), this.servicio.getNombre());
 			if (res == 10000) {
 				this.servicio.setEstatus(ServicioStatus.getServicioStatusSuccess());
-				this.servicio.setMensaje(messageResources.getResource("importarindicadores.success"));
+				this.servicio.setMensaje(messageResources.getResource("importar.success"));
 				this.servicio.setLog(log.toString());
 				new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 
-				message.setMensaje(messageResources.getResource("importarindicadores.success"));
+				message.setMensaje(messageResources.getResource("importar.success"));
 				new MessageManager(this.pm, this.log, this.messageResources).saveMessage(message, null);
 
 				respuesta = true;
 			} else {
 				this.servicio.setEstatus(ServicioStatus.getServicioStatusNoSuccess());
-				this.servicio.setMensaje(messageResources.getResource("calcularindicadores.error"));
+				this.servicio.setMensaje(messageResources.getResource("importar.no.success"));
 				this.servicio.setLog(log.toString());
 				new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 
-				message.setMensaje(messageResources.getResource("calcularindicadores.error"));
+				message.setMensaje(messageResources.getResource("importar.no.success"));
 				new MessageManager(this.pm, this.log, this.messageResources).saveMessage(message, null);
 			}
 		} catch (Exception e) {
-			argsReemplazo[0] = e.getMessage() != null ? e.getMessage() : "";
-			argsReemplazo[1] = "";
-			argsReemplazo[2] = "";
-			argsReemplazo[3] = "";
-			argsReemplazo[4] = "";
-			argsReemplazo[5] = "";
-			argsReemplazo[6] = "";
-			argsReemplazo[7] = "";
-			argsReemplazo[8] = "";
-			argsReemplazo[9] = "";
+			this.servicio.setEstatus(ServicioStatus.getServicioStatusNoSuccess());
+			this.servicio.setMensaje(messageResources.getResource("importar.no.success"));
+			log.append(e.getMessage());
+			System.out.print(e.getMessage());
+			new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 
-			log.append(
-					messageResources.getResource("jsp.asistente.importacion.log.medicion.general.error", argsReemplazo)
-							+ "\n\n");
 		} finally {
 			try {
 				if (transActiva)
@@ -1042,10 +989,12 @@ public class ImportarManager {
 				}
 			} catch (Exception localException9) {
 			}
-		}
+			System.out.print("Finalizada la importacion");
+		}		
 		return respuesta;
 	}
 
+	@SuppressWarnings("resource")
 	public boolean ImportarActividad(String[][] datos, Usuario usuario) {
 		boolean respuesta = false;
 
@@ -1071,12 +1020,18 @@ public class ImportarManager {
 			Iniciativa iniciativa = new Iniciativa();
 			boolean hayIniciativa = false;
 			long num = 0L;
-
-			Long iniciativaSeleccionadaId = Long.parseLong(pm.getProperty("iniciativaId", "0"));
+			
 			int totalDatos = datos.length;
 			Map<String, String> filtros = new HashMap<String, String>();
 			iniciativas = new IniciativaManager(pm, log, messageResources).getIniciativas(filtros, stm);
 
+			StrategosPryActividadesService strategosActividadesService = StrategosServiceFactory
+					.getInstance().openStrategosPryActividadesService();
+			StrategosUnidadesService strategosUnidadesService = StrategosServiceFactory
+					.getInstance().openStrategosUnidadesService();
+			StrategosClasesIndicadoresService strategosClasesIndicadoresService = StrategosServiceFactory.getInstance()
+					.openStrategosClasesIndicadoresService();
+			
 			if (iniciativas.size() > 0) {
 				String codigoIniArchivo = "";
 				String nombreArchivo = "";
@@ -1090,7 +1045,7 @@ public class ImportarManager {
 				String codigoEnlaceArchivo = "";
 				String pesoArchivo = "";
 
-				for (int f = 0; f < datos.length; f++) {									
+				for (int f = 0; f < datos.length; f++) {
 
 					codigoIniArchivo = datos[f][0] != null ? datos[f][0] : "";
 					nombreArchivo = datos[f][1] != null ? datos[f][1] : "";
@@ -1106,52 +1061,74 @@ public class ImportarManager {
 
 					SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 					PryCalendario calendario = new PryCalendario();
-					
+
 					if (!codigoIniArchivo.equals("") && !nombreArchivo.equals("") && !descripcionArchivo.equals("")
 							&& !alertaVerdeArchivo.equals("") && !alertaAmarillaArchivo.equals("")
 							&& !unidadMedidaArchivo.equals("") && !fechaCulminacionArchivo.equals("")
-							&& !fechaInicioArchivo.equals("") && !numeroActividadArchivo.equals("") && !codigoEnlaceArchivo.equals("") && !pesoArchivo.equals("")) {
-																	
+							&& !fechaInicioArchivo.equals("") && !numeroActividadArchivo.equals("")
+							&& !codigoEnlaceArchivo.equals("") && !pesoArchivo.equals("")) {
+
 						hayIniciativa = false;
 
 						for (Iterator<?> iter = iniciativas.iterator(); iter.hasNext();) {
-							iniciativa = (Iniciativa) iter.next();							
-							
+							iniciativa = (Iniciativa) iter.next();									
 							if (iniciativa.getCodigoIniciativa() != null
-									&& iniciativa.getCodigoIniciativa().equalsIgnoreCase(codigoIniArchivo)) {
-																
+									&& iniciativa.getCodigoIniciativa().equalsIgnoreCase(codigoIniArchivo)) {							
+
 								num++;
 
 								if (this.logConsolaDetallado)
 									System.out.println("Leyendo actividad numero: " + num + " de " + totalDatos
-											+ "--> codigo iniciativa: " + iniciativa.getCodigoIniciativa());								
+											+ "--> codigo iniciativa: " + iniciativa.getCodigoIniciativa());
 								this.servicio.setEstatus(ServicioStatus.getServicioStatusEnProceso());
 								this.servicio.setMensaje("Leyendo actividad numero: " + num + " --> codigo iniciativa: "
 										+ iniciativa.getCodigoIniciativa());
 								this.servicio.setLog(log.toString());
 								new ServicioManager(this.pm, this.log, this.messageResources)
-										.saveServicio(this.servicio, null);
-
+										.saveServicio(this.servicio, null);								
 								Date fechaInicio = formato.parse(fechaInicioArchivo);
 								Date fechaFinal = formato.parse(fechaCulminacionArchivo);
 								Date fechaActual = new Date();
-								
-								Set<Date> diasFestivos = new HashSet<>();
-						        // Agrega los días festivos a la lista (en formato Date)
 
-								int duracion = calcularDiasHabiles(fechaInicio, fechaFinal, diasFestivos);		
-																
-								StrategosPryActividadesService strategosActividadesService = StrategosServiceFactory
-										.getInstance().openStrategosPryActividadesService();
-																							
-								Long claseId = strategosActividadesService.crearClaseIndicador(iniciativa.getProyectoId(), nombreArchivo, usuario);								
-								Long indicadorId = strategosActividadesService.crearIndicador(iniciativa.getProyectoId(), claseId, nombreArchivo, Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo), Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario);								
-								PryActividad actividad = new PryActividad();
+								Set<Date> diasFestivos = new HashSet<>();
+								// Agrega los días festivos a la lista (en formato Date)
 								
-								actividad.setActividadId(strategosActividadesService.getUniqueId());
-								actividad.setProyectoId(iniciativa.getProyectoId());
-								actividad.setNombre(nombreArchivo);
-								actividad.setIndicadorId(indicadorId);
+								int duracion = calcularDiasHabiles(fechaInicio, fechaFinal, diasFestivos);
+																
+								UnidadMedida unidad = (UnidadMedida) strategosUnidadesService.load(UnidadMedida.class,
+										new Long(unidadMedidaArchivo));
+																																									
+								nombreArchivo = nombreArchivo.length() > 140 ? nombreArchivo.substring(0, 140) : nombreArchivo;
+																								
+								
+								if (unidad == null)
+									throw new IllegalArgumentException(
+											"No existe la unidad de medida con ID " + unidadMedidaArchivo
+													+ " registrado en la actividad con codigo " + codigoEnlaceArchivo);
+																								
+								if (iniciativa.getProyectoId() == null) {									
+									throw new IllegalArgumentException(
+											"El proyecto " + iniciativa.getNombre()  
+													+ " no tiene registrado un ID de proyecto");
+								}
+								
+								strategosActividadesService.crearClaseIndicador(iniciativa.getProyectoId(), nombreArchivo, usuario);
+								Map<String, Object> filtrosClase = new HashMap<String, Object>();
+								filtrosClase.put("nombre", nombreArchivo);
+								List<ClaseIndicadores> clase = strategosClasesIndicadoresService.getClases(filtrosClase);								
+								
+								PryActividad actividad = new PryActividad();
+
+								Long claseId = clase.get(0).getClaseId();																					
+								
+								actividad.setIndicadorId(strategosActividadesService.crearIndicador(
+									iniciativa.getProyectoId(), claseId, nombreArchivo,
+									Long.parseLong(unidadMedidaArchivo), Double.parseDouble(alertaVerdeArchivo),
+									Double.parseDouble(alertaAmarillaArchivo), codigoEnlaceArchivo, usuario));																	
+																																																											
+								actividad.setActividadId(strategosActividadesService.getUniqueId());								
+								actividad.setProyectoId(iniciativa.getProyectoId());								
+								actividad.setNombre(nombreArchivo);								
 								actividad.setClaseId(claseId);
 								actividad.setDescripcion(descripcionArchivo);
 								actividad.setComienzoPlan(fechaInicio);
@@ -1166,70 +1143,43 @@ public class ImportarManager {
 								actividad.setCreado(fechaActual);
 								actividad.setCreadoId(new Long(1));
 								actividad.setNaturaleza((byte) 0);
-								actividad.setTipoMedicion((byte) 0);
-								actividad.setCrecimiento((byte) 3);							
+								actividad.setTipoMedicion((byte) 0);								
 								actividad.setAlertaZonaAmarilla(Double.parseDouble(alertaAmarillaArchivo));
 								actividad.setAlertaZonaVerde(Double.parseDouble(alertaVerdeArchivo));
-								actividad.setPeso(Double.parseDouble(pesoArchivo));
+								actividad.setPeso(Double.parseDouble(pesoArchivo));								
 								
-
 								actividades.add(actividad);
-																
-
-								argsReemplazo[0] = iniciativa.getCodigoIniciativa();
-								argsReemplazo[1] = nombreArchivo;
-								argsReemplazo[2] = descripcionArchivo;
-								argsReemplazo[3] = fechaInicioArchivo;
-								argsReemplazo[4] = fechaCulminacionArchivo;
-								argsReemplazo[5] = alertaVerdeArchivo;
-								argsReemplazo[6] = alertaAmarillaArchivo;
-								argsReemplazo[7] = unidadMedidaArchivo;
-								argsReemplazo[8] = numeroActividadArchivo;
-								argsReemplazo[9] = codigoEnlaceArchivo;
-								argsReemplazo[10] = pesoArchivo;
-								argsReemplazo[11] = "";
+								argsReemplazo[0] = nombreArchivo;
+								argsReemplazo[1] = iniciativa.getCodigoIniciativa();
+								argsReemplazo[2] = "";
 								
-
-								if (logMediciones)
+								if (logMediciones)			
 									log.append(messageResources.getResource(
-											"jsp.asistente.importacion.log.indicador.success", argsReemplazo) + "\n");
-							}
-
-						}												
-						if (!hayIniciativa && logErrores) {
-							argsReemplazo[0] = codigoIniArchivo;
-							argsReemplazo[1] = "";
-							argsReemplazo[2] = "";
-							argsReemplazo[3] = "";
-							argsReemplazo[4] = "";
-							argsReemplazo[5] = "";
-							argsReemplazo[6] = "";
-							argsReemplazo[7] = "";
-							argsReemplazo[8] = "";
-							argsReemplazo[9] = "";
-							argsReemplazo[10] = "";							
-							log.append(messageResources.getResource(
-									"jsp.asistente.importacion.log.error.nohaycodigoenlace", argsReemplazo) + "\n");
+											"jsp.asistente.importacion.log.actividad.success", argsReemplazo) + "\n");																	
+							} 								
 						}
+					}if (num == 0 ) {
+						log.append("No hay iniciativas con codigo de enlace indicado: " + codigoIniArchivo + "\n");
 					}
 				}
-			} else if (logErrores)
-				log.append(messageResources.getResource("jsp.asistente.importacion.log.nohayindicadores") + "\n");
+			} 
 			
 			int totalActividades = 0;
 			if (actividades.size() > 0)
 				totalActividades = actividades.size();
+						
 
-			if (totalActividades > 0) {
+			if (totalActividades > 0) {			
 				this.servicio.setEstatus(ServicioStatus.getServicioStatusEnProceso());
 				this.servicio.setMensaje("Salvando actividades, total de actividades a salvar: " + totalActividades);
-				this.servicio.setLog(log.toString());
+				this.servicio.setLog(log.toString());				
 				new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 			}
-			
-			int res = 10000;
-			if (actividades.size() > 0) {
-				res = new PryActividadManager(pm, log, messageResources).saveActividades(actividades, stm);
+						
+
+			int res = 10000;			
+			if (actividades.size() > 0) {				
+				res = new PryActividadManager(pm, log, messageResources).saveActividades(actividades, stm);				
 			}
 
 			if (res == 10000) {
@@ -1248,42 +1198,42 @@ public class ImportarManager {
 					MessageStatus.getStatusPendiente(), "", MessageType.getTypeAlerta(), this.servicio.getNombre());
 			if (res == 10000) {
 				this.servicio.setEstatus(ServicioStatus.getServicioStatusSuccess());
-				this.servicio.setMensaje(messageResources.getResource("importarindicadores.success"));
+				this.servicio.setMensaje(messageResources.getResource("importar.success"));
 				this.servicio.setLog(log.toString());
 				new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 
-				message.setMensaje(messageResources.getResource("importarindicadores.success"));
+				message.setMensaje(messageResources.getResource("importar.success"));
 				new MessageManager(this.pm, this.log, this.messageResources).saveMessage(message, null);
 
 				respuesta = true;
 			} else {
 				this.servicio.setEstatus(ServicioStatus.getServicioStatusNoSuccess());
-				this.servicio.setMensaje(messageResources.getResource("calcularindicadores.error"));
+				this.servicio.setMensaje(messageResources.getResource("importar.no.success"));
 				this.servicio.setLog(log.toString());
 				new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
 
-				message.setMensaje(messageResources.getResource("calcularindicadores.error"));
+				message.setMensaje(messageResources.getResource("importar.no.success"));
 				new MessageManager(this.pm, this.log, this.messageResources).saveMessage(message, null);
 			}
+			strategosActividadesService.close();
+			strategosUnidadesService.close();
+			strategosClasesIndicadoresService.close();
+			
 
 		} catch (Exception e) {
-			argsReemplazo[0] = e.getMessage() != null ? e.getMessage() : "";
-			argsReemplazo[1] = "";
-			argsReemplazo[2] = "";
-			argsReemplazo[3] = "";
-			argsReemplazo[4] = "";
-			argsReemplazo[5] = "";
-			argsReemplazo[6] = "";
-			argsReemplazo[7] = "";
-			argsReemplazo[8] = "";
-			argsReemplazo[9] = "";
-			argsReemplazo[10] = "";
-			argsReemplazo[11] = "";
-
-			log.append(
-					messageResources.getResource("jsp.asistente.importacion.log.medicion.general.error", argsReemplazo)
-							+ "\n\n");
-		} finally {
+			Message message = new Message(this.servicio.getUsuarioId(), this.servicio.getFecha(),
+					MessageStatus.getStatusPendiente(), "", MessageType.getTypeAlerta(), this.servicio.getNombre());
+			this.servicio.setEstatus(ServicioStatus.getServicioStatusNoSuccess());
+			this.servicio.setMensaje(messageResources.getResource("importar.no.success"));
+			if (e.getMessage() != null)
+				log.append(e.getMessage());
+			else
+				log.append(e);
+			new ServicioManager(this.pm, this.log, this.messageResources).saveServicio(this.servicio, null);
+			message.setMensaje(messageResources.getResource("importar.no.success"));
+			new MessageManager(this.pm, this.log, this.messageResources).saveMessage(message, null);
+			System.out.print(e.getMessage());
+		}finally {
 			try {
 				if (transActiva)
 					stm.close();
@@ -1298,8 +1248,8 @@ public class ImportarManager {
 				}
 			} catch (Exception localException9) {
 			}
-		}
-
+			System.out.print("Finalizada la importacion");
+		}		
 		return respuesta;
 	}
 
@@ -1835,7 +1785,7 @@ public class ImportarManager {
 		}
 
 		return respuesta;
-	}
+	}	
 }
 
 class Tarea implements Runnable {
@@ -1883,7 +1833,7 @@ class Tarea implements Runnable {
 	public void programarActividad(long duracion, int terminar, boolean infinito, TimeUnit timeUnit, StringBuffer log,
 			VgcMessageResources messageResources, PropertyCalcularManager pm, String[][] datos, Servicio servicio,
 			Usuario usuario) {
-				
+
 		this.terminar = terminar;
 		this.infinito = infinito;
 		this.log = log;
@@ -1963,9 +1913,9 @@ class Tarea implements Runnable {
 		if (tipoImportacion == 7)
 			respuesta = new ImportarManager(this.pm, this.log, this.messageResources, this.servicio)
 					.ImportarIniciativa(this.datos, usuario);
-		else if (tipoImportacion == 8) {						
+		else if (tipoImportacion == 8) {
 			respuesta = new ImportarManager(this.pm, this.log, this.messageResources, this.servicio)
-					.ImportarActividad(this.datos, usuario);			
+					.ImportarActividad(this.datos, usuario);
 		} else
 			respuesta = new ImportarManager(this.pm, this.log, this.messageResources, this.servicio)
 					.Importar(this.datos);

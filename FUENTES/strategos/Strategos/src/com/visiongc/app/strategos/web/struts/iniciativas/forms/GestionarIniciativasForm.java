@@ -39,6 +39,9 @@ public class GestionarIniciativasForm
   private boolean detalladoPlanes;
   private boolean indicadores;
   
+  private String anchoPorDefecto;
+  private String altoPorDefecto;
+  
 
   public String getFiltroNombre()
   {
@@ -234,60 +237,80 @@ public void clear()
     filtro.setIncluirTodos(Boolean.valueOf(true));
     setFiltro(filtro);
   }
-
-public boolean isDetallado() {
-	return detallado;
-}
-
-public void setDetallado(boolean detallado) {
-	this.detallado = detallado;
-}
-
-public boolean isResumido() {
-	return resumido;
-}
-
-public void setResumido(boolean resumido) {
-	this.resumido = resumido;
-}
-
-public boolean isResumidoVigentes() {
-	return resumidoVigentes;
-}
-
-public void setResumidoVigentes(boolean resumidoVigentes) {
-	this.resumidoVigentes = resumidoVigentes;
-}
-
-public boolean isDatosBasicos() {
-	return datosBasicos;
-}
-
-public void setDatosBasicos(boolean datosBasicos) {
-	this.datosBasicos = datosBasicos;
-}
-
-public boolean isMedicionesAtrasadas() {
-	return medicionesAtrasadas;
-}
-
-public void setMedicionesAtrasadas(boolean medicionesAtrasadas) {
-	this.medicionesAtrasadas = medicionesAtrasadas;
-}
-
-public boolean isDetalladoPlanes() {
-	return detalladoPlanes;
-}
-
-public void setDetalladoPlanes(boolean detalladoPlanes) {
-	this.detalladoPlanes = detalladoPlanes;
-}
-
-public boolean isIndicadores() {
-	return indicadores;
-}
-
-public void setIndicadores(boolean indicadores) {
-	this.indicadores = indicadores;
-}
+	
+	public boolean isDetallado() {
+		return detallado;
+	}
+	
+	public void setDetallado(boolean detallado) {
+		this.detallado = detallado;
+	}
+	
+	public boolean isResumido() {
+		return resumido;
+	}
+	
+	public void setResumido(boolean resumido) {
+		this.resumido = resumido;
+	}
+	
+	public boolean isResumidoVigentes() {
+		return resumidoVigentes;
+	}
+	
+	public void setResumidoVigentes(boolean resumidoVigentes) {
+		this.resumidoVigentes = resumidoVigentes;
+	}
+	
+	public boolean isDatosBasicos() {
+		return datosBasicos;
+	}
+	
+	public void setDatosBasicos(boolean datosBasicos) {
+		this.datosBasicos = datosBasicos;
+	}
+	
+	public boolean isMedicionesAtrasadas() {
+		return medicionesAtrasadas;
+	}
+	
+	public void setMedicionesAtrasadas(boolean medicionesAtrasadas) {
+		this.medicionesAtrasadas = medicionesAtrasadas;
+	}
+	
+	public boolean isDetalladoPlanes() {
+		return detalladoPlanes;
+	}
+	
+	public void setDetalladoPlanes(boolean detalladoPlanes) {
+		this.detalladoPlanes = detalladoPlanes;
+	}
+	
+	public boolean isIndicadores() {
+		return indicadores;
+	}
+	
+	public void setIndicadores(boolean indicadores) {
+		this.indicadores = indicadores;
+	}
+	
+	public String getAnchoPorDefecto()
+	{
+		return this.anchoPorDefecto;
+	}
+	
+	public void setAnchoPorDefecto(String anchoPorDefecto)
+	{
+		this.anchoPorDefecto = anchoPorDefecto;
+	}
+	
+	public String getAltoPorDefecto()
+	{
+		return this.altoPorDefecto;
+	}
+	
+	public void setAltoPorDefecto(String altoPorDefecto)
+	{
+		this.altoPorDefecto = altoPorDefecto;
+	}
 }

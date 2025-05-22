@@ -505,9 +505,10 @@ public final class EditarMedicionesAction extends VgcAction
 						if (editarMedicionesForm.getSourceScreen() == TipoSource.SOURCE_ACTIVIDAD && indicador.getActividadId() != null)
 						{
 							mediciones = strategosMedicionesService.getMedicionesPeriodo(actividad.getIndicadorId(), SerieTiempo.getSerieReal().getSerieId(), new Integer(0000), new Integer(9999), new Integer(000), new Integer(999));
+							Iniciativa ini = strategosIniciativasService.getIniciativaByProyecto(actividad.getProyectoId());
 							if (mediciones.size() > 0)
-							{
-								if(((Medicion) mediciones.get(mediciones.size() -1)).getValor() == 100.0)
+							{								
+								if(((Medicion) mediciones.get(mediciones.size() -1)).getValor() == 100.0 && ini.getEstatusId() == 5L)
 									indicador.setEstaBloqueado(new Boolean(true));
 							}							
 							indicador.setIsPocentaje(true);
@@ -527,8 +528,9 @@ public final class EditarMedicionesAction extends VgcAction
 						}
 						
 						if(actividad != null ) {
+							Iniciativa ini = strategosIniciativasService.getIniciativaByProyecto(actividad.getProyectoId());														
 							if (actividad.getPorcentajeEjecutado() != null) {
-								if(actividad.getPorcentajeEjecutado() == 100.0 )
+								if(actividad.getPorcentajeEjecutado() == 100.0 && ini.getEstatusId() == 5L)									
 									indicador.setEstaBloqueado(new Boolean(true));
 							}
 						}

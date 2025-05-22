@@ -161,8 +161,8 @@
 		<!-- Mapeo del Action: Proteger/Liberar Mediciones -->
 		<action path="/indicadores/transformarInventarioSalvar" type="com.visiongc.app.strategos.web.struts.indicadores.actions.TransformarInventarioSalvarAction" name="indicadorInventarioForm" scope="session" parameter="transformarInventario"></action>
 		
-		
-		
+		<action path="/indicadores/setPanel" type="com.visiongc.app.strategos.web.struts.indicadores.actions.SetPanelAction"></action>
+		 
 		
 	</action-mappings>
 </struts-config>

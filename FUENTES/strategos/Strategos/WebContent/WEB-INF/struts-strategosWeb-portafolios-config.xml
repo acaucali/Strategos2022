@@ -89,7 +89,7 @@
 		<!-- Mapeo del Action: Asignar Pesos -->
 		<action path="/portafolios/asignarPesos" type="com.visiongc.app.strategos.web.struts.portafolios.actions.AsignarPesosIniciativasPortafolioAction" scope="request" name="editarPortafolioForm" parameter="asignarPesos"></action>
 	
-		
+		<action path="/portafolios/setPanel" type="com.visiongc.app.strategos.web.struts.portafolios.actions.SetPanelAction" ></action>
 	</action-mappings>
 
 </struts-config>

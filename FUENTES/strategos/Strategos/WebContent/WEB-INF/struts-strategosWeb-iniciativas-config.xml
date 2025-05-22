@@ -160,6 +160,8 @@
 		
 		<!-- Mapeo del Action: Importar Mediciones  -->
 		<action path="/iniciativas/importarSalvar" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.ImportarIniciativasSalvarAction" name="importarIniciativasForm" scope="session" parameter="asistenteImportarIniciativas"></action>
-									
+						
+		<!-- Mapeo del Action: Setear el panel de la iniciativa -->
+		<action path="/iniciativas/setPanel" type="com.visiongc.app.strategos.web.struts.iniciativas.actions.SetPanelAction"></action>			
 		</action-mappings>
 </struts-config>

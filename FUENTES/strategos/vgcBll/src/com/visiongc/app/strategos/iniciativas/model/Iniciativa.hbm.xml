@@ -111,7 +111,19 @@
 		<property name="responsableAdminContratosTelefono" type="java.lang.String" column="resp_admin_contratos_telefono" length="50" />
 		
 		<property name="codigoIniciativa" type="java.lang.String" column="codigo" length="50" />
-
+		
+		<!-- Campos Cooperacion 
+		<property name="alineacionPDMP" type="java.lang.String" column="alineacion_pdmp" length="500" />
+		<property name="alineacionODS" type="java.lang.String" column="alineacion_ods" length="500" />
+		<property name="coberturaGeografica" type="java.lang.String" column="cobertura_geografica" length="500" />
+		<property name="impactoCiudadania" type="java.lang.String" column="impacto_ciudadania" length="500" />
+		<property name="implementadorRecursos" type="java.lang.String" column="implementador_recursos" length="500" />
+		<property name="dependenciaResponsable" type="java.lang.String" column="dependencia_responsable" length="500" />
+		<property name="dependenciasCompetentes" type="java.lang.String" column="dependencias_competentes" length="500" />
+		<property name="sostenibilidad" type="java.lang.String" column="sostenibilidad" length="500" />
+		
+		-->
+		
 		<!-- Asociación uno a uno para organizacion -->
 		<many-to-one name="organizacion" class="com.visiongc.app.strategos.organizaciones.model.OrganizacionStrategos" column="organizacion_id" unique="true" insert="false" update="false"></many-to-one>
 
