@@ -75,5 +75,8 @@ export class MapaComponent implements OnInit, OnChanges {
     this.factores = obj.factores;
   }
   
+  cerrarVentana(){
+    window.close();
+  }
   
 }

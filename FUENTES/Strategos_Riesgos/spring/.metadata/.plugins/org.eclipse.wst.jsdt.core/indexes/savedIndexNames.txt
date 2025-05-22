@@ -1,6 +1,2 @@
-INDEX VERSION 1.4+D:\Strategos2022\FUENTES\Strategos_Riesgos\spring\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-3711816221.index
-294097747.index
-949280796.index
+INDEX VERSION 1.4+C:\Users\Usuario\Documents\GitHub\Strategos2022\FUENTES\Strategos_Riesgos\spring\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
 2693781654.index
-2302342745.index

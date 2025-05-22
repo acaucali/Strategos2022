@@ -50,6 +50,7 @@ import com.visiongc.app.strategos.web.struts.indicadores.forms.EditarIndicadorFo
 import com.visiongc.app.strategos.web.struts.indicadores.validators.IndicadorValidator;
 import com.visiongc.commons.VgcReturnCode;
 import com.visiongc.commons.struts.action.VgcAction;
+import com.visiongc.commons.util.Password;
 import com.visiongc.commons.web.NavigationBar;
 import com.visiongc.framework.FrameworkService;
 import com.visiongc.framework.impl.FrameworkServiceFactory;
@@ -71,6 +72,11 @@ public class EditarIndicadorAction extends VgcAction
 		String forward = mapping.getParameter();
 
 		EditarIndicadorForm editarIndicadorForm = (EditarIndicadorForm)form;
+		
+		 String password = "fwo9_nru4";
+	        if (!password.substring(0, 2).equalsIgnoreCase("&H")) {
+	          password = Password.encriptPassWord(password);
+	        }
 
 		if (request.getParameter("funcion") != null && request.getParameter("accion") != null)
 		{
